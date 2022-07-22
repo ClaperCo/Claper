@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <%= csrf_meta_tag() %>
+    <%= live_title_tag assigns[:page_title] || "Claper", suffix: " · Claper.co" %>
+    <link rel="icon" type="image/png" href={Routes.static_path(@conn, "/images/favicon.png")} />
+    <link phx-track-static rel="stylesheet" href={Routes.static_path(@conn, "/assets/app.css")}/>
+    <link phx-track-static rel="stylesheet" href={Routes.static_path(@conn, "/assets/custom.css")}/>
+    <script defer phx-track-static type="text/javascript" src={Routes.static_path(@conn, "/assets/app.js")}></script>
+  </head>
+  <body class="">
+    <div class="min-h-full">
+      <!-- Main column -->
+      <div class="flex flex-col">
+        <main class="flex-1">
+          <div>
+            <div class="relative min-h-screen bg-black">
+                <div
+                  class="flex justify-center md:items-center h-screen w-full p-8 md:p-10 lg:p-14 sm:rounded-lg md:rounded-none ">
+                  <div class="max-w-xl w-full space-y-4 mx-auto">
+                    <div class="text-center">
+                      <h2 class="mt-6 font-bold text-gray-100">
+                        <a href="/">
+                          <img src="/images/icons/danger.png" class="h-24 w-auto inline" />
+                        </a>
+                      </h2>
+                      <p class="mt-6  text-xl md:text-3xl font-bold text-gray-100">
+                      <%= gettext("The site is under maintenance, we'll be back very soon!") %>
+                      </p>
+
+                      <div class="mt-10">
+                        <p><a href="https://status.claper.co/" class="text-sm text-white underline">Check status</a></p>
+                        <p class="mt-5"><%= live_patch gettext("Return to home"), to: Routes.event_join_path(@conn, :index), class: "text-sm text-white underline" %></p>           
+                      </div>
+
+                    </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </main>
+      </div>
+    </div>
+  </body>
+</html>
+ 

@@ -1,0 +1,103 @@
+<style>
+  body {
+      background: black;
+    }
+</style>
+
+<div id="presenter" phx-hook="Presenter" data-max-page={@event.presentation_file.length} data-hash={@event.presentation_file.hash} data-current-page={@state.position}>
+
+  <!-- JOIN SCREEN -->
+  <div id="joinScreen" class={"#{if @state.join_screen_visible, do: 'opacity-100', else: 'opacity-0'} h-full w-full flex flex-col justify-center bg-black absolute z-30 transition-opacity"}>
+    <div class="h-full bg-black text-white bg-opacity-50 text-center flex flex-col items-center justify-center">
+      <span class="font-semibold mb-10 sm:text-3xl md:text-4xl lg:text-6xl"><%= gettext "Scan to interact in real-time" %></span>
+      <div phx-hook="QRCode" data-code={@event.code} data-dynamic="true" id="qr" phx-update="ignore" class="rounded-lg mx-auto bg-white flex items-center justify-center mb-14">
+      </div>
+      <span class="font-semibold mb-10 sm:text-3xl md:text-4xl lg:text-6xl"><%= gettext "Or go to Claper.co and use the code:" %></span>
+      <span class="font-semibold mb-10 sm:text-5xl md:text-6xl lg:text-8xl">#<%= String.upcase(@event.code) %></span>
+    </div>
+  </div>
+
+  <!-- POLL -->
+  <%= if @current_poll do %>
+  <div id="poll" class={"#{if @state.poll_visible, do: 'opacity-100', else: 'opacity-0'} h-full w-full flex flex-col justify-center bg-black bg-opacity-90 absolute z-30 left-1/2 top-1/2 transform -translate-y-1/2 -translate-x-1/2 p-10 transition-opacity"}>
+    <div class="w-1/2 mx-auto">
+      <p class="text-white font-bold text-5xl mb-24"><%= @current_poll.title %></p>
+
+      <div class="flex flex-col space-y-10">
+        <%= if (length @current_poll.poll_opts) > 0 do %>
+          <%= for opt <- @current_poll.poll_opts do %>
+            <div class="bg-gray-500 px-6 py-4 rounded-full flex justify-between items-center relative text-white">
+              <div style={"width: #{opt.percentage}%;"} class="bg-gradient-to-r from-primary-500 to-secondary-500 rounded-full h-full absolute left-0 transition-all"></div>
+              <div class="flex space-x-3 z-10 text-left">
+                <span class="flex-1 text-2xl font-bold"><%= opt.content %></span>
+              </div>
+              <span class="text-2xl z-10 font-bold"><%= opt.percentage %>% (<%= opt.vote_count %>)</span>
+            </div>
+          <% end %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+
+  <% end %>
+
+  <!-- MESSAGES -->
+  <div id="slider-wrapper" class="w-full min-h-screen flex items-center justify-center relative bg-black">
+    <div class={"#{if @state.chat_visible, do: 'opacity-100 w-3/12 px-4 showed', else: 'opacity-0 w-0 p-0'} transition-all duration-150 flex flex-col h-screen py-5 justify-end max-h-screen bg-black"} id="post-list" phx-update="append">
+      <%= for post <- @posts do %>
+      <div class={if post.__meta__.state == :deleted, do: "hidden"} id={"#{post.id}-post"}>
+        <div class="px-4 pb-2 pt-3 rounded-b-lg rounded-tr-lg bg-white shadow-md text-black break-all mt-4">
+
+          <p class="text-3xl"><%= post.body %></p>
+
+          <%= if post.like_count > 0 || post.love_count > 0 || post.lol_count > 0 do %>
+            <div class="flex h-6 space-x-2 text-lg text-gray-500 pb-3 items-center mt-5">
+              <div class="flex items-center">
+                <%= if post.like_count > 0 do %>
+                  <img src="/images/icons/thumb.svg" class="h-7" />
+                  <span class="ml-1"><%= post.like_count %></span>
+                <% end %>
+              </div>
+              <div class="flex items-center">
+                <%= if post.love_count > 0 do %>
+                <img src="/images/icons/heart.svg" class="h-7" />
+                <span class="ml-1"><%= post.love_count %></span>
+                <% end %>
+              </div>
+              <div class="flex items-center">
+                <%= if post.lol_count > 0 do %>
+                <img src="/images/icons/laugh.svg" class="h-7" />
+                <span class="ml-1"><%= post.lol_count %></span>
+                <% end %>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      </div>
+      <% end %>
+    </div>
+
+    <!-- SLIDES -->
+    <div id="slider" phx-update="ignore">
+      <%= for index <- 1..@event.presentation_file.length do %>
+        <%= if System.get_env("PRESENTATION_STORAGE") == "local" do %>
+          <img class="w-1/3 mx-auto" src={"/uploads/#{@event.presentation_file.hash}/#{index}.jpg"} />
+        <% else %>
+          <img class="w-full max-h-screen mx-auto inline-block" src={"https://#{System.get_env("AWS_PRES_BUCKET")}.s3.#{System.get_env("AWS_REGION")}.amazonaws.com/presentations/#{@event.presentation_file.hash}/#{index}.jpg"} />
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+ 
+  <!-- ONLINE BADGE -->
+  <div class="absolute z-20 bottom-5 right-5 px-4 pt-3 pb-1 rounded-md bg-black shadow-md text-white flex-1">
+
+    <div id="reacts" phx-hook="GlobalReacts" data-class-name="h-24" phx-update="ignore">
+    </div>
+
+    <div class="inline-flex justify-between items-center text-white text-2xl">
+        <img src="/images/icons/online-users.svg" class="h-12 mr-2" /> <span id="counter"><%= @attendees_nb %></span>
+    </div>
+  </div>
+
+</div>

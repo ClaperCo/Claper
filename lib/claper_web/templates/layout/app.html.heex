@@ -1,0 +1,11 @@
+<div class="fixed max-w-xl w-full bottom-5 left-1/2 tranform -translate-x-1/2 z-10">
+  <%= if get_flash(@conn, :info) do %>
+  <ClaperWeb.Component.Alert.info message={get_flash(@conn, :info)} />
+  <% end %>
+
+  <%= if get_flash(@conn, :error) do %>
+  <ClaperWeb.Component.Alert.error message={get_flash(@conn, :error)} />
+  <% end %>
+</div>
+
+<%= @inner_content %>

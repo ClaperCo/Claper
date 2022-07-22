@@ -1,0 +1,13 @@
+<div>
+<%= if @user.avatar do %>
+  <img class="w-10 h-10 bg-gray-300 rounded-full" src={@user.avatar} alt="avatar" />
+<% else %>
+  <div class="bg-neutral-500 h-10 w-10 rounded-full text-center flex items-center justify-center">
+    <%= if @user.full_name do %>
+      <%= with [first | _] <- String.codepoints(@user.full_name), do: String.capitalize(first) %>
+    <% else %>
+      <%= with [first | _] <- String.codepoints(@user.email), do: String.capitalize(first) %>
+    <% end %>
+  </div>
+<% end %>
+</div>

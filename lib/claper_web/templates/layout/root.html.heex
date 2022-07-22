@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <%= csrf_meta_tag() %>
+    <%= live_title_tag assigns[:page_title] || "Claper", suffix: " · Claper.co" %>
+    <link rel="icon" type="image/png" href={Routes.static_path(@conn, "/images/favicon.png")} />
+    <link phx-track-static rel="stylesheet" href={Routes.static_path(@conn, "/assets/app.css")}/>
+    <link phx-track-static rel="stylesheet" href={Routes.static_path(@conn, "/assets/custom.css")}/>
+    <script defer phx-track-static type="text/javascript" src={Routes.static_path(@conn, "/assets/app.js")}></script>
+  </head>
+  <body class="">
+    <div class="min-h-full">
+      <!-- Main column -->
+      <div class="flex flex-col">
+        <main class="flex-1">
+          <%= @inner_content %>
+        </main>
+      </div>
+    </div>
+  </body>
+</html>
+ 
