@@ -46,7 +46,7 @@ defmodule Claper.Tasks.Converter do
   def clear(hash) do
     IO.puts("Clearing #{hash}...")
 
-    if System.get_env("PRESENTATION_STORAGE") == "local" do
+    if System.get_env("PRESENTATION_STORAGE", "local") == "local" do
       File.rm_rf(Path.join([
         :code.priv_dir(:claper),
         "static",
@@ -121,7 +121,7 @@ defmodule Claper.Tasks.Converter do
     # assign new hash to avoid cache issues
     new_hash = :erlang.phash2("#{hash}-#{System.system_time(:second)}")
 
-    if System.get_env("PRESENTATION_STORAGE") == "local" do
+    if System.get_env("PRESENTATION_STORAGE", "local") == "local" do
 
       File.rename(Path.join([
         :code.priv_dir(:claper),
@@ -170,7 +170,7 @@ defmodule Claper.Tasks.Converter do
              "length" => length,
              "status" => "done"
            }) do
-      unless System.get_env("PRESENTATION_STORAGE") == "local", do: File.rm_rf!(path)
+      unless System.get_env("PRESENTATION_STORAGE", "local") == "local", do: File.rm_rf!(path)
 
       Phoenix.PubSub.broadcast(
         Claper.PubSub,
