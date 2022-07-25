@@ -144,6 +144,15 @@ Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
 If you have configured `MAIL` to `local`, you can access to the mailbox at [`localhost:4000/dev/mailbox`](http://localhost:4000/dev/mailbox).
 
 
+#### Using Docker
+
+You can build the app with Docker:
+```sh
+  docker build -t claper .
+  docker run -p 4000:4000 -d claper
+  ```
+
+
 <!-- USAGE EXAMPLES -->
 ## Usage
 

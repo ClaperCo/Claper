@@ -35,8 +35,8 @@ jobs:
       with:
         context: .
         push: true
-        tags: ghcr.io/${{ github.repository }}/claper
-        cache-from: type=registry,ref=ghcr.io/${{ github.repository }}/claper:latest
+        tags: ghcr.io/claperco/claper
+        cache-from: type=registry,ref=ghcr.io/claperco/claper:latest
         cache-to: type=inline
 
 
