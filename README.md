@@ -91,6 +91,8 @@ To run Claper on your local environment you need to have:
 * Erland >= 24
 * NPM >= 6.14.17
 * NodeJS >= 14.19.2
+* Ghostscript >= 9.5.0 (for PDF support)
+* Libreoffice >= 6.4 (for PPT/PPTX support)
 
 You can also use Docker to easily run a Postgres instance:
 ```sh
@@ -101,18 +103,21 @@ You can also use Docker to easily run a Postgres instance:
 
 All configuration used by the app is store on the `.env` file. You can find an example file in `.env.sample`, but you should copy it to `.env` and fill it with your own values.
 
+Variable | Values | Default | Description
+--- | --- | --- | ---
+DATABASE_URL | - | postgres://claper:claper@localhost:5432/postgres | Postgres connection string
+SECRET_KEY_BASE | - | - | _(only for production)_  Generate it with `mix phx.gen.secret`
+PRESENTATION_STORAGE | local, s3 | local | Define where the presentation files will be stored
+MAIL | local, smtp | local | Define how the mails will be sent
+AWS_ACCESS_KEY_ID | - | - | _(only if s3 is used)_ Your AWS Access Key ID
+AWS_SECRET_ACCESS_KEY | - | - | _(only if s3 is used)_ Your AWS Secret Access Key
+AWS_S3_BUCKET | - | - | _(only if s3 is used)_ The name of the bucket where the presentation files will be stored
+AWS_S3_REGION | - | - | _(only if s3 is used)_ The region where the bucket is located
+
 - **PRESENTATION_STORAGE** : `local` or `s3`, define where the presentation files will be stored.
 - **MAIL** : `local` or `smtp`, define how the mails will be sent.
 
-_(only if s3 is used)_ :
-- **AWS_ACCESS_KEY_ID** : Your AWS Access Key ID.
-- **AWS_SECRET_ACCESS_KEY** : Your AWS Secret Access Key.
-- **AWS_S3_BUCKET** : The name of the bucket where the presentation files will be stored.
-- **AWS_S3_REGION** : The region where the bucket is located.
-
 ### Installation
-
-
 
 1. Clone the repo
    ```sh
