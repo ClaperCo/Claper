@@ -89,6 +89,8 @@ To run Claper on your local environment you need to have:
 * Postgres >= 9
 * Elixir >= 1.13.2
 * Erland >= 24
+* NPM >= 6.14.17
+* NodeJS >= 14.19.2
 
 You can also use Docker to easily run a Postgres instance:
 ```sh
@@ -124,9 +126,17 @@ _(only if s3 is used)_ :
    ```sh
    mix ecto.migrate
    ```
-4. Start Phoenix endpoint with
+4. Install JS dependencies
    ```sh
-   mix phx.server
+   cd assets && npm i
+   ```
+5. Allow execution of startup file
+   ```sh
+   chmod +x ./start.sh
+   ```
+6. Start Phoenix endpoint with
+   ```sh
+   ./start.sh
    ```
 
 Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
