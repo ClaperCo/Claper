@@ -114,9 +114,6 @@ AWS_SECRET_ACCESS_KEY | - | - | _(only if s3 is used)_ Your AWS Secret Access Ke
 AWS_S3_BUCKET | - | - | _(only if s3 is used)_ The name of the bucket where the presentation files will be stored
 AWS_S3_REGION | - | - | _(only if s3 is used)_ The region where the bucket is located
 
-- **PRESENTATION_STORAGE** : `local` or `s3`, define where the presentation files will be stored.
-- **MAIL** : `local` or `smtp`, define how the mails will be sent.
-
 ### Installation
 
 1. Clone the repo
@@ -153,10 +150,9 @@ If you have configured `MAIL` to `local`, you can access to the mailbox at [`loc
 
 You can build the app with Docker:
 ```sh
-  docker build -t claper .
-  docker run -p 4000:4000 -d claper
-  ```
-
+docker build -t claper .
+docker run -p 4000:4000 -d claper
+```
 
 <!-- USAGE EXAMPLES -->
 ## Usage

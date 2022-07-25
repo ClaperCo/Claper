@@ -61,7 +61,8 @@ defmodule Claper.MixProject do
       {:mogrify, "~> 0.9.1"},
       {:libcluster, "~> 3.3"},
       {:porcelain, "~> 2.0"},
-      {:hackney, "~> 1.18"}
+      {:hackney, "~> 1.18"},
+      {:gen_smtp, "~> 1.2"}
     ]
   end
 
