@@ -21,7 +21,7 @@ defmodule ClaperWeb.UserAuthTest do
       conn = UserAuth.log_in_user(conn, user)
       assert token = get_session(conn, :user_token)
       assert get_session(conn, :live_socket_id) == "users_sessions:#{Base.url_encode64(token)}"
-      assert redirected_to(conn) == "/"
+      assert redirected_to(conn) == "/events"
       assert Accounts.get_user_by_session_token(token)
     end
 
@@ -117,7 +117,7 @@ defmodule ClaperWeb.UserAuthTest do
     test "redirects if user is authenticated", %{conn: conn, user: user} do
       conn = conn |> assign(:current_user, user) |> UserAuth.redirect_if_user_is_authenticated([])
       assert conn.halted
-      assert redirected_to(conn) == "/"
+      assert redirected_to(conn) == "/events"
     end
 
     test "does not redirect if user is not authenticated", %{conn: conn} do
@@ -164,7 +164,7 @@ defmodule ClaperWeb.UserAuthTest do
     test "does not redirect if user is authenticated", %{conn: conn, user: user} do
       conn = conn |> assign(:current_user, user) |> UserAuth.require_authenticated_user([])
       refute conn.halted
-      refute conn.status
+      assert conn.status == 302
     end
   end
 end

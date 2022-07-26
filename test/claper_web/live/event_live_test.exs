@@ -9,8 +9,8 @@ defmodule ClaperWeb.EventLiveTest do
   @invalid_attrs %{name: nil}
 
   defp create_event(params) do
-    event = event_fixture(%{}, [:org])
-    params |> Map.put(:event, event) |> Map.put(:org_id, event.org.id)
+    event = event_fixture()
+    params |> Map.put(:event, event)
   end
 
   describe "Index" do

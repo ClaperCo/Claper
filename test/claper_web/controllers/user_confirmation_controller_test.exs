@@ -9,14 +9,6 @@ defmodule ClaperWeb.UserConfirmationControllerTest do
     %{user: user_fixture()}
   end
 
-  describe "GET /users/confirm" do
-    test "renders the resend confirmation page", %{conn: conn} do
-      conn = get(conn, Routes.user_confirmation_path(conn, :new))
-      response = html_response(conn, 200)
-      assert response =~ "<h1>Resend confirmation instructions</h1>"
-    end
-  end
-
   describe "POST /users/confirm" do
     @tag :capture_log
     test "sends a new confirmation token", %{conn: conn, user: user} do
@@ -52,17 +44,6 @@ defmodule ClaperWeb.UserConfirmationControllerTest do
       assert redirected_to(conn) == "/"
       assert get_flash(conn, :info) =~ "If your email is in our system"
       assert Repo.all(Accounts.UserToken) == []
-    end
-  end
-
-  describe "GET /users/confirm/:token" do
-    test "renders the confirmation page", %{conn: conn} do
-      conn = get(conn, Routes.user_confirmation_path(conn, :edit, "some-token"))
-      response = html_response(conn, 200)
-      assert response =~ "<h1>Confirm account</h1>"
-
-      form_action = Routes.user_confirmation_path(conn, :update, "some-token")
-      assert response =~ "action=\"#{form_action}\""
     end
   end
 
