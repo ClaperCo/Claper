@@ -10,7 +10,7 @@
     <title>Claper.Polls — Claper v1.0.0</title>
     <link rel="stylesheet" href="dist/elixir-b6f1ed5df9b1d42a7309.css" />
 
-    <script src="dist/sidebar_items-37c81d9b39.js"></script>
+    <script src="dist/sidebar_items-0c5fe6c4a6.js"></script>
 
       <script src="docs_config.js"></script>
 
@@ -184,7 +184,7 @@ Claper
 
         </div>
 
-          <div class="summary-synopsis"><p>Gets a single poll.</p></div>
+          <div class="summary-synopsis"><p>Gets a single poll and set percentages for each poll options.</p></div>
 
       </div>
 
@@ -193,6 +193,8 @@ Claper
           <a href="#get_poll_current_position/2" translate="no">get_poll_current_position(presentation_file_id, position)</a>
 
         </div>
+
+          <div class="summary-synopsis"><p>Gets a single poll for a given position.</p></div>
 
       </div>
 
@@ -212,7 +214,7 @@ Claper
 
         </div>
 
-          <div class="summary-synopsis"><p>Returns the list of polls.</p></div>
+          <div class="summary-synopsis"><p>Returns the list of polls for a given presentation file.</p></div>
 
       </div>
 
@@ -221,6 +223,8 @@ Claper
           <a href="#list_polls_at_position/2" translate="no">list_polls_at_position(presentation_file_id, position)</a>
 
         </div>
+
+          <div class="summary-synopsis"><p>Returns the list of polls for a given presentation file and a given position.</p></div>
 
       </div>
 
@@ -247,6 +251,8 @@ Claper
           <a href="#set_percentages/1" translate="no">set_percentages(poll)</a>
 
         </div>
+
+          <div class="summary-synopsis"><p>Calculate percentage of all poll options for a given poll.</p></div>
 
       </div>
 
@@ -291,7 +297,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">add_poll_opt(changeset)</h1>
 
-      <a href="https://github.com/ClaperCo/Claper/blob/v1.0.0/lib/claper/polls.ex#L179" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/ClaperCo/Claper/blob/v1.0.0/lib/claper/polls.ex#L206" class="view-source" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -315,7 +321,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">change_poll(poll, attrs \\ %{})</h1>
 
-      <a href="https://github.com/ClaperCo/Claper/blob/v1.0.0/lib/claper/polls.ex#L172" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/ClaperCo/Claper/blob/v1.0.0/lib/claper/polls.ex#L199" class="view-source" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -331,8 +337,8 @@ Functions
   </a>
   Examples
 </h2>
-<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">change_poll</span><span class="p" data-group-id="6191421818-1">(</span><span class="n">poll</span><span class="p" data-group-id="6191421818-1">)</span><span class="w">
-</span><span class="p" data-group-id="6191421818-2">%</span><span class="nc" data-group-id="6191421818-2">Ecto.Changeset</span><span class="p" data-group-id="6191421818-2">{</span><span class="ss">data</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="6191421818-3">%</span><span class="nc" data-group-id="6191421818-3">Poll</span><span class="p" data-group-id="6191421818-3">{</span><span class="p" data-group-id="6191421818-3">}</span><span class="p" data-group-id="6191421818-2">}</span></code></pre>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">change_poll</span><span class="p" data-group-id="6529801452-1">(</span><span class="n">poll</span><span class="p" data-group-id="6529801452-1">)</span><span class="w">
+</span><span class="p" data-group-id="6529801452-2">%</span><span class="nc" data-group-id="6529801452-2">Ecto.Changeset</span><span class="p" data-group-id="6529801452-2">{</span><span class="ss">data</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="6529801452-3">%</span><span class="nc" data-group-id="6529801452-3">Poll</span><span class="p" data-group-id="6529801452-3">{</span><span class="p" data-group-id="6529801452-3">}</span><span class="p" data-group-id="6529801452-2">}</span></code></pre>
   </section>
 </section>
 <section class="detail" id="create_poll/1">
@@ -346,7 +352,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">create_poll(attrs \\ %{})</h1>
 
-      <a href="https://github.com/ClaperCo/Claper/blob/v1.0.0/lib/claper/polls.ex#L114" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/ClaperCo/Claper/blob/v1.0.0/lib/claper/polls.ex#L141" class="view-source" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -362,11 +368,11 @@ Functions
   </a>
   Examples
 </h2>
-<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">create_poll</span><span class="p" data-group-id="8702517145-1">(</span><span class="p" data-group-id="8702517145-2">%{</span><span class="ss">field</span><span class="p">:</span><span class="w"> </span><span class="n">value</span><span class="p" data-group-id="8702517145-2">}</span><span class="p" data-group-id="8702517145-1">)</span><span class="w">
-</span><span class="p" data-group-id="8702517145-3">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="8702517145-4">%</span><span class="nc" data-group-id="8702517145-4">Poll</span><span class="p" data-group-id="8702517145-4">{</span><span class="p" data-group-id="8702517145-4">}</span><span class="p" data-group-id="8702517145-3">}</span><span class="w">
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">create_poll</span><span class="p" data-group-id="0677208174-1">(</span><span class="p" data-group-id="0677208174-2">%{</span><span class="ss">field</span><span class="p">:</span><span class="w"> </span><span class="n">value</span><span class="p" data-group-id="0677208174-2">}</span><span class="p" data-group-id="0677208174-1">)</span><span class="w">
+</span><span class="p" data-group-id="0677208174-3">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="0677208174-4">%</span><span class="nc" data-group-id="0677208174-4">Poll</span><span class="p" data-group-id="0677208174-4">{</span><span class="p" data-group-id="0677208174-4">}</span><span class="p" data-group-id="0677208174-3">}</span><span class="w">
 
-</span><span class="gp unselectable">iex&gt; </span><span class="n">create_poll</span><span class="p" data-group-id="8702517145-5">(</span><span class="p" data-group-id="8702517145-6">%{</span><span class="ss">field</span><span class="p">:</span><span class="w"> </span><span class="n">bad_value</span><span class="p" data-group-id="8702517145-6">}</span><span class="p" data-group-id="8702517145-5">)</span><span class="w">
-</span><span class="p" data-group-id="8702517145-7">{</span><span class="ss">:error</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="8702517145-8">%</span><span class="nc" data-group-id="8702517145-8">Ecto.Changeset</span><span class="p" data-group-id="8702517145-8">{</span><span class="p" data-group-id="8702517145-8">}</span><span class="p" data-group-id="8702517145-7">}</span></code></pre>
+</span><span class="gp unselectable">iex&gt; </span><span class="n">create_poll</span><span class="p" data-group-id="0677208174-5">(</span><span class="p" data-group-id="0677208174-6">%{</span><span class="ss">field</span><span class="p">:</span><span class="w"> </span><span class="n">bad_value</span><span class="p" data-group-id="0677208174-6">}</span><span class="p" data-group-id="0677208174-5">)</span><span class="w">
+</span><span class="p" data-group-id="0677208174-7">{</span><span class="ss">:error</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="0677208174-8">%</span><span class="nc" data-group-id="0677208174-8">Ecto.Changeset</span><span class="p" data-group-id="0677208174-8">{</span><span class="p" data-group-id="0677208174-8">}</span><span class="p" data-group-id="0677208174-7">}</span></code></pre>
   </section>
 </section>
 <section class="detail" id="create_poll_vote/1">
@@ -380,7 +386,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">create_poll_vote(attrs \\ %{})</h1>
 
-      <a href="https://github.com/ClaperCo/Claper/blob/v1.0.0/lib/claper/polls.ex#L315" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/ClaperCo/Claper/blob/v1.0.0/lib/claper/polls.ex#L338" class="view-source" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -396,11 +402,11 @@ Functions
   </a>
   Examples
 </h2>
-<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">create_poll_vote</span><span class="p" data-group-id="6910210079-1">(</span><span class="p" data-group-id="6910210079-2">%{</span><span class="ss">field</span><span class="p">:</span><span class="w"> </span><span class="n">value</span><span class="p" data-group-id="6910210079-2">}</span><span class="p" data-group-id="6910210079-1">)</span><span class="w">
-</span><span class="p" data-group-id="6910210079-3">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="6910210079-4">%</span><span class="nc" data-group-id="6910210079-4">PollVote</span><span class="p" data-group-id="6910210079-4">{</span><span class="p" data-group-id="6910210079-4">}</span><span class="p" data-group-id="6910210079-3">}</span><span class="w">
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">create_poll_vote</span><span class="p" data-group-id="5516958585-1">(</span><span class="p" data-group-id="5516958585-2">%{</span><span class="ss">field</span><span class="p">:</span><span class="w"> </span><span class="n">value</span><span class="p" data-group-id="5516958585-2">}</span><span class="p" data-group-id="5516958585-1">)</span><span class="w">
+</span><span class="p" data-group-id="5516958585-3">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="5516958585-4">%</span><span class="nc" data-group-id="5516958585-4">PollVote</span><span class="p" data-group-id="5516958585-4">{</span><span class="p" data-group-id="5516958585-4">}</span><span class="p" data-group-id="5516958585-3">}</span><span class="w">
 
-</span><span class="gp unselectable">iex&gt; </span><span class="n">create_poll_vote</span><span class="p" data-group-id="6910210079-5">(</span><span class="p" data-group-id="6910210079-6">%{</span><span class="ss">field</span><span class="p">:</span><span class="w"> </span><span class="n">bad_value</span><span class="p" data-group-id="6910210079-6">}</span><span class="p" data-group-id="6910210079-5">)</span><span class="w">
-</span><span class="p" data-group-id="6910210079-7">{</span><span class="ss">:error</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="6910210079-8">%</span><span class="nc" data-group-id="6910210079-8">Ecto.Changeset</span><span class="p" data-group-id="6910210079-8">{</span><span class="p" data-group-id="6910210079-8">}</span><span class="p" data-group-id="6910210079-7">}</span></code></pre>
+</span><span class="gp unselectable">iex&gt; </span><span class="n">create_poll_vote</span><span class="p" data-group-id="5516958585-5">(</span><span class="p" data-group-id="5516958585-6">%{</span><span class="ss">field</span><span class="p">:</span><span class="w"> </span><span class="n">bad_value</span><span class="p" data-group-id="5516958585-6">}</span><span class="p" data-group-id="5516958585-5">)</span><span class="w">
+</span><span class="p" data-group-id="5516958585-7">{</span><span class="ss">:error</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="5516958585-8">%</span><span class="nc" data-group-id="5516958585-8">Ecto.Changeset</span><span class="p" data-group-id="5516958585-8">{</span><span class="p" data-group-id="5516958585-8">}</span><span class="p" data-group-id="5516958585-7">}</span></code></pre>
   </section>
 </section>
 <section class="detail" id="delete_poll/2">
@@ -412,7 +418,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">delete_poll(event_uuid, poll)</h1>
 
-      <a href="https://github.com/ClaperCo/Claper/blob/v1.0.0/lib/claper/polls.ex#L158" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/ClaperCo/Claper/blob/v1.0.0/lib/claper/polls.ex#L185" class="view-source" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -428,11 +434,11 @@ Functions
   </a>
   Examples
 </h2>
-<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">delete_poll</span><span class="p" data-group-id="9142562981-1">(</span><span class="n">poll</span><span class="p" data-group-id="9142562981-1">)</span><span class="w">
-</span><span class="p" data-group-id="9142562981-2">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="9142562981-3">%</span><span class="nc" data-group-id="9142562981-3">Poll</span><span class="p" data-group-id="9142562981-3">{</span><span class="p" data-group-id="9142562981-3">}</span><span class="p" data-group-id="9142562981-2">}</span><span class="w">
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">delete_poll</span><span class="p" data-group-id="6995732564-1">(</span><span class="s">&quot;123e4567-e89b-12d3-a456-426614174000&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">poll</span><span class="p" data-group-id="6995732564-1">)</span><span class="w">
+</span><span class="p" data-group-id="6995732564-2">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="6995732564-3">%</span><span class="nc" data-group-id="6995732564-3">Poll</span><span class="p" data-group-id="6995732564-3">{</span><span class="p" data-group-id="6995732564-3">}</span><span class="p" data-group-id="6995732564-2">}</span><span class="w">
 
-</span><span class="gp unselectable">iex&gt; </span><span class="n">delete_poll</span><span class="p" data-group-id="9142562981-4">(</span><span class="n">poll</span><span class="p" data-group-id="9142562981-4">)</span><span class="w">
-</span><span class="p" data-group-id="9142562981-5">{</span><span class="ss">:error</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="9142562981-6">%</span><span class="nc" data-group-id="9142562981-6">Ecto.Changeset</span><span class="p" data-group-id="9142562981-6">{</span><span class="p" data-group-id="9142562981-6">}</span><span class="p" data-group-id="9142562981-5">}</span></code></pre>
+</span><span class="gp unselectable">iex&gt; </span><span class="n">delete_poll</span><span class="p" data-group-id="6995732564-4">(</span><span class="s">&quot;123e4567-e89b-12d3-a456-426614174000&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">poll</span><span class="p" data-group-id="6995732564-4">)</span><span class="w">
+</span><span class="p" data-group-id="6995732564-5">{</span><span class="ss">:error</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="6995732564-6">%</span><span class="nc" data-group-id="6995732564-6">Ecto.Changeset</span><span class="p" data-group-id="6995732564-6">{</span><span class="p" data-group-id="6995732564-6">}</span><span class="p" data-group-id="6995732564-5">}</span></code></pre>
   </section>
 </section>
 <section class="detail" id="get_poll!/1">
@@ -444,7 +450,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">get_poll!(id)</h1>
 
-      <a href="https://github.com/ClaperCo/Claper/blob/v1.0.0/lib/claper/polls.ex#L54" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/ClaperCo/Claper/blob/v1.0.0/lib/claper/polls.ex#L63" class="view-source" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -454,16 +460,16 @@ Functions
 
   <section class="docstring">
 
-<p>Gets a single poll.</p><p>Raises <a href="https://hexdocs.pm/ecto/3.7.2/Ecto.NoResultsError.html"><code class="inline">Ecto.NoResultsError</code></a> if the Poll does not exist.</p><h2 id="get_poll!/1-examples" class="section-heading">
+<p>Gets a single poll and set percentages for each poll options.</p><p>Raises <a href="https://hexdocs.pm/ecto/3.7.2/Ecto.NoResultsError.html"><code class="inline">Ecto.NoResultsError</code></a> if the Poll does not exist.</p><h2 id="get_poll!/1-examples" class="section-heading">
   <a href="#get_poll!/1-examples" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i>
   <p class="sr-only">examples</p>
   </a>
   Examples
 </h2>
-<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">get_poll!</span><span class="p" data-group-id="7993078278-1">(</span><span class="mi">123</span><span class="p" data-group-id="7993078278-1">)</span><span class="w">
-</span><span class="p" data-group-id="7993078278-2">%</span><span class="nc" data-group-id="7993078278-2">Poll</span><span class="p" data-group-id="7993078278-2">{</span><span class="p" data-group-id="7993078278-2">}</span><span class="w">
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">get_poll!</span><span class="p" data-group-id="1381717059-1">(</span><span class="mi">123</span><span class="p" data-group-id="1381717059-1">)</span><span class="w">
+</span><span class="p" data-group-id="1381717059-2">%</span><span class="nc" data-group-id="1381717059-2">Poll</span><span class="p" data-group-id="1381717059-2">{</span><span class="p" data-group-id="1381717059-2">}</span><span class="w">
 
-</span><span class="gp unselectable">iex&gt; </span><span class="n">get_poll!</span><span class="p" data-group-id="7993078278-3">(</span><span class="mi">456</span><span class="p" data-group-id="7993078278-3">)</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="n">get_poll!</span><span class="p" data-group-id="1381717059-3">(</span><span class="mi">456</span><span class="p" data-group-id="1381717059-3">)</span><span class="w">
 </span><span class="gt">** (Ecto.NoResultsError)</span></code></pre>
   </section>
 </section>
@@ -476,7 +482,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">get_poll_current_position(presentation_file_id, position)</h1>
 
-      <a href="https://github.com/ClaperCo/Claper/blob/v1.0.0/lib/claper/polls.ex#L66" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/ClaperCo/Claper/blob/v1.0.0/lib/claper/polls.ex#L84" class="view-source" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -486,7 +492,14 @@ Functions
 
   <section class="docstring">
 
-
+<p>Gets a single poll for a given position.</p><h2 id="get_poll_current_position/2-examples" class="section-heading">
+  <a href="#get_poll_current_position/2-examples" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i>
+  <p class="sr-only">examples</p>
+  </a>
+  Examples
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">get_poll!</span><span class="p" data-group-id="2793020875-1">(</span><span class="mi">123</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p" data-group-id="2793020875-1">)</span><span class="w">
+</span><span class="p" data-group-id="2793020875-2">%</span><span class="nc" data-group-id="2793020875-2">Poll</span><span class="p" data-group-id="2793020875-2">{</span><span class="p" data-group-id="2793020875-2">}</span></code></pre>
   </section>
 </section>
 <section class="detail" id="get_poll_vote/2">
@@ -498,7 +511,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">get_poll_vote(user_id, poll_id)</h1>
 
-      <a href="https://github.com/ClaperCo/Claper/blob/v1.0.0/lib/claper/polls.ex#L297" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/ClaperCo/Claper/blob/v1.0.0/lib/claper/polls.ex#L320" class="view-source" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -508,17 +521,14 @@ Functions
 
   <section class="docstring">
 
-<p>Gets a single poll_vote.</p><p>Raises <a href="https://hexdocs.pm/ecto/3.7.2/Ecto.NoResultsError.html"><code class="inline">Ecto.NoResultsError</code></a> if the Poll vote does not exist.</p><h2 id="get_poll_vote/2-examples" class="section-heading">
+<p>Gets a single poll_vote.</p><h2 id="get_poll_vote/2-examples" class="section-heading">
   <a href="#get_poll_vote/2-examples" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i>
   <p class="sr-only">examples</p>
   </a>
   Examples
 </h2>
-<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">get_poll_vote!</span><span class="p" data-group-id="2189047214-1">(</span><span class="mi">123</span><span class="p" data-group-id="2189047214-1">)</span><span class="w">
-</span><span class="p" data-group-id="2189047214-2">%</span><span class="nc" data-group-id="2189047214-2">PollVote</span><span class="p" data-group-id="2189047214-2">{</span><span class="p" data-group-id="2189047214-2">}</span><span class="w">
-
-</span><span class="gp unselectable">iex&gt; </span><span class="n">get_poll_vote!</span><span class="p" data-group-id="2189047214-3">(</span><span class="mi">456</span><span class="p" data-group-id="2189047214-3">)</span><span class="w">
-</span><span class="gt">** (Ecto.NoResultsError)</span></code></pre>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">get_poll_vote!</span><span class="p" data-group-id="4080507880-1">(</span><span class="mi">321</span><span class="p">,</span><span class="w"> </span><span class="mi">123</span><span class="p" data-group-id="4080507880-1">)</span><span class="w">
+</span><span class="p" data-group-id="4080507880-2">%</span><span class="nc" data-group-id="4080507880-2">PollVote</span><span class="p" data-group-id="4080507880-2">{</span><span class="p" data-group-id="4080507880-2">}</span></code></pre>
   </section>
 </section>
 <section class="detail" id="list_polls/1">
@@ -540,14 +550,14 @@ Functions
 
   <section class="docstring">
 
-<p>Returns the list of polls.</p><h2 id="list_polls/1-examples" class="section-heading">
+<p>Returns the list of polls for a given presentation file.</p><h2 id="list_polls/1-examples" class="section-heading">
   <a href="#list_polls/1-examples" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i>
   <p class="sr-only">examples</p>
   </a>
   Examples
 </h2>
-<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">list_polls</span><span class="p" data-group-id="7005448808-1">(</span><span class="p" data-group-id="7005448808-1">)</span><span class="w">
-</span><span class="p" data-group-id="7005448808-2">[</span><span class="p" data-group-id="7005448808-3">%</span><span class="nc" data-group-id="7005448808-3">Poll</span><span class="p" data-group-id="7005448808-3">{</span><span class="p" data-group-id="7005448808-3">}</span><span class="p">,</span><span class="w"> </span><span class="n">...</span><span class="p" data-group-id="7005448808-2">]</span></code></pre>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">list_polls</span><span class="p" data-group-id="0389346946-1">(</span><span class="mi">123</span><span class="p" data-group-id="0389346946-1">)</span><span class="w">
+</span><span class="p" data-group-id="0389346946-2">[</span><span class="p" data-group-id="0389346946-3">%</span><span class="nc" data-group-id="0389346946-3">Poll</span><span class="p" data-group-id="0389346946-3">{</span><span class="p" data-group-id="0389346946-3">}</span><span class="p">,</span><span class="w"> </span><span class="n">...</span><span class="p" data-group-id="0389346946-2">]</span></code></pre>
   </section>
 </section>
 <section class="detail" id="list_polls_at_position/2">
@@ -559,7 +569,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">list_polls_at_position(presentation_file_id, position)</h1>
 
-      <a href="https://github.com/ClaperCo/Claper/blob/v1.0.0/lib/claper/polls.ex#L31" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/ClaperCo/Claper/blob/v1.0.0/lib/claper/polls.ex#L40" class="view-source" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -569,7 +579,14 @@ Functions
 
   <section class="docstring">
 
-
+<p>Returns the list of polls for a given presentation file and a given position.</p><h2 id="list_polls_at_position/2-examples" class="section-heading">
+  <a href="#list_polls_at_position/2-examples" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i>
+  <p class="sr-only">examples</p>
+  </a>
+  Examples
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">list_polls_at_position</span><span class="p" data-group-id="8230692787-1">(</span><span class="mi">123</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p" data-group-id="8230692787-1">)</span><span class="w">
+</span><span class="p" data-group-id="8230692787-2">[</span><span class="p" data-group-id="8230692787-3">%</span><span class="nc" data-group-id="8230692787-3">Poll</span><span class="p" data-group-id="8230692787-3">{</span><span class="p" data-group-id="8230692787-3">}</span><span class="p">,</span><span class="w"> </span><span class="n">...</span><span class="p" data-group-id="8230692787-2">]</span></code></pre>
   </section>
 </section>
 <section class="detail" id="remove_poll_opt/2">
@@ -581,7 +598,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">remove_poll_opt(changeset, poll_opt)</h1>
 
-      <a href="https://github.com/ClaperCo/Claper/blob/v1.0.0/lib/claper/polls.ex#L190" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/ClaperCo/Claper/blob/v1.0.0/lib/claper/polls.ex#L217" class="view-source" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -603,7 +620,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">set_default(id, presentation_file_id, position)</h1>
 
-      <a href="https://github.com/ClaperCo/Claper/blob/v1.0.0/lib/claper/polls.ex#L254" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/ClaperCo/Claper/blob/v1.0.0/lib/claper/polls.ex#L281" class="view-source" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -625,7 +642,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">set_percentages(poll)</h1>
 
-      <a href="https://github.com/ClaperCo/Claper/blob/v1.0.0/lib/claper/polls.ex#L83" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/ClaperCo/Claper/blob/v1.0.0/lib/claper/polls.ex#L110" class="view-source" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -635,7 +652,14 @@ Functions
 
   <section class="docstring">
 
-
+<p>Calculate percentage of all poll options for a given poll.</p><h2 id="set_percentages/1-examples" class="section-heading">
+  <a href="#set_percentages/1-examples" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i>
+  <p class="sr-only">examples</p>
+  </a>
+  Examples
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">set_percentages</span><span class="p" data-group-id="7200481941-1">(</span><span class="n">poll</span><span class="p" data-group-id="7200481941-1">)</span><span class="w">
+</span><span class="p" data-group-id="7200481941-2">%</span><span class="nc" data-group-id="7200481941-2">Poll</span><span class="p" data-group-id="7200481941-2">{</span><span class="p" data-group-id="7200481941-2">}</span></code></pre>
   </section>
 </section>
 <section class="detail" id="update_poll/3">
@@ -647,7 +671,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">update_poll(event_uuid, poll, attrs)</h1>
 
-      <a href="https://github.com/ClaperCo/Claper/blob/v1.0.0/lib/claper/polls.ex#L132" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/ClaperCo/Claper/blob/v1.0.0/lib/claper/polls.ex#L159" class="view-source" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -663,11 +687,11 @@ Functions
   </a>
   Examples
 </h2>
-<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">update_poll</span><span class="p" data-group-id="7884867545-1">(</span><span class="n">poll</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="7884867545-2">%{</span><span class="ss">field</span><span class="p">:</span><span class="w"> </span><span class="n">new_value</span><span class="p" data-group-id="7884867545-2">}</span><span class="p" data-group-id="7884867545-1">)</span><span class="w">
-</span><span class="p" data-group-id="7884867545-3">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="7884867545-4">%</span><span class="nc" data-group-id="7884867545-4">Poll</span><span class="p" data-group-id="7884867545-4">{</span><span class="p" data-group-id="7884867545-4">}</span><span class="p" data-group-id="7884867545-3">}</span><span class="w">
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">update_poll</span><span class="p" data-group-id="0886821612-1">(</span><span class="s">&quot;123e4567-e89b-12d3-a456-426614174000&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">poll</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="0886821612-2">%{</span><span class="ss">field</span><span class="p">:</span><span class="w"> </span><span class="n">new_value</span><span class="p" data-group-id="0886821612-2">}</span><span class="p" data-group-id="0886821612-1">)</span><span class="w">
+</span><span class="p" data-group-id="0886821612-3">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="0886821612-4">%</span><span class="nc" data-group-id="0886821612-4">Poll</span><span class="p" data-group-id="0886821612-4">{</span><span class="p" data-group-id="0886821612-4">}</span><span class="p" data-group-id="0886821612-3">}</span><span class="w">
 
-</span><span class="gp unselectable">iex&gt; </span><span class="n">update_poll</span><span class="p" data-group-id="7884867545-5">(</span><span class="n">poll</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="7884867545-6">%{</span><span class="ss">field</span><span class="p">:</span><span class="w"> </span><span class="n">bad_value</span><span class="p" data-group-id="7884867545-6">}</span><span class="p" data-group-id="7884867545-5">)</span><span class="w">
-</span><span class="p" data-group-id="7884867545-7">{</span><span class="ss">:error</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="7884867545-8">%</span><span class="nc" data-group-id="7884867545-8">Ecto.Changeset</span><span class="p" data-group-id="7884867545-8">{</span><span class="p" data-group-id="7884867545-8">}</span><span class="p" data-group-id="7884867545-7">}</span></code></pre>
+</span><span class="gp unselectable">iex&gt; </span><span class="n">update_poll</span><span class="p" data-group-id="0886821612-5">(</span><span class="s">&quot;123e4567-e89b-12d3-a456-426614174000&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">poll</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="0886821612-6">%{</span><span class="ss">field</span><span class="p">:</span><span class="w"> </span><span class="n">bad_value</span><span class="p" data-group-id="0886821612-6">}</span><span class="p" data-group-id="0886821612-5">)</span><span class="w">
+</span><span class="p" data-group-id="0886821612-7">{</span><span class="ss">:error</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="0886821612-8">%</span><span class="nc" data-group-id="0886821612-8">Ecto.Changeset</span><span class="p" data-group-id="0886821612-8">{</span><span class="p" data-group-id="0886821612-8">}</span><span class="p" data-group-id="0886821612-7">}</span></code></pre>
   </section>
 </section>
 <section class="detail" id="vote/4">
@@ -679,7 +703,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">vote(user_id, event_uuid, poll_opt, poll_id)</h1>
 
-      <a href="https://github.com/ClaperCo/Claper/blob/v1.0.0/lib/claper/polls.ex#L198" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/ClaperCo/Claper/blob/v1.0.0/lib/claper/polls.ex#L225" class="view-source" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
