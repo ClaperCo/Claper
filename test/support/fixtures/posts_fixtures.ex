@@ -12,8 +12,8 @@ defmodule Claper.PostsFixtures do
   Generate a post.
   """
   def post_fixture(attrs \\ %{}, preload \\ []) do
-    user = user_fixture()
-    event = event_fixture()
+    user = attrs[:user] || user_fixture()
+    event = attrs[:event] || event_fixture()
     assoc = %{user: user, event: event}
     {:ok, post} =
       Claper.Posts.create_post(assoc.event, attrs

@@ -8,11 +8,27 @@ defmodule Claper.AccountsFixtures do
 
   def valid_user_attributes(attrs \\ %{}) do
     Enum.into(attrs, %{
+      email: unique_user_email(),
+      confirmed_at: NaiveDateTime.utc_now(),
+    })
+  end
+
+  def no_valid_user_attributes(attrs \\ %{}) do
+    Enum.into(attrs, %{
       email: unique_user_email()
     })
   end
 
   def user_fixture(attrs \\ %{}) do
+    {:ok, user} =
+      attrs
+      |> no_valid_user_attributes()
+      |> Claper.Accounts.register_user()
+
+    user
+  end
+
+  def confirmed_user_fixture(attrs \\ %{}) do
     {:ok, user} =
       attrs
       |> valid_user_attributes()

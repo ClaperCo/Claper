@@ -17,7 +17,7 @@ defmodule Claper.Presentations.PresentationFile do
   @doc false
   def changeset(presentation_file, attrs) do
     presentation_file
-    |> cast(attrs, [:length, :status, :hash])
+    |> cast(attrs, [:length, :status, :hash, :event_id])
     |> cast_assoc(:presentation_state)
   end
 end

@@ -8,7 +8,7 @@
 
 <div class="lg:overflow-hidden">
 
-  <div x-data="{open: false}" class="w-full h-24 py-4 text-right md:px-5 relative z-20" phx-update="ignore">
+  <div x-data="{open: false}" id="menu" class="w-full h-24 py-4 text-right md:px-5 relative z-20" phx-update="ignore">
     <div x-show="open" x-transition class="absolute h-24 bg-white w-full top-0 md:hidden px-5 py-3 flex flex-col items-center justify-center space-y-2" @click.away="open = false">
       <a href="https://get.claper.co/" class="text-sm font-semibold text-black"><%= gettext("About") %></a>
       <%= if @current_user do %>

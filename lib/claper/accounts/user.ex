@@ -16,7 +16,7 @@ defmodule Claper.Accounts.User do
 
   def registration_changeset(user, attrs, _opts \\ []) do
     user
-    |> cast(attrs, [:email])
+    |> cast(attrs, [:email, :confirmed_at])
     |> validate_email()
   end
 

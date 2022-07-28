@@ -12,7 +12,7 @@ defmodule Claper.EventsFixtures do
   Generate a event.
   """
   def event_fixture(attrs \\ %{}, preload \\ []) do
-    assoc = %{user: user_fixture()}
+    assoc = %{user: attrs[:user] || user_fixture()}
     {:ok, event} =
       attrs
       |> Enum.into(%{

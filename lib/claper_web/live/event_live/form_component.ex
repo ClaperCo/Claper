@@ -78,8 +78,6 @@ defmodule ClaperWeb.EventLive.FormComponent do
         leader.temp_id == remove_id
       end)
 
-    IO.inspect(leaders)
-
     changeset =
       socket.assigns.changeset
       |> Ecto.Changeset.put_assoc(:leaders, leaders)
@@ -155,10 +153,6 @@ defmodule ClaperWeb.EventLive.FormComponent do
   end
 
   defp create_event(socket, event_params, hash, ext) do
-    IO.inspect(
-      event_params
-      |> Map.put("user_id", socket.assigns.current_user.id)
-    )
 
     case Events.create_event(
            event_params

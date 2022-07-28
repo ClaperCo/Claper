@@ -45,13 +45,8 @@ defmodule ClaperWeb.ConnCase do
   It stores an updated connection and a registered user in the
   test context.
   """
-  def register_and_log_in_user(%{conn: conn, org_id: org_id}) do
-    user = Claper.AccountsFixtures.user_fixture(%{confirmed_at: DateTime.utc_now(), org_id: org_id})
-    %{conn: log_in_user(conn, user), user: user}
-  end
-
   def register_and_log_in_user(%{conn: conn}) do
-    user = Claper.AccountsFixtures.user_fixture(%{confirmed_at: DateTime.utc_now()})
+    user = Claper.AccountsFixtures.confirmed_user_fixture()
     %{conn: log_in_user(conn, user), user: user}
   end
 
@@ -65,7 +60,8 @@ defmodule ClaperWeb.ConnCase do
 
     conn
     |> Phoenix.ConnTest.init_test_session(%{})
-    |> Plug.Conn.put_session(:user_token, token)
     |> Plug.Conn.put_session(:current_user, user)
+    |> Plug.Conn.put_session(:user_token, token)
+
   end
 end

@@ -7,7 +7,7 @@ defmodule ClaperWeb.EventLive.EventCardComponent do
       |> assign_new(:is_leader, fn -> false end)
 
     ~H"""
-    <li class="w-full my-4">
+    <li class="w-full my-4" id={"event-#{@event.uuid}"}>
       <div class="block bg-white rounded-2xl shadow-base">
         <div class="px-4 py-4 sm:px-6">
           <div class="flex items-center justify-between">
@@ -39,7 +39,7 @@ defmodule ClaperWeb.EventLive.EventCardComponent do
                   <%= @event.code %>
                 </p>
               </div>
-              <div class="flex items-center text-sm text-gray-500 space-x-1" phx-update="ignore">
+              <div id="event-infos-0" class="flex items-center text-sm text-gray-500 space-x-1" phx-update="ignore">
                 <img src="/images/icons/calendar-clear-outline.svg" class="h-5 w-5" />
                 <%= if NaiveDateTime.compare(@current_time, @event.started_at) == :gt and NaiveDateTime.compare(@current_time, @event.expired_at) == :lt do %>
                 <p>
@@ -66,7 +66,7 @@ defmodule ClaperWeb.EventLive.EventCardComponent do
             <%= if NaiveDateTime.compare(@current_time, @event.expired_at) == :lt do %>
               <%= if @event.presentation_file.status == "done" || (@event.presentation_file.status == "fail" && @event.presentation_file.hash) do %>
                 <div class="mt-2 flex flex-col space-y-2 sm:space-y-0 justify-between sm:flex-row items-center">
-                  <div class="text-sm w-full space-y-2 sm:w-auto font-medium text-gray-700 sm:flex sm:justify-center sm:space-x-1 sm:space-y-0 sm:items-center" phx-update="ignore">
+                  <div id="event-infos" class="text-sm w-full space-y-2 sm:w-auto font-medium text-gray-700 sm:flex sm:justify-center sm:space-x-1 sm:space-y-0 sm:items-center" phx-update="ignore">
                     <a data-phx-link="patch" data-phx-link-state="push" href={Routes.event_manage_path(@socket, :show, @event.code)} class="flex w-full lg:w-auto px-6 text-white py-2 justify-center rounded-md tracking-wide font-bold focus:outline-none focus:shadow-outline hover:bg-primary-600 bg-primary-500 space-x-2">
                       <img src="/images/icons/easel.svg" class="h-5" />
                       <span><%= gettext "Present/Customize" %></span>
@@ -110,7 +110,7 @@ defmodule ClaperWeb.EventLive.EventCardComponent do
 
             <%= if NaiveDateTime.compare(@current_time, @event.expired_at) == :gt do %>
               <div class="mt-2 flex flex-col space-y-2 sm:space-y-0 justify-between sm:flex-row items-center">
-                <div class="text-sm w-full space-y-2 sm:w-auto font-medium text-gray-700 sm:flex sm:justify-center sm:space-x-1 sm:space-y-0 sm:items-center" phx-update="ignore">
+                <div id="event-infos-2" class="text-sm w-full space-y-2 sm:w-auto font-medium text-gray-700 sm:flex sm:justify-center sm:space-x-1 sm:space-y-0 sm:items-center" phx-update="ignore">
                   <a data-phx-link="patch" data-phx-link-state="push" href={Routes.stat_index_path(@socket, :index, @event.uuid)} class="flex w-full lg:w-auto px-6 text-white py-2 justify-center rounded-md tracking-wide font-bold focus:outline-none focus:shadow-outline hover:bg-primary-600 bg-primary-500 space-x-2">
                   <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                     <path d="M2 10a8 8 0 018-8v8h8a8 8 0 11-16 0z" />

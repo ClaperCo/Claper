@@ -17,7 +17,7 @@ defmodule Claper.Presentations.PresentationState do
   @doc false
   def changeset(presentation_state, attrs) do
     presentation_state
-    |> cast(attrs, [:position, :chat_visible, :poll_visible, :join_screen_visible, :banned])
+    |> cast(attrs, [:position, :chat_visible, :poll_visible, :join_screen_visible, :banned, :presentation_file_id])
     |> validate_required([])
   end
 end

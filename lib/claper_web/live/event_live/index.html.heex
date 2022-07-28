@@ -52,7 +52,7 @@
   </div>
 
   <div class="mt-10 relative">
-    <ul role="managed-event-list" class="divide-y divide-gray-200" phx-update="replace">
+    <ul role="managed-event-list" class="divide-y divide-gray-200" id="event-cards" phx-update="replace">
         <% current_time = NaiveDateTime.utc_now() %>
         <%= for event <- @managed_events do %>
           <.live_component module={ClaperWeb.EventLive.EventCardComponent} id={"managed-event-#{event.uuid}"} is_leader={true} event={event} current_time={current_time} />
