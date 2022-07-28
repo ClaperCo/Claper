@@ -1,7 +1,7 @@
 name: Publish doc
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "main", "dev" ]
     tags: ['v*']
 permissions:
   contents: write
