@@ -14,7 +14,7 @@ jobs:
       id: meta
       uses: docker/metadata-action@v4
       with:
-        images: claperco/claper
+        images: ghcr.io/claperco/claper
         tags: |
           type=ref,event=branch
           type=semver,pattern={{version}}
