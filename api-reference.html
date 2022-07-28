@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="ExDoc v0.28.4">
+    <meta name="project" content="Claper v1.0.0">
+
+    <title>API Reference — Claper v1.0.0</title>
+    <link rel="stylesheet" href="dist/elixir-b6f1ed5df9b1d42a7309.css" />
+
+    <script src="dist/sidebar_items-51590e335a.js"></script>
+
+      <script src="docs_config.js"></script>
+
+    <script async src="dist/app-bd1cb213813bf4825aa2.js"></script>
+
+
+  </head>
+  <body data-type="extras">
+    <script>
+
+      try {
+        var settings = JSON.parse(localStorage.getItem('ex_doc:settings') || '{}');
+
+        if (settings.theme === 'dark' ||
+           ((settings.theme === 'system' || settings.theme == null) &&
+             window.matchMedia('(prefers-color-scheme: dark)').matches)
+           ) {
+          document.body.classList.add('dark')
+        }
+      } catch (error) { }
+    </script>
+
+<div class="main">
+
+
+<section class="sidebar">
+  <button class="sidebar-button sidebar-toggle" aria-label="toggle sidebar">
+    <i class="ri-menu-line ri-lg" title="Collapse/expand sidebar"></i>
+  </button>
+
+  <form class="sidebar-search" action="search.html">
+    <button type="submit" class="search-button" aria-label="Submit Search">
+      <i class="ri-search-2-line" aria-hidden="true" title="Submit search"></i>
+    </button>
+    <button type="button" tabindex="-1" class="search-close-button" aria-label="Cancel Search">
+      <i class="ri-close-line ri-lg" aria-hidden="true" title="Cancel search"></i>
+    </button>
+    <label class="search-label">
+      <p class="sr-only">Search</p>
+      <input name="q" type="text" class="search-input" placeholder="Search..." aria-label="Input your search terms" autocomplete="off" />
+    </label>
+  </form>
+
+  <div class="autocomplete">
+    <div class="autocomplete-results">
+    </div>
+  </div>
+
+  <div class="sidebar-header">
+
+      <a href="https://get.claper.co">
+        <img src="assets/logo.png" alt="Claper" class="sidebar-projectImage">
+      </a>
+
+    <div class="sidebar-projectDetails">
+      <a href="https://get.claper.co" class="sidebar-projectName" translate="no">
+Claper
+      </a>
+      <strong class="sidebar-projectVersion" translate="no">
+        v1.0.0
+      </strong>
+    </div>
+    <ul class="sidebar-listNav">
+      <li><a id="extras-list-link" href="#full-list">Pages</a></li>
+
+        <li><a id="modules-list-link" href="#full-list">Modules</a></li>
+
+
+    </ul>
+  </div>
+
+  <div class="gradient"></div>
+  <ul id="full-list" class="sidebar-fullList"></ul>
+</section>
+
+<section class="content">
+  <output role="status" id="toast"></output>
+  <div class="content-outer">
+    <div id="content" class="content-inner">
+
+<h1>
+<button class="settings display-settings">
+  <i class="ri-settings-3-line"></i>
+  <span class="sr-only">Settings</span>
+</button>
+
+
+  <span>API Reference <small class="app-vsn">Claper v1.0.0</small></span>
+</h1>
+
+
+  <section class="details-list">
+    <h2 id="modules" class="section-heading">
+  <a href="#modules" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i>
+  <p class="sr-only">modules</p>
+  </a>
+  Modules
+</h2>
+
+    <div class="summary">
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Claper.html" translate="no">Claper</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>Claper keeps the contexts that define your domain
+and business logic.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Claper.Accounts.html" translate="no">Claper.Accounts</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>The Accounts context.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Claper.Accounts.User.html" translate="no">Claper.Accounts.User</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Claper.Accounts.UserNotifier.html" translate="no">Claper.Accounts.UserNotifier</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Claper.Accounts.UserToken.html" translate="no">Claper.Accounts.UserToken</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Claper.Events.html" translate="no">Claper.Events</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>The Events context.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Claper.Events.ActivityLeader.html" translate="no">Claper.Events.ActivityLeader</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Claper.Events.Event.html" translate="no">Claper.Events.Event</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Claper.Mailer.html" translate="no">Claper.Mailer</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Claper.Polls.html" translate="no">Claper.Polls</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>The Polls context.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Claper.Polls.Poll.html" translate="no">Claper.Polls.Poll</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Claper.Polls.PollOpt.html" translate="no">Claper.Polls.PollOpt</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Claper.Polls.PollVote.html" translate="no">Claper.Polls.PollVote</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Claper.Posts.html" translate="no">Claper.Posts</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>The Posts context.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Claper.Posts.Post.html" translate="no">Claper.Posts.Post</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Claper.Posts.Reaction.html" translate="no">Claper.Posts.Reaction</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Claper.Presentations.html" translate="no">Claper.Presentations</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>The Presentations context.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Claper.Presentations.PresentationFile.html" translate="no">Claper.Presentations.PresentationFile</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Claper.Presentations.PresentationState.html" translate="no">Claper.Presentations.PresentationState</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Claper.Release.html" translate="no">Claper.Release</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>Used for executing DB release tasks when run in production without Mix
+installed.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Claper.Repo.html" translate="no">Claper.Repo</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Claper.Schema.html" translate="no">Claper.Schema</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Claper.Stats.html" translate="no">Claper.Stats</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>The Stats context.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Claper.Tasks.Converter.html" translate="no">Claper.Tasks.Converter</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>This module is used to convert presentations from PDF or PPT to images.
+We use a hash to identify the presentation. A new hash is generated when the conversion is finished and the presentation is being uploaded.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="ClaperWeb.html" translate="no">ClaperWeb</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>The entrypoint for defining your web interface, such
+as controllers, views, channels and so on.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="ClaperWeb.AttendeeLiveAuth.html" translate="no">ClaperWeb.AttendeeLiveAuth</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="ClaperWeb.AttendeeRegistrationView.html" translate="no">ClaperWeb.AttendeeRegistrationView</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="ClaperWeb.Component.Alert.html" translate="no">ClaperWeb.Component.Alert</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="ClaperWeb.Component.Input.html" translate="no">ClaperWeb.Component.Input</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="ClaperWeb.ComponentView.html" translate="no">ClaperWeb.ComponentView</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="ClaperWeb.Endpoint.html" translate="no">ClaperWeb.Endpoint</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="ClaperWeb.ErrorHelpers.html" translate="no">ClaperWeb.ErrorHelpers</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>Conveniences for translating and building error messages.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="ClaperWeb.ErrorView.html" translate="no">ClaperWeb.ErrorView</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="ClaperWeb.EventController.html" translate="no">ClaperWeb.EventController</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="ClaperWeb.EventLive.EventCardComponent.html" translate="no">ClaperWeb.EventLive.EventCardComponent</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="ClaperWeb.EventLive.FormComponent.html" translate="no">ClaperWeb.EventLive.FormComponent</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="ClaperWeb.EventLive.Index.html" translate="no">ClaperWeb.EventLive.Index</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="ClaperWeb.EventLive.Join.html" translate="no">ClaperWeb.EventLive.Join</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="ClaperWeb.EventLive.Manage.html" translate="no">ClaperWeb.EventLive.Manage</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="ClaperWeb.EventLive.PollComponent.html" translate="no">ClaperWeb.EventLive.PollComponent</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="ClaperWeb.EventLive.PostComponent.html" translate="no">ClaperWeb.EventLive.PostComponent</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="ClaperWeb.EventLive.Presenter.html" translate="no">ClaperWeb.EventLive.Presenter</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="ClaperWeb.EventLive.Show.html" translate="no">ClaperWeb.EventLive.Show</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="ClaperWeb.EventView.html" translate="no">ClaperWeb.EventView</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="ClaperWeb.Gettext.html" translate="no">ClaperWeb.Gettext</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>A module providing Internationalization with a gettext-based API.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="ClaperWeb.LayoutView.html" translate="no">ClaperWeb.LayoutView</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="ClaperWeb.LiveHelpers.html" translate="no">ClaperWeb.LiveHelpers</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="ClaperWeb.ModalComponent.html" translate="no">ClaperWeb.ModalComponent</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="ClaperWeb.Notifiers.UserNotifier.html" translate="no">ClaperWeb.Notifiers.UserNotifier</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="ClaperWeb.PageController.html" translate="no">ClaperWeb.PageController</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="ClaperWeb.PageView.html" translate="no">ClaperWeb.PageView</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="ClaperWeb.Plugs.Locale.html" translate="no">ClaperWeb.Plugs.Locale</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="ClaperWeb.PollLive.FormComponent.html" translate="no">ClaperWeb.PollLive.FormComponent</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="ClaperWeb.PostController.html" translate="no">ClaperWeb.PostController</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="ClaperWeb.PostView.html" translate="no">ClaperWeb.PostView</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="ClaperWeb.Presence.html" translate="no">ClaperWeb.Presence</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>Provides presence tracking to channels and processes.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="ClaperWeb.Router.html" translate="no">ClaperWeb.Router</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="ClaperWeb.Router.Helpers.html" translate="no">ClaperWeb.Router.Helpers</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>Module with named helpers generated from ClaperWeb.Router.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="ClaperWeb.StatLive.Index.html" translate="no">ClaperWeb.StatLive.Index</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="ClaperWeb.Telemetry.html" translate="no">ClaperWeb.Telemetry</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="ClaperWeb.UserAuth.html" translate="no">ClaperWeb.UserAuth</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="ClaperWeb.UserConfirmationController.html" translate="no">ClaperWeb.UserConfirmationController</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="ClaperWeb.UserConfirmationView.html" translate="no">ClaperWeb.UserConfirmationView</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="ClaperWeb.UserLiveAuth.html" translate="no">ClaperWeb.UserLiveAuth</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="ClaperWeb.UserNotifierView.html" translate="no">ClaperWeb.UserNotifierView</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="ClaperWeb.UserRegistrationController.html" translate="no">ClaperWeb.UserRegistrationController</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="ClaperWeb.UserRegistrationView.html" translate="no">ClaperWeb.UserRegistrationView</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="ClaperWeb.UserResetPasswordView.html" translate="no">ClaperWeb.UserResetPasswordView</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="ClaperWeb.UserSessionController.html" translate="no">ClaperWeb.UserSessionController</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="ClaperWeb.UserSessionView.html" translate="no">ClaperWeb.UserSessionView</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="ClaperWeb.UserSettingsController.html" translate="no">ClaperWeb.UserSettingsController</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="ClaperWeb.UserSettingsLive.FormComponent.html" translate="no">ClaperWeb.UserSettingsLive.FormComponent</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="ClaperWeb.UserSettingsLive.Show.html" translate="no">ClaperWeb.UserSettingsLive.Show</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="ClaperWeb.UserSettingsView.html" translate="no">ClaperWeb.UserSettingsView</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="ClaperWeb.UserView.html" translate="no">ClaperWeb.UserView</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="SimpleS3Upload.html" translate="no">SimpleS3Upload</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>Dependency-free S3 Form Upload using HTTP POST sigv4</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Utils.FileUpload.html" translate="no">Utils.FileUpload</a>
+
+  </div>
+
+</div>
+
+    </div>
+  </section>
+
+
+<div class="bottom-actions">
+  <div class="bottom-actions-item">
+
+  </div>
+  <div class="bottom-actions-item">
+
+      <a href="configuration.html" class="bottom-actions-button" rel="next">
+        <span class="subheader">
+          Next Page →
+        </span>
+        <span class="title">
+Configuration
+        </span>
+      </a>
+
+  </div>
+</div>
+
+      <footer class="footer">
+
+        <p>
+          Built using
+          <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.28.4) for the
+
+            <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
+
+        </p>
+      </footer>
+    </div>
+  </div>
+</section>
+</div>
+
+
+  </body>
+</html>

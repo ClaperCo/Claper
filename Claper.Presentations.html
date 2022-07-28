@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="ExDoc v0.28.4">
+    <meta name="project" content="Claper v1.0.0">
+
+    <title>Claper.Presentations — Claper v1.0.0</title>
+    <link rel="stylesheet" href="dist/elixir-b6f1ed5df9b1d42a7309.css" />
+
+    <script src="dist/sidebar_items-51590e335a.js"></script>
+
+      <script src="docs_config.js"></script>
+
+    <script async src="dist/app-bd1cb213813bf4825aa2.js"></script>
+
+
+  </head>
+  <body data-type="modules">
+    <script>
+
+      try {
+        var settings = JSON.parse(localStorage.getItem('ex_doc:settings') || '{}');
+
+        if (settings.theme === 'dark' ||
+           ((settings.theme === 'system' || settings.theme == null) &&
+             window.matchMedia('(prefers-color-scheme: dark)').matches)
+           ) {
+          document.body.classList.add('dark')
+        }
+      } catch (error) { }
+    </script>
+
+<div class="main">
+
+
+<section class="sidebar">
+  <button class="sidebar-button sidebar-toggle" aria-label="toggle sidebar">
+    <i class="ri-menu-line ri-lg" title="Collapse/expand sidebar"></i>
+  </button>
+
+  <form class="sidebar-search" action="search.html">
+    <button type="submit" class="search-button" aria-label="Submit Search">
+      <i class="ri-search-2-line" aria-hidden="true" title="Submit search"></i>
+    </button>
+    <button type="button" tabindex="-1" class="search-close-button" aria-label="Cancel Search">
+      <i class="ri-close-line ri-lg" aria-hidden="true" title="Cancel search"></i>
+    </button>
+    <label class="search-label">
+      <p class="sr-only">Search</p>
+      <input name="q" type="text" class="search-input" placeholder="Search..." aria-label="Input your search terms" autocomplete="off" />
+    </label>
+  </form>
+
+  <div class="autocomplete">
+    <div class="autocomplete-results">
+    </div>
+  </div>
+
+  <div class="sidebar-header">
+
+      <a href="https://get.claper.co">
+        <img src="assets/logo.png" alt="Claper" class="sidebar-projectImage">
+      </a>
+
+    <div class="sidebar-projectDetails">
+      <a href="https://get.claper.co" class="sidebar-projectName" translate="no">
+Claper
+      </a>
+      <strong class="sidebar-projectVersion" translate="no">
+        v1.0.0
+      </strong>
+    </div>
+    <ul class="sidebar-listNav">
+      <li><a id="extras-list-link" href="#full-list">Pages</a></li>
+
+        <li><a id="modules-list-link" href="#full-list">Modules</a></li>
+
+
+    </ul>
+  </div>
+
+  <div class="gradient"></div>
+  <ul id="full-list" class="sidebar-fullList"></ul>
+</section>
+
+<section class="content">
+  <output role="status" id="toast"></output>
+  <div class="content-outer">
+    <div id="content" class="content-inner">
+
+<h1>
+<button class="settings display-settings">
+  <i class="ri-settings-3-line"></i>
+  <span class="sr-only">Settings</span>
+</button>
+
+
+    <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper/presentations.ex#L1" title="View Source" class="view-source" rel="help">
+      <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+      <span class="sr-only">View Source</span>
+    </a>
+
+  <span translate="no">Claper.Presentations</span> 
+  <small class="app-vsn" translate="no">(Claper v1.0.0)</small>
+
+</h1>
+
+
+  <section id="moduledoc">
+<p>The Presentations context.</p>
+  </section>
+
+
+  <section id="summary" class="details-list">
+    <h1 class="section-heading">
+      <a class="hover-link" href="#summary">
+        <i class="ri-link-m" aria-hidden="true"></i>
+        <span class="sr-only">Link to this section</span>
+      </a>
+      Summary
+    </h1>
+
+  <div class="summary-functions summary">
+    <h2>
+      <a href="#functions">Functions</a>
+    </h2>
+
+      <div class="summary-row">
+        <div class="summary-signature">
+          <a href="#create_presentation_file/1" translate="no">create_presentation_file(attrs \\ %{})</a>
+
+        </div>
+
+          <div class="summary-synopsis"><p>Creates a presentation_files.</p></div>
+
+      </div>
+
+      <div class="summary-row">
+        <div class="summary-signature">
+          <a href="#create_presentation_state/1" translate="no">create_presentation_state(attrs \\ %{})</a>
+
+        </div>
+
+          <div class="summary-synopsis"><p>Creates a presentation_state.</p></div>
+
+      </div>
+
+      <div class="summary-row">
+        <div class="summary-signature">
+          <a href="#get_presentation_file!/2" translate="no">get_presentation_file!(id, preload \\ [])</a>
+
+        </div>
+
+          <div class="summary-synopsis"><p>Gets a single presentation_files.</p></div>
+
+      </div>
+
+      <div class="summary-row">
+        <div class="summary-signature">
+          <a href="#get_presentation_file_by_hash!/1" translate="no">get_presentation_file_by_hash!(hash)</a>
+
+        </div>
+
+      </div>
+
+      <div class="summary-row">
+        <div class="summary-signature">
+          <a href="#subscribe/1" translate="no">subscribe(presentation_file_id)</a>
+
+        </div>
+
+      </div>
+
+      <div class="summary-row">
+        <div class="summary-signature">
+          <a href="#update_presentation_file/2" translate="no">update_presentation_file(presentation_file, attrs)</a>
+
+        </div>
+
+          <div class="summary-synopsis"><p>Updates a presentation_files.</p></div>
+
+      </div>
+
+      <div class="summary-row">
+        <div class="summary-signature">
+          <a href="#update_presentation_state/2" translate="no">update_presentation_state(presentation_state, attrs)</a>
+
+        </div>
+
+          <div class="summary-synopsis"><p>Updates a presentation_state.</p></div>
+
+      </div>
+
+  </div>
+
+  </section>
+
+
+  <section id="functions" class="details-list">
+    <h1 class="section-heading">
+      <a class="hover-link" href="#functions">
+        <i class="ri-link-m" aria-hidden="true"></i>
+        <span class="sr-only">Link to this section</span>
+      </a>
+Functions
+    </h1>
+    <div class="functions-list">
+<section class="detail" id="create_presentation_file/1">
+
+    <span id="create_presentation_file/0"></span>
+
+  <div class="detail-header">
+    <a href="#create_presentation_file/1" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">create_presentation_file(attrs \\ %{})</h1>
+
+      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper/presentations.ex#L43" class="view-source" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+<p>Creates a presentation_files.</p><h2 id="create_presentation_file/1-examples" class="section-heading">
+  <a href="#create_presentation_file/1-examples" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i>
+  <p class="sr-only">examples</p>
+  </a>
+  Examples
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">create_presentation_file</span><span class="p" data-group-id="2660747384-1">(</span><span class="p" data-group-id="2660747384-2">%{</span><span class="ss">field</span><span class="p">:</span><span class="w"> </span><span class="n">value</span><span class="p" data-group-id="2660747384-2">}</span><span class="p" data-group-id="2660747384-1">)</span><span class="w">
+</span><span class="p" data-group-id="2660747384-3">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="2660747384-4">%</span><span class="nc" data-group-id="2660747384-4">PresentationFile</span><span class="p" data-group-id="2660747384-4">{</span><span class="p" data-group-id="2660747384-4">}</span><span class="p" data-group-id="2660747384-3">}</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="n">create_presentation_file</span><span class="p" data-group-id="2660747384-5">(</span><span class="p" data-group-id="2660747384-6">%{</span><span class="ss">field</span><span class="p">:</span><span class="w"> </span><span class="n">bad_value</span><span class="p" data-group-id="2660747384-6">}</span><span class="p" data-group-id="2660747384-5">)</span><span class="w">
+</span><span class="p" data-group-id="2660747384-7">{</span><span class="ss">:error</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="2660747384-8">%</span><span class="nc" data-group-id="2660747384-8">Ecto.Changeset</span><span class="p" data-group-id="2660747384-8">{</span><span class="p" data-group-id="2660747384-8">}</span><span class="p" data-group-id="2660747384-7">}</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="create_presentation_state/1">
+
+    <span id="create_presentation_state/0"></span>
+
+  <div class="detail-header">
+    <a href="#create_presentation_state/1" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">create_presentation_state(attrs \\ %{})</h1>
+
+      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper/presentations.ex#L85" class="view-source" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+<p>Creates a presentation_state.</p><h2 id="create_presentation_state/1-examples" class="section-heading">
+  <a href="#create_presentation_state/1-examples" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i>
+  <p class="sr-only">examples</p>
+  </a>
+  Examples
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">create_presentation_state</span><span class="p" data-group-id="3036538613-1">(</span><span class="p" data-group-id="3036538613-2">%{</span><span class="ss">field</span><span class="p">:</span><span class="w"> </span><span class="n">value</span><span class="p" data-group-id="3036538613-2">}</span><span class="p" data-group-id="3036538613-1">)</span><span class="w">
+</span><span class="p" data-group-id="3036538613-3">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="3036538613-4">%</span><span class="nc" data-group-id="3036538613-4">PresentationState</span><span class="p" data-group-id="3036538613-4">{</span><span class="p" data-group-id="3036538613-4">}</span><span class="p" data-group-id="3036538613-3">}</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="n">create_presentation_state</span><span class="p" data-group-id="3036538613-5">(</span><span class="p" data-group-id="3036538613-6">%{</span><span class="ss">field</span><span class="p">:</span><span class="w"> </span><span class="n">bad_value</span><span class="p" data-group-id="3036538613-6">}</span><span class="p" data-group-id="3036538613-5">)</span><span class="w">
+</span><span class="p" data-group-id="3036538613-7">{</span><span class="ss">:error</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="3036538613-8">%</span><span class="nc" data-group-id="3036538613-8">Ecto.Changeset</span><span class="p" data-group-id="3036538613-8">{</span><span class="p" data-group-id="3036538613-8">}</span><span class="p" data-group-id="3036538613-7">}</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="get_presentation_file!/2">
+
+    <span id="get_presentation_file!/1"></span>
+
+  <div class="detail-header">
+    <a href="#get_presentation_file!/2" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">get_presentation_file!(id, preload \\ [])</h1>
+
+      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper/presentations.ex#L25" class="view-source" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+<p>Gets a single presentation_files.</p><p>Raises <a href="https://hexdocs.pm/ecto/3.7.2/Ecto.NoResultsError.html"><code class="inline">Ecto.NoResultsError</code></a> if the Presentation files does not exist.</p><h2 id="get_presentation_file!/2-examples" class="section-heading">
+  <a href="#get_presentation_file!/2-examples" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i>
+  <p class="sr-only">examples</p>
+  </a>
+  Examples
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">get_presentation_file!</span><span class="p" data-group-id="1526976313-1">(</span><span class="mi">123</span><span class="p" data-group-id="1526976313-1">)</span><span class="w">
+</span><span class="p" data-group-id="1526976313-2">%</span><span class="nc" data-group-id="1526976313-2">PresentationFile</span><span class="p" data-group-id="1526976313-2">{</span><span class="p" data-group-id="1526976313-2">}</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="n">get_presentation_file!</span><span class="p" data-group-id="1526976313-3">(</span><span class="mi">456</span><span class="p" data-group-id="1526976313-3">)</span><span class="w">
+</span><span class="gt">** (Ecto.NoResultsError)</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="get_presentation_file_by_hash!/1">
+
+  <div class="detail-header">
+    <a href="#get_presentation_file_by_hash!/1" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">get_presentation_file_by_hash!(hash)</h1>
+
+      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper/presentations.ex#L28" class="view-source" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="subscribe/1">
+
+  <div class="detail-header">
+    <a href="#subscribe/1" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">subscribe(presentation_file_id)</h1>
+
+      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper/presentations.ex#L67" class="view-source" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="update_presentation_file/2">
+
+  <div class="detail-header">
+    <a href="#update_presentation_file/2" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">update_presentation_file(presentation_file, attrs)</h1>
+
+      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper/presentations.ex#L61" class="view-source" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+<p>Updates a presentation_files.</p><h2 id="update_presentation_file/2-examples" class="section-heading">
+  <a href="#update_presentation_file/2-examples" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i>
+  <p class="sr-only">examples</p>
+  </a>
+  Examples
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">update_presentation_file</span><span class="p" data-group-id="1802543995-1">(</span><span class="n">presentation_files</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="1802543995-2">%{</span><span class="ss">field</span><span class="p">:</span><span class="w"> </span><span class="n">new_value</span><span class="p" data-group-id="1802543995-2">}</span><span class="p" data-group-id="1802543995-1">)</span><span class="w">
+</span><span class="p" data-group-id="1802543995-3">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="1802543995-4">%</span><span class="nc" data-group-id="1802543995-4">PresentationFile</span><span class="p" data-group-id="1802543995-4">{</span><span class="p" data-group-id="1802543995-4">}</span><span class="p" data-group-id="1802543995-3">}</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="n">update_presentation_file</span><span class="p" data-group-id="1802543995-5">(</span><span class="n">presentation_files</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="1802543995-6">%{</span><span class="ss">field</span><span class="p">:</span><span class="w"> </span><span class="n">bad_value</span><span class="p" data-group-id="1802543995-6">}</span><span class="p" data-group-id="1802543995-5">)</span><span class="w">
+</span><span class="p" data-group-id="1802543995-7">{</span><span class="ss">:error</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="1802543995-8">%</span><span class="nc" data-group-id="1802543995-8">Ecto.Changeset</span><span class="p" data-group-id="1802543995-8">{</span><span class="p" data-group-id="1802543995-8">}</span><span class="p" data-group-id="1802543995-7">}</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="update_presentation_state/2">
+
+  <div class="detail-header">
+    <a href="#update_presentation_state/2" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">update_presentation_state(presentation_state, attrs)</h1>
+
+      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper/presentations.ex#L103" class="view-source" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+<p>Updates a presentation_state.</p><h2 id="update_presentation_state/2-examples" class="section-heading">
+  <a href="#update_presentation_state/2-examples" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i>
+  <p class="sr-only">examples</p>
+  </a>
+  Examples
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">update_presentation_state</span><span class="p" data-group-id="1680299304-1">(</span><span class="n">presentation_state</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="1680299304-2">%{</span><span class="ss">field</span><span class="p">:</span><span class="w"> </span><span class="n">new_value</span><span class="p" data-group-id="1680299304-2">}</span><span class="p" data-group-id="1680299304-1">)</span><span class="w">
+</span><span class="p" data-group-id="1680299304-3">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="1680299304-4">%</span><span class="nc" data-group-id="1680299304-4">PresentationState</span><span class="p" data-group-id="1680299304-4">{</span><span class="p" data-group-id="1680299304-4">}</span><span class="p" data-group-id="1680299304-3">}</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="n">update_presentation_state</span><span class="p" data-group-id="1680299304-5">(</span><span class="n">presentation_state</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="1680299304-6">%{</span><span class="ss">field</span><span class="p">:</span><span class="w"> </span><span class="n">bad_value</span><span class="p" data-group-id="1680299304-6">}</span><span class="p" data-group-id="1680299304-5">)</span><span class="w">
+</span><span class="p" data-group-id="1680299304-7">{</span><span class="ss">:error</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="1680299304-8">%</span><span class="nc" data-group-id="1680299304-8">Ecto.Changeset</span><span class="p" data-group-id="1680299304-8">{</span><span class="p" data-group-id="1680299304-8">}</span><span class="p" data-group-id="1680299304-7">}</span></code></pre>
+  </section>
+</section>
+
+    </div>
+  </section>
+
+      <footer class="footer">
+
+        <p>
+          Built using
+          <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.28.4) for the
+
+            <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
+
+        </p>
+      </footer>
+    </div>
+  </div>
+</section>
+</div>
+
+
+  </body>
+</html>

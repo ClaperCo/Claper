@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="ExDoc v0.28.4">
+    <meta name="project" content="Claper v1.0.0">
+
+    <title>Claper.Accounts.UserToken — Claper v1.0.0</title>
+    <link rel="stylesheet" href="dist/elixir-b6f1ed5df9b1d42a7309.css" />
+
+    <script src="dist/sidebar_items-51590e335a.js"></script>
+
+      <script src="docs_config.js"></script>
+
+    <script async src="dist/app-bd1cb213813bf4825aa2.js"></script>
+
+
+  </head>
+  <body data-type="modules">
+    <script>
+
+      try {
+        var settings = JSON.parse(localStorage.getItem('ex_doc:settings') || '{}');
+
+        if (settings.theme === 'dark' ||
+           ((settings.theme === 'system' || settings.theme == null) &&
+             window.matchMedia('(prefers-color-scheme: dark)').matches)
+           ) {
+          document.body.classList.add('dark')
+        }
+      } catch (error) { }
+    </script>
+
+<div class="main">
+
+
+<section class="sidebar">
+  <button class="sidebar-button sidebar-toggle" aria-label="toggle sidebar">
+    <i class="ri-menu-line ri-lg" title="Collapse/expand sidebar"></i>
+  </button>
+
+  <form class="sidebar-search" action="search.html">
+    <button type="submit" class="search-button" aria-label="Submit Search">
+      <i class="ri-search-2-line" aria-hidden="true" title="Submit search"></i>
+    </button>
+    <button type="button" tabindex="-1" class="search-close-button" aria-label="Cancel Search">
+      <i class="ri-close-line ri-lg" aria-hidden="true" title="Cancel search"></i>
+    </button>
+    <label class="search-label">
+      <p class="sr-only">Search</p>
+      <input name="q" type="text" class="search-input" placeholder="Search..." aria-label="Input your search terms" autocomplete="off" />
+    </label>
+  </form>
+
+  <div class="autocomplete">
+    <div class="autocomplete-results">
+    </div>
+  </div>
+
+  <div class="sidebar-header">
+
+      <a href="https://get.claper.co">
+        <img src="assets/logo.png" alt="Claper" class="sidebar-projectImage">
+      </a>
+
+    <div class="sidebar-projectDetails">
+      <a href="https://get.claper.co" class="sidebar-projectName" translate="no">
+Claper
+      </a>
+      <strong class="sidebar-projectVersion" translate="no">
+        v1.0.0
+      </strong>
+    </div>
+    <ul class="sidebar-listNav">
+      <li><a id="extras-list-link" href="#full-list">Pages</a></li>
+
+        <li><a id="modules-list-link" href="#full-list">Modules</a></li>
+
+
+    </ul>
+  </div>
+
+  <div class="gradient"></div>
+  <ul id="full-list" class="sidebar-fullList"></ul>
+</section>
+
+<section class="content">
+  <output role="status" id="toast"></output>
+  <div class="content-outer">
+    <div id="content" class="content-inner">
+
+<h1>
+<button class="settings display-settings">
+  <i class="ri-settings-3-line"></i>
+  <span class="sr-only">Settings</span>
+</button>
+
+
+    <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper/accounts/user_token.ex#L1" title="View Source" class="view-source" rel="help">
+      <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+      <span class="sr-only">View Source</span>
+    </a>
+
+  <span translate="no">Claper.Accounts.UserToken</span> 
+  <small class="app-vsn" translate="no">(Claper v1.0.0)</small>
+
+</h1>
+
+
+
+  <section id="summary" class="details-list">
+    <h1 class="section-heading">
+      <a class="hover-link" href="#summary">
+        <i class="ri-link-m" aria-hidden="true"></i>
+        <span class="sr-only">Link to this section</span>
+      </a>
+      Summary
+    </h1>
+
+  <div class="summary-functions summary">
+    <h2>
+      <a href="#functions">Functions</a>
+    </h2>
+
+      <div class="summary-row">
+        <div class="summary-signature">
+          <a href="#build_email_token/2" translate="no">build_email_token(user, context)</a>
+
+        </div>
+
+          <div class="summary-synopsis"><p>Builds a token and its hash to be delivered to the user's email.</p></div>
+
+      </div>
+
+      <div class="summary-row">
+        <div class="summary-signature">
+          <a href="#build_magic_token/2" translate="no">build_magic_token(email, context)</a>
+
+        </div>
+
+      </div>
+
+      <div class="summary-row">
+        <div class="summary-signature">
+          <a href="#build_session_token/1" translate="no">build_session_token(user)</a>
+
+        </div>
+
+          <div class="summary-synopsis"><p>Generates a token that will be stored in a signed place,
+such as session or cookie. As they are signed, those
+tokens do not need to be hashed.</p></div>
+
+      </div>
+
+      <div class="summary-row">
+        <div class="summary-signature">
+          <a href="#token_and_context_query/2" translate="no">token_and_context_query(token, context)</a>
+
+        </div>
+
+          <div class="summary-synopsis"><p>Returns the token struct for the given token value and context.</p></div>
+
+      </div>
+
+      <div class="summary-row">
+        <div class="summary-signature">
+          <a href="#user_and_contexts_query/2" translate="no">user_and_contexts_query(user, contexts)</a>
+
+        </div>
+
+          <div class="summary-synopsis"><p>Gets all tokens for the given user for the given contexts.</p></div>
+
+      </div>
+
+      <div class="summary-row">
+        <div class="summary-signature">
+          <a href="#user_magic_and_contexts_expiry_query/1" translate="no">user_magic_and_contexts_expiry_query(email)</a>
+
+        </div>
+
+      </div>
+
+      <div class="summary-row">
+        <div class="summary-signature">
+          <a href="#user_magic_and_contexts_query/2" translate="no">user_magic_and_contexts_query(email, contexts)</a>
+
+        </div>
+
+      </div>
+
+      <div class="summary-row">
+        <div class="summary-signature">
+          <a href="#verify_change_email_token_query/2" translate="no">verify_change_email_token_query(token, context)</a>
+
+        </div>
+
+          <div class="summary-synopsis"><p>Checks if the token is valid and returns its underlying lookup query.</p></div>
+
+      </div>
+
+      <div class="summary-row">
+        <div class="summary-signature">
+          <a href="#verify_email_token_query/2" translate="no">verify_email_token_query(token, context)</a>
+
+        </div>
+
+          <div class="summary-synopsis"><p>Checks if the token is valid and returns its underlying lookup query.</p></div>
+
+      </div>
+
+      <div class="summary-row">
+        <div class="summary-signature">
+          <a href="#verify_magic_token_query/2" translate="no">verify_magic_token_query(token, context)</a>
+
+        </div>
+
+      </div>
+
+      <div class="summary-row">
+        <div class="summary-signature">
+          <a href="#verify_session_token_query/1" translate="no">verify_session_token_query(token)</a>
+
+        </div>
+
+          <div class="summary-synopsis"><p>Checks if the token is valid and returns its underlying lookup query.</p></div>
+
+      </div>
+
+  </div>
+
+  </section>
+
+
+  <section id="functions" class="details-list">
+    <h1 class="section-heading">
+      <a class="hover-link" href="#functions">
+        <i class="ri-link-m" aria-hidden="true"></i>
+        <span class="sr-only">Link to this section</span>
+      </a>
+Functions
+    </h1>
+    <div class="functions-list">
+<section class="detail" id="build_email_token/2">
+
+  <div class="detail-header">
+    <a href="#build_email_token/2" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">build_email_token(user, context)</h1>
+
+      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper/accounts/user_token.ex#L92" class="view-source" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+<p>Builds a token and its hash to be delivered to the user's email.</p><p>The non-hashed token is sent to the user email while the
+hashed part is stored in the database. The original token cannot be reconstructed,
+which means anyone with read-only access to the database cannot directly use
+the token in the application to gain access. Furthermore, if the user changes
+their email in the system, the tokens sent to the previous email are no longer
+valid.</p><p>Users can easily adapt the existing code to provide other types of delivery methods,
+for example, by phone numbers.</p>
+  </section>
+</section>
+<section class="detail" id="build_magic_token/2">
+
+  <div class="detail-header">
+    <a href="#build_magic_token/2" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">build_magic_token(email, context)</h1>
+
+      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper/accounts/user_token.ex#L49" class="view-source" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="build_session_token/1">
+
+  <div class="detail-header">
+    <a href="#build_session_token/1" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">build_session_token(user)</h1>
+
+      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper/accounts/user_token.ex#L44" class="view-source" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+<p>Generates a token that will be stored in a signed place,
+such as session or cookie. As they are signed, those
+tokens do not need to be hashed.</p><p>The reason why we store session tokens in the database, even
+though Phoenix already provides a session cookie, is because
+Phoenix' default session cookies are not persisted, they are
+simply signed and potentially encrypted. This means they are
+valid indefinitely, unless you change the signing/encryption
+salt.</p><p>Therefore, storing them allows individual user
+sessions to be expired. The token system can also be extended
+to store additional data, such as the device used for logging in.
+You could then use this information to display all valid sessions
+and devices in the UI and allow users to explicitly expire any
+session they deem invalid.</p>
+  </section>
+</section>
+<section class="detail" id="token_and_context_query/2">
+
+  <div class="detail-header">
+    <a href="#token_and_context_query/2" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">token_and_context_query(token, context)</h1>
+
+      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper/accounts/user_token.ex#L195" class="view-source" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+<p>Returns the token struct for the given token value and context.</p>
+  </section>
+</section>
+<section class="detail" id="user_and_contexts_query/2">
+
+  <div class="detail-header">
+    <a href="#user_and_contexts_query/2" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">user_and_contexts_query(user, contexts)</h1>
+
+      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper/accounts/user_token.ex#L202" class="view-source" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+<p>Gets all tokens for the given user for the given contexts.</p>
+  </section>
+</section>
+<section class="detail" id="user_magic_and_contexts_expiry_query/1">
+
+  <div class="detail-header">
+    <a href="#user_magic_and_contexts_expiry_query/1" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">user_magic_and_contexts_expiry_query(email)</h1>
+
+      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper/accounts/user_token.ex#L214" class="view-source" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="user_magic_and_contexts_query/2">
+
+  <div class="detail-header">
+    <a href="#user_magic_and_contexts_query/2" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">user_magic_and_contexts_query(email, contexts)</h1>
+
+      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper/accounts/user_token.ex#L210" class="view-source" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="verify_change_email_token_query/2">
+
+  <div class="detail-header">
+    <a href="#verify_change_email_token_query/2" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">verify_change_email_token_query(token, context)</h1>
+
+      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper/accounts/user_token.ex#L176" class="view-source" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+<p>Checks if the token is valid and returns its underlying lookup query.</p><p>The query returns the user found by the token, if any.</p><p>This is used to validate requests to change the user
+email. It is different from <a href="#verify_email_token_query/2"><code class="inline">verify_email_token_query/2</code></a> precisely because
+<a href="#verify_email_token_query/2"><code class="inline">verify_email_token_query/2</code></a> validates the email has not changed, which is
+the starting point by this function.</p><p>The given token is valid if it matches its hashed counterpart in the
+database and if it has not expired (after @change_email_validity_in_days).
+The context must always start with &quot;change:&quot;.</p>
+  </section>
+</section>
+<section class="detail" id="verify_email_token_query/2">
+
+  <div class="detail-header">
+    <a href="#verify_email_token_query/2" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">verify_email_token_query(token, context)</h1>
+
+      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper/accounts/user_token.ex#L122" class="view-source" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+<p>Checks if the token is valid and returns its underlying lookup query.</p><p>The query returns the user found by the token, if any.</p><p>The given token is valid if it matches its hashed counterpart in the
+database and the user email has not changed. This function also checks
+if the token is being used within a certain period, depending on the
+context. The default contexts supported by this function are either
+&quot;confirm&quot;, for account confirmation emails, and &quot;reset_password&quot;,
+for resetting the password. For verifying requests to change the email,
+see <a href="#verify_change_email_token_query/2"><code class="inline">verify_change_email_token_query/2</code></a>.</p>
+  </section>
+</section>
+<section class="detail" id="verify_magic_token_query/2">
+
+  <div class="detail-header">
+    <a href="#verify_magic_token_query/2" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">verify_magic_token_query(token, context)</h1>
+
+      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper/accounts/user_token.ex#L141" class="view-source" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="verify_session_token_query/1">
+
+  <div class="detail-header">
+    <a href="#verify_session_token_query/1" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">verify_session_token_query(token)</h1>
+
+      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper/accounts/user_token.ex#L69" class="view-source" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+<p>Checks if the token is valid and returns its underlying lookup query.</p><p>The query returns the user found by the token, if any.</p><p>The token is valid if it matches the value in the database and it has
+not expired (after @session_validity_in_days).</p>
+  </section>
+</section>
+
+    </div>
+  </section>
+
+      <footer class="footer">
+
+        <p>
+          Built using
+          <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.28.4) for the
+
+            <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
+
+        </p>
+      </footer>
+    </div>
+  </div>
+</section>
+</div>
+
+
+  </body>
+</html>
