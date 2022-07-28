@@ -7,7 +7,7 @@
     <meta name="generator" content="ExDoc v0.28.4">
     <meta name="project" content="Claper v1.0.0">
 
-    <title>ClaperWeb.EventLive.PollComponent — Claper v1.0.0</title>
+    <title>Installation — Claper v1.0.0</title>
     <link rel="stylesheet" href="dist/elixir-b6f1ed5df9b1d42a7309.css" />
 
     <script src="dist/sidebar_items-37c81d9b39.js"></script>
@@ -18,7 +18,7 @@
 
 
   </head>
-  <body data-type="modules">
+  <body data-type="extras">
     <script>
 
       try {
@@ -98,81 +98,62 @@ Claper
 </button>
 
 
-    <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper_web/live/event_live/poll_component.ex#L1" title="View Source" class="view-source" rel="help">
+    <a href="https://github.com/ClaperCo/Claper/blob/main/guides/introduction/installation.md#L1" title="View Source" class="view-source" rel="help">
       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
       <span class="sr-only">View Source</span>
     </a>
 
-  <span translate="no">ClaperWeb.EventLive.PollComponent</span> 
-  <small class="app-vsn" translate="no">(Claper v1.0.0)</small>
-
+  <span>Installation</span>
 </h1>
 
+<h2 id="prerequisites" class="section-heading">
+  <a href="#prerequisites" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i>
+  <p class="sr-only">prerequisites</p>
+  </a>
+  Prerequisites
+</h2>
+<p>To run Claper on your local environment you need to have:</p><ul><li>Postgres &gt;= 9</li><li>Elixir &gt;= 1.13.2</li><li>Erland &gt;= 24</li><li>NPM &gt;= 6.14.17</li><li>NodeJS &gt;= 14.19.2</li><li>Ghostscript &gt;= 9.5.0 (for PDF support)</li><li>Libreoffice &gt;= 6.4 (for PPT/PPTX support)</li></ul><p>You can also use Docker to easily run a Postgres instance:</p><pre><code class="makeup sh" translate="no"><span class="">  docker run -p 5432:5432 -e POSTGRES_PASSWORD=claper -e POSTGRES_USER=claper -e POSTGRES_DB=claper --name claper-db -d postgres:9
+</span></code></pre><ol><li>Clone the repo<pre><code class="makeup sh" translate="no"><span class="">   git clone https://github.com/ClaperCo/Claper.git
+</span></code></pre></li><li>Install dependencies<pre><code class="makeup sh" translate="no"><span class="">   mix deps.get
+</span></code></pre></li><li>Migrate your database<pre><code class="makeup sh" translate="no"><span class="">   mix ecto.migrate
+</span></code></pre></li><li>Install JS dependencies<pre><code class="makeup sh" translate="no"><span class="">   cd assets &amp;&amp; npm i
+</span></code></pre></li><li>Allow execution of startup file<pre><code class="makeup sh" translate="no"><span class="">   chmod +x ./start.sh
+</span></code></pre></li><li>Start Phoenix endpoint with<pre><code class="makeup sh" translate="no"><span class="">   ./start.sh
+</span></code></pre></li></ol><p>Now you can visit <a href="http://localhost:4000"><code class="inline">localhost:4000</code></a> from your browser.</p><p>If you have configured <code class="inline">MAIL</code> to <code class="inline">local</code>, you can access to the mailbox at <a href="http://localhost:4000/dev/mailbox"><code class="inline">localhost:4000/dev/mailbox</code></a>.</p><h2 id="using-docker" class="section-heading">
+  <a href="#using-docker" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i>
+  <p class="sr-only">using-docker</p>
+  </a>
+  Using Docker
+</h2>
+<p>You can build the app with Docker:</p><pre><code class="makeup sh" translate="no"><span class="">docker build -t claper .
+</span><span class="">docker run -p 4000:4000 -d claper
+</span></code></pre>
+<div class="bottom-actions">
+  <div class="bottom-actions-item">
 
-
-  <section id="summary" class="details-list">
-    <h1 class="section-heading">
-      <a class="hover-link" href="#summary">
-        <i class="ri-link-m" aria-hidden="true"></i>
-        <span class="sr-only">Link to this section</span>
+      <a href="configuration.html" class="bottom-actions-button" rel="prev">
+        <span class="subheader">
+          ← Previous Page
+        </span>
+        <span class="title">
+Configuration
+        </span>
       </a>
-      Summary
-    </h1>
-
-  <div class="summary-functions summary">
-    <h2>
-      <a href="#functions">Functions</a>
-    </h2>
-
-      <div class="summary-row">
-        <div class="summary-signature">
-          <a href="#toggle_poll/1" translate="no">toggle_poll(js \\ %JS{})</a>
-
-        </div>
-
-      </div>
 
   </div>
+  <div class="bottom-actions-item">
 
-  </section>
-
-
-  <section id="functions" class="details-list">
-    <h1 class="section-heading">
-      <a class="hover-link" href="#functions">
-        <i class="ri-link-m" aria-hidden="true"></i>
-        <span class="sr-only">Link to this section</span>
+      <a href="authentication.html" class="bottom-actions-button" rel="next">
+        <span class="subheader">
+          Next Page →
+        </span>
+        <span class="title">
+Authentication
+        </span>
       </a>
-Functions
-    </h1>
-    <div class="functions-list">
-<section class="detail" id="toggle_poll/1">
-
-    <span id="toggle_poll/0"></span>
-
-  <div class="detail-header">
-    <a href="#toggle_poll/1" class="detail-link" title="Link to this function">
-      <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
-    </a>
-    <h1 class="signature" translate="no">toggle_poll(js \\ %JS{})</h1>
-
-      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper_web/live/event_live/poll_component.ex#L77" class="view-source" rel="help" title="View Source">
-       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
-     </a>
-
 
   </div>
-
-  <section class="docstring">
-
-
-  </section>
-</section>
-
-    </div>
-  </section>
+</div>
 
       <footer class="footer">
 
