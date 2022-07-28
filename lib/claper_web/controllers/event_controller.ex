@@ -46,7 +46,7 @@ defmodule ClaperWeb.EventController do
           "center",
           "-annotate",
           "+0+200",
-          "Ou allez sur Claper.co et utilisez le code:",
+          "Ou utilisez le code:",
           "-pointsize",
           "65",
           "-gravity",

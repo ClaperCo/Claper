@@ -168,7 +168,7 @@
       </div>
 
       <div class="my-3">
-        <ClaperWeb.Component.Input.date_range readonly={NaiveDateTime.compare(NaiveDateTime.utc_now(), @event.expired_at) == :gt} form={f} key={:date_range} name={gettext "When your presentation will be available ?"} required="true" start_date_field={:started_at} end_date_field={:expired_at} from={Date.add(Date.utc_today(), -1)} to={Date.add(Date.utc_today(), 90)} />
+        <ClaperWeb.Component.Input.date_range readonly={NaiveDateTime.compare(NaiveDateTime.utc_now(), @event.expired_at) == :gt} form={f} key={:date_range} name={gettext "When your presentation will be available ?"} required="true" start_date_field={:started_at} end_date_field={:expired_at} from={Date.add(Date.utc_today(), -1)} to={Date.add(Date.utc_today(), 365)} />
       </div>
 
       <%= if @action == :edit do %>
