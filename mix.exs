@@ -10,7 +10,17 @@ defmodule Claper.MixProject do
       compilers: [:gettext] ++ Mix.compilers(),
       start_permanent: Mix.env() == :prod,
       aliases: aliases(),
-      deps: deps()
+      deps: deps(),
+
+      # Docs
+      name: "Claper",
+      source_url: "https://github.com/ClaperCo/Claper",
+      homepage_url: "https://get.claper.co",
+      docs: [
+        main: "Claper",
+        logo: "priv/static/images/logo.png",
+        extras: ["guides/Configuration.md"]
+      ]
     ]
   end
 
