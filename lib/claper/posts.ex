@@ -55,10 +55,10 @@ defmodule Claper.Posts do
 
   ## Examples
 
-      iex> get_post!(123)
+      iex> get_post!("123e4567-e89b-12d3-a456-426614174000")
       %Post{}
 
-      iex> get_post!(456)
+      iex> get_post!("123e4567-e89b-12d3-a456-426614174123")
       ** (Ecto.NoResultsError)
 
   """
@@ -69,10 +69,10 @@ defmodule Claper.Posts do
 
   ## Examples
 
-      iex> create_post(%{field: value})
+      iex> create_post(event, %{field: value})
       {:ok, %Post{}}
 
-      iex> create_post(%{field: bad_value})
+      iex> create_post(event, %{field: bad_value})
       {:error, %Ecto.Changeset{}}
 
   """

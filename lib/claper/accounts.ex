@@ -136,11 +136,11 @@ defmodule Claper.Accounts do
   end
 
   @doc """
-  Delivers the update email instructions to the given user.
+  Delivers the magic link email to the given user.
 
   ## Examples
 
-      iex> deliver_update_email_instructions(user, current_email, &Routes.user_update_email_url(conn, :edit, &1))
+      iex> deliver_magic_link(user, &Routes.user_confirmation_url(conn, :confirm_magic, &1))
       {:ok, %{to: ..., body: ...}}
 
   """
@@ -152,6 +152,15 @@ defmodule Claper.Accounts do
     UserNotifier.deliver_magic_link(email, magic_link_url_fun.(encoded_token))
   end
 
+  @doc """
+  Delivers the update email instructions to the given user.
+
+  ## Examples
+
+      iex> deliver_update_email_instructions(user, current_email, &Routes.user_update_email_url(conn, :edit, &1))
+      {:ok, %{to: ..., body: ...}}
+
+  """
   def deliver_update_email_instructions(%User{} = user, current_email, update_email_url_fun)
       when is_function(update_email_url_fun, 1) do
     {encoded_token, user_token} = UserToken.build_email_token(user, "change:#{current_email}")
@@ -179,6 +188,9 @@ defmodule Claper.Accounts do
     Repo.one(query)
   end
 
+  @doc """
+  Verify the token for a given user email is valid.
+  """
   def magic_token_valid?(email) do
     query = UserToken.user_magic_and_contexts_expiry_query(email)
     Repo.exists?(query)

@@ -122,8 +122,7 @@ Claper is passwordless, so you don't have to create an account. Just login with 
 <!-- ROADMAP -->
 ## Roadmap
 
-- [ ] Add Changelog
-- [ ] Remove dead code
+- [x] Add Changelog
 - [ ] Add additional tests for better coverage
 - [ ] Add more docs
 

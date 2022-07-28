@@ -37,8 +37,29 @@ defmodule Claper.MixProject do
           Usage: ~r/guides\/usage\/.?/
         ],
         groups_for_modules: [
-          Authentication: [
-            Claper.Accounts
+          "User management": [
+            ~r/Claper\.Account\.?/,
+            ~r/ClaperWeb\.UserRegistration\.?/,
+            ~r/ClaperWeb\.UserSession\.?/,
+            ~r/ClaperWeb\.UserLiveAuth\.?/,
+            ~r/ClaperWeb\.UserConfirmation\.?/,
+            ~r/ClaperWeb\.UserSettings\.?/,
+            ~r/ClaperWeb\.UserReset\.?/,
+            ~r/ClaperWeb\.Attendee\.?/,
+            ~r/ClaperWeb\.UserAuth\.?/,
+            ~r/ClaperWeb\.UserView\.?/,
+          ],
+          "Events": [
+            ~r/Claper\.Event\.?/,
+            ~r/ClaperWeb\.Event\.?/,
+          ],
+          "Polls": [
+            ~r/Claper\.Polls\.?/,
+            ~r/ClaperWeb\.Poll\.?/,
+          ],
+          "Posts": [
+            ~r/Claper\.Posts\.?/,
+            ~r/ClaperWeb\.Post\.?/,
           ]
         ]
       ]

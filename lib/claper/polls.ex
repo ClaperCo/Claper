@@ -11,11 +11,11 @@ defmodule Claper.Polls do
   alias Claper.Polls.PollVote
 
   @doc """
-  Returns the list of polls.
+  Returns the list of polls for a given presentation file.
 
   ## Examples
 
-      iex> list_polls()
+      iex> list_polls(123)
       [%Poll{}, ...]
 
   """
@@ -28,6 +28,15 @@ defmodule Claper.Polls do
     |> Repo.preload([:poll_opts])
   end
 
+  @doc """
+  Returns the list of polls for a given presentation file and a given position.
+
+  ## Examples
+
+      iex> list_polls_at_position(123, 0)
+      [%Poll{}, ...]
+
+  """
   def list_polls_at_position(presentation_file_id, position) do
     from(p in Poll,
       where: p.presentation_file_id == ^presentation_file_id and p.position == ^position,
@@ -38,7 +47,7 @@ defmodule Claper.Polls do
   end
 
   @doc """
-  Gets a single poll.
+  Gets a single poll and set percentages for each poll options.
 
   Raises `Ecto.NoResultsError` if the Poll does not exist.
 
@@ -63,6 +72,15 @@ defmodule Claper.Polls do
       )
       |> set_percentages()
 
+  @doc """
+  Gets a single poll for a given position.
+
+  ## Examples
+
+      iex> get_poll!(123, 0)
+      %Poll{}
+
+  """
   def get_poll_current_position(presentation_file_id, position) do
     from(p in Poll,
       where:
@@ -80,6 +98,15 @@ defmodule Claper.Polls do
     |> set_percentages()
   end
 
+  @doc """
+  Calculate percentage of all poll options for a given poll.
+
+  ## Examples
+
+      iex> set_percentages(poll)
+      %Poll{}
+
+  """
   def set_percentages(%Poll{poll_opts: poll_opts} = poll) when is_list(poll_opts) do
     total = Enum.map(poll.poll_opts, fn e -> e.vote_count end) |> Enum.sum()
 
@@ -122,10 +149,10 @@ defmodule Claper.Polls do
 
   ## Examples
 
-      iex> update_poll(poll, %{field: new_value})
+      iex> update_poll("123e4567-e89b-12d3-a456-426614174000", poll, %{field: new_value})
       {:ok, %Poll{}}
 
-      iex> update_poll(poll, %{field: bad_value})
+      iex> update_poll("123e4567-e89b-12d3-a456-426614174000", poll, %{field: bad_value})
       {:error, %Ecto.Changeset{}}
 
   """
@@ -148,10 +175,10 @@ defmodule Claper.Polls do
 
   ## Examples
 
-      iex> delete_poll(poll)
+      iex> delete_poll("123e4567-e89b-12d3-a456-426614174000", poll)
       {:ok, %Poll{}}
 
-      iex> delete_poll(poll)
+      iex> delete_poll("123e4567-e89b-12d3-a456-426614174000", poll)
       {:error, %Ecto.Changeset{}}
 
   """
@@ -283,15 +310,11 @@ defmodule Claper.Polls do
   @doc """
   Gets a single poll_vote.
 
-  Raises `Ecto.NoResultsError` if the Poll vote does not exist.
 
   ## Examples
 
-      iex> get_poll_vote!(123)
+      iex> get_poll_vote!(321, 123)
       %PollVote{}
-
-      iex> get_poll_vote!(456)
-      ** (Ecto.NoResultsError)
 
   """
   def get_poll_vote(user_id, poll_id) when is_number(user_id),

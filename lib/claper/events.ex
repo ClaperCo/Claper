@@ -1,6 +1,8 @@
 defmodule Claper.Events do
   @moduledoc """
   The Events context.
+
+  An activity leader is a facilitator, a user invited to manage an event.
   """
 
   import Ecto.Query, warn: false
@@ -9,11 +11,11 @@ defmodule Claper.Events do
   alias Claper.Events.{Event, ActivityLeader}
 
   @doc """
-  Returns the list of events.
+  Returns the list of events of a given user.
 
   ## Examples
 
-      iex> list_events()
+      iex> list_events(123)
       [%Event{}, ...]
 
   """
@@ -23,6 +25,15 @@ defmodule Claper.Events do
     |> Repo.preload(preload)
   end
 
+  @doc """
+  Returns the list of events managed by a given user email.
+
+  ## Examples
+
+      iex> list_managed_events_by("email@example.com")
+      [%Event{}, ...]
+
+  """
   def list_managed_events_by(email, preload \\ []) do
     from(a in ActivityLeader,
       join: u in Claper.Accounts.User,
@@ -58,16 +69,30 @@ defmodule Claper.Events do
 
   ## Examples
 
-      iex> get_event!(123)
+      iex> get_event!("123e4567-e89b-12d3-a456-426614174000")
       %Event{}
 
-      iex> get_event!(456)
+      iex> get_event!("123e4567-e89b-12d3-a456-4266141740111")
       ** (Ecto.NoResultsError)
 
   """
   def get_event!(id, preload \\ []),
     do: Repo.get_by!(Event, uuid: id) |> Repo.preload(preload)
 
+  @doc """
+  Gets a single managed event.
+
+  Raises `Ecto.NoResultsError` if the Event does not exist.
+
+  ## Examples
+
+      iex> get_managed_event!(user, "123e4567-e89b-12d3-a456-426614174000")
+      %Event{}
+
+      iex> get_managed_event!(another_user, "123e4567-e89b-12d3-a456-426614174000")
+      ** (Ecto.NoResultsError)
+
+  """
   def get_managed_event!(current_user, id, preload \\ []) do
     event = Repo.get_by!(Event, uuid: id)
     is_leader = Claper.Events.is_leaded_by(current_user.email, event) || event.user_id == current_user.id
@@ -78,9 +103,37 @@ defmodule Claper.Events do
     end
   end
 
+  @doc """
+  Gets a single user's event.
+
+  Raises `Ecto.NoResultsError` if the Event does not exist.
+
+  ## Examples
+
+      iex> get_user_event!(user, "123e4567-e89b-12d3-a456-426614174000")
+      %Event{}
+
+      iex> get_user_event!(another_user, "123e4567-e89b-12d3-a456-426614174000")
+      ** (Ecto.NoResultsError)
+
+  """
   def get_user_event!(user_id, id, preload \\ []),
     do: Repo.get_by!(Event, uuid: id, user_id: user_id) |> Repo.preload(preload)
 
+  @doc """
+  Gets a single event by code.
+
+  Raises `Ecto.NoResultsError` if the Event does not exist.
+
+  ## Examples
+
+      iex> get_event_with_code!("Hello")
+      %Event{}
+
+      iex> get_event_with_code!("Old event")
+      ** (Ecto.NoResultsError)
+
+  """
   def get_event_with_code!(code, preload \\ []) do
     now = NaiveDateTime.utc_now()
 
@@ -97,6 +150,16 @@ defmodule Claper.Events do
     |> Repo.preload(preload)
   end
 
+  @doc """
+  Get a single event with the same code excluding a specific event.
+
+  ## Examples
+
+      iex> get_different_event_with_code("Hello", 123)
+      %Event{}
+
+
+  """
   def get_different_event_with_code(nil, _event_id), do: nil
 
   def get_different_event_with_code(code, event_id) do
@@ -106,6 +169,16 @@ defmodule Claper.Events do
     |> Repo.one()
   end
 
+  @doc """
+  Check if a user is a facilitator of a specific event.
+
+  ## Examples
+
+      iex> is_leaded_by("email@example.com", 123)
+      true
+
+
+  """
   def is_leaded_by(email, event) do
     from(a in ActivityLeader,
       join: u in Claper.Accounts.User,
@@ -214,20 +287,7 @@ defmodule Claper.Events do
   alias Claper.Events.ActivityLeader
 
   @doc """
-  Returns the list of activity_leaders.
-
-  ## Examples
-
-      iex> list_activity_leaders()
-      [%ActivityLeader{}, ...]
-
-  """
-  def list_activity_leaders do
-    Repo.all(ActivityLeader)
-  end
-
-  @doc """
-  Gets a single activity_leader.
+  Gets a single facilitator.
 
   Raises `Ecto.NoResultsError` if the Activity leader does not exist.
 
@@ -242,6 +302,15 @@ defmodule Claper.Events do
   """
   def get_activity_leader!(id), do: Repo.get!(ActivityLeader, id)
 
+  @doc """
+  Gets all facilitators for a given event.
+
+  ## Examples
+
+      iex> get_activity_leaders_for_event!(event)
+      [%ActivityLeader{}, ...]
+
+  """
   def get_activity_leaders_for_event(event_id) do
     from(a in ActivityLeader,
       left_join: u in Claper.Accounts.User,
@@ -253,7 +322,7 @@ defmodule Claper.Events do
   end
 
   @doc """
-  Returns an `%Ecto.Changeset{}` for tracking activity_leader changes.
+  Returns an `%Ecto.Changeset{}` for tracking facilitator changes.
 
   ## Examples
 

@@ -51,10 +51,10 @@ defmodule Claper.Presentations do
 
   ## Examples
 
-      iex> update_presentation_file(presentation_files, %{field: new_value})
+      iex> update_presentation_file(presentation_file, %{field: new_value})
       {:ok, %PresentationFile{}}
 
-      iex> update_presentation_file(presentation_files, %{field: bad_value})
+      iex> update_presentation_file(presentation_file, %{field: bad_value})
       {:error, %Ecto.Changeset{}}
 
   """
