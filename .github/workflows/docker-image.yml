@@ -3,9 +3,6 @@ name: Docker Image CI
 on:
   push:
     branches: [ main ]
-  pull_request:
-    branches: [ main ]
-
 jobs:
 
   build:
@@ -13,6 +10,17 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+    - name: Docker meta
+      id: meta
+      uses: docker/metadata-action@v4
+      with:
+        images: claperco/claper
+        tags: |
+          type=ref,event=branch
+          type=semver,pattern={{version}}
+          type=semver,pattern={{major}}.{{minor}}
+          type=semver,pattern={{major}}
+
     - uses: actions/checkout@v3
     - name: Set up QEMU
       id: qemu
@@ -35,8 +43,9 @@ jobs:
       with:
         context: .
         push: true
-        tags: ghcr.io/claperco/claper
-        cache-from: type=registry,ref=ghcr.io/claperco/claper:latest
-        cache-to: type=inline
+        tags: ${{ steps.meta.outputs.tags }}
+        labels: ${{ steps.meta.outputs.labels }}
+        cache-from: type=gha
+        cache-to: type=gha,mode=max
 
 
