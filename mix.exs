@@ -17,9 +17,27 @@ defmodule Claper.MixProject do
       source_url: "https://github.com/ClaperCo/Claper",
       homepage_url: "https://get.claper.co",
       docs: [
-        main: "Claper",
+        main: "overview",
+        assets: "guides/assets",
         logo: "priv/static/images/logo.png",
-        extras: ["guides/Configuration.md"]
+        extra_section: "GUIDES",
+        extras: [
+          "guides/introduction/overview.md",
+          "guides/introduction/configuration.md",
+          "guides/introduction/installation.md",
+
+          "guides/usage/authentication.md"
+        ],
+        groups_for_extras: [
+          Introduction: ~r/guides\/introduction\/.?/,
+          Guides: ~r/guides\/[^\/]+\.md/,
+          Usage: ~r/guides\/usage\/.?/
+        ],
+        groups_for_modules: [
+          Authentication: [
+            Claper.Accounts
+          ]
+        ]
       ]
     ]
   end

@@ -1,3 +1,5 @@
+# Configuration
+
 ## Environment file
 
 All configuration used by the app is stored in the `.env` file. You can find an example file in `.env.sample`, but you should copy it to `.env` and fill it with your own values (described below).

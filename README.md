@@ -17,7 +17,7 @@
   <p align="center">
     The ultimate tool to interact with your audience.
     <br />
-    <a href="https://github.com/ClaperCo/Claper/wiki"><strong>Explore the wiki »</strong></a>
+    <a href="https://docs.claper.co"><strong>Explore the docs »</strong></a>
     <br />
     <br />
     <a href="https://github.com/ClaperCo/Claper/issues">Report Bug</a>
@@ -71,7 +71,7 @@ You can also use Docker to easily run a Postgres instance:
 
 ### Configuration
 
-You can find all configuration options in [the wiki](https://github.com/ClaperCo/Claper/wiki/Configuration).
+You can find all configuration options in [the docs](https://docs.claper.co/configuration.html).
 
 ### Installation
 
