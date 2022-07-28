@@ -1,10 +1,12 @@
 defmodule Claper.MixProject do
   use Mix.Project
 
+  @version "1.0.0"
+
   def project do
     [
       app: :claper,
-      version: "1.0.0",
+      version: @version,
       elixir: "~> 1.12",
       elixirc_paths: elixirc_paths(Mix.env()),
       compilers: [:gettext] ++ Mix.compilers(),
@@ -17,6 +19,7 @@ defmodule Claper.MixProject do
       source_url: "https://github.com/ClaperCo/Claper",
       homepage_url: "https://get.claper.co",
       docs: [
+        source_ref: "v#{@version}",
         main: "overview",
         assets: "guides/assets",
         logo: "priv/static/images/logo.png",
