@@ -82,7 +82,7 @@ defmodule ClaperWeb.Router do
   #
   # Note that preview only shows emails that were sent by the same
   # node running the Phoenix server.
-  if Mix.env() == :dev do
+  if Mix.env() == :dev || System.get_env("MAIL_TRANSPORT", "local") == "local" do
     scope "/dev" do
       pipe_through(:browser)
 
