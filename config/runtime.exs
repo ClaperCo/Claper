@@ -38,8 +38,8 @@ if config_env() == :prod do
 
   config :claper, ClaperWeb.Endpoint,
     url: [
-      host: System.get_env("ENDPOINT_HOST", "localhost"),
-      port:  System.get_env("ENDPOINT_PORT", 80)
+      host: System.get_env("ENDPOINT_HOST") || "localhost",
+      port: String.to_integer(System.get_env("ENDPOINT_PORT") || "80")
     ],
     http: [
       # Enable IPv6 and bind on all interfaces.
