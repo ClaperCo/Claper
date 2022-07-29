@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: claper-svc
+  labels:
+    app: claper
+spec:
+  type: ClusterIP
+  ports:
+  - name: cowboy
+    port: 80
+    targetPort: 4000
+  - port: 4369
+    name: epmd
+    targetPort: 4369
+  selector:
+    app: claper
