@@ -5,12 +5,12 @@
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="generator" content="ExDoc v0.28.4">
-    <meta name="project" content="Claper v1.0.1">
+    <meta name="project" content="Claper v1.0.0">
 
-    <title>ClaperWeb.Gettext — Claper v1.0.1</title>
+    <title>ClaperWeb.Gettext — Claper v1.0.0</title>
     <link rel="stylesheet" href="dist/elixir-b6f1ed5df9b1d42a7309.css" />
 
-    <script src="dist/sidebar_items-0c5fe6c4a6.js"></script>
+    <script src="dist/sidebar_items-372d70b46c.js"></script>
 
       <script src="docs_config.js"></script>
 
@@ -70,7 +70,7 @@
 Claper
       </a>
       <strong class="sidebar-projectVersion" translate="no">
-        v1.0.1
+        v1.0.0
       </strong>
     </div>
     <ul class="sidebar-listNav">
@@ -98,13 +98,13 @@ Claper
 </button>
 
 
-    <a href="https://github.com/ClaperCo/Claper/blob/v1.0.1/lib/claper_web/gettext.ex#L1" title="View Source" class="view-source" rel="help">
+    <a href="https://github.com/ClaperCo/Claper/blob/v1.0.0/lib/claper_web/gettext.ex#L1" title="View Source" class="view-source" rel="help">
       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
       <span class="sr-only">View Source</span>
     </a>
 
   <span translate="no">ClaperWeb.Gettext</span> 
-  <small class="app-vsn" translate="no">(Claper v1.0.1)</small>
+  <small class="app-vsn" translate="no">(Claper v1.0.0)</small>
 
 </h1>
 
@@ -114,15 +114,15 @@ Claper
 your module gains a set of macros for translations, for example:</p><pre><code class="makeup elixir" translate="no"><span class="kn">import</span><span class="w"> </span><span class="nc">ClaperWeb.Gettext</span><span class="w">
 
 </span><span class="c1"># Simple translation</span><span class="w">
-</span><span class="n">gettext</span><span class="p" data-group-id="0413547214-1">(</span><span class="s">&quot;Here is the string to translate&quot;</span><span class="p" data-group-id="0413547214-1">)</span><span class="w">
+</span><span class="n">gettext</span><span class="p" data-group-id="0399202896-1">(</span><span class="s">&quot;Here is the string to translate&quot;</span><span class="p" data-group-id="0399202896-1">)</span><span class="w">
 
 </span><span class="c1"># Plural translation</span><span class="w">
-</span><span class="n">ngettext</span><span class="p" data-group-id="0413547214-2">(</span><span class="s">&quot;Here is the string to translate&quot;</span><span class="p">,</span><span class="w">
+</span><span class="n">ngettext</span><span class="p" data-group-id="0399202896-2">(</span><span class="s">&quot;Here is the string to translate&quot;</span><span class="p">,</span><span class="w">
          </span><span class="s">&quot;Here are the strings to translate&quot;</span><span class="p">,</span><span class="w">
-         </span><span class="mi">3</span><span class="p" data-group-id="0413547214-2">)</span><span class="w">
+         </span><span class="mi">3</span><span class="p" data-group-id="0399202896-2">)</span><span class="w">
 
 </span><span class="c1"># Domain-based translation</span><span class="w">
-</span><span class="n">dgettext</span><span class="p" data-group-id="0413547214-3">(</span><span class="s">&quot;errors&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Here is the error message to translate&quot;</span><span class="p" data-group-id="0413547214-3">)</span></code></pre><p>See the <a href="https://hexdocs.pm/gettext">Gettext Docs</a> for detailed usage.</p>
+</span><span class="n">dgettext</span><span class="p" data-group-id="0399202896-3">(</span><span class="s">&quot;errors&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Here is the error message to translate&quot;</span><span class="p" data-group-id="0399202896-3">)</span></code></pre><p>See the <a href="https://hexdocs.pm/gettext">Gettext Docs</a> for detailed usage.</p>
   </section>
 
 
@@ -373,7 +373,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">dgettext(domain, msgid, bindings \\ Macro.escape(%{}))</h1>
 
-      <a href="https://github.com/ClaperCo/Claper/blob/v1.0.1/lib/claper_web/gettext.ex#L1" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/ClaperCo/Claper/blob/v1.0.0/lib/claper_web/gettext.ex#L1" class="view-source" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -397,7 +397,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">dgettext_noop(domain, msgid)</h1>
 
-      <a href="https://github.com/ClaperCo/Claper/blob/v1.0.1/lib/claper_web/gettext.ex#L1" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/ClaperCo/Claper/blob/v1.0.0/lib/claper_web/gettext.ex#L1" class="view-source" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -423,7 +423,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">dngettext(domain, msgid, msgid_plural, n, bindings \\ Macro.escape(%{}))</h1>
 
-      <a href="https://github.com/ClaperCo/Claper/blob/v1.0.1/lib/claper_web/gettext.ex#L1" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/ClaperCo/Claper/blob/v1.0.0/lib/claper_web/gettext.ex#L1" class="view-source" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -447,7 +447,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">dngettext_noop(domain, msgid, msgid_plural)</h1>
 
-      <a href="https://github.com/ClaperCo/Claper/blob/v1.0.1/lib/claper_web/gettext.ex#L1" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/ClaperCo/Claper/blob/v1.0.0/lib/claper_web/gettext.ex#L1" class="view-source" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -473,7 +473,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">dpgettext(domain, msgctxt, msgid, bindings \\ Macro.escape(%{}))</h1>
 
-      <a href="https://github.com/ClaperCo/Claper/blob/v1.0.1/lib/claper_web/gettext.ex#L1" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/ClaperCo/Claper/blob/v1.0.0/lib/claper_web/gettext.ex#L1" class="view-source" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -497,7 +497,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">dpgettext_noop(domain, msgctxt, msgid)</h1>
 
-      <a href="https://github.com/ClaperCo/Claper/blob/v1.0.1/lib/claper_web/gettext.ex#L1" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/ClaperCo/Claper/blob/v1.0.0/lib/claper_web/gettext.ex#L1" class="view-source" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -523,7 +523,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">dpngettext(domain, msgctxt, msgid, msgid_plural, n, bindings \\ Macro.escape(%{}))</h1>
 
-      <a href="https://github.com/ClaperCo/Claper/blob/v1.0.1/lib/claper_web/gettext.ex#L1" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/ClaperCo/Claper/blob/v1.0.0/lib/claper_web/gettext.ex#L1" class="view-source" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -547,7 +547,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">dpngettext_noop(domain, msgctxt, msgid, msgid_plural)</h1>
 
-      <a href="https://github.com/ClaperCo/Claper/blob/v1.0.1/lib/claper_web/gettext.ex#L1" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/ClaperCo/Claper/blob/v1.0.0/lib/claper_web/gettext.ex#L1" class="view-source" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -573,7 +573,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">gettext(msgid, bindings \\ Macro.escape(%{}))</h1>
 
-      <a href="https://github.com/ClaperCo/Claper/blob/v1.0.1/lib/claper_web/gettext.ex#L1" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/ClaperCo/Claper/blob/v1.0.0/lib/claper_web/gettext.ex#L1" class="view-source" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -597,7 +597,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">gettext_comment(comment)</h1>
 
-      <a href="https://github.com/ClaperCo/Claper/blob/v1.0.1/lib/claper_web/gettext.ex#L1" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/ClaperCo/Claper/blob/v1.0.0/lib/claper_web/gettext.ex#L1" class="view-source" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -621,7 +621,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">gettext_noop(msgid)</h1>
 
-      <a href="https://github.com/ClaperCo/Claper/blob/v1.0.1/lib/claper_web/gettext.ex#L1" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/ClaperCo/Claper/blob/v1.0.0/lib/claper_web/gettext.ex#L1" class="view-source" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -645,7 +645,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">handle_missing_bindings(exception, incomplete)</h1>
 
-      <a href="https://github.com/ClaperCo/Claper/blob/v1.0.1/lib/claper_web/gettext.ex#L23" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/ClaperCo/Claper/blob/v1.0.0/lib/claper_web/gettext.ex#L23" class="view-source" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -667,7 +667,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">handle_missing_plural_translation(locale, domain, msgid, msgid_plural, n, bindings)</h1>
 
-      <a href="https://github.com/ClaperCo/Claper/blob/v1.0.1/lib/claper_web/gettext.ex#L23" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/ClaperCo/Claper/blob/v1.0.0/lib/claper_web/gettext.ex#L23" class="view-source" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -689,7 +689,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">handle_missing_translation(locale, domain, msgid, bindings)</h1>
 
-      <a href="https://github.com/ClaperCo/Claper/blob/v1.0.1/lib/claper_web/gettext.ex#L23" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/ClaperCo/Claper/blob/v1.0.0/lib/claper_web/gettext.ex#L23" class="view-source" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -713,7 +713,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">lgettext(locale, domain, msgctxt \\ nil, msgid, bindings)</h1>
 
-      <a href="https://github.com/ClaperCo/Claper/blob/v1.0.1/lib/claper_web/gettext.ex#L1" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/ClaperCo/Claper/blob/v1.0.0/lib/claper_web/gettext.ex#L1" class="view-source" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -737,7 +737,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">lngettext(locale, domain, msgctxt \\ nil, msgid, msgid_plural, n, bindings)</h1>
 
-      <a href="https://github.com/ClaperCo/Claper/blob/v1.0.1/lib/claper_web/gettext.ex#L1" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/ClaperCo/Claper/blob/v1.0.0/lib/claper_web/gettext.ex#L1" class="view-source" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -761,7 +761,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">ngettext(msgid, msgid_plural, n, bindings \\ Macro.escape(%{}))</h1>
 
-      <a href="https://github.com/ClaperCo/Claper/blob/v1.0.1/lib/claper_web/gettext.ex#L1" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/ClaperCo/Claper/blob/v1.0.0/lib/claper_web/gettext.ex#L1" class="view-source" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -785,7 +785,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">ngettext_noop(msgid, msgid_plural)</h1>
 
-      <a href="https://github.com/ClaperCo/Claper/blob/v1.0.1/lib/claper_web/gettext.ex#L1" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/ClaperCo/Claper/blob/v1.0.0/lib/claper_web/gettext.ex#L1" class="view-source" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -811,7 +811,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">pgettext(msgctxt, msgid, bindings \\ Macro.escape(%{}))</h1>
 
-      <a href="https://github.com/ClaperCo/Claper/blob/v1.0.1/lib/claper_web/gettext.ex#L1" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/ClaperCo/Claper/blob/v1.0.0/lib/claper_web/gettext.ex#L1" class="view-source" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -835,7 +835,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">pgettext_noop(msgid, context)</h1>
 
-      <a href="https://github.com/ClaperCo/Claper/blob/v1.0.1/lib/claper_web/gettext.ex#L1" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/ClaperCo/Claper/blob/v1.0.0/lib/claper_web/gettext.ex#L1" class="view-source" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -861,7 +861,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">pngettext(msgctxt, msgid, msgid_plural, n, bindings \\ Macro.escape(%{}))</h1>
 
-      <a href="https://github.com/ClaperCo/Claper/blob/v1.0.1/lib/claper_web/gettext.ex#L1" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/ClaperCo/Claper/blob/v1.0.0/lib/claper_web/gettext.ex#L1" class="view-source" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -885,7 +885,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">pngettext_noop(msgctxt, msgid, msgid_plural)</h1>
 
-      <a href="https://github.com/ClaperCo/Claper/blob/v1.0.1/lib/claper_web/gettext.ex#L1" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/ClaperCo/Claper/blob/v1.0.0/lib/claper_web/gettext.ex#L1" class="view-source" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
