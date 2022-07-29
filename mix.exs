@@ -19,7 +19,6 @@ defmodule Claper.MixProject do
       source_url: "https://github.com/ClaperCo/Claper",
       homepage_url: "https://get.claper.co",
       docs: [
-        source_ref: "v#{@version}",
         main: "overview",
         assets: "guides/assets",
         logo: "priv/static/images/logo.png",
