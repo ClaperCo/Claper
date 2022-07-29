@@ -75,17 +75,18 @@ if config_env() == :prod do
   # For this example you need include a HTTP client required by Swoosh API client.
   # Swoosh supports Hackney and Finch out of the box:
   #
-  config :claper, Claper.Mailer,
-    adapter: Swoosh.Adapters.SMTP,
-    relay: System.get_env("SMTP_RELAY"),
-    username: System.get_env("SMTP_USERNAME"),
-    password: System.get_env("SMTP_PASSWORD"),
-    ssl: System.get_env("SMTP_SSL", "true") == "true",
-    tls: String.to_atom(System.get_env("SMTP_TLS", "always")), # always, never, if_available
-    auth: String.to_atom(System.get_env("SMTP_AUTH", "always")), # always, never, if_available
-    port: String.to_integer(System.get_env("SMTP_PORT", "25"))
 
-
+  if System.get_env("MAIL_TRANSPORT", "local") == "smtp" do
+    config :claper, Claper.Mailer,
+      adapter: Swoosh.Adapters.SMTP,
+      relay: System.get_env("SMTP_RELAY"),
+      username: System.get_env("SMTP_USERNAME"),
+      password: System.get_env("SMTP_PASSWORD"),
+      ssl: System.get_env("SMTP_SSL", "true") == "true",
+      tls: String.to_atom(System.get_env("SMTP_TLS", "always")), # always, never, if_available
+      auth: String.to_atom(System.get_env("SMTP_AUTH", "always")), # always, never, if_available
+      port: String.to_integer(System.get_env("SMTP_PORT", "25"))
+  end
 
   config :swoosh, :api_client, Swoosh.ApiClient.Finch
   #
