@@ -16,20 +16,6 @@ config :claper, ClaperWeb.Endpoint,
 # Do not print debug messages in production
 config :logger, level: :info
 
-config :libcluster,
-  topologies: [
-    default: [
-      strategy: Cluster.Strategy.Kubernetes,
-      config: [
-        mode: :dns,
-        kubernetes_node_basename: "claper",
-        kubernetes_selector: "app=claper",
-        kubernetes_namespace: "default",
-        polling_interval: 10_000
-      ]
-    ]
-  ]
-
 # ## SSL Support
 #
 # To get SSL working, you will need to add the `https` key
