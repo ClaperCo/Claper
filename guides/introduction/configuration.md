@@ -30,3 +30,6 @@ Variable | Values | Default | Required | Description
 --- | --- | --- | --- | ---
 DATABASE_URL | - | - | ✓ | Postgres connection string
 SECRET_KEY_BASE | - | - |  ✓ |  Generate it with `mix phx.gen.secret`
+ENDPOINT_HOST | - | localhost |  - | Host used to access the app (used for url generation)
+ENDPOINT_PORT | - | 80 |  - | Port used to access the app (used for url generation)
+PORT | - | 4000 |  - | Port to listen to
