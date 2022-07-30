@@ -12,8 +12,8 @@ AWS_SECRET_ACCESS_KEY | - | - | _only for s3_ | Your AWS Secret Access Key
 AWS_S3_BUCKET | - | - | _only for s3_ | The name of the bucket where the presentation files will be stored
 AWS_S3_REGION | - | - | _only for s3_ | The region where the bucket is located
 MAIL_TRANSPORT | local, smtp | local | - | Define how the emails will be sent
-MAIL_FROM | - | Claper | - | Email address used to send emails
-MAIL_FROM_NAME | - | noreply@claper.co | - | Name used to send emails
+MAIL_FROM | - | noreply@claper.co | - | Email address used to send emails
+MAIL_FROM_NAME | - | Claper | - | Name used to send emails
 SMTP_RELAY | - | - |  ✓ | SMTP relay server
 SMTP_USERNAME | - | - | ✓ |  SMTP username
 SMTP_PASSWORD | - | - |  ✓ | SMTP password
