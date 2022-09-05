@@ -113,21 +113,11 @@ docker build -t claper .
 docker run -p 4000:4000 -d claper
 ```
 
-<!-- USAGE EXAMPLES -->
-## Usage
+or you can use the official Docker image:
 
-### Login/Signup
-Claper is passwordless, so you don't have to create an account. Just login with your email, check your mailbox ([localhost:4000/dev/mailbox](http://localhost:4000/dev/mailbox) if you have configured mail to be in local) and click on the link to get connected.
-
-<!-- ROADMAP -->
-## Roadmap
-
-- [x] Add Changelog
-- [ ] Add additional tests for better coverage
-- [ ] Add more docs
-
-See the [open issues](https://github.com/ClaperCo/Claper/issues) for a full list of proposed features (and known issues).
-
+```sh
+docker run -p 4000:4000 ghcr.io/claperco/claper:main
+```
 
 <!-- CONTRIBUTING -->
 ## Contributing

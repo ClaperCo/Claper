@@ -14,6 +14,10 @@ defmodule ClaperWeb.Router do
     plug(ClaperWeb.Plugs.Locale)
   end
 
+  pipeline :protect_with_basic_auth do
+    plug :basic_auth
+  end
+
   pipeline :api do
     plug(:accepts, ["json"])
   end
@@ -82,21 +86,28 @@ defmodule ClaperWeb.Router do
   #
   # Note that preview only shows emails that were sent by the same
   # node running the Phoenix server.
-  if Mix.env() == :dev || System.get_env("MAIL_TRANSPORT", "local") == "local" do
+  if Mix.env() == :dev || System.get_env("ENABLE_MAILBOX_ROUTE", "false") == "true" do
     scope "/dev" do
-      pipe_through(:browser)
+
+      if System.get_env("MAILBOX_USER") && System.get_env("MAILBOX_PASSWORD") && System.get_env("ENABLE_MAILBOX_ROUTE", "false") == "true" do
+        pipe_through [:browser, :protect_with_basic_auth]
+      else
+        pipe_through [:browser]
+      end
 
       forward("/mailbox", Plug.Swoosh.MailboxPreview)
     end
   end
 
   ## Authentication routes
-
   scope "/", ClaperWeb do
     pipe_through([:browser, :redirect_if_user_is_authenticated])
 
-    get("/users/register", UserRegistrationController, :new)
-    post("/users/register", UserRegistrationController, :create)
+    if System.get_env("ENABLE_ACCOUNT_CREATION", "true") == "true" do
+      get("/users/register", UserRegistrationController, :new)
+      post("/users/register", UserRegistrationController, :create)
+    end
+
     get("/users/register/confirm", UserRegistrationController, :confirm)
     get("/users/log_in", UserSessionController, :new)
     post("/users/log_in", UserSessionController, :create)
@@ -125,4 +136,11 @@ defmodule ClaperWeb.Router do
     get("/users/confirm/:token", UserConfirmationController, :edit)
     post("/users/confirm/:token", UserConfirmationController, :update)
   end
+
+  defp basic_auth(conn, _opts) do
+    username = System.fetch_env!("MAILBOX_USER")
+    password = System.fetch_env!("MAILBOX_PASSWORD")
+    Plug.BasicAuth.basic_auth(conn, username: username, password: password)
+  end
+
 end
