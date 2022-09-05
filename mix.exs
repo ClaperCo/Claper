@@ -28,7 +28,7 @@ defmodule Claper.MixProject do
           "guides/introduction/configuration.md",
           "guides/introduction/installation.md",
 
-          "guides/usage/authentication.md"
+          "guides/usage/features.md"
         ],
         groups_for_extras: [
           Introduction: ~r/guides\/introduction\/.?/,
