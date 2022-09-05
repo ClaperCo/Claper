@@ -51,5 +51,11 @@ If you have configured `MAIL` to `local`, you can access to the mailbox at [`loc
 You can build the app with Docker:
 ```sh
 docker build -t claper .
-docker run -p 4000:4000 -d claper
+docker run -p 4000:4000 claper
+```
+
+or you can use the official Docker image:
+
+```sh
+docker run -p 4000:4000 ghcr.io/claperco/claper:main
 ```
