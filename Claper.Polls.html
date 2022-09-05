@@ -5,12 +5,12 @@
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="generator" content="ExDoc v0.28.4">
-    <meta name="project" content="Claper v1.1.0">
+    <meta name="project" content="Claper v1.1.1">
 
-    <title>Claper.Polls — Claper v1.1.0</title>
+    <title>Claper.Polls — Claper v1.1.1</title>
     <link rel="stylesheet" href="dist/elixir-b6f1ed5df9b1d42a7309.css" />
 
-    <script src="dist/sidebar_items-eda8f5c996.js"></script>
+    <script src="dist/sidebar_items-00b4d09f2b.js"></script>
 
       <script src="docs_config.js"></script>
 
@@ -70,7 +70,7 @@
 Claper
       </a>
       <strong class="sidebar-projectVersion" translate="no">
-        v1.1.0
+        v1.1.1
       </strong>
     </div>
     <ul class="sidebar-listNav">
@@ -104,7 +104,7 @@ Claper
     </a>
 
   <span translate="no">Claper.Polls</span> 
-  <small class="app-vsn" translate="no">(Claper v1.1.0)</small>
+  <small class="app-vsn" translate="no">(Claper v1.1.1)</small>
 
 </h1>
 
@@ -337,8 +337,8 @@ Functions
   </a>
   Examples
 </h2>
-<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">change_poll</span><span class="p" data-group-id="1957620245-1">(</span><span class="n">poll</span><span class="p" data-group-id="1957620245-1">)</span><span class="w">
-</span><span class="p" data-group-id="1957620245-2">%</span><span class="nc" data-group-id="1957620245-2">Ecto.Changeset</span><span class="p" data-group-id="1957620245-2">{</span><span class="ss">data</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="1957620245-3">%</span><span class="nc" data-group-id="1957620245-3">Poll</span><span class="p" data-group-id="1957620245-3">{</span><span class="p" data-group-id="1957620245-3">}</span><span class="p" data-group-id="1957620245-2">}</span></code></pre>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">change_poll</span><span class="p" data-group-id="3392775017-1">(</span><span class="n">poll</span><span class="p" data-group-id="3392775017-1">)</span><span class="w">
+</span><span class="p" data-group-id="3392775017-2">%</span><span class="nc" data-group-id="3392775017-2">Ecto.Changeset</span><span class="p" data-group-id="3392775017-2">{</span><span class="ss">data</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="3392775017-3">%</span><span class="nc" data-group-id="3392775017-3">Poll</span><span class="p" data-group-id="3392775017-3">{</span><span class="p" data-group-id="3392775017-3">}</span><span class="p" data-group-id="3392775017-2">}</span></code></pre>
   </section>
 </section>
 <section class="detail" id="create_poll/1">
@@ -368,11 +368,11 @@ Functions
   </a>
   Examples
 </h2>
-<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">create_poll</span><span class="p" data-group-id="8735119980-1">(</span><span class="p" data-group-id="8735119980-2">%{</span><span class="ss">field</span><span class="p">:</span><span class="w"> </span><span class="n">value</span><span class="p" data-group-id="8735119980-2">}</span><span class="p" data-group-id="8735119980-1">)</span><span class="w">
-</span><span class="p" data-group-id="8735119980-3">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="8735119980-4">%</span><span class="nc" data-group-id="8735119980-4">Poll</span><span class="p" data-group-id="8735119980-4">{</span><span class="p" data-group-id="8735119980-4">}</span><span class="p" data-group-id="8735119980-3">}</span><span class="w">
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">create_poll</span><span class="p" data-group-id="2034766362-1">(</span><span class="p" data-group-id="2034766362-2">%{</span><span class="ss">field</span><span class="p">:</span><span class="w"> </span><span class="n">value</span><span class="p" data-group-id="2034766362-2">}</span><span class="p" data-group-id="2034766362-1">)</span><span class="w">
+</span><span class="p" data-group-id="2034766362-3">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="2034766362-4">%</span><span class="nc" data-group-id="2034766362-4">Poll</span><span class="p" data-group-id="2034766362-4">{</span><span class="p" data-group-id="2034766362-4">}</span><span class="p" data-group-id="2034766362-3">}</span><span class="w">
 
-</span><span class="gp unselectable">iex&gt; </span><span class="n">create_poll</span><span class="p" data-group-id="8735119980-5">(</span><span class="p" data-group-id="8735119980-6">%{</span><span class="ss">field</span><span class="p">:</span><span class="w"> </span><span class="n">bad_value</span><span class="p" data-group-id="8735119980-6">}</span><span class="p" data-group-id="8735119980-5">)</span><span class="w">
-</span><span class="p" data-group-id="8735119980-7">{</span><span class="ss">:error</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="8735119980-8">%</span><span class="nc" data-group-id="8735119980-8">Ecto.Changeset</span><span class="p" data-group-id="8735119980-8">{</span><span class="p" data-group-id="8735119980-8">}</span><span class="p" data-group-id="8735119980-7">}</span></code></pre>
+</span><span class="gp unselectable">iex&gt; </span><span class="n">create_poll</span><span class="p" data-group-id="2034766362-5">(</span><span class="p" data-group-id="2034766362-6">%{</span><span class="ss">field</span><span class="p">:</span><span class="w"> </span><span class="n">bad_value</span><span class="p" data-group-id="2034766362-6">}</span><span class="p" data-group-id="2034766362-5">)</span><span class="w">
+</span><span class="p" data-group-id="2034766362-7">{</span><span class="ss">:error</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="2034766362-8">%</span><span class="nc" data-group-id="2034766362-8">Ecto.Changeset</span><span class="p" data-group-id="2034766362-8">{</span><span class="p" data-group-id="2034766362-8">}</span><span class="p" data-group-id="2034766362-7">}</span></code></pre>
   </section>
 </section>
 <section class="detail" id="create_poll_vote/1">
@@ -402,11 +402,11 @@ Functions
   </a>
   Examples
 </h2>
-<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">create_poll_vote</span><span class="p" data-group-id="5678352867-1">(</span><span class="p" data-group-id="5678352867-2">%{</span><span class="ss">field</span><span class="p">:</span><span class="w"> </span><span class="n">value</span><span class="p" data-group-id="5678352867-2">}</span><span class="p" data-group-id="5678352867-1">)</span><span class="w">
-</span><span class="p" data-group-id="5678352867-3">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="5678352867-4">%</span><span class="nc" data-group-id="5678352867-4">PollVote</span><span class="p" data-group-id="5678352867-4">{</span><span class="p" data-group-id="5678352867-4">}</span><span class="p" data-group-id="5678352867-3">}</span><span class="w">
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">create_poll_vote</span><span class="p" data-group-id="4909896347-1">(</span><span class="p" data-group-id="4909896347-2">%{</span><span class="ss">field</span><span class="p">:</span><span class="w"> </span><span class="n">value</span><span class="p" data-group-id="4909896347-2">}</span><span class="p" data-group-id="4909896347-1">)</span><span class="w">
+</span><span class="p" data-group-id="4909896347-3">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="4909896347-4">%</span><span class="nc" data-group-id="4909896347-4">PollVote</span><span class="p" data-group-id="4909896347-4">{</span><span class="p" data-group-id="4909896347-4">}</span><span class="p" data-group-id="4909896347-3">}</span><span class="w">
 
-</span><span class="gp unselectable">iex&gt; </span><span class="n">create_poll_vote</span><span class="p" data-group-id="5678352867-5">(</span><span class="p" data-group-id="5678352867-6">%{</span><span class="ss">field</span><span class="p">:</span><span class="w"> </span><span class="n">bad_value</span><span class="p" data-group-id="5678352867-6">}</span><span class="p" data-group-id="5678352867-5">)</span><span class="w">
-</span><span class="p" data-group-id="5678352867-7">{</span><span class="ss">:error</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="5678352867-8">%</span><span class="nc" data-group-id="5678352867-8">Ecto.Changeset</span><span class="p" data-group-id="5678352867-8">{</span><span class="p" data-group-id="5678352867-8">}</span><span class="p" data-group-id="5678352867-7">}</span></code></pre>
+</span><span class="gp unselectable">iex&gt; </span><span class="n">create_poll_vote</span><span class="p" data-group-id="4909896347-5">(</span><span class="p" data-group-id="4909896347-6">%{</span><span class="ss">field</span><span class="p">:</span><span class="w"> </span><span class="n">bad_value</span><span class="p" data-group-id="4909896347-6">}</span><span class="p" data-group-id="4909896347-5">)</span><span class="w">
+</span><span class="p" data-group-id="4909896347-7">{</span><span class="ss">:error</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="4909896347-8">%</span><span class="nc" data-group-id="4909896347-8">Ecto.Changeset</span><span class="p" data-group-id="4909896347-8">{</span><span class="p" data-group-id="4909896347-8">}</span><span class="p" data-group-id="4909896347-7">}</span></code></pre>
   </section>
 </section>
 <section class="detail" id="delete_poll/2">
@@ -434,11 +434,11 @@ Functions
   </a>
   Examples
 </h2>
-<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">delete_poll</span><span class="p" data-group-id="1050422362-1">(</span><span class="s">&quot;123e4567-e89b-12d3-a456-426614174000&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">poll</span><span class="p" data-group-id="1050422362-1">)</span><span class="w">
-</span><span class="p" data-group-id="1050422362-2">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="1050422362-3">%</span><span class="nc" data-group-id="1050422362-3">Poll</span><span class="p" data-group-id="1050422362-3">{</span><span class="p" data-group-id="1050422362-3">}</span><span class="p" data-group-id="1050422362-2">}</span><span class="w">
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">delete_poll</span><span class="p" data-group-id="7020557664-1">(</span><span class="s">&quot;123e4567-e89b-12d3-a456-426614174000&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">poll</span><span class="p" data-group-id="7020557664-1">)</span><span class="w">
+</span><span class="p" data-group-id="7020557664-2">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="7020557664-3">%</span><span class="nc" data-group-id="7020557664-3">Poll</span><span class="p" data-group-id="7020557664-3">{</span><span class="p" data-group-id="7020557664-3">}</span><span class="p" data-group-id="7020557664-2">}</span><span class="w">
 
-</span><span class="gp unselectable">iex&gt; </span><span class="n">delete_poll</span><span class="p" data-group-id="1050422362-4">(</span><span class="s">&quot;123e4567-e89b-12d3-a456-426614174000&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">poll</span><span class="p" data-group-id="1050422362-4">)</span><span class="w">
-</span><span class="p" data-group-id="1050422362-5">{</span><span class="ss">:error</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="1050422362-6">%</span><span class="nc" data-group-id="1050422362-6">Ecto.Changeset</span><span class="p" data-group-id="1050422362-6">{</span><span class="p" data-group-id="1050422362-6">}</span><span class="p" data-group-id="1050422362-5">}</span></code></pre>
+</span><span class="gp unselectable">iex&gt; </span><span class="n">delete_poll</span><span class="p" data-group-id="7020557664-4">(</span><span class="s">&quot;123e4567-e89b-12d3-a456-426614174000&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">poll</span><span class="p" data-group-id="7020557664-4">)</span><span class="w">
+</span><span class="p" data-group-id="7020557664-5">{</span><span class="ss">:error</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="7020557664-6">%</span><span class="nc" data-group-id="7020557664-6">Ecto.Changeset</span><span class="p" data-group-id="7020557664-6">{</span><span class="p" data-group-id="7020557664-6">}</span><span class="p" data-group-id="7020557664-5">}</span></code></pre>
   </section>
 </section>
 <section class="detail" id="get_poll!/1">
@@ -466,10 +466,10 @@ Functions
   </a>
   Examples
 </h2>
-<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">get_poll!</span><span class="p" data-group-id="6073213416-1">(</span><span class="mi">123</span><span class="p" data-group-id="6073213416-1">)</span><span class="w">
-</span><span class="p" data-group-id="6073213416-2">%</span><span class="nc" data-group-id="6073213416-2">Poll</span><span class="p" data-group-id="6073213416-2">{</span><span class="p" data-group-id="6073213416-2">}</span><span class="w">
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">get_poll!</span><span class="p" data-group-id="3749531254-1">(</span><span class="mi">123</span><span class="p" data-group-id="3749531254-1">)</span><span class="w">
+</span><span class="p" data-group-id="3749531254-2">%</span><span class="nc" data-group-id="3749531254-2">Poll</span><span class="p" data-group-id="3749531254-2">{</span><span class="p" data-group-id="3749531254-2">}</span><span class="w">
 
-</span><span class="gp unselectable">iex&gt; </span><span class="n">get_poll!</span><span class="p" data-group-id="6073213416-3">(</span><span class="mi">456</span><span class="p" data-group-id="6073213416-3">)</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="n">get_poll!</span><span class="p" data-group-id="3749531254-3">(</span><span class="mi">456</span><span class="p" data-group-id="3749531254-3">)</span><span class="w">
 </span><span class="gt">** (Ecto.NoResultsError)</span></code></pre>
   </section>
 </section>
@@ -498,8 +498,8 @@ Functions
   </a>
   Examples
 </h2>
-<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">get_poll!</span><span class="p" data-group-id="7413906241-1">(</span><span class="mi">123</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p" data-group-id="7413906241-1">)</span><span class="w">
-</span><span class="p" data-group-id="7413906241-2">%</span><span class="nc" data-group-id="7413906241-2">Poll</span><span class="p" data-group-id="7413906241-2">{</span><span class="p" data-group-id="7413906241-2">}</span></code></pre>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">get_poll!</span><span class="p" data-group-id="1669340784-1">(</span><span class="mi">123</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p" data-group-id="1669340784-1">)</span><span class="w">
+</span><span class="p" data-group-id="1669340784-2">%</span><span class="nc" data-group-id="1669340784-2">Poll</span><span class="p" data-group-id="1669340784-2">{</span><span class="p" data-group-id="1669340784-2">}</span></code></pre>
   </section>
 </section>
 <section class="detail" id="get_poll_vote/2">
@@ -527,8 +527,8 @@ Functions
   </a>
   Examples
 </h2>
-<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">get_poll_vote!</span><span class="p" data-group-id="9942933435-1">(</span><span class="mi">321</span><span class="p">,</span><span class="w"> </span><span class="mi">123</span><span class="p" data-group-id="9942933435-1">)</span><span class="w">
-</span><span class="p" data-group-id="9942933435-2">%</span><span class="nc" data-group-id="9942933435-2">PollVote</span><span class="p" data-group-id="9942933435-2">{</span><span class="p" data-group-id="9942933435-2">}</span></code></pre>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">get_poll_vote!</span><span class="p" data-group-id="9139884196-1">(</span><span class="mi">321</span><span class="p">,</span><span class="w"> </span><span class="mi">123</span><span class="p" data-group-id="9139884196-1">)</span><span class="w">
+</span><span class="p" data-group-id="9139884196-2">%</span><span class="nc" data-group-id="9139884196-2">PollVote</span><span class="p" data-group-id="9139884196-2">{</span><span class="p" data-group-id="9139884196-2">}</span></code></pre>
   </section>
 </section>
 <section class="detail" id="list_polls/1">
@@ -556,8 +556,8 @@ Functions
   </a>
   Examples
 </h2>
-<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">list_polls</span><span class="p" data-group-id="4809431512-1">(</span><span class="mi">123</span><span class="p" data-group-id="4809431512-1">)</span><span class="w">
-</span><span class="p" data-group-id="4809431512-2">[</span><span class="p" data-group-id="4809431512-3">%</span><span class="nc" data-group-id="4809431512-3">Poll</span><span class="p" data-group-id="4809431512-3">{</span><span class="p" data-group-id="4809431512-3">}</span><span class="p">,</span><span class="w"> </span><span class="n">...</span><span class="p" data-group-id="4809431512-2">]</span></code></pre>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">list_polls</span><span class="p" data-group-id="8193286681-1">(</span><span class="mi">123</span><span class="p" data-group-id="8193286681-1">)</span><span class="w">
+</span><span class="p" data-group-id="8193286681-2">[</span><span class="p" data-group-id="8193286681-3">%</span><span class="nc" data-group-id="8193286681-3">Poll</span><span class="p" data-group-id="8193286681-3">{</span><span class="p" data-group-id="8193286681-3">}</span><span class="p">,</span><span class="w"> </span><span class="n">...</span><span class="p" data-group-id="8193286681-2">]</span></code></pre>
   </section>
 </section>
 <section class="detail" id="list_polls_at_position/2">
@@ -585,8 +585,8 @@ Functions
   </a>
   Examples
 </h2>
-<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">list_polls_at_position</span><span class="p" data-group-id="7108043360-1">(</span><span class="mi">123</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p" data-group-id="7108043360-1">)</span><span class="w">
-</span><span class="p" data-group-id="7108043360-2">[</span><span class="p" data-group-id="7108043360-3">%</span><span class="nc" data-group-id="7108043360-3">Poll</span><span class="p" data-group-id="7108043360-3">{</span><span class="p" data-group-id="7108043360-3">}</span><span class="p">,</span><span class="w"> </span><span class="n">...</span><span class="p" data-group-id="7108043360-2">]</span></code></pre>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">list_polls_at_position</span><span class="p" data-group-id="0162740125-1">(</span><span class="mi">123</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p" data-group-id="0162740125-1">)</span><span class="w">
+</span><span class="p" data-group-id="0162740125-2">[</span><span class="p" data-group-id="0162740125-3">%</span><span class="nc" data-group-id="0162740125-3">Poll</span><span class="p" data-group-id="0162740125-3">{</span><span class="p" data-group-id="0162740125-3">}</span><span class="p">,</span><span class="w"> </span><span class="n">...</span><span class="p" data-group-id="0162740125-2">]</span></code></pre>
   </section>
 </section>
 <section class="detail" id="remove_poll_opt/2">
@@ -658,8 +658,8 @@ Functions
   </a>
   Examples
 </h2>
-<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">set_percentages</span><span class="p" data-group-id="9130484130-1">(</span><span class="n">poll</span><span class="p" data-group-id="9130484130-1">)</span><span class="w">
-</span><span class="p" data-group-id="9130484130-2">%</span><span class="nc" data-group-id="9130484130-2">Poll</span><span class="p" data-group-id="9130484130-2">{</span><span class="p" data-group-id="9130484130-2">}</span></code></pre>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">set_percentages</span><span class="p" data-group-id="5673242737-1">(</span><span class="n">poll</span><span class="p" data-group-id="5673242737-1">)</span><span class="w">
+</span><span class="p" data-group-id="5673242737-2">%</span><span class="nc" data-group-id="5673242737-2">Poll</span><span class="p" data-group-id="5673242737-2">{</span><span class="p" data-group-id="5673242737-2">}</span></code></pre>
   </section>
 </section>
 <section class="detail" id="update_poll/3">
@@ -687,11 +687,11 @@ Functions
   </a>
   Examples
 </h2>
-<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">update_poll</span><span class="p" data-group-id="7487787059-1">(</span><span class="s">&quot;123e4567-e89b-12d3-a456-426614174000&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">poll</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="7487787059-2">%{</span><span class="ss">field</span><span class="p">:</span><span class="w"> </span><span class="n">new_value</span><span class="p" data-group-id="7487787059-2">}</span><span class="p" data-group-id="7487787059-1">)</span><span class="w">
-</span><span class="p" data-group-id="7487787059-3">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="7487787059-4">%</span><span class="nc" data-group-id="7487787059-4">Poll</span><span class="p" data-group-id="7487787059-4">{</span><span class="p" data-group-id="7487787059-4">}</span><span class="p" data-group-id="7487787059-3">}</span><span class="w">
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">update_poll</span><span class="p" data-group-id="7389529235-1">(</span><span class="s">&quot;123e4567-e89b-12d3-a456-426614174000&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">poll</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="7389529235-2">%{</span><span class="ss">field</span><span class="p">:</span><span class="w"> </span><span class="n">new_value</span><span class="p" data-group-id="7389529235-2">}</span><span class="p" data-group-id="7389529235-1">)</span><span class="w">
+</span><span class="p" data-group-id="7389529235-3">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="7389529235-4">%</span><span class="nc" data-group-id="7389529235-4">Poll</span><span class="p" data-group-id="7389529235-4">{</span><span class="p" data-group-id="7389529235-4">}</span><span class="p" data-group-id="7389529235-3">}</span><span class="w">
 
-</span><span class="gp unselectable">iex&gt; </span><span class="n">update_poll</span><span class="p" data-group-id="7487787059-5">(</span><span class="s">&quot;123e4567-e89b-12d3-a456-426614174000&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">poll</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="7487787059-6">%{</span><span class="ss">field</span><span class="p">:</span><span class="w"> </span><span class="n">bad_value</span><span class="p" data-group-id="7487787059-6">}</span><span class="p" data-group-id="7487787059-5">)</span><span class="w">
-</span><span class="p" data-group-id="7487787059-7">{</span><span class="ss">:error</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="7487787059-8">%</span><span class="nc" data-group-id="7487787059-8">Ecto.Changeset</span><span class="p" data-group-id="7487787059-8">{</span><span class="p" data-group-id="7487787059-8">}</span><span class="p" data-group-id="7487787059-7">}</span></code></pre>
+</span><span class="gp unselectable">iex&gt; </span><span class="n">update_poll</span><span class="p" data-group-id="7389529235-5">(</span><span class="s">&quot;123e4567-e89b-12d3-a456-426614174000&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">poll</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="7389529235-6">%{</span><span class="ss">field</span><span class="p">:</span><span class="w"> </span><span class="n">bad_value</span><span class="p" data-group-id="7389529235-6">}</span><span class="p" data-group-id="7389529235-5">)</span><span class="w">
+</span><span class="p" data-group-id="7389529235-7">{</span><span class="ss">:error</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="7389529235-8">%</span><span class="nc" data-group-id="7389529235-8">Ecto.Changeset</span><span class="p" data-group-id="7389529235-8">{</span><span class="p" data-group-id="7389529235-8">}</span><span class="p" data-group-id="7389529235-7">}</span></code></pre>
   </section>
 </section>
 <section class="detail" id="vote/4">
