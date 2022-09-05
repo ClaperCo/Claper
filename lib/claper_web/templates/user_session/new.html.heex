@@ -40,6 +40,12 @@
                 </button>
               </div>
             </.form>
+
+            <div class="mt-4 text-center">
+              <%= if System.get_env("ENABLE_ACCOUNT_CREATION") == "true" do %>
+                <%= link gettext("Create account"), to: Routes.user_registration_path(@conn, :new), class: "text-white text-sm text-center" %>
+              <% end %>
+            </div>
         </div>
       </div>
     </div>

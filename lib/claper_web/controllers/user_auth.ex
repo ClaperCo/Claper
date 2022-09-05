@@ -133,7 +133,7 @@ defmodule ClaperWeb.UserAuth do
         conn
       else
         conn
-        |> redirect(to: Routes.user_registration_path(conn, :confirm))
+        #|> redirect(to: Routes.user_registration_path(conn, :confirm))
       end
     else
       conn
