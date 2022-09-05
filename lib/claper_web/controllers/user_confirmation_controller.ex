@@ -11,7 +11,7 @@ defmodule ClaperWeb.UserConfirmationController do
     if user = Accounts.get_user_by_email(email) do
       Accounts.deliver_user_confirmation_instructions(
         user,
-        &Routes.user_confirmation_url(conn, :edit, &1)
+        &Routes.user_confirmation_url(conn, :update, &1)
       )
     end
 
@@ -23,10 +23,6 @@ defmodule ClaperWeb.UserConfirmationController do
         "you will receive an email with instructions shortly."
     )
     |> redirect(to: "/")
-  end
-
-  def edit(conn, %{"token" => token}) do
-    render(conn, "edit.html", token: token)
   end
 
   # Do not log in the user after confirmation to avoid a
