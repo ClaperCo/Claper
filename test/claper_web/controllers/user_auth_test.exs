@@ -164,7 +164,6 @@ defmodule ClaperWeb.UserAuthTest do
     test "does not redirect if user is authenticated", %{conn: conn, user: user} do
       conn = conn |> assign(:current_user, user) |> UserAuth.require_authenticated_user([])
       refute conn.halted
-      assert conn.status == 302
     end
   end
 end

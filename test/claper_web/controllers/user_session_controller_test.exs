@@ -11,7 +11,7 @@ defmodule ClaperWeb.UserSessionControllerTest do
     test "renders log in page", %{conn: conn} do
       conn = get(conn, Routes.user_session_path(conn, :new))
       response = html_response(conn, 200)
-      assert response =~ "Enter your address email"
+      assert response =~ "Your email address"
     end
 
     test "redirects if already logged in", %{conn: conn, user: user} do

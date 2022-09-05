@@ -1,7 +1,7 @@
 defmodule Claper.MixProject do
   use Mix.Project
 
-  @version "1.0.0"
+  @version "1.1.0"
 
   def project do
     [
@@ -28,7 +28,7 @@ defmodule Claper.MixProject do
           "guides/introduction/configuration.md",
           "guides/introduction/installation.md",
 
-          "guides/usage/authentication.md"
+          "guides/usage/features.md"
         ],
         groups_for_extras: [
           Introduction: ~r/guides\/introduction\/.?/,
@@ -99,7 +99,7 @@ defmodule Claper.MixProject do
       {:floki, ">= 0.30.0", only: :test},
       {:phoenix_live_dashboard, "~> 0.6"},
       {:esbuild, "~> 0.2", runtime: Mix.env() == :dev},
-      {:dart_sass, "~> 0.4", runtime: Mix.env() == :dev},
+      {:dart_sass, "~> 0.5", runtime: Mix.env() == :dev},
       {:swoosh, "~> 1.3"},
       {:finch, "~> 0.8"},
       {:telemetry_metrics, "~> 0.6"},

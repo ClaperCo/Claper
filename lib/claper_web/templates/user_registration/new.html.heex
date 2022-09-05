@@ -19,11 +19,12 @@
               <ClaperWeb.Component.Alert.error message={gettext "Oops, check that all fields are filled in correctly."} stick={true} />
             <% end %>
             <input type="hidden" name="remember" value="true">
-            <ClaperWeb.Component.Input.email form={f} key={:email} labelClass="text-white" fieldClass="bg-gray-700" name={gettext "Email"} required="true" />
+            <ClaperWeb.Component.Input.email form={f} key={:email} labelClass="text-white" fieldClass="bg-gray-700 text-white" name={gettext "Email"} required="true" />
+            <ClaperWeb.Component.Input.password form={f} key={:password} labelClass="text-white" fieldClass="bg-gray-700 text-white" name={gettext "Password"} required="true" />
 
             <div>
               <button type="submit" class="w-full flex justify-center text-white p-4 rounded-full tracking-wide font-bold focus:outline-none focus:shadow-outline shadow-lg bg-gradient-to-tl from-primary-500 to-secondary-500 bg-size-200 bg-pos-0 hover:bg-pos-100 transition-all duration-500">
-                Create account
+                <%= gettext("Create account") %>
               </button>
             </div>
           </.form>

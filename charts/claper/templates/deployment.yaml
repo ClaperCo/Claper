@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: claper-app
+  labels:
+    app: claper
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: claper
+  template:
+    metadata:
+      labels:
+        app: claper
+    spec:
+      serviceAccountName: sa-claper
+      containers:
+      - name: claper
+        image: ghcr.io/claperco/claper:latest
+        imagePullPolicy: Always
+        resources:
+          requests:
+            cpu: "300m"
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 4000
+          initialDelaySeconds: 60
+          periodSeconds: 20
+        ports:
+          - containerPort: 4000
+          - name: epmd
+            containerPort: 4369
+            protocol: TCP
+        env:
+{{ include "env" . | indent 10 }}

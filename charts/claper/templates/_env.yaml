@@ -1,0 +1,31 @@
+{{- define "env" -}}
+- name: SECRET_KEY_BASE
+  valueFrom:
+    secretKeyRef:
+      name: claper-secret
+      key: secret-key-base
+- name: POD_IP
+  valueFrom:
+    fieldRef:
+      fieldPath: status.podIP
+- name: NAMESPACE
+  valueFrom:
+    fieldRef:
+      fieldPath: metadata.namespace
+- name: ENDPOINT_HOST
+  value: claper.co
+- name: DATABASE_URL
+  value: postgresql://claper:claper@10.0.0.6:6432/claper
+- name: AWS_ACCESS_KEY_ID
+  value: XXX
+- name: AWS_PRES_BUCKET
+  value: XXX
+- name: POOL_SIZE
+  value: "20"
+- name: AWS_REGION
+  value: eu-west-3
+- name: AWS_SECRET_ACCESS_KEY
+  value: XXX
+- name: PRESENTATION_STORAGE
+  value: s3
+{{- end -}}
