@@ -21,6 +21,7 @@ SMTP_PORT | - | 25 | - | SMTP port
 SMTP_TLS | always, never, if_available | always | - | SMTP TLS
 SMTP_AUTH | always, never, if_available | always | - | SMTP Auth
 SMTP_SSL | true, false | true | - | SMTP SSL
+ENABLE_ACCOUNT_CREATION | true, false | true | - | Enable/disable user registration
 
 ## Production / Docker
 
