@@ -5,12 +5,12 @@
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="generator" content="ExDoc v0.28.4">
-    <meta name="project" content="Claper v1.0.0">
+    <meta name="project" content="Claper v1.1.0">
 
-    <title>Claper.Accounts.User — Claper v1.0.0</title>
+    <title>Claper.Accounts.User — Claper v1.1.0</title>
     <link rel="stylesheet" href="dist/elixir-b6f1ed5df9b1d42a7309.css" />
 
-    <script src="dist/sidebar_items-372d70b46c.js"></script>
+    <script src="dist/sidebar_items-eda8f5c996.js"></script>
 
       <script src="docs_config.js"></script>
 
@@ -70,7 +70,7 @@
 Claper
       </a>
       <strong class="sidebar-projectVersion" translate="no">
-        v1.0.0
+        v1.1.0
       </strong>
     </div>
     <ul class="sidebar-listNav">
@@ -104,7 +104,7 @@ Claper
     </a>
 
   <span translate="no">Claper.Accounts.User</span> 
-  <small class="app-vsn" translate="no">(Claper v1.0.0)</small>
+  <small class="app-vsn" translate="no">(Claper v1.1.0)</small>
 
 </h1>
 
@@ -146,9 +146,39 @@ Claper
 
       <div class="summary-row">
         <div class="summary-signature">
+          <a href="#password_changeset/3" translate="no">password_changeset(user, attrs, opts \\ [])</a>
+
+        </div>
+
+          <div class="summary-synopsis"><p>A user changeset for changing the password.</p></div>
+
+      </div>
+
+      <div class="summary-row">
+        <div class="summary-signature">
           <a href="#registration_changeset/3" translate="no">registration_changeset(user, attrs, opts \\ [])</a>
 
         </div>
+
+      </div>
+
+      <div class="summary-row">
+        <div class="summary-signature">
+          <a href="#valid_password?/2" translate="no">valid_password?(arg1, password)</a>
+
+        </div>
+
+          <div class="summary-synopsis"><p>Verifies the password.</p></div>
+
+      </div>
+
+      <div class="summary-row">
+        <div class="summary-signature">
+          <a href="#validate_current_password/2" translate="no">validate_current_password(changeset, password)</a>
+
+        </div>
+
+          <div class="summary-synopsis"><p>Validates the current password otherwise adds an error to the changeset.</p></div>
 
       </div>
 
@@ -175,7 +205,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">confirm_changeset(user)</h1>
 
-      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper/accounts/user.ex#L50" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper/accounts/user.ex#L99" class="view-source" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -197,7 +227,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">email_changeset(user, attrs)</h1>
 
-      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper/accounts/user.ex#L37" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper/accounts/user.ex#L60" class="view-source" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -208,6 +238,30 @@ Functions
   <section class="docstring">
 
 <p>A user changeset for changing the email.</p><p>It requires the email to change otherwise an error is added.</p>
+  </section>
+</section>
+<section class="detail" id="password_changeset/3">
+
+    <span id="password_changeset/2"></span>
+
+  <div class="detail-header">
+    <a href="#password_changeset/3" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">password_changeset(user, attrs, opts \\ [])</h1>
+
+      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper/accounts/user.ex#L73" class="view-source" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+<p>A user changeset for changing the password.</p>
   </section>
 </section>
 <section class="detail" id="registration_changeset/3">
@@ -221,7 +275,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">registration_changeset(user, attrs, opts \\ [])</h1>
 
-      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper/accounts/user.ex#L17" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper/accounts/user.ex#L19" class="view-source" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -232,6 +286,51 @@ Functions
   <section class="docstring">
 
 
+  </section>
+</section>
+<section class="detail" id="valid_password?/2">
+
+  <div class="detail-header">
+    <a href="#valid_password?/2" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">valid_password?(arg1, password)</h1>
+
+      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper/accounts/user.ex#L86" class="view-source" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+<p>Verifies the password.</p><p>If there is no user or the user doesn't have a password, we call
+<a href="https://hexdocs.pm/bcrypt_elixir/2.3.1/Bcrypt.html#no_user_verify/0"><code class="inline">Bcrypt.no_user_verify/0</code></a> to avoid timing attacks.</p>
+  </section>
+</section>
+<section class="detail" id="validate_current_password/2">
+
+  <div class="detail-header">
+    <a href="#validate_current_password/2" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">validate_current_password(changeset, password)</h1>
+
+      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper/accounts/user.ex#L107" class="view-source" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+<p>Validates the current password otherwise adds an error to the changeset.</p>
   </section>
 </section>
 
