@@ -10,7 +10,7 @@
     <title>Installation — Claper v1.1.1</title>
     <link rel="stylesheet" href="dist/elixir-b6f1ed5df9b1d42a7309.css" />
 
-    <script src="dist/sidebar_items-00b4d09f2b.js"></script>
+    <script src="dist/sidebar_items-b66129d9f4.js"></script>
 
       <script src="docs_config.js"></script>
 
@@ -128,7 +128,13 @@ Claper
 <p>You can build the app with Docker:</p><pre><code class="makeup sh" translate="no"><span class="">docker build -t claper .
 </span><span class="">docker run -p 4000:4000 claper
 </span></code></pre><p>or you can use the official Docker image:</p><pre><code class="makeup sh" translate="no"><span class="">docker run -p 4000:4000 ghcr.io/claperco/claper:main
-</span></code></pre>
+</span></code></pre><h3 id="arm-architecture" class="section-heading">
+  <a href="#arm-architecture" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i>
+  <p class="sr-only">arm-architecture</p>
+  </a>
+  ARM architecture
+</h3>
+<p>If you are using an ARM architecture (like Apple M1), the original Docker image won't work. You can build the image yourself by replacing the <code class="inline">BUILDER_IMAGE</code> argument in the <code class="inline">Dockerfile</code> with <code class="inline">ARG BUILDER_IMAGE=&quot;hexpm/elixir-arm64:1.13.2-erlang-24.2.1-debian-bullseye-20210902-slim&quot;</code> and then build the image as described above.</p>
 <div class="bottom-actions">
   <div class="bottom-actions-item">
 
@@ -144,12 +150,12 @@ Configuration
   </div>
   <div class="bottom-actions-item">
 
-      <a href="features.html" class="bottom-actions-button" rel="next">
+      <a href="storage.html" class="bottom-actions-button" rel="next">
         <span class="subheader">
           Next Page →
         </span>
         <span class="title">
-Features
+Presentation storage
         </span>
       </a>
 

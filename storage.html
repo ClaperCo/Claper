@@ -7,7 +7,7 @@
     <meta name="generator" content="ExDoc v0.28.4">
     <meta name="project" content="Claper v1.1.1">
 
-    <title>ClaperWeb.EventLive.Index — Claper v1.1.1</title>
+    <title>Presentation storage — Claper v1.1.1</title>
     <link rel="stylesheet" href="dist/elixir-b6f1ed5df9b1d42a7309.css" />
 
     <script src="dist/sidebar_items-b66129d9f4.js"></script>
@@ -18,7 +18,7 @@
 
 
   </head>
-  <body data-type="modules">
+  <body data-type="extras">
     <script>
 
       try {
@@ -98,81 +98,53 @@ Claper
 </button>
 
 
-    <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper_web/live/event_live/index.ex#L1" title="View Source" class="view-source" rel="help">
+    <a href="https://github.com/ClaperCo/Claper/blob/main/guides/introduction/storage.md#L1" title="View Source" class="view-source" rel="help">
       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
       <span class="sr-only">View Source</span>
     </a>
 
-  <span translate="no">ClaperWeb.EventLive.Index</span> 
-  <small class="app-vsn" translate="no">(Claper v1.1.1)</small>
-
+  <span>Presentation storage</span>
 </h1>
 
+<p>You can configure different storage options for your presentations. By default, Claper uses the local storage.</p><p>Each presentation has a unique hash that is generated in two steps, first with <code class="inline">:erlang.phash2(&quot;#{code}-#{name}&quot;)</code> and then <code class="inline">:erlang.phash2(&quot;#{hash}-#{System.system_time(:second)}&quot;)</code>.</p><h2 id="local-storage" class="section-heading">
+  <a href="#local-storage" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i>
+  <p class="sr-only">local-storage</p>
+  </a>
+  Local storage
+</h2>
+<p>The local storage is the default storage option. It stores the presentations in the <code class="inline">priv/static/uploads/[hash]</code> folder.</p><h2 id="s3-storage" class="section-heading">
+  <a href="#s3-storage" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i>
+  <p class="sr-only">s3-storage</p>
+  </a>
+  S3 storage
+</h2>
+<p>You can use S3 storage to store your presentations.</p><p>When user upload a new presentation, the destination file is uploaded to S3 in your bucket in <code class="inline">presentations/[hash]</code> and the local file is deleted.</p>
+<div class="bottom-actions">
+  <div class="bottom-actions-item">
 
-
-  <section id="summary" class="details-list">
-    <h1 class="section-heading">
-      <a class="hover-link" href="#summary">
-        <i class="ri-link-m" aria-hidden="true"></i>
-        <span class="sr-only">Link to this section</span>
+      <a href="installation.html" class="bottom-actions-button" rel="prev">
+        <span class="subheader">
+          ← Previous Page
+        </span>
+        <span class="title">
+Installation
+        </span>
       </a>
-      Summary
-    </h1>
-
-  <div class="summary-functions summary">
-    <h2>
-      <a href="#functions">Functions</a>
-    </h2>
-
-      <div class="summary-row">
-        <div class="summary-signature">
-          <a href="#render/1" translate="no">render(arg)</a>
-
-        </div>
-
-          <div class="summary-synopsis"><p>Callback implementation for <a href="https://hexdocs.pm/phoenix_live_view/0.17.7/Phoenix.LiveView.html#c:render/1"><code class="inline">Phoenix.LiveView.render/1</code></a>.</p></div>
-
-      </div>
 
   </div>
+  <div class="bottom-actions-item">
 
-  </section>
-
-
-  <section id="functions" class="details-list">
-    <h1 class="section-heading">
-      <a class="hover-link" href="#functions">
-        <i class="ri-link-m" aria-hidden="true"></i>
-        <span class="sr-only">Link to this section</span>
+      <a href="features.html" class="bottom-actions-button" rel="next">
+        <span class="subheader">
+          Next Page →
+        </span>
+        <span class="title">
+Features
+        </span>
       </a>
-Functions
-    </h1>
-    <div class="functions-list">
-<section class="detail" id="render/1">
-
-  <div class="detail-header">
-    <a href="#render/1" class="detail-link" title="Link to this function">
-      <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
-    </a>
-    <h1 class="signature" translate="no">render(arg)</h1>
-
-      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper_web/live/event_live/index.ex#L1" class="view-source" rel="help" title="View Source">
-       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
-     </a>
-
 
   </div>
-
-  <section class="docstring">
-
-<p>Callback implementation for <a href="https://hexdocs.pm/phoenix_live_view/0.17.7/Phoenix.LiveView.html#c:render/1"><code class="inline">Phoenix.LiveView.render/1</code></a>.</p>
-  </section>
-</section>
-
-    </div>
-  </section>
+</div>
 
       <footer class="footer">
 
