@@ -8,6 +8,8 @@ We don't want to add a lot of features but instead focusing on the core features
 
 Users can send instant message during the presentation and interact to others messages with emoji reactions.
 
+<img src="assets/messages.png" width="300"/>
+
 ## Polls
 
 You can add polls during your presentation. Users can vote to the poll and see the results in real time. 
@@ -16,11 +18,15 @@ When you create a new presentation, click on **Present/Customize**, select the s
 
 During your presentation, enable **Active poll results** on the dashboard to see the poll results in real time.
 
+<img src="assets/feature1.png" width="300"/>
+
 ## Moderation tools
 
 You can moderate the messages during your presentation. You can delete messages or ban users from the dashboard. 
 
 Banning the user will prevent him to send messages during the presentation and is based on a token that is stored in the browser. If the user clear his cookies, he will be able to send messages again.
+
+<img src="assets/feature2.png" width="400"/>
 
 ## Facilitators
 

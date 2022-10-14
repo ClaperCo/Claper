@@ -59,3 +59,7 @@ or you can use the official Docker image:
 ```sh
 docker run -p 4000:4000 ghcr.io/claperco/claper:main
 ```
+
+### ARM architecture
+
+If you are using an ARM architecture (like Apple M1), the original Docker image won't work. You can build the image yourself by replacing the `BUILDER_IMAGE` argument in the `Dockerfile` with `ARG BUILDER_IMAGE="hexpm/elixir-arm64:1.13.2-erlang-24.2.1-debian-bullseye-20210902-slim"` and then build the image as described above.
