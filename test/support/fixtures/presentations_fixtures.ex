@@ -13,6 +13,7 @@ defmodule Claper.PresentationsFixtures do
   """
   def presentation_file_fixture(attrs \\ %{}, preload \\ []) do
     assoc = %{event: attrs[:event] || event_fixture(attrs)}
+
     {:ok, presentation_file} =
       attrs
       |> Enum.into(%{
@@ -23,14 +24,15 @@ defmodule Claper.PresentationsFixtures do
       })
       |> Claper.Presentations.create_presentation_file()
 
-      Claper.UtilFixture.merge_preload(presentation_file, preload, assoc)
+    Claper.UtilFixture.merge_preload(presentation_file, preload, assoc)
   end
 
   @doc """
   Generate a presentation_state.
   """
-  def presentation_state_fixture(attrs \\ %{},  preload \\ []) do
+  def presentation_state_fixture(attrs \\ %{}, preload \\ []) do
     assoc = %{presentation_file: attrs[:presentation_file] || presentation_file_fixture()}
+
     {:ok, presentation_state} =
       attrs
       |> Enum.into(%{
@@ -43,6 +45,6 @@ defmodule Claper.PresentationsFixtures do
       })
       |> Claper.Presentations.create_presentation_state()
 
-      Claper.UtilFixture.merge_preload(presentation_state, preload, assoc)
+    Claper.UtilFixture.merge_preload(presentation_state, preload, assoc)
   end
 end

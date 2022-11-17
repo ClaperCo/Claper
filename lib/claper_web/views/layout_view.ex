@@ -7,6 +7,7 @@ defmodule ClaperWeb.LayoutView do
 
   def active_class(conn, path) do
     current_path = Path.join(["/" | conn.path_info])
+
     if path == current_path do
       "bg-gray-900 text-white"
     else
@@ -23,21 +24,28 @@ defmodule ClaperWeb.LayoutView do
   end
 
   def active_link(%Plug.Conn{} = conn, text, opts) do
-    class = [opts[:class], active_class(conn, opts[:to])]
-            |> Enum.filter(& &1)
-            |> Enum.join(" ")
-    opts = opts
-           |> Keyword.put(:class, class)
+    class =
+      [opts[:class], active_class(conn, opts[:to])]
+      |> Enum.filter(& &1)
+      |> Enum.join(" ")
+
+    opts =
+      opts
+      |> Keyword.put(:class, class)
+
     link(text, opts)
   end
 
   def active_link(%Phoenix.LiveView.Socket{} = conn, text, opts) do
-    class = [opts[:class], active_live_class(conn, opts[:to])]
-            |> Enum.filter(& &1)
-            |> Enum.join(" ")
-    opts = opts
-           |> Keyword.put(:class, class)
+    class =
+      [opts[:class], active_live_class(conn, opts[:to])]
+      |> Enum.filter(& &1)
+      |> Enum.join(" ")
+
+    opts =
+      opts
+      |> Keyword.put(:class, class)
+
     live_patch(text, opts)
   end
-
 end

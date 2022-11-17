@@ -88,8 +88,8 @@ defmodule ClaperWeb.Router do
   # node running the Phoenix server.
   if Mix.env() == :dev || System.get_env("ENABLE_MAILBOX_ROUTE", "false") == "true" do
     scope "/dev" do
-
-      if System.get_env("MAILBOX_USER") && System.get_env("MAILBOX_PASSWORD") && System.get_env("ENABLE_MAILBOX_ROUTE", "false") == "true" do
+      if System.get_env("MAILBOX_USER") && System.get_env("MAILBOX_PASSWORD") &&
+           System.get_env("ENABLE_MAILBOX_ROUTE", "false") == "true" do
         pipe_through [:browser, :protect_with_basic_auth]
       else
         pipe_through [:browser]
@@ -142,5 +142,4 @@ defmodule ClaperWeb.Router do
     password = System.fetch_env!("MAILBOX_PASSWORD")
     Plug.BasicAuth.basic_auth(conn, username: username, password: password)
   end
-
 end

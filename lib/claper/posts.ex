@@ -176,6 +176,7 @@ defmodule Claper.Posts do
 
   """
   def create_reaction(%{post: nil} = attrs), do: create_reaction(%{attrs | post: %Post{}})
+
   def create_reaction(%{post: post} = attrs) do
     case %Reaction{}
          |> Map.put(:post_id, post.id)

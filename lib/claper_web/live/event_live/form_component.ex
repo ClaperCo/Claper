@@ -153,7 +153,6 @@ defmodule ClaperWeb.EventLive.FormComponent do
   end
 
   defp create_event(socket, event_params, hash, ext) do
-
     case Events.create_event(
            event_params
            |> Map.put("user_id", socket.assigns.current_user.id)

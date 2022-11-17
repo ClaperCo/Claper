@@ -88,7 +88,6 @@ defmodule ClaperWeb.EventLive.Show do
 
     {:ok, socket |> assign(:empty_room, Enum.count(socket.assigns.posts) == 0),
      temporary_assigns: [posts: []]}
-
   end
 
   defp leader_list(socket, event) do

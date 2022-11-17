@@ -166,8 +166,7 @@ defmodule Claper.Polls do
 
       {:error, changeset} ->
         {:error, %{changeset | action: :update}}
-      end
-
+    end
   end
 
   @doc """
@@ -305,7 +304,6 @@ defmodule Claper.Polls do
 
     {:ok, poll}
   end
-
 
   @doc """
   Gets a single poll_vote.

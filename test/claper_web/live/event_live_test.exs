@@ -25,7 +25,9 @@ defmodule ClaperWeb.EventLiveTest do
     test "updates event in listing", %{conn: conn, presentation_file: presentation_file} do
       {:ok, index_live, _html} = live(conn, Routes.event_index_path(conn, :index))
 
-      assert index_live |> element("#event-#{presentation_file.event.uuid} a", "Edit") |> render_click() =~
+      assert index_live
+             |> element("#event-#{presentation_file.event.uuid} a", "Edit")
+             |> render_click() =~
                "Edit"
 
       assert_patch(index_live, Routes.event_index_path(conn, :edit, presentation_file.event.uuid))
@@ -43,14 +45,18 @@ defmodule ClaperWeb.EventLiveTest do
     test "deletes event in listing", %{conn: conn, presentation_file: presentation_file} do
       {:ok, index_live, _html} = live(conn, Routes.event_index_path(conn, :index))
 
-      assert index_live |> element("#event-#{presentation_file.event.uuid} a", "Edit") |> render_click() =~
+      assert index_live
+             |> element("#event-#{presentation_file.event.uuid} a", "Edit")
+             |> render_click() =~
                "Edit"
 
-      {:ok, conn} = index_live |> element(~s{a[phx-value-id=#{presentation_file.event.uuid}]}) |> render_click()
-      |> follow_redirect(conn, Routes.event_index_path(conn, :index))
+      {:ok, conn} =
+        index_live
+        |> element(~s{a[phx-value-id=#{presentation_file.event.uuid}]})
+        |> render_click()
+        |> follow_redirect(conn, Routes.event_index_path(conn, :index))
 
       {:ok, index_live, _html} = live(conn, Routes.event_index_path(conn, :index))
-
 
       refute has_element?(index_live, "#event-#{presentation_file.event.uuid}")
     end
@@ -60,12 +66,11 @@ defmodule ClaperWeb.EventLiveTest do
     setup [:register_and_log_in_user, :create_event]
 
     test "displays event", %{conn: conn, presentation_file: presentation_file} do
-
-      {:ok, _show_live, html} = live(conn, Routes.event_show_path(conn, :show, presentation_file.event.code))
+      {:ok, _show_live, html} =
+        live(conn, Routes.event_show_path(conn, :show, presentation_file.event.code))
 
       assert html =~ "Be the first to react"
       assert html =~ presentation_file.event.name
     end
-
   end
 end

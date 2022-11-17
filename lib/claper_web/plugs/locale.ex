@@ -4,9 +4,11 @@ defmodule ClaperWeb.Plugs.Locale do
   def init(_opts), do: nil
 
   def call(conn, _opts) do
-
     known_locales = Gettext.known_locales(ClaperWeb.Gettext)
-    accepted_languages = extract_accept_language(conn) |> Enum.reject(&String.length(&1) > 2 && not Enum.member?(known_locales, &1))
+
+    accepted_languages =
+      extract_accept_language(conn)
+      |> Enum.reject(&(String.length(&1) > 2 && not Enum.member?(known_locales, &1)))
 
     case accepted_languages do
       [locale | _] ->

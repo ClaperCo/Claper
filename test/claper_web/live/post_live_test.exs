@@ -2,7 +2,7 @@ defmodule ClaperWeb.PostLiveTest do
   use ClaperWeb.ConnCase
 
   import Phoenix.LiveViewTest
-  import Claper.{PresentationsFixtures,PostsFixtures}
+  import Claper.{PresentationsFixtures, PostsFixtures}
 
   defp create_event(params) do
     presentation_file = presentation_file_fixture(%{user: params.user}, [:event])
@@ -15,10 +15,10 @@ defmodule ClaperWeb.PostLiveTest do
     setup [:register_and_log_in_user, :create_event]
 
     test "list posts", %{conn: conn, presentation_file: presentation_file} do
-      {:ok, _index_live, html} = live(conn, Routes.event_show_path(conn, :show, presentation_file.event.code))
+      {:ok, _index_live, html} =
+        live(conn, Routes.event_show_path(conn, :show, presentation_file.event.code))
 
       assert html =~ "some body"
-
     end
   end
 end

@@ -95,7 +95,10 @@ defmodule Claper.Events do
   """
   def get_managed_event!(current_user, id, preload \\ []) do
     event = Repo.get_by!(Event, uuid: id)
-    is_leader = Claper.Events.is_leaded_by(current_user.email, event) || event.user_id == current_user.id
+
+    is_leader =
+      Claper.Events.is_leaded_by(current_user.email, event) || event.user_id == current_user.id
+
     if is_leader do
       event |> Repo.preload(preload)
     else

@@ -83,8 +83,10 @@ if config_env() == :prod do
       username: System.get_env("SMTP_USERNAME"),
       password: System.get_env("SMTP_PASSWORD"),
       ssl: System.get_env("SMTP_SSL", "true") == "true",
-      tls: String.to_atom(System.get_env("SMTP_TLS", "always")), # always, never, if_available
-      auth: String.to_atom(System.get_env("SMTP_AUTH", "always")), # always, never, if_available
+      # always, never, if_available
+      tls: String.to_atom(System.get_env("SMTP_TLS", "always")),
+      # always, never, if_available
+      auth: String.to_atom(System.get_env("SMTP_AUTH", "always")),
       port: String.to_integer(System.get_env("SMTP_PORT", "25"))
   end
 
