@@ -6,7 +6,6 @@ import Config
 # and secrets from environment variables or elsewhere. Do not define
 # any compile-time configuration in here, as it won't be applied.
 # The block below contains prod specific runtime configuration.
-if config_env() == :prod do
   database_url =
     System.get_env("DATABASE_URL") ||
       raise """
@@ -86,7 +85,6 @@ if config_env() == :prod do
       tls: String.to_atom(System.get_env("SMTP_TLS", "always")), # always, never, if_available
       auth: String.to_atom(System.get_env("SMTP_AUTH", "always")), # always, never, if_available
       port: String.to_integer(System.get_env("SMTP_PORT", "25"))
-  end
 
   config :swoosh, :api_client, Swoosh.ApiClient.Finch
   #
