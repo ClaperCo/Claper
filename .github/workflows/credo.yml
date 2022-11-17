@@ -1,0 +1,37 @@
+name: credo
+
+on:
+  push:
+    branches: [ "main", "dev" ]
+    tags: ['v*']
+  pull_request:
+    branches: [ "main" ]
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  credo:
+    name: credo
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up Elixir
+      uses: erlef/setup-beam@988e02bfe678367a02564f65ca2e37726dc0268f
+      with:
+        elixir-version: '1.13.2'
+        otp-version: '24.1'
+    - name: Restore dependencies cache
+      uses: actions/cache@v3
+      with:
+        path: deps
+        key: ${{ runner.os }}-mix-${{ hashFiles('**/mix.lock') }}
+        restore-keys: ${{ runner.os }}-mix-
+    - name: Install dependencies
+      run: mix deps.get
+    - name: credo
+      uses: red-shirts/reviewdog-action-credo@v1
+      with:
+        github_token: ${{ secrets.github_token }}
+        reporter: github-pr-review # Change reporter.
