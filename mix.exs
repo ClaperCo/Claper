@@ -115,7 +115,8 @@ defmodule Claper.MixProject do
       {:libcluster, "~> 3.3"},
       {:porcelain, "~> 2.0"},
       {:hackney, "~> 1.18"},
-      {:gen_smtp, "~> 1.2"}
+      {:gen_smtp, "~> 1.2"},
+      {:credo, "~> 1.6", only: [:dev, :test], runtime: false}
     ]
   end
 
