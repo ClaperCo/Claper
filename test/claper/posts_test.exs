@@ -8,7 +8,6 @@ defmodule Claper.PostsTest do
   alias Claper.Posts.Post
 
   describe "posts" do
-
     @invalid_attrs %{body: "a"}
 
     test "list_posts/0 returns all posts from an event" do
@@ -55,7 +54,6 @@ defmodule Claper.PostsTest do
     end
   end
 
-
   describe "reactions" do
     alias Claper.Posts.Reaction
 
@@ -86,7 +84,9 @@ defmodule Claper.PostsTest do
       post = post_fixture()
       reaction = reaction_fixture(%{post: post, user_id: post.user_id})
 
-      assert {:ok, %Post{}} = Posts.delete_reaction(%{user_id: post.user_id, post: post, icon: "some icon"})
+      assert {:ok, %Post{}} =
+               Posts.delete_reaction(%{user_id: post.user_id, post: post, icon: "some icon"})
+
       assert_raise Ecto.NoResultsError, fn -> Posts.get_reaction!(reaction.id) end
     end
   end

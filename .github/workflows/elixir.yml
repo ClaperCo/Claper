@@ -47,3 +47,5 @@ jobs:
       run: mix deps.get
     - name: Run tests
       run: mix test
+    - name: Check format
+      run: mix format --check-formatted

@@ -90,5 +90,4 @@ defmodule ClaperWeb.EventLive.Index do
   defp list_managed_events(socket) do
     Events.list_managed_events_by(socket.assigns.current_user.email, [:presentation_file])
   end
-
 end

@@ -410,9 +410,11 @@ defmodule Claper.Accounts do
     Ecto.Multi.new()
     |> Ecto.Multi.run(:run, fn repo, _changes ->
       user = repo.get_by(User, email: token.sent_to)
-      if (is_nil(user)) do
+
+      if is_nil(user) do
         UserNotifier.deliver_welcome(token.sent_to)
       end
+
       {:ok, user || %User{email: token.sent_to}}
     end)
     |> Ecto.Multi.insert_or_update(:user, fn %{run: user} -> User.confirm_changeset(user) end)

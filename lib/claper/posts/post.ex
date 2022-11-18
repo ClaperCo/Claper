@@ -22,9 +22,16 @@ defmodule Claper.Posts.Post do
   @doc false
   def changeset(post, attrs) do
     post
-    |> cast(attrs, [:body, :attendee_identifier, :user_id, :like_count, :love_count, :lol_count, :position])
+    |> cast(attrs, [
+      :body,
+      :attendee_identifier,
+      :user_id,
+      :like_count,
+      :love_count,
+      :lol_count,
+      :position
+    ])
     |> validate_required([:body, :position])
     |> validate_length(:body, min: 2, max: 250)
   end
-
 end

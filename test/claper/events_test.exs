@@ -2,10 +2,9 @@ defmodule Claper.EventsTest do
   use Claper.DataCase
 
   alias Claper.Events
-  import Claper.{EventsFixtures,AccountsFixtures}
+  import Claper.{EventsFixtures, AccountsFixtures}
 
   describe "events" do
-
     alias Claper.Events.Event
 
     @invalid_attrs %{name: nil, code: nil}
@@ -32,12 +31,22 @@ defmodule Claper.EventsTest do
     test "get_user_event!/3 with invalid user raises exception" do
       event = event_fixture()
       event2 = event_fixture()
-      assert_raise Ecto.NoResultsError, fn -> Events.get_user_event!(event.user_id, event2.uuid) == event end
+
+      assert_raise Ecto.NoResultsError, fn ->
+        Events.get_user_event!(event.user_id, event2.uuid) == event
+      end
     end
 
     test "create_event/1 with valid data creates a event" do
       user = user_fixture()
-      valid_attrs = %{name: "some name", code: "code", user_id: user.id, started_at: NaiveDateTime.utc_now, expired_at: NaiveDateTime.add(NaiveDateTime.utc_now, 7200, :second)}
+
+      valid_attrs = %{
+        name: "some name",
+        code: "code",
+        user_id: user.id,
+        started_at: NaiveDateTime.utc_now(),
+        expired_at: NaiveDateTime.add(NaiveDateTime.utc_now(), 7200, :second)
+      }
 
       assert {:ok, %Event{} = event} = Events.create_event(valid_attrs)
       assert event.name == "some name"

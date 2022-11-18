@@ -4,7 +4,7 @@ defmodule Claper.PollsFixtures do
   entities via the `Claper.Polls` context.
   """
 
-  import Claper.{AccountsFixtures,PresentationsFixtures}
+  import Claper.{AccountsFixtures, PresentationsFixtures}
 
   require Claper.UtilFixture
 
@@ -20,13 +20,12 @@ defmodule Claper.PollsFixtures do
         enabled: true,
         poll_opts: [
           %{content: "some option 1", vote_count: 0},
-          %{content: "some option 2", vote_count: 0},
+          %{content: "some option 2", vote_count: 0}
         ]
       })
       |> Claper.Polls.create_poll()
 
-      Claper.UtilFixture.merge_preload(poll, preload, %{})
-
+    Claper.UtilFixture.merge_preload(poll, preload, %{})
   end
 
   @doc """
@@ -37,6 +36,7 @@ defmodule Claper.PollsFixtures do
     poll = poll_fixture(%{presentation_file_id: presentation_file.id})
     [poll_opt | _] = poll.poll_opts
     assoc = %{poll: poll}
+
     {:ok, poll_vote} =
       attrs
       |> Enum.into(%{

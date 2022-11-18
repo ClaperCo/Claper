@@ -13,6 +13,7 @@ defmodule Claper.EventsFixtures do
   """
   def event_fixture(attrs \\ %{}, preload \\ []) do
     assoc = %{user: attrs[:user] || user_fixture()}
+
     {:ok, event} =
       attrs
       |> Enum.into(%{
@@ -20,12 +21,12 @@ defmodule Claper.EventsFixtures do
         code: "#{Enum.random(1000..2000)}",
         uuid: Ecto.UUID.generate(),
         user_id: assoc.user.id,
-        started_at: NaiveDateTime.utc_now,
-        expired_at: NaiveDateTime.add(NaiveDateTime.utc_now, 7200, :second) # add 2 hours
+        started_at: NaiveDateTime.utc_now(),
+        # add 2 hours
+        expired_at: NaiveDateTime.add(NaiveDateTime.utc_now(), 7200, :second)
       })
       |> Claper.Events.create_event()
 
-      Claper.UtilFixture.merge_preload(event, preload, assoc)
+    Claper.UtilFixture.merge_preload(event, preload, assoc)
   end
-
 end

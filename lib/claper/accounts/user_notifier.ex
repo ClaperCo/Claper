@@ -19,6 +19,7 @@ defmodule Claper.Accounts.UserNotifier do
 
   def deliver_magic_link(email, url) do
     email = ClaperWeb.Notifiers.UserNotifier.magic(email, url)
+
     with {:ok, _metadata} <- Mailer.deliver(email) do
       {:ok, email}
     end
@@ -26,6 +27,7 @@ defmodule Claper.Accounts.UserNotifier do
 
   def deliver_welcome(email) do
     email = ClaperWeb.Notifiers.UserNotifier.welcome(email)
+
     with {:ok, _metadata} <- Mailer.deliver(email) do
       {:ok, email}
     end
@@ -76,6 +78,7 @@ defmodule Claper.Accounts.UserNotifier do
   """
   def deliver_update_email_instructions(user, url) do
     email = ClaperWeb.Notifiers.UserNotifier.update_email(user, url)
+
     with {:ok, _metadata} <- Mailer.deliver(email) do
       {:ok, email}
     end

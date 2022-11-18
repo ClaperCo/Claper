@@ -20,5 +20,4 @@ defmodule ClaperWeb.LiveHelpers do
     modal_opts = [id: :modal, return_to: path, component: component, opts: opts]
     live_component(ClaperWeb.ModalComponent, modal_opts)
   end
-
 end

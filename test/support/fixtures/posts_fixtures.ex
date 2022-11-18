@@ -15,19 +15,22 @@ defmodule Claper.PostsFixtures do
     user = attrs[:user] || user_fixture()
     event = attrs[:event] || event_fixture()
     assoc = %{user: user, event: event}
+
     {:ok, post} =
-      Claper.Posts.create_post(assoc.event, attrs
-      |> Enum.into(%{
-        body: "some body",
-        like_count: 42,
-        position: 0,
-        uuid: Ecto.UUID.generate(),
-        user_id: assoc.user.id
-      }))
+      Claper.Posts.create_post(
+        assoc.event,
+        attrs
+        |> Enum.into(%{
+          body: "some body",
+          like_count: 42,
+          position: 0,
+          uuid: Ecto.UUID.generate(),
+          user_id: assoc.user.id
+        })
+      )
 
-      Claper.UtilFixture.merge_preload(post, preload, assoc)
+    Claper.UtilFixture.merge_preload(post, preload, assoc)
   end
-
 
   @doc """
   Generate a reaction.

@@ -47,13 +47,14 @@ defmodule Claper.Tasks.Converter do
     IO.puts("Clearing #{hash}...")
 
     if System.get_env("PRESENTATION_STORAGE", "local") == "local" do
-      File.rm_rf(Path.join([
-        :code.priv_dir(:claper),
-        "static",
-        "uploads",
-        "#{hash}"
-      ]))
-
+      File.rm_rf(
+        Path.join([
+          :code.priv_dir(:claper),
+          "static",
+          "uploads",
+          "#{hash}"
+        ])
+      )
     else
       stream =
         ExAws.S3.list_objects(System.get_env("AWS_PRES_BUCKET"), prefix: "presentations/#{hash}")
@@ -115,28 +116,27 @@ defmodule Claper.Tasks.Converter do
   end
 
   defp jpg_upload(%Result{status: 0}, hash, path, presentation, user_id) do
-
     files = Path.wildcard("#{path}/*.jpg")
 
     # assign new hash to avoid cache issues
     new_hash = :erlang.phash2("#{hash}-#{System.system_time(:second)}")
 
     if System.get_env("PRESENTATION_STORAGE", "local") == "local" do
-
-      File.rename(Path.join([
-        :code.priv_dir(:claper),
-        "static",
-        "uploads",
-        "#{hash}"
-      ]), Path.join([
-        :code.priv_dir(:claper),
-        "static",
-        "uploads",
-        "#{new_hash}"
-      ]))
-
+      File.rename(
+        Path.join([
+          :code.priv_dir(:claper),
+          "static",
+          "uploads",
+          "#{hash}"
+        ]),
+        Path.join([
+          :code.priv_dir(:claper),
+          "static",
+          "uploads",
+          "#{new_hash}"
+        ])
+      )
     else
-
       for f <- files do
         IO.puts("Uploads #{f} to presentations/#{new_hash}/#{Path.basename(f)}")
 
@@ -149,7 +149,6 @@ defmodule Claper.Tasks.Converter do
         )
         |> ExAws.request()
       end
-
     end
 
     if !is_nil(presentation.hash) do

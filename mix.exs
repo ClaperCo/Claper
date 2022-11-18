@@ -28,7 +28,6 @@ defmodule Claper.MixProject do
           "guides/introduction/configuration.md",
           "guides/introduction/installation.md",
           "guides/introduction/storage.md",
-
           "guides/usage/features.md",
           "guides/usage/howto.md"
         ],
@@ -48,19 +47,19 @@ defmodule Claper.MixProject do
             ~r/ClaperWeb\.UserReset\.?/,
             ~r/ClaperWeb\.Attendee\.?/,
             ~r/ClaperWeb\.UserAuth\.?/,
-            ~r/ClaperWeb\.UserView\.?/,
+            ~r/ClaperWeb\.UserView\.?/
           ],
-          "Events": [
+          Events: [
             ~r/Claper\.Event\.?/,
-            ~r/ClaperWeb\.Event\.?/,
+            ~r/ClaperWeb\.Event\.?/
           ],
-          "Polls": [
+          Polls: [
             ~r/Claper\.Polls\.?/,
-            ~r/ClaperWeb\.Poll\.?/,
+            ~r/ClaperWeb\.Poll\.?/
           ],
-          "Posts": [
+          Posts: [
             ~r/Claper\.Posts\.?/,
-            ~r/ClaperWeb\.Post\.?/,
+            ~r/ClaperWeb\.Post\.?/
           ]
         ]
       ]

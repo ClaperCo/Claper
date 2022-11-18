@@ -14,7 +14,6 @@ AWS_SECRET_ACCESS_KEY | - | - | _only for s3_ | Your AWS Secret Access Key
 AWS_S3_BUCKET | - | - | _only for s3_ | The name of the bucket where the presentation files will be stored
 AWS_S3_REGION | - | - | _only for s3_ | The region where the bucket is located
 
-
 ### Mail
 
 Variable | Values | Default | Required | Description

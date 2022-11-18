@@ -6,37 +6,46 @@ defmodule Claper.PollsTest do
   describe "polls" do
     alias Claper.Polls.Poll
 
-    import Claper.{PollsFixtures,PresentationsFixtures}
+    import Claper.{PollsFixtures, PresentationsFixtures}
 
     @invalid_attrs %{title: nil}
 
     test "list_polls/1 returns all polls from a presentation" do
       presentation_file = presentation_file_fixture()
-      poll = poll_fixture(%{presentation_file_id: presentation_file.id })
+      poll = poll_fixture(%{presentation_file_id: presentation_file.id})
 
       assert Polls.list_polls(presentation_file.id) == [poll]
     end
 
     test "list_polls_at_position/2 returns all polls from a presentation at a given position" do
       presentation_file = presentation_file_fixture()
-      poll = poll_fixture(%{presentation_file_id: presentation_file.id, position: 5 })
+      poll = poll_fixture(%{presentation_file_id: presentation_file.id, position: 5})
 
       assert Polls.list_polls_at_position(presentation_file.id, 5) == [poll]
     end
 
     test "get_poll!/1 returns the poll with given id" do
       presentation_file = presentation_file_fixture()
-      poll = poll_fixture(%{presentation_file_id: presentation_file.id }) |> Claper.Polls.set_percentages()
+
+      poll =
+        poll_fixture(%{presentation_file_id: presentation_file.id})
+        |> Claper.Polls.set_percentages()
 
       assert Polls.get_poll!(poll.id) == poll
     end
 
     test "create_poll/1 with valid data creates a poll" do
       presentation_file = presentation_file_fixture()
-      valid_attrs = %{title: "some title", presentation_file_id: presentation_file.id, position: 0, poll_opts: [
-        %{content: "some option 1", vote_count: 0},
-        %{content: "some option 2", vote_count: 0},
-      ]}
+
+      valid_attrs = %{
+        title: "some title",
+        presentation_file_id: presentation_file.id,
+        position: 0,
+        poll_opts: [
+          %{content: "some option 1", vote_count: 0},
+          %{content: "some option 2", vote_count: 0}
+        ]
+      }
 
       assert {:ok, %Poll{} = poll} = Polls.create_poll(valid_attrs)
       assert poll.title == "some title"
@@ -51,14 +60,19 @@ defmodule Claper.PollsTest do
       poll = poll_fixture(%{presentation_file_id: presentation_file.id})
       update_attrs = %{title: "some updated title"}
 
-      assert {:ok, %Poll{} = poll} = Polls.update_poll(presentation_file.event_id, poll, update_attrs)
+      assert {:ok, %Poll{} = poll} =
+               Polls.update_poll(presentation_file.event_id, poll, update_attrs)
+
       assert poll.title == "some updated title"
     end
 
     test "update_poll/3 with invalid data returns error changeset" do
       presentation_file = presentation_file_fixture()
       poll = poll_fixture(%{presentation_file_id: presentation_file.id})
-      assert {:error, %Ecto.Changeset{}} = Polls.update_poll(presentation_file.event_id, poll, @invalid_attrs)
+
+      assert {:error, %Ecto.Changeset{}} =
+               Polls.update_poll(presentation_file.event_id, poll, @invalid_attrs)
+
       assert poll |> Claper.Polls.set_percentages() == Polls.get_poll!(poll.id)
     end
 
@@ -78,15 +92,15 @@ defmodule Claper.PollsTest do
   end
 
   describe "poll_opts" do
-
-    import Claper.{PollsFixtures,PresentationsFixtures}
+    import Claper.{PollsFixtures, PresentationsFixtures}
 
     test "add_poll_opt/1 returns poll changeset plus the added poll_opt" do
       presentation_file = presentation_file_fixture()
       poll = poll_fixture(%{presentation_file_id: presentation_file.id})
       poll_changeset = poll |> Polls.change_poll()
 
-      assert Ecto.Changeset.get_field(Polls.add_poll_opt(poll_changeset), :poll_opts) |> Enum.count == 3
+      assert Ecto.Changeset.get_field(Polls.add_poll_opt(poll_changeset), :poll_opts)
+             |> Enum.count() == 3
     end
 
     test "remove_poll_opt/2 returns poll changeset minus the removed poll_opt" do
@@ -94,13 +108,16 @@ defmodule Claper.PollsTest do
       poll = poll_fixture(%{presentation_file_id: presentation_file.id})
       poll_changeset = poll |> Polls.change_poll()
 
-      assert Ecto.Changeset.get_field(Polls.remove_poll_opt(poll_changeset, Enum.at(poll.poll_opts, 0)), :poll_opts) |> Enum.count == 1
+      assert Ecto.Changeset.get_field(
+               Polls.remove_poll_opt(poll_changeset, Enum.at(poll.poll_opts, 0)),
+               :poll_opts
+             )
+             |> Enum.count() == 1
     end
   end
 
   describe "poll_votes" do
-
-    import Claper.{PollsFixtures,PresentationsFixtures}
+    import Claper.{PollsFixtures, PresentationsFixtures}
 
     test "get_poll_vote/2 returns the poll_vote with given id and user id" do
       poll_vote = poll_vote_fixture()
@@ -112,8 +129,13 @@ defmodule Claper.PollsTest do
       poll = poll_fixture(%{presentation_file_id: presentation_file.id})
       [poll_opt | _] = poll.poll_opts
 
-
-      assert {:ok, %Polls.Poll{}} = Polls.vote(presentation_file.event.user_id, presentation_file.event_id, poll_opt, poll.id)
+      assert {:ok, %Polls.Poll{}} =
+               Polls.vote(
+                 presentation_file.event.user_id,
+                 presentation_file.event_id,
+                 poll_opt,
+                 poll.id
+               )
     end
   end
 end

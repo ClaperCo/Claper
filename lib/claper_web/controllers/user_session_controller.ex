@@ -9,12 +9,12 @@ defmodule ClaperWeb.UserSessionController do
     |> render("new.html", error_message: nil)
   end
 
-  #def create(conn, %{"user" => %{"email" => email}} = _user_params) do
+  # def create(conn, %{"user" => %{"email" => email}} = _user_params) do
   #  Accounts.deliver_magic_link(email, &Routes.user_confirmation_url(conn, :confirm_magic, &1))
 
   #  conn
   #  |> redirect(to: Routes.user_registration_path(conn, :confirm, %{email: email}))
-  #end
+  # end
   def create(conn, %{"user" => user_params}) do
     %{"email" => email, "password" => password} = user_params
 

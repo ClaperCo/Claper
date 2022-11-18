@@ -5,6 +5,7 @@ defmodule ClaperWeb.Component.Alert do
     assigns =
       assigns
       |> assign_new(:stick, fn -> false end)
+
     ~H"""
     <div class="bg-supporting-green-50 border-t-4 rounded-b-md shadow-md border-supporting-green-400 p-4 mb-3" x-data="{ open: true }" x-show={if @stick, do: "true", else: "open"} x-init="setTimeout(() => {open = false},  4000)" x-transition>
       <div class="flex">
@@ -27,6 +28,7 @@ defmodule ClaperWeb.Component.Alert do
     assigns =
       assigns
       |> assign_new(:stick, fn -> false end)
+
     ~H"""
     <div class="bg-supporting-red-50 border-t-4 rounded-b-md shadow-md border-supporting-red-400 p-4 mb-3" x-data="{ open: true }" x-show={if @stick, do: "true", else: "open"} x-init="setTimeout(() => {open = false},  4000)" x-transition>
       <div class="flex">
@@ -45,5 +47,4 @@ defmodule ClaperWeb.Component.Alert do
     </div>
     """
   end
-
 end

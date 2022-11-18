@@ -23,15 +23,18 @@ defmodule ClaperWeb.StatLive.Index do
      socket
      |> assign(:event, event)
      |> assign(
-      :distinct_poster_count,
-      distinct_poster_count
-    )
+       :distinct_poster_count,
+       distinct_poster_count
+     )
      |> assign(
        :grouped_total_votes,
        grouped_total_votes
      )
      |> assign(:average_voters, average_voters(grouped_total_votes))
-     |> assign(:engagement_rate, calculate_engagement_rate(grouped_total_votes, distinct_poster_count, event))
+     |> assign(
+       :engagement_rate,
+       calculate_engagement_rate(grouped_total_votes, distinct_poster_count, event)
+     )
      |> assign(:posts, list_posts(socket, event.uuid))}
   end
 
@@ -49,9 +52,16 @@ defmodule ClaperWeb.StatLive.Index do
     total_polls = Enum.count(grouped_total_votes)
 
     if total_polls == 0 do
-      (distinct_poster_count/event.audience_peak) * 100 |> Float.round |> :erlang.float_to_binary(decimals: 0) |> :erlang.binary_to_integer
+      (distinct_poster_count / event.audience_peak * 100)
+      |> Float.round()
+      |> :erlang.float_to_binary(decimals: 0)
+      |> :erlang.binary_to_integer()
     else
-      (((distinct_poster_count/event.audience_peak) + (average_voters(grouped_total_votes))/event.audience_peak) / 2) * 100 |> Float.round |> :erlang.float_to_binary(decimals: 0) |> :erlang.binary_to_integer
+      ((distinct_poster_count / event.audience_peak +
+          average_voters(grouped_total_votes) / event.audience_peak) / 2 * 100)
+      |> Float.round()
+      |> :erlang.float_to_binary(decimals: 0)
+      |> :erlang.binary_to_integer()
     end
   end
 
@@ -61,9 +71,11 @@ defmodule ClaperWeb.StatLive.Index do
     if total_polls == 0 do
       0
     else
-      (Enum.sum(grouped_total_votes)/total_polls) |> Float.round |> :erlang.float_to_binary(decimals: 0) |> :erlang.binary_to_integer
+      (Enum.sum(grouped_total_votes) / total_polls)
+      |> Float.round()
+      |> :erlang.float_to_binary(decimals: 0)
+      |> :erlang.binary_to_integer()
     end
-
   end
 
   defp list_posts(_socket, event_id) do

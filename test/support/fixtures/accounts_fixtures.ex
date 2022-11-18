@@ -11,7 +11,7 @@ defmodule Claper.AccountsFixtures do
     Enum.into(attrs, %{
       email: unique_user_email(),
       password: valid_user_password(),
-      confirmed_at: NaiveDateTime.utc_now(),
+      confirmed_at: NaiveDateTime.utc_now()
     })
   end
 
