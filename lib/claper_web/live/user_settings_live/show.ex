@@ -14,7 +14,10 @@ defmodule ClaperWeb.UserSettingsLive.Show do
     email_changeset = Accounts.User.email_changeset(%Accounts.User{}, %{})
     password_changeset = Accounts.User.password_changeset(%Accounts.User{}, %{})
 
-    {:ok, socket |> assign(:email_changeset, email_changeset) |> assign(:password_changeset, password_changeset)}
+    {:ok,
+     socket
+     |> assign(:email_changeset, email_changeset)
+     |> assign(:password_changeset, password_changeset)}
   end
 
   @impl true
@@ -81,7 +84,6 @@ defmodule ClaperWeb.UserSettingsLive.Show do
 
     case Accounts.update_user_password(user, password, user_params) do
       {:ok, applied_user} ->
-
         {:noreply,
          socket
          |> put_flash(
