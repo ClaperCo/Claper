@@ -16,3 +16,7 @@ _Security updates_
 
 - Added `ENABLE_MAILBOX_ROUTE`, `MAILBOX_USER` and `MAILBOX_PASSWORD` environment variables to enable/disable route to local mailbox (`/dev/mailbox`) and basic auth (optional)
 - Restricted `/users/register` route if `ENABLE_ACCOUNT_CREATION` is false
+
+## v1.2.0
+
+- Added password change form in settings
