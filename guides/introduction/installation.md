@@ -1,11 +1,11 @@
-# Installation
+# Local installation
 
 ## Prerequisites
 
 To run Claper on your local environment you need to have:
 * Postgres >= 9
 * Elixir >= 1.13.2
-* Erland >= 24
+* Erlang >= 24
 * NPM >= 6.14.17
 * NodeJS >= 14.19.2
 * Ghostscript >= 9.5.0 (for PDF support)

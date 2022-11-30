@@ -27,6 +27,7 @@ defmodule Claper.MixProject do
           "guides/introduction/overview.md",
           "guides/introduction/configuration.md",
           "guides/introduction/installation.md",
+          "guides/introduction/deployment.md",
           "guides/introduction/storage.md",
           "guides/usage/features.md",
           "guides/usage/howto.md"

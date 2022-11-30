@@ -20,3 +20,4 @@ _Security updates_
 ## v1.2.0
 
 - Added password change form in settings
+- Added more documentation on deployment in production
