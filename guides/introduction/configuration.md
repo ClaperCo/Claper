@@ -11,8 +11,8 @@ Variable | Values | Default | Required | Description
 PRESENTATION_STORAGE | local, s3 | local | - |  Define where the presentation files will be stored
 AWS_ACCESS_KEY_ID | - | - | _only for s3_ | Your AWS Access Key ID
 AWS_SECRET_ACCESS_KEY | - | - | _only for s3_ | Your AWS Secret Access Key
-AWS_S3_BUCKET | - | - | _only for s3_ | The name of the bucket where the presentation files will be stored
-AWS_S3_REGION | - | - | _only for s3_ | The region where the bucket is located
+AWS_PRES_BUCKET | - | - | _only for s3_ | The name of the bucket where the presentation files will be stored
+AWS_REGION | - | - | _only for s3_ | The region where the bucket is located
 
 ### Mail
 
