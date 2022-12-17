@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="ExDoc v0.28.4">
+    <meta name="project" content="Claper v1.2.0">
+
+    <title>Deployment — Claper v1.2.0</title>
+    <link rel="stylesheet" href="dist/elixir-b6f1ed5df9b1d42a7309.css" />
+
+    <script src="dist/sidebar_items-a1513a6c5c.js"></script>
+
+      <script src="docs_config.js"></script>
+
+    <script async src="dist/app-bd1cb213813bf4825aa2.js"></script>
+
+
+  </head>
+  <body data-type="extras">
+    <script>
+
+      try {
+        var settings = JSON.parse(localStorage.getItem('ex_doc:settings') || '{}');
+
+        if (settings.theme === 'dark' ||
+           ((settings.theme === 'system' || settings.theme == null) &&
+             window.matchMedia('(prefers-color-scheme: dark)').matches)
+           ) {
+          document.body.classList.add('dark')
+        }
+      } catch (error) { }
+    </script>
+
+<div class="main">
+
+
+<section class="sidebar">
+  <button class="sidebar-button sidebar-toggle" aria-label="toggle sidebar">
+    <i class="ri-menu-line ri-lg" title="Collapse/expand sidebar"></i>
+  </button>
+
+  <form class="sidebar-search" action="search.html">
+    <button type="submit" class="search-button" aria-label="Submit Search">
+      <i class="ri-search-2-line" aria-hidden="true" title="Submit search"></i>
+    </button>
+    <button type="button" tabindex="-1" class="search-close-button" aria-label="Cancel Search">
+      <i class="ri-close-line ri-lg" aria-hidden="true" title="Cancel search"></i>
+    </button>
+    <label class="search-label">
+      <p class="sr-only">Search</p>
+      <input name="q" type="text" class="search-input" placeholder="Search..." aria-label="Input your search terms" autocomplete="off" />
+    </label>
+  </form>
+
+  <div class="autocomplete">
+    <div class="autocomplete-results">
+    </div>
+  </div>
+
+  <div class="sidebar-header">
+
+      <a href="https://get.claper.co">
+        <img src="assets/logo.png" alt="Claper" class="sidebar-projectImage">
+      </a>
+
+    <div class="sidebar-projectDetails">
+      <a href="https://get.claper.co" class="sidebar-projectName" translate="no">
+Claper
+      </a>
+      <strong class="sidebar-projectVersion" translate="no">
+        v1.2.0
+      </strong>
+    </div>
+    <ul class="sidebar-listNav">
+      <li><a id="extras-list-link" href="#full-list">GUIDES</a></li>
+
+        <li><a id="modules-list-link" href="#full-list">Modules</a></li>
+
+
+    </ul>
+  </div>
+
+  <div class="gradient"></div>
+  <ul id="full-list" class="sidebar-fullList"></ul>
+</section>
+
+<section class="content">
+  <output role="status" id="toast"></output>
+  <div class="content-outer">
+    <div id="content" class="content-inner">
+
+<h1>
+<button class="settings display-settings">
+  <i class="ri-settings-3-line"></i>
+  <span class="sr-only">Settings</span>
+</button>
+
+
+    <a href="https://github.com/ClaperCo/Claper/blob/main/guides/introduction/deployment.md#L1" title="View Source" class="view-source" rel="help">
+      <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+      <span class="sr-only">View Source</span>
+    </a>
+
+  <span>Deployment</span>
+</h1>
+
+<h2 id="prerequisites" class="section-heading">
+  <a href="#prerequisites" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i>
+  <p class="sr-only">prerequisites</p>
+  </a>
+  Prerequisites
+</h2>
+<p>To run Claper on your production environment you need to have:</p><ul><li>Postgres &gt;= 9</li><li>Elixir &gt;= 1.13.2</li><li>Erlang &gt;= 24</li><li>NPM &gt;= 6.14.17</li><li>NodeJS &gt;= 14.19.2</li><li>Ghostscript &gt;= 9.5.0 (for PDF support)</li><li>Libreoffice &gt;= 6.4 (for PPT/PPTX support)</li></ul><h2 id="steps-without-docker" class="section-heading">
+  <a href="#steps-without-docker" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i>
+  <p class="sr-only">steps-without-docker</p>
+  </a>
+  Steps (without docker)
+</h2>
+<ol><li>Clone the repo<pre><code class="makeup sh" translate="no"><span class="">   git clone https://github.com/ClaperCo/Claper.git
+</span></code></pre></li><li>Install dependencies<pre><code class="makeup sh" translate="no"><span class="">   mix deps.get --only prod
+</span></code></pre></li><li>Migrate your database<pre><code class="makeup sh" translate="no"><span class="">   mix ecto.migrate
+</span></code></pre></li><li>Compile assets<pre><code class="makeup sh" translate="no"><span class="">   MIX_ENV=prod mix compile
+</span></code></pre></li><li>Deploy assets<pre><code class="makeup sh" translate="no"><span class="">   MIX_ENV=prod mix assets.deploy
+</span></code></pre></li><li>Start Phoenix endpoint with<pre><code class="makeup sh" translate="no"><span class="">   MIX_ENV=prod mix phx.server
+</span></code></pre></li></ol><p>You can follow the steps from the official Phoenix guide for further details and release management: <a href="https://hexdocs.pm/phoenix/deployment.html">Introduction to Deployement</a> and <a href="https://hexdocs.pm/phoenix/releases.html">Deploying with Releases</a>.</p><h2 id="steps-with-docker" class="section-heading">
+  <a href="#steps-with-docker" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i>
+  <p class="sr-only">steps-with-docker</p>
+  </a>
+  Steps (with docker)
+</h2>
+<p>You can follow the same steps as in the <a href="/installation.html#using-docker">installation guide</a> to run Claper with Docker.</p><h2 id="behind-nginx" class="section-heading">
+  <a href="#behind-nginx" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i>
+  <p class="sr-only">behind-nginx</p>
+  </a>
+  Behind Nginx
+</h2>
+<p>This an example of Nginx configuration file to run Claper behind Nginx.</p><pre><code class="nginx">server {
+   listen 80;
+	server_name app.claper.co; # Your own domain
+
+	location / {
+		proxy_set_header X-Real-IP $remote_addr;
+		proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+		proxy_set_header Host $http_host;
+		proxy_pass http://localhost:4000;
+		proxy_http_version 1.1;
+		proxy_set_header Upgrade $http_upgrade;
+		proxy_set_header Connection &quot;upgrade&quot;;
+	}
+}</code></pre><h2 id="behind-traefik" class="section-heading">
+  <a href="#behind-traefik" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i>
+  <p class="sr-only">behind-traefik</p>
+  </a>
+  Behind Traefik
+</h2>
+<p>Here is a docker-compose example to run Claper behind Traefik.</p><pre><code class="yaml">version: &quot;3.0&quot;
+services:
+  db:
+    image: postgres:9
+    environment:
+      POSTGRES_PASSWORD: claper
+      POSTGRES_USER: claper
+      POSTGRES_DB: claper
+  app:
+    build: .
+    environment:
+      DATABASE_URL: postgres://claper:claper@db:5432/claper
+      SECRET_KEY_BASE: 0LZiQBLw4WvqPlz4cz8RsHJlxNiSqM9B48y4ChyJ5v1oA0L/TPIqRjQNdPZN3iEG
+      MAIL_TRANSPORT: local
+      ENDPOINT_HOST: claper.local
+      ENDPOINT_PORT: 4000
+    labels:
+      - &quot;traefik.enable=true&quot;
+      - &quot;traefik.http.routers.claper.rule=Host(`claper.local`)&quot;
+      - &quot;traefik.http.routers.claper.entrypoints=web&quot;
+    depends_on:
+      - db
+      - traefik
+
+  traefik:
+    image: traefik
+    command:
+      #- &quot;--log.level=DEBUG&quot;
+      - &quot;--api.insecure=true&quot;
+      - &quot;--providers.docker=true&quot;
+      - &quot;--providers.docker.exposedbydefault=false&quot;
+      - &quot;--entrypoints.web.address=:80&quot;
+    volumes:
+      - &quot;/var/run/docker.sock:/var/run/docker.sock:ro&quot;
+    ports:
+      - &quot;80:80&quot;
+      - &quot;8080:8080&quot;</code></pre><h2 id="behind-kubernetes" class="section-heading">
+  <a href="#behind-kubernetes" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i>
+  <p class="sr-only">behind-kubernetes</p>
+  </a>
+  Behind Kubernetes
+</h2>
+<p>Change the <code class="inline">rel/env.sh.eex</code> file to uncomment:</p><pre><code class="makeup sh" translate="no"><span class="">export POD_A_RECORD=$(echo $POD_IP | sed &#39;s/\./-/g&#39;)
+</span><span class="">export RELEASE_DISTRIBUTION=name
+</span><span class="">export RELEASE_NODE=&lt;%= @release.name %&gt;@$(echo $POD_A_RECORD).$(echo $NAMESPACE).pod.cluster.local
+</span></code></pre><p>and comment as follows:</p><pre><code class="makeup sh" translate="no"><span class="">#export RELEASE_DISTRIBUTION=sname
+</span><span class="">#export RELEASE_NODE=&lt;%= @release.name %&gt;
+</span></code></pre><p>In Kubernetes, you have to use <code class="inline">libcluster</code> to make the nodes discoverable. You can use the following configuration in your <code class="inline">config/prod.exs</code>:</p><pre><code class="makeup elixir" translate="no"><span class="n">config</span><span class="w"> </span><span class="ss">:libcluster</span><span class="p">,</span><span class="w">
+  </span><span class="ss">topologies</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="8628517276-1">[</span><span class="w">
+    </span><span class="ss">default</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="8628517276-2">[</span><span class="w">
+      </span><span class="ss">strategy</span><span class="p">:</span><span class="w"> </span><span class="nc">Cluster.Strategy.Kubernetes</span><span class="p">,</span><span class="w">
+      </span><span class="ss">config</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="8628517276-3">[</span><span class="w">
+        </span><span class="ss">mode</span><span class="p">:</span><span class="w"> </span><span class="ss">:dns</span><span class="p">,</span><span class="w">
+        </span><span class="ss">kubernetes_node_basename</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;claper&quot;</span><span class="p">,</span><span class="w">
+        </span><span class="ss">kubernetes_selector</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;app=claper&quot;</span><span class="p">,</span><span class="w">
+        </span><span class="ss">kubernetes_namespace</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;default&quot;</span><span class="p">,</span><span class="w">
+        </span><span class="ss">polling_interval</span><span class="p">:</span><span class="w"> </span><span class="mi">10_000</span><span class="w">
+      </span><span class="p" data-group-id="8628517276-3">]</span><span class="w">
+    </span><span class="p" data-group-id="8628517276-2">]</span><span class="w">
+  </span><span class="p" data-group-id="8628517276-1">]</span></code></pre><h3 id="helm-chart" class="section-heading">
+  <a href="#helm-chart" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i>
+  <p class="sr-only">helm-chart</p>
+  </a>
+  Helm chart
+</h3>
+<p>You can check the <a href="https://github.com/ClaperCo/Claper/tree/main/charts/claper">Claper Helm chart</a> to deploy Claper on Kubernetes.</p>
+<div class="bottom-actions">
+  <div class="bottom-actions-item">
+
+      <a href="installation.html" class="bottom-actions-button" rel="prev">
+        <span class="subheader">
+          ← Previous Page
+        </span>
+        <span class="title">
+Local installation
+        </span>
+      </a>
+
+  </div>
+  <div class="bottom-actions-item">
+
+      <a href="storage.html" class="bottom-actions-button" rel="next">
+        <span class="subheader">
+          Next Page →
+        </span>
+        <span class="title">
+Presentation storage
+        </span>
+      </a>
+
+  </div>
+</div>
+
+      <footer class="footer">
+
+        <p>
+          Built using
+          <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.28.4) for the
+
+            <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
+
+        </p>
+      </footer>
+    </div>
+  </div>
+</section>
+</div>
+
+
+  </body>
+</html>
