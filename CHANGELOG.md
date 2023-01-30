@@ -24,3 +24,5 @@ _Security updates_
 
 ## v1.2.1
 - Fix presenter url (400 error in production)
+
+## v1.2.2
