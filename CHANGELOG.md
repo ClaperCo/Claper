@@ -23,3 +23,4 @@ _Security updates_
 - Added more documentation on deployment in production
 
 ## v1.2.1
+- Fix presenter url (400 error in production)
