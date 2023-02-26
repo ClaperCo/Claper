@@ -83,7 +83,7 @@ defmodule ClaperWeb.UserSettingsLive.Show do
     user = socket.assigns.current_user
 
     case Accounts.update_user_password(user, password, user_params) do
-      {:ok, applied_user} ->
+      {:ok, _applied_user} ->
         {:noreply,
          socket
          |> put_flash(

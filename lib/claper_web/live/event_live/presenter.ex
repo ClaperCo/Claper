@@ -110,6 +110,20 @@ defmodule ClaperWeb.EventLive.Presenter do
   end
 
   @impl true
+  def handle_info({:form_updated, form}, socket) do
+    {:noreply,
+     socket
+     |> update(:current_form, fn _current_form -> form end)}
+  end
+
+  @impl true
+  def handle_info({:form_deleted, _form}, socket) do
+    {:noreply,
+     socket
+     |> update(:current_form, fn _current_form -> nil end)}
+  end
+
+  @impl true
   def handle_info({:chat_visible, value}, socket) do
     {:noreply,
      socket
@@ -146,6 +160,14 @@ defmodule ClaperWeb.EventLive.Presenter do
         socket
       ) do
     {:noreply, socket |> assign(:current_poll, poll)}
+  end
+
+  @impl true
+  def handle_info(
+        {:current_form, form},
+        socket
+      ) do
+    {:noreply, socket |> assign(:current_form, form)}
   end
 
   @impl true

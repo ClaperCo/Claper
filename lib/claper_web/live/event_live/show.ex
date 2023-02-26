@@ -1,7 +1,7 @@
 defmodule ClaperWeb.EventLive.Show do
   use ClaperWeb, :live_view
 
-  alias Claper.{Posts, Polls}
+  alias Claper.{Posts, Polls, Forms}
   alias ClaperWeb.Presence
 
   on_mount(ClaperWeb.AttendeeLiveAuth)
@@ -83,6 +83,7 @@ defmodule ClaperWeb.EventLive.Show do
       |> assign(:state, event.presentation_file.presentation_state)
       |> starting_soon_assigns(event)
       |> get_current_poll(event)
+      |> get_current_form(event)
       |> check_leader(event)
       |> leader_list(event)
 
@@ -224,6 +225,18 @@ defmodule ClaperWeb.EventLive.Show do
   end
 
   @impl true
+  def handle_info(
+        {:current_form, form},
+        socket
+      ) do
+    if is_nil(form) do
+      {:noreply, socket |> assign(:current_form, form)}
+    else
+      {:noreply, socket |> assign(:current_form, form) |> get_current_form_submit(form.id)}
+    end
+  end
+
+  @impl true
   def handle_info({:post_updated, post}, socket) do
     {:noreply, socket |> update(:posts, fn posts -> [post | posts] end)}
   end
@@ -255,6 +268,20 @@ defmodule ClaperWeb.EventLive.Show do
     {:noreply,
      socket
      |> update(:current_poll, fn _current_poll -> nil end)}
+  end
+
+  @impl true
+  def handle_info({:form_updated, form}, socket) do
+    {:noreply,
+     socket
+     |> update(:current_form, fn _current_form -> form end)}
+  end
+
+  @impl true
+  def handle_info({:form_deleted, _form}, socket) do
+    {:noreply,
+     socket
+     |> update(:current_form, fn _current_form-> nil end)}
   end
 
   @impl true
@@ -543,6 +570,20 @@ defmodule ClaperWeb.EventLive.Show do
     end
   end
 
+  defp get_current_form(socket, event) do
+    with form <-
+           Forms.get_form_current_position(
+             event.presentation_file.id,
+             event.presentation_file.presentation_state.position
+           ) do
+      if is_nil(form) do
+        socket |> assign(:current_form, form)
+      else
+        socket |> assign(:current_form, form) |> get_current_form_submit(form.id)
+      end
+    end
+  end
+
   defp get_current_vote(%{assigns: %{current_user: current_user}} = socket, poll_id)
        when is_map(current_user) do
     vote = Polls.get_poll_vote(current_user.id, poll_id)
@@ -552,6 +593,17 @@ defmodule ClaperWeb.EventLive.Show do
   defp get_current_vote(%{assigns: %{attendee_identifier: attendee_identifier}} = socket, poll_id) do
     vote = Polls.get_poll_vote(attendee_identifier, poll_id)
     socket |> assign(:current_poll_vote, vote)
+  end
+
+  defp get_current_form_submit(%{assigns: %{current_user: current_user}} = socket, form_id)
+      when is_map(current_user) do
+    fs = Forms.get_form_submit(current_user.id, form_id)
+    socket |> assign(:current_form_submit, fs)
+  end
+
+  defp get_current_form_submit(%{assigns: %{attendee_identifier: attendee_identifier}} = socket, form_id) do
+    fs = Forms.get_form_submit(attendee_identifier, form_id)
+    socket |> assign(:current_form_submit, fs)
   end
 
   defp reacted_posts(
