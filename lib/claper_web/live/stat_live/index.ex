@@ -35,8 +35,7 @@ defmodule ClaperWeb.StatLive.Index do
        :engagement_rate,
        calculate_engagement_rate(grouped_total_votes, distinct_poster_count, event)
      )
-     |> assign(:posts, list_posts(socket, event.uuid))
-    }
+     |> assign(:posts, list_posts(socket, event.uuid))}
   end
 
   @impl true

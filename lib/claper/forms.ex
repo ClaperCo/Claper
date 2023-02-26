@@ -59,8 +59,7 @@ defmodule Claper.Forms do
 
   """
   def get_form!(id, preload \\ []),
-    do:
-      Repo.get!(Form, id) |> Repo.preload(preload)
+    do: Repo.get!(Form, id) |> Repo.preload(preload)
 
   @doc """
   Gets a single form for a given position.
@@ -177,8 +176,7 @@ defmodule Claper.Forms do
 
   def disable_all(presentation_file_id, position) do
     from(f in Form,
-      where:
-        f.presentation_file_id == ^presentation_file_id and f.position == ^position
+      where: f.presentation_file_id == ^presentation_file_id and f.position == ^position
     )
     |> Repo.update_all(set: [enabled: false])
   end
@@ -240,7 +238,8 @@ defmodule Claper.Forms do
   """
   def list_form_submits(presentation_file_id) do
     from(fs in FormSubmit,
-      join: f in Form, on: f.id == fs.form_id,
+      join: f in Form,
+      on: f.id == fs.form_id,
       where: f.presentation_file_id == ^presentation_file_id
     )
     |> Repo.all()
@@ -257,6 +256,7 @@ defmodule Claper.Forms do
   """
   def get_form_submit(user_id, form_id) when is_number(user_id),
     do: Repo.get_by(FormSubmit, form_id: form_id, user_id: user_id)
+
   def get_form_submit(attendee_identifier, form_id),
     do: Repo.get_by(FormSubmit, form_id: form_id, attendee_identifier: attendee_identifier)
 
@@ -274,7 +274,8 @@ defmodule Claper.Forms do
       ** (Ecto.NoResultsError)
 
   """
-  def get_form_submit_by_id!(id, preload \\ []), do: Repo.get_by!(FormSubmit, id: id) |> Repo.preload(preload)
+  def get_form_submit_by_id!(id, preload \\ []),
+    do: Repo.get_by!(FormSubmit, id: id) |> Repo.preload(preload)
 
   @doc """
   Creates or update a FormSubmit.
@@ -288,27 +289,35 @@ defmodule Claper.Forms do
       {:error, %Ecto.Changeset{}}
 
   """
-  def create_or_update_form_submit(event_uuid, %{"user_id" => user_id, "form_id" => form_id} = attrs) when is_number(user_id) do
+  def create_or_update_form_submit(
+        event_uuid,
+        %{"user_id" => user_id, "form_id" => form_id} = attrs
+      )
+      when is_number(user_id) do
     get_form_submit(user_id, form_id) |> create_or_update_form_submit(event_uuid, attrs)
   end
 
-  def create_or_update_form_submit(event_uuid, %{"attendee_identifier" => attendee_identifier, "form_id" => form_id} = attrs) do
-    get_form_submit(attendee_identifier, form_id) |> create_or_update_form_submit(event_uuid, attrs)
-
+  def create_or_update_form_submit(
+        event_uuid,
+        %{"attendee_identifier" => attendee_identifier, "form_id" => form_id} = attrs
+      ) do
+    get_form_submit(attendee_identifier, form_id)
+    |> create_or_update_form_submit(event_uuid, attrs)
   end
 
   def create_or_update_form_submit(fs, event_uuid, attrs) do
     case fs do
-      nil  -> %FormSubmit{}
+      nil -> %FormSubmit{}
       form_submit -> form_submit
     end
     |> FormSubmit.changeset(attrs)
     |> Repo.insert_or_update()
     |> case do
-      {:ok, r} -> case fs do
-        nil  -> broadcast({:ok, r, event_uuid}, :form_submit_created)
-        _form_submit -> broadcast({:ok, r, event_uuid}, :form_submit_updated)
-      end
+      {:ok, r} ->
+        case fs do
+          nil -> broadcast({:ok, r, event_uuid}, :form_submit_created)
+          _form_submit -> broadcast({:ok, r, event_uuid}, :form_submit_updated)
+        end
     end
   end
 

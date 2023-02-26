@@ -27,9 +27,7 @@ defmodule Claper.FormsTest do
     test "get_form!/1 returns the form with given id" do
       presentation_file = presentation_file_fixture()
 
-      form =
-        form_fixture(%{presentation_file_id: presentation_file.id})\
-
+      form = form_fixture(%{presentation_file_id: presentation_file.id})
       assert Forms.get_form!(form.id) == form
     end
 
@@ -88,7 +86,6 @@ defmodule Claper.FormsTest do
       form = form_fixture(%{presentation_file_id: presentation_file.id})
       assert %Ecto.Changeset{} = Forms.change_form(form)
     end
-
   end
 
   describe "form_submits" do
@@ -103,17 +100,15 @@ defmodule Claper.FormsTest do
       presentation_file = presentation_file_fixture(%{}, [:event])
       f = form_fixture(%{presentation_file_id: presentation_file.id})
 
-
       assert {:ok, %Claper.Forms.FormSubmit{}} =
                Forms.create_or_update_form_submit(
-                presentation_file.event_id,
-                %{
-                  "user_id" => presentation_file.event.user_id,
-                  "form_id" => f.id,
-                  "response" => %{:"Test" => "some option 1", :"Test 2" => "some option 2"}
-                }
+                 presentation_file.event_id,
+                 %{
+                   "user_id" => presentation_file.event.user_id,
+                   "form_id" => f.id,
+                   "response" => %{:Test => "some option 1", :"Test 2" => "some option 2"}
+                 }
                )
     end
   end
-
 end

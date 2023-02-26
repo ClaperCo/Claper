@@ -281,7 +281,7 @@ defmodule ClaperWeb.EventLive.Show do
   def handle_info({:form_deleted, _form}, socket) do
     {:noreply,
      socket
-     |> update(:current_form, fn _current_form-> nil end)}
+     |> update(:current_form, fn _current_form -> nil end)}
   end
 
   @impl true
@@ -596,12 +596,15 @@ defmodule ClaperWeb.EventLive.Show do
   end
 
   defp get_current_form_submit(%{assigns: %{current_user: current_user}} = socket, form_id)
-      when is_map(current_user) do
+       when is_map(current_user) do
     fs = Forms.get_form_submit(current_user.id, form_id)
     socket |> assign(:current_form_submit, fs)
   end
 
-  defp get_current_form_submit(%{assigns: %{attendee_identifier: attendee_identifier}} = socket, form_id) do
+  defp get_current_form_submit(
+         %{assigns: %{attendee_identifier: attendee_identifier}} = socket,
+         form_id
+       ) do
     fs = Forms.get_form_submit(attendee_identifier, form_id)
     socket |> assign(:current_form_submit, fs)
   end

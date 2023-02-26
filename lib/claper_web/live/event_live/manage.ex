@@ -97,7 +97,9 @@ defmodule ClaperWeb.EventLive.Manage do
   @impl true
   def handle_info({:form_submit_created, fs}, socket) do
     {:noreply,
-     socket |> update(:form_submits, fn form_submits -> [fs | form_submits] end) |> push_event("scroll", %{})}
+     socket
+     |> update(:form_submits, fn form_submits -> [fs | form_submits] end)
+     |> push_event("scroll", %{})}
   end
 
   @impl true
@@ -160,6 +162,7 @@ defmodule ClaperWeb.EventLive.Manage do
 
   def handle_event("poll-set-default", %{"id" => id}, socket) do
     Forms.disable_all(socket.assigns.event.presentation_file.id, socket.assigns.state.position)
+
     Polls.set_default(
       id,
       socket.assigns.event.presentation_file.id,
@@ -183,11 +186,12 @@ defmodule ClaperWeb.EventLive.Manage do
     {:noreply,
      socket
      |> assign(:polls, list_polls(socket, socket.assigns.event.presentation_file.id))
-     |> assign(:forms, list_forms(socket, socket.assigns.event.presentation_file.id))
-    }
+     |> assign(:forms, list_forms(socket, socket.assigns.event.presentation_file.id))}
   end
+
   def handle_event("form-set-default", %{"id" => id}, socket) do
     Polls.disable_all(socket.assigns.event.presentation_file.id, socket.assigns.state.position)
+
     Forms.set_default(
       id,
       socket.assigns.event.presentation_file.id,
@@ -300,17 +304,32 @@ defmodule ClaperWeb.EventLive.Manage do
     form = Claper.Forms.get_form_submit_by_id!(id)
     {:ok, _} = Claper.Forms.delete_form_submit(event_id, form)
 
-    {:noreply, assign(socket, :form_submits, list_form_submits(socket, socket.assigns.event.presentation_file.id))}
+    {:noreply,
+     assign(
+       socket,
+       :form_submits,
+       list_form_submits(socket, socket.assigns.event.presentation_file.id)
+     )}
   end
 
   @impl true
   def handle_event("list-tab", %{"tab" => tab}, socket) do
     socket = assign(socket, :list_tab, String.to_atom(tab))
-    socket = case tab do
-      "posts" -> assign(socket, :posts, list_posts(socket, socket.assigns.event.uuid))
-      "forms" -> assign(socket, :form_submits, list_form_submits(socket, socket.assigns.event.presentation_file.id))
-    end
-    {:noreply,socket}
+
+    socket =
+      case tab do
+        "posts" ->
+          assign(socket, :posts, list_posts(socket, socket.assigns.event.uuid))
+
+        "forms" ->
+          assign(
+            socket,
+            :form_submits,
+            list_form_submits(socket, socket.assigns.event.presentation_file.id)
+          )
+      end
+
+    {:noreply, socket}
   end
 
   @impl true
@@ -374,7 +393,10 @@ defmodule ClaperWeb.EventLive.Manage do
     socket
     |> assign(:create, "form")
     |> assign(:form, %Forms.Form{
-      fields: [%Forms.Field{name: gettext("Name"), type: "text"}, %Forms.Field{name: gettext("Email"), type: "email"}]
+      fields: [
+        %Forms.Field{name: gettext("Name"), type: "text"},
+        %Forms.Field{name: gettext("Email"), type: "email"}
+      ]
     })
   end
 
@@ -438,5 +460,4 @@ defmodule ClaperWeb.EventLive.Manage do
   defp list_form_submits(_socket, presentation_file_id) do
     Claper.Forms.list_form_submits(presentation_file_id)
   end
-
 end

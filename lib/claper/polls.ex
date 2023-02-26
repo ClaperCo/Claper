@@ -279,8 +279,7 @@ defmodule Claper.Polls do
 
   def disable_all(presentation_file_id, position) do
     from(p in Poll,
-      where:
-        p.presentation_file_id == ^presentation_file_id and p.position == ^position
+      where: p.presentation_file_id == ^presentation_file_id and p.position == ^position
     )
     |> Repo.update_all(set: [enabled: false])
   end

@@ -66,38 +66,47 @@ defmodule ClaperWeb.EventLive.FormComponent do
   end
 
   @impl true
-  def handle_event("submit", %{"form_submit" => params}, %{assigns: %{current_user: current_user}} = socket) when is_map(current_user) do
+  def handle_event(
+        "submit",
+        %{"form_submit" => params},
+        %{assigns: %{current_user: current_user}} = socket
+      )
+      when is_map(current_user) do
     case Claper.Forms.create_or_update_form_submit(
-      socket.assigns.event.uuid,
-      %{"response" => params }
-      |> Map.put("user_id", socket.assigns.current_user.id)
-      |> Map.put("form_id", socket.assigns.form.id)
-    ) do
-    {:ok, form_submit} ->
-      {:noreply,
-        socket
-        |> assign(:current_form_submit, form_submit)}
+           socket.assigns.event.uuid,
+           %{"response" => params}
+           |> Map.put("user_id", socket.assigns.current_user.id)
+           |> Map.put("form_id", socket.assigns.form.id)
+         ) do
+      {:ok, form_submit} ->
+        {:noreply,
+         socket
+         |> assign(:current_form_submit, form_submit)}
 
-    {:error, %Ecto.Changeset{} = changeset} ->
-      {:noreply, assign(socket, :changeset, changeset)}
+      {:error, %Ecto.Changeset{} = changeset} ->
+        {:noreply, assign(socket, :changeset, changeset)}
     end
   end
 
   @impl true
-  def handle_event("submit", %{"form_submit" => params}, %{assigns: %{attendee_identifier: attendee_identifier}} = socket) do
+  def handle_event(
+        "submit",
+        %{"form_submit" => params},
+        %{assigns: %{attendee_identifier: attendee_identifier}} = socket
+      ) do
     case Claper.Forms.create_or_update_form_submit(
-      socket.assigns.event.uuid,
-      %{"response" => params }
-      |> Map.put("attendee_identifier", attendee_identifier)
-      |> Map.put("form_id", socket.assigns.form.id)
-    ) do
-    {:ok, form_submit} ->
-      {:noreply,
-        socket
-        |> assign(:current_form_submit, form_submit)}
+           socket.assigns.event.uuid,
+           %{"response" => params}
+           |> Map.put("attendee_identifier", attendee_identifier)
+           |> Map.put("form_id", socket.assigns.form.id)
+         ) do
+      {:ok, form_submit} ->
+        {:noreply,
+         socket
+         |> assign(:current_form_submit, form_submit)}
 
-    {:error, %Ecto.Changeset{} = changeset} ->
-      {:noreply, assign(socket, :changeset, changeset)}
+      {:error, %Ecto.Changeset{} = changeset} ->
+        {:noreply, assign(socket, :changeset, changeset)}
     end
   end
 
