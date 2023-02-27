@@ -5,12 +5,12 @@
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="generator" content="ExDoc v0.28.4">
-    <meta name="project" content="Claper v1.2.1">
+    <meta name="project" content="Claper v1.3.0">
 
-    <title>ClaperWeb.Component.Input — Claper v1.2.1</title>
+    <title>ClaperWeb.Component.Input — Claper v1.3.0</title>
     <link rel="stylesheet" href="dist/elixir-b6f1ed5df9b1d42a7309.css" />
 
-    <script src="dist/sidebar_items-a1513a6c5c.js"></script>
+    <script src="dist/sidebar_items-9c8468b1bc.js"></script>
 
       <script src="docs_config.js"></script>
 
@@ -70,7 +70,7 @@
 Claper
       </a>
       <strong class="sidebar-projectVersion" translate="no">
-        v1.2.1
+        v1.3.0
       </strong>
     </div>
     <ul class="sidebar-listNav">
@@ -104,7 +104,7 @@ Claper
     </a>
 
   <span translate="no">ClaperWeb.Component.Input</span> 
-  <small class="app-vsn" translate="no">(Claper v1.2.1)</small>
+  <small class="app-vsn" translate="no">(Claper v1.3.0)</small>
 
 </h1>
 
@@ -182,6 +182,14 @@ Claper
 
       <div class="summary-row">
         <div class="summary-signature">
+          <a href="#select/1" translate="no">select(assigns)</a>
+
+        </div>
+
+      </div>
+
+      <div class="summary-row">
+        <div class="summary-signature">
           <a href="#text/1" translate="no">text(assigns)</a>
 
         </div>
@@ -211,7 +219,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">check(assigns)</h1>
 
-      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper_web/views/components/input_component.ex#L27" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper_web/views/components/input_component.ex#L50" class="view-source" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -235,7 +243,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">checked(is_checked, key, js \\ %JS{})</h1>
 
-      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper_web/views/components/input_component.ex#L54" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper_web/views/components/input_component.ex#L77" class="view-source" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -257,7 +265,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">code(assigns)</h1>
 
-      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper_web/views/components/input_component.ex#L102" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper_web/views/components/input_component.ex#L125" class="view-source" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -279,7 +287,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">date(assigns)</h1>
 
-      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper_web/views/components/input_component.ex#L124" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper_web/views/components/input_component.ex#L147" class="view-source" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -301,7 +309,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">date_range(assigns)</h1>
 
-      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper_web/views/components/input_component.ex#L153" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper_web/views/components/input_component.ex#L176" class="view-source" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -323,7 +331,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">email(assigns)</h1>
 
-      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper_web/views/components/input_component.ex#L189" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper_web/views/components/input_component.ex#L212" class="view-source" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -345,7 +353,29 @@ Functions
     </a>
     <h1 class="signature" translate="no">password(assigns)</h1>
 
-      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper_web/views/components/input_component.ex#L213" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper_web/views/components/input_component.ex#L236" class="view-source" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="select/1">
+
+  <div class="detail-header">
+    <a href="#select/1" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">select(assigns)</h1>
+
+      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper_web/views/components/input_component.ex#L28" class="view-source" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>

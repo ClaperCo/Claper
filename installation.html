@@ -5,12 +5,12 @@
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="generator" content="ExDoc v0.28.4">
-    <meta name="project" content="Claper v1.2.1">
+    <meta name="project" content="Claper v1.3.0">
 
-    <title>Local installation — Claper v1.2.1</title>
+    <title>Local installation — Claper v1.3.0</title>
     <link rel="stylesheet" href="dist/elixir-b6f1ed5df9b1d42a7309.css" />
 
-    <script src="dist/sidebar_items-a1513a6c5c.js"></script>
+    <script src="dist/sidebar_items-9c8468b1bc.js"></script>
 
       <script src="docs_config.js"></script>
 
@@ -70,7 +70,7 @@
 Claper
       </a>
       <strong class="sidebar-projectVersion" translate="no">
-        v1.2.1
+        v1.3.0
       </strong>
     </div>
     <ul class="sidebar-listNav">
@@ -119,16 +119,16 @@ Claper
 </span></code></pre></li><li>Install JS dependencies<pre><code class="makeup sh" translate="no"><span class="">   cd assets &amp;&amp; npm i
 </span></code></pre></li><li>Allow execution of startup file<pre><code class="makeup sh" translate="no"><span class="">   chmod +x ./start.sh
 </span></code></pre></li><li>Start Phoenix endpoint with<pre><code class="makeup sh" translate="no"><span class="">   ./start.sh
-</span></code></pre></li></ol><p>Now you can visit <a href="http://localhost:4000"><code class="inline">localhost:4000</code></a> from your browser.</p><p>If you have configured <code class="inline">MAIL</code> to <code class="inline">local</code>, you can access to the mailbox at <a href="http://localhost:4000/dev/mailbox"><code class="inline">localhost:4000/dev/mailbox</code></a>.</p><h2 id="using-docker" class="section-heading">
-  <a href="#using-docker" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i>
-  <p class="sr-only">using-docker</p>
+</span></code></pre></li></ol><p>Now you can visit <a href="http://localhost:4000"><code class="inline">localhost:4000</code></a> from your browser.</p><p>If you have configured <code class="inline">MAIL</code> to <code class="inline">local</code>, you can access to the mailbox at <a href="http://localhost:4000/dev/mailbox"><code class="inline">localhost:4000/dev/mailbox</code></a>.</p><h2 id="using-docker-compose" class="section-heading">
+  <a href="#using-docker-compose" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i>
+  <p class="sr-only">using-docker-compose</p>
   </a>
-  Using Docker
+  Using Docker Compose
 </h2>
-<p>You can build the app with Docker:</p><pre><code class="makeup sh" translate="no"><span class="">docker build -t claper .
-</span><span class="">docker run -p 4000:4000 claper
-</span></code></pre><p>or you can use the official Docker image:</p><pre><code class="makeup sh" translate="no"><span class="">docker run -p 4000:4000 ghcr.io/claperco/claper:main
-</span></code></pre><p>Do not forget to set the environment variables in the docker run command with <code class="inline">docker run -e DATABASE_URL=claper-db -e MAIL=local ...</code>.</p><h3 id="arm-architecture" class="section-heading">
+<p>A Docker Compose <a href="https://github.com/ClaperCo/Claper/blob/main/docker-compose.yml">reference file</a> is provided in the repository. You can use it to run Claper with Docker Compose.</p><pre><code class="makeup sh" translate="no"><span class="">git clone https://github.com/ClaperCo/Claper.git
+</span><span class="">cd Claper
+</span><span class="">docker-compose up
+</span></code></pre><h3 id="arm-architecture" class="section-heading">
   <a href="#arm-architecture" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i>
   <p class="sr-only">arm-architecture</p>
   </a>
