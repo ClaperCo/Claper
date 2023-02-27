@@ -13,7 +13,7 @@ defmodule ClaperWeb.StatLive.Index do
 
     event =
       Events.get_managed_event!(socket.assigns.current_user, id,
-        presentation_file: [polls: [:poll_opts]]
+        presentation_file: [polls: [:poll_opts], forms: [:form_submits]]
       )
 
     grouped_total_votes = Claper.Stats.total_vote_count(event.presentation_file.id)

@@ -93,7 +93,11 @@ module.exports = {
       'h-5',
       'left-2.5',
       'top-3',
-      'h-7'
+      'h-7',
+      'bg-secondary-600',
+      'text-white',
+      'bg-white',
+      'text-gray-600'
     ]
   },
   darkMode: false, // or 'media' or 'class'

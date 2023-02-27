@@ -38,6 +38,14 @@
     </div>
   <% end %>
 
+  <%= if @current_form do %>
+    <div class="animate__animated animate__zoomInDown w-full lg:w-1/3 lg:mx-auto fixed top-16 z-10 px-2 lg:px-7">
+      <div class="transition-all" id="form-wrapper">
+        <.live_component module={ClaperWeb.EventLive.FormComponent} id={"#{@current_form.id}-form"} form={@current_form} current_user={@current_user} attendee_identifier={@attendee_identifier} event={@event} current_form_submit={@current_form_submit} />
+      </div>
+    </div>
+  <% end %>
+
   <div class="flex flex-col space-y-4 px-5 pt-20 pb-24 lg:w-1/3 bg-black min-h-screen" id="post-list" phx-update="append" data-posts-nb={Enum.count(@posts)} phx-hook="Scroll" data-target="body">
     <%= for post <- @posts do %>
       <.live_component module={ClaperWeb.EventLive.PostComponent} id={"#{post.id}-post"} post={post} leaders={@leaders} is_leader={@is_leader} current_user={@current_user} attendee_identifier={@attendee_identifier} event={@event} liked_posts={@liked_posts} loved_posts={@loved_posts} loled_posts={@loled_posts} />
@@ -109,7 +117,7 @@
           <h1 class="py-5 text-5xl font-semibold text-white md:text-6xl"><%= @event.name %></h1>
 
           <h2 x-data={"{date: moment.utc('#{@event.started_at}').local().format('LLLL')}"} class="py-5 text-2xl text-gray-300 md:text-4xl" x-text="date.charAt(0).toUpperCase() + date.slice(1)"></h2>
-                        
+
           <div class="text-white flex justify-between items-center mt-12">
             <div class="flex flex-col items-center mr-10"><span class="text-5xl font-bold"><%= if @remaining_days < 10, do: "0" %><%= @remaining_days %></span><span class="text-gray-400"><%= gettext "days" %></span></div>
             <div class="flex flex-col items-center mr-10"><span class="text-5xl font-bold"><%= if @remaining_hours < 10, do: "0" %><%= @remaining_hours %></span><span class="text-gray-400"><%= gettext "hours" %></span></div>
@@ -127,7 +135,7 @@
               <span class="text-4xl font-semibold mb-10"><%= gettext "Or use the code:" %></span>
               <span class="text-5xl font-semibold mb-10">#<%= String.upcase(@event.code) %></span>
             </div>
-            
+
         </div>
     </div>
   </div>

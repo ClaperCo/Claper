@@ -1,6 +1,6 @@
 <div class="mx-3 max-w-7xl sm:mx-auto">
   <%= if @live_action in [:new, :edit] do %>
-    <.live_component module={ClaperWeb.EventLive.FormComponent} id="event-create" event={@event} page_title={@page_title} action={@live_action} return_to={Routes.event_index_path(@socket, :index)} current_user={@current_user} />
+    <.live_component module={ClaperWeb.EventLive.EventFormComponent} id="event-create" event={@event} page_title={@page_title} action={@live_action} return_to={Routes.event_index_path(@socket, :index)} current_user={@current_user} />
   <% else %>
 
 
@@ -24,7 +24,7 @@
         </span>
       </a>
     </div>
-  </div>  
+  </div>
 
   <div class="mt-10 relative">
     <ul role="event-list" class="divide-y divide-gray-200" phx-update="append" id="events">

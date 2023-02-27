@@ -12,6 +12,8 @@ services:
     image: ghcr.io/claperco/claper:latest
     ports: 
       - 4000:4000
+    volumes:
+      - uploads:/app/priv/static/uploads
     environment:
       DATABASE_URL: postgres://claper:claper@db:5432/claper
       SECRET_KEY_BASE: 0LZiQBLw4WvqPlz4cz8RsHJlxNiSqM9B48y4ChyJ5v1oA0L/TPIqRjQNdPZN3iEG

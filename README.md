@@ -105,18 +105,14 @@ Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
 If you have configured `MAIL` to `local`, you can access to the mailbox at [`localhost:4000/dev/mailbox`](http://localhost:4000/dev/mailbox).
 
 
-#### Using Docker
+### Using Docker Compose
 
-You can build the app with Docker:
-```sh
-docker build -t claper .
-docker run -p 4000:4000 -d claper
-```
-
-or you can use the official Docker image:
+A Docker Compose [reference file](https://github.com/ClaperCo/Claper/blob/main/docker-compose.yml) is provided in the repository. You can use it to run Claper with Docker Compose.
 
 ```sh
-docker run -p 4000:4000 ghcr.io/claperco/claper:main
+git clone https://github.com/ClaperCo/Claper.git
+cd Claper
+docker-compose up
 ```
 
 <!-- CONTRIBUTING -->
@@ -142,7 +138,7 @@ Distributed under the GPLv3 License. See `LICENSE.txt` for more information.
 <!-- CONTACT -->
 ## Contact
 
-[![](https://img.shields.io/badge/@alexlionco-1DA1F2?style=for-the-badge&logo=twitter&logoColor=white)](https://twitter.com/alexlionco) 
+[![](https://img.shields.io/badge/@alxlion__-1DA1F2?style=for-the-badge&logo=twitter&logoColor=white)](https://twitter.com/alxlion_) 
 
 Project Link: [https://github.com/ClaperCo/Claper](https://github.com/ClaperCo/Claper)
 

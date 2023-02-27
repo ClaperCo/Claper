@@ -1,7 +1,7 @@
 defmodule Claper.MixProject do
   use Mix.Project
 
-  @version "1.2.1"
+  @version "1.3.0"
 
   def project do
     [
@@ -115,7 +115,8 @@ defmodule Claper.MixProject do
       {:libcluster, "~> 3.3"},
       {:porcelain, "~> 2.0"},
       {:hackney, "~> 1.18"},
-      {:gen_smtp, "~> 1.2"}
+      {:gen_smtp, "~> 1.2"},
+      {:csv, "~> 3.0"}
     ]
   end
 

@@ -118,8 +118,47 @@
         </div>
       <% end %>
 
+      <% forms = Enum.filter(@event.presentation_file.forms, fn f -> f.position == position end) %>
+
+      <%= for form <- forms do %>
+
+        <span class="text-2xl font-semibold text-gray-900 mb-4"><%= gettext("Form") %>: <%= form.title %></span>
+
+        <%= if length(form.form_submits) > 0 do %>
+          <%= link to: Routes.stat_path(@socket, :export, form.id), class: "text-xs text-white bg-primary-500 rounded-md px-2 py-0.5", method: :post do %>
+            <%= gettext("Export all submissions") %>
+          <% end %>
+        <% end %>
+
+        <%= if length(form.form_submits) == 0 do %>
+          <p class="italic text-gray-500"><%= gettext "No form submission has been sent" %></p>
+        <% end %>
+
+        <%= for fs <- form.form_submits do %>
+          <div id={"#{fs.id}-form"}>
+            <div class="px-4 pb-2 pt-3 rounded-b-lg rounded-tr-lg bg-white relative shadow-md text-black break-all mt-4">
+
+              <div class="flex space-x-3 items-center">
+                <%= if fs.attendee_identifier do %>
+                  <img class="h-8 w-8" src={"https://avatars.dicebear.com/api/identicon/#{fs.attendee_identifier}.svg"} />
+                <% else %>
+                  <img class="h-8 w-8" src={"https://avatars.dicebear.com/api/identicon/#{fs.user_id}.svg"} />
+                <% end %>
+
+                <div>
+                  <%= for res <- fs.response do %>
+                    <p><strong><%= elem(res, 0) %>:</strong> <%= elem(res, 1) %></p>
+                  <% end %>
+                </div>
+              </div>
+            </div>
+          </div>
+        <% end %>
+      <% end %>
 
       <% posts = Enum.filter(@posts, fn p -> p.position == position end) %>
+
+      <span class="text-2xl font-semibold text-gray-900 mb-4">Messages</span>
 
       <%= if length(posts) == 0 do  %>
 
