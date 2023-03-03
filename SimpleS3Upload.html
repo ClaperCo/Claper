@@ -184,19 +184,19 @@ before the signed upload expires.</li></ul><h2 id="sign_form_upload/3-examples" 
   </a>
   Examples
 </h2>
-<pre><code class="makeup elixir" translate="no"><span class="n">config</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p" data-group-id="8212657049-1">%{</span><span class="w">
+<pre><code class="makeup elixir" translate="no"><span class="n">config</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p" data-group-id="3122157827-1">%{</span><span class="w">
   </span><span class="ss">region</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;us-east-1&quot;</span><span class="p">,</span><span class="w">
-  </span><span class="ss">access_key_id</span><span class="p">:</span><span class="w"> </span><span class="nc">System</span><span class="o">.</span><span class="n">fetch_env!</span><span class="p" data-group-id="8212657049-2">(</span><span class="s">&quot;AWS_ACCESS_KEY_ID&quot;</span><span class="p" data-group-id="8212657049-2">)</span><span class="p">,</span><span class="w">
-  </span><span class="ss">secret_access_key</span><span class="p">:</span><span class="w"> </span><span class="nc">System</span><span class="o">.</span><span class="n">fetch_env!</span><span class="p" data-group-id="8212657049-3">(</span><span class="s">&quot;AWS_SECRET_ACCESS_KEY&quot;</span><span class="p" data-group-id="8212657049-3">)</span><span class="w">
-</span><span class="p" data-group-id="8212657049-1">}</span><span class="w">
+  </span><span class="ss">access_key_id</span><span class="p">:</span><span class="w"> </span><span class="nc">System</span><span class="o">.</span><span class="n">fetch_env!</span><span class="p" data-group-id="3122157827-2">(</span><span class="s">&quot;AWS_ACCESS_KEY_ID&quot;</span><span class="p" data-group-id="3122157827-2">)</span><span class="p">,</span><span class="w">
+  </span><span class="ss">secret_access_key</span><span class="p">:</span><span class="w"> </span><span class="nc">System</span><span class="o">.</span><span class="n">fetch_env!</span><span class="p" data-group-id="3122157827-3">(</span><span class="s">&quot;AWS_SECRET_ACCESS_KEY&quot;</span><span class="p" data-group-id="3122157827-3">)</span><span class="w">
+</span><span class="p" data-group-id="3122157827-1">}</span><span class="w">
 
-</span><span class="p" data-group-id="8212657049-4">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="n">fields</span><span class="p" data-group-id="8212657049-4">}</span><span class="w"> </span><span class="o">=</span><span class="w">
-  </span><span class="nc">SimpleS3Upload</span><span class="o">.</span><span class="n">sign_form_upload</span><span class="p" data-group-id="8212657049-5">(</span><span class="n">config</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;my-bucket&quot;</span><span class="p">,</span><span class="w">
+</span><span class="p" data-group-id="3122157827-4">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="n">fields</span><span class="p" data-group-id="3122157827-4">}</span><span class="w"> </span><span class="o">=</span><span class="w">
+  </span><span class="nc">SimpleS3Upload</span><span class="o">.</span><span class="n">sign_form_upload</span><span class="p" data-group-id="3122157827-5">(</span><span class="n">config</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;my-bucket&quot;</span><span class="p">,</span><span class="w">
     </span><span class="ss">key</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;public/my-file-name&quot;</span><span class="p">,</span><span class="w">
     </span><span class="ss">content_type</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;image/png&quot;</span><span class="p">,</span><span class="w">
     </span><span class="ss">max_file_size</span><span class="p">:</span><span class="w"> </span><span class="mi">10_000</span><span class="p">,</span><span class="w">
-    </span><span class="ss">expires_in</span><span class="p">:</span><span class="w"> </span><span class="nc">:timer</span><span class="o">.</span><span class="n">hours</span><span class="p" data-group-id="8212657049-6">(</span><span class="mi">1</span><span class="p" data-group-id="8212657049-6">)</span><span class="w">
-  </span><span class="p" data-group-id="8212657049-5">)</span></code></pre>
+    </span><span class="ss">expires_in</span><span class="p">:</span><span class="w"> </span><span class="nc">:timer</span><span class="o">.</span><span class="n">hours</span><span class="p" data-group-id="3122157827-6">(</span><span class="mi">1</span><span class="p" data-group-id="3122157827-6">)</span><span class="w">
+  </span><span class="p" data-group-id="3122157827-5">)</span></code></pre>
   </section>
 </section>
 
