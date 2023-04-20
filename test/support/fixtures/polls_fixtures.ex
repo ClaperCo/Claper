@@ -17,6 +17,7 @@ defmodule Claper.PollsFixtures do
       |> Enum.into(%{
         title: "some title",
         position: 0,
+        multiple: false,
         enabled: true,
         poll_opts: [
           %{content: "some option 1", vote_count: 0},

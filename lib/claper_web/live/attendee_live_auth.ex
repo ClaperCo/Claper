@@ -1,5 +1,5 @@
 defmodule ClaperWeb.AttendeeLiveAuth do
-  import Phoenix.LiveView
+  import Phoenix.Component
 
   def on_mount(:default, _params, session, socket) do
     socket =

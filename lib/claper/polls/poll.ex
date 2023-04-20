@@ -8,6 +8,7 @@ defmodule Claper.Polls.Poll do
     field :position, :integer
     field :total, :integer, virtual: true
     field :enabled, :boolean
+    field :multiple, :boolean
 
     belongs_to :presentation_file, Claper.Presentations.PresentationFile
     has_many :poll_opts, Claper.Polls.PollOpt, on_replace: :delete
@@ -19,7 +20,7 @@ defmodule Claper.Polls.Poll do
   @doc false
   def changeset(poll, attrs) do
     poll
-    |> cast(attrs, [:title, :presentation_file_id, :position, :enabled, :total])
+    |> cast(attrs, [:title, :presentation_file_id, :position, :enabled, :total, :multiple])
     |> cast_assoc(:poll_opts, required: true)
     |> validate_required([:title, :presentation_file_id, :position])
   end

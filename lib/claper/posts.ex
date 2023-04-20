@@ -27,8 +27,9 @@ defmodule Claper.Posts do
   def reacted_posts(event_id, user_id, icon) when is_number(user_id) do
     from(reaction in Claper.Posts.Reaction,
       join: post in Claper.Posts.Post,
+      on: reaction.post_id == post.id,
       where:
-        reaction.icon == ^icon and reaction.post_id == post.id and reaction.user_id == ^user_id and
+        reaction.icon == ^icon and reaction.user_id == ^user_id and
           post.event_id == ^event_id,
       distinct: true,
       select: reaction.post_id
@@ -39,8 +40,9 @@ defmodule Claper.Posts do
   def reacted_posts(event_id, attendee_identifier, icon) do
     from(reaction in Claper.Posts.Reaction,
       join: post in Claper.Posts.Post,
+      on: reaction.post_id == post.id,
       where:
-        reaction.icon == ^icon and reaction.post_id == post.id and
+        reaction.icon == ^icon and
           reaction.attendee_identifier == ^attendee_identifier and post.event_id == ^event_id,
       distinct: true,
       select: reaction.post_id

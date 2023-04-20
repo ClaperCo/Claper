@@ -149,21 +149,20 @@ defmodule ClaperWeb.Component.Input do
       assigns
       |> assign_new(:required, fn -> false end)
       |> assign_new(:autofocus, fn -> false end)
+      |> assign_new(:value, fn -> Map.get(assigns.form.data, assigns.key) end)
 
     assigns =
       if Map.has_key?(assigns, :dark),
         do: assign(assigns, :containerTheme, "text-white"),
         else: assign(assigns, :containerTheme, "text-black")
 
-    value = Map.get(assigns.form.data, assigns.key)
-
     ~H"""
-    <div class="relative flatpickr" x-data={"{input: moment.utc(#{if value == nil, do: 'undefined', else: '\'#{value}\''}).local().format('Y-MM-DD HH:mm')}"} data-default-date={"#{value}"} x-on:click="$refs.input.focus()" id="date" phx-hook="Pickr" data-enable={"[
+    <div class="relative flatpickr" x-data={"{input: moment.utc(#{if assigns.value == nil, do: 'undefined', else: '\'#{assigns.value}\''}).local().format('Y-MM-DD HH:mm')}"} data-default-date={"#{assigns.value}"} x-on:click="$refs.input.focus()" id="date" phx-hook="Pickr" data-enable={"[
       {
         \"from\": \"#{@from}\",
         \"to\": \"#{@to}\"
       }]"} >
-      <%= hidden_input @form, :utc_date, required: @required, "x-ref": "utc", "phx-hook": "DefaultValue", "data-default-value": "#{value}" %>
+      <%= hidden_input @form, :utc_date, required: @required, "x-ref": "utc", "phx-hook": "DefaultValue", "data-default-value": "#{assigns.value}" %>
       <%= text_input @form, @key, required: @required, autofocus: @autofocus, autocomplete: @key, class: "transition-all bg-transparent w-full #{@containerTheme} rounded px-3 border border-gray-500 focus:border-2 focus:border-primary-500 pt-5 pb-2 focus:outline-none input active:outline-none text-left", "x-model": "input", "x-ref": "input", "data-input": "true", "x-on:change": "$refs.utc.value = moment($refs.input.value).utc().format()" %>
       <%= label @form, @key, @name, class: "label absolute mb-0 -mt-2 pt-5 pl-3 leading-tighter text-gray-500 mt-2 cursor-text transition-all left-0", "x-bind:class": "input.length > 0 ? 'text-sm -top-1.5' : 'top-1'", "x-on:click": "$refs.input.focus()", "x-on:click.away": "$refs.input.blur()" %>
       <%= if Keyword.has_key?(@form.errors, @key) do %>
@@ -241,11 +240,10 @@ defmodule ClaperWeb.Component.Input do
       |> assign_new(:placeholder, fn -> false end)
       |> assign_new(:labelClass, fn -> "text-gray-700" end)
       |> assign_new(:fieldClass, fn -> "bg-white" end)
-
-    value = Map.get(assigns.form.data, assigns.key, "")
+      |> assign_new(:value, fn -> Map.get(assigns.form.data, assigns.key, "") end)
 
     ~H"""
-    <div class="relative" x-data={"{input: '#{value}'}"}>
+    <div class="relative" x-data={"{input: '#{assigns.value}'}"}>
       <%= label @form, @key, @name, class: "block text-sm font-medium #{@labelClass}" %>
       <div class="mt-1">
         <%= password_input @form, @key, required: @required, autofocus: @autofocus, placeholder: @placeholder, class: "#{@fieldClass} shadow-base block w-full text-lg focus:ring-primary-500 focus:ring-2 outline-none rounded-md py-4 px-3", "x-model": "input", "x-ref": "input" %>

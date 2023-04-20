@@ -7,8 +7,13 @@
       phx-change="validate"
       phx-submit="save">
 
-      <div class="my-3 mb-10">
+      <div class="my-3 mb-5">
         <ClaperWeb.Component.Input.text form={f} key={:title} name={gettext "Title of your poll"} labelClass={if @dark, do: "text-white"} fieldClass={if @dark, do: "bg-gray-700 text-white"}  autofocus="true" required="true" />
+      </div>
+
+      <div class="flex gap-x-2 mb-5">
+        <%= checkbox f, :multiple, class: "h-5 w-5" %>
+        <%= label f, :multiple, gettext("Multiple answer"), class: "text-sm font-medium" %>
       </div>
 
       <%= inputs_for f, :poll_opts, fn i -> %>

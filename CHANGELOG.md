@@ -31,3 +31,8 @@ _Security updates_
 - Add Form feature to collect data from your public
 - Improve docs for Docker Compose
 - Improve Docker Compose file reference
+
+## v1.4.0
+
+- Migrate to Phoenix 1.7
+- Migrate to Liveview 0.18

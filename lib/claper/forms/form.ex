@@ -6,7 +6,7 @@ defmodule Claper.Forms.Form do
   schema "forms" do
     field :enabled, :boolean, default: true
     field :position, :integer, default: 0
-    field :title, :string, null: false
+    field :title, :string
     embeds_many :fields, Claper.Forms.Field, on_replace: :delete
 
     belongs_to :presentation_file, Claper.Presentations.PresentationFile

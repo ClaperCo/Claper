@@ -121,7 +121,7 @@ defmodule Claper.PollsTest do
 
     test "get_poll_vote/2 returns the poll_vote with given id and user id" do
       poll_vote = poll_vote_fixture()
-      assert Polls.get_poll_vote(poll_vote.user_id, poll_vote.poll_id) == poll_vote
+      assert Polls.get_poll_vote(poll_vote.user_id, poll_vote.poll_id) == [poll_vote]
     end
 
     test "vote/4 with valid data creates a poll_vote" do
@@ -133,7 +133,7 @@ defmodule Claper.PollsTest do
                Polls.vote(
                  presentation_file.event.user_id,
                  presentation_file.event_id,
-                 poll_opt,
+                 [poll_opt],
                  poll.id
                )
     end

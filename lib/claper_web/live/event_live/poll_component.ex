@@ -25,18 +25,23 @@ defmodule ClaperWeb.EventLive.PollComponent do
           </div>
 
           <p class="text-xs text-gray-500 my-1"><%= gettext "Current poll" %></p>
-          <p class="text-white text-lg font-semibold mb-4"> <%= @poll.title %> </p>
+          <p class="text-white text-lg font-semibold mb-2"> <%= @poll.title %> </p>
+          <%= if @poll.multiple do %>
+          <p class="text-gray-600 text-sm mb-4"> <%= gettext("Select one or multiple options") %> </p>
+          <% else %>
+          <p class="text-gray-600 text-sm mb-4"> <%= gettext("Select one option") %> </p>
+          <% end %>
 
         </div>
         <div>
           <div class="flex flex-col space-y-3">
             <%= if (length @poll.poll_opts) > 0 do %>
               <%= for {opt, idx} <- Enum.with_index(@poll.poll_opts) do %>
-                <%= if ! is_nil(@current_poll_vote) do %>
+                <%= if (length @current_poll_vote) > 0 do %>
                   <button class="bg-gray-500 px-3 py-2 rounded-full flex justify-between items-center relative text-white">
                     <div style={"width: #{opt.percentage}%;"} class={"bg-gradient-to-r from-primary-500 to-secondary-500 h-full absolute left-0 transition-all rounded-l-full #{if opt.percentage == "100", do: 'rounded-r-full'}"}></div>
                     <div class="flex space-x-3 z-10 text-left">
-                      <%= if @current_poll_vote.poll_opt_id == opt.id do %>
+                      <%= if (length Enum.filter(@current_poll_vote, fn(vote) -> vote.poll_opt_id == opt.id end)) > 0 do %>
                       <span class="h-5 w-5 mt-0.5 rounded-full point-select bg-white"></span>
                       <% else %>
                       <span class="h-5 w-5 mt-0.5 rounded-full point-select border-2 border-white"></span>
@@ -49,7 +54,7 @@ defmodule ClaperWeb.EventLive.PollComponent do
                   <button id={"poll-opt-#{idx}"} phx-click="select-poll-opt" phx-value-opt={idx} class="bg-gray-500 px-3 py-2 rounded-full flex justify-between items-center relative text-white">
                     <div style={"width: #{opt.percentage}%;"} class={"bg-gradient-to-r from-primary-500 to-secondary-500 h-full absolute left-0 transition-all rounded-l-full #{if opt.percentage == "100", do: 'rounded-r-full'}"}></div>
                     <div class="flex space-x-3 z-10 text-left">
-                    <%= if @selected_poll_opt == "#{idx}" do %>
+                    <%= if Enum.member?(@selected_poll_opt, "#{idx}") do %>
                     <span class="h-5 w-5 mt-0.5 rounded-full point-select bg-white"></span>
                     <% else %>
                     <span class="h-5 w-5 mt-0.5 rounded-full point-select border-2 border-white"></span>
@@ -63,10 +68,10 @@ defmodule ClaperWeb.EventLive.PollComponent do
             <% end %>
           </div>
 
-          <%= if ! is_nil(@current_poll_vote) do %>
+          <%= if (length @selected_poll_opt) == 0 || (length @current_poll_vote) > 0 do %>
           <button class="px-3 py-2 text-white font-semibold bg-gray-500 rounded-md my-5 cursor-default"><%= gettext "Vote" %></button>
           <% else %>
-          <button phx-click="vote" phx-value-opt={@selected_poll_opt} phx-disable-with="..." class="px-3 py-2 text-white font-semibold bg-primary-500 hover:bg-primary-600 rounded-md my-5"><%= gettext "Vote" %></button>
+          <button phx-click="vote" phx-disable-with="..." class="px-3 py-2 text-white font-semibold bg-primary-500 hover:bg-primary-600 rounded-md my-5"><%= gettext "Vote" %></button>
           <% end %>
           </div>
       </div>
