@@ -93,6 +93,17 @@
           </li>
         </ul>
 
+        <%= if (length @polls) == 0 && (length @forms) == 0 do %>
+        <div class="mt-10">
+          <a data-phx-link="patch" data-phx-link-state="push" href={Routes.event_manage_path(@socket, :import, @event.code)} class="group flex gap-x-2 select-none rounded-xl p-3 w-full hover:bg-gray-200 cursor-pointer">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" width="24" height="24" >
+              <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" />
+            </svg>
+            <p class="text-gray-700"><%= gettext("Import all interactions from another presentation") %></p>
+          </a>
+        </div>
+        <% end %>
+
       <% end %>
 
       <%= if @create == "poll" do %>
@@ -110,6 +121,24 @@
           :new -> gettext("New form")
           :edit -> gettext("Edit form") end %></p>
           <.live_component module={ClaperWeb.FormLive.FormComponent} id="form-create" event_uuid={@event.uuid} presentation_file={@event.presentation_file} form={@form} live_action={@create_action} position={@state.position} return_to={Routes.event_manage_path(@socket, :show, @event.code)} />
+        </div>
+      <% end %>
+
+      <%= if @create == "import" do %>
+        <div class="scroll-py-3 overflow-y-auto bg-gray-100 p-3">
+          <p class="text-xl font-bold"><%= gettext("Select presentation") %></p>
+          <ul>
+          <%= for event <- @events do %>
+            <li class="my-3">
+              <button phx-click="import" phx-value-event={event.uuid} class="bg-blue-500 text-white flex gap-x-2 items-center px-2 py-1 rounded-md">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" />
+                </svg>
+                <span><%= event.name %></span>
+              </button>
+            </li>
+          <% end %>
+          </ul>
         </div>
       <% end %>
 
@@ -212,7 +241,9 @@
             <% end %>
             </div>
 
-            <button class="underline" phx-click={toggle_add_modal()}><%= gettext "Add interaction" %></button>
+            <%= if @state.position == index do %>
+              <button class="underline" phx-click={toggle_add_modal()}><%= gettext "Add interaction" %></button>
+            <% end %>
 
           </div>
 

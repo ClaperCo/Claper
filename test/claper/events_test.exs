@@ -2,7 +2,7 @@ defmodule Claper.EventsTest do
   use Claper.DataCase
 
   alias Claper.Events
-  import Claper.{EventsFixtures, AccountsFixtures}
+  import Claper.{EventsFixtures, AccountsFixtures, PresentationsFixtures, PollsFixtures}
 
   describe "events" do
     alias Claper.Events.Event
@@ -68,6 +68,30 @@ defmodule Claper.EventsTest do
       event = event_fixture()
       assert {:error, %Ecto.Changeset{}} = Events.update_event(event, @invalid_attrs)
       assert event == Events.get_event!(event.uuid)
+    end
+
+    test "import/3 transfer all interactions from an event to another" do
+      user = user_fixture()
+      from_event = event_fixture(%{user: user, name: "from event"})
+      to_event = event_fixture(%{user: user, name: "to event"})
+      from_presentation_file = presentation_file_fixture(%{event: from_event})
+      from_poll = poll_fixture(%{presentation_file_id: from_presentation_file.id})
+      to_presentation_file = presentation_file_fixture(%{event: to_event , hash: "444444"})
+
+      assert {:ok, %Event{}} = Events.import(user.id, from_event.uuid, to_event.uuid)
+      assert Enum.at(Claper.Presentations.get_presentation_file!(to_presentation_file.id, [:polls]).polls, 0).title == from_poll.title
+    end
+
+    test "import/3 fail with different user" do
+      user = user_fixture()
+      bad_user = user_fixture()
+      from_event = event_fixture(%{user: bad_user, name: "from event"})
+      to_event = event_fixture(%{user: user, name: "to event"})
+      from_presentation_file = presentation_file_fixture(%{event: from_event})
+      from_poll = poll_fixture(%{presentation_file_id: from_presentation_file.id})
+      to_presentation_file = presentation_file_fixture(%{event: to_event , hash: "444444"})
+
+      assert_raise Ecto.NoResultsError, fn -> Events.import(user.id, from_event.uuid, to_event.uuid) end
     end
 
     test "delete_event/1 deletes the event" do

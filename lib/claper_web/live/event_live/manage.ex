@@ -160,6 +160,31 @@ defmodule ClaperWeb.EventLive.Manage do
      |> poll_at_position}
   end
 
+  @impl true
+  def handle_event(
+        "import",
+        %{"event" => event_uuid},
+        %{assigns: %{current_user: current_user, event: current_event}} = socket
+      ) do
+    try do
+      case Claper.Events.import(current_user.id, event_uuid, current_event.uuid) do
+        {:ok, _event} ->
+          {:noreply, socket
+            |> put_flash(:info, gettext("Interactions imported successfully"))
+            |> redirect(to: Routes.event_manage_path(socket, :show, current_event.code))
+          }
+      end
+    rescue
+      Ecto.NoResultsError ->
+        {:noreply, socket
+            |> put_flash(:error, gettext("Interactions import failed"))
+            |> redirect(to: Routes.event_manage_path(socket, :show, current_event.code))
+          }
+    end
+
+  end
+
+
   def handle_event("poll-set-default", %{"id" => id}, socket) do
     Forms.disable_all(socket.assigns.event.presentation_file.id, socket.assigns.state.position)
 
@@ -398,6 +423,12 @@ defmodule ClaperWeb.EventLive.Manage do
         %Forms.Field{name: gettext("Email"), type: "email"}
       ]
     })
+  end
+
+  defp apply_action(socket, :import, _params) do
+    socket
+    |> assign(:create, "import")
+    |> assign(:events, Claper.Events.list_events(socket.assigns.current_user.id))
   end
 
   defp apply_action(socket, :edit_form, %{"id" => id}) do
