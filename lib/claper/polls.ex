@@ -221,16 +221,24 @@ defmodule Claper.Polls do
     )
   end
 
-  def vote(user_id, event_uuid, poll_opts, poll_id) when is_number(user_id) and is_list(poll_opts) do
+  def vote(user_id, event_uuid, poll_opts, poll_id)
+      when is_number(user_id) and is_list(poll_opts) do
     case Enum.reduce(poll_opts, Ecto.Multi.new(), fn opt, multi ->
-      Ecto.Multi.update(multi, {:update_poll_opt, opt.id}, PollOpt.changeset(opt, %{"vote_count" => opt.vote_count + 1}))
-      |> Ecto.Multi.insert({:insert_poll_vote, opt.id}, PollVote.changeset(%PollVote{}, %{
-        user_id: user_id,
-        poll_opt_id: opt.id,
-        poll_id: poll_id
-      }))
-    end)
-        |> Repo.transaction() do
+           Ecto.Multi.update(
+             multi,
+             {:update_poll_opt, opt.id},
+             PollOpt.changeset(opt, %{"vote_count" => opt.vote_count + 1})
+           )
+           |> Ecto.Multi.insert(
+             {:insert_poll_vote, opt.id},
+             PollVote.changeset(%PollVote{}, %{
+               user_id: user_id,
+               poll_opt_id: opt.id,
+               poll_id: poll_id
+             })
+           )
+         end)
+         |> Repo.transaction() do
       {:ok, _} ->
         poll = get_poll!(poll_id)
         broadcast({:ok, poll, event_uuid}, :poll_updated)
@@ -239,14 +247,21 @@ defmodule Claper.Polls do
 
   def vote(attendee_identifier, event_uuid, poll_opts, poll_id) when is_list(poll_opts) do
     case Enum.reduce(poll_opts, Ecto.Multi.new(), fn opt, multi ->
-      Ecto.Multi.update(multi, {:update_poll_opt, opt.id}, PollOpt.changeset(opt, %{"vote_count" => opt.vote_count + 1}))
-      |> Ecto.Multi.insert({:insert_poll_vote, opt.id}, PollVote.changeset(%PollVote{}, %{
-        attendee_identifier: attendee_identifier,
-        poll_opt_id: opt.id,
-        poll_id: poll_id
-      }))
-    end)
-        |> Repo.transaction() do
+           Ecto.Multi.update(
+             multi,
+             {:update_poll_opt, opt.id},
+             PollOpt.changeset(opt, %{"vote_count" => opt.vote_count + 1})
+           )
+           |> Ecto.Multi.insert(
+             {:insert_poll_vote, opt.id},
+             PollVote.changeset(%PollVote{}, %{
+               attendee_identifier: attendee_identifier,
+               poll_opt_id: opt.id,
+               poll_id: poll_id
+             })
+           )
+         end)
+         |> Repo.transaction() do
       {:ok, _} ->
         poll = get_poll!(poll_id)
         broadcast({:ok, poll, event_uuid}, :poll_updated)

@@ -7,64 +7,106 @@
 </style>
 
 <div class="lg:overflow-hidden">
-
-  <div x-data="{open: false}" id="menu" class="w-full h-24 py-4 text-right md:px-5 relative z-20" phx-update="ignore">
-    <div x-show="open" x-transition class="absolute h-24 bg-white w-full top-0 md:hidden px-5 py-3 flex flex-col items-center justify-center space-y-2" @click.away="open = false">
-      <a href="https://get.claper.co/" class="text-sm font-semibold text-black"><%= gettext("About") %></a>
+  <div
+    x-data="{open: false}"
+    id="menu"
+    class="w-full h-24 py-4 text-right md:px-5 relative z-20"
+    phx-update="ignore"
+  >
+    <div
+      x-show="open"
+      x-transition
+      class="absolute h-24 bg-white w-full top-0 md:hidden px-5 py-3 flex flex-col items-center justify-center space-y-2"
+      @click.away="open = false"
+    >
+      <a href="https://get.claper.co/" class="text-sm font-semibold text-black">
+        <%= gettext("About") %>
+      </a>
       <%= if @current_user do %>
-        <%= live_patch gettext("Dashboard"), to: Routes.event_index_path(@socket, :index), class: "relative inline-flex items-center px-4 py-1 text-base font-sm rounded-md text-white bg-gradient-to-tl from-primary-500 to-secondary-500 bg-size-200 bg-pos-0 hover:bg-pos-100 transition-all duration-500" %>
+        <%= live_patch(gettext("Dashboard"),
+          to: Routes.event_index_path(@socket, :index),
+          class:
+            "relative inline-flex items-center px-4 py-1 text-base font-sm rounded-md text-white bg-gradient-to-tl from-primary-500 to-secondary-500 bg-size-200 bg-pos-0 hover:bg-pos-100 transition-all duration-500"
+        ) %>
       <% else %>
-        <%= live_patch gettext("Login"), to: Routes.user_session_path(@socket, :new), class: "relative inline-flex items-center px-4 py-1 text-base font-sm rounded-md text-white bg-gradient-to-tl from-primary-500 to-secondary-500 bg-size-200 bg-pos-0 hover:bg-pos-100 transition-all duration-500" %>
+        <%= live_patch(gettext("Login"),
+          to: Routes.user_session_path(@socket, :new),
+          class:
+            "relative inline-flex items-center px-4 py-1 text-base font-sm rounded-md text-white bg-gradient-to-tl from-primary-500 to-secondary-500 bg-size-200 bg-pos-0 hover:bg-pos-100 transition-all duration-500"
+        ) %>
       <% end %>
     </div>
     <button @click="open = true" class="md:hidden">
-          <img src="/images/icons/menu-outline.svg" class="h-9" />
+      <img src="/images/icons/menu-outline.svg" class="h-9" />
     </button>
     <div class="hidden md:block">
-      <a href="https://get.claper.co/" class="text-sm text-white font-semibold mr-3"><%= gettext("About") %></a>
+      <a href="https://get.claper.co/" class="text-sm text-white font-semibold mr-3">
+        <%= gettext("About") %>
+      </a>
       <%= if @current_user do %>
-        <%= live_patch gettext("Dashboard"), to: Routes.event_index_path(@socket, :index), class: "relative inline-flex items-center px-4 py-1 text-base font-sm rounded-md text-white bg-gradient-to-tl from-primary-500 to-secondary-500 bg-size-200 bg-pos-0 hover:bg-pos-100 transition-all duration-500" %>
+        <%= live_patch(gettext("Dashboard"),
+          to: Routes.event_index_path(@socket, :index),
+          class:
+            "relative inline-flex items-center px-4 py-1 text-base font-sm rounded-md text-white bg-gradient-to-tl from-primary-500 to-secondary-500 bg-size-200 bg-pos-0 hover:bg-pos-100 transition-all duration-500"
+        ) %>
       <% else %>
-        <%= live_patch gettext("Login"), to: Routes.user_session_path(@socket, :new), class: "relative inline-flex items-center px-4 py-1 text-base font-sm rounded-md text-white bg-gradient-to-tl from-primary-500 to-secondary-500 bg-size-200 bg-pos-0 hover:bg-pos-100 transition-all duration-500" %>
+        <%= live_patch(gettext("Login"),
+          to: Routes.user_session_path(@socket, :new),
+          class:
+            "relative inline-flex items-center px-4 py-1 text-base font-sm rounded-md text-white bg-gradient-to-tl from-primary-500 to-secondary-500 bg-size-200 bg-pos-0 hover:bg-pos-100 transition-all duration-500"
+        ) %>
       <% end %>
     </div>
   </div>
 
   <div class="px-5 lg:w-1/3 lg:mx-auto">
-
     <div class="mt-10 ">
       <img src="/images/logo.svg" class="h-12 mx-auto mb-16" />
     </div>
 
     <%= if @last_event do %>
       <%= live_patch to: Routes.event_show_path(@socket, :show, @last_event.code) do %>
-      <div class="rounded-md bg-gray-600 p-4 mb-8">
-        <div class="flex justify-center items-center">
-          <p class="text-sm text-white">
-            <%= gettext "Return to your last presentation" %> (#<span class="uppercase"><%= @last_event.code %></span>)
-          </p>
-          <p class="text-base ml-3 mt-1">
-            <a href="#" class="whitespace-nowrap font-medium text-white"><span aria-hidden="true">&rarr;</span></a>
-          </p>
+        <div class="rounded-md bg-gray-600 p-4 mb-8">
+          <div class="flex justify-center items-center">
+            <p class="text-sm text-white">
+              <%= gettext("Return to your last presentation") %> (#<span class="uppercase"><%= @last_event.code %></span>)
+            </p>
+            <p class="text-base ml-3 mt-1">
+              <a href="#" class="whitespace-nowrap font-medium text-white">
+                <span aria-hidden="true">&rarr;</span>
+              </a>
+            </p>
+          </div>
         </div>
-      </div>
       <% end %>
     <% end %>
 
     <%= form_for :event, Routes.event_join_path(@socket, :join), ["phx-submit": "join", "phx-hook": "JoinEvent", id: "form"], fn f -> %>
       <div class="relative">
-        <%= text_input f, :code, required: true, autofocus: true, id: "input", class: "transition-all bg-transparent tracking-widest w-full uppercase text-white text-2xl px-3 border-b border-gray-200 focus:border-b-2 pt-5 pl-12 pb-3 outline-none" %>
-        <img class="icon absolute top-5 left-2 transition-all duration-100" src="/images/icons/hashtag-white.svg" alt="code">
+        <%= text_input(f, :code,
+          required: true,
+          autofocus: true,
+          id: "input",
+          class:
+            "transition-all bg-transparent tracking-widest w-full uppercase text-white text-2xl px-3 border-b border-gray-200 focus:border-b-2 pt-5 pl-12 pb-3 outline-none"
+        ) %>
+        <img
+          class="icon absolute top-5 left-2 transition-all duration-100"
+          src="/images/icons/hashtag-white.svg"
+          alt="code"
+        />
       </div>
-      
+
       <div class="mt-10">
-        <button type="submit" id="submit" class="w-full flex justify-center text-white p-4 rounded-full tracking-wide font-bold outline-none focus:shadow-outline shadow-lg bg-gradient-to-tl from-primary-500 to-secondary-500 bg-size-200 bg-pos-0 hover:bg-pos-100 transition-all duration-500">
-          <%= gettext "Join" %>
+        <button
+          type="submit"
+          id="submit"
+          class="w-full flex justify-center text-white p-4 rounded-full tracking-wide font-bold outline-none focus:shadow-outline shadow-lg bg-gradient-to-tl from-primary-500 to-secondary-500 bg-size-200 bg-pos-0 hover:bg-pos-100 transition-all duration-500"
+        >
+          <%= gettext("Join") %>
         </button>
         <img src="/images/loading.gif" id="loading" class="hidden h-12 mx-auto" />
       </div>
-
     <% end %>
-    
   </div>
 </div>

@@ -1,10 +1,10 @@
 <div class="fixed max-w-xl w-full bottom-5 left-1/2 tranform -translate-x-1/2 z-10">
   <%= if Phoenix.Flash.get(@flash, :info) do %>
-  <ClaperWeb.Component.Alert.info message={Phoenix.Flash.get(@flash, :info)} />
+    <ClaperWeb.Component.Alert.info message={Phoenix.Flash.get(@flash, :info)} />
   <% end %>
 
   <%= if Phoenix.Flash.get(@flash, :error) do %>
-  <ClaperWeb.Component.Alert.error message={Phoenix.Flash.get(@flash, :error)} />
+    <ClaperWeb.Component.Alert.error message={Phoenix.Flash.get(@flash, :error)} />
   <% end %>
 </div>
 

@@ -76,10 +76,14 @@ defmodule Claper.EventsTest do
       to_event = event_fixture(%{user: user, name: "to event"})
       from_presentation_file = presentation_file_fixture(%{event: from_event})
       from_poll = poll_fixture(%{presentation_file_id: from_presentation_file.id})
-      to_presentation_file = presentation_file_fixture(%{event: to_event , hash: "444444"})
+      to_presentation_file = presentation_file_fixture(%{event: to_event, hash: "444444"})
 
       assert {:ok, %Event{}} = Events.import(user.id, from_event.uuid, to_event.uuid)
-      assert Enum.at(Claper.Presentations.get_presentation_file!(to_presentation_file.id, [:polls]).polls, 0).title == from_poll.title
+
+      assert Enum.at(
+               Claper.Presentations.get_presentation_file!(to_presentation_file.id, [:polls]).polls,
+               0
+             ).title == from_poll.title
     end
 
     test "import/3 fail with different user" do
@@ -89,9 +93,11 @@ defmodule Claper.EventsTest do
       to_event = event_fixture(%{user: user, name: "to event"})
       from_presentation_file = presentation_file_fixture(%{event: from_event})
       from_poll = poll_fixture(%{presentation_file_id: from_presentation_file.id})
-      to_presentation_file = presentation_file_fixture(%{event: to_event , hash: "444444"})
+      to_presentation_file = presentation_file_fixture(%{event: to_event, hash: "444444"})
 
-      assert_raise Ecto.NoResultsError, fn -> Events.import(user.id, from_event.uuid, to_event.uuid) end
+      assert_raise Ecto.NoResultsError, fn ->
+        Events.import(user.id, from_event.uuid, to_event.uuid)
+      end
     end
 
     test "delete_event/1 deletes the event" do

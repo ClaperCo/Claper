@@ -8,6 +8,5 @@ defmodule Claper.Repo.Migrations.AddMultipleFromPolls do
 
     drop index(:poll_votes, [:poll_id, :user_id]), mode: :cascade
     drop index(:poll_votes, [:poll_id, :attendee_identifier]), mode: :cascade
-
   end
 end
