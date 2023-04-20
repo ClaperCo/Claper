@@ -34,7 +34,7 @@ config :claper, Claper.Mailer, adapter: Swoosh.Adapters.Local
 config :swoosh, :api_client, false
 
 config :dart_sass,
-  version: "1.54.0",
+  version: "1.58.0",
   default: [
     args: ~w(css/custom.scss ../priv/static/assets/custom.css),
     cd: Path.expand("../assets", __DIR__)
