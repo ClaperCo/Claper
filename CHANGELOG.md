@@ -36,3 +36,4 @@ _Security updates_
 
 - Migrate to Phoenix 1.7
 - Migrate to Liveview 0.18
+- Add multiple choice poll

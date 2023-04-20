@@ -45,7 +45,7 @@ defmodule ClaperWeb do
   def live_view do
     quote do
       use Phoenix.LiveView,
-        layout: {ClaperWeb.LayoutView, "live.html"}
+        layout: {ClaperWeb.LayoutView, :live}
 
       unquote(view_helpers())
     end

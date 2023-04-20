@@ -19,7 +19,7 @@
         return_to={Routes.user_settings_show_path(@socket, :show)}>
 
         <div>
-          <.form let={f} for={@email_changeset} phx-submit="save" id="update_email" class="mt-5 md:flex md:items-end">
+          <.form :let={f} for={@email_changeset} phx-submit="save" id="update_email" class="mt-5 md:flex md:items-end">
 
             <%= hidden_input f, :action, name: "action", value: "update_email" %>
 
@@ -41,7 +41,7 @@
         return_to={Routes.user_settings_show_path(@socket, :show)}>
 
         <div>
-          <.form let={f} for={@password_changeset} phx-submit="save" id="update_password" class="mt-5 md:flex md:items-end gap-x-2">
+          <.form :let={f} for={@password_changeset} phx-submit="save" id="update_password" class="mt-5 md:flex md:items-end gap-x-2">
 
             <%= hidden_input f, :action, name: "action", value: "update_password" %>
 

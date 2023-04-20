@@ -1,6 +1,6 @@
 <div>
    <.form
-      let={f}
+      :let={f}
       for={@changeset}
       id="poll-form"
       phx-target={@myself}
@@ -13,7 +13,7 @@
 
       <div class="flex gap-x-2 mb-5">
         <%= checkbox f, :multiple, class: "h-5 w-5" %>
-        <%= label f, :multiple, gettext("Multiple answer"), class: "text-sm font-medium" %>
+        <%= label f, :multiple, gettext("Multiple answers"), class: "text-sm font-medium" %>
       </div>
 
       <%= inputs_for f, :poll_opts, fn i -> %>
