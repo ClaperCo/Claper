@@ -92,8 +92,8 @@ defmodule Claper.EventsTest do
       from_event = event_fixture(%{user: bad_user, name: "from event"})
       to_event = event_fixture(%{user: user, name: "to event"})
       from_presentation_file = presentation_file_fixture(%{event: from_event})
-      from_poll = poll_fixture(%{presentation_file_id: from_presentation_file.id})
-      to_presentation_file = presentation_file_fixture(%{event: to_event, hash: "444444"})
+      _from_poll = poll_fixture(%{presentation_file_id: from_presentation_file.id})
+      _to_presentation_file = presentation_file_fixture(%{event: to_event, hash: "444444"})
 
       assert_raise Ecto.NoResultsError, fn ->
         Events.import(user.id, from_event.uuid, to_event.uuid)

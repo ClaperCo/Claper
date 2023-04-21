@@ -4,6 +4,8 @@
 - Migrate to Liveview 0.18
 - Add multiple choice poll
 - Add feature to import all interactions from another presentation
+- Add MAX_FILE_SIZE_MB environment variable to limit file upload size
+- Add feature to deactivate messages during a presentation
 
 
 ## v1.3.0

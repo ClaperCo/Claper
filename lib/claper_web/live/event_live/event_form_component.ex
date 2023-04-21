@@ -7,15 +7,18 @@ defmodule ClaperWeb.EventLive.EventFormComponent do
   def update(%{event: event} = assigns, socket) do
     changeset = Events.change_event(event)
 
+    {max_file_size, _} = Integer.parse("#{Application.fetch_env!(:claper, :max_file_size)}")
+
     {:ok,
      socket
      |> assign(assigns)
      |> assign(:changeset, changeset)
+     |> assign(:max_file_size, max_file_size)
      |> allow_upload(:presentation_file,
        accept: ~w(.pdf .ppt .pptx),
        auto_upload: true,
        max_entries: 1,
-       max_file_size: 15_000_000
+       max_file_size: max_file_size * 1_000_000 # MB
      )}
   end
 

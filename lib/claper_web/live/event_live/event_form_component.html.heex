@@ -75,7 +75,7 @@
               </label>
               <p class="pl-1"><%= gettext("or drag and drop") %></p>
             </div>
-            <p class="text-xs text-gray-500"><%= gettext("PDF, PPT, PPTX up to 15MB") %></p>
+            <p class="text-xs text-gray-500"><%= gettext("PDF, PPT, PPTX up to %{size} MB", size: @max_file_size) %></p>
             <%= for entry <- @uploads.presentation_file.entries do %>
               <progress id="file" max="100" value={entry.progress}>
                 <%= entry.progress %>

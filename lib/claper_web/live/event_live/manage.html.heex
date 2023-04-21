@@ -759,29 +759,43 @@
       </div>
 
       <div class="w-full shadow-lg">
-        <div class="px-5 py-3">
-          <span class="font-semibold text-lg"><%= gettext("On screen settings") %></span>
+        <div class="px-5 py-3 grid grid-cols-1 sm:grid-cols-2">
+          <div>
+            <span class="font-semibold text-lg"><%= gettext("On screen settings") %></span>
 
-          <div class="flex space-x-2 items-center mt-3">
-            <ClaperWeb.Component.Input.check
-              key={:join_screen_visible}
-              checked={@state.join_screen_visible}
-            />
-            <span><%= gettext("Instructions") %></span>
+            <div class="flex space-x-2 items-center mt-3">
+              <ClaperWeb.Component.Input.check
+                key={:join_screen_visible}
+                checked={@state.join_screen_visible}
+              />
+              <span><%= gettext("Show instructions") %></span>
+            </div>
+
+            <div class="flex space-x-2 items-center mt-3">
+              <ClaperWeb.Component.Input.check key={:chat_visible} checked={@state.chat_visible} />
+              <span><%= gettext("Show messages") %></span>
+            </div>
+
+            <div class={"#{if !@current_poll, do: 'opacity-50'} flex space-x-2 items-center mt-3"}>
+              <ClaperWeb.Component.Input.check
+                key={:poll_visible}
+                disabled={!@current_poll}
+                checked={@state.poll_visible}
+              />
+              <span><%= gettext("Show poll results") %></span>
+            </div>
           </div>
 
-          <div class="flex space-x-2 items-center mt-3">
-            <ClaperWeb.Component.Input.check key={:chat_visible} checked={@state.chat_visible} />
-            <span><%= gettext("Messages") %></span>
-          </div>
+          <div>
+            <span class="font-semibold text-lg"><%= gettext("Attendees settings") %></span>
 
-          <div class={"#{if !@current_poll, do: 'opacity-50'} flex space-x-2 items-center mt-3"}>
-            <ClaperWeb.Component.Input.check
-              key={:poll_visible}
-              disabled={!@current_poll}
-              checked={@state.poll_visible}
-            />
-            <span><%= gettext("Active poll results") %></span>
+            <div class="flex space-x-2 items-center mt-3">
+              <ClaperWeb.Component.Input.check
+                key={:chat_enabled}
+                checked={@state.chat_enabled}
+              />
+              <span><%= gettext("Enable messages") %></span>
+            </div>
           </div>
         </div>
       </div>

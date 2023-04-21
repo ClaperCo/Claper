@@ -54,6 +54,7 @@ defmodule ClaperWeb.EventLive.Show do
   defp init(socket, event, false) do
     if connected?(socket) do
       Claper.Events.Event.subscribe(event.uuid)
+      Claper.Presentations.subscribe(event.presentation_file.id)
 
       Presence.track(
         self(),
@@ -174,6 +175,13 @@ defmodule ClaperWeb.EventLive.Show do
      |> update(:posts, fn posts -> [post | posts] end)
      |> push_event("scroll", %{})
      |> maybe_disable_empty_room}
+  end
+
+  @impl true
+  def handle_info({:state_updated, presentation_state}, socket) do
+    {:noreply,
+     socket
+      |> assign(:state, presentation_state)}
   end
 
   @impl true

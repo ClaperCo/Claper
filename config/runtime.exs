@@ -76,6 +76,8 @@ if config_env() == :prod do
   # Swoosh supports Hackney and Finch out of the box:
   #
 
+
+
   if System.get_env("MAIL_TRANSPORT", "local") == "smtp" do
     config :claper, Claper.Mailer,
       adapter: Swoosh.Adapters.SMTP,

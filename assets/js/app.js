@@ -148,8 +148,10 @@ Hooks.PostForm = {
   mounted() {
     const submitBtn = document.getElementById("submitBtn")
     const TA = document.getElementById("postFormTA")
-    submitBtn.addEventListener("click", (e) => this.onSubmit(e, TA))
-    TA.addEventListener("keydown",  (e) => this.onPress(e, submitBtn, TA))
+    if (submitBtn && TA) {
+      submitBtn.addEventListener("click", (e) => this.onSubmit(e, TA))
+      TA.addEventListener("keydown",  (e) => this.onPress(e, submitBtn, TA))  
+    }
   },
   updated() {
     const submitBtn = document.getElementById("submitBtn")
@@ -165,8 +167,10 @@ Hooks.PostForm = {
   destroyed() {
     const submitBtn = document.getElementById("submitBtn")
     const TA = document.getElementById("postFormTA")
-    TA.removeEventListener("keydown",  (e) => this.onPress(e, submitBtn, TA))
-    submitBtn.removeEventListener("click",  (e) => this.onSubmit(e, TA))
+    if (submitBtn && TA) {
+      TA.removeEventListener("keydown",  (e) => this.onPress(e, submitBtn, TA))
+      submitBtn.removeEventListener("click",  (e) => this.onSubmit(e, TA))  
+    }
   }
 }
 
