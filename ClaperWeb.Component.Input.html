@@ -4,21 +4,24 @@
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="generator" content="ExDoc v0.28.4">
-    <meta name="project" content="Claper v1.3.0">
+    <meta name="generator" content="ExDoc v0.29.4">
+    <meta name="project" content="Claper v1.4.0">
 
-    <title>ClaperWeb.Component.Input — Claper v1.3.0</title>
-    <link rel="stylesheet" href="dist/elixir-b6f1ed5df9b1d42a7309.css" />
+    <title>ClaperWeb.Component.Input — Claper v1.4.0</title>
+    <link rel="stylesheet" href="dist/html-elixir-HHVY3JYD.css" />
 
-    <script src="dist/sidebar_items-9c8468b1bc.js"></script>
+
+    <script src="dist/handlebars.runtime-NWIB6V2M.js"></script>
+    <script src="dist/handlebars.templates-XWGFFSCD.js"></script>
+    <script src="dist/sidebar_items-3229396A.js"></script>
 
       <script src="docs_config.js"></script>
 
-    <script async src="dist/app-bd1cb213813bf4825aa2.js"></script>
+    <script async src="dist/html-JDI3AVDD.js"></script>
 
 
   </head>
-  <body data-type="modules">
+  <body data-type="modules" class="page-module">
     <script>
 
       try {
@@ -35,12 +38,11 @@
 
 <div class="main">
 
+<button class="sidebar-button sidebar-toggle" aria-label="toggle sidebar">
+  <i class="ri-menu-line ri-lg" title="Collapse/expand sidebar"></i>
+</button>
 
 <section class="sidebar">
-  <button class="sidebar-button sidebar-toggle" aria-label="toggle sidebar">
-    <i class="ri-menu-line ri-lg" title="Collapse/expand sidebar"></i>
-  </button>
-
   <form class="sidebar-search" action="search.html">
     <button type="submit" class="search-button" aria-label="Submit Search">
       <i class="ri-search-2-line" aria-hidden="true" title="Submit search"></i>
@@ -50,7 +52,7 @@
     </button>
     <label class="search-label">
       <p class="sr-only">Search</p>
-      <input name="q" type="text" class="search-input" placeholder="Search..." aria-label="Input your search terms" autocomplete="off" />
+      <input name="q" type="text" class="search-input" placeholder="Search..." aria-label="Input your search terms" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
     </label>
   </form>
 
@@ -69,9 +71,9 @@
       <a href="https://get.claper.co" class="sidebar-projectName" translate="no">
 Claper
       </a>
-      <strong class="sidebar-projectVersion" translate="no">
-        v1.3.0
-      </strong>
+      <div class="sidebar-projectVersion" translate="no">
+        v1.4.0
+      </div>
     </div>
     <ul class="sidebar-listNav">
       <li><a id="extras-list-link" href="#full-list">GUIDES</a></li>
@@ -83,7 +85,7 @@ Claper
   </div>
 
   <div class="gradient"></div>
-  <ul id="full-list" class="sidebar-fullList"></ul>
+  <ul id="full-list"></ul>
 </section>
 
 <section class="content">
@@ -92,19 +94,19 @@ Claper
     <div id="content" class="content-inner">
 
 <h1>
-<button class="settings display-settings">
+<button class="icon-action display-settings">
   <i class="ri-settings-3-line"></i>
   <span class="sr-only">Settings</span>
 </button>
 
 
-    <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper_web/views/components/input_component.ex#L1" title="View Source" class="view-source" rel="help">
+    <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper_web/views/components/input_component.ex#L1" title="View Source" class="icon-action" rel="help">
       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
       <span class="sr-only">View Source</span>
     </a>
 
   <span translate="no">ClaperWeb.Component.Input</span> 
-  <small class="app-vsn" translate="no">(Claper v1.3.0)</small>
+  <small class="app-vsn" translate="no">(Claper v1.4.0)</small>
 
 </h1>
 
@@ -118,85 +120,84 @@ Claper
       </a>
       Summary
     </h1>
+<div class="summary-functions summary">
+  <h2>
+    <a href="#functions">Functions</a>
+  </h2>
 
-  <div class="summary-functions summary">
-    <h2>
-      <a href="#functions">Functions</a>
-    </h2>
-
-      <div class="summary-row">
-        <div class="summary-signature">
-          <a href="#check/1" translate="no">check(assigns)</a>
-
-        </div>
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#check/1" translate="no">check(assigns)</a>
 
       </div>
 
-      <div class="summary-row">
-        <div class="summary-signature">
-          <a href="#checked/3" translate="no">checked(is_checked, key, js \\ %JS{})</a>
+    </div>
 
-        </div>
-
-      </div>
-
-      <div class="summary-row">
-        <div class="summary-signature">
-          <a href="#code/1" translate="no">code(assigns)</a>
-
-        </div>
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#checked/3" translate="no">checked(is_checked, key, js \\ %JS{})</a>
 
       </div>
 
-      <div class="summary-row">
-        <div class="summary-signature">
-          <a href="#date/1" translate="no">date(assigns)</a>
+    </div>
 
-        </div>
-
-      </div>
-
-      <div class="summary-row">
-        <div class="summary-signature">
-          <a href="#date_range/1" translate="no">date_range(assigns)</a>
-
-        </div>
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#code/1" translate="no">code(assigns)</a>
 
       </div>
 
-      <div class="summary-row">
-        <div class="summary-signature">
-          <a href="#email/1" translate="no">email(assigns)</a>
+    </div>
 
-        </div>
-
-      </div>
-
-      <div class="summary-row">
-        <div class="summary-signature">
-          <a href="#password/1" translate="no">password(assigns)</a>
-
-        </div>
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#date/1" translate="no">date(assigns)</a>
 
       </div>
 
-      <div class="summary-row">
-        <div class="summary-signature">
-          <a href="#select/1" translate="no">select(assigns)</a>
+    </div>
 
-        </div>
-
-      </div>
-
-      <div class="summary-row">
-        <div class="summary-signature">
-          <a href="#text/1" translate="no">text(assigns)</a>
-
-        </div>
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#date_range/1" translate="no">date_range(assigns)</a>
 
       </div>
 
-  </div>
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#email/1" translate="no">email(assigns)</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#password/1" translate="no">password(assigns)</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#select/1" translate="no">select(assigns)</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#text/1" translate="no">text(assigns)</a>
+
+      </div>
+
+    </div>
+
+</div>
 
   </section>
 
@@ -219,7 +220,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">check(assigns)</h1>
 
-      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper_web/views/components/input_component.ex#L50" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper_web/views/components/input_component.ex#L66" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -243,7 +244,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">checked(is_checked, key, js \\ %JS{})</h1>
 
-      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper_web/views/components/input_component.ex#L77" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper_web/views/components/input_component.ex#L114" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -265,7 +266,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">code(assigns)</h1>
 
-      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper_web/views/components/input_component.ex#L125" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper_web/views/components/input_component.ex#L162" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -287,7 +288,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">date(assigns)</h1>
 
-      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper_web/views/components/input_component.ex#L147" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper_web/views/components/input_component.ex#L196" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -309,7 +310,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">date_range(assigns)</h1>
 
-      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper_web/views/components/input_component.ex#L176" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper_web/views/components/input_component.ex#L253" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -331,7 +332,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">email(assigns)</h1>
 
-      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper_web/views/components/input_component.ex#L212" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper_web/views/components/input_component.ex#L311" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -353,7 +354,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">password(assigns)</h1>
 
-      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper_web/views/components/input_component.ex#L236" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper_web/views/components/input_component.ex#L346" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -375,7 +376,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">select(assigns)</h1>
 
-      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper_web/views/components/input_component.ex#L28" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper_web/views/components/input_component.ex#L37" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -397,7 +398,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">text(assigns)</h1>
 
-      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper_web/views/components/input_component.ex#L4" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper_web/views/components/input_component.ex#L4" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -415,10 +416,23 @@ Functions
   </section>
 
       <footer class="footer">
-
         <p>
+
+          <span class="line">
+            <button class="a-main footer-button display-quick-switch" title="Search HexDocs packages">
+              Search HexDocs
+            </button>
+
+              <a href="Claper.epub" title="ePub version">
+                Download ePub version
+              </a>
+
+          </span>
+        </p>
+
+        <p class="built-using">
           Built using
-          <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.28.4) for the
+          <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.29.4) for the
 
             <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
 

@@ -4,21 +4,24 @@
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="generator" content="ExDoc v0.28.4">
-    <meta name="project" content="Claper v1.3.0">
+    <meta name="generator" content="ExDoc v0.29.4">
+    <meta name="project" content="Claper v1.4.0">
 
-    <title>ClaperWeb.UserNotifierView — Claper v1.3.0</title>
-    <link rel="stylesheet" href="dist/elixir-b6f1ed5df9b1d42a7309.css" />
+    <title>ClaperWeb.UserNotifierView — Claper v1.4.0</title>
+    <link rel="stylesheet" href="dist/html-elixir-HHVY3JYD.css" />
 
-    <script src="dist/sidebar_items-9c8468b1bc.js"></script>
+
+    <script src="dist/handlebars.runtime-NWIB6V2M.js"></script>
+    <script src="dist/handlebars.templates-XWGFFSCD.js"></script>
+    <script src="dist/sidebar_items-3229396A.js"></script>
 
       <script src="docs_config.js"></script>
 
-    <script async src="dist/app-bd1cb213813bf4825aa2.js"></script>
+    <script async src="dist/html-JDI3AVDD.js"></script>
 
 
   </head>
-  <body data-type="modules">
+  <body data-type="modules" class="page-module">
     <script>
 
       try {
@@ -35,12 +38,11 @@
 
 <div class="main">
 
+<button class="sidebar-button sidebar-toggle" aria-label="toggle sidebar">
+  <i class="ri-menu-line ri-lg" title="Collapse/expand sidebar"></i>
+</button>
 
 <section class="sidebar">
-  <button class="sidebar-button sidebar-toggle" aria-label="toggle sidebar">
-    <i class="ri-menu-line ri-lg" title="Collapse/expand sidebar"></i>
-  </button>
-
   <form class="sidebar-search" action="search.html">
     <button type="submit" class="search-button" aria-label="Submit Search">
       <i class="ri-search-2-line" aria-hidden="true" title="Submit search"></i>
@@ -50,7 +52,7 @@
     </button>
     <label class="search-label">
       <p class="sr-only">Search</p>
-      <input name="q" type="text" class="search-input" placeholder="Search..." aria-label="Input your search terms" autocomplete="off" />
+      <input name="q" type="text" class="search-input" placeholder="Search..." aria-label="Input your search terms" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
     </label>
   </form>
 
@@ -69,9 +71,9 @@
       <a href="https://get.claper.co" class="sidebar-projectName" translate="no">
 Claper
       </a>
-      <strong class="sidebar-projectVersion" translate="no">
-        v1.3.0
-      </strong>
+      <div class="sidebar-projectVersion" translate="no">
+        v1.4.0
+      </div>
     </div>
     <ul class="sidebar-listNav">
       <li><a id="extras-list-link" href="#full-list">GUIDES</a></li>
@@ -83,7 +85,7 @@ Claper
   </div>
 
   <div class="gradient"></div>
-  <ul id="full-list" class="sidebar-fullList"></ul>
+  <ul id="full-list"></ul>
 </section>
 
 <section class="content">
@@ -92,19 +94,19 @@ Claper
     <div id="content" class="content-inner">
 
 <h1>
-<button class="settings display-settings">
+<button class="icon-action display-settings">
   <i class="ri-settings-3-line"></i>
   <span class="sr-only">Settings</span>
 </button>
 
 
-    <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper_web/views/user_notifier_view.ex#L1" title="View Source" class="view-source" rel="help">
+    <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper_web/views/user_notifier_view.ex#L1" title="View Source" class="icon-action" rel="help">
       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
       <span class="sr-only">View Source</span>
     </a>
 
   <span translate="no">ClaperWeb.UserNotifierView</span> 
-  <small class="app-vsn" translate="no">(Claper v1.3.0)</small>
+  <small class="app-vsn" translate="no">(Claper v1.4.0)</small>
 
 </h1>
 
@@ -118,45 +120,68 @@ Claper
       </a>
       Summary
     </h1>
+<div class="summary-functions summary">
+  <h2>
+    <a href="#functions">Functions</a>
+  </h2>
 
-  <div class="summary-functions summary">
-    <h2>
-      <a href="#functions">Functions</a>
-    </h2>
-
-      <div class="summary-row">
-        <div class="summary-signature">
-          <a href="#__resource__/0" translate="no">__resource__()</a>
-
-        </div>
-
-          <div class="summary-synopsis"><p>The resource name, as an atom, for this view</p></div>
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#__resource__/0" translate="no">__resource__()</a>
 
       </div>
 
-      <div class="summary-row">
-        <div class="summary-signature">
-          <a href="#render/2" translate="no">render(template, assigns \\ %{})</a>
+        <div class="summary-synopsis"><p>The resource name, as an atom, for this view</p></div>
 
-        </div>
+    </div>
 
-          <div class="summary-synopsis"><p>Renders the given template locally.</p></div>
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#change.html/1" translate="no">change.html(arg)</a>
 
       </div>
 
-      <div class="summary-row">
-        <div class="summary-signature">
-          <a href="#template_not_found/2" translate="no">template_not_found(template, assigns)</a>
+    </div>
 
-        </div>
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#magic.html/1" translate="no">magic.html(arg)</a>
 
-          <div class="summary-synopsis"><p>Callback invoked when no template is found.
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#render/2" translate="no">render(template, assigns \\ %{})</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Renders the given template locally.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#template_not_found/2" translate="no">template_not_found(template, assigns)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Callback invoked when no template is found.
 By default it raises but can be customized
 to render a particular template.</p></div>
 
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#welcome.html/1" translate="no">welcome.html(arg)</a>
+
       </div>
 
-  </div>
+    </div>
+
+</div>
 
   </section>
 
@@ -179,7 +204,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">__resource__()</h1>
 
-      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper_web/views/user_notifier_view.ex#L2" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper_web/views/user_notifier_view.ex#L2" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -190,6 +215,50 @@ Functions
   <section class="docstring">
 
 <p>The resource name, as an atom, for this view</p>
+  </section>
+</section>
+<section class="detail" id="change.html/1">
+
+  <div class="detail-header">
+    <a href="#change.html/1" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">change.html(arg)</h1>
+
+      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper_web/views/user_notifier_view.ex#L1" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="magic.html/1">
+
+  <div class="detail-header">
+    <a href="#magic.html/1" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">magic.html(arg)</h1>
+
+      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper_web/views/user_notifier_view.ex#L1" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+
   </section>
 </section>
 <section class="detail" id="render/2">
@@ -203,7 +272,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">render(template, assigns \\ %{})</h1>
 
-      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper_web/views/user_notifier_view.ex#L2" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper_web/views/user_notifier_view.ex#L2" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -225,7 +294,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">template_not_found(template, assigns)</h1>
 
-      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper_web/views/user_notifier_view.ex#L2" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper_web/views/user_notifier_view.ex#L2" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -237,7 +306,7 @@ Functions
 
       <div class="specs">
 
-          <pre translate="no"><span class="attribute">@spec</span> template_not_found(<a href="https://hexdocs.pm/phoenix_view/1.1.2/Phoenix.Template.html#t:name/0">Phoenix.Template.name</a>(), <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">map</a>()) :: <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">no_return</a>()</pre>
+          <pre translate="no"><span class="attribute">@spec</span> template_not_found(<a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">binary</a>(), <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">map</a>()) :: <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">no_return</a>()</pre>
 
       </div>
 
@@ -246,15 +315,50 @@ By default it raises but can be customized
 to render a particular template.</p>
   </section>
 </section>
+<section class="detail" id="welcome.html/1">
+
+  <div class="detail-header">
+    <a href="#welcome.html/1" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">welcome.html(arg)</h1>
+
+      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper_web/views/user_notifier_view.ex#L1" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
 
     </div>
   </section>
 
       <footer class="footer">
-
         <p>
+
+          <span class="line">
+            <button class="a-main footer-button display-quick-switch" title="Search HexDocs packages">
+              Search HexDocs
+            </button>
+
+              <a href="Claper.epub" title="ePub version">
+                Download ePub version
+              </a>
+
+          </span>
+        </p>
+
+        <p class="built-using">
           Built using
-          <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.28.4) for the
+          <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.29.4) for the
 
             <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
 

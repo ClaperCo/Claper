@@ -4,21 +4,24 @@
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="generator" content="ExDoc v0.28.4">
-    <meta name="project" content="Claper v1.3.0">
+    <meta name="generator" content="ExDoc v0.29.4">
+    <meta name="project" content="Claper v1.4.0">
 
-    <title>Claper.Events — Claper v1.3.0</title>
-    <link rel="stylesheet" href="dist/elixir-b6f1ed5df9b1d42a7309.css" />
+    <title>Claper.Events — Claper v1.4.0</title>
+    <link rel="stylesheet" href="dist/html-elixir-HHVY3JYD.css" />
 
-    <script src="dist/sidebar_items-9c8468b1bc.js"></script>
+
+    <script src="dist/handlebars.runtime-NWIB6V2M.js"></script>
+    <script src="dist/handlebars.templates-XWGFFSCD.js"></script>
+    <script src="dist/sidebar_items-3229396A.js"></script>
 
       <script src="docs_config.js"></script>
 
-    <script async src="dist/app-bd1cb213813bf4825aa2.js"></script>
+    <script async src="dist/html-JDI3AVDD.js"></script>
 
 
   </head>
-  <body data-type="modules">
+  <body data-type="modules" class="page-module">
     <script>
 
       try {
@@ -35,12 +38,11 @@
 
 <div class="main">
 
+<button class="sidebar-button sidebar-toggle" aria-label="toggle sidebar">
+  <i class="ri-menu-line ri-lg" title="Collapse/expand sidebar"></i>
+</button>
 
 <section class="sidebar">
-  <button class="sidebar-button sidebar-toggle" aria-label="toggle sidebar">
-    <i class="ri-menu-line ri-lg" title="Collapse/expand sidebar"></i>
-  </button>
-
   <form class="sidebar-search" action="search.html">
     <button type="submit" class="search-button" aria-label="Submit Search">
       <i class="ri-search-2-line" aria-hidden="true" title="Submit search"></i>
@@ -50,7 +52,7 @@
     </button>
     <label class="search-label">
       <p class="sr-only">Search</p>
-      <input name="q" type="text" class="search-input" placeholder="Search..." aria-label="Input your search terms" autocomplete="off" />
+      <input name="q" type="text" class="search-input" placeholder="Search..." aria-label="Input your search terms" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
     </label>
   </form>
 
@@ -69,9 +71,9 @@
       <a href="https://get.claper.co" class="sidebar-projectName" translate="no">
 Claper
       </a>
-      <strong class="sidebar-projectVersion" translate="no">
-        v1.3.0
-      </strong>
+      <div class="sidebar-projectVersion" translate="no">
+        v1.4.0
+      </div>
     </div>
     <ul class="sidebar-listNav">
       <li><a id="extras-list-link" href="#full-list">GUIDES</a></li>
@@ -83,7 +85,7 @@ Claper
   </div>
 
   <div class="gradient"></div>
-  <ul id="full-list" class="sidebar-fullList"></ul>
+  <ul id="full-list"></ul>
 </section>
 
 <section class="content">
@@ -92,19 +94,19 @@ Claper
     <div id="content" class="content-inner">
 
 <h1>
-<button class="settings display-settings">
+<button class="icon-action display-settings">
   <i class="ri-settings-3-line"></i>
   <span class="sr-only">Settings</span>
 </button>
 
 
-    <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper/events.ex#L1" title="View Source" class="view-source" rel="help">
+    <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper/events.ex#L1" title="View Source" class="icon-action" rel="help">
       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
       <span class="sr-only">View Source</span>
     </a>
 
   <span translate="no">Claper.Events</span> 
-  <small class="app-vsn" translate="no">(Claper v1.3.0)</small>
+  <small class="app-vsn" translate="no">(Claper v1.4.0)</small>
 
 </h1>
 
@@ -122,179 +124,188 @@ Claper
       </a>
       Summary
     </h1>
+<div class="summary-functions summary">
+  <h2>
+    <a href="#functions">Functions</a>
+  </h2>
 
-  <div class="summary-functions summary">
-    <h2>
-      <a href="#functions">Functions</a>
-    </h2>
-
-      <div class="summary-row">
-        <div class="summary-signature">
-          <a href="#change_activity_leader/2" translate="no">change_activity_leader(activity_leader, attrs \\ %{})</a>
-
-        </div>
-
-          <div class="summary-synopsis"><p>Returns an <code class="inline">%Ecto.Changeset{}</code> for tracking facilitator changes.</p></div>
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#change_activity_leader/2" translate="no">change_activity_leader(activity_leader, attrs \\ %{})</a>
 
       </div>
 
-      <div class="summary-row">
-        <div class="summary-signature">
-          <a href="#change_event/2" translate="no">change_event(event, attrs \\ %{})</a>
+        <div class="summary-synopsis"><p>Returns an <code class="inline">%Ecto.Changeset{}</code> for tracking facilitator changes.</p></div>
 
-        </div>
+    </div>
 
-          <div class="summary-synopsis"><p>Returns an <code class="inline">%Ecto.Changeset{}</code> for tracking event changes.</p></div>
-
-      </div>
-
-      <div class="summary-row">
-        <div class="summary-signature">
-          <a href="#count_events_month/1" translate="no">count_events_month(user_id)</a>
-
-        </div>
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#change_event/2" translate="no">change_event(event, attrs \\ %{})</a>
 
       </div>
 
-      <div class="summary-row">
-        <div class="summary-signature">
-          <a href="#create_event/1" translate="no">create_event(attrs)</a>
+        <div class="summary-synopsis"><p>Returns an <code class="inline">%Ecto.Changeset{}</code> for tracking event changes.</p></div>
 
-        </div>
+    </div>
 
-          <div class="summary-synopsis"><p>Creates a event.</p></div>
-
-      </div>
-
-      <div class="summary-row">
-        <div class="summary-signature">
-          <a href="#delete_event/1" translate="no">delete_event(event)</a>
-
-        </div>
-
-          <div class="summary-synopsis"><p>Deletes a event.</p></div>
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#count_events_month/1" translate="no">count_events_month(user_id)</a>
 
       </div>
 
-      <div class="summary-row">
-        <div class="summary-signature">
-          <a href="#get_activity_leader!/1" translate="no">get_activity_leader!(id)</a>
+    </div>
 
-        </div>
-
-          <div class="summary-synopsis"><p>Gets a single facilitator.</p></div>
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#create_event/1" translate="no">create_event(attrs)</a>
 
       </div>
 
-      <div class="summary-row">
-        <div class="summary-signature">
-          <a href="#get_activity_leaders_for_event/1" translate="no">get_activity_leaders_for_event(event_id)</a>
+        <div class="summary-synopsis"><p>Creates a event.</p></div>
 
-        </div>
+    </div>
 
-          <div class="summary-synopsis"><p>Gets all facilitators for a given event.</p></div>
-
-      </div>
-
-      <div class="summary-row">
-        <div class="summary-signature">
-          <a href="#get_different_event_with_code/2" translate="no">get_different_event_with_code(code, event_id)</a>
-
-        </div>
-
-          <div class="summary-synopsis"><p>Get a single event with the same code excluding a specific event.</p></div>
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#delete_event/1" translate="no">delete_event(event)</a>
 
       </div>
 
-      <div class="summary-row">
-        <div class="summary-signature">
-          <a href="#get_event!/2" translate="no">get_event!(id, preload \\ [])</a>
+        <div class="summary-synopsis"><p>Deletes a event.</p></div>
 
-        </div>
+    </div>
 
-          <div class="summary-synopsis"><p>Gets a single event.</p></div>
-
-      </div>
-
-      <div class="summary-row">
-        <div class="summary-signature">
-          <a href="#get_event_with_code!/2" translate="no">get_event_with_code!(code, preload \\ [])</a>
-
-        </div>
-
-          <div class="summary-synopsis"><p>Gets a single event by code.</p></div>
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#get_activity_leader!/1" translate="no">get_activity_leader!(id)</a>
 
       </div>
 
-      <div class="summary-row">
-        <div class="summary-signature">
-          <a href="#get_event_with_code/2" translate="no">get_event_with_code(code, preload \\ [])</a>
+        <div class="summary-synopsis"><p>Gets a single facilitator.</p></div>
 
-        </div>
+    </div>
 
-      </div>
-
-      <div class="summary-row">
-        <div class="summary-signature">
-          <a href="#get_managed_event!/3" translate="no">get_managed_event!(current_user, id, preload \\ [])</a>
-
-        </div>
-
-          <div class="summary-synopsis"><p>Gets a single managed event.</p></div>
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#get_activity_leaders_for_event/1" translate="no">get_activity_leaders_for_event(event_id)</a>
 
       </div>
 
-      <div class="summary-row">
-        <div class="summary-signature">
-          <a href="#get_user_event!/3" translate="no">get_user_event!(user_id, id, preload \\ [])</a>
+        <div class="summary-synopsis"><p>Gets all facilitators for a given event.</p></div>
 
-        </div>
+    </div>
 
-          <div class="summary-synopsis"><p>Gets a single user's event.</p></div>
-
-      </div>
-
-      <div class="summary-row">
-        <div class="summary-signature">
-          <a href="#is_leaded_by/2" translate="no">is_leaded_by(email, event)</a>
-
-        </div>
-
-          <div class="summary-synopsis"><p>Check if a user is a facilitator of a specific event.</p></div>
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#get_different_event_with_code/2" translate="no">get_different_event_with_code(code, event_id)</a>
 
       </div>
 
-      <div class="summary-row">
-        <div class="summary-signature">
-          <a href="#list_events/2" translate="no">list_events(user_id, preload \\ [])</a>
+        <div class="summary-synopsis"><p>Get a single event with the same code excluding a specific event.</p></div>
 
-        </div>
+    </div>
 
-          <div class="summary-synopsis"><p>Returns the list of events of a given user.</p></div>
-
-      </div>
-
-      <div class="summary-row">
-        <div class="summary-signature">
-          <a href="#list_managed_events_by/2" translate="no">list_managed_events_by(email, preload \\ [])</a>
-
-        </div>
-
-          <div class="summary-synopsis"><p>Returns the list of events managed by a given user email.</p></div>
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#get_event!/2" translate="no">get_event!(id, preload \\ [])</a>
 
       </div>
 
-      <div class="summary-row">
-        <div class="summary-signature">
-          <a href="#update_event/2" translate="no">update_event(event, attrs)</a>
+        <div class="summary-synopsis"><p>Gets a single event.</p></div>
 
-        </div>
+    </div>
 
-          <div class="summary-synopsis"><p>Updates a event.</p></div>
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#get_event_with_code/2" translate="no">get_event_with_code(code, preload \\ [])</a>
 
       </div>
 
-  </div>
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#get_event_with_code!/2" translate="no">get_event_with_code!(code, preload \\ [])</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Gets a single event by code.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#get_managed_event!/3" translate="no">get_managed_event!(current_user, id, preload \\ [])</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Gets a single managed event.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#get_user_event!/3" translate="no">get_user_event!(user_id, id, preload \\ [])</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Gets a single user's event.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#import/3" translate="no">import(user_id, from_event_uuid, to_event_uuid)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Import interactions from another event</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#is_leaded_by/2" translate="no">is_leaded_by(email, event)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Check if a user is a facilitator of a specific event.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#list_events/2" translate="no">list_events(user_id, preload \\ [])</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Returns the list of events of a given user.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#list_managed_events_by/2" translate="no">list_managed_events_by(email, preload \\ [])</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Returns the list of events managed by a given user email.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#update_event/2" translate="no">update_event(event, attrs)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Updates a event.</p></div>
+
+    </div>
+
+</div>
 
   </section>
 
@@ -319,7 +330,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">change_activity_leader(activity_leader, attrs \\ %{})</h1>
 
-      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper/events.ex#L336" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper/events.ex#L404" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -335,8 +346,8 @@ Functions
   </a>
   Examples
 </h2>
-<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">change_activity_leader</span><span class="p" data-group-id="7007852776-1">(</span><span class="n">activity_leader</span><span class="p" data-group-id="7007852776-1">)</span><span class="w">
-</span><span class="p" data-group-id="7007852776-2">%</span><span class="nc" data-group-id="7007852776-2">Ecto.Changeset</span><span class="p" data-group-id="7007852776-2">{</span><span class="ss">data</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="7007852776-3">%</span><span class="nc" data-group-id="7007852776-3">ActivityLeader</span><span class="p" data-group-id="7007852776-3">{</span><span class="p" data-group-id="7007852776-3">}</span><span class="p" data-group-id="7007852776-2">}</span></code></pre>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">change_activity_leader</span><span class="p" data-group-id="5581068708-1">(</span><span class="n">activity_leader</span><span class="p" data-group-id="5581068708-1">)</span><span class="w">
+</span><span class="p" data-group-id="5581068708-2">%</span><span class="nc" data-group-id="5581068708-2">Ecto.Changeset</span><span class="p" data-group-id="5581068708-2">{</span><span class="ss">data</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="5581068708-3">%</span><span class="nc" data-group-id="5581068708-3">ActivityLeader</span><span class="p" data-group-id="5581068708-3">{</span><span class="p" data-group-id="5581068708-3">}</span><span class="p" data-group-id="5581068708-2">}</span></code></pre>
   </section>
 </section>
 <section class="detail" id="change_event/2">
@@ -350,7 +361,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">change_event(event, attrs \\ %{})</h1>
 
-      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper/events.ex#L286" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper/events.ex#L354" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -366,8 +377,8 @@ Functions
   </a>
   Examples
 </h2>
-<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">change_event</span><span class="p" data-group-id="0572540091-1">(</span><span class="n">event</span><span class="p" data-group-id="0572540091-1">)</span><span class="w">
-</span><span class="p" data-group-id="0572540091-2">%</span><span class="nc" data-group-id="0572540091-2">Ecto.Changeset</span><span class="p" data-group-id="0572540091-2">{</span><span class="ss">data</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="0572540091-3">%</span><span class="nc" data-group-id="0572540091-3">Event</span><span class="p" data-group-id="0572540091-3">{</span><span class="p" data-group-id="0572540091-3">}</span><span class="p" data-group-id="0572540091-2">}</span></code></pre>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">change_event</span><span class="p" data-group-id="0939911040-1">(</span><span class="n">event</span><span class="p" data-group-id="0939911040-1">)</span><span class="w">
+</span><span class="p" data-group-id="0939911040-2">%</span><span class="nc" data-group-id="0939911040-2">Ecto.Changeset</span><span class="p" data-group-id="0939911040-2">{</span><span class="ss">data</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="0939911040-3">%</span><span class="nc" data-group-id="0939911040-3">Event</span><span class="p" data-group-id="0939911040-3">{</span><span class="p" data-group-id="0939911040-3">}</span><span class="p" data-group-id="0939911040-2">}</span></code></pre>
   </section>
 </section>
 <section class="detail" id="count_events_month/1">
@@ -379,7 +390,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">count_events_month(user_id)</h1>
 
-      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper/events.ex#L51" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper/events.ex#L51" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -401,7 +412,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">create_event(attrs)</h1>
 
-      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper/events.ex#L209" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper/events.ex#L209" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -417,11 +428,11 @@ Functions
   </a>
   Examples
 </h2>
-<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">create_event</span><span class="p" data-group-id="3326872354-1">(</span><span class="p" data-group-id="3326872354-2">%{</span><span class="ss">field</span><span class="p">:</span><span class="w"> </span><span class="n">value</span><span class="p" data-group-id="3326872354-2">}</span><span class="p" data-group-id="3326872354-1">)</span><span class="w">
-</span><span class="p" data-group-id="3326872354-3">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="3326872354-4">%</span><span class="nc" data-group-id="3326872354-4">Event</span><span class="p" data-group-id="3326872354-4">{</span><span class="p" data-group-id="3326872354-4">}</span><span class="p" data-group-id="3326872354-3">}</span><span class="w">
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">create_event</span><span class="p" data-group-id="6595005847-1">(</span><span class="p" data-group-id="6595005847-2">%{</span><span class="ss">field</span><span class="p">:</span><span class="w"> </span><span class="n">value</span><span class="p" data-group-id="6595005847-2">}</span><span class="p" data-group-id="6595005847-1">)</span><span class="w">
+</span><span class="p" data-group-id="6595005847-3">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="6595005847-4">%</span><span class="nc" data-group-id="6595005847-4">Event</span><span class="p" data-group-id="6595005847-4">{</span><span class="p" data-group-id="6595005847-4">}</span><span class="p" data-group-id="6595005847-3">}</span><span class="w">
 
-</span><span class="gp unselectable">iex&gt; </span><span class="n">create_event</span><span class="p" data-group-id="3326872354-5">(</span><span class="p" data-group-id="3326872354-6">%{</span><span class="ss">field</span><span class="p">:</span><span class="w"> </span><span class="n">bad_value</span><span class="p" data-group-id="3326872354-6">}</span><span class="p" data-group-id="3326872354-5">)</span><span class="w">
-</span><span class="p" data-group-id="3326872354-7">{</span><span class="ss">:error</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="3326872354-8">%</span><span class="nc" data-group-id="3326872354-8">Ecto.Changeset</span><span class="p" data-group-id="3326872354-8">{</span><span class="p" data-group-id="3326872354-8">}</span><span class="p" data-group-id="3326872354-7">}</span></code></pre>
+</span><span class="gp unselectable">iex&gt; </span><span class="n">create_event</span><span class="p" data-group-id="6595005847-5">(</span><span class="p" data-group-id="6595005847-6">%{</span><span class="ss">field</span><span class="p">:</span><span class="w"> </span><span class="n">bad_value</span><span class="p" data-group-id="6595005847-6">}</span><span class="p" data-group-id="6595005847-5">)</span><span class="w">
+</span><span class="p" data-group-id="6595005847-7">{</span><span class="ss">:error</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="6595005847-8">%</span><span class="nc" data-group-id="6595005847-8">Ecto.Changeset</span><span class="p" data-group-id="6595005847-8">{</span><span class="p" data-group-id="6595005847-8">}</span><span class="p" data-group-id="6595005847-7">}</span></code></pre>
   </section>
 </section>
 <section class="detail" id="delete_event/1">
@@ -433,7 +444,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">delete_event(event)</h1>
 
-      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper/events.ex#L273" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper/events.ex#L341" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -449,11 +460,11 @@ Functions
   </a>
   Examples
 </h2>
-<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">delete_event</span><span class="p" data-group-id="5522355604-1">(</span><span class="n">event</span><span class="p" data-group-id="5522355604-1">)</span><span class="w">
-</span><span class="p" data-group-id="5522355604-2">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="5522355604-3">%</span><span class="nc" data-group-id="5522355604-3">Event</span><span class="p" data-group-id="5522355604-3">{</span><span class="p" data-group-id="5522355604-3">}</span><span class="p" data-group-id="5522355604-2">}</span><span class="w">
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">delete_event</span><span class="p" data-group-id="1706915660-1">(</span><span class="n">event</span><span class="p" data-group-id="1706915660-1">)</span><span class="w">
+</span><span class="p" data-group-id="1706915660-2">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="1706915660-3">%</span><span class="nc" data-group-id="1706915660-3">Event</span><span class="p" data-group-id="1706915660-3">{</span><span class="p" data-group-id="1706915660-3">}</span><span class="p" data-group-id="1706915660-2">}</span><span class="w">
 
-</span><span class="gp unselectable">iex&gt; </span><span class="n">delete_event</span><span class="p" data-group-id="5522355604-4">(</span><span class="n">event</span><span class="p" data-group-id="5522355604-4">)</span><span class="w">
-</span><span class="p" data-group-id="5522355604-5">{</span><span class="ss">:error</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="5522355604-6">%</span><span class="nc" data-group-id="5522355604-6">Ecto.Changeset</span><span class="p" data-group-id="5522355604-6">{</span><span class="p" data-group-id="5522355604-6">}</span><span class="p" data-group-id="5522355604-5">}</span></code></pre>
+</span><span class="gp unselectable">iex&gt; </span><span class="n">delete_event</span><span class="p" data-group-id="1706915660-4">(</span><span class="n">event</span><span class="p" data-group-id="1706915660-4">)</span><span class="w">
+</span><span class="p" data-group-id="1706915660-5">{</span><span class="ss">:error</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="1706915660-6">%</span><span class="nc" data-group-id="1706915660-6">Ecto.Changeset</span><span class="p" data-group-id="1706915660-6">{</span><span class="p" data-group-id="1706915660-6">}</span><span class="p" data-group-id="1706915660-5">}</span></code></pre>
   </section>
 </section>
 <section class="detail" id="get_activity_leader!/1">
@@ -465,7 +476,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">get_activity_leader!(id)</h1>
 
-      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper/events.ex#L306" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper/events.ex#L374" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -475,16 +486,16 @@ Functions
 
   <section class="docstring">
 
-<p>Gets a single facilitator.</p><p>Raises <a href="https://hexdocs.pm/ecto/3.7.2/Ecto.NoResultsError.html"><code class="inline">Ecto.NoResultsError</code></a> if the Activity leader does not exist.</p><h2 id="get_activity_leader!/1-examples" class="section-heading">
+<p>Gets a single facilitator.</p><p>Raises <a href="https://hexdocs.pm/ecto/3.10.1/Ecto.NoResultsError.html"><code class="inline">Ecto.NoResultsError</code></a> if the Activity leader does not exist.</p><h2 id="get_activity_leader!/1-examples" class="section-heading">
   <a href="#get_activity_leader!/1-examples" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i>
   <p class="sr-only">examples</p>
   </a>
   Examples
 </h2>
-<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">get_activity_leader!</span><span class="p" data-group-id="6482438153-1">(</span><span class="mi">123</span><span class="p" data-group-id="6482438153-1">)</span><span class="w">
-</span><span class="p" data-group-id="6482438153-2">%</span><span class="nc" data-group-id="6482438153-2">ActivityLeader</span><span class="p" data-group-id="6482438153-2">{</span><span class="p" data-group-id="6482438153-2">}</span><span class="w">
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">get_activity_leader!</span><span class="p" data-group-id="8415865097-1">(</span><span class="mi">123</span><span class="p" data-group-id="8415865097-1">)</span><span class="w">
+</span><span class="p" data-group-id="8415865097-2">%</span><span class="nc" data-group-id="8415865097-2">ActivityLeader</span><span class="p" data-group-id="8415865097-2">{</span><span class="p" data-group-id="8415865097-2">}</span><span class="w">
 
-</span><span class="gp unselectable">iex&gt; </span><span class="n">get_activity_leader!</span><span class="p" data-group-id="6482438153-3">(</span><span class="mi">456</span><span class="p" data-group-id="6482438153-3">)</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="n">get_activity_leader!</span><span class="p" data-group-id="8415865097-3">(</span><span class="mi">456</span><span class="p" data-group-id="8415865097-3">)</span><span class="w">
 </span><span class="gt">** (Ecto.NoResultsError)</span></code></pre>
   </section>
 </section>
@@ -497,7 +508,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">get_activity_leaders_for_event(event_id)</h1>
 
-      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper/events.ex#L317" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper/events.ex#L385" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -513,8 +524,8 @@ Functions
   </a>
   Examples
 </h2>
-<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">get_activity_leaders_for_event!</span><span class="p" data-group-id="6160467297-1">(</span><span class="n">event</span><span class="p" data-group-id="6160467297-1">)</span><span class="w">
-</span><span class="p" data-group-id="6160467297-2">[</span><span class="p" data-group-id="6160467297-3">%</span><span class="nc" data-group-id="6160467297-3">ActivityLeader</span><span class="p" data-group-id="6160467297-3">{</span><span class="p" data-group-id="6160467297-3">}</span><span class="p">,</span><span class="w"> </span><span class="n">...</span><span class="p" data-group-id="6160467297-2">]</span></code></pre>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">get_activity_leaders_for_event!</span><span class="p" data-group-id="0173083732-1">(</span><span class="n">event</span><span class="p" data-group-id="0173083732-1">)</span><span class="w">
+</span><span class="p" data-group-id="0173083732-2">[</span><span class="p" data-group-id="0173083732-3">%</span><span class="nc" data-group-id="0173083732-3">ActivityLeader</span><span class="p" data-group-id="0173083732-3">{</span><span class="p" data-group-id="0173083732-3">}</span><span class="p">,</span><span class="w"> </span><span class="n">...</span><span class="p" data-group-id="0173083732-2">]</span></code></pre>
   </section>
 </section>
 <section class="detail" id="get_different_event_with_code/2">
@@ -526,7 +537,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">get_different_event_with_code(code, event_id)</h1>
 
-      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper/events.ex#L166" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper/events.ex#L166" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -542,8 +553,8 @@ Functions
   </a>
   Examples
 </h2>
-<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">get_different_event_with_code</span><span class="p" data-group-id="9183016921-1">(</span><span class="s">&quot;Hello&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">123</span><span class="p" data-group-id="9183016921-1">)</span><span class="w">
-</span><span class="p" data-group-id="9183016921-2">%</span><span class="nc" data-group-id="9183016921-2">Event</span><span class="p" data-group-id="9183016921-2">{</span><span class="p" data-group-id="9183016921-2">}</span></code></pre>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">get_different_event_with_code</span><span class="p" data-group-id="7346551690-1">(</span><span class="s">&quot;Hello&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">123</span><span class="p" data-group-id="7346551690-1">)</span><span class="w">
+</span><span class="p" data-group-id="7346551690-2">%</span><span class="nc" data-group-id="7346551690-2">Event</span><span class="p" data-group-id="7346551690-2">{</span><span class="p" data-group-id="7346551690-2">}</span></code></pre>
   </section>
 </section>
 <section class="detail" id="get_event!/2">
@@ -557,7 +568,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">get_event!(id, preload \\ [])</h1>
 
-      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper/events.ex#L79" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper/events.ex#L79" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -567,50 +578,16 @@ Functions
 
   <section class="docstring">
 
-<p>Gets a single event.</p><p>Raises <a href="https://hexdocs.pm/ecto/3.7.2/Ecto.NoResultsError.html"><code class="inline">Ecto.NoResultsError</code></a> if the Event does not exist.</p><h2 id="get_event!/2-examples" class="section-heading">
+<p>Gets a single event.</p><p>Raises <a href="https://hexdocs.pm/ecto/3.10.1/Ecto.NoResultsError.html"><code class="inline">Ecto.NoResultsError</code></a> if the Event does not exist.</p><h2 id="get_event!/2-examples" class="section-heading">
   <a href="#get_event!/2-examples" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i>
   <p class="sr-only">examples</p>
   </a>
   Examples
 </h2>
-<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">get_event!</span><span class="p" data-group-id="9961612598-1">(</span><span class="s">&quot;123e4567-e89b-12d3-a456-426614174000&quot;</span><span class="p" data-group-id="9961612598-1">)</span><span class="w">
-</span><span class="p" data-group-id="9961612598-2">%</span><span class="nc" data-group-id="9961612598-2">Event</span><span class="p" data-group-id="9961612598-2">{</span><span class="p" data-group-id="9961612598-2">}</span><span class="w">
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">get_event!</span><span class="p" data-group-id="6579759694-1">(</span><span class="s">&quot;123e4567-e89b-12d3-a456-426614174000&quot;</span><span class="p" data-group-id="6579759694-1">)</span><span class="w">
+</span><span class="p" data-group-id="6579759694-2">%</span><span class="nc" data-group-id="6579759694-2">Event</span><span class="p" data-group-id="6579759694-2">{</span><span class="p" data-group-id="6579759694-2">}</span><span class="w">
 
-</span><span class="gp unselectable">iex&gt; </span><span class="n">get_event!</span><span class="p" data-group-id="9961612598-3">(</span><span class="s">&quot;123e4567-e89b-12d3-a456-4266141740111&quot;</span><span class="p" data-group-id="9961612598-3">)</span><span class="w">
-</span><span class="gt">** (Ecto.NoResultsError)</span></code></pre>
-  </section>
-</section>
-<section class="detail" id="get_event_with_code!/2">
-
-    <span id="get_event_with_code!/1"></span>
-
-  <div class="detail-header">
-    <a href="#get_event_with_code!/2" class="detail-link" title="Link to this function">
-      <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
-    </a>
-    <h1 class="signature" translate="no">get_event_with_code!(code, preload \\ [])</h1>
-
-      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper/events.ex#L140" class="view-source" rel="help" title="View Source">
-       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
-     </a>
-
-
-  </div>
-
-  <section class="docstring">
-
-<p>Gets a single event by code.</p><p>Raises <a href="https://hexdocs.pm/ecto/3.7.2/Ecto.NoResultsError.html"><code class="inline">Ecto.NoResultsError</code></a> if the Event does not exist.</p><h2 id="get_event_with_code!/2-examples" class="section-heading">
-  <a href="#get_event_with_code!/2-examples" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i>
-  <p class="sr-only">examples</p>
-  </a>
-  Examples
-</h2>
-<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">get_event_with_code!</span><span class="p" data-group-id="7449342479-1">(</span><span class="s">&quot;Hello&quot;</span><span class="p" data-group-id="7449342479-1">)</span><span class="w">
-</span><span class="p" data-group-id="7449342479-2">%</span><span class="nc" data-group-id="7449342479-2">Event</span><span class="p" data-group-id="7449342479-2">{</span><span class="p" data-group-id="7449342479-2">}</span><span class="w">
-
-</span><span class="gp unselectable">iex&gt; </span><span class="n">get_event_with_code!</span><span class="p" data-group-id="7449342479-3">(</span><span class="s">&quot;Old event&quot;</span><span class="p" data-group-id="7449342479-3">)</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="n">get_event!</span><span class="p" data-group-id="6579759694-3">(</span><span class="s">&quot;123e4567-e89b-12d3-a456-4266141740111&quot;</span><span class="p" data-group-id="6579759694-3">)</span><span class="w">
 </span><span class="gt">** (Ecto.NoResultsError)</span></code></pre>
   </section>
 </section>
@@ -625,7 +602,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">get_event_with_code(code, preload \\ [])</h1>
 
-      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper/events.ex#L148" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper/events.ex#L148" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -636,6 +613,40 @@ Functions
   <section class="docstring">
 
 
+  </section>
+</section>
+<section class="detail" id="get_event_with_code!/2">
+
+    <span id="get_event_with_code!/1"></span>
+
+  <div class="detail-header">
+    <a href="#get_event_with_code!/2" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">get_event_with_code!(code, preload \\ [])</h1>
+
+      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper/events.ex#L140" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+<p>Gets a single event by code.</p><p>Raises <a href="https://hexdocs.pm/ecto/3.10.1/Ecto.NoResultsError.html"><code class="inline">Ecto.NoResultsError</code></a> if the Event does not exist.</p><h2 id="get_event_with_code!/2-examples" class="section-heading">
+  <a href="#get_event_with_code!/2-examples" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i>
+  <p class="sr-only">examples</p>
+  </a>
+  Examples
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">get_event_with_code!</span><span class="p" data-group-id="5249175985-1">(</span><span class="s">&quot;Hello&quot;</span><span class="p" data-group-id="5249175985-1">)</span><span class="w">
+</span><span class="p" data-group-id="5249175985-2">%</span><span class="nc" data-group-id="5249175985-2">Event</span><span class="p" data-group-id="5249175985-2">{</span><span class="p" data-group-id="5249175985-2">}</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="n">get_event_with_code!</span><span class="p" data-group-id="5249175985-3">(</span><span class="s">&quot;Old event&quot;</span><span class="p" data-group-id="5249175985-3">)</span><span class="w">
+</span><span class="gt">** (Ecto.NoResultsError)</span></code></pre>
   </section>
 </section>
 <section class="detail" id="get_managed_event!/3">
@@ -649,7 +660,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">get_managed_event!(current_user, id, preload \\ [])</h1>
 
-      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper/events.ex#L96" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper/events.ex#L96" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -659,16 +670,16 @@ Functions
 
   <section class="docstring">
 
-<p>Gets a single managed event.</p><p>Raises <a href="https://hexdocs.pm/ecto/3.7.2/Ecto.NoResultsError.html"><code class="inline">Ecto.NoResultsError</code></a> if the Event does not exist.</p><h2 id="get_managed_event!/3-examples" class="section-heading">
+<p>Gets a single managed event.</p><p>Raises <a href="https://hexdocs.pm/ecto/3.10.1/Ecto.NoResultsError.html"><code class="inline">Ecto.NoResultsError</code></a> if the Event does not exist.</p><h2 id="get_managed_event!/3-examples" class="section-heading">
   <a href="#get_managed_event!/3-examples" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i>
   <p class="sr-only">examples</p>
   </a>
   Examples
 </h2>
-<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">get_managed_event!</span><span class="p" data-group-id="9472954475-1">(</span><span class="n">user</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;123e4567-e89b-12d3-a456-426614174000&quot;</span><span class="p" data-group-id="9472954475-1">)</span><span class="w">
-</span><span class="p" data-group-id="9472954475-2">%</span><span class="nc" data-group-id="9472954475-2">Event</span><span class="p" data-group-id="9472954475-2">{</span><span class="p" data-group-id="9472954475-2">}</span><span class="w">
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">get_managed_event!</span><span class="p" data-group-id="0238624119-1">(</span><span class="n">user</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;123e4567-e89b-12d3-a456-426614174000&quot;</span><span class="p" data-group-id="0238624119-1">)</span><span class="w">
+</span><span class="p" data-group-id="0238624119-2">%</span><span class="nc" data-group-id="0238624119-2">Event</span><span class="p" data-group-id="0238624119-2">{</span><span class="p" data-group-id="0238624119-2">}</span><span class="w">
 
-</span><span class="gp unselectable">iex&gt; </span><span class="n">get_managed_event!</span><span class="p" data-group-id="9472954475-3">(</span><span class="n">another_user</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;123e4567-e89b-12d3-a456-426614174000&quot;</span><span class="p" data-group-id="9472954475-3">)</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="n">get_managed_event!</span><span class="p" data-group-id="0238624119-3">(</span><span class="n">another_user</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;123e4567-e89b-12d3-a456-426614174000&quot;</span><span class="p" data-group-id="0238624119-3">)</span><span class="w">
 </span><span class="gt">** (Ecto.NoResultsError)</span></code></pre>
   </section>
 </section>
@@ -683,7 +694,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">get_user_event!(user_id, id, preload \\ [])</h1>
 
-      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper/events.ex#L123" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper/events.ex#L123" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -693,17 +704,49 @@ Functions
 
   <section class="docstring">
 
-<p>Gets a single user's event.</p><p>Raises <a href="https://hexdocs.pm/ecto/3.7.2/Ecto.NoResultsError.html"><code class="inline">Ecto.NoResultsError</code></a> if the Event does not exist.</p><h2 id="get_user_event!/3-examples" class="section-heading">
+<p>Gets a single user's event.</p><p>Raises <a href="https://hexdocs.pm/ecto/3.10.1/Ecto.NoResultsError.html"><code class="inline">Ecto.NoResultsError</code></a> if the Event does not exist.</p><h2 id="get_user_event!/3-examples" class="section-heading">
   <a href="#get_user_event!/3-examples" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i>
   <p class="sr-only">examples</p>
   </a>
   Examples
 </h2>
-<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">get_user_event!</span><span class="p" data-group-id="3281850650-1">(</span><span class="n">user</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;123e4567-e89b-12d3-a456-426614174000&quot;</span><span class="p" data-group-id="3281850650-1">)</span><span class="w">
-</span><span class="p" data-group-id="3281850650-2">%</span><span class="nc" data-group-id="3281850650-2">Event</span><span class="p" data-group-id="3281850650-2">{</span><span class="p" data-group-id="3281850650-2">}</span><span class="w">
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">get_user_event!</span><span class="p" data-group-id="2717151982-1">(</span><span class="n">user</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;123e4567-e89b-12d3-a456-426614174000&quot;</span><span class="p" data-group-id="2717151982-1">)</span><span class="w">
+</span><span class="p" data-group-id="2717151982-2">%</span><span class="nc" data-group-id="2717151982-2">Event</span><span class="p" data-group-id="2717151982-2">{</span><span class="p" data-group-id="2717151982-2">}</span><span class="w">
 
-</span><span class="gp unselectable">iex&gt; </span><span class="n">get_user_event!</span><span class="p" data-group-id="3281850650-3">(</span><span class="n">another_user</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;123e4567-e89b-12d3-a456-426614174000&quot;</span><span class="p" data-group-id="3281850650-3">)</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="n">get_user_event!</span><span class="p" data-group-id="2717151982-3">(</span><span class="n">another_user</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;123e4567-e89b-12d3-a456-426614174000&quot;</span><span class="p" data-group-id="2717151982-3">)</span><span class="w">
 </span><span class="gt">** (Ecto.NoResultsError)</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="import/3">
+
+  <div class="detail-header">
+    <a href="#import/3" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">import(user_id, from_event_uuid, to_event_uuid)</h1>
+
+      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper/events.ex#L273" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+<p>Import interactions from another event</p><h2 id="import/3-examples" class="section-heading">
+  <a href="#import/3-examples" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i>
+  <p class="sr-only">examples</p>
+  </a>
+  Examples
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="kn">import</span><span class="p" data-group-id="0447957874-1">(</span><span class="n">user_id</span><span class="p">,</span><span class="w"> </span><span class="n">from_event_uuid</span><span class="p">,</span><span class="w"> </span><span class="n">to_event_uuid</span><span class="p" data-group-id="0447957874-1">)</span><span class="w">
+</span><span class="p" data-group-id="0447957874-2">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="0447957874-3">%</span><span class="nc" data-group-id="0447957874-3">Event</span><span class="p" data-group-id="0447957874-3">{</span><span class="p" data-group-id="0447957874-3">}</span><span class="p" data-group-id="0447957874-2">}</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="kn">import</span><span class="p" data-group-id="0447957874-4">(</span><span class="n">user_id</span><span class="p">,</span><span class="w"> </span><span class="n">from_event_uuid</span><span class="p">,</span><span class="w"> </span><span class="n">to_event_uuid</span><span class="p" data-group-id="0447957874-4">)</span><span class="w">
+</span><span class="p" data-group-id="0447957874-5">{</span><span class="ss">:error</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="0447957874-6">%</span><span class="nc" data-group-id="0447957874-6">Ecto.Changeset</span><span class="p" data-group-id="0447957874-6">{</span><span class="p" data-group-id="0447957874-6">}</span><span class="p" data-group-id="0447957874-5">}</span></code></pre>
   </section>
 </section>
 <section class="detail" id="is_leaded_by/2">
@@ -715,7 +758,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">is_leaded_by(email, event)</h1>
 
-      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper/events.ex#L185" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper/events.ex#L185" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -731,7 +774,7 @@ Functions
   </a>
   Examples
 </h2>
-<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">is_leaded_by</span><span class="p" data-group-id="4665189545-1">(</span><span class="s">&quot;email@example.com&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">123</span><span class="p" data-group-id="4665189545-1">)</span><span class="w">
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">is_leaded_by</span><span class="p" data-group-id="9309051324-1">(</span><span class="s">&quot;email@example.com&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">123</span><span class="p" data-group-id="9309051324-1">)</span><span class="w">
 </span><span class="no">true</span></code></pre>
   </section>
 </section>
@@ -746,7 +789,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">list_events(user_id, preload \\ [])</h1>
 
-      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper/events.ex#L22" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper/events.ex#L22" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -762,8 +805,8 @@ Functions
   </a>
   Examples
 </h2>
-<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">list_events</span><span class="p" data-group-id="1485743642-1">(</span><span class="mi">123</span><span class="p" data-group-id="1485743642-1">)</span><span class="w">
-</span><span class="p" data-group-id="1485743642-2">[</span><span class="p" data-group-id="1485743642-3">%</span><span class="nc" data-group-id="1485743642-3">Event</span><span class="p" data-group-id="1485743642-3">{</span><span class="p" data-group-id="1485743642-3">}</span><span class="p">,</span><span class="w"> </span><span class="n">...</span><span class="p" data-group-id="1485743642-2">]</span></code></pre>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">list_events</span><span class="p" data-group-id="2678933744-1">(</span><span class="mi">123</span><span class="p" data-group-id="2678933744-1">)</span><span class="w">
+</span><span class="p" data-group-id="2678933744-2">[</span><span class="p" data-group-id="2678933744-3">%</span><span class="nc" data-group-id="2678933744-3">Event</span><span class="p" data-group-id="2678933744-3">{</span><span class="p" data-group-id="2678933744-3">}</span><span class="p">,</span><span class="w"> </span><span class="n">...</span><span class="p" data-group-id="2678933744-2">]</span></code></pre>
   </section>
 </section>
 <section class="detail" id="list_managed_events_by/2">
@@ -777,7 +820,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">list_managed_events_by(email, preload \\ [])</h1>
 
-      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper/events.ex#L37" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper/events.ex#L37" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -793,8 +836,8 @@ Functions
   </a>
   Examples
 </h2>
-<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">list_managed_events_by</span><span class="p" data-group-id="3165721446-1">(</span><span class="s">&quot;email@example.com&quot;</span><span class="p" data-group-id="3165721446-1">)</span><span class="w">
-</span><span class="p" data-group-id="3165721446-2">[</span><span class="p" data-group-id="3165721446-3">%</span><span class="nc" data-group-id="3165721446-3">Event</span><span class="p" data-group-id="3165721446-3">{</span><span class="p" data-group-id="3165721446-3">}</span><span class="p">,</span><span class="w"> </span><span class="n">...</span><span class="p" data-group-id="3165721446-2">]</span></code></pre>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">list_managed_events_by</span><span class="p" data-group-id="7807794359-1">(</span><span class="s">&quot;email@example.com&quot;</span><span class="p" data-group-id="7807794359-1">)</span><span class="w">
+</span><span class="p" data-group-id="7807794359-2">[</span><span class="p" data-group-id="7807794359-3">%</span><span class="nc" data-group-id="7807794359-3">Event</span><span class="p" data-group-id="7807794359-3">{</span><span class="p" data-group-id="7807794359-3">}</span><span class="p">,</span><span class="w"> </span><span class="n">...</span><span class="p" data-group-id="7807794359-2">]</span></code></pre>
   </section>
 </section>
 <section class="detail" id="update_event/2">
@@ -806,7 +849,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">update_event(event, attrs)</h1>
 
-      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper/events.ex#L248" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper/events.ex#L248" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -822,11 +865,11 @@ Functions
   </a>
   Examples
 </h2>
-<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">update_event</span><span class="p" data-group-id="1592869617-1">(</span><span class="n">event</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="1592869617-2">%{</span><span class="ss">field</span><span class="p">:</span><span class="w"> </span><span class="n">new_value</span><span class="p" data-group-id="1592869617-2">}</span><span class="p" data-group-id="1592869617-1">)</span><span class="w">
-</span><span class="p" data-group-id="1592869617-3">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="1592869617-4">%</span><span class="nc" data-group-id="1592869617-4">Event</span><span class="p" data-group-id="1592869617-4">{</span><span class="p" data-group-id="1592869617-4">}</span><span class="p" data-group-id="1592869617-3">}</span><span class="w">
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">update_event</span><span class="p" data-group-id="6484099888-1">(</span><span class="n">event</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="6484099888-2">%{</span><span class="ss">field</span><span class="p">:</span><span class="w"> </span><span class="n">new_value</span><span class="p" data-group-id="6484099888-2">}</span><span class="p" data-group-id="6484099888-1">)</span><span class="w">
+</span><span class="p" data-group-id="6484099888-3">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="6484099888-4">%</span><span class="nc" data-group-id="6484099888-4">Event</span><span class="p" data-group-id="6484099888-4">{</span><span class="p" data-group-id="6484099888-4">}</span><span class="p" data-group-id="6484099888-3">}</span><span class="w">
 
-</span><span class="gp unselectable">iex&gt; </span><span class="n">update_event</span><span class="p" data-group-id="1592869617-5">(</span><span class="n">event</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="1592869617-6">%{</span><span class="ss">field</span><span class="p">:</span><span class="w"> </span><span class="n">bad_value</span><span class="p" data-group-id="1592869617-6">}</span><span class="p" data-group-id="1592869617-5">)</span><span class="w">
-</span><span class="p" data-group-id="1592869617-7">{</span><span class="ss">:error</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="1592869617-8">%</span><span class="nc" data-group-id="1592869617-8">Ecto.Changeset</span><span class="p" data-group-id="1592869617-8">{</span><span class="p" data-group-id="1592869617-8">}</span><span class="p" data-group-id="1592869617-7">}</span></code></pre>
+</span><span class="gp unselectable">iex&gt; </span><span class="n">update_event</span><span class="p" data-group-id="6484099888-5">(</span><span class="n">event</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="6484099888-6">%{</span><span class="ss">field</span><span class="p">:</span><span class="w"> </span><span class="n">bad_value</span><span class="p" data-group-id="6484099888-6">}</span><span class="p" data-group-id="6484099888-5">)</span><span class="w">
+</span><span class="p" data-group-id="6484099888-7">{</span><span class="ss">:error</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="6484099888-8">%</span><span class="nc" data-group-id="6484099888-8">Ecto.Changeset</span><span class="p" data-group-id="6484099888-8">{</span><span class="p" data-group-id="6484099888-8">}</span><span class="p" data-group-id="6484099888-7">}</span></code></pre>
   </section>
 </section>
 
@@ -834,10 +877,23 @@ Functions
   </section>
 
       <footer class="footer">
-
         <p>
+
+          <span class="line">
+            <button class="a-main footer-button display-quick-switch" title="Search HexDocs packages">
+              Search HexDocs
+            </button>
+
+              <a href="Claper.epub" title="ePub version">
+                Download ePub version
+              </a>
+
+          </span>
+        </p>
+
+        <p class="built-using">
           Built using
-          <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.28.4) for the
+          <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.29.4) for the
 
             <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
 

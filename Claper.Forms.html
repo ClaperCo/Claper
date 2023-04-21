@@ -4,21 +4,24 @@
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="generator" content="ExDoc v0.28.4">
-    <meta name="project" content="Claper v1.3.0">
+    <meta name="generator" content="ExDoc v0.29.4">
+    <meta name="project" content="Claper v1.4.0">
 
-    <title>Claper.Forms — Claper v1.3.0</title>
-    <link rel="stylesheet" href="dist/elixir-b6f1ed5df9b1d42a7309.css" />
+    <title>Claper.Forms — Claper v1.4.0</title>
+    <link rel="stylesheet" href="dist/html-elixir-HHVY3JYD.css" />
 
-    <script src="dist/sidebar_items-9c8468b1bc.js"></script>
+
+    <script src="dist/handlebars.runtime-NWIB6V2M.js"></script>
+    <script src="dist/handlebars.templates-XWGFFSCD.js"></script>
+    <script src="dist/sidebar_items-3229396A.js"></script>
 
       <script src="docs_config.js"></script>
 
-    <script async src="dist/app-bd1cb213813bf4825aa2.js"></script>
+    <script async src="dist/html-JDI3AVDD.js"></script>
 
 
   </head>
-  <body data-type="modules">
+  <body data-type="modules" class="page-module">
     <script>
 
       try {
@@ -35,12 +38,11 @@
 
 <div class="main">
 
+<button class="sidebar-button sidebar-toggle" aria-label="toggle sidebar">
+  <i class="ri-menu-line ri-lg" title="Collapse/expand sidebar"></i>
+</button>
 
 <section class="sidebar">
-  <button class="sidebar-button sidebar-toggle" aria-label="toggle sidebar">
-    <i class="ri-menu-line ri-lg" title="Collapse/expand sidebar"></i>
-  </button>
-
   <form class="sidebar-search" action="search.html">
     <button type="submit" class="search-button" aria-label="Submit Search">
       <i class="ri-search-2-line" aria-hidden="true" title="Submit search"></i>
@@ -50,7 +52,7 @@
     </button>
     <label class="search-label">
       <p class="sr-only">Search</p>
-      <input name="q" type="text" class="search-input" placeholder="Search..." aria-label="Input your search terms" autocomplete="off" />
+      <input name="q" type="text" class="search-input" placeholder="Search..." aria-label="Input your search terms" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
     </label>
   </form>
 
@@ -69,9 +71,9 @@
       <a href="https://get.claper.co" class="sidebar-projectName" translate="no">
 Claper
       </a>
-      <strong class="sidebar-projectVersion" translate="no">
-        v1.3.0
-      </strong>
+      <div class="sidebar-projectVersion" translate="no">
+        v1.4.0
+      </div>
     </div>
     <ul class="sidebar-listNav">
       <li><a id="extras-list-link" href="#full-list">GUIDES</a></li>
@@ -83,7 +85,7 @@ Claper
   </div>
 
   <div class="gradient"></div>
-  <ul id="full-list" class="sidebar-fullList"></ul>
+  <ul id="full-list"></ul>
 </section>
 
 <section class="content">
@@ -92,19 +94,19 @@ Claper
     <div id="content" class="content-inner">
 
 <h1>
-<button class="settings display-settings">
+<button class="icon-action display-settings">
   <i class="ri-settings-3-line"></i>
   <span class="sr-only">Settings</span>
 </button>
 
 
-    <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper/forms.ex#L1" title="View Source" class="view-source" rel="help">
+    <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper/forms.ex#L1" title="View Source" class="icon-action" rel="help">
       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
       <span class="sr-only">View Source</span>
     </a>
 
   <span translate="no">Claper.Forms</span> 
-  <small class="app-vsn" translate="no">(Claper v1.3.0)</small>
+  <small class="app-vsn" translate="no">(Claper v1.4.0)</small>
 
 </h1>
 
@@ -122,207 +124,206 @@ Claper
       </a>
       Summary
     </h1>
+<div class="summary-functions summary">
+  <h2>
+    <a href="#functions">Functions</a>
+  </h2>
 
-  <div class="summary-functions summary">
-    <h2>
-      <a href="#functions">Functions</a>
-    </h2>
-
-      <div class="summary-row">
-        <div class="summary-signature">
-          <a href="#add_form_field/1" translate="no">add_form_field(changeset)</a>
-
-        </div>
-
-          <div class="summary-synopsis"><p>Add an empty form field to a form changeset.</p></div>
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#add_form_field/1" translate="no">add_form_field(changeset)</a>
 
       </div>
 
-      <div class="summary-row">
-        <div class="summary-signature">
-          <a href="#change_form/2" translate="no">change_form(form, attrs \\ %{})</a>
+        <div class="summary-synopsis"><p>Add an empty form field to a form changeset.</p></div>
 
-        </div>
+    </div>
 
-          <div class="summary-synopsis"><p>Returns an <code class="inline">%Ecto.Changeset{}</code> for tracking form changes.</p></div>
-
-      </div>
-
-      <div class="summary-row">
-        <div class="summary-signature">
-          <a href="#change_form_submit/2" translate="no">change_form_submit(form_submit, attrs \\ %{})</a>
-
-        </div>
-
-          <div class="summary-synopsis"><p>Returns an <code class="inline">%Ecto.Changeset{}</code> for tracking form submit changes.</p></div>
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#change_form/2" translate="no">change_form(form, attrs \\ %{})</a>
 
       </div>
 
-      <div class="summary-row">
-        <div class="summary-signature">
-          <a href="#create_form/1" translate="no">create_form(attrs \\ %{})</a>
+        <div class="summary-synopsis"><p>Returns an <code class="inline">%Ecto.Changeset{}</code> for tracking form changes.</p></div>
 
-        </div>
+    </div>
 
-          <div class="summary-synopsis"><p>Creates a form.</p></div>
-
-      </div>
-
-      <div class="summary-row">
-        <div class="summary-signature">
-          <a href="#create_form_submit/1" translate="no">create_form_submit(attrs \\ %{})</a>
-
-        </div>
-
-          <div class="summary-synopsis"><p>Creates a form submit.</p></div>
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#change_form_submit/2" translate="no">change_form_submit(form_submit, attrs \\ %{})</a>
 
       </div>
 
-      <div class="summary-row">
-        <div class="summary-signature">
-          <a href="#create_or_update_form_submit/2" translate="no">create_or_update_form_submit(event_uuid, attrs)</a>
+        <div class="summary-synopsis"><p>Returns an <code class="inline">%Ecto.Changeset{}</code> for tracking form submit changes.</p></div>
 
-        </div>
+    </div>
 
-          <div class="summary-synopsis"><p>Creates or update a FormSubmit.</p></div>
-
-      </div>
-
-      <div class="summary-row">
-        <div class="summary-signature">
-          <a href="#create_or_update_form_submit/3" translate="no">create_or_update_form_submit(fs, event_uuid, attrs)</a>
-
-        </div>
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#create_form/1" translate="no">create_form(attrs \\ %{})</a>
 
       </div>
 
-      <div class="summary-row">
-        <div class="summary-signature">
-          <a href="#delete_form/2" translate="no">delete_form(event_uuid, form)</a>
+        <div class="summary-synopsis"><p>Creates a form.</p></div>
 
-        </div>
+    </div>
 
-          <div class="summary-synopsis"><p>Deletes a form.</p></div>
-
-      </div>
-
-      <div class="summary-row">
-        <div class="summary-signature">
-          <a href="#delete_form_submit/2" translate="no">delete_form_submit(event_uuid, fs)</a>
-
-        </div>
-
-          <div class="summary-synopsis"><p>Deletes a form submit.</p></div>
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#create_form_submit/1" translate="no">create_form_submit(attrs \\ %{})</a>
 
       </div>
 
-      <div class="summary-row">
-        <div class="summary-signature">
-          <a href="#disable_all/2" translate="no">disable_all(presentation_file_id, position)</a>
+        <div class="summary-synopsis"><p>Creates a form submit.</p></div>
 
-        </div>
+    </div>
 
-      </div>
-
-      <div class="summary-row">
-        <div class="summary-signature">
-          <a href="#get_form!/2" translate="no">get_form!(id, preload \\ [])</a>
-
-        </div>
-
-          <div class="summary-synopsis"><p>Gets a single form.</p></div>
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#create_or_update_form_submit/2" translate="no">create_or_update_form_submit(event_uuid, attrs)</a>
 
       </div>
 
-      <div class="summary-row">
-        <div class="summary-signature">
-          <a href="#get_form_current_position/2" translate="no">get_form_current_position(presentation_file_id, position)</a>
+        <div class="summary-synopsis"><p>Creates or update a FormSubmit.</p></div>
 
-        </div>
+    </div>
 
-          <div class="summary-synopsis"><p>Gets a single form for a given position.</p></div>
-
-      </div>
-
-      <div class="summary-row">
-        <div class="summary-signature">
-          <a href="#get_form_submit/2" translate="no">get_form_submit(user_id, form_id)</a>
-
-        </div>
-
-          <div class="summary-synopsis"><p>Gets a single FormSubmit.</p></div>
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#create_or_update_form_submit/3" translate="no">create_or_update_form_submit(fs, event_uuid, attrs)</a>
 
       </div>
 
-      <div class="summary-row">
-        <div class="summary-signature">
-          <a href="#get_form_submit_by_id!/2" translate="no">get_form_submit_by_id!(id, preload \\ [])</a>
+    </div>
 
-        </div>
-
-          <div class="summary-synopsis"><p>Gets a single FormSubmit by its ID.</p></div>
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#delete_form/2" translate="no">delete_form(event_uuid, form)</a>
 
       </div>
 
-      <div class="summary-row">
-        <div class="summary-signature">
-          <a href="#list_form_submits/1" translate="no">list_form_submits(presentation_file_id)</a>
+        <div class="summary-synopsis"><p>Deletes a form.</p></div>
 
-        </div>
+    </div>
 
-          <div class="summary-synopsis"><p>Returns the list of form submissions for a given presentation file.</p></div>
-
-      </div>
-
-      <div class="summary-row">
-        <div class="summary-signature">
-          <a href="#list_forms/1" translate="no">list_forms(presentation_file_id)</a>
-
-        </div>
-
-          <div class="summary-synopsis"><p>Returns the list of forms for a given presentation file.</p></div>
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#delete_form_submit/2" translate="no">delete_form_submit(event_uuid, fs)</a>
 
       </div>
 
-      <div class="summary-row">
-        <div class="summary-signature">
-          <a href="#list_forms_at_position/2" translate="no">list_forms_at_position(presentation_file_id, position)</a>
+        <div class="summary-synopsis"><p>Deletes a form submit.</p></div>
 
-        </div>
+    </div>
 
-          <div class="summary-synopsis"><p>Returns the list of forms for a given presentation file and a given position.</p></div>
-
-      </div>
-
-      <div class="summary-row">
-        <div class="summary-signature">
-          <a href="#remove_form_field/2" translate="no">remove_form_field(changeset, field)</a>
-
-        </div>
-
-          <div class="summary-synopsis"><p>Remove a form field from a form changeset.</p></div>
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#disable_all/2" translate="no">disable_all(presentation_file_id, position)</a>
 
       </div>
 
-      <div class="summary-row">
-        <div class="summary-signature">
-          <a href="#set_default/3" translate="no">set_default(id, presentation_file_id, position)</a>
+    </div>
 
-        </div>
-
-      </div>
-
-      <div class="summary-row">
-        <div class="summary-signature">
-          <a href="#update_form/3" translate="no">update_form(event_uuid, form, attrs)</a>
-
-        </div>
-
-          <div class="summary-synopsis"><p>Updates a form.</p></div>
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#get_form!/2" translate="no">get_form!(id, preload \\ [])</a>
 
       </div>
 
-  </div>
+        <div class="summary-synopsis"><p>Gets a single form.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#get_form_current_position/2" translate="no">get_form_current_position(presentation_file_id, position)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Gets a single form for a given position.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#get_form_submit/2" translate="no">get_form_submit(user_id, form_id)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Gets a single FormSubmit.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#get_form_submit_by_id!/2" translate="no">get_form_submit_by_id!(id, preload \\ [])</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Gets a single FormSubmit by its ID.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#list_form_submits/1" translate="no">list_form_submits(presentation_file_id)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Returns the list of form submissions for a given presentation file.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#list_forms/1" translate="no">list_forms(presentation_file_id)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Returns the list of forms for a given presentation file.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#list_forms_at_position/2" translate="no">list_forms_at_position(presentation_file_id, position)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Returns the list of forms for a given presentation file and a given position.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#remove_form_field/2" translate="no">remove_form_field(changeset, field)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Remove a form field from a form changeset.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#set_default/3" translate="no">set_default(id, presentation_file_id, position)</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#update_form/3" translate="no">update_form(event_uuid, form, attrs)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Updates a form.</p></div>
+
+    </div>
+
+</div>
 
   </section>
 
@@ -345,7 +346,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">add_form_field(changeset)</h1>
 
-      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper/forms.ex#L158" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper/forms.ex#L158" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -369,7 +370,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">change_form(form, attrs \\ %{})</h1>
 
-      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper/forms.ex#L151" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper/forms.ex#L151" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -385,8 +386,8 @@ Functions
   </a>
   Examples
 </h2>
-<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">change_form</span><span class="p" data-group-id="4614046764-1">(</span><span class="n">form</span><span class="p" data-group-id="4614046764-1">)</span><span class="w">
-</span><span class="p" data-group-id="4614046764-2">%</span><span class="nc" data-group-id="4614046764-2">Ecto.Changeset</span><span class="p" data-group-id="4614046764-2">{</span><span class="ss">data</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="4614046764-3">%</span><span class="nc" data-group-id="4614046764-3">Form</span><span class="p" data-group-id="4614046764-3">{</span><span class="p" data-group-id="4614046764-3">}</span><span class="p" data-group-id="4614046764-2">}</span></code></pre>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">change_form</span><span class="p" data-group-id="1864186100-1">(</span><span class="n">form</span><span class="p" data-group-id="1864186100-1">)</span><span class="w">
+</span><span class="p" data-group-id="1864186100-2">%</span><span class="nc" data-group-id="1864186100-2">Ecto.Changeset</span><span class="p" data-group-id="1864186100-2">{</span><span class="ss">data</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="1864186100-3">%</span><span class="nc" data-group-id="1864186100-3">Form</span><span class="p" data-group-id="1864186100-3">{</span><span class="p" data-group-id="1864186100-3">}</span><span class="p" data-group-id="1864186100-2">}</span></code></pre>
   </section>
 </section>
 <section class="detail" id="change_form_submit/2">
@@ -400,7 +401,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">change_form_submit(form_submit, attrs \\ %{})</h1>
 
-      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper/forms.ex#L353" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper/forms.ex#L353" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -416,8 +417,8 @@ Functions
   </a>
   Examples
 </h2>
-<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">change_form_submit</span><span class="p" data-group-id="7932092395-1">(</span><span class="n">form_submit</span><span class="p" data-group-id="7932092395-1">)</span><span class="w">
-</span><span class="p" data-group-id="7932092395-2">%</span><span class="nc" data-group-id="7932092395-2">Ecto.Changeset</span><span class="p" data-group-id="7932092395-2">{</span><span class="ss">data</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="7932092395-3">%</span><span class="nc" data-group-id="7932092395-3">FormSubmit</span><span class="p" data-group-id="7932092395-3">{</span><span class="p" data-group-id="7932092395-3">}</span><span class="p" data-group-id="7932092395-2">}</span></code></pre>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">change_form_submit</span><span class="p" data-group-id="0627530805-1">(</span><span class="n">form_submit</span><span class="p" data-group-id="0627530805-1">)</span><span class="w">
+</span><span class="p" data-group-id="0627530805-2">%</span><span class="nc" data-group-id="0627530805-2">Ecto.Changeset</span><span class="p" data-group-id="0627530805-2">{</span><span class="ss">data</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="0627530805-3">%</span><span class="nc" data-group-id="0627530805-3">FormSubmit</span><span class="p" data-group-id="0627530805-3">{</span><span class="p" data-group-id="0627530805-3">}</span><span class="p" data-group-id="0627530805-2">}</span></code></pre>
   </section>
 </section>
 <section class="detail" id="create_form/1">
@@ -431,7 +432,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">create_form(attrs \\ %{})</h1>
 
-      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper/forms.ex#L94" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper/forms.ex#L94" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -447,11 +448,11 @@ Functions
   </a>
   Examples
 </h2>
-<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">create_form</span><span class="p" data-group-id="4026111757-1">(</span><span class="p" data-group-id="4026111757-2">%{</span><span class="ss">field</span><span class="p">:</span><span class="w"> </span><span class="n">value</span><span class="p" data-group-id="4026111757-2">}</span><span class="p" data-group-id="4026111757-1">)</span><span class="w">
-</span><span class="p" data-group-id="4026111757-3">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="4026111757-4">%</span><span class="nc" data-group-id="4026111757-4">Form</span><span class="p" data-group-id="4026111757-4">{</span><span class="p" data-group-id="4026111757-4">}</span><span class="p" data-group-id="4026111757-3">}</span><span class="w">
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">create_form</span><span class="p" data-group-id="8890512358-1">(</span><span class="p" data-group-id="8890512358-2">%{</span><span class="ss">field</span><span class="p">:</span><span class="w"> </span><span class="n">value</span><span class="p" data-group-id="8890512358-2">}</span><span class="p" data-group-id="8890512358-1">)</span><span class="w">
+</span><span class="p" data-group-id="8890512358-3">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="8890512358-4">%</span><span class="nc" data-group-id="8890512358-4">Form</span><span class="p" data-group-id="8890512358-4">{</span><span class="p" data-group-id="8890512358-4">}</span><span class="p" data-group-id="8890512358-3">}</span><span class="w">
 
-</span><span class="gp unselectable">iex&gt; </span><span class="n">create_form</span><span class="p" data-group-id="4026111757-5">(</span><span class="p" data-group-id="4026111757-6">%{</span><span class="ss">field</span><span class="p">:</span><span class="w"> </span><span class="n">bad_value</span><span class="p" data-group-id="4026111757-6">}</span><span class="p" data-group-id="4026111757-5">)</span><span class="w">
-</span><span class="p" data-group-id="4026111757-7">{</span><span class="ss">:error</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="4026111757-8">%</span><span class="nc" data-group-id="4026111757-8">Ecto.Changeset</span><span class="p" data-group-id="4026111757-8">{</span><span class="p" data-group-id="4026111757-8">}</span><span class="p" data-group-id="4026111757-7">}</span></code></pre>
+</span><span class="gp unselectable">iex&gt; </span><span class="n">create_form</span><span class="p" data-group-id="8890512358-5">(</span><span class="p" data-group-id="8890512358-6">%{</span><span class="ss">field</span><span class="p">:</span><span class="w"> </span><span class="n">bad_value</span><span class="p" data-group-id="8890512358-6">}</span><span class="p" data-group-id="8890512358-5">)</span><span class="w">
+</span><span class="p" data-group-id="8890512358-7">{</span><span class="ss">:error</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="8890512358-8">%</span><span class="nc" data-group-id="8890512358-8">Ecto.Changeset</span><span class="p" data-group-id="8890512358-8">{</span><span class="p" data-group-id="8890512358-8">}</span><span class="p" data-group-id="8890512358-7">}</span></code></pre>
   </section>
 </section>
 <section class="detail" id="create_form_submit/1">
@@ -465,7 +466,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">create_form_submit(attrs \\ %{})</h1>
 
-      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper/forms.ex#L224" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper/forms.ex#L224" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -481,11 +482,11 @@ Functions
   </a>
   Examples
 </h2>
-<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">create_form_submit</span><span class="p" data-group-id="8067924102-1">(</span><span class="p" data-group-id="8067924102-2">%{</span><span class="ss">field</span><span class="p">:</span><span class="w"> </span><span class="n">value</span><span class="p" data-group-id="8067924102-2">}</span><span class="p" data-group-id="8067924102-1">)</span><span class="w">
-</span><span class="p" data-group-id="8067924102-3">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="8067924102-4">%</span><span class="nc" data-group-id="8067924102-4">FormSubmit</span><span class="p" data-group-id="8067924102-4">{</span><span class="p" data-group-id="8067924102-4">}</span><span class="p" data-group-id="8067924102-3">}</span><span class="w">
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">create_form_submit</span><span class="p" data-group-id="2169184770-1">(</span><span class="p" data-group-id="2169184770-2">%{</span><span class="ss">field</span><span class="p">:</span><span class="w"> </span><span class="n">value</span><span class="p" data-group-id="2169184770-2">}</span><span class="p" data-group-id="2169184770-1">)</span><span class="w">
+</span><span class="p" data-group-id="2169184770-3">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="2169184770-4">%</span><span class="nc" data-group-id="2169184770-4">FormSubmit</span><span class="p" data-group-id="2169184770-4">{</span><span class="p" data-group-id="2169184770-4">}</span><span class="p" data-group-id="2169184770-3">}</span><span class="w">
 
-</span><span class="gp unselectable">iex&gt; </span><span class="n">create_form_submit</span><span class="p" data-group-id="8067924102-5">(</span><span class="p" data-group-id="8067924102-6">%{</span><span class="ss">field</span><span class="p">:</span><span class="w"> </span><span class="n">bad_value</span><span class="p" data-group-id="8067924102-6">}</span><span class="p" data-group-id="8067924102-5">)</span><span class="w">
-</span><span class="p" data-group-id="8067924102-7">{</span><span class="ss">:error</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="8067924102-8">%</span><span class="nc" data-group-id="8067924102-8">Ecto.Changeset</span><span class="p" data-group-id="8067924102-8">{</span><span class="p" data-group-id="8067924102-8">}</span><span class="p" data-group-id="8067924102-7">}</span></code></pre>
+</span><span class="gp unselectable">iex&gt; </span><span class="n">create_form_submit</span><span class="p" data-group-id="2169184770-5">(</span><span class="p" data-group-id="2169184770-6">%{</span><span class="ss">field</span><span class="p">:</span><span class="w"> </span><span class="n">bad_value</span><span class="p" data-group-id="2169184770-6">}</span><span class="p" data-group-id="2169184770-5">)</span><span class="w">
+</span><span class="p" data-group-id="2169184770-7">{</span><span class="ss">:error</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="2169184770-8">%</span><span class="nc" data-group-id="2169184770-8">Ecto.Changeset</span><span class="p" data-group-id="2169184770-8">{</span><span class="p" data-group-id="2169184770-8">}</span><span class="p" data-group-id="2169184770-7">}</span></code></pre>
   </section>
 </section>
 <section class="detail" id="create_or_update_form_submit/2">
@@ -497,7 +498,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">create_or_update_form_submit(event_uuid, attrs)</h1>
 
-      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper/forms.ex#L292" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper/forms.ex#L292" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -513,11 +514,11 @@ Functions
   </a>
   Examples
 </h2>
-<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">create_or_update_form_submit</span><span class="p" data-group-id="0052129357-1">(</span><span class="p" data-group-id="0052129357-2">%{</span><span class="ss">field</span><span class="p">:</span><span class="w"> </span><span class="n">value</span><span class="p" data-group-id="0052129357-2">}</span><span class="p" data-group-id="0052129357-1">)</span><span class="w">
-</span><span class="p" data-group-id="0052129357-3">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="0052129357-4">%</span><span class="nc" data-group-id="0052129357-4">FormSubmit</span><span class="p" data-group-id="0052129357-4">{</span><span class="p" data-group-id="0052129357-4">}</span><span class="p" data-group-id="0052129357-3">}</span><span class="w">
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">create_or_update_form_submit</span><span class="p" data-group-id="2193480213-1">(</span><span class="p" data-group-id="2193480213-2">%{</span><span class="ss">field</span><span class="p">:</span><span class="w"> </span><span class="n">value</span><span class="p" data-group-id="2193480213-2">}</span><span class="p" data-group-id="2193480213-1">)</span><span class="w">
+</span><span class="p" data-group-id="2193480213-3">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="2193480213-4">%</span><span class="nc" data-group-id="2193480213-4">FormSubmit</span><span class="p" data-group-id="2193480213-4">{</span><span class="p" data-group-id="2193480213-4">}</span><span class="p" data-group-id="2193480213-3">}</span><span class="w">
 
-</span><span class="gp unselectable">iex&gt; </span><span class="n">create_or_update_form_submit</span><span class="p" data-group-id="0052129357-5">(</span><span class="p" data-group-id="0052129357-6">%{</span><span class="ss">field</span><span class="p">:</span><span class="w"> </span><span class="n">bad_value</span><span class="p" data-group-id="0052129357-6">}</span><span class="p" data-group-id="0052129357-5">)</span><span class="w">
-</span><span class="p" data-group-id="0052129357-7">{</span><span class="ss">:error</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="0052129357-8">%</span><span class="nc" data-group-id="0052129357-8">Ecto.Changeset</span><span class="p" data-group-id="0052129357-8">{</span><span class="p" data-group-id="0052129357-8">}</span><span class="p" data-group-id="0052129357-7">}</span></code></pre>
+</span><span class="gp unselectable">iex&gt; </span><span class="n">create_or_update_form_submit</span><span class="p" data-group-id="2193480213-5">(</span><span class="p" data-group-id="2193480213-6">%{</span><span class="ss">field</span><span class="p">:</span><span class="w"> </span><span class="n">bad_value</span><span class="p" data-group-id="2193480213-6">}</span><span class="p" data-group-id="2193480213-5">)</span><span class="w">
+</span><span class="p" data-group-id="2193480213-7">{</span><span class="ss">:error</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="2193480213-8">%</span><span class="nc" data-group-id="2193480213-8">Ecto.Changeset</span><span class="p" data-group-id="2193480213-8">{</span><span class="p" data-group-id="2193480213-8">}</span><span class="p" data-group-id="2193480213-7">}</span></code></pre>
   </section>
 </section>
 <section class="detail" id="create_or_update_form_submit/3">
@@ -529,7 +530,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">create_or_update_form_submit(fs, event_uuid, attrs)</h1>
 
-      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper/forms.ex#L308" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper/forms.ex#L308" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -551,7 +552,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">delete_form(event_uuid, form)</h1>
 
-      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper/forms.ex#L137" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper/forms.ex#L137" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -567,11 +568,11 @@ Functions
   </a>
   Examples
 </h2>
-<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">delete_form</span><span class="p" data-group-id="3376735922-1">(</span><span class="s">&quot;123e4567-e89b-12d3-a456-426614174000&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">form</span><span class="p" data-group-id="3376735922-1">)</span><span class="w">
-</span><span class="p" data-group-id="3376735922-2">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="3376735922-3">%</span><span class="nc" data-group-id="3376735922-3">Form</span><span class="p" data-group-id="3376735922-3">{</span><span class="p" data-group-id="3376735922-3">}</span><span class="p" data-group-id="3376735922-2">}</span><span class="w">
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">delete_form</span><span class="p" data-group-id="7278589985-1">(</span><span class="s">&quot;123e4567-e89b-12d3-a456-426614174000&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">form</span><span class="p" data-group-id="7278589985-1">)</span><span class="w">
+</span><span class="p" data-group-id="7278589985-2">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="7278589985-3">%</span><span class="nc" data-group-id="7278589985-3">Form</span><span class="p" data-group-id="7278589985-3">{</span><span class="p" data-group-id="7278589985-3">}</span><span class="p" data-group-id="7278589985-2">}</span><span class="w">
 
-</span><span class="gp unselectable">iex&gt; </span><span class="n">delete_form</span><span class="p" data-group-id="3376735922-4">(</span><span class="s">&quot;123e4567-e89b-12d3-a456-426614174000&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">form</span><span class="p" data-group-id="3376735922-4">)</span><span class="w">
-</span><span class="p" data-group-id="3376735922-5">{</span><span class="ss">:error</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="3376735922-6">%</span><span class="nc" data-group-id="3376735922-6">Ecto.Changeset</span><span class="p" data-group-id="3376735922-6">{</span><span class="p" data-group-id="3376735922-6">}</span><span class="p" data-group-id="3376735922-5">}</span></code></pre>
+</span><span class="gp unselectable">iex&gt; </span><span class="n">delete_form</span><span class="p" data-group-id="7278589985-4">(</span><span class="s">&quot;123e4567-e89b-12d3-a456-426614174000&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">form</span><span class="p" data-group-id="7278589985-4">)</span><span class="w">
+</span><span class="p" data-group-id="7278589985-5">{</span><span class="ss">:error</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="7278589985-6">%</span><span class="nc" data-group-id="7278589985-6">Ecto.Changeset</span><span class="p" data-group-id="7278589985-6">{</span><span class="p" data-group-id="7278589985-6">}</span><span class="p" data-group-id="7278589985-5">}</span></code></pre>
   </section>
 </section>
 <section class="detail" id="delete_form_submit/2">
@@ -583,7 +584,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">delete_form_submit(event_uuid, fs)</h1>
 
-      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper/forms.ex#L336" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper/forms.ex#L336" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -599,11 +600,11 @@ Functions
   </a>
   Examples
 </h2>
-<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">delete_form_submit</span><span class="p" data-group-id="6181570276-1">(</span><span class="n">post</span><span class="p">,</span><span class="w"> </span><span class="n">event_id</span><span class="p" data-group-id="6181570276-1">)</span><span class="w">
-</span><span class="p" data-group-id="6181570276-2">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="6181570276-3">%</span><span class="nc" data-group-id="6181570276-3">FormSubmit</span><span class="p" data-group-id="6181570276-3">{</span><span class="p" data-group-id="6181570276-3">}</span><span class="p" data-group-id="6181570276-2">}</span><span class="w">
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">delete_form_submit</span><span class="p" data-group-id="1249991333-1">(</span><span class="n">post</span><span class="p">,</span><span class="w"> </span><span class="n">event_id</span><span class="p" data-group-id="1249991333-1">)</span><span class="w">
+</span><span class="p" data-group-id="1249991333-2">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="1249991333-3">%</span><span class="nc" data-group-id="1249991333-3">FormSubmit</span><span class="p" data-group-id="1249991333-3">{</span><span class="p" data-group-id="1249991333-3">}</span><span class="p" data-group-id="1249991333-2">}</span><span class="w">
 
-</span><span class="gp unselectable">iex&gt; </span><span class="n">delete_form_submit</span><span class="p" data-group-id="6181570276-4">(</span><span class="n">post</span><span class="p">,</span><span class="w"> </span><span class="n">event_id</span><span class="p" data-group-id="6181570276-4">)</span><span class="w">
-</span><span class="p" data-group-id="6181570276-5">{</span><span class="ss">:error</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="6181570276-6">%</span><span class="nc" data-group-id="6181570276-6">Ecto.Changeset</span><span class="p" data-group-id="6181570276-6">{</span><span class="p" data-group-id="6181570276-6">}</span><span class="p" data-group-id="6181570276-5">}</span></code></pre>
+</span><span class="gp unselectable">iex&gt; </span><span class="n">delete_form_submit</span><span class="p" data-group-id="1249991333-4">(</span><span class="n">post</span><span class="p">,</span><span class="w"> </span><span class="n">event_id</span><span class="p" data-group-id="1249991333-4">)</span><span class="w">
+</span><span class="p" data-group-id="1249991333-5">{</span><span class="ss">:error</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="1249991333-6">%</span><span class="nc" data-group-id="1249991333-6">Ecto.Changeset</span><span class="p" data-group-id="1249991333-6">{</span><span class="p" data-group-id="1249991333-6">}</span><span class="p" data-group-id="1249991333-5">}</span></code></pre>
   </section>
 </section>
 <section class="detail" id="disable_all/2">
@@ -615,7 +616,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">disable_all(presentation_file_id, position)</h1>
 
-      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper/forms.ex#L177" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper/forms.ex#L177" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -639,7 +640,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">get_form!(id, preload \\ [])</h1>
 
-      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper/forms.ex#L61" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper/forms.ex#L61" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -649,16 +650,16 @@ Functions
 
   <section class="docstring">
 
-<p>Gets a single form.</p><p>Raises <a href="https://hexdocs.pm/ecto/3.7.2/Ecto.NoResultsError.html"><code class="inline">Ecto.NoResultsError</code></a> if the Form does not exist.</p><h2 id="get_form!/2-examples" class="section-heading">
+<p>Gets a single form.</p><p>Raises <a href="https://hexdocs.pm/ecto/3.10.1/Ecto.NoResultsError.html"><code class="inline">Ecto.NoResultsError</code></a> if the Form does not exist.</p><h2 id="get_form!/2-examples" class="section-heading">
   <a href="#get_form!/2-examples" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i>
   <p class="sr-only">examples</p>
   </a>
   Examples
 </h2>
-<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">get_form!</span><span class="p" data-group-id="9675670738-1">(</span><span class="mi">123</span><span class="p" data-group-id="9675670738-1">)</span><span class="w">
-</span><span class="p" data-group-id="9675670738-2">%</span><span class="nc" data-group-id="9675670738-2">Poll</span><span class="p" data-group-id="9675670738-2">{</span><span class="p" data-group-id="9675670738-2">}</span><span class="w">
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">get_form!</span><span class="p" data-group-id="3185494717-1">(</span><span class="mi">123</span><span class="p" data-group-id="3185494717-1">)</span><span class="w">
+</span><span class="p" data-group-id="3185494717-2">%</span><span class="nc" data-group-id="3185494717-2">Poll</span><span class="p" data-group-id="3185494717-2">{</span><span class="p" data-group-id="3185494717-2">}</span><span class="w">
 
-</span><span class="gp unselectable">iex&gt; </span><span class="n">get_form!</span><span class="p" data-group-id="9675670738-3">(</span><span class="mi">456</span><span class="p" data-group-id="9675670738-3">)</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="n">get_form!</span><span class="p" data-group-id="3185494717-3">(</span><span class="mi">456</span><span class="p" data-group-id="3185494717-3">)</span><span class="w">
 </span><span class="gt">** (Ecto.NoResultsError)</span></code></pre>
   </section>
 </section>
@@ -671,7 +672,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">get_form_current_position(presentation_file_id, position)</h1>
 
-      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper/forms.ex#L73" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper/forms.ex#L73" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -687,8 +688,8 @@ Functions
   </a>
   Examples
 </h2>
-<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">get_form!</span><span class="p" data-group-id="3517525538-1">(</span><span class="mi">123</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p" data-group-id="3517525538-1">)</span><span class="w">
-</span><span class="p" data-group-id="3517525538-2">%</span><span class="nc" data-group-id="3517525538-2">Form</span><span class="p" data-group-id="3517525538-2">{</span><span class="p" data-group-id="3517525538-2">}</span></code></pre>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">get_form!</span><span class="p" data-group-id="1242076370-1">(</span><span class="mi">123</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p" data-group-id="1242076370-1">)</span><span class="w">
+</span><span class="p" data-group-id="1242076370-2">%</span><span class="nc" data-group-id="1242076370-2">Form</span><span class="p" data-group-id="1242076370-2">{</span><span class="p" data-group-id="1242076370-2">}</span></code></pre>
   </section>
 </section>
 <section class="detail" id="get_form_submit/2">
@@ -700,7 +701,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">get_form_submit(user_id, form_id)</h1>
 
-      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper/forms.ex#L257" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper/forms.ex#L257" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -716,8 +717,8 @@ Functions
   </a>
   Examples
 </h2>
-<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">get_form_submit!</span><span class="p" data-group-id="7064064372-1">(</span><span class="mi">321</span><span class="p">,</span><span class="w"> </span><span class="mi">123</span><span class="p" data-group-id="7064064372-1">)</span><span class="w">
-</span><span class="p" data-group-id="7064064372-2">%</span><span class="nc" data-group-id="7064064372-2">FormSubmit</span><span class="p" data-group-id="7064064372-2">{</span><span class="p" data-group-id="7064064372-2">}</span></code></pre>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">get_form_submit!</span><span class="p" data-group-id="0778987462-1">(</span><span class="mi">321</span><span class="p">,</span><span class="w"> </span><span class="mi">123</span><span class="p" data-group-id="0778987462-1">)</span><span class="w">
+</span><span class="p" data-group-id="0778987462-2">%</span><span class="nc" data-group-id="0778987462-2">FormSubmit</span><span class="p" data-group-id="0778987462-2">{</span><span class="p" data-group-id="0778987462-2">}</span></code></pre>
   </section>
 </section>
 <section class="detail" id="get_form_submit_by_id!/2">
@@ -731,7 +732,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">get_form_submit_by_id!(id, preload \\ [])</h1>
 
-      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper/forms.ex#L277" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper/forms.ex#L277" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -741,16 +742,16 @@ Functions
 
   <section class="docstring">
 
-<p>Gets a single FormSubmit by its ID.</p><p>Raises <a href="https://hexdocs.pm/ecto/3.7.2/Ecto.NoResultsError.html"><code class="inline">Ecto.NoResultsError</code></a> if the FormSubmit does not exist.</p><h2 id="get_form_submit_by_id!/2-examples" class="section-heading">
+<p>Gets a single FormSubmit by its ID.</p><p>Raises <a href="https://hexdocs.pm/ecto/3.10.1/Ecto.NoResultsError.html"><code class="inline">Ecto.NoResultsError</code></a> if the FormSubmit does not exist.</p><h2 id="get_form_submit_by_id!/2-examples" class="section-heading">
   <a href="#get_form_submit_by_id!/2-examples" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i>
   <p class="sr-only">examples</p>
   </a>
   Examples
 </h2>
-<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">get_form_submit_by_id!</span><span class="p" data-group-id="8783066394-1">(</span><span class="s">&quot;123e4567-e89b-12d3-a456-426614174000&quot;</span><span class="p" data-group-id="8783066394-1">)</span><span class="w">
-</span><span class="p" data-group-id="8783066394-2">%</span><span class="nc" data-group-id="8783066394-2">Post</span><span class="p" data-group-id="8783066394-2">{</span><span class="p" data-group-id="8783066394-2">}</span><span class="w">
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">get_form_submit_by_id!</span><span class="p" data-group-id="8558867228-1">(</span><span class="s">&quot;123e4567-e89b-12d3-a456-426614174000&quot;</span><span class="p" data-group-id="8558867228-1">)</span><span class="w">
+</span><span class="p" data-group-id="8558867228-2">%</span><span class="nc" data-group-id="8558867228-2">Post</span><span class="p" data-group-id="8558867228-2">{</span><span class="p" data-group-id="8558867228-2">}</span><span class="w">
 
-</span><span class="gp unselectable">iex&gt; </span><span class="n">get_form_submit_by_id!</span><span class="p" data-group-id="8783066394-3">(</span><span class="s">&quot;123e4567-e89b-12d3-a456-426614174123&quot;</span><span class="p" data-group-id="8783066394-3">)</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="n">get_form_submit_by_id!</span><span class="p" data-group-id="8558867228-3">(</span><span class="s">&quot;123e4567-e89b-12d3-a456-426614174123&quot;</span><span class="p" data-group-id="8558867228-3">)</span><span class="w">
 </span><span class="gt">** (Ecto.NoResultsError)</span></code></pre>
   </section>
 </section>
@@ -763,7 +764,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">list_form_submits(presentation_file_id)</h1>
 
-      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper/forms.ex#L239" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper/forms.ex#L239" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -779,8 +780,8 @@ Functions
   </a>
   Examples
 </h2>
-<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">list_form_submits</span><span class="p" data-group-id="1950566938-1">(</span><span class="mi">123</span><span class="p" data-group-id="1950566938-1">)</span><span class="w">
-</span><span class="p" data-group-id="1950566938-2">[</span><span class="p" data-group-id="1950566938-3">%</span><span class="nc" data-group-id="1950566938-3">FormSubmit</span><span class="p" data-group-id="1950566938-3">{</span><span class="p" data-group-id="1950566938-3">}</span><span class="p">,</span><span class="w"> </span><span class="n">...</span><span class="p" data-group-id="1950566938-2">]</span></code></pre>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">list_form_submits</span><span class="p" data-group-id="2544804608-1">(</span><span class="mi">123</span><span class="p" data-group-id="2544804608-1">)</span><span class="w">
+</span><span class="p" data-group-id="2544804608-2">[</span><span class="p" data-group-id="2544804608-3">%</span><span class="nc" data-group-id="2544804608-3">FormSubmit</span><span class="p" data-group-id="2544804608-3">{</span><span class="p" data-group-id="2544804608-3">}</span><span class="p">,</span><span class="w"> </span><span class="n">...</span><span class="p" data-group-id="2544804608-2">]</span></code></pre>
   </section>
 </section>
 <section class="detail" id="list_forms/1">
@@ -792,7 +793,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">list_forms(presentation_file_id)</h1>
 
-      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper/forms.ex#L22" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper/forms.ex#L22" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -808,8 +809,8 @@ Functions
   </a>
   Examples
 </h2>
-<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">list_forms</span><span class="p" data-group-id="3708557619-1">(</span><span class="mi">123</span><span class="p" data-group-id="3708557619-1">)</span><span class="w">
-</span><span class="p" data-group-id="3708557619-2">[</span><span class="p" data-group-id="3708557619-3">%</span><span class="nc" data-group-id="3708557619-3">Form</span><span class="p" data-group-id="3708557619-3">{</span><span class="p" data-group-id="3708557619-3">}</span><span class="p">,</span><span class="w"> </span><span class="n">...</span><span class="p" data-group-id="3708557619-2">]</span></code></pre>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">list_forms</span><span class="p" data-group-id="3084331312-1">(</span><span class="mi">123</span><span class="p" data-group-id="3084331312-1">)</span><span class="w">
+</span><span class="p" data-group-id="3084331312-2">[</span><span class="p" data-group-id="3084331312-3">%</span><span class="nc" data-group-id="3084331312-3">Form</span><span class="p" data-group-id="3084331312-3">{</span><span class="p" data-group-id="3084331312-3">}</span><span class="p">,</span><span class="w"> </span><span class="n">...</span><span class="p" data-group-id="3084331312-2">]</span></code></pre>
   </section>
 </section>
 <section class="detail" id="list_forms_at_position/2">
@@ -821,7 +822,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">list_forms_at_position(presentation_file_id, position)</h1>
 
-      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper/forms.ex#L39" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper/forms.ex#L39" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -837,8 +838,8 @@ Functions
   </a>
   Examples
 </h2>
-<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">list_forms_at_position</span><span class="p" data-group-id="3777858188-1">(</span><span class="mi">123</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p" data-group-id="3777858188-1">)</span><span class="w">
-</span><span class="p" data-group-id="3777858188-2">[</span><span class="p" data-group-id="3777858188-3">%</span><span class="nc" data-group-id="3777858188-3">Form</span><span class="p" data-group-id="3777858188-3">{</span><span class="p" data-group-id="3777858188-3">}</span><span class="p">,</span><span class="w"> </span><span class="n">...</span><span class="p" data-group-id="3777858188-2">]</span></code></pre>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">list_forms_at_position</span><span class="p" data-group-id="0465268868-1">(</span><span class="mi">123</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p" data-group-id="0465268868-1">)</span><span class="w">
+</span><span class="p" data-group-id="0465268868-2">[</span><span class="p" data-group-id="0465268868-3">%</span><span class="nc" data-group-id="0465268868-3">Form</span><span class="p" data-group-id="0465268868-3">{</span><span class="p" data-group-id="0465268868-3">}</span><span class="p">,</span><span class="w"> </span><span class="n">...</span><span class="p" data-group-id="0465268868-2">]</span></code></pre>
   </section>
 </section>
 <section class="detail" id="remove_form_field/2">
@@ -850,7 +851,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">remove_form_field(changeset, field)</h1>
 
-      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper/forms.ex#L169" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper/forms.ex#L169" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -872,7 +873,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">set_default(id, presentation_file_id, position)</h1>
 
-      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper/forms.ex#L184" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper/forms.ex#L184" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -894,7 +895,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">update_form(event_uuid, form, attrs)</h1>
 
-      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper/forms.ex#L112" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper/forms.ex#L112" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -910,11 +911,11 @@ Functions
   </a>
   Examples
 </h2>
-<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">update_form</span><span class="p" data-group-id="0062583779-1">(</span><span class="s">&quot;123e4567-e89b-12d3-a456-426614174000&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">form</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="0062583779-2">%{</span><span class="ss">field</span><span class="p">:</span><span class="w"> </span><span class="n">new_value</span><span class="p" data-group-id="0062583779-2">}</span><span class="p" data-group-id="0062583779-1">)</span><span class="w">
-</span><span class="p" data-group-id="0062583779-3">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="0062583779-4">%</span><span class="nc" data-group-id="0062583779-4">Form</span><span class="p" data-group-id="0062583779-4">{</span><span class="p" data-group-id="0062583779-4">}</span><span class="p" data-group-id="0062583779-3">}</span><span class="w">
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">update_form</span><span class="p" data-group-id="3313443089-1">(</span><span class="s">&quot;123e4567-e89b-12d3-a456-426614174000&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">form</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="3313443089-2">%{</span><span class="ss">field</span><span class="p">:</span><span class="w"> </span><span class="n">new_value</span><span class="p" data-group-id="3313443089-2">}</span><span class="p" data-group-id="3313443089-1">)</span><span class="w">
+</span><span class="p" data-group-id="3313443089-3">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="3313443089-4">%</span><span class="nc" data-group-id="3313443089-4">Form</span><span class="p" data-group-id="3313443089-4">{</span><span class="p" data-group-id="3313443089-4">}</span><span class="p" data-group-id="3313443089-3">}</span><span class="w">
 
-</span><span class="gp unselectable">iex&gt; </span><span class="n">update_form</span><span class="p" data-group-id="0062583779-5">(</span><span class="s">&quot;123e4567-e89b-12d3-a456-426614174000&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">form</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="0062583779-6">%{</span><span class="ss">field</span><span class="p">:</span><span class="w"> </span><span class="n">bad_value</span><span class="p" data-group-id="0062583779-6">}</span><span class="p" data-group-id="0062583779-5">)</span><span class="w">
-</span><span class="p" data-group-id="0062583779-7">{</span><span class="ss">:error</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="0062583779-8">%</span><span class="nc" data-group-id="0062583779-8">Ecto.Changeset</span><span class="p" data-group-id="0062583779-8">{</span><span class="p" data-group-id="0062583779-8">}</span><span class="p" data-group-id="0062583779-7">}</span></code></pre>
+</span><span class="gp unselectable">iex&gt; </span><span class="n">update_form</span><span class="p" data-group-id="3313443089-5">(</span><span class="s">&quot;123e4567-e89b-12d3-a456-426614174000&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">form</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="3313443089-6">%{</span><span class="ss">field</span><span class="p">:</span><span class="w"> </span><span class="n">bad_value</span><span class="p" data-group-id="3313443089-6">}</span><span class="p" data-group-id="3313443089-5">)</span><span class="w">
+</span><span class="p" data-group-id="3313443089-7">{</span><span class="ss">:error</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="3313443089-8">%</span><span class="nc" data-group-id="3313443089-8">Ecto.Changeset</span><span class="p" data-group-id="3313443089-8">{</span><span class="p" data-group-id="3313443089-8">}</span><span class="p" data-group-id="3313443089-7">}</span></code></pre>
   </section>
 </section>
 
@@ -922,10 +923,23 @@ Functions
   </section>
 
       <footer class="footer">
-
         <p>
+
+          <span class="line">
+            <button class="a-main footer-button display-quick-switch" title="Search HexDocs packages">
+              Search HexDocs
+            </button>
+
+              <a href="Claper.epub" title="ePub version">
+                Download ePub version
+              </a>
+
+          </span>
+        </p>
+
+        <p class="built-using">
           Built using
-          <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.28.4) for the
+          <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.29.4) for the
 
             <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
 

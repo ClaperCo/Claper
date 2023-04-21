@@ -4,21 +4,24 @@
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="generator" content="ExDoc v0.28.4">
-    <meta name="project" content="Claper v1.3.0">
+    <meta name="generator" content="ExDoc v0.29.4">
+    <meta name="project" content="Claper v1.4.0">
 
-    <title>Claper.Posts — Claper v1.3.0</title>
-    <link rel="stylesheet" href="dist/elixir-b6f1ed5df9b1d42a7309.css" />
+    <title>Claper.Posts — Claper v1.4.0</title>
+    <link rel="stylesheet" href="dist/html-elixir-HHVY3JYD.css" />
 
-    <script src="dist/sidebar_items-9c8468b1bc.js"></script>
+
+    <script src="dist/handlebars.runtime-NWIB6V2M.js"></script>
+    <script src="dist/handlebars.templates-XWGFFSCD.js"></script>
+    <script src="dist/sidebar_items-3229396A.js"></script>
 
       <script src="docs_config.js"></script>
 
-    <script async src="dist/app-bd1cb213813bf4825aa2.js"></script>
+    <script async src="dist/html-JDI3AVDD.js"></script>
 
 
   </head>
-  <body data-type="modules">
+  <body data-type="modules" class="page-module">
     <script>
 
       try {
@@ -35,12 +38,11 @@
 
 <div class="main">
 
+<button class="sidebar-button sidebar-toggle" aria-label="toggle sidebar">
+  <i class="ri-menu-line ri-lg" title="Collapse/expand sidebar"></i>
+</button>
 
 <section class="sidebar">
-  <button class="sidebar-button sidebar-toggle" aria-label="toggle sidebar">
-    <i class="ri-menu-line ri-lg" title="Collapse/expand sidebar"></i>
-  </button>
-
   <form class="sidebar-search" action="search.html">
     <button type="submit" class="search-button" aria-label="Submit Search">
       <i class="ri-search-2-line" aria-hidden="true" title="Submit search"></i>
@@ -50,7 +52,7 @@
     </button>
     <label class="search-label">
       <p class="sr-only">Search</p>
-      <input name="q" type="text" class="search-input" placeholder="Search..." aria-label="Input your search terms" autocomplete="off" />
+      <input name="q" type="text" class="search-input" placeholder="Search..." aria-label="Input your search terms" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
     </label>
   </form>
 
@@ -69,9 +71,9 @@
       <a href="https://get.claper.co" class="sidebar-projectName" translate="no">
 Claper
       </a>
-      <strong class="sidebar-projectVersion" translate="no">
-        v1.3.0
-      </strong>
+      <div class="sidebar-projectVersion" translate="no">
+        v1.4.0
+      </div>
     </div>
     <ul class="sidebar-listNav">
       <li><a id="extras-list-link" href="#full-list">GUIDES</a></li>
@@ -83,7 +85,7 @@ Claper
   </div>
 
   <div class="gradient"></div>
-  <ul id="full-list" class="sidebar-fullList"></ul>
+  <ul id="full-list"></ul>
 </section>
 
 <section class="content">
@@ -92,19 +94,19 @@ Claper
     <div id="content" class="content-inner">
 
 <h1>
-<button class="settings display-settings">
+<button class="icon-action display-settings">
   <i class="ri-settings-3-line"></i>
   <span class="sr-only">Settings</span>
 </button>
 
 
-    <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper/posts.ex#L1" title="View Source" class="view-source" rel="help">
+    <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper/posts.ex#L1" title="View Source" class="icon-action" rel="help">
       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
       <span class="sr-only">View Source</span>
     </a>
 
   <span translate="no">Claper.Posts</span> 
-  <small class="app-vsn" translate="no">(Claper v1.3.0)</small>
+  <small class="app-vsn" translate="no">(Claper v1.4.0)</small>
 
 </h1>
 
@@ -122,109 +124,108 @@ Claper
       </a>
       Summary
     </h1>
+<div class="summary-functions summary">
+  <h2>
+    <a href="#functions">Functions</a>
+  </h2>
 
-  <div class="summary-functions summary">
-    <h2>
-      <a href="#functions">Functions</a>
-    </h2>
-
-      <div class="summary-row">
-        <div class="summary-signature">
-          <a href="#create_post/2" translate="no">create_post(event, attrs)</a>
-
-        </div>
-
-          <div class="summary-synopsis"><p>Creates a post.</p></div>
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#create_post/2" translate="no">create_post(event, attrs)</a>
 
       </div>
 
-      <div class="summary-row">
-        <div class="summary-signature">
-          <a href="#create_reaction/1" translate="no">create_reaction(attrs)</a>
+        <div class="summary-synopsis"><p>Creates a post.</p></div>
 
-        </div>
+    </div>
 
-          <div class="summary-synopsis"><p>Creates a reaction.</p></div>
-
-      </div>
-
-      <div class="summary-row">
-        <div class="summary-signature">
-          <a href="#delete_all_posts/3" translate="no">delete_all_posts(atom, attendee_identifier, event)</a>
-
-        </div>
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#create_reaction/1" translate="no">create_reaction(attrs)</a>
 
       </div>
 
-      <div class="summary-row">
-        <div class="summary-signature">
-          <a href="#delete_post/1" translate="no">delete_post(post)</a>
+        <div class="summary-synopsis"><p>Creates a reaction.</p></div>
 
-        </div>
+    </div>
 
-          <div class="summary-synopsis"><p>Deletes a post.</p></div>
-
-      </div>
-
-      <div class="summary-row">
-        <div class="summary-signature">
-          <a href="#delete_reaction/1" translate="no">delete_reaction(params)</a>
-
-        </div>
-
-          <div class="summary-synopsis"><p>Deletes a reaction.</p></div>
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#delete_all_posts/3" translate="no">delete_all_posts(atom, attendee_identifier, event)</a>
 
       </div>
 
-      <div class="summary-row">
-        <div class="summary-signature">
-          <a href="#get_post!/2" translate="no">get_post!(id, preload \\ [])</a>
+    </div>
 
-        </div>
-
-          <div class="summary-synopsis"><p>Gets a single post.</p></div>
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#delete_post/1" translate="no">delete_post(post)</a>
 
       </div>
 
-      <div class="summary-row">
-        <div class="summary-signature">
-          <a href="#get_reaction!/1" translate="no">get_reaction!(id)</a>
+        <div class="summary-synopsis"><p>Deletes a post.</p></div>
 
-        </div>
+    </div>
 
-          <div class="summary-synopsis"><p>Gets a single reaction.</p></div>
-
-      </div>
-
-      <div class="summary-row">
-        <div class="summary-signature">
-          <a href="#list_posts/2" translate="no">list_posts(event_id, preload \\ [])</a>
-
-        </div>
-
-          <div class="summary-synopsis"><p>Get event posts</p></div>
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#delete_reaction/1" translate="no">delete_reaction(params)</a>
 
       </div>
 
-      <div class="summary-row">
-        <div class="summary-signature">
-          <a href="#reacted_posts/3" translate="no">reacted_posts(event_id, user_id, icon)</a>
+        <div class="summary-synopsis"><p>Deletes a reaction.</p></div>
 
-        </div>
+    </div>
 
-      </div>
-
-      <div class="summary-row">
-        <div class="summary-signature">
-          <a href="#update_post/2" translate="no">update_post(post, attrs)</a>
-
-        </div>
-
-          <div class="summary-synopsis"><p>Updates a post.</p></div>
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#get_post!/2" translate="no">get_post!(id, preload \\ [])</a>
 
       </div>
 
-  </div>
+        <div class="summary-synopsis"><p>Gets a single post.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#get_reaction!/1" translate="no">get_reaction!(id)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Gets a single reaction.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#list_posts/2" translate="no">list_posts(event_id, preload \\ [])</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Get event posts</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#reacted_posts/3" translate="no">reacted_posts(event_id, user_id, icon)</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#update_post/2" translate="no">update_post(post, attrs)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Updates a post.</p></div>
+
+    </div>
+
+</div>
 
   </section>
 
@@ -247,7 +248,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">create_post(event, attrs)</h1>
 
-      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper/posts.ex#L79" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper/posts.ex#L81" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -263,11 +264,11 @@ Functions
   </a>
   Examples
 </h2>
-<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">create_post</span><span class="p" data-group-id="5083230217-1">(</span><span class="n">event</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="5083230217-2">%{</span><span class="ss">field</span><span class="p">:</span><span class="w"> </span><span class="n">value</span><span class="p" data-group-id="5083230217-2">}</span><span class="p" data-group-id="5083230217-1">)</span><span class="w">
-</span><span class="p" data-group-id="5083230217-3">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="5083230217-4">%</span><span class="nc" data-group-id="5083230217-4">Post</span><span class="p" data-group-id="5083230217-4">{</span><span class="p" data-group-id="5083230217-4">}</span><span class="p" data-group-id="5083230217-3">}</span><span class="w">
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">create_post</span><span class="p" data-group-id="8762839520-1">(</span><span class="n">event</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="8762839520-2">%{</span><span class="ss">field</span><span class="p">:</span><span class="w"> </span><span class="n">value</span><span class="p" data-group-id="8762839520-2">}</span><span class="p" data-group-id="8762839520-1">)</span><span class="w">
+</span><span class="p" data-group-id="8762839520-3">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="8762839520-4">%</span><span class="nc" data-group-id="8762839520-4">Post</span><span class="p" data-group-id="8762839520-4">{</span><span class="p" data-group-id="8762839520-4">}</span><span class="p" data-group-id="8762839520-3">}</span><span class="w">
 
-</span><span class="gp unselectable">iex&gt; </span><span class="n">create_post</span><span class="p" data-group-id="5083230217-5">(</span><span class="n">event</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="5083230217-6">%{</span><span class="ss">field</span><span class="p">:</span><span class="w"> </span><span class="n">bad_value</span><span class="p" data-group-id="5083230217-6">}</span><span class="p" data-group-id="5083230217-5">)</span><span class="w">
-</span><span class="p" data-group-id="5083230217-7">{</span><span class="ss">:error</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="5083230217-8">%</span><span class="nc" data-group-id="5083230217-8">Ecto.Changeset</span><span class="p" data-group-id="5083230217-8">{</span><span class="p" data-group-id="5083230217-8">}</span><span class="p" data-group-id="5083230217-7">}</span></code></pre>
+</span><span class="gp unselectable">iex&gt; </span><span class="n">create_post</span><span class="p" data-group-id="8762839520-5">(</span><span class="n">event</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="8762839520-6">%{</span><span class="ss">field</span><span class="p">:</span><span class="w"> </span><span class="n">bad_value</span><span class="p" data-group-id="8762839520-6">}</span><span class="p" data-group-id="8762839520-5">)</span><span class="w">
+</span><span class="p" data-group-id="8762839520-7">{</span><span class="ss">:error</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="8762839520-8">%</span><span class="nc" data-group-id="8762839520-8">Ecto.Changeset</span><span class="p" data-group-id="8762839520-8">{</span><span class="p" data-group-id="8762839520-8">}</span><span class="p" data-group-id="8762839520-7">}</span></code></pre>
   </section>
 </section>
 <section class="detail" id="create_reaction/1">
@@ -279,7 +280,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">create_reaction(attrs)</h1>
 
-      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper/posts.ex#L178" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper/posts.ex#L180" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -295,11 +296,11 @@ Functions
   </a>
   Examples
 </h2>
-<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">create_reaction</span><span class="p" data-group-id="9423801598-1">(</span><span class="p" data-group-id="9423801598-2">%{</span><span class="ss">field</span><span class="p">:</span><span class="w"> </span><span class="n">value</span><span class="p" data-group-id="9423801598-2">}</span><span class="p" data-group-id="9423801598-1">)</span><span class="w">
-</span><span class="p" data-group-id="9423801598-3">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="9423801598-4">%</span><span class="nc" data-group-id="9423801598-4">Reaction</span><span class="p" data-group-id="9423801598-4">{</span><span class="p" data-group-id="9423801598-4">}</span><span class="p" data-group-id="9423801598-3">}</span><span class="w">
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">create_reaction</span><span class="p" data-group-id="1493014049-1">(</span><span class="p" data-group-id="1493014049-2">%{</span><span class="ss">field</span><span class="p">:</span><span class="w"> </span><span class="n">value</span><span class="p" data-group-id="1493014049-2">}</span><span class="p" data-group-id="1493014049-1">)</span><span class="w">
+</span><span class="p" data-group-id="1493014049-3">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="1493014049-4">%</span><span class="nc" data-group-id="1493014049-4">Reaction</span><span class="p" data-group-id="1493014049-4">{</span><span class="p" data-group-id="1493014049-4">}</span><span class="p" data-group-id="1493014049-3">}</span><span class="w">
 
-</span><span class="gp unselectable">iex&gt; </span><span class="n">create_reaction</span><span class="p" data-group-id="9423801598-5">(</span><span class="p" data-group-id="9423801598-6">%{</span><span class="ss">field</span><span class="p">:</span><span class="w"> </span><span class="n">bad_value</span><span class="p" data-group-id="9423801598-6">}</span><span class="p" data-group-id="9423801598-5">)</span><span class="w">
-</span><span class="p" data-group-id="9423801598-7">{</span><span class="ss">:error</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="9423801598-8">%</span><span class="nc" data-group-id="9423801598-8">Ecto.Changeset</span><span class="p" data-group-id="9423801598-8">{</span><span class="p" data-group-id="9423801598-8">}</span><span class="p" data-group-id="9423801598-7">}</span></code></pre>
+</span><span class="gp unselectable">iex&gt; </span><span class="n">create_reaction</span><span class="p" data-group-id="1493014049-5">(</span><span class="p" data-group-id="1493014049-6">%{</span><span class="ss">field</span><span class="p">:</span><span class="w"> </span><span class="n">bad_value</span><span class="p" data-group-id="1493014049-6">}</span><span class="p" data-group-id="1493014049-5">)</span><span class="w">
+</span><span class="p" data-group-id="1493014049-7">{</span><span class="ss">:error</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="1493014049-8">%</span><span class="nc" data-group-id="1493014049-8">Ecto.Changeset</span><span class="p" data-group-id="1493014049-8">{</span><span class="p" data-group-id="1493014049-8">}</span><span class="p" data-group-id="1493014049-7">}</span></code></pre>
   </section>
 </section>
 <section class="detail" id="delete_all_posts/3">
@@ -311,7 +312,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">delete_all_posts(atom, attendee_identifier, event)</h1>
 
-      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper/posts.ex#L124" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper/posts.ex#L126" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -333,7 +334,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">delete_post(post)</h1>
 
-      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper/posts.ex#L118" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper/posts.ex#L120" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -349,11 +350,11 @@ Functions
   </a>
   Examples
 </h2>
-<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">delete_post</span><span class="p" data-group-id="6112017522-1">(</span><span class="n">post</span><span class="p" data-group-id="6112017522-1">)</span><span class="w">
-</span><span class="p" data-group-id="6112017522-2">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="6112017522-3">%</span><span class="nc" data-group-id="6112017522-3">Post</span><span class="p" data-group-id="6112017522-3">{</span><span class="p" data-group-id="6112017522-3">}</span><span class="p" data-group-id="6112017522-2">}</span><span class="w">
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">delete_post</span><span class="p" data-group-id="3887673271-1">(</span><span class="n">post</span><span class="p" data-group-id="3887673271-1">)</span><span class="w">
+</span><span class="p" data-group-id="3887673271-2">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="3887673271-3">%</span><span class="nc" data-group-id="3887673271-3">Post</span><span class="p" data-group-id="3887673271-3">{</span><span class="p" data-group-id="3887673271-3">}</span><span class="p" data-group-id="3887673271-2">}</span><span class="w">
 
-</span><span class="gp unselectable">iex&gt; </span><span class="n">delete_post</span><span class="p" data-group-id="6112017522-4">(</span><span class="n">post</span><span class="p" data-group-id="6112017522-4">)</span><span class="w">
-</span><span class="p" data-group-id="6112017522-5">{</span><span class="ss">:error</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="6112017522-6">%</span><span class="nc" data-group-id="6112017522-6">Ecto.Changeset</span><span class="p" data-group-id="6112017522-6">{</span><span class="p" data-group-id="6112017522-6">}</span><span class="p" data-group-id="6112017522-5">}</span></code></pre>
+</span><span class="gp unselectable">iex&gt; </span><span class="n">delete_post</span><span class="p" data-group-id="3887673271-4">(</span><span class="n">post</span><span class="p" data-group-id="3887673271-4">)</span><span class="w">
+</span><span class="p" data-group-id="3887673271-5">{</span><span class="ss">:error</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="3887673271-6">%</span><span class="nc" data-group-id="3887673271-6">Ecto.Changeset</span><span class="p" data-group-id="3887673271-6">{</span><span class="p" data-group-id="3887673271-6">}</span><span class="p" data-group-id="3887673271-5">}</span></code></pre>
   </section>
 </section>
 <section class="detail" id="delete_reaction/1">
@@ -365,7 +366,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">delete_reaction(params)</h1>
 
-      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper/posts.ex#L206" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper/posts.ex#L208" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -381,11 +382,11 @@ Functions
   </a>
   Examples
 </h2>
-<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">delete_reaction</span><span class="p" data-group-id="1274076257-1">(</span><span class="n">reaction</span><span class="p" data-group-id="1274076257-1">)</span><span class="w">
-</span><span class="p" data-group-id="1274076257-2">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="1274076257-3">%</span><span class="nc" data-group-id="1274076257-3">Reaction</span><span class="p" data-group-id="1274076257-3">{</span><span class="p" data-group-id="1274076257-3">}</span><span class="p" data-group-id="1274076257-2">}</span><span class="w">
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">delete_reaction</span><span class="p" data-group-id="6026177521-1">(</span><span class="n">reaction</span><span class="p" data-group-id="6026177521-1">)</span><span class="w">
+</span><span class="p" data-group-id="6026177521-2">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="6026177521-3">%</span><span class="nc" data-group-id="6026177521-3">Reaction</span><span class="p" data-group-id="6026177521-3">{</span><span class="p" data-group-id="6026177521-3">}</span><span class="p" data-group-id="6026177521-2">}</span><span class="w">
 
-</span><span class="gp unselectable">iex&gt; </span><span class="n">delete_reaction</span><span class="p" data-group-id="1274076257-4">(</span><span class="n">reaction</span><span class="p" data-group-id="1274076257-4">)</span><span class="w">
-</span><span class="p" data-group-id="1274076257-5">{</span><span class="ss">:error</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="1274076257-6">%</span><span class="nc" data-group-id="1274076257-6">Ecto.Changeset</span><span class="p" data-group-id="1274076257-6">{</span><span class="p" data-group-id="1274076257-6">}</span><span class="p" data-group-id="1274076257-5">}</span></code></pre>
+</span><span class="gp unselectable">iex&gt; </span><span class="n">delete_reaction</span><span class="p" data-group-id="6026177521-4">(</span><span class="n">reaction</span><span class="p" data-group-id="6026177521-4">)</span><span class="w">
+</span><span class="p" data-group-id="6026177521-5">{</span><span class="ss">:error</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="6026177521-6">%</span><span class="nc" data-group-id="6026177521-6">Ecto.Changeset</span><span class="p" data-group-id="6026177521-6">{</span><span class="p" data-group-id="6026177521-6">}</span><span class="p" data-group-id="6026177521-5">}</span></code></pre>
   </section>
 </section>
 <section class="detail" id="get_post!/2">
@@ -399,7 +400,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">get_post!(id, preload \\ [])</h1>
 
-      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper/posts.ex#L65" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper/posts.ex#L67" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -409,16 +410,16 @@ Functions
 
   <section class="docstring">
 
-<p>Gets a single post.</p><p>Raises <a href="https://hexdocs.pm/ecto/3.7.2/Ecto.NoResultsError.html"><code class="inline">Ecto.NoResultsError</code></a> if the Post does not exist.</p><h2 id="get_post!/2-examples" class="section-heading">
+<p>Gets a single post.</p><p>Raises <a href="https://hexdocs.pm/ecto/3.10.1/Ecto.NoResultsError.html"><code class="inline">Ecto.NoResultsError</code></a> if the Post does not exist.</p><h2 id="get_post!/2-examples" class="section-heading">
   <a href="#get_post!/2-examples" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i>
   <p class="sr-only">examples</p>
   </a>
   Examples
 </h2>
-<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">get_post!</span><span class="p" data-group-id="7136417265-1">(</span><span class="s">&quot;123e4567-e89b-12d3-a456-426614174000&quot;</span><span class="p" data-group-id="7136417265-1">)</span><span class="w">
-</span><span class="p" data-group-id="7136417265-2">%</span><span class="nc" data-group-id="7136417265-2">Post</span><span class="p" data-group-id="7136417265-2">{</span><span class="p" data-group-id="7136417265-2">}</span><span class="w">
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">get_post!</span><span class="p" data-group-id="9096263949-1">(</span><span class="s">&quot;123e4567-e89b-12d3-a456-426614174000&quot;</span><span class="p" data-group-id="9096263949-1">)</span><span class="w">
+</span><span class="p" data-group-id="9096263949-2">%</span><span class="nc" data-group-id="9096263949-2">Post</span><span class="p" data-group-id="9096263949-2">{</span><span class="p" data-group-id="9096263949-2">}</span><span class="w">
 
-</span><span class="gp unselectable">iex&gt; </span><span class="n">get_post!</span><span class="p" data-group-id="7136417265-3">(</span><span class="s">&quot;123e4567-e89b-12d3-a456-426614174123&quot;</span><span class="p" data-group-id="7136417265-3">)</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="n">get_post!</span><span class="p" data-group-id="9096263949-3">(</span><span class="s">&quot;123e4567-e89b-12d3-a456-426614174123&quot;</span><span class="p" data-group-id="9096263949-3">)</span><span class="w">
 </span><span class="gt">** (Ecto.NoResultsError)</span></code></pre>
   </section>
 </section>
@@ -431,7 +432,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">get_reaction!(id)</h1>
 
-      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper/posts.ex#L164" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper/posts.ex#L166" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -441,16 +442,16 @@ Functions
 
   <section class="docstring">
 
-<p>Gets a single reaction.</p><p>Raises <a href="https://hexdocs.pm/ecto/3.7.2/Ecto.NoResultsError.html"><code class="inline">Ecto.NoResultsError</code></a> if the Reaction does not exist.</p><h2 id="get_reaction!/1-examples" class="section-heading">
+<p>Gets a single reaction.</p><p>Raises <a href="https://hexdocs.pm/ecto/3.10.1/Ecto.NoResultsError.html"><code class="inline">Ecto.NoResultsError</code></a> if the Reaction does not exist.</p><h2 id="get_reaction!/1-examples" class="section-heading">
   <a href="#get_reaction!/1-examples" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i>
   <p class="sr-only">examples</p>
   </a>
   Examples
 </h2>
-<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">get_reaction!</span><span class="p" data-group-id="2738404343-1">(</span><span class="mi">123</span><span class="p" data-group-id="2738404343-1">)</span><span class="w">
-</span><span class="p" data-group-id="2738404343-2">%</span><span class="nc" data-group-id="2738404343-2">Reaction</span><span class="p" data-group-id="2738404343-2">{</span><span class="p" data-group-id="2738404343-2">}</span><span class="w">
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">get_reaction!</span><span class="p" data-group-id="9202555157-1">(</span><span class="mi">123</span><span class="p" data-group-id="9202555157-1">)</span><span class="w">
+</span><span class="p" data-group-id="9202555157-2">%</span><span class="nc" data-group-id="9202555157-2">Reaction</span><span class="p" data-group-id="9202555157-2">{</span><span class="p" data-group-id="9202555157-2">}</span><span class="w">
 
-</span><span class="gp unselectable">iex&gt; </span><span class="n">get_reaction!</span><span class="p" data-group-id="2738404343-3">(</span><span class="mi">456</span><span class="p" data-group-id="2738404343-3">)</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="n">get_reaction!</span><span class="p" data-group-id="9202555157-3">(</span><span class="mi">456</span><span class="p" data-group-id="9202555157-3">)</span><span class="w">
 </span><span class="gt">** (Ecto.NoResultsError)</span></code></pre>
   </section>
 </section>
@@ -465,7 +466,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">list_posts(event_id, preload \\ [])</h1>
 
-      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper/posts.ex#L15" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper/posts.ex#L15" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -487,7 +488,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">reacted_posts(event_id, user_id, icon)</h1>
 
-      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper/posts.ex#L27" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper/posts.ex#L27" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -509,7 +510,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">update_post(post, attrs)</h1>
 
-      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper/posts.ex#L99" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper/posts.ex#L101" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -525,11 +526,11 @@ Functions
   </a>
   Examples
 </h2>
-<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">update_post</span><span class="p" data-group-id="1203345001-1">(</span><span class="n">post</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="1203345001-2">%{</span><span class="ss">field</span><span class="p">:</span><span class="w"> </span><span class="n">new_value</span><span class="p" data-group-id="1203345001-2">}</span><span class="p" data-group-id="1203345001-1">)</span><span class="w">
-</span><span class="p" data-group-id="1203345001-3">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="1203345001-4">%</span><span class="nc" data-group-id="1203345001-4">Post</span><span class="p" data-group-id="1203345001-4">{</span><span class="p" data-group-id="1203345001-4">}</span><span class="p" data-group-id="1203345001-3">}</span><span class="w">
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">update_post</span><span class="p" data-group-id="2609560684-1">(</span><span class="n">post</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="2609560684-2">%{</span><span class="ss">field</span><span class="p">:</span><span class="w"> </span><span class="n">new_value</span><span class="p" data-group-id="2609560684-2">}</span><span class="p" data-group-id="2609560684-1">)</span><span class="w">
+</span><span class="p" data-group-id="2609560684-3">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="2609560684-4">%</span><span class="nc" data-group-id="2609560684-4">Post</span><span class="p" data-group-id="2609560684-4">{</span><span class="p" data-group-id="2609560684-4">}</span><span class="p" data-group-id="2609560684-3">}</span><span class="w">
 
-</span><span class="gp unselectable">iex&gt; </span><span class="n">update_post</span><span class="p" data-group-id="1203345001-5">(</span><span class="n">post</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="1203345001-6">%{</span><span class="ss">field</span><span class="p">:</span><span class="w"> </span><span class="n">bad_value</span><span class="p" data-group-id="1203345001-6">}</span><span class="p" data-group-id="1203345001-5">)</span><span class="w">
-</span><span class="p" data-group-id="1203345001-7">{</span><span class="ss">:error</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="1203345001-8">%</span><span class="nc" data-group-id="1203345001-8">Ecto.Changeset</span><span class="p" data-group-id="1203345001-8">{</span><span class="p" data-group-id="1203345001-8">}</span><span class="p" data-group-id="1203345001-7">}</span></code></pre>
+</span><span class="gp unselectable">iex&gt; </span><span class="n">update_post</span><span class="p" data-group-id="2609560684-5">(</span><span class="n">post</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="2609560684-6">%{</span><span class="ss">field</span><span class="p">:</span><span class="w"> </span><span class="n">bad_value</span><span class="p" data-group-id="2609560684-6">}</span><span class="p" data-group-id="2609560684-5">)</span><span class="w">
+</span><span class="p" data-group-id="2609560684-7">{</span><span class="ss">:error</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="2609560684-8">%</span><span class="nc" data-group-id="2609560684-8">Ecto.Changeset</span><span class="p" data-group-id="2609560684-8">{</span><span class="p" data-group-id="2609560684-8">}</span><span class="p" data-group-id="2609560684-7">}</span></code></pre>
   </section>
 </section>
 
@@ -537,10 +538,23 @@ Functions
   </section>
 
       <footer class="footer">
-
         <p>
+
+          <span class="line">
+            <button class="a-main footer-button display-quick-switch" title="Search HexDocs packages">
+              Search HexDocs
+            </button>
+
+              <a href="Claper.epub" title="ePub version">
+                Download ePub version
+              </a>
+
+          </span>
+        </p>
+
+        <p class="built-using">
           Built using
-          <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.28.4) for the
+          <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.29.4) for the
 
             <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
 

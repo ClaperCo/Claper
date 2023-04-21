@@ -4,21 +4,24 @@
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="generator" content="ExDoc v0.28.4">
-    <meta name="project" content="Claper v1.3.0">
+    <meta name="generator" content="ExDoc v0.29.4">
+    <meta name="project" content="Claper v1.4.0">
 
-    <title>ClaperWeb.Endpoint — Claper v1.3.0</title>
-    <link rel="stylesheet" href="dist/elixir-b6f1ed5df9b1d42a7309.css" />
+    <title>ClaperWeb.Endpoint — Claper v1.4.0</title>
+    <link rel="stylesheet" href="dist/html-elixir-HHVY3JYD.css" />
 
-    <script src="dist/sidebar_items-9c8468b1bc.js"></script>
+
+    <script src="dist/handlebars.runtime-NWIB6V2M.js"></script>
+    <script src="dist/handlebars.templates-XWGFFSCD.js"></script>
+    <script src="dist/sidebar_items-3229396A.js"></script>
 
       <script src="docs_config.js"></script>
 
-    <script async src="dist/app-bd1cb213813bf4825aa2.js"></script>
+    <script async src="dist/html-JDI3AVDD.js"></script>
 
 
   </head>
-  <body data-type="modules">
+  <body data-type="modules" class="page-module">
     <script>
 
       try {
@@ -35,12 +38,11 @@
 
 <div class="main">
 
+<button class="sidebar-button sidebar-toggle" aria-label="toggle sidebar">
+  <i class="ri-menu-line ri-lg" title="Collapse/expand sidebar"></i>
+</button>
 
 <section class="sidebar">
-  <button class="sidebar-button sidebar-toggle" aria-label="toggle sidebar">
-    <i class="ri-menu-line ri-lg" title="Collapse/expand sidebar"></i>
-  </button>
-
   <form class="sidebar-search" action="search.html">
     <button type="submit" class="search-button" aria-label="Submit Search">
       <i class="ri-search-2-line" aria-hidden="true" title="Submit search"></i>
@@ -50,7 +52,7 @@
     </button>
     <label class="search-label">
       <p class="sr-only">Search</p>
-      <input name="q" type="text" class="search-input" placeholder="Search..." aria-label="Input your search terms" autocomplete="off" />
+      <input name="q" type="text" class="search-input" placeholder="Search..." aria-label="Input your search terms" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
     </label>
   </form>
 
@@ -69,9 +71,9 @@
       <a href="https://get.claper.co" class="sidebar-projectName" translate="no">
 Claper
       </a>
-      <strong class="sidebar-projectVersion" translate="no">
-        v1.3.0
-      </strong>
+      <div class="sidebar-projectVersion" translate="no">
+        v1.4.0
+      </div>
     </div>
     <ul class="sidebar-listNav">
       <li><a id="extras-list-link" href="#full-list">GUIDES</a></li>
@@ -83,7 +85,7 @@ Claper
   </div>
 
   <div class="gradient"></div>
-  <ul id="full-list" class="sidebar-fullList"></ul>
+  <ul id="full-list"></ul>
 </section>
 
 <section class="content">
@@ -92,19 +94,19 @@ Claper
     <div id="content" class="content-inner">
 
 <h1>
-<button class="settings display-settings">
+<button class="icon-action display-settings">
   <i class="ri-settings-3-line"></i>
   <span class="sr-only">Settings</span>
 </button>
 
 
-    <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper_web/endpoint.ex#L1" title="View Source" class="view-source" rel="help">
+    <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper_web/endpoint.ex#L1" title="View Source" class="icon-action" rel="help">
       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
       <span class="sr-only">View Source</span>
     </a>
 
   <span translate="no">ClaperWeb.Endpoint</span> 
-  <small class="app-vsn" translate="no">(Claper v1.3.0)</small>
+  <small class="app-vsn" translate="no">(Claper v1.4.0)</small>
 
 </h1>
 
@@ -118,246 +120,245 @@ Claper
       </a>
       Summary
     </h1>
+<div class="summary-functions summary">
+  <h2>
+    <a href="#functions">Functions</a>
+  </h2>
 
-  <div class="summary-functions summary">
-    <h2>
-      <a href="#functions">Functions</a>
-    </h2>
-
-      <div class="summary-row">
-        <div class="summary-signature">
-          <a href="#broadcast!/3" translate="no">broadcast!(topic, event, msg)</a>
-
-        </div>
-
-          <div class="summary-synopsis"><p>Callback implementation for <a href="https://hexdocs.pm/phoenix/1.6.6/Phoenix.Endpoint.html#c:broadcast!/3"><code class="inline">Phoenix.Endpoint.broadcast!/3</code></a>.</p></div>
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#broadcast/3" translate="no">broadcast(topic, event, msg)</a>
 
       </div>
 
-      <div class="summary-row">
-        <div class="summary-signature">
-          <a href="#broadcast/3" translate="no">broadcast(topic, event, msg)</a>
+        <div class="summary-synopsis"><p>Callback implementation for <a href="https://hexdocs.pm/phoenix/1.7.2/Phoenix.Endpoint.html#c:broadcast/3"><code class="inline">Phoenix.Endpoint.broadcast/3</code></a>.</p></div>
 
-        </div>
+    </div>
 
-          <div class="summary-synopsis"><p>Callback implementation for <a href="https://hexdocs.pm/phoenix/1.6.6/Phoenix.Endpoint.html#c:broadcast/3"><code class="inline">Phoenix.Endpoint.broadcast/3</code></a>.</p></div>
-
-      </div>
-
-      <div class="summary-row">
-        <div class="summary-signature">
-          <a href="#broadcast_from!/4" translate="no">broadcast_from!(from, topic, event, msg)</a>
-
-        </div>
-
-          <div class="summary-synopsis"><p>Callback implementation for <a href="https://hexdocs.pm/phoenix/1.6.6/Phoenix.Endpoint.html#c:broadcast_from!/4"><code class="inline">Phoenix.Endpoint.broadcast_from!/4</code></a>.</p></div>
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#broadcast!/3" translate="no">broadcast!(topic, event, msg)</a>
 
       </div>
 
-      <div class="summary-row">
-        <div class="summary-signature">
-          <a href="#broadcast_from/4" translate="no">broadcast_from(from, topic, event, msg)</a>
+        <div class="summary-synopsis"><p>Callback implementation for <a href="https://hexdocs.pm/phoenix/1.7.2/Phoenix.Endpoint.html#c:broadcast!/3"><code class="inline">Phoenix.Endpoint.broadcast!/3</code></a>.</p></div>
 
-        </div>
+    </div>
 
-          <div class="summary-synopsis"><p>Callback implementation for <a href="https://hexdocs.pm/phoenix/1.6.6/Phoenix.Endpoint.html#c:broadcast_from/4"><code class="inline">Phoenix.Endpoint.broadcast_from/4</code></a>.</p></div>
-
-      </div>
-
-      <div class="summary-row">
-        <div class="summary-signature">
-          <a href="#call/2" translate="no">call(conn, opts)</a>
-
-        </div>
-
-          <div class="summary-synopsis"><p>Callback implementation for <a href="https://hexdocs.pm/plug/1.13.4/Plug.html#c:call/2"><code class="inline">Plug.call/2</code></a>.</p></div>
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#broadcast_from/4" translate="no">broadcast_from(from, topic, event, msg)</a>
 
       </div>
 
-      <div class="summary-row">
-        <div class="summary-signature">
-          <a href="#child_spec/1" translate="no">child_spec(opts)</a>
+        <div class="summary-synopsis"><p>Callback implementation for <a href="https://hexdocs.pm/phoenix/1.7.2/Phoenix.Endpoint.html#c:broadcast_from/4"><code class="inline">Phoenix.Endpoint.broadcast_from/4</code></a>.</p></div>
 
-        </div>
+    </div>
 
-          <div class="summary-synopsis"><p>Returns the child specification to start the endpoint
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#broadcast_from!/4" translate="no">broadcast_from!(from, topic, event, msg)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Callback implementation for <a href="https://hexdocs.pm/phoenix/1.7.2/Phoenix.Endpoint.html#c:broadcast_from!/4"><code class="inline">Phoenix.Endpoint.broadcast_from!/4</code></a>.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#call/2" translate="no">call(conn, opts)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Callback implementation for <a href="https://hexdocs.pm/plug/1.14.2/Plug.html#c:call/2"><code class="inline">Plug.call/2</code></a>.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#child_spec/1" translate="no">child_spec(opts)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Returns the child specification to start the endpoint
 under a supervision tree.</p></div>
 
-      </div>
+    </div>
 
-      <div class="summary-row">
-        <div class="summary-signature">
-          <a href="#config/2" translate="no">config(key, default \\ nil)</a>
-
-        </div>
-
-          <div class="summary-synopsis"><p>Returns the endpoint configuration for <code class="inline">key</code></p></div>
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#config/2" translate="no">config(key, default \\ nil)</a>
 
       </div>
 
-      <div class="summary-row">
-        <div class="summary-signature">
-          <a href="#config_change/2" translate="no">config_change(changed, removed)</a>
+        <div class="summary-synopsis"><p>Returns the endpoint configuration for <code class="inline">key</code></p></div>
 
-        </div>
+    </div>
 
-          <div class="summary-synopsis"><p>Reloads the configuration given the application environment changes.</p></div>
-
-      </div>
-
-      <div class="summary-row">
-        <div class="summary-signature">
-          <a href="#host/0" translate="no">host()</a>
-
-        </div>
-
-          <div class="summary-synopsis"><p>Returns the host for the given endpoint.</p></div>
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#config_change/2" translate="no">config_change(changed, removed)</a>
 
       </div>
 
-      <div class="summary-row">
-        <div class="summary-signature">
-          <a href="#init/1" translate="no">init(opts)</a>
+        <div class="summary-synopsis"><p>Reloads the configuration given the application environment changes.</p></div>
 
-        </div>
+    </div>
 
-          <div class="summary-synopsis"><p>Callback implementation for <a href="https://hexdocs.pm/plug/1.13.4/Plug.html#c:init/1"><code class="inline">Plug.init/1</code></a>.</p></div>
-
-      </div>
-
-      <div class="summary-row">
-        <div class="summary-signature">
-          <a href="#local_broadcast/3" translate="no">local_broadcast(topic, event, msg)</a>
-
-        </div>
-
-          <div class="summary-synopsis"><p>Callback implementation for <a href="https://hexdocs.pm/phoenix/1.6.6/Phoenix.Endpoint.html#c:local_broadcast/3"><code class="inline">Phoenix.Endpoint.local_broadcast/3</code></a>.</p></div>
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#host/0" translate="no">host()</a>
 
       </div>
 
-      <div class="summary-row">
-        <div class="summary-signature">
-          <a href="#local_broadcast_from/4" translate="no">local_broadcast_from(from, topic, event, msg)</a>
+        <div class="summary-synopsis"><p>Returns the host for the given endpoint.</p></div>
 
-        </div>
+    </div>
 
-          <div class="summary-synopsis"><p>Callback implementation for <a href="https://hexdocs.pm/phoenix/1.6.6/Phoenix.Endpoint.html#c:local_broadcast_from/4"><code class="inline">Phoenix.Endpoint.local_broadcast_from/4</code></a>.</p></div>
-
-      </div>
-
-      <div class="summary-row">
-        <div class="summary-signature">
-          <a href="#path/1" translate="no">path(path)</a>
-
-        </div>
-
-          <div class="summary-synopsis"><p>Generates the path information when routing to this endpoint.</p></div>
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#init/1" translate="no">init(opts)</a>
 
       </div>
 
-      <div class="summary-row">
-        <div class="summary-signature">
-          <a href="#script_name/0" translate="no">script_name()</a>
+        <div class="summary-synopsis"><p>Callback implementation for <a href="https://hexdocs.pm/plug/1.14.2/Plug.html#c:init/1"><code class="inline">Plug.init/1</code></a>.</p></div>
 
-        </div>
+    </div>
 
-          <div class="summary-synopsis"><p>Generates the script name.</p></div>
-
-      </div>
-
-      <div class="summary-row">
-        <div class="summary-signature">
-          <a href="#start_link/1" translate="no">start_link(opts \\ [])</a>
-
-        </div>
-
-          <div class="summary-synopsis"><p>Starts the endpoint supervision tree.</p></div>
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#local_broadcast/3" translate="no">local_broadcast(topic, event, msg)</a>
 
       </div>
 
-      <div class="summary-row">
-        <div class="summary-signature">
-          <a href="#static_integrity/1" translate="no">static_integrity(path)</a>
+        <div class="summary-synopsis"><p>Callback implementation for <a href="https://hexdocs.pm/phoenix/1.7.2/Phoenix.Endpoint.html#c:local_broadcast/3"><code class="inline">Phoenix.Endpoint.local_broadcast/3</code></a>.</p></div>
 
-        </div>
+    </div>
 
-          <div class="summary-synopsis"><p>Generates a base64-encoded cryptographic hash (sha512) to a static file
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#local_broadcast_from/4" translate="no">local_broadcast_from(from, topic, event, msg)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Callback implementation for <a href="https://hexdocs.pm/phoenix/1.7.2/Phoenix.Endpoint.html#c:local_broadcast_from/4"><code class="inline">Phoenix.Endpoint.local_broadcast_from/4</code></a>.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#path/1" translate="no">path(path)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Generates the path information when routing to this endpoint.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#script_name/0" translate="no">script_name()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Generates the script name.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#start_link/1" translate="no">start_link(opts \\ [])</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Starts the endpoint supervision tree.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#static_integrity/1" translate="no">static_integrity(path)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Generates a base64-encoded cryptographic hash (sha512) to a static file
 in <code class="inline">priv/static</code>. Meant to be used for Subresource Integrity with CDNs.</p></div>
 
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#static_lookup/1" translate="no">static_lookup(path)</a>
+
       </div>
 
-      <div class="summary-row">
-        <div class="summary-signature">
-          <a href="#static_lookup/1" translate="no">static_lookup(path)</a>
-
-        </div>
-
-          <div class="summary-synopsis"><p>Returns a two item tuple with the first item being the <code class="inline">static_path</code>
+        <div class="summary-synopsis"><p>Returns a two item tuple with the first item being the <code class="inline">static_path</code>
 and the second item being the <code class="inline">static_integrity</code>.</p></div>
 
-      </div>
+    </div>
 
-      <div class="summary-row">
-        <div class="summary-signature">
-          <a href="#static_path/1" translate="no">static_path(path)</a>
-
-        </div>
-
-          <div class="summary-synopsis"><p>Generates a route to a static file in <code class="inline">priv/static</code>.</p></div>
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#static_path/1" translate="no">static_path(path)</a>
 
       </div>
 
-      <div class="summary-row">
-        <div class="summary-signature">
-          <a href="#static_url/0" translate="no">static_url()</a>
+        <div class="summary-synopsis"><p>Generates a route to a static file in <code class="inline">priv/static</code>.</p></div>
 
-        </div>
+    </div>
 
-          <div class="summary-synopsis"><p>Generates the static URL without any path information.</p></div>
-
-      </div>
-
-      <div class="summary-row">
-        <div class="summary-signature">
-          <a href="#struct_url/0" translate="no">struct_url()</a>
-
-        </div>
-
-          <div class="summary-synopsis"><p>Generates the endpoint base URL but as a <a href="https://hexdocs.pm/elixir/URI.html"><code class="inline">URI</code></a> struct.</p></div>
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#static_url/0" translate="no">static_url()</a>
 
       </div>
 
-      <div class="summary-row">
-        <div class="summary-signature">
-          <a href="#subscribe/2" translate="no">subscribe(topic, opts \\ [])</a>
+        <div class="summary-synopsis"><p>Generates the static URL without any path information.</p></div>
 
-        </div>
+    </div>
 
-          <div class="summary-synopsis"><p>Callback implementation for <a href="https://hexdocs.pm/phoenix/1.6.6/Phoenix.Endpoint.html#c:subscribe/2"><code class="inline">Phoenix.Endpoint.subscribe/2</code></a>.</p></div>
-
-      </div>
-
-      <div class="summary-row">
-        <div class="summary-signature">
-          <a href="#unsubscribe/1" translate="no">unsubscribe(topic)</a>
-
-        </div>
-
-          <div class="summary-synopsis"><p>Callback implementation for <a href="https://hexdocs.pm/phoenix/1.6.6/Phoenix.Endpoint.html#c:unsubscribe/1"><code class="inline">Phoenix.Endpoint.unsubscribe/1</code></a>.</p></div>
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#struct_url/0" translate="no">struct_url()</a>
 
       </div>
 
-      <div class="summary-row">
-        <div class="summary-signature">
-          <a href="#url/0" translate="no">url()</a>
+        <div class="summary-synopsis"><p>Generates the endpoint base URL but as a <a href="https://hexdocs.pm/elixir/URI.html"><code class="inline">URI</code></a> struct.</p></div>
 
-        </div>
+    </div>
 
-          <div class="summary-synopsis"><p>Generates the endpoint base URL without any path information.</p></div>
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#subscribe/2" translate="no">subscribe(topic, opts \\ [])</a>
 
       </div>
 
-  </div>
+        <div class="summary-synopsis"><p>Callback implementation for <a href="https://hexdocs.pm/phoenix/1.7.2/Phoenix.Endpoint.html#c:subscribe/2"><code class="inline">Phoenix.Endpoint.subscribe/2</code></a>.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#unsubscribe/1" translate="no">unsubscribe(topic)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Callback implementation for <a href="https://hexdocs.pm/phoenix/1.7.2/Phoenix.Endpoint.html#c:unsubscribe/1"><code class="inline">Phoenix.Endpoint.unsubscribe/1</code></a>.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#url/0" translate="no">url()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Generates the endpoint base URL without any path information.</p></div>
+
+    </div>
+
+</div>
 
   </section>
 
@@ -371,28 +372,6 @@ and the second item being the <code class="inline">static_integrity</code>.</p><
 Functions
     </h1>
     <div class="functions-list">
-<section class="detail" id="broadcast!/3">
-
-  <div class="detail-header">
-    <a href="#broadcast!/3" class="detail-link" title="Link to this function">
-      <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
-    </a>
-    <h1 class="signature" translate="no">broadcast!(topic, event, msg)</h1>
-
-      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper_web/endpoint.ex#L2" class="view-source" rel="help" title="View Source">
-       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
-     </a>
-
-
-  </div>
-
-  <section class="docstring">
-
-<p>Callback implementation for <a href="https://hexdocs.pm/phoenix/1.6.6/Phoenix.Endpoint.html#c:broadcast!/3"><code class="inline">Phoenix.Endpoint.broadcast!/3</code></a>.</p>
-  </section>
-</section>
 <section class="detail" id="broadcast/3">
 
   <div class="detail-header">
@@ -402,7 +381,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">broadcast(topic, event, msg)</h1>
 
-      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper_web/endpoint.ex#L2" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper_web/endpoint.ex#L2" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -412,19 +391,19 @@ Functions
 
   <section class="docstring">
 
-<p>Callback implementation for <a href="https://hexdocs.pm/phoenix/1.6.6/Phoenix.Endpoint.html#c:broadcast/3"><code class="inline">Phoenix.Endpoint.broadcast/3</code></a>.</p>
+<p>Callback implementation for <a href="https://hexdocs.pm/phoenix/1.7.2/Phoenix.Endpoint.html#c:broadcast/3"><code class="inline">Phoenix.Endpoint.broadcast/3</code></a>.</p>
   </section>
 </section>
-<section class="detail" id="broadcast_from!/4">
+<section class="detail" id="broadcast!/3">
 
   <div class="detail-header">
-    <a href="#broadcast_from!/4" class="detail-link" title="Link to this function">
+    <a href="#broadcast!/3" class="detail-link" title="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this function</span>
     </a>
-    <h1 class="signature" translate="no">broadcast_from!(from, topic, event, msg)</h1>
+    <h1 class="signature" translate="no">broadcast!(topic, event, msg)</h1>
 
-      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper_web/endpoint.ex#L2" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper_web/endpoint.ex#L2" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -434,7 +413,7 @@ Functions
 
   <section class="docstring">
 
-<p>Callback implementation for <a href="https://hexdocs.pm/phoenix/1.6.6/Phoenix.Endpoint.html#c:broadcast_from!/4"><code class="inline">Phoenix.Endpoint.broadcast_from!/4</code></a>.</p>
+<p>Callback implementation for <a href="https://hexdocs.pm/phoenix/1.7.2/Phoenix.Endpoint.html#c:broadcast!/3"><code class="inline">Phoenix.Endpoint.broadcast!/3</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="broadcast_from/4">
@@ -446,7 +425,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">broadcast_from(from, topic, event, msg)</h1>
 
-      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper_web/endpoint.ex#L2" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper_web/endpoint.ex#L2" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -456,7 +435,29 @@ Functions
 
   <section class="docstring">
 
-<p>Callback implementation for <a href="https://hexdocs.pm/phoenix/1.6.6/Phoenix.Endpoint.html#c:broadcast_from/4"><code class="inline">Phoenix.Endpoint.broadcast_from/4</code></a>.</p>
+<p>Callback implementation for <a href="https://hexdocs.pm/phoenix/1.7.2/Phoenix.Endpoint.html#c:broadcast_from/4"><code class="inline">Phoenix.Endpoint.broadcast_from/4</code></a>.</p>
+  </section>
+</section>
+<section class="detail" id="broadcast_from!/4">
+
+  <div class="detail-header">
+    <a href="#broadcast_from!/4" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">broadcast_from!(from, topic, event, msg)</h1>
+
+      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper_web/endpoint.ex#L2" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+<p>Callback implementation for <a href="https://hexdocs.pm/phoenix/1.7.2/Phoenix.Endpoint.html#c:broadcast_from!/4"><code class="inline">Phoenix.Endpoint.broadcast_from!/4</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="call/2">
@@ -468,7 +469,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">call(conn, opts)</h1>
 
-      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper_web/endpoint.ex#L1" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper_web/endpoint.ex#L1" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -478,7 +479,7 @@ Functions
 
   <section class="docstring">
 
-<p>Callback implementation for <a href="https://hexdocs.pm/plug/1.13.4/Plug.html#c:call/2"><code class="inline">Plug.call/2</code></a>.</p>
+<p>Callback implementation for <a href="https://hexdocs.pm/plug/1.14.2/Plug.html#c:call/2"><code class="inline">Plug.call/2</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="child_spec/1">
@@ -490,7 +491,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">child_spec(opts)</h1>
 
-      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper_web/endpoint.ex#L2" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper_web/endpoint.ex#L2" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -515,7 +516,7 @@ under a supervision tree.</p>
     </a>
     <h1 class="signature" translate="no">config(key, default \\ nil)</h1>
 
-      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper_web/endpoint.ex#L2" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper_web/endpoint.ex#L2" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -537,7 +538,7 @@ under a supervision tree.</p>
     </a>
     <h1 class="signature" translate="no">config_change(changed, removed)</h1>
 
-      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper_web/endpoint.ex#L2" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper_web/endpoint.ex#L2" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -559,7 +560,7 @@ under a supervision tree.</p>
     </a>
     <h1 class="signature" translate="no">host()</h1>
 
-      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper_web/endpoint.ex#L2" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper_web/endpoint.ex#L2" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -581,7 +582,7 @@ under a supervision tree.</p>
     </a>
     <h1 class="signature" translate="no">init(opts)</h1>
 
-      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper_web/endpoint.ex#L2" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper_web/endpoint.ex#L2" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -591,7 +592,7 @@ under a supervision tree.</p>
 
   <section class="docstring">
 
-<p>Callback implementation for <a href="https://hexdocs.pm/plug/1.13.4/Plug.html#c:init/1"><code class="inline">Plug.init/1</code></a>.</p>
+<p>Callback implementation for <a href="https://hexdocs.pm/plug/1.14.2/Plug.html#c:init/1"><code class="inline">Plug.init/1</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="local_broadcast/3">
@@ -603,7 +604,7 @@ under a supervision tree.</p>
     </a>
     <h1 class="signature" translate="no">local_broadcast(topic, event, msg)</h1>
 
-      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper_web/endpoint.ex#L2" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper_web/endpoint.ex#L2" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -613,7 +614,7 @@ under a supervision tree.</p>
 
   <section class="docstring">
 
-<p>Callback implementation for <a href="https://hexdocs.pm/phoenix/1.6.6/Phoenix.Endpoint.html#c:local_broadcast/3"><code class="inline">Phoenix.Endpoint.local_broadcast/3</code></a>.</p>
+<p>Callback implementation for <a href="https://hexdocs.pm/phoenix/1.7.2/Phoenix.Endpoint.html#c:local_broadcast/3"><code class="inline">Phoenix.Endpoint.local_broadcast/3</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="local_broadcast_from/4">
@@ -625,7 +626,7 @@ under a supervision tree.</p>
     </a>
     <h1 class="signature" translate="no">local_broadcast_from(from, topic, event, msg)</h1>
 
-      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper_web/endpoint.ex#L2" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper_web/endpoint.ex#L2" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -635,7 +636,7 @@ under a supervision tree.</p>
 
   <section class="docstring">
 
-<p>Callback implementation for <a href="https://hexdocs.pm/phoenix/1.6.6/Phoenix.Endpoint.html#c:local_broadcast_from/4"><code class="inline">Phoenix.Endpoint.local_broadcast_from/4</code></a>.</p>
+<p>Callback implementation for <a href="https://hexdocs.pm/phoenix/1.7.2/Phoenix.Endpoint.html#c:local_broadcast_from/4"><code class="inline">Phoenix.Endpoint.local_broadcast_from/4</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="path/1">
@@ -647,7 +648,7 @@ under a supervision tree.</p>
     </a>
     <h1 class="signature" translate="no">path(path)</h1>
 
-      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper_web/endpoint.ex#L2" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper_web/endpoint.ex#L2" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -669,7 +670,7 @@ under a supervision tree.</p>
     </a>
     <h1 class="signature" translate="no">script_name()</h1>
 
-      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper_web/endpoint.ex#L2" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper_web/endpoint.ex#L2" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -693,7 +694,7 @@ under a supervision tree.</p>
     </a>
     <h1 class="signature" translate="no">start_link(opts \\ [])</h1>
 
-      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper_web/endpoint.ex#L2" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper_web/endpoint.ex#L2" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -703,14 +704,7 @@ under a supervision tree.</p>
 
   <section class="docstring">
 
-<p>Starts the endpoint supervision tree.</p><h2 id="start_link/1-options" class="section-heading">
-  <a href="#start_link/1-options" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i>
-  <p class="sr-only">options</p>
-  </a>
-  Options
-</h2>
-<ul><li><code class="inline">:log_access_url</code> - if the access url should be logged
-once the endpoint starts</li></ul><p>All other options are merged into the endpoint configuration.</p>
+<p>Starts the endpoint supervision tree.</p><p>All other options are merged into the endpoint configuration.</p>
   </section>
 </section>
 <section class="detail" id="static_integrity/1">
@@ -722,7 +716,7 @@ once the endpoint starts</li></ul><p>All other options are merged into the endpo
     </a>
     <h1 class="signature" translate="no">static_integrity(path)</h1>
 
-      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper_web/endpoint.ex#L2" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper_web/endpoint.ex#L2" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -745,7 +739,7 @@ in <code class="inline">priv/static</code>. Meant to be used for Subresource Int
     </a>
     <h1 class="signature" translate="no">static_lookup(path)</h1>
 
-      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper_web/endpoint.ex#L2" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper_web/endpoint.ex#L2" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -768,7 +762,7 @@ and the second item being the <code class="inline">static_integrity</code>.</p>
     </a>
     <h1 class="signature" translate="no">static_path(path)</h1>
 
-      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper_web/endpoint.ex#L2" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper_web/endpoint.ex#L2" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -790,7 +784,7 @@ and the second item being the <code class="inline">static_integrity</code>.</p>
     </a>
     <h1 class="signature" translate="no">static_url()</h1>
 
-      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper_web/endpoint.ex#L2" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper_web/endpoint.ex#L2" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -813,7 +807,7 @@ such. It falls back to <code class="inline">:url</code> if <code class="inline">
     </a>
     <h1 class="signature" translate="no">struct_url()</h1>
 
-      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper_web/endpoint.ex#L2" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper_web/endpoint.ex#L2" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -839,7 +833,7 @@ URL helpers.</p>
     </a>
     <h1 class="signature" translate="no">subscribe(topic, opts \\ [])</h1>
 
-      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper_web/endpoint.ex#L2" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper_web/endpoint.ex#L2" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -849,7 +843,7 @@ URL helpers.</p>
 
   <section class="docstring">
 
-<p>Callback implementation for <a href="https://hexdocs.pm/phoenix/1.6.6/Phoenix.Endpoint.html#c:subscribe/2"><code class="inline">Phoenix.Endpoint.subscribe/2</code></a>.</p>
+<p>Callback implementation for <a href="https://hexdocs.pm/phoenix/1.7.2/Phoenix.Endpoint.html#c:subscribe/2"><code class="inline">Phoenix.Endpoint.subscribe/2</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="unsubscribe/1">
@@ -861,7 +855,7 @@ URL helpers.</p>
     </a>
     <h1 class="signature" translate="no">unsubscribe(topic)</h1>
 
-      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper_web/endpoint.ex#L2" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper_web/endpoint.ex#L2" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -871,7 +865,7 @@ URL helpers.</p>
 
   <section class="docstring">
 
-<p>Callback implementation for <a href="https://hexdocs.pm/phoenix/1.6.6/Phoenix.Endpoint.html#c:unsubscribe/1"><code class="inline">Phoenix.Endpoint.unsubscribe/1</code></a>.</p>
+<p>Callback implementation for <a href="https://hexdocs.pm/phoenix/1.7.2/Phoenix.Endpoint.html#c:unsubscribe/1"><code class="inline">Phoenix.Endpoint.unsubscribe/1</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="url/0">
@@ -883,7 +877,7 @@ URL helpers.</p>
     </a>
     <h1 class="signature" translate="no">url()</h1>
 
-      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper_web/endpoint.ex#L2" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper_web/endpoint.ex#L2" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -901,10 +895,23 @@ URL helpers.</p>
   </section>
 
       <footer class="footer">
-
         <p>
+
+          <span class="line">
+            <button class="a-main footer-button display-quick-switch" title="Search HexDocs packages">
+              Search HexDocs
+            </button>
+
+              <a href="Claper.epub" title="ePub version">
+                Download ePub version
+              </a>
+
+          </span>
+        </p>
+
+        <p class="built-using">
           Built using
-          <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.28.4) for the
+          <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.29.4) for the
 
             <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
 

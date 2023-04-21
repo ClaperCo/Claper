@@ -4,21 +4,24 @@
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="generator" content="ExDoc v0.28.4">
-    <meta name="project" content="Claper v1.3.0">
+    <meta name="generator" content="ExDoc v0.29.4">
+    <meta name="project" content="Claper v1.4.0">
 
-    <title>ClaperWeb.Presence — Claper v1.3.0</title>
-    <link rel="stylesheet" href="dist/elixir-b6f1ed5df9b1d42a7309.css" />
+    <title>ClaperWeb.Presence — Claper v1.4.0</title>
+    <link rel="stylesheet" href="dist/html-elixir-HHVY3JYD.css" />
 
-    <script src="dist/sidebar_items-9c8468b1bc.js"></script>
+
+    <script src="dist/handlebars.runtime-NWIB6V2M.js"></script>
+    <script src="dist/handlebars.templates-XWGFFSCD.js"></script>
+    <script src="dist/sidebar_items-3229396A.js"></script>
 
       <script src="docs_config.js"></script>
 
-    <script async src="dist/app-bd1cb213813bf4825aa2.js"></script>
+    <script async src="dist/html-JDI3AVDD.js"></script>
 
 
   </head>
-  <body data-type="modules">
+  <body data-type="modules" class="page-module">
     <script>
 
       try {
@@ -35,12 +38,11 @@
 
 <div class="main">
 
+<button class="sidebar-button sidebar-toggle" aria-label="toggle sidebar">
+  <i class="ri-menu-line ri-lg" title="Collapse/expand sidebar"></i>
+</button>
 
 <section class="sidebar">
-  <button class="sidebar-button sidebar-toggle" aria-label="toggle sidebar">
-    <i class="ri-menu-line ri-lg" title="Collapse/expand sidebar"></i>
-  </button>
-
   <form class="sidebar-search" action="search.html">
     <button type="submit" class="search-button" aria-label="Submit Search">
       <i class="ri-search-2-line" aria-hidden="true" title="Submit search"></i>
@@ -50,7 +52,7 @@
     </button>
     <label class="search-label">
       <p class="sr-only">Search</p>
-      <input name="q" type="text" class="search-input" placeholder="Search..." aria-label="Input your search terms" autocomplete="off" />
+      <input name="q" type="text" class="search-input" placeholder="Search..." aria-label="Input your search terms" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
     </label>
   </form>
 
@@ -69,9 +71,9 @@
       <a href="https://get.claper.co" class="sidebar-projectName" translate="no">
 Claper
       </a>
-      <strong class="sidebar-projectVersion" translate="no">
-        v1.3.0
-      </strong>
+      <div class="sidebar-projectVersion" translate="no">
+        v1.4.0
+      </div>
     </div>
     <ul class="sidebar-listNav">
       <li><a id="extras-list-link" href="#full-list">GUIDES</a></li>
@@ -83,7 +85,7 @@ Claper
   </div>
 
   <div class="gradient"></div>
-  <ul id="full-list" class="sidebar-fullList"></ul>
+  <ul id="full-list"></ul>
 </section>
 
 <section class="content">
@@ -92,19 +94,19 @@ Claper
     <div id="content" class="content-inner">
 
 <h1>
-<button class="settings display-settings">
+<button class="icon-action display-settings">
   <i class="ri-settings-3-line"></i>
   <span class="sr-only">Settings</span>
 </button>
 
 
-    <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper_web/channels/presence.ex#L1" title="View Source" class="view-source" rel="help">
+    <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper_web/channels/presence.ex#L1" title="View Source" class="icon-action" rel="help">
       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
       <span class="sr-only">View Source</span>
     </a>
 
   <span translate="no">ClaperWeb.Presence</span> 
-  <small class="app-vsn" translate="no">(Claper v1.3.0)</small>
+  <small class="app-vsn" translate="no">(Claper v1.4.0)</small>
 
 </h1>
 
@@ -123,119 +125,118 @@ docs for more details.</p>
       </a>
       Summary
     </h1>
+<div class="summary-functions summary">
+  <h2>
+    <a href="#functions">Functions</a>
+  </h2>
 
-  <div class="summary-functions summary">
-    <h2>
-      <a href="#functions">Functions</a>
-    </h2>
-
-      <div class="summary-row">
-        <div class="summary-signature">
-          <a href="#child_spec/1" translate="no">child_spec(opts)</a>
-
-        </div>
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#child_spec/1" translate="no">child_spec(opts)</a>
 
       </div>
 
-      <div class="summary-row">
-        <div class="summary-signature">
-          <a href="#fetch/2" translate="no">fetch(topic, presences)</a>
+    </div>
 
-        </div>
-
-          <div class="summary-synopsis"><p>Callback implementation for <a href="https://hexdocs.pm/phoenix/1.6.6/Phoenix.Presence.html#c:fetch/2"><code class="inline">Phoenix.Presence.fetch/2</code></a>.</p></div>
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#fetch/2" translate="no">fetch(topic, presences)</a>
 
       </div>
 
-      <div class="summary-row">
-        <div class="summary-signature">
-          <a href="#fetchers_pids/0" translate="no">fetchers_pids()</a>
+        <div class="summary-synopsis"><p>Callback implementation for <a href="https://hexdocs.pm/phoenix/1.7.2/Phoenix.Presence.html#c:fetch/2"><code class="inline">Phoenix.Presence.fetch/2</code></a>.</p></div>
 
-        </div>
+    </div>
 
-      </div>
-
-      <div class="summary-row">
-        <div class="summary-signature">
-          <a href="#get_by_key/2" translate="no">get_by_key(topic, key)</a>
-
-        </div>
-
-          <div class="summary-synopsis"><p>Callback implementation for <a href="https://hexdocs.pm/phoenix/1.6.6/Phoenix.Presence.html#c:get_by_key/2"><code class="inline">Phoenix.Presence.get_by_key/2</code></a>.</p></div>
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#fetchers_pids/0" translate="no">fetchers_pids()</a>
 
       </div>
 
-      <div class="summary-row">
-        <div class="summary-signature">
-          <a href="#list/1" translate="no">list(topic)</a>
+    </div>
 
-        </div>
-
-          <div class="summary-synopsis"><p>Callback implementation for <a href="https://hexdocs.pm/phoenix/1.6.6/Phoenix.Presence.html#c:list/1"><code class="inline">Phoenix.Presence.list/1</code></a>.</p></div>
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#get_by_key/2" translate="no">get_by_key(topic, key)</a>
 
       </div>
 
-      <div class="summary-row">
-        <div class="summary-signature">
-          <a href="#track/3" translate="no">track(socket, key, meta)</a>
+        <div class="summary-synopsis"><p>Callback implementation for <a href="https://hexdocs.pm/phoenix/1.7.2/Phoenix.Presence.html#c:get_by_key/2"><code class="inline">Phoenix.Presence.get_by_key/2</code></a>.</p></div>
 
-        </div>
+    </div>
 
-          <div class="summary-synopsis"><p>Callback implementation for <a href="https://hexdocs.pm/phoenix/1.6.6/Phoenix.Presence.html#c:track/3"><code class="inline">Phoenix.Presence.track/3</code></a>.</p></div>
-
-      </div>
-
-      <div class="summary-row">
-        <div class="summary-signature">
-          <a href="#track/4" translate="no">track(pid, topic, key, meta)</a>
-
-        </div>
-
-          <div class="summary-synopsis"><p>Callback implementation for <a href="https://hexdocs.pm/phoenix/1.6.6/Phoenix.Presence.html#c:track/4"><code class="inline">Phoenix.Presence.track/4</code></a>.</p></div>
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#list/1" translate="no">list(topic)</a>
 
       </div>
 
-      <div class="summary-row">
-        <div class="summary-signature">
-          <a href="#untrack/2" translate="no">untrack(socket, key)</a>
+        <div class="summary-synopsis"><p>Callback implementation for <a href="https://hexdocs.pm/phoenix/1.7.2/Phoenix.Presence.html#c:list/1"><code class="inline">Phoenix.Presence.list/1</code></a>.</p></div>
 
-        </div>
+    </div>
 
-          <div class="summary-synopsis"><p>Callback implementation for <a href="https://hexdocs.pm/phoenix/1.6.6/Phoenix.Presence.html#c:untrack/2"><code class="inline">Phoenix.Presence.untrack/2</code></a>.</p></div>
-
-      </div>
-
-      <div class="summary-row">
-        <div class="summary-signature">
-          <a href="#untrack/3" translate="no">untrack(pid, topic, key)</a>
-
-        </div>
-
-          <div class="summary-synopsis"><p>Callback implementation for <a href="https://hexdocs.pm/phoenix/1.6.6/Phoenix.Presence.html#c:untrack/3"><code class="inline">Phoenix.Presence.untrack/3</code></a>.</p></div>
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#track/3" translate="no">track(socket, key, meta)</a>
 
       </div>
 
-      <div class="summary-row">
-        <div class="summary-signature">
-          <a href="#update/3" translate="no">update(socket, key, meta)</a>
+        <div class="summary-synopsis"><p>Callback implementation for <a href="https://hexdocs.pm/phoenix/1.7.2/Phoenix.Presence.html#c:track/3"><code class="inline">Phoenix.Presence.track/3</code></a>.</p></div>
 
-        </div>
+    </div>
 
-          <div class="summary-synopsis"><p>Callback implementation for <a href="https://hexdocs.pm/phoenix/1.6.6/Phoenix.Presence.html#c:update/3"><code class="inline">Phoenix.Presence.update/3</code></a>.</p></div>
-
-      </div>
-
-      <div class="summary-row">
-        <div class="summary-signature">
-          <a href="#update/4" translate="no">update(pid, topic, key, meta)</a>
-
-        </div>
-
-          <div class="summary-synopsis"><p>Callback implementation for <a href="https://hexdocs.pm/phoenix/1.6.6/Phoenix.Presence.html#c:update/4"><code class="inline">Phoenix.Presence.update/4</code></a>.</p></div>
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#track/4" translate="no">track(pid, topic, key, meta)</a>
 
       </div>
 
-  </div>
+        <div class="summary-synopsis"><p>Callback implementation for <a href="https://hexdocs.pm/phoenix/1.7.2/Phoenix.Presence.html#c:track/4"><code class="inline">Phoenix.Presence.track/4</code></a>.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#untrack/2" translate="no">untrack(socket, key)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Callback implementation for <a href="https://hexdocs.pm/phoenix/1.7.2/Phoenix.Presence.html#c:untrack/2"><code class="inline">Phoenix.Presence.untrack/2</code></a>.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#untrack/3" translate="no">untrack(pid, topic, key)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Callback implementation for <a href="https://hexdocs.pm/phoenix/1.7.2/Phoenix.Presence.html#c:untrack/3"><code class="inline">Phoenix.Presence.untrack/3</code></a>.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#update/3" translate="no">update(socket, key, meta)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Callback implementation for <a href="https://hexdocs.pm/phoenix/1.7.2/Phoenix.Presence.html#c:update/3"><code class="inline">Phoenix.Presence.update/3</code></a>.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#update/4" translate="no">update(pid, topic, key, meta)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Callback implementation for <a href="https://hexdocs.pm/phoenix/1.7.2/Phoenix.Presence.html#c:update/4"><code class="inline">Phoenix.Presence.update/4</code></a>.</p></div>
+
+    </div>
+
+</div>
 
   </section>
 
@@ -258,7 +259,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">child_spec(opts)</h1>
 
-      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper_web/channels/presence.ex#L8" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper_web/channels/presence.ex#L8" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -280,7 +281,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">fetch(topic, presences)</h1>
 
-      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper_web/channels/presence.ex#L8" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper_web/channels/presence.ex#L8" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -290,7 +291,7 @@ Functions
 
   <section class="docstring">
 
-<p>Callback implementation for <a href="https://hexdocs.pm/phoenix/1.6.6/Phoenix.Presence.html#c:fetch/2"><code class="inline">Phoenix.Presence.fetch/2</code></a>.</p>
+<p>Callback implementation for <a href="https://hexdocs.pm/phoenix/1.7.2/Phoenix.Presence.html#c:fetch/2"><code class="inline">Phoenix.Presence.fetch/2</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="fetchers_pids/0">
@@ -302,7 +303,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">fetchers_pids()</h1>
 
-      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper_web/channels/presence.ex#L8" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper_web/channels/presence.ex#L8" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -324,7 +325,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">get_by_key(topic, key)</h1>
 
-      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper_web/channels/presence.ex#L8" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper_web/channels/presence.ex#L8" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -334,7 +335,7 @@ Functions
 
   <section class="docstring">
 
-<p>Callback implementation for <a href="https://hexdocs.pm/phoenix/1.6.6/Phoenix.Presence.html#c:get_by_key/2"><code class="inline">Phoenix.Presence.get_by_key/2</code></a>.</p>
+<p>Callback implementation for <a href="https://hexdocs.pm/phoenix/1.7.2/Phoenix.Presence.html#c:get_by_key/2"><code class="inline">Phoenix.Presence.get_by_key/2</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="list/1">
@@ -346,7 +347,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">list(topic)</h1>
 
-      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper_web/channels/presence.ex#L8" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper_web/channels/presence.ex#L8" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -356,7 +357,7 @@ Functions
 
   <section class="docstring">
 
-<p>Callback implementation for <a href="https://hexdocs.pm/phoenix/1.6.6/Phoenix.Presence.html#c:list/1"><code class="inline">Phoenix.Presence.list/1</code></a>.</p>
+<p>Callback implementation for <a href="https://hexdocs.pm/phoenix/1.7.2/Phoenix.Presence.html#c:list/1"><code class="inline">Phoenix.Presence.list/1</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="track/3">
@@ -368,7 +369,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">track(socket, key, meta)</h1>
 
-      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper_web/channels/presence.ex#L8" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper_web/channels/presence.ex#L8" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -378,7 +379,7 @@ Functions
 
   <section class="docstring">
 
-<p>Callback implementation for <a href="https://hexdocs.pm/phoenix/1.6.6/Phoenix.Presence.html#c:track/3"><code class="inline">Phoenix.Presence.track/3</code></a>.</p>
+<p>Callback implementation for <a href="https://hexdocs.pm/phoenix/1.7.2/Phoenix.Presence.html#c:track/3"><code class="inline">Phoenix.Presence.track/3</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="track/4">
@@ -390,7 +391,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">track(pid, topic, key, meta)</h1>
 
-      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper_web/channels/presence.ex#L8" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper_web/channels/presence.ex#L8" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -400,7 +401,7 @@ Functions
 
   <section class="docstring">
 
-<p>Callback implementation for <a href="https://hexdocs.pm/phoenix/1.6.6/Phoenix.Presence.html#c:track/4"><code class="inline">Phoenix.Presence.track/4</code></a>.</p>
+<p>Callback implementation for <a href="https://hexdocs.pm/phoenix/1.7.2/Phoenix.Presence.html#c:track/4"><code class="inline">Phoenix.Presence.track/4</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="untrack/2">
@@ -412,7 +413,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">untrack(socket, key)</h1>
 
-      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper_web/channels/presence.ex#L8" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper_web/channels/presence.ex#L8" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -422,7 +423,7 @@ Functions
 
   <section class="docstring">
 
-<p>Callback implementation for <a href="https://hexdocs.pm/phoenix/1.6.6/Phoenix.Presence.html#c:untrack/2"><code class="inline">Phoenix.Presence.untrack/2</code></a>.</p>
+<p>Callback implementation for <a href="https://hexdocs.pm/phoenix/1.7.2/Phoenix.Presence.html#c:untrack/2"><code class="inline">Phoenix.Presence.untrack/2</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="untrack/3">
@@ -434,7 +435,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">untrack(pid, topic, key)</h1>
 
-      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper_web/channels/presence.ex#L8" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper_web/channels/presence.ex#L8" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -444,7 +445,7 @@ Functions
 
   <section class="docstring">
 
-<p>Callback implementation for <a href="https://hexdocs.pm/phoenix/1.6.6/Phoenix.Presence.html#c:untrack/3"><code class="inline">Phoenix.Presence.untrack/3</code></a>.</p>
+<p>Callback implementation for <a href="https://hexdocs.pm/phoenix/1.7.2/Phoenix.Presence.html#c:untrack/3"><code class="inline">Phoenix.Presence.untrack/3</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="update/3">
@@ -456,7 +457,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">update(socket, key, meta)</h1>
 
-      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper_web/channels/presence.ex#L8" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper_web/channels/presence.ex#L8" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -466,7 +467,7 @@ Functions
 
   <section class="docstring">
 
-<p>Callback implementation for <a href="https://hexdocs.pm/phoenix/1.6.6/Phoenix.Presence.html#c:update/3"><code class="inline">Phoenix.Presence.update/3</code></a>.</p>
+<p>Callback implementation for <a href="https://hexdocs.pm/phoenix/1.7.2/Phoenix.Presence.html#c:update/3"><code class="inline">Phoenix.Presence.update/3</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="update/4">
@@ -478,7 +479,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">update(pid, topic, key, meta)</h1>
 
-      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper_web/channels/presence.ex#L8" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper_web/channels/presence.ex#L8" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -488,7 +489,7 @@ Functions
 
   <section class="docstring">
 
-<p>Callback implementation for <a href="https://hexdocs.pm/phoenix/1.6.6/Phoenix.Presence.html#c:update/4"><code class="inline">Phoenix.Presence.update/4</code></a>.</p>
+<p>Callback implementation for <a href="https://hexdocs.pm/phoenix/1.7.2/Phoenix.Presence.html#c:update/4"><code class="inline">Phoenix.Presence.update/4</code></a>.</p>
   </section>
 </section>
 
@@ -496,10 +497,23 @@ Functions
   </section>
 
       <footer class="footer">
-
         <p>
+
+          <span class="line">
+            <button class="a-main footer-button display-quick-switch" title="Search HexDocs packages">
+              Search HexDocs
+            </button>
+
+              <a href="Claper.epub" title="ePub version">
+                Download ePub version
+              </a>
+
+          </span>
+        </p>
+
+        <p class="built-using">
           Built using
-          <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.28.4) for the
+          <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.29.4) for the
 
             <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
 

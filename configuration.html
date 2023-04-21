@@ -4,21 +4,24 @@
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="generator" content="ExDoc v0.28.4">
-    <meta name="project" content="Claper v1.3.0">
+    <meta name="generator" content="ExDoc v0.29.4">
+    <meta name="project" content="Claper v1.4.0">
 
-    <title>Configuration — Claper v1.3.0</title>
-    <link rel="stylesheet" href="dist/elixir-b6f1ed5df9b1d42a7309.css" />
+    <title>Configuration — Claper v1.4.0</title>
+    <link rel="stylesheet" href="dist/html-elixir-HHVY3JYD.css" />
 
-    <script src="dist/sidebar_items-9c8468b1bc.js"></script>
+
+    <script src="dist/handlebars.runtime-NWIB6V2M.js"></script>
+    <script src="dist/handlebars.templates-XWGFFSCD.js"></script>
+    <script src="dist/sidebar_items-3229396A.js"></script>
 
       <script src="docs_config.js"></script>
 
-    <script async src="dist/app-bd1cb213813bf4825aa2.js"></script>
+    <script async src="dist/html-JDI3AVDD.js"></script>
 
 
   </head>
-  <body data-type="extras">
+  <body data-type="extras" class="page-extra">
     <script>
 
       try {
@@ -35,12 +38,11 @@
 
 <div class="main">
 
+<button class="sidebar-button sidebar-toggle" aria-label="toggle sidebar">
+  <i class="ri-menu-line ri-lg" title="Collapse/expand sidebar"></i>
+</button>
 
 <section class="sidebar">
-  <button class="sidebar-button sidebar-toggle" aria-label="toggle sidebar">
-    <i class="ri-menu-line ri-lg" title="Collapse/expand sidebar"></i>
-  </button>
-
   <form class="sidebar-search" action="search.html">
     <button type="submit" class="search-button" aria-label="Submit Search">
       <i class="ri-search-2-line" aria-hidden="true" title="Submit search"></i>
@@ -50,7 +52,7 @@
     </button>
     <label class="search-label">
       <p class="sr-only">Search</p>
-      <input name="q" type="text" class="search-input" placeholder="Search..." aria-label="Input your search terms" autocomplete="off" />
+      <input name="q" type="text" class="search-input" placeholder="Search..." aria-label="Input your search terms" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
     </label>
   </form>
 
@@ -69,9 +71,9 @@
       <a href="https://get.claper.co" class="sidebar-projectName" translate="no">
 Claper
       </a>
-      <strong class="sidebar-projectVersion" translate="no">
-        v1.3.0
-      </strong>
+      <div class="sidebar-projectVersion" translate="no">
+        v1.4.0
+      </div>
     </div>
     <ul class="sidebar-listNav">
       <li><a id="extras-list-link" href="#full-list">GUIDES</a></li>
@@ -83,7 +85,7 @@ Claper
   </div>
 
   <div class="gradient"></div>
-  <ul id="full-list" class="sidebar-fullList"></ul>
+  <ul id="full-list"></ul>
 </section>
 
 <section class="content">
@@ -92,16 +94,17 @@ Claper
     <div id="content" class="content-inner">
 
 <h1>
-<button class="settings display-settings">
+<button class="icon-action display-settings">
   <i class="ri-settings-3-line"></i>
   <span class="sr-only">Settings</span>
 </button>
 
 
-    <a href="https://github.com/ClaperCo/Claper/blob/main/guides/introduction/configuration.md#L1" title="View Source" class="view-source" rel="help">
+    <a href="https://github.com/ClaperCo/Claper/blob/main/guides/introduction/configuration.md#L1" title="View Source" class="icon-action" rel="help">
       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
       <span class="sr-only">View Source</span>
     </a>
+
 
   <span>Configuration</span>
 </h1>
@@ -130,13 +133,13 @@ Claper
   </a>
   Application
 </h3>
-<table><thead><tr><th style="text-align: left;">Variable</th><th style="text-align: left;">Values</th><th style="text-align: left;">Default</th><th style="text-align: left;">Required</th><th style="text-align: left;">Description</th></tr></thead><tbody><tr><td style="text-align: left;">ENABLE_ACCOUNT_CREATION</td><td style="text-align: left;">true, false</td><td style="text-align: left;">true</td><td style="text-align: left;">-</td><td style="text-align: left;">Enable/disable user registration</td></tr></tbody></table><h2 id="production-docker" class="section-heading">
+<table><thead><tr><th style="text-align: left;">Variable</th><th style="text-align: left;">Values</th><th style="text-align: left;">Default</th><th style="text-align: left;">Required</th><th style="text-align: left;">Description</th></tr></thead><tbody><tr><td style="text-align: left;">ENABLE_ACCOUNT_CREATION</td><td style="text-align: left;">true, false</td><td style="text-align: left;">true</td><td style="text-align: left;">-</td><td style="text-align: left;">Enable/disable user registration</td></tr><tr><td style="text-align: left;">MAX_FILE_SIZE_MB</td><td style="text-align: left;">-</td><td style="text-align: left;">15</td><td style="text-align: left;">-</td><td style="text-align: left;">Max file size to upload in MB</td></tr></tbody></table><h2 id="production-docker" class="section-heading">
   <a href="#production-docker" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i>
   <p class="sr-only">production-docker</p>
   </a>
   Production / Docker
 </h2>
-<p>You can use all local variables plus the following:</p><table><thead><tr><th style="text-align: left;">Variable</th><th style="text-align: left;">Values</th><th style="text-align: left;">Default</th><th style="text-align: left;">Required</th><th style="text-align: left;">Description</th></tr></thead><tbody><tr><td style="text-align: left;">DATABASE_URL</td><td style="text-align: left;">-</td><td style="text-align: left;">-</td><td style="text-align: left;">✓</td><td style="text-align: left;">Postgres connection string</td></tr><tr><td style="text-align: left;">SECRET_KEY_BASE</td><td style="text-align: left;">-</td><td style="text-align: left;">-</td><td style="text-align: left;">✓</td><td style="text-align: left;">Generate it with <a href="https://hexdocs.pm/phoenix/1.6.6/Mix.Tasks.Phx.Gen.Secret.html"><code class="inline">mix phx.gen.secret</code></a></td></tr><tr><td style="text-align: left;">ENDPOINT_HOST</td><td style="text-align: left;">-</td><td style="text-align: left;">localhost</td><td style="text-align: left;">-</td><td style="text-align: left;">Host used to access the app (used for url generation)</td></tr><tr><td style="text-align: left;">ENDPOINT_PORT</td><td style="text-align: left;">-</td><td style="text-align: left;">80</td><td style="text-align: left;">-</td><td style="text-align: left;">Port used to access the app (used for url generation)</td></tr><tr><td style="text-align: left;">PORT</td><td style="text-align: left;">-</td><td style="text-align: left;">4000</td><td style="text-align: left;">-</td><td style="text-align: left;">Port to listen to</td></tr></tbody></table>
+<p>You can use all local variables plus the following:</p><table><thead><tr><th style="text-align: left;">Variable</th><th style="text-align: left;">Values</th><th style="text-align: left;">Default</th><th style="text-align: left;">Required</th><th style="text-align: left;">Description</th></tr></thead><tbody><tr><td style="text-align: left;">DATABASE_URL</td><td style="text-align: left;">-</td><td style="text-align: left;">-</td><td style="text-align: left;">✓</td><td style="text-align: left;">Postgres connection string</td></tr><tr><td style="text-align: left;">SECRET_KEY_BASE</td><td style="text-align: left;">-</td><td style="text-align: left;">-</td><td style="text-align: left;">✓</td><td style="text-align: left;">Generate it with <a href="https://hexdocs.pm/phoenix/1.7.2/Mix.Tasks.Phx.Gen.Secret.html"><code class="inline">mix phx.gen.secret</code></a></td></tr><tr><td style="text-align: left;">ENDPOINT_HOST</td><td style="text-align: left;">-</td><td style="text-align: left;">localhost</td><td style="text-align: left;">-</td><td style="text-align: left;">Host used to access the app (used for url generation)</td></tr><tr><td style="text-align: left;">ENDPOINT_PORT</td><td style="text-align: left;">-</td><td style="text-align: left;">80</td><td style="text-align: left;">-</td><td style="text-align: left;">Port used to access the app (used for url generation)</td></tr><tr><td style="text-align: left;">PORT</td><td style="text-align: left;">-</td><td style="text-align: left;">4000</td><td style="text-align: left;">-</td><td style="text-align: left;">Port to listen to</td></tr></tbody></table>
 <div class="bottom-actions">
   <div class="bottom-actions-item">
 
@@ -163,12 +166,24 @@ Local installation
 
   </div>
 </div>
-
       <footer class="footer">
-
         <p>
+
+          <span class="line">
+            <button class="a-main footer-button display-quick-switch" title="Search HexDocs packages">
+              Search HexDocs
+            </button>
+
+              <a href="Claper.epub" title="ePub version">
+                Download ePub version
+              </a>
+
+          </span>
+        </p>
+
+        <p class="built-using">
           Built using
-          <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.28.4) for the
+          <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.29.4) for the
 
             <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
 

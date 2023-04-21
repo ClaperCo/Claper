@@ -4,21 +4,24 @@
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="generator" content="ExDoc v0.28.4">
-    <meta name="project" content="Claper v1.3.0">
+    <meta name="generator" content="ExDoc v0.29.4">
+    <meta name="project" content="Claper v1.4.0">
 
-    <title>Claper.Accounts — Claper v1.3.0</title>
-    <link rel="stylesheet" href="dist/elixir-b6f1ed5df9b1d42a7309.css" />
+    <title>Claper.Accounts — Claper v1.4.0</title>
+    <link rel="stylesheet" href="dist/html-elixir-HHVY3JYD.css" />
 
-    <script src="dist/sidebar_items-9c8468b1bc.js"></script>
+
+    <script src="dist/handlebars.runtime-NWIB6V2M.js"></script>
+    <script src="dist/handlebars.templates-XWGFFSCD.js"></script>
+    <script src="dist/sidebar_items-3229396A.js"></script>
 
       <script src="docs_config.js"></script>
 
-    <script async src="dist/app-bd1cb213813bf4825aa2.js"></script>
+    <script async src="dist/html-JDI3AVDD.js"></script>
 
 
   </head>
-  <body data-type="modules">
+  <body data-type="modules" class="page-module">
     <script>
 
       try {
@@ -35,12 +38,11 @@
 
 <div class="main">
 
+<button class="sidebar-button sidebar-toggle" aria-label="toggle sidebar">
+  <i class="ri-menu-line ri-lg" title="Collapse/expand sidebar"></i>
+</button>
 
 <section class="sidebar">
-  <button class="sidebar-button sidebar-toggle" aria-label="toggle sidebar">
-    <i class="ri-menu-line ri-lg" title="Collapse/expand sidebar"></i>
-  </button>
-
   <form class="sidebar-search" action="search.html">
     <button type="submit" class="search-button" aria-label="Submit Search">
       <i class="ri-search-2-line" aria-hidden="true" title="Submit search"></i>
@@ -50,7 +52,7 @@
     </button>
     <label class="search-label">
       <p class="sr-only">Search</p>
-      <input name="q" type="text" class="search-input" placeholder="Search..." aria-label="Input your search terms" autocomplete="off" />
+      <input name="q" type="text" class="search-input" placeholder="Search..." aria-label="Input your search terms" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
     </label>
   </form>
 
@@ -69,9 +71,9 @@
       <a href="https://get.claper.co" class="sidebar-projectName" translate="no">
 Claper
       </a>
-      <strong class="sidebar-projectVersion" translate="no">
-        v1.3.0
-      </strong>
+      <div class="sidebar-projectVersion" translate="no">
+        v1.4.0
+      </div>
     </div>
     <ul class="sidebar-listNav">
       <li><a id="extras-list-link" href="#full-list">GUIDES</a></li>
@@ -83,7 +85,7 @@ Claper
   </div>
 
   <div class="gradient"></div>
-  <ul id="full-list" class="sidebar-fullList"></ul>
+  <ul id="full-list"></ul>
 </section>
 
 <section class="content">
@@ -92,19 +94,19 @@ Claper
     <div id="content" class="content-inner">
 
 <h1>
-<button class="settings display-settings">
+<button class="icon-action display-settings">
   <i class="ri-settings-3-line"></i>
   <span class="sr-only">Settings</span>
 </button>
 
 
-    <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper/accounts.ex#L1" title="View Source" class="view-source" rel="help">
+    <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper/accounts.ex#L1" title="View Source" class="icon-action" rel="help">
       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
       <span class="sr-only">View Source</span>
     </a>
 
   <span translate="no">Claper.Accounts</span> 
-  <small class="app-vsn" translate="no">(Claper v1.3.0)</small>
+  <small class="app-vsn" translate="no">(Claper v1.4.0)</small>
 
 </h1>
 
@@ -122,242 +124,241 @@ Claper
       </a>
       Summary
     </h1>
+<div class="summary-functions summary">
+  <h2>
+    <a href="#functions">Functions</a>
+  </h2>
 
-  <div class="summary-functions summary">
-    <h2>
-      <a href="#functions">Functions</a>
-    </h2>
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#apply_user_email/2" translate="no">apply_user_email(user, attrs)</a>
 
-      <div class="summary-row">
-        <div class="summary-signature">
-          <a href="#apply_user_email/2" translate="no">apply_user_email(user, attrs)</a>
+      </div>
 
-        </div>
-
-          <div class="summary-synopsis"><p>Emulates that the email will change without actually changing
+        <div class="summary-synopsis"><p>Emulates that the email will change without actually changing
 it in the database.</p></div>
 
-      </div>
+    </div>
 
-      <div class="summary-row">
-        <div class="summary-signature">
-          <a href="#change_user_email/2" translate="no">change_user_email(user, attrs \\ %{})</a>
-
-        </div>
-
-          <div class="summary-synopsis"><p>Returns an <code class="inline">%Ecto.Changeset{}</code> for changing the user email.</p></div>
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#change_user_email/2" translate="no">change_user_email(user, attrs \\ %{})</a>
 
       </div>
 
-      <div class="summary-row">
-        <div class="summary-signature">
-          <a href="#change_user_password/2" translate="no">change_user_password(user, attrs \\ %{})</a>
+        <div class="summary-synopsis"><p>Returns an <code class="inline">%Ecto.Changeset{}</code> for changing the user email.</p></div>
 
-        </div>
+    </div>
 
-          <div class="summary-synopsis"><p>Returns an <code class="inline">%Ecto.Changeset{}</code> for changing the user password.</p></div>
-
-      </div>
-
-      <div class="summary-row">
-        <div class="summary-signature">
-          <a href="#change_user_registration/2" translate="no">change_user_registration(user, attrs \\ %{})</a>
-
-        </div>
-
-          <div class="summary-synopsis"><p>Returns an <code class="inline">%Ecto.Changeset{}</code> for tracking user changes.</p></div>
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#change_user_password/2" translate="no">change_user_password(user, attrs \\ %{})</a>
 
       </div>
 
-      <div class="summary-row">
-        <div class="summary-signature">
-          <a href="#confirm_magic/1" translate="no">confirm_magic(token)</a>
+        <div class="summary-synopsis"><p>Returns an <code class="inline">%Ecto.Changeset{}</code> for changing the user password.</p></div>
 
-        </div>
+    </div>
 
-      </div>
-
-      <div class="summary-row">
-        <div class="summary-signature">
-          <a href="#confirm_user/1" translate="no">confirm_user(token)</a>
-
-        </div>
-
-          <div class="summary-synopsis"><p>Confirms a user by the given token.</p></div>
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#change_user_registration/2" translate="no">change_user_registration(user, attrs \\ %{})</a>
 
       </div>
 
-      <div class="summary-row">
-        <div class="summary-signature">
-          <a href="#delete_session_token/1" translate="no">delete_session_token(token)</a>
+        <div class="summary-synopsis"><p>Returns an <code class="inline">%Ecto.Changeset{}</code> for tracking user changes.</p></div>
 
-        </div>
+    </div>
 
-          <div class="summary-synopsis"><p>Deletes the signed token with the given context.</p></div>
-
-      </div>
-
-      <div class="summary-row">
-        <div class="summary-signature">
-          <a href="#deliver_magic_link/2" translate="no">deliver_magic_link(email, magic_link_url_fun)</a>
-
-        </div>
-
-          <div class="summary-synopsis"><p>Delivers the magic link email to the given user.</p></div>
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#confirm_magic/1" translate="no">confirm_magic(token)</a>
 
       </div>
 
-      <div class="summary-row">
-        <div class="summary-signature">
-          <a href="#deliver_update_email_instructions/3" translate="no">deliver_update_email_instructions(user, current_email, update_email_url_fun)</a>
+    </div>
 
-        </div>
-
-          <div class="summary-synopsis"><p>Delivers the update email instructions to the given user.</p></div>
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#confirm_user/1" translate="no">confirm_user(token)</a>
 
       </div>
 
-      <div class="summary-row">
-        <div class="summary-signature">
-          <a href="#deliver_user_confirmation_instructions/2" translate="no">deliver_user_confirmation_instructions(user, confirmation_url_fun)</a>
+        <div class="summary-synopsis"><p>Confirms a user by the given token.</p></div>
 
-        </div>
+    </div>
 
-          <div class="summary-synopsis"><p>Delivers the confirmation email instructions to the given user.</p></div>
-
-      </div>
-
-      <div class="summary-row">
-        <div class="summary-signature">
-          <a href="#deliver_user_reset_password_instructions/2" translate="no">deliver_user_reset_password_instructions(user, reset_password_url_fun)</a>
-
-        </div>
-
-          <div class="summary-synopsis"><p>Delivers the reset password email to the given user.</p></div>
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#delete_session_token/1" translate="no">delete_session_token(token)</a>
 
       </div>
 
-      <div class="summary-row">
-        <div class="summary-signature">
-          <a href="#generate_user_session_token/1" translate="no">generate_user_session_token(user)</a>
+        <div class="summary-synopsis"><p>Deletes the signed token with the given context.</p></div>
 
-        </div>
+    </div>
 
-          <div class="summary-synopsis"><p>Generates a session token.</p></div>
-
-      </div>
-
-      <div class="summary-row">
-        <div class="summary-signature">
-          <a href="#get_user!/1" translate="no">get_user!(id)</a>
-
-        </div>
-
-          <div class="summary-synopsis"><p>Gets a single user.</p></div>
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#deliver_magic_link/2" translate="no">deliver_magic_link(email, magic_link_url_fun)</a>
 
       </div>
 
-      <div class="summary-row">
-        <div class="summary-signature">
-          <a href="#get_user_by_email/1" translate="no">get_user_by_email(email)</a>
+        <div class="summary-synopsis"><p>Delivers the magic link email to the given user.</p></div>
 
-        </div>
+    </div>
 
-          <div class="summary-synopsis"><p>Gets a user by email.</p></div>
-
-      </div>
-
-      <div class="summary-row">
-        <div class="summary-signature">
-          <a href="#get_user_by_email_and_password/2" translate="no">get_user_by_email_and_password(email, password)</a>
-
-        </div>
-
-          <div class="summary-synopsis"><p>Gets a user by email and password.</p></div>
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#deliver_update_email_instructions/3" translate="no">deliver_update_email_instructions(user, current_email, update_email_url_fun)</a>
 
       </div>
 
-      <div class="summary-row">
-        <div class="summary-signature">
-          <a href="#get_user_by_reset_password_token/1" translate="no">get_user_by_reset_password_token(token)</a>
+        <div class="summary-synopsis"><p>Delivers the update email instructions to the given user.</p></div>
 
-        </div>
+    </div>
 
-          <div class="summary-synopsis"><p>Gets the user by reset password token.</p></div>
-
-      </div>
-
-      <div class="summary-row">
-        <div class="summary-signature">
-          <a href="#get_user_by_session_token/1" translate="no">get_user_by_session_token(token)</a>
-
-        </div>
-
-          <div class="summary-synopsis"><p>Gets the user with the given signed token.</p></div>
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#deliver_user_confirmation_instructions/2" translate="no">deliver_user_confirmation_instructions(user, confirmation_url_fun)</a>
 
       </div>
 
-      <div class="summary-row">
-        <div class="summary-signature">
-          <a href="#magic_token_valid?/1" translate="no">magic_token_valid?(email)</a>
+        <div class="summary-synopsis"><p>Delivers the confirmation email instructions to the given user.</p></div>
 
-        </div>
+    </div>
 
-          <div class="summary-synopsis"><p>Verify the token for a given user email is valid.</p></div>
-
-      </div>
-
-      <div class="summary-row">
-        <div class="summary-signature">
-          <a href="#register_user/1" translate="no">register_user(attrs)</a>
-
-        </div>
-
-          <div class="summary-synopsis"><p>Registers a user.</p></div>
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#deliver_user_reset_password_instructions/2" translate="no">deliver_user_reset_password_instructions(user, reset_password_url_fun)</a>
 
       </div>
 
-      <div class="summary-row">
-        <div class="summary-signature">
-          <a href="#reset_user_password/2" translate="no">reset_user_password(user, attrs)</a>
+        <div class="summary-synopsis"><p>Delivers the reset password email to the given user.</p></div>
 
-        </div>
+    </div>
 
-          <div class="summary-synopsis"><p>Resets the user password.</p></div>
-
-      </div>
-
-      <div class="summary-row">
-        <div class="summary-signature">
-          <a href="#update_user_email/2" translate="no">update_user_email(user, token)</a>
-
-        </div>
-
-          <div class="summary-synopsis"><p>Updates the user email using the given token.</p></div>
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#generate_user_session_token/1" translate="no">generate_user_session_token(user)</a>
 
       </div>
 
-      <div class="summary-row">
-        <div class="summary-signature">
-          <a href="#update_user_password/2" translate="no">update_user_password(user, attrs)</a>
+        <div class="summary-synopsis"><p>Generates a session token.</p></div>
 
-        </div>
+    </div>
 
-          <div class="summary-synopsis"><p>Updates the user password.</p></div>
-
-      </div>
-
-      <div class="summary-row">
-        <div class="summary-signature">
-          <a href="#update_user_password/3" translate="no">update_user_password(user, password, attrs)</a>
-
-        </div>
-
-          <div class="summary-synopsis"><p>Updates the user password.</p></div>
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#get_user!/1" translate="no">get_user!(id)</a>
 
       </div>
 
-  </div>
+        <div class="summary-synopsis"><p>Gets a single user.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#get_user_by_email/1" translate="no">get_user_by_email(email)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Gets a user by email.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#get_user_by_email_and_password/2" translate="no">get_user_by_email_and_password(email, password)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Gets a user by email and password.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#get_user_by_reset_password_token/1" translate="no">get_user_by_reset_password_token(token)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Gets the user by reset password token.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#get_user_by_session_token/1" translate="no">get_user_by_session_token(token)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Gets the user with the given signed token.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#magic_token_valid?/1" translate="no">magic_token_valid?(email)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Verify the token for a given user email is valid.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#register_user/1" translate="no">register_user(attrs)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Registers a user.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#reset_user_password/2" translate="no">reset_user_password(user, attrs)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Resets the user password.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#update_user_email/2" translate="no">update_user_email(user, token)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Updates the user email using the given token.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#update_user_password/2" translate="no">update_user_password(user, attrs)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Updates the user password.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#update_user_password/3" translate="no">update_user_password(user, password, attrs)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Updates the user password.</p></div>
+
+    </div>
+
+</div>
 
   </section>
 
@@ -380,7 +381,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">apply_user_email(user, attrs)</h1>
 
-      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper/accounts.ex#L124" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper/accounts.ex#L124" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -397,11 +398,11 @@ it in the database.</p><h2 id="apply_user_email/2-examples" class="section-headi
   </a>
   Examples
 </h2>
-<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">apply_user_email</span><span class="p" data-group-id="3512277122-1">(</span><span class="n">user</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;valid password&quot;</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="3512277122-2">%{</span><span class="ss">email</span><span class="p">:</span><span class="w"> </span><span class="n">...</span><span class="p" data-group-id="3512277122-2">}</span><span class="p" data-group-id="3512277122-1">)</span><span class="w">
-</span><span class="p" data-group-id="3512277122-3">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="3512277122-4">%</span><span class="nc" data-group-id="3512277122-4">User</span><span class="p" data-group-id="3512277122-4">{</span><span class="p" data-group-id="3512277122-4">}</span><span class="p" data-group-id="3512277122-3">}</span><span class="w">
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">apply_user_email</span><span class="p" data-group-id="0512284291-1">(</span><span class="n">user</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;valid password&quot;</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="0512284291-2">%{</span><span class="ss">email</span><span class="p">:</span><span class="w"> </span><span class="n">...</span><span class="p" data-group-id="0512284291-2">}</span><span class="p" data-group-id="0512284291-1">)</span><span class="w">
+</span><span class="p" data-group-id="0512284291-3">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="0512284291-4">%</span><span class="nc" data-group-id="0512284291-4">User</span><span class="p" data-group-id="0512284291-4">{</span><span class="p" data-group-id="0512284291-4">}</span><span class="p" data-group-id="0512284291-3">}</span><span class="w">
 
-</span><span class="gp unselectable">iex&gt; </span><span class="n">apply_user_email</span><span class="p" data-group-id="3512277122-5">(</span><span class="n">user</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;invalid password&quot;</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="3512277122-6">%{</span><span class="ss">email</span><span class="p">:</span><span class="w"> </span><span class="n">...</span><span class="p" data-group-id="3512277122-6">}</span><span class="p" data-group-id="3512277122-5">)</span><span class="w">
-</span><span class="p" data-group-id="3512277122-7">{</span><span class="ss">:error</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="3512277122-8">%</span><span class="nc" data-group-id="3512277122-8">Ecto.Changeset</span><span class="p" data-group-id="3512277122-8">{</span><span class="p" data-group-id="3512277122-8">}</span><span class="p" data-group-id="3512277122-7">}</span></code></pre>
+</span><span class="gp unselectable">iex&gt; </span><span class="n">apply_user_email</span><span class="p" data-group-id="0512284291-5">(</span><span class="n">user</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;invalid password&quot;</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="0512284291-6">%{</span><span class="ss">email</span><span class="p">:</span><span class="w"> </span><span class="n">...</span><span class="p" data-group-id="0512284291-6">}</span><span class="p" data-group-id="0512284291-5">)</span><span class="w">
+</span><span class="p" data-group-id="0512284291-7">{</span><span class="ss">:error</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="0512284291-8">%</span><span class="nc" data-group-id="0512284291-8">Ecto.Changeset</span><span class="p" data-group-id="0512284291-8">{</span><span class="p" data-group-id="0512284291-8">}</span><span class="p" data-group-id="0512284291-7">}</span></code></pre>
   </section>
 </section>
 <section class="detail" id="change_user_email/2">
@@ -415,7 +416,7 @@ it in the database.</p><h2 id="apply_user_email/2-examples" class="section-headi
     </a>
     <h1 class="signature" translate="no">change_user_email(user, attrs \\ %{})</h1>
 
-      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper/accounts.ex#L107" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper/accounts.ex#L107" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -431,8 +432,8 @@ it in the database.</p><h2 id="apply_user_email/2-examples" class="section-headi
   </a>
   Examples
 </h2>
-<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">change_user_email</span><span class="p" data-group-id="5925920405-1">(</span><span class="n">user</span><span class="p" data-group-id="5925920405-1">)</span><span class="w">
-</span><span class="p" data-group-id="5925920405-2">%</span><span class="nc" data-group-id="5925920405-2">Ecto.Changeset</span><span class="p" data-group-id="5925920405-2">{</span><span class="ss">data</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="5925920405-3">%</span><span class="nc" data-group-id="5925920405-3">User</span><span class="p" data-group-id="5925920405-3">{</span><span class="p" data-group-id="5925920405-3">}</span><span class="p" data-group-id="5925920405-2">}</span></code></pre>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">change_user_email</span><span class="p" data-group-id="6569252229-1">(</span><span class="n">user</span><span class="p" data-group-id="6569252229-1">)</span><span class="w">
+</span><span class="p" data-group-id="6569252229-2">%</span><span class="nc" data-group-id="6569252229-2">Ecto.Changeset</span><span class="p" data-group-id="6569252229-2">{</span><span class="ss">data</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="6569252229-3">%</span><span class="nc" data-group-id="6569252229-3">User</span><span class="p" data-group-id="6569252229-3">{</span><span class="p" data-group-id="6569252229-3">}</span><span class="p" data-group-id="6569252229-2">}</span></code></pre>
   </section>
 </section>
 <section class="detail" id="change_user_password/2">
@@ -446,7 +447,7 @@ it in the database.</p><h2 id="apply_user_email/2-examples" class="section-headi
     </a>
     <h1 class="signature" translate="no">change_user_password(user, attrs \\ %{})</h1>
 
-      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper/accounts.ex#L223" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper/accounts.ex#L223" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -462,8 +463,8 @@ it in the database.</p><h2 id="apply_user_email/2-examples" class="section-headi
   </a>
   Examples
 </h2>
-<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">change_user_password</span><span class="p" data-group-id="2017285627-1">(</span><span class="n">user</span><span class="p" data-group-id="2017285627-1">)</span><span class="w">
-</span><span class="p" data-group-id="2017285627-2">%</span><span class="nc" data-group-id="2017285627-2">Ecto.Changeset</span><span class="p" data-group-id="2017285627-2">{</span><span class="ss">data</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="2017285627-3">%</span><span class="nc" data-group-id="2017285627-3">User</span><span class="p" data-group-id="2017285627-3">{</span><span class="p" data-group-id="2017285627-3">}</span><span class="p" data-group-id="2017285627-2">}</span></code></pre>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">change_user_password</span><span class="p" data-group-id="2827340438-1">(</span><span class="n">user</span><span class="p" data-group-id="2827340438-1">)</span><span class="w">
+</span><span class="p" data-group-id="2827340438-2">%</span><span class="nc" data-group-id="2827340438-2">Ecto.Changeset</span><span class="p" data-group-id="2827340438-2">{</span><span class="ss">data</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="2827340438-3">%</span><span class="nc" data-group-id="2827340438-3">User</span><span class="p" data-group-id="2827340438-3">{</span><span class="p" data-group-id="2827340438-3">}</span><span class="p" data-group-id="2827340438-2">}</span></code></pre>
   </section>
 </section>
 <section class="detail" id="change_user_registration/2">
@@ -477,7 +478,7 @@ it in the database.</p><h2 id="apply_user_email/2-examples" class="section-headi
     </a>
     <h1 class="signature" translate="no">change_user_registration(user, attrs \\ %{})</h1>
 
-      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper/accounts.ex#L92" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper/accounts.ex#L92" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -493,8 +494,8 @@ it in the database.</p><h2 id="apply_user_email/2-examples" class="section-headi
   </a>
   Examples
 </h2>
-<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">change_user_registration</span><span class="p" data-group-id="4913303923-1">(</span><span class="n">user</span><span class="p" data-group-id="4913303923-1">)</span><span class="w">
-</span><span class="p" data-group-id="4913303923-2">%</span><span class="nc" data-group-id="4913303923-2">Ecto.Changeset</span><span class="p" data-group-id="4913303923-2">{</span><span class="ss">data</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="4913303923-3">%</span><span class="nc" data-group-id="4913303923-3">User</span><span class="p" data-group-id="4913303923-3">{</span><span class="p" data-group-id="4913303923-3">}</span><span class="p" data-group-id="4913303923-2">}</span></code></pre>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">change_user_registration</span><span class="p" data-group-id="7882055126-1">(</span><span class="n">user</span><span class="p" data-group-id="7882055126-1">)</span><span class="w">
+</span><span class="p" data-group-id="7882055126-2">%</span><span class="nc" data-group-id="7882055126-2">Ecto.Changeset</span><span class="p" data-group-id="7882055126-2">{</span><span class="ss">data</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="7882055126-3">%</span><span class="nc" data-group-id="7882055126-3">User</span><span class="p" data-group-id="7882055126-3">{</span><span class="p" data-group-id="7882055126-3">}</span><span class="p" data-group-id="7882055126-2">}</span></code></pre>
   </section>
 </section>
 <section class="detail" id="confirm_magic/1">
@@ -506,7 +507,7 @@ it in the database.</p><h2 id="apply_user_email/2-examples" class="section-headi
     </a>
     <h1 class="signature" translate="no">confirm_magic(token)</h1>
 
-      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper/accounts.ex#L399" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper/accounts.ex#L399" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -528,7 +529,7 @@ it in the database.</p><h2 id="apply_user_email/2-examples" class="section-headi
     </a>
     <h1 class="signature" translate="no">confirm_user(token)</h1>
 
-      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper/accounts.ex#L383" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper/accounts.ex#L383" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -551,7 +552,7 @@ and the token is deleted.</p>
     </a>
     <h1 class="signature" translate="no">delete_session_token(token)</h1>
 
-      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper/accounts.ex#L285" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper/accounts.ex#L285" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -573,7 +574,7 @@ and the token is deleted.</p>
     </a>
     <h1 class="signature" translate="no">deliver_magic_link(email, magic_link_url_fun)</h1>
 
-      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper/accounts.ex#L189" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper/accounts.ex#L189" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -589,8 +590,8 @@ and the token is deleted.</p>
   </a>
   Examples
 </h2>
-<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">deliver_magic_link</span><span class="p" data-group-id="9650630564-1">(</span><span class="n">user</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="nc">Routes</span><span class="o">.</span><span class="n">user_confirmation_url</span><span class="p" data-group-id="9650630564-2">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="ss">:confirm_magic</span><span class="p">,</span><span class="w"> </span><span class="ni">&amp;1</span><span class="p" data-group-id="9650630564-2">)</span><span class="p" data-group-id="9650630564-1">)</span><span class="w">
-</span><span class="p" data-group-id="9650630564-3">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="9650630564-4">%{</span><span class="ss">to</span><span class="p">:</span><span class="w"> </span><span class="n">...</span><span class="p">,</span><span class="w"> </span><span class="ss">body</span><span class="p">:</span><span class="w"> </span><span class="n">...</span><span class="p" data-group-id="9650630564-4">}</span><span class="p" data-group-id="9650630564-3">}</span></code></pre>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">deliver_magic_link</span><span class="p" data-group-id="5877068157-1">(</span><span class="n">user</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="nc">Routes</span><span class="o">.</span><span class="n">user_confirmation_url</span><span class="p" data-group-id="5877068157-2">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="ss">:confirm_magic</span><span class="p">,</span><span class="w"> </span><span class="ni">&amp;1</span><span class="p" data-group-id="5877068157-2">)</span><span class="p" data-group-id="5877068157-1">)</span><span class="w">
+</span><span class="p" data-group-id="5877068157-3">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="5877068157-4">%{</span><span class="ss">to</span><span class="p">:</span><span class="w"> </span><span class="n">...</span><span class="p">,</span><span class="w"> </span><span class="ss">body</span><span class="p">:</span><span class="w"> </span><span class="n">...</span><span class="p" data-group-id="5877068157-4">}</span><span class="p" data-group-id="5877068157-3">}</span></code></pre>
   </section>
 </section>
 <section class="detail" id="deliver_update_email_instructions/3">
@@ -602,7 +603,7 @@ and the token is deleted.</p>
     </a>
     <h1 class="signature" translate="no">deliver_update_email_instructions(user, current_email, update_email_url_fun)</h1>
 
-      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper/accounts.ex#L206" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper/accounts.ex#L206" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -618,8 +619,8 @@ and the token is deleted.</p>
   </a>
   Examples
 </h2>
-<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">deliver_update_email_instructions</span><span class="p" data-group-id="5679714845-1">(</span><span class="n">user</span><span class="p">,</span><span class="w"> </span><span class="n">current_email</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="nc">Routes</span><span class="o">.</span><span class="n">user_update_email_url</span><span class="p" data-group-id="5679714845-2">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="ss">:edit</span><span class="p">,</span><span class="w"> </span><span class="ni">&amp;1</span><span class="p" data-group-id="5679714845-2">)</span><span class="p" data-group-id="5679714845-1">)</span><span class="w">
-</span><span class="p" data-group-id="5679714845-3">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="5679714845-4">%{</span><span class="ss">to</span><span class="p">:</span><span class="w"> </span><span class="n">...</span><span class="p">,</span><span class="w"> </span><span class="ss">body</span><span class="p">:</span><span class="w"> </span><span class="n">...</span><span class="p" data-group-id="5679714845-4">}</span><span class="p" data-group-id="5679714845-3">}</span></code></pre>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">deliver_update_email_instructions</span><span class="p" data-group-id="1570296004-1">(</span><span class="n">user</span><span class="p">,</span><span class="w"> </span><span class="n">current_email</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="nc">Routes</span><span class="o">.</span><span class="n">user_update_email_url</span><span class="p" data-group-id="1570296004-2">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="ss">:edit</span><span class="p">,</span><span class="w"> </span><span class="ni">&amp;1</span><span class="p" data-group-id="1570296004-2">)</span><span class="p" data-group-id="1570296004-1">)</span><span class="w">
+</span><span class="p" data-group-id="1570296004-3">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="1570296004-4">%{</span><span class="ss">to</span><span class="p">:</span><span class="w"> </span><span class="n">...</span><span class="p">,</span><span class="w"> </span><span class="ss">body</span><span class="p">:</span><span class="w"> </span><span class="n">...</span><span class="p" data-group-id="1570296004-4">}</span><span class="p" data-group-id="1570296004-3">}</span></code></pre>
   </section>
 </section>
 <section class="detail" id="deliver_user_confirmation_instructions/2">
@@ -631,7 +632,7 @@ and the token is deleted.</p>
     </a>
     <h1 class="signature" translate="no">deliver_user_confirmation_instructions(user, confirmation_url_fun)</h1>
 
-      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper/accounts.ex#L304" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper/accounts.ex#L304" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -647,11 +648,11 @@ and the token is deleted.</p>
   </a>
   Examples
 </h2>
-<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">deliver_user_confirmation_instructions</span><span class="p" data-group-id="9419629239-1">(</span><span class="n">user</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="nc">Routes</span><span class="o">.</span><span class="n">user_confirmation_url</span><span class="p" data-group-id="9419629239-2">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="ss">:edit</span><span class="p">,</span><span class="w"> </span><span class="ni">&amp;1</span><span class="p" data-group-id="9419629239-2">)</span><span class="p" data-group-id="9419629239-1">)</span><span class="w">
-</span><span class="p" data-group-id="9419629239-3">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="9419629239-4">%{</span><span class="ss">to</span><span class="p">:</span><span class="w"> </span><span class="n">...</span><span class="p">,</span><span class="w"> </span><span class="ss">body</span><span class="p">:</span><span class="w"> </span><span class="n">...</span><span class="p" data-group-id="9419629239-4">}</span><span class="p" data-group-id="9419629239-3">}</span><span class="w">
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">deliver_user_confirmation_instructions</span><span class="p" data-group-id="1959038495-1">(</span><span class="n">user</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="nc">Routes</span><span class="o">.</span><span class="n">user_confirmation_url</span><span class="p" data-group-id="1959038495-2">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="ss">:edit</span><span class="p">,</span><span class="w"> </span><span class="ni">&amp;1</span><span class="p" data-group-id="1959038495-2">)</span><span class="p" data-group-id="1959038495-1">)</span><span class="w">
+</span><span class="p" data-group-id="1959038495-3">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="1959038495-4">%{</span><span class="ss">to</span><span class="p">:</span><span class="w"> </span><span class="n">...</span><span class="p">,</span><span class="w"> </span><span class="ss">body</span><span class="p">:</span><span class="w"> </span><span class="n">...</span><span class="p" data-group-id="1959038495-4">}</span><span class="p" data-group-id="1959038495-3">}</span><span class="w">
 
-</span><span class="gp unselectable">iex&gt; </span><span class="n">deliver_user_confirmation_instructions</span><span class="p" data-group-id="9419629239-5">(</span><span class="n">confirmed_user</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="nc">Routes</span><span class="o">.</span><span class="n">user_confirmation_url</span><span class="p" data-group-id="9419629239-6">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="ss">:edit</span><span class="p">,</span><span class="w"> </span><span class="ni">&amp;1</span><span class="p" data-group-id="9419629239-6">)</span><span class="p" data-group-id="9419629239-5">)</span><span class="w">
-</span><span class="p" data-group-id="9419629239-7">{</span><span class="ss">:error</span><span class="p">,</span><span class="w"> </span><span class="ss">:already_confirmed</span><span class="p" data-group-id="9419629239-7">}</span></code></pre>
+</span><span class="gp unselectable">iex&gt; </span><span class="n">deliver_user_confirmation_instructions</span><span class="p" data-group-id="1959038495-5">(</span><span class="n">confirmed_user</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="nc">Routes</span><span class="o">.</span><span class="n">user_confirmation_url</span><span class="p" data-group-id="1959038495-6">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="ss">:edit</span><span class="p">,</span><span class="w"> </span><span class="ni">&amp;1</span><span class="p" data-group-id="1959038495-6">)</span><span class="p" data-group-id="1959038495-5">)</span><span class="w">
+</span><span class="p" data-group-id="1959038495-7">{</span><span class="ss">:error</span><span class="p">,</span><span class="w"> </span><span class="ss">:already_confirmed</span><span class="p" data-group-id="1959038495-7">}</span></code></pre>
   </section>
 </section>
 <section class="detail" id="deliver_user_reset_password_instructions/2">
@@ -663,7 +664,7 @@ and the token is deleted.</p>
     </a>
     <h1 class="signature" translate="no">deliver_user_reset_password_instructions(user, reset_password_url_fun)</h1>
 
-      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper/accounts.ex#L326" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper/accounts.ex#L326" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -679,8 +680,8 @@ and the token is deleted.</p>
   </a>
   Examples
 </h2>
-<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">deliver_user_reset_password_instructions</span><span class="p" data-group-id="2070856131-1">(</span><span class="n">user</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="nc">Routes</span><span class="o">.</span><span class="n">user_reset_password_url</span><span class="p" data-group-id="2070856131-2">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="ss">:edit</span><span class="p">,</span><span class="w"> </span><span class="ni">&amp;1</span><span class="p" data-group-id="2070856131-2">)</span><span class="p" data-group-id="2070856131-1">)</span><span class="w">
-</span><span class="p" data-group-id="2070856131-3">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="2070856131-4">%{</span><span class="ss">to</span><span class="p">:</span><span class="w"> </span><span class="n">...</span><span class="p">,</span><span class="w"> </span><span class="ss">body</span><span class="p">:</span><span class="w"> </span><span class="n">...</span><span class="p" data-group-id="2070856131-4">}</span><span class="p" data-group-id="2070856131-3">}</span></code></pre>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">deliver_user_reset_password_instructions</span><span class="p" data-group-id="6230770719-1">(</span><span class="n">user</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="nc">Routes</span><span class="o">.</span><span class="n">user_reset_password_url</span><span class="p" data-group-id="6230770719-2">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="ss">:edit</span><span class="p">,</span><span class="w"> </span><span class="ni">&amp;1</span><span class="p" data-group-id="6230770719-2">)</span><span class="p" data-group-id="6230770719-1">)</span><span class="w">
+</span><span class="p" data-group-id="6230770719-3">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="6230770719-4">%{</span><span class="ss">to</span><span class="p">:</span><span class="w"> </span><span class="n">...</span><span class="p">,</span><span class="w"> </span><span class="ss">body</span><span class="p">:</span><span class="w"> </span><span class="n">...</span><span class="p" data-group-id="6230770719-4">}</span><span class="p" data-group-id="6230770719-3">}</span></code></pre>
   </section>
 </section>
 <section class="detail" id="generate_user_session_token/1">
@@ -692,7 +693,7 @@ and the token is deleted.</p>
     </a>
     <h1 class="signature" translate="no">generate_user_session_token(user)</h1>
 
-      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper/accounts.ex#L260" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper/accounts.ex#L260" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -714,7 +715,7 @@ and the token is deleted.</p>
     </a>
     <h1 class="signature" translate="no">get_user!(id)</h1>
 
-      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper/accounts.ex#L61" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper/accounts.ex#L61" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -724,16 +725,16 @@ and the token is deleted.</p>
 
   <section class="docstring">
 
-<p>Gets a single user.</p><p>Raises <a href="https://hexdocs.pm/ecto/3.7.2/Ecto.NoResultsError.html"><code class="inline">Ecto.NoResultsError</code></a> if the User does not exist.</p><h2 id="get_user!/1-examples" class="section-heading">
+<p>Gets a single user.</p><p>Raises <a href="https://hexdocs.pm/ecto/3.10.1/Ecto.NoResultsError.html"><code class="inline">Ecto.NoResultsError</code></a> if the User does not exist.</p><h2 id="get_user!/1-examples" class="section-heading">
   <a href="#get_user!/1-examples" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i>
   <p class="sr-only">examples</p>
   </a>
   Examples
 </h2>
-<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">get_user!</span><span class="p" data-group-id="9420065922-1">(</span><span class="mi">123</span><span class="p" data-group-id="9420065922-1">)</span><span class="w">
-</span><span class="p" data-group-id="9420065922-2">%</span><span class="nc" data-group-id="9420065922-2">User</span><span class="p" data-group-id="9420065922-2">{</span><span class="p" data-group-id="9420065922-2">}</span><span class="w">
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">get_user!</span><span class="p" data-group-id="3463360080-1">(</span><span class="mi">123</span><span class="p" data-group-id="3463360080-1">)</span><span class="w">
+</span><span class="p" data-group-id="3463360080-2">%</span><span class="nc" data-group-id="3463360080-2">User</span><span class="p" data-group-id="3463360080-2">{</span><span class="p" data-group-id="3463360080-2">}</span><span class="w">
 
-</span><span class="gp unselectable">iex&gt; </span><span class="n">get_user!</span><span class="p" data-group-id="9420065922-3">(</span><span class="mi">456</span><span class="p" data-group-id="9420065922-3">)</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="n">get_user!</span><span class="p" data-group-id="3463360080-3">(</span><span class="mi">456</span><span class="p" data-group-id="3463360080-3">)</span><span class="w">
 </span><span class="gt">** (Ecto.NoResultsError)</span></code></pre>
   </section>
 </section>
@@ -746,7 +747,7 @@ and the token is deleted.</p>
     </a>
     <h1 class="signature" translate="no">get_user_by_email(email)</h1>
 
-      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper/accounts.ex#L25" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper/accounts.ex#L25" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -762,10 +763,10 @@ and the token is deleted.</p>
   </a>
   Examples
 </h2>
-<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">get_user_by_email</span><span class="p" data-group-id="8051306739-1">(</span><span class="s">&quot;foo@example.com&quot;</span><span class="p" data-group-id="8051306739-1">)</span><span class="w">
-</span><span class="p" data-group-id="8051306739-2">%</span><span class="nc" data-group-id="8051306739-2">User</span><span class="p" data-group-id="8051306739-2">{</span><span class="p" data-group-id="8051306739-2">}</span><span class="w">
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">get_user_by_email</span><span class="p" data-group-id="6268621078-1">(</span><span class="s">&quot;foo@example.com&quot;</span><span class="p" data-group-id="6268621078-1">)</span><span class="w">
+</span><span class="p" data-group-id="6268621078-2">%</span><span class="nc" data-group-id="6268621078-2">User</span><span class="p" data-group-id="6268621078-2">{</span><span class="p" data-group-id="6268621078-2">}</span><span class="w">
 
-</span><span class="gp unselectable">iex&gt; </span><span class="n">get_user_by_email</span><span class="p" data-group-id="8051306739-3">(</span><span class="s">&quot;unknown@example.com&quot;</span><span class="p" data-group-id="8051306739-3">)</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="n">get_user_by_email</span><span class="p" data-group-id="6268621078-3">(</span><span class="s">&quot;unknown@example.com&quot;</span><span class="p" data-group-id="6268621078-3">)</span><span class="w">
 </span><span class="no">nil</span></code></pre>
   </section>
 </section>
@@ -778,7 +779,7 @@ and the token is deleted.</p>
     </a>
     <h1 class="signature" translate="no">get_user_by_email_and_password(email, password)</h1>
 
-      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper/accounts.ex#L41" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper/accounts.ex#L41" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -794,10 +795,10 @@ and the token is deleted.</p>
   </a>
   Examples
 </h2>
-<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">get_user_by_email_and_password</span><span class="p" data-group-id="2892110714-1">(</span><span class="s">&quot;foo@example.com&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;correct_password&quot;</span><span class="p" data-group-id="2892110714-1">)</span><span class="w">
-</span><span class="p" data-group-id="2892110714-2">%</span><span class="nc" data-group-id="2892110714-2">User</span><span class="p" data-group-id="2892110714-2">{</span><span class="p" data-group-id="2892110714-2">}</span><span class="w">
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">get_user_by_email_and_password</span><span class="p" data-group-id="6971063081-1">(</span><span class="s">&quot;foo@example.com&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;correct_password&quot;</span><span class="p" data-group-id="6971063081-1">)</span><span class="w">
+</span><span class="p" data-group-id="6971063081-2">%</span><span class="nc" data-group-id="6971063081-2">User</span><span class="p" data-group-id="6971063081-2">{</span><span class="p" data-group-id="6971063081-2">}</span><span class="w">
 
-</span><span class="gp unselectable">iex&gt; </span><span class="n">get_user_by_email_and_password</span><span class="p" data-group-id="2892110714-3">(</span><span class="s">&quot;foo@example.com&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;invalid_password&quot;</span><span class="p" data-group-id="2892110714-3">)</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="n">get_user_by_email_and_password</span><span class="p" data-group-id="6971063081-3">(</span><span class="s">&quot;foo@example.com&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;invalid_password&quot;</span><span class="p" data-group-id="6971063081-3">)</span><span class="w">
 </span><span class="no">nil</span></code></pre>
   </section>
 </section>
@@ -810,7 +811,7 @@ and the token is deleted.</p>
     </a>
     <h1 class="signature" translate="no">get_user_by_reset_password_token(token)</h1>
 
-      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper/accounts.ex#L345" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper/accounts.ex#L345" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -826,10 +827,10 @@ and the token is deleted.</p>
   </a>
   Examples
 </h2>
-<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">get_user_by_reset_password_token</span><span class="p" data-group-id="0618509319-1">(</span><span class="s">&quot;validtoken&quot;</span><span class="p" data-group-id="0618509319-1">)</span><span class="w">
-</span><span class="p" data-group-id="0618509319-2">%</span><span class="nc" data-group-id="0618509319-2">User</span><span class="p" data-group-id="0618509319-2">{</span><span class="p" data-group-id="0618509319-2">}</span><span class="w">
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">get_user_by_reset_password_token</span><span class="p" data-group-id="1261646730-1">(</span><span class="s">&quot;validtoken&quot;</span><span class="p" data-group-id="1261646730-1">)</span><span class="w">
+</span><span class="p" data-group-id="1261646730-2">%</span><span class="nc" data-group-id="1261646730-2">User</span><span class="p" data-group-id="1261646730-2">{</span><span class="p" data-group-id="1261646730-2">}</span><span class="w">
 
-</span><span class="gp unselectable">iex&gt; </span><span class="n">get_user_by_reset_password_token</span><span class="p" data-group-id="0618509319-3">(</span><span class="s">&quot;invalidtoken&quot;</span><span class="p" data-group-id="0618509319-3">)</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="n">get_user_by_reset_password_token</span><span class="p" data-group-id="1261646730-3">(</span><span class="s">&quot;invalidtoken&quot;</span><span class="p" data-group-id="1261646730-3">)</span><span class="w">
 </span><span class="no">nil</span></code></pre>
   </section>
 </section>
@@ -842,7 +843,7 @@ and the token is deleted.</p>
     </a>
     <h1 class="signature" translate="no">get_user_by_session_token(token)</h1>
 
-      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper/accounts.ex#L269" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper/accounts.ex#L269" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -864,7 +865,7 @@ and the token is deleted.</p>
     </a>
     <h1 class="signature" translate="no">magic_token_valid?(email)</h1>
 
-      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper/accounts.ex#L277" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper/accounts.ex#L277" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -886,7 +887,7 @@ and the token is deleted.</p>
     </a>
     <h1 class="signature" translate="no">register_user(attrs)</h1>
 
-      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper/accounts.ex#L77" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper/accounts.ex#L77" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -902,11 +903,11 @@ and the token is deleted.</p>
   </a>
   Examples
 </h2>
-<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">register_user</span><span class="p" data-group-id="2136184502-1">(</span><span class="p" data-group-id="2136184502-2">%{</span><span class="ss">field</span><span class="p">:</span><span class="w"> </span><span class="n">value</span><span class="p" data-group-id="2136184502-2">}</span><span class="p" data-group-id="2136184502-1">)</span><span class="w">
-</span><span class="p" data-group-id="2136184502-3">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="2136184502-4">%</span><span class="nc" data-group-id="2136184502-4">User</span><span class="p" data-group-id="2136184502-4">{</span><span class="p" data-group-id="2136184502-4">}</span><span class="p" data-group-id="2136184502-3">}</span><span class="w">
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">register_user</span><span class="p" data-group-id="6081475473-1">(</span><span class="p" data-group-id="6081475473-2">%{</span><span class="ss">field</span><span class="p">:</span><span class="w"> </span><span class="n">value</span><span class="p" data-group-id="6081475473-2">}</span><span class="p" data-group-id="6081475473-1">)</span><span class="w">
+</span><span class="p" data-group-id="6081475473-3">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="6081475473-4">%</span><span class="nc" data-group-id="6081475473-4">User</span><span class="p" data-group-id="6081475473-4">{</span><span class="p" data-group-id="6081475473-4">}</span><span class="p" data-group-id="6081475473-3">}</span><span class="w">
 
-</span><span class="gp unselectable">iex&gt; </span><span class="n">register_user</span><span class="p" data-group-id="2136184502-5">(</span><span class="p" data-group-id="2136184502-6">%{</span><span class="ss">field</span><span class="p">:</span><span class="w"> </span><span class="n">bad_value</span><span class="p" data-group-id="2136184502-6">}</span><span class="p" data-group-id="2136184502-5">)</span><span class="w">
-</span><span class="p" data-group-id="2136184502-7">{</span><span class="ss">:error</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="2136184502-8">%</span><span class="nc" data-group-id="2136184502-8">Ecto.Changeset</span><span class="p" data-group-id="2136184502-8">{</span><span class="p" data-group-id="2136184502-8">}</span><span class="p" data-group-id="2136184502-7">}</span></code></pre>
+</span><span class="gp unselectable">iex&gt; </span><span class="n">register_user</span><span class="p" data-group-id="6081475473-5">(</span><span class="p" data-group-id="6081475473-6">%{</span><span class="ss">field</span><span class="p">:</span><span class="w"> </span><span class="n">bad_value</span><span class="p" data-group-id="6081475473-6">}</span><span class="p" data-group-id="6081475473-5">)</span><span class="w">
+</span><span class="p" data-group-id="6081475473-7">{</span><span class="ss">:error</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="6081475473-8">%</span><span class="nc" data-group-id="6081475473-8">Ecto.Changeset</span><span class="p" data-group-id="6081475473-8">{</span><span class="p" data-group-id="6081475473-8">}</span><span class="p" data-group-id="6081475473-7">}</span></code></pre>
   </section>
 </section>
 <section class="detail" id="reset_user_password/2">
@@ -918,7 +919,7 @@ and the token is deleted.</p>
     </a>
     <h1 class="signature" translate="no">reset_user_password(user, attrs)</h1>
 
-      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper/accounts.ex#L366" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper/accounts.ex#L366" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -934,11 +935,11 @@ and the token is deleted.</p>
   </a>
   Examples
 </h2>
-<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">reset_user_password</span><span class="p" data-group-id="8493133227-1">(</span><span class="n">user</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="8493133227-2">%{</span><span class="ss">password</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;new long password&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">password_confirmation</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;new long password&quot;</span><span class="p" data-group-id="8493133227-2">}</span><span class="p" data-group-id="8493133227-1">)</span><span class="w">
-</span><span class="p" data-group-id="8493133227-3">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="8493133227-4">%</span><span class="nc" data-group-id="8493133227-4">User</span><span class="p" data-group-id="8493133227-4">{</span><span class="p" data-group-id="8493133227-4">}</span><span class="p" data-group-id="8493133227-3">}</span><span class="w">
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">reset_user_password</span><span class="p" data-group-id="1369592253-1">(</span><span class="n">user</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="1369592253-2">%{</span><span class="ss">password</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;new long password&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">password_confirmation</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;new long password&quot;</span><span class="p" data-group-id="1369592253-2">}</span><span class="p" data-group-id="1369592253-1">)</span><span class="w">
+</span><span class="p" data-group-id="1369592253-3">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="1369592253-4">%</span><span class="nc" data-group-id="1369592253-4">User</span><span class="p" data-group-id="1369592253-4">{</span><span class="p" data-group-id="1369592253-4">}</span><span class="p" data-group-id="1369592253-3">}</span><span class="w">
 
-</span><span class="gp unselectable">iex&gt; </span><span class="n">reset_user_password</span><span class="p" data-group-id="8493133227-5">(</span><span class="n">user</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="8493133227-6">%{</span><span class="ss">password</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;valid&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">password_confirmation</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;not the same&quot;</span><span class="p" data-group-id="8493133227-6">}</span><span class="p" data-group-id="8493133227-5">)</span><span class="w">
-</span><span class="p" data-group-id="8493133227-7">{</span><span class="ss">:error</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="8493133227-8">%</span><span class="nc" data-group-id="8493133227-8">Ecto.Changeset</span><span class="p" data-group-id="8493133227-8">{</span><span class="p" data-group-id="8493133227-8">}</span><span class="p" data-group-id="8493133227-7">}</span></code></pre>
+</span><span class="gp unselectable">iex&gt; </span><span class="n">reset_user_password</span><span class="p" data-group-id="1369592253-5">(</span><span class="n">user</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="1369592253-6">%{</span><span class="ss">password</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;valid&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">password_confirmation</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;not the same&quot;</span><span class="p" data-group-id="1369592253-6">}</span><span class="p" data-group-id="1369592253-5">)</span><span class="w">
+</span><span class="p" data-group-id="1369592253-7">{</span><span class="ss">:error</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="1369592253-8">%</span><span class="nc" data-group-id="1369592253-8">Ecto.Changeset</span><span class="p" data-group-id="1369592253-8">{</span><span class="p" data-group-id="1369592253-8">}</span><span class="p" data-group-id="1369592253-7">}</span></code></pre>
   </section>
 </section>
 <section class="detail" id="update_user_email/2">
@@ -950,7 +951,7 @@ and the token is deleted.</p>
     </a>
     <h1 class="signature" translate="no">update_user_email(user, token)</h1>
 
-      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper/accounts.ex#L136" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper/accounts.ex#L136" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -973,7 +974,7 @@ The confirmed_at date is also updated to the current time.</p>
     </a>
     <h1 class="signature" translate="no">update_user_password(user, attrs)</h1>
 
-      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper/accounts.ex#L239" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper/accounts.ex#L239" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -989,11 +990,11 @@ The confirmed_at date is also updated to the current time.</p>
   </a>
   Examples
 </h2>
-<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">update_user_password</span><span class="p" data-group-id="5143403399-1">(</span><span class="n">user</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;valid password&quot;</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="5143403399-2">%{</span><span class="ss">password</span><span class="p">:</span><span class="w"> </span><span class="n">...</span><span class="p" data-group-id="5143403399-2">}</span><span class="p" data-group-id="5143403399-1">)</span><span class="w">
-</span><span class="p" data-group-id="5143403399-3">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="5143403399-4">%</span><span class="nc" data-group-id="5143403399-4">User</span><span class="p" data-group-id="5143403399-4">{</span><span class="p" data-group-id="5143403399-4">}</span><span class="p" data-group-id="5143403399-3">}</span><span class="w">
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">update_user_password</span><span class="p" data-group-id="3858087938-1">(</span><span class="n">user</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;valid password&quot;</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="3858087938-2">%{</span><span class="ss">password</span><span class="p">:</span><span class="w"> </span><span class="n">...</span><span class="p" data-group-id="3858087938-2">}</span><span class="p" data-group-id="3858087938-1">)</span><span class="w">
+</span><span class="p" data-group-id="3858087938-3">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="3858087938-4">%</span><span class="nc" data-group-id="3858087938-4">User</span><span class="p" data-group-id="3858087938-4">{</span><span class="p" data-group-id="3858087938-4">}</span><span class="p" data-group-id="3858087938-3">}</span><span class="w">
 
-</span><span class="gp unselectable">iex&gt; </span><span class="n">update_user_password</span><span class="p" data-group-id="5143403399-5">(</span><span class="n">user</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;invalid password&quot;</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="5143403399-6">%{</span><span class="ss">password</span><span class="p">:</span><span class="w"> </span><span class="n">...</span><span class="p" data-group-id="5143403399-6">}</span><span class="p" data-group-id="5143403399-5">)</span><span class="w">
-</span><span class="p" data-group-id="5143403399-7">{</span><span class="ss">:error</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="5143403399-8">%</span><span class="nc" data-group-id="5143403399-8">Ecto.Changeset</span><span class="p" data-group-id="5143403399-8">{</span><span class="p" data-group-id="5143403399-8">}</span><span class="p" data-group-id="5143403399-7">}</span></code></pre>
+</span><span class="gp unselectable">iex&gt; </span><span class="n">update_user_password</span><span class="p" data-group-id="3858087938-5">(</span><span class="n">user</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;invalid password&quot;</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="3858087938-6">%{</span><span class="ss">password</span><span class="p">:</span><span class="w"> </span><span class="n">...</span><span class="p" data-group-id="3858087938-6">}</span><span class="p" data-group-id="3858087938-5">)</span><span class="w">
+</span><span class="p" data-group-id="3858087938-7">{</span><span class="ss">:error</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="3858087938-8">%</span><span class="nc" data-group-id="3858087938-8">Ecto.Changeset</span><span class="p" data-group-id="3858087938-8">{</span><span class="p" data-group-id="3858087938-8">}</span><span class="p" data-group-id="3858087938-7">}</span></code></pre>
   </section>
 </section>
 <section class="detail" id="update_user_password/3">
@@ -1005,7 +1006,7 @@ The confirmed_at date is also updated to the current time.</p>
     </a>
     <h1 class="signature" translate="no">update_user_password(user, password, attrs)</h1>
 
-      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper/accounts.ex#L164" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper/accounts.ex#L164" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1021,10 +1022,10 @@ The confirmed_at date is also updated to the current time.</p>
   </a>
   Examples
 </h2>
-<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">update_user_password</span><span class="p" data-group-id="4013250567-1">(</span><span class="n">user</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;valid password&quot;</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="4013250567-2">%{</span><span class="ss">password</span><span class="p">:</span><span class="w"> </span><span class="n">...</span><span class="p" data-group-id="4013250567-2">}</span><span class="p" data-group-id="4013250567-1">)</span><span class="w">
-</span><span class="p" data-group-id="4013250567-3">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="4013250567-4">%</span><span class="nc" data-group-id="4013250567-4">User</span><span class="p" data-group-id="4013250567-4">{</span><span class="p" data-group-id="4013250567-4">}</span><span class="p" data-group-id="4013250567-3">}</span><span class="w">
-</span><span class="gp unselectable">iex&gt; </span><span class="n">update_user_password</span><span class="p" data-group-id="4013250567-5">(</span><span class="n">user</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;invalid password&quot;</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="4013250567-6">%{</span><span class="ss">password</span><span class="p">:</span><span class="w"> </span><span class="n">...</span><span class="p" data-group-id="4013250567-6">}</span><span class="p" data-group-id="4013250567-5">)</span><span class="w">
-</span><span class="p" data-group-id="4013250567-7">{</span><span class="ss">:error</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="4013250567-8">%</span><span class="nc" data-group-id="4013250567-8">Ecto.Changeset</span><span class="p" data-group-id="4013250567-8">{</span><span class="p" data-group-id="4013250567-8">}</span><span class="p" data-group-id="4013250567-7">}</span></code></pre>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">update_user_password</span><span class="p" data-group-id="0990954961-1">(</span><span class="n">user</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;valid password&quot;</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="0990954961-2">%{</span><span class="ss">password</span><span class="p">:</span><span class="w"> </span><span class="n">...</span><span class="p" data-group-id="0990954961-2">}</span><span class="p" data-group-id="0990954961-1">)</span><span class="w">
+</span><span class="p" data-group-id="0990954961-3">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="0990954961-4">%</span><span class="nc" data-group-id="0990954961-4">User</span><span class="p" data-group-id="0990954961-4">{</span><span class="p" data-group-id="0990954961-4">}</span><span class="p" data-group-id="0990954961-3">}</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="n">update_user_password</span><span class="p" data-group-id="0990954961-5">(</span><span class="n">user</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;invalid password&quot;</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="0990954961-6">%{</span><span class="ss">password</span><span class="p">:</span><span class="w"> </span><span class="n">...</span><span class="p" data-group-id="0990954961-6">}</span><span class="p" data-group-id="0990954961-5">)</span><span class="w">
+</span><span class="p" data-group-id="0990954961-7">{</span><span class="ss">:error</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="0990954961-8">%</span><span class="nc" data-group-id="0990954961-8">Ecto.Changeset</span><span class="p" data-group-id="0990954961-8">{</span><span class="p" data-group-id="0990954961-8">}</span><span class="p" data-group-id="0990954961-7">}</span></code></pre>
   </section>
 </section>
 
@@ -1032,10 +1033,23 @@ The confirmed_at date is also updated to the current time.</p>
   </section>
 
       <footer class="footer">
-
         <p>
+
+          <span class="line">
+            <button class="a-main footer-button display-quick-switch" title="Search HexDocs packages">
+              Search HexDocs
+            </button>
+
+              <a href="Claper.epub" title="ePub version">
+                Download ePub version
+              </a>
+
+          </span>
+        </p>
+
+        <p class="built-using">
           Built using
-          <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.28.4) for the
+          <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.29.4) for the
 
             <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
 
