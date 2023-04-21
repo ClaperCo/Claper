@@ -790,10 +790,7 @@
             <span class="font-semibold text-lg"><%= gettext("Attendees settings") %></span>
 
             <div class="flex space-x-2 items-center mt-3">
-              <ClaperWeb.Component.Input.check
-                key={:chat_enabled}
-                checked={@state.chat_enabled}
-              />
+              <ClaperWeb.Component.Input.check key={:chat_enabled} checked={@state.chat_enabled} />
               <span><%= gettext("Enable messages") %></span>
             </div>
           </div>

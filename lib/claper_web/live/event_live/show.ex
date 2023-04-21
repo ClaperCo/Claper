@@ -181,7 +181,7 @@ defmodule ClaperWeb.EventLive.Show do
   def handle_info({:state_updated, presentation_state}, socket) do
     {:noreply,
      socket
-      |> assign(:state, presentation_state)}
+     |> assign(:state, presentation_state)}
   end
 
   @impl true

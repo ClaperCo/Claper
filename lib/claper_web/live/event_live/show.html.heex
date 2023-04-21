@@ -157,13 +157,8 @@
         <%= error_tag(f, :body) %>
         <%= submit("Save", phx_disable_with: "Saving...", id: "hiddenSubmit", class: "hidden") %>
       </.form>
-
     <% else %>
-
-    <div
-        id="post-form"
-        class="fixed bottom-12 w-full lg:w-1/3 lg:mx-auto"
-      >
+      <div id="post-form" class="fixed bottom-12 w-full lg:w-1/3 lg:mx-auto">
         <div
           class="rounded-full text-base px-4 py-2 mx-5 relative"
           style="
@@ -173,7 +168,6 @@
           backdrop-filter: blur(11.5px);
           -webkit-backdrop-filter: blur(11.5px);"
         >
-
           <div class="flex space-x-2 items-center">
             <div class="opacity-50 bg-transparent outline-none w-full text-white h-10 placeholder-white pt-3 resize-none pr-20 leading-4 overflow-y-hidden focus:overflow-y-auto">
               <%= gettext("Messages deactivated") %>
@@ -181,8 +175,6 @@
           </div>
         </div>
       </div>
-
-
     <% end %>
 
     <div class="flex space-x-6 fixed justify-center bottom-3 w-full lg:w-1/3 lg:mx-auto">

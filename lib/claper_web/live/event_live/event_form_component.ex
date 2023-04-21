@@ -18,7 +18,8 @@ defmodule ClaperWeb.EventLive.EventFormComponent do
        accept: ~w(.pdf .ppt .pptx),
        auto_upload: true,
        max_entries: 1,
-       max_file_size: max_file_size * 1_000_000 # MB
+       # MB
+       max_file_size: max_file_size * 1_000_000
      )}
   end
 
