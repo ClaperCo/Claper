@@ -1,143 +1,284 @@
 <%= if @started do %>
-<div class="relative min-h-screen lg:flex lg:flex-col lg:items-center lg:w-full bg-black lg:bg-gradient-to-tl from-primary-500 to-secondary-500">
-
-  <div class="relative w-full">
-    <div id="side-menu-shadow"  phx-click={toggle_side_menu()} class="hidden fixed z-20 h-screen bg-black bg-opacity-70 w-full">
-    </div>
-
-    <div id="side-menu" class="hidden fixed h-screen w-64 bg-white rounded-r-lg flex z-30 px-4 flex-col justify-start lg:left-0">
-      <div>
-        <img src="/images/logo-large-black.svg" class="h-16 my-3" />
-
-        <span class="font-bold text-xl"><%= @event.name %></span>
+  <div class="relative min-h-screen lg:flex lg:flex-col lg:items-center lg:w-full bg-black lg:bg-gradient-to-tl from-primary-500 to-secondary-500">
+    <div class="relative w-full">
+      <div
+        id="side-menu-shadow"
+        phx-click={toggle_side_menu()}
+        class="hidden fixed z-20 h-screen bg-black bg-opacity-70 w-full"
+      >
       </div>
 
-      <a class="flex items-center px-3 py-2 bg-gray-200 mb-15 rounded-lg mt-5" href={Routes.event_join_path(@socket, :index, %{disconnected_from: @event.uuid})}>
-        <img src="/images/icons/exit-outline.svg" class="h-5 mr-3" /> <span><%= gettext "Leave" %></span>
+      <div
+        id="side-menu"
+        class="hidden fixed h-screen w-64 bg-white rounded-r-lg flex z-30 px-4 flex-col justify-start lg:left-0"
+      >
+        <div>
+          <img src="/images/logo-large-black.svg" class="h-16 my-3" />
+
+          <span class="font-bold text-xl"><%= @event.name %></span>
+        </div>
+
+        <a
+          class="flex items-center px-3 py-2 bg-gray-200 mb-15 rounded-lg mt-5"
+          href={Routes.event_join_path(@socket, :index, %{disconnected_from: @event.uuid})}
+        >
+          <img src="/images/icons/exit-outline.svg" class="h-5 mr-3" />
+          <span><%= gettext("Leave") %></span>
+        </a>
+      </div>
+    </div>
+
+    <div
+      id="content"
+      class="w-full bg-black fixed z-10 lg:w-1/3"
+      style="box-shadow: 0px 15px 14px 1px rgba(0,0,0,0.75); -webkit-box-shadow: 0px 15px 14px 1px rgba(0,0,0,0.75); -moz-box-shadow: 0px 15px 14px 1px rgba(0,0,0,0.75);"
+    >
+      <div class="flex justify-between items-center px-5 py-3">
+        <button
+          phx-click={toggle_side_menu()}
+          class="bg-black rounded-full text-sm px-3 py-1 bg-gradient-to-tl from-primary-500 to-secondary-500 bg-size-200 bg-pos-0 text-white uppercase flex items-center"
+        >
+          <img src="/images/icons/menu-outline.svg" class="h-6" />
+          <span class="ml-1">#<%= @event.code %></span>
+        </button>
+
+        <div class="inline-flex justify-between items-center text-white text-sm">
+          <img src="/images/icons/online-users.svg" class="h-6 mr-2" />
+          <span id="counter"><%= @attendees_nb %></span>
+        </div>
+      </div>
+    </div>
+
+    <%= if @current_poll do %>
+      <div class="animate__animated animate__zoomInDown w-full lg:w-1/3 lg:mx-auto fixed top-16 z-10 px-2 lg:px-7">
+        <div class="transition-all" id="poll-wrapper">
+          <.live_component
+            module={ClaperWeb.EventLive.PollComponent}
+            id={"#{@current_poll.id}-poll"}
+            poll={@current_poll}
+            current_user={@current_user}
+            attendee_identifier={@attendee_identifier}
+            event={@event}
+            selected_poll_opt={@selected_poll_opt}
+            current_poll_vote={@current_poll_vote}
+          />
+        </div>
+      </div>
+    <% end %>
+
+    <%= if @current_form do %>
+      <div class="animate__animated animate__zoomInDown w-full lg:w-1/3 lg:mx-auto fixed top-16 z-10 px-2 lg:px-7">
+        <div class="transition-all" id="form-wrapper">
+          <.live_component
+            module={ClaperWeb.EventLive.FormComponent}
+            id={"#{@current_form.id}-form"}
+            form={@current_form}
+            current_user={@current_user}
+            attendee_identifier={@attendee_identifier}
+            event={@event}
+            current_form_submit={@current_form_submit}
+          />
+        </div>
+      </div>
+    <% end %>
+
+    <div
+      class="flex flex-col space-y-4 px-5 pt-20 pb-24 lg:w-1/3 bg-black min-h-screen"
+      id="post-list"
+      phx-update="append"
+      data-posts-nb={Enum.count(@posts)}
+      phx-hook="Scroll"
+      data-target="body"
+    >
+      <%= for post <- @posts do %>
+        <.live_component
+          module={ClaperWeb.EventLive.PostComponent}
+          id={"#{post.id}-post"}
+          post={post}
+          leaders={@leaders}
+          is_leader={@is_leader}
+          current_user={@current_user}
+          attendee_identifier={@attendee_identifier}
+          event={@event}
+          liked_posts={@liked_posts}
+          loved_posts={@loved_posts}
+          loled_posts={@loled_posts}
+        />
+      <% end %>
+    </div>
+
+    <%= if @empty_room && @state.chat_enabled do %>
+      <div class="text-2xl text-white block fixed bottom-32 left-0 w-full lg:w-1/3 lg:left-1/2 lg:transform lg:-translate-x-1/2 text-center opacity-30">
+        <span><%= gettext("Be the first to react !") %></span>
+        <img src="/images/icons/arrow-white.svg" class="h-24 rotate-180 ml-12 mt-8" />
+      </div>
+    <% end %>
+
+    <div
+      id="reacts"
+      phx-hook="GlobalReacts"
+      data-class-name="h-12"
+      class="fixed right-5 bottom-12 z-30 w-1/3"
+      phx-update="ignore"
+    >
+    </div>
+
+    <%= if @state.chat_enabled do %>
+      <.form
+        :let={f}
+        for={@post_changeset}
+        id="post-form"
+        class="fixed bottom-12 w-full lg:w-1/3 lg:mx-auto"
+        phx-hook="PostForm"
+        phx-submit="save"
+      >
+        <div
+          class="rounded-full text-base px-4 py-2 mx-5 relative"
+          style="
+          background: rgb(17,134,213);
+          background: linear-gradient(333deg, rgba(17,134,213,0.4962359943977591) 0%, rgba(163,39,255,0.5046393557422969) 100%);
+          box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+          backdrop-filter: blur(11.5px);
+          -webkit-backdrop-filter: blur(11.5px);"
+        >
+          <button class="absolute right-10 top-4 opacity-50" id="submitBtn">
+            <img src="/images/icons/send.svg" class="h-6" />
+          </button>
+
+          <div class="flex space-x-2 items-center">
+            <%= textarea(f, :body,
+              id: "postFormTA",
+              class:
+                "bg-transparent outline-none w-full text-white h-10 placeholder-white pt-3 resize-none pr-20 leading-4 overflow-y-hidden focus:overflow-y-auto",
+              placeholder: gettext("Ask, comment...")
+            ) %>
+          </div>
+        </div>
+        <%= error_tag(f, :body) %>
+        <%= submit("Save", phx_disable_with: "Saving...", id: "hiddenSubmit", class: "hidden") %>
+      </.form>
+    <% else %>
+      <div id="post-form" class="fixed bottom-12 w-full lg:w-1/3 lg:mx-auto">
+        <div
+          class="rounded-full text-base px-4 py-2 mx-5 relative"
+          style="
+          background: rgb(17,134,213);
+          background: linear-gradient(333deg, rgba(17,134,213,0.4962359943977591) 0%, rgba(163,39,255,0.5046393557422969) 100%);
+          box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+          backdrop-filter: blur(11.5px);
+          -webkit-backdrop-filter: blur(11.5px);"
+        >
+          <div class="flex space-x-2 items-center">
+            <div class="opacity-50 bg-transparent outline-none w-full text-white h-10 placeholder-white pt-3 resize-none pr-20 leading-4 overflow-y-hidden focus:overflow-y-auto">
+              <%= gettext("Messages deactivated") %>
+            </div>
+          </div>
+        </div>
+      </div>
+    <% end %>
+
+    <div class="flex space-x-6 fixed justify-center bottom-3 w-full lg:w-1/3 lg:mx-auto">
+      <a
+        phx-click="global-react"
+        phx-hook="ClickFeedback"
+        id="react-heart"
+        class="cursor-pointer"
+        phx-value-type="heart"
+      >
+        <img class="h-6" src="/images/icons/heart.svg" />
+      </a>
+
+      <a
+        phx-click="global-react"
+        phx-hook="ClickFeedback"
+        id="react-clap"
+        class="cursor-pointer"
+        phx-value-type="clap"
+      >
+        <img class="h-6" src="/images/icons/clap.svg" />
+      </a>
+
+      <a
+        phx-click="global-react"
+        phx-hook="ClickFeedback"
+        id="react-hundred"
+        class="cursor-pointer"
+        phx-value-type="hundred"
+      >
+        <img class="h-6" src="/images/icons/hundred.svg" />
+      </a>
+
+      <a
+        phx-click="global-react"
+        phx-hook="ClickFeedback"
+        id="react-raisehand"
+        class="cursor-pointer"
+        phx-value-type="raisehand"
+      >
+        <img class="h-6" src="/images/icons/raisehand.svg" />
       </a>
     </div>
   </div>
-
-  <div id="content" class="w-full bg-black fixed z-10 lg:w-1/3" style="box-shadow: 0px 15px 14px 1px rgba(0,0,0,0.75); -webkit-box-shadow: 0px 15px 14px 1px rgba(0,0,0,0.75); -moz-box-shadow: 0px 15px 14px 1px rgba(0,0,0,0.75);">
-    <div class="flex justify-between items-center px-5 py-3">
-      <button phx-click={toggle_side_menu()} class="bg-black rounded-full text-sm px-3 py-1 bg-gradient-to-tl from-primary-500 to-secondary-500 bg-size-200 bg-pos-0 text-white uppercase flex items-center">
-        <img src="/images/icons/menu-outline.svg" class="h-6" /> <span class="ml-1">#<%= @event.code %></span>
-      </button>
-
-      <div class="inline-flex justify-between items-center text-white text-sm">
-        <img src="/images/icons/online-users.svg" class="h-6 mr-2" /> <span id="counter"><%= @attendees_nb %></span>
-      </div>
-    </div>
-  </div>
-
-  <%= if @current_poll do %>
-    <div class="animate__animated animate__zoomInDown w-full lg:w-1/3 lg:mx-auto fixed top-16 z-10 px-2 lg:px-7">
-      <div class="transition-all" id="poll-wrapper">
-        <.live_component module={ClaperWeb.EventLive.PollComponent} id={"#{@current_poll.id}-poll"} poll={@current_poll} current_user={@current_user} attendee_identifier={@attendee_identifier} event={@event} selected_poll_opt={@selected_poll_opt} current_poll_vote={@current_poll_vote} />
-      </div>
-    </div>
-  <% end %>
-
-  <%= if @current_form do %>
-    <div class="animate__animated animate__zoomInDown w-full lg:w-1/3 lg:mx-auto fixed top-16 z-10 px-2 lg:px-7">
-      <div class="transition-all" id="form-wrapper">
-        <.live_component module={ClaperWeb.EventLive.FormComponent} id={"#{@current_form.id}-form"} form={@current_form} current_user={@current_user} attendee_identifier={@attendee_identifier} event={@event} current_form_submit={@current_form_submit} />
-      </div>
-    </div>
-  <% end %>
-
-  <div class="flex flex-col space-y-4 px-5 pt-20 pb-24 lg:w-1/3 bg-black min-h-screen" id="post-list" phx-update="append" data-posts-nb={Enum.count(@posts)} phx-hook="Scroll" data-target="body">
-    <%= for post <- @posts do %>
-      <.live_component module={ClaperWeb.EventLive.PostComponent} id={"#{post.id}-post"} post={post} leaders={@leaders} is_leader={@is_leader} current_user={@current_user} attendee_identifier={@attendee_identifier} event={@event} liked_posts={@liked_posts} loved_posts={@loved_posts} loled_posts={@loled_posts} />
-    <% end %>
-  </div>
-
-  <%= if @empty_room do %>
-    <div class="text-2xl text-white block fixed bottom-32 left-0 w-full lg:w-1/3 lg:left-1/2 lg:transform lg:-translate-x-1/2 text-center opacity-30">
-      <span><%= gettext "Be the first to react !" %></span>
-      <img src="/images/icons/arrow-white.svg" class="h-24 rotate-180 ml-12 mt-8" />
-    </div>
-  <% end %>
-
-  <div id="reacts" phx-hook="GlobalReacts" data-class-name="h-12" class="fixed right-5 bottom-12 z-30 w-1/3" phx-update="ignore" >
-  </div>
-
-  <.form
-    let={f}
-    for={@post_changeset}
-    id="post-form"
-    class="fixed bottom-12 w-full lg:w-1/3 lg:mx-auto"
-    phx-hook="PostForm"
-    phx-submit="save">
-
-    <div class="rounded-full text-base px-4 py-2 mx-5 relative" style="
-        background: rgb(17,134,213);
-        background: linear-gradient(333deg, rgba(17,134,213,0.4962359943977591) 0%, rgba(163,39,255,0.5046393557422969) 100%);
-        box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-        backdrop-filter: blur(11.5px);
-        -webkit-backdrop-filter: blur(11.5px);" >
-        <button class="absolute right-10 top-4 opacity-50" id="submitBtn">
-            <img src="/images/icons/send.svg" class="h-6" />
-        </button>
-      <div class="flex space-x-2 items-center">
-        <%= textarea f, :body, id: "postFormTA", class: "bg-transparent outline-none w-full text-white h-10 placeholder-white pt-3 resize-none pr-20 leading-4 overflow-y-hidden focus:overflow-y-auto", placeholder: gettext("Ask, comment...") %>
-      </div>
-    </div>
-    <%= error_tag f, :body %>
-    <%= submit "Save", phx_disable_with: "Saving...", id: "hiddenSubmit", class: "hidden" %>
-  </.form>
-
-  <div class="flex space-x-6 fixed justify-center bottom-3 w-full lg:w-1/3 lg:mx-auto">
-
-    <a phx-click="global-react" phx-hook="ClickFeedback" id="react-heart" class="cursor-pointer" phx-value-type="heart">
-       <img class="h-6" src={"/images/icons/heart.svg"} />
-    </a>
-
-    <a phx-click="global-react" phx-hook="ClickFeedback" id="react-clap" class="cursor-pointer" phx-value-type="clap">
-       <img class="h-6" src={"/images/icons/clap.svg"} />
-    </a>
-
-    <a phx-click="global-react" phx-hook="ClickFeedback" id="react-hundred" class="cursor-pointer" phx-value-type="hundred">
-       <img class="h-6" src={"/images/icons/hundred.svg"} />
-    </a>
-
-    <a phx-click="global-react" phx-hook="ClickFeedback" id="react-raisehand" class="cursor-pointer" phx-value-type="raisehand">
-       <img class="h-6" src={"/images/icons/raisehand.svg"} />
-    </a>
-
-  </div>
-
-
-</div>
 <% else %>
-<div class="w-full">
-  <div class="flex bg-black h-screen">
-    <div class="flex items-center text-center lg:text-left justify-center lg:justify-start lg:px-12 w-full lg:w-1/2">
+  <div class="w-full">
+    <div class="flex bg-black h-screen">
+      <div class="flex items-center text-center lg:text-left justify-center lg:justify-start lg:px-12 w-full lg:w-1/2">
         <div class="w-full mx-12 lg:w-auto lg:mx-0">
           <h1 class="py-5 text-5xl font-semibold text-white md:text-6xl"><%= @event.name %></h1>
 
-          <h2 x-data={"{date: moment.utc('#{@event.started_at}').local().format('LLLL')}"} class="py-5 text-2xl text-gray-300 md:text-4xl" x-text="date.charAt(0).toUpperCase() + date.slice(1)"></h2>
+          <h2
+            x-data={"{date: moment.utc('#{@event.started_at}').local().format('LLLL')}"}
+            class="py-5 text-2xl text-gray-300 md:text-4xl"
+            x-text="date.charAt(0).toUpperCase() + date.slice(1)"
+          >
+          </h2>
 
           <div class="text-white flex justify-between items-center mt-12">
-            <div class="flex flex-col items-center mr-10"><span class="text-5xl font-bold"><%= if @remaining_days < 10, do: "0" %><%= @remaining_days %></span><span class="text-gray-400"><%= gettext "days" %></span></div>
-            <div class="flex flex-col items-center mr-10"><span class="text-5xl font-bold"><%= if @remaining_hours < 10, do: "0" %><%= @remaining_hours %></span><span class="text-gray-400"><%= gettext "hours" %></span></div>
-            <div class="flex flex-col items-center mr-10"><span class="text-5xl font-bold"><%= if @remaining_minutes < 10, do: "0" %><%= @remaining_minutes %></span><span class="text-gray-400"><%= gettext "minutes" %></span></div>
-            <div class="flex flex-col items-center"><span class="text-5xl font-bold"><%= if @remaining_seconds < 10, do: "0" %><%= @remaining_seconds %></span><span class="text-gray-400"><%= gettext "seconds" %></span></div>
+            <div class="flex flex-col items-center mr-10">
+              <span class="text-5xl font-bold">
+                <%= if @remaining_days < 10, do: "0" %><%= @remaining_days %>
+              </span>
+              <span class="text-gray-400"><%= gettext("days") %></span>
+            </div>
+            <div class="flex flex-col items-center mr-10">
+              <span class="text-5xl font-bold">
+                <%= if @remaining_hours < 10, do: "0" %><%= @remaining_hours %>
+              </span>
+              <span class="text-gray-400"><%= gettext("hours") %></span>
+            </div>
+            <div class="flex flex-col items-center mr-10">
+              <span class="text-5xl font-bold">
+                <%= if @remaining_minutes < 10, do: "0" %><%= @remaining_minutes %>
+              </span>
+              <span class="text-gray-400"><%= gettext("minutes") %></span>
+            </div>
+            <div class="flex flex-col items-center">
+              <span class="text-5xl font-bold">
+                <%= if @remaining_seconds < 10, do: "0" %><%= @remaining_seconds %>
+              </span>
+              <span class="text-gray-400"><%= gettext("seconds") %></span>
+            </div>
           </div>
         </div>
-    </div>
-    <div class="hidden lg:block lg:w-1/2" >
+      </div>
+      <div class="hidden lg:block lg:w-1/2">
         <div class="h-full object-cover bg-gradient-animate">
-            <div class="h-full bg-black text-white bg-opacity-50 text-center flex flex-col items-center justify-center">
-              <span class="text-4xl font-semibold mb-10"><%= gettext "Scan to interact in real-time" %></span>
-              <div phx-hook="QRCode" id="qr" phx-update="ignore" class="rounded-lg mx-auto bg-white w-64 h-64 p-12 flex items-center justify-center mb-14">
-              </div>
-              <span class="text-4xl font-semibold mb-10"><%= gettext "Or use the code:" %></span>
-              <span class="text-5xl font-semibold mb-10">#<%= String.upcase(@event.code) %></span>
+          <div class="h-full bg-black text-white bg-opacity-50 text-center flex flex-col items-center justify-center">
+            <span class="text-4xl font-semibold mb-10">
+              <%= gettext("Scan to interact in real-time") %>
+            </span>
+            <div
+              phx-hook="QRCode"
+              id="qr"
+              phx-update="ignore"
+              class="rounded-lg mx-auto bg-white w-64 h-64 p-12 flex items-center justify-center mb-14"
+            >
             </div>
-
+            <span class="text-4xl font-semibold mb-10"><%= gettext("Or use the code:") %></span>
+            <span class="text-5xl font-semibold mb-10">#<%= String.upcase(@event.code) %></span>
+          </div>
         </div>
+      </div>
     </div>
   </div>
-</div>
 <% end %>

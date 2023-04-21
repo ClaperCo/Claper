@@ -221,59 +221,50 @@ defmodule Claper.Polls do
     )
   end
 
-  def vote(user_id, event_uuid, %PollOpt{} = poll_opt, poll_id) when is_number(user_id) do
-    case Ecto.Multi.new()
-         |> Ecto.Multi.update(
-           :poll_opt,
-           PollOpt.changeset(poll_opt, %{"vote_count" => poll_opt.vote_count + 1})
-         )
-         |> Ecto.Multi.insert(:poll_vote, %PollVote{
-           user_id: user_id,
-           poll_opt_id: poll_opt.id,
-           poll_id: poll_id
-         })
+  def vote(user_id, event_uuid, poll_opts, poll_id)
+      when is_number(user_id) and is_list(poll_opts) do
+    case Enum.reduce(poll_opts, Ecto.Multi.new(), fn opt, multi ->
+           Ecto.Multi.update(
+             multi,
+             {:update_poll_opt, opt.id},
+             PollOpt.changeset(opt, %{"vote_count" => opt.vote_count + 1})
+           )
+           |> Ecto.Multi.insert(
+             {:insert_poll_vote, opt.id},
+             PollVote.changeset(%PollVote{}, %{
+               user_id: user_id,
+               poll_opt_id: opt.id,
+               poll_id: poll_id
+             })
+           )
+         end)
          |> Repo.transaction() do
-      {:ok, %{poll_opt: opt}} ->
-        opt =
-          Repo.preload(opt,
-            poll: [
-              poll_opts:
-                from(
-                  o in PollOpt,
-                  order_by: [asc: o.id]
-                )
-            ]
-          )
-
-        broadcast({:ok, opt.poll |> set_percentages, event_uuid}, :poll_updated)
+      {:ok, _} ->
+        poll = get_poll!(poll_id)
+        broadcast({:ok, poll, event_uuid}, :poll_updated)
     end
   end
 
-  def vote(attendee_identifier, event_uuid, %PollOpt{} = poll_opt, poll_id) do
-    case Ecto.Multi.new()
-         |> Ecto.Multi.update(
-           :poll_opt,
-           PollOpt.changeset(poll_opt, %{"vote_count" => poll_opt.vote_count + 1})
-         )
-         |> Ecto.Multi.insert(:poll_vote, %PollVote{
-           attendee_identifier: attendee_identifier,
-           poll_opt_id: poll_opt.id,
-           poll_id: poll_id
-         })
+  def vote(attendee_identifier, event_uuid, poll_opts, poll_id) when is_list(poll_opts) do
+    case Enum.reduce(poll_opts, Ecto.Multi.new(), fn opt, multi ->
+           Ecto.Multi.update(
+             multi,
+             {:update_poll_opt, opt.id},
+             PollOpt.changeset(opt, %{"vote_count" => opt.vote_count + 1})
+           )
+           |> Ecto.Multi.insert(
+             {:insert_poll_vote, opt.id},
+             PollVote.changeset(%PollVote{}, %{
+               attendee_identifier: attendee_identifier,
+               poll_opt_id: opt.id,
+               poll_id: poll_id
+             })
+           )
+         end)
          |> Repo.transaction() do
-      {:ok, %{poll_opt: opt}} ->
-        opt =
-          Repo.preload(opt,
-            poll: [
-              poll_opts:
-                from(
-                  o in PollOpt,
-                  order_by: [asc: o.id]
-                )
-            ]
-          )
-
-        broadcast({:ok, opt.poll |> set_percentages, event_uuid}, :poll_updated)
+      {:ok, _} ->
+        poll = get_poll!(poll_id)
+        broadcast({:ok, poll, event_uuid}, :poll_updated)
     end
   end
 
@@ -313,20 +304,30 @@ defmodule Claper.Polls do
   end
 
   @doc """
-  Gets a single poll_vote.
+  Gets a all poll_vote.
 
 
   ## Examples
 
       iex> get_poll_vote!(321, 123)
-      %PollVote{}
+      [%PollVote{}]
 
   """
-  def get_poll_vote(user_id, poll_id) when is_number(user_id),
-    do: Repo.get_by(PollVote, poll_id: poll_id, user_id: user_id)
+  def get_poll_vote(user_id, poll_id) when is_number(user_id) do
+    from(p in PollVote,
+      where: p.poll_id == ^poll_id and p.user_id == ^user_id,
+      order_by: [asc: p.id]
+    )
+    |> Repo.all()
+  end
 
-  def get_poll_vote(attendee_identifier, poll_id),
-    do: Repo.get_by(PollVote, poll_id: poll_id, attendee_identifier: attendee_identifier)
+  def get_poll_vote(attendee_identifier, poll_id) do
+    from(p in PollVote,
+      where: p.poll_id == ^poll_id and p.attendee_identifier == ^attendee_identifier,
+      order_by: [asc: p.id]
+    )
+    |> Repo.all()
+  end
 
   @doc """
   Creates a poll_vote.

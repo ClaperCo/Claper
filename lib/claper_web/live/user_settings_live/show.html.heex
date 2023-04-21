@@ -5,85 +5,123 @@
         <%= gettext("Settings") %>
       </h1>
     </div>
-    <div class="mt-4 flex sm:mt-0 sm:ml-4">
-    </div>
+    <div class="mt-4 flex sm:mt-0 sm:ml-4"></div>
   </div>
 
   <div class="mt-8">
-      <%= if @live_action in [:edit_email] do %>
-      <.live_component module={ClaperWeb.ModalComponent}
+    <%= if @live_action in [:edit_email] do %>
+      <.live_component
+        module={ClaperWeb.ModalComponent}
         class="hidden"
         id="modal-wrapper"
         title={@page_title}
         description={@page_description}
-        return_to={Routes.user_settings_show_path(@socket, :show)}>
-
+        return_to={Routes.user_settings_show_path(@socket, :show)}
+      >
         <div>
-          <.form let={f} for={@email_changeset} phx-submit="save" id="update_email" class="mt-5 md:flex md:items-end">
+          <.form
+            :let={f}
+            for={@email_changeset}
+            phx-submit="save"
+            id="update_email"
+            class="mt-5 md:flex md:items-end"
+          >
+            <%= hidden_input(f, :action, name: "action", value: "update_email") %>
 
-            <%= hidden_input f, :action, name: "action", value: "update_email" %>
+            <ClaperWeb.Component.Input.email
+              form={f}
+              key={:email}
+              name={gettext("Email")}
+              required="true"
+            />
 
-            <ClaperWeb.Component.Input.email form={f} key={:email} name={gettext "Email"} required="true" />
-
-            <%= submit gettext("Save"), phx_disable_with: "Saving...", class: "mt-2 w-full h-14 inline-flex transition-all items-center justify-center px-4 py-2 shadow-sm font-medium rounded-md text-white bg-black hover:bg-primary-500 md:mt-0 md:ml-3 md:w-auto md:text-sm" %>
+            <%= submit(gettext("Save"),
+              phx_disable_with: "Saving...",
+              class:
+                "mt-2 w-full h-14 inline-flex transition-all items-center justify-center px-4 py-2 shadow-sm font-medium rounded-md text-white bg-black hover:bg-primary-500 md:mt-0 md:ml-3 md:w-auto md:text-sm"
+            ) %>
           </.form>
         </div>
-
-        </.live_component>
+      </.live_component>
     <% end %>
 
     <%= if @live_action in [:edit_password] do %>
-      <.live_component module={ClaperWeb.ModalComponent}
+      <.live_component
+        module={ClaperWeb.ModalComponent}
         class="hidden"
         id="modal-wrapper"
         title={@page_title}
         description={@page_description}
-        return_to={Routes.user_settings_show_path(@socket, :show)}>
-
+        return_to={Routes.user_settings_show_path(@socket, :show)}
+      >
         <div>
-          <.form let={f} for={@password_changeset} phx-submit="save" id="update_password" class="mt-5 md:flex md:items-end gap-x-2">
+          <.form
+            :let={f}
+            for={@password_changeset}
+            phx-submit="save"
+            id="update_password"
+            class="mt-5 md:flex md:items-end gap-x-2"
+          >
+            <%= hidden_input(f, :action, name: "action", value: "update_password") %>
 
-            <%= hidden_input f, :action, name: "action", value: "update_password" %>
+            <ClaperWeb.Component.Input.password
+              form={f}
+              key={:current_password}
+              name={gettext("Current password")}
+              required="true"
+            />
+            <ClaperWeb.Component.Input.password
+              form={f}
+              key={:password}
+              name={gettext("New password")}
+              required="true"
+            />
 
-            <ClaperWeb.Component.Input.password form={f} key={:current_password} name={gettext "Current password"} required="true" />
-            <ClaperWeb.Component.Input.password form={f} key={:password} name={gettext "New password"} required="true" />
-
-            <%= submit gettext("Save"), phx_disable_with: "Saving...", class: "mt-2 w-full h-14 inline-flex transition-all items-center justify-center px-4 py-2 shadow-sm font-medium rounded-md text-white bg-black hover:bg-primary-500 md:mt-0 md:ml-3 md:w-auto md:text-sm" %>
+            <%= submit(gettext("Save"),
+              phx_disable_with: "Saving...",
+              class:
+                "mt-2 w-full h-14 inline-flex transition-all items-center justify-center px-4 py-2 shadow-sm font-medium rounded-md text-white bg-black hover:bg-primary-500 md:mt-0 md:ml-3 md:w-auto md:text-sm"
+            ) %>
           </.form>
         </div>
-
-        </.live_component>
+      </.live_component>
     <% end %>
 
     <div class="shadow overflow-hidden sm:rounded-lg">
       <div class="py-5">
         <h3 class="text-lg leading-6 font-medium text-gray-900">
-          <%= gettext "Personal informations" %>
+          <%= gettext("Personal informations") %>
         </h3>
         <p class="mt-1 max-w-2xl text-sm text-gray-500">
-          <%= gettext "Your personal informations only visible by you" %>
+          <%= gettext("Your personal informations only visible by you") %>
         </p>
       </div>
       <div class="border-t border-gray-200 py-5 sm:p-0">
         <dl class="sm:divide-y sm:divide-gray-200">
           <div class="py-4 sm:py-5 sm:grid sm:grid-cols-2 sm:gap-4">
             <dt class="text-sm font-medium text-gray-500">
-              <%= gettext "Email address" %>
+              <%= gettext("Email address") %>
             </dt>
             <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
               <span class="flex-grow"><%= @current_user.email %></span>
               <span class="ml-4 flex-shrink-0">
-                <%= live_patch gettext("Change"), to: Routes.user_settings_show_path(@socket, :edit_email), class: "rounded-md font-medium text-purple-600 hover:text-purple-500" %>
+                <%= live_patch(gettext("Change"),
+                  to: Routes.user_settings_show_path(@socket, :edit_email),
+                  class: "rounded-md font-medium text-purple-600 hover:text-purple-500"
+                ) %>
               </span>
             </dd>
 
             <dt class="text-sm font-medium text-gray-500">
-              <%= gettext "Password" %>
+              <%= gettext("Password") %>
             </dt>
             <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
               <span class="flex-grow">********</span>
               <span class="ml-4 flex-shrink-0">
-                <%= live_patch gettext("Change"), to: Routes.user_settings_show_path(@socket, :edit_password), class: "rounded-md font-medium text-purple-600 hover:text-purple-500" %>
+                <%= live_patch(gettext("Change"),
+                  to: Routes.user_settings_show_path(@socket, :edit_password),
+                  class: "rounded-md font-medium text-purple-600 hover:text-purple-500"
+                ) %>
               </span>
             </dd>
           </div>

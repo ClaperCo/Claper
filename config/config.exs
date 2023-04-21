@@ -34,7 +34,7 @@ config :claper, Claper.Mailer, adapter: Swoosh.Adapters.Local
 config :swoosh, :api_client, false
 
 config :dart_sass,
-  version: "1.54.0",
+  version: "1.58.0",
   default: [
     args: ~w(css/custom.scss ../priv/static/assets/custom.css),
     cd: Path.expand("../assets", __DIR__)
@@ -65,6 +65,8 @@ config :ex_aws,
   secret_access_key: [{:system, "AWS_SECRET_ACCESS_KEY"}, :instance_role],
   region: {:system, "AWS_REGION"},
   normalize_path: false
+
+config :claper, max_file_size: System.get_env("MAX_FILE_SIZE_MB") || 15
 
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.

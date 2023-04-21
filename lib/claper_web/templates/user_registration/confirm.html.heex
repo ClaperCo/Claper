@@ -1,31 +1,36 @@
 <div>
   <div class="relative min-h-screen bg-black">
-      <div
-        class="flex justify-center md:items-center h-screen w-full p-8 md:p-10 lg:p-14 sm:rounded-lg md:rounded-none ">
-        <div class="max-w-xl w-full space-y-4 mx-auto">
-          <div class="text-center">
-            <h2 class="mt-6 font-bold text-gray-100">
-              <a href="/">
-                <img src="/images/icons/email.png" class="w-auto inline" />
-              </a>
-            </h2>
-            <p class="mt-6  text-xl md:text-3xl font-bold text-gray-100">
+    <div class="flex justify-center md:items-center h-screen w-full p-8 md:p-10 lg:p-14 sm:rounded-lg md:rounded-none ">
+      <div class="max-w-xl w-full space-y-4 mx-auto">
+        <div class="text-center">
+          <h2 class="mt-6 font-bold text-gray-100">
+            <a href="/">
+              <img src="/images/icons/email.png" class="w-auto inline" />
+            </a>
+          </h2>
+          <p class="mt-6  text-xl md:text-3xl font-bold text-gray-100">
             <%= if @conn.query_params["retry"] do %>
-                <%= gettext("We already sent you an email to login, please retry in 5 minutes.") %>
+              <%= gettext("We already sent you an email to login, please retry in 5 minutes.") %>
+            <% else %>
+              <%= if @conn.query_params["email"] do %>
+                <%= gettext("We sent you an email at") <>
+                  " #{@conn.query_params["email"]}" <>
+                  gettext(", click on the provided link to connect (check your spam !)") %>
               <% else %>
-                <%= if @conn.query_params["email"] do %>
-                  <%= gettext("We sent you an email at") <> " #{@conn.query_params["email"]}" <> gettext(", click on the provided link to connect (check your spam !)") %>
-                <% else %>
-                  <%= gettext("We sent you an email, click on the provided link to connect (check your spam !)") %>
-                <% end %>
+                <%= gettext(
+                  "We sent you an email, click on the provided link to connect (check your spam !)"
+                ) %>
+              <% end %>
             <% end %>
-            </p>
+          </p>
 
-            <div class="mt-10">
-              <%= live_patch gettext("Return to home"), to: Routes.event_join_path(@conn, :index), class: "text-sm text-white underline" %>
-            </div>
-
+          <div class="mt-10">
+            <%= live_patch(gettext("Return to home"),
+              to: Routes.event_join_path(@conn, :index),
+              class: "text-sm text-white underline"
+            ) %>
           </div>
+        </div>
       </div>
     </div>
   </div>

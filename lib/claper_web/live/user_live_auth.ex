@@ -1,5 +1,6 @@
 defmodule ClaperWeb.UserLiveAuth do
   import Phoenix.LiveView
+  import Phoenix.Component
   alias ClaperWeb.Router.Helpers, as: Routes
 
   def on_mount(:default, _params, %{"current_user" => current_user} = _session, socket) do

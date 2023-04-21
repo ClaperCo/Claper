@@ -37,6 +37,7 @@ MAILBOX_PASSWORD | - | - | - | Basic auth password for mailbox route
 Variable | Values | Default | Required | Description
 --- | --- | --- | --- | ---
 ENABLE_ACCOUNT_CREATION | true, false | true | - | Enable/disable user registration
+MAX_FILE_SIZE_MB | - | 15 | - | Max file size to upload in MB
 
 ## Production / Docker
 

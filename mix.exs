@@ -1,7 +1,7 @@
 defmodule Claper.MixProject do
   use Mix.Project
 
-  @version "1.3.0"
+  @version "1.4.0"
 
   def project do
     [
@@ -9,7 +9,6 @@ defmodule Claper.MixProject do
       version: @version,
       elixir: "~> 1.12",
       elixirc_paths: elixirc_paths(Mix.env()),
-      compilers: [:gettext] ++ Mix.compilers(),
       start_permanent: Mix.env() == :prod,
       aliases: aliases(),
       deps: deps(),
@@ -90,16 +89,17 @@ defmodule Claper.MixProject do
       {:ex_aws_s3, "~> 2.3"},
       {:ex_doc, "~> 0.27", only: :dev, runtime: false},
       {:bcrypt_elixir, "~> 2.0"},
-      {:phoenix, "~> 1.6.2"},
+      {:phoenix, "~> 1.7"},
       {:phoenix_ecto, "~> 4.4"},
-      {:ecto_sql, "~> 3.6"},
+      {:ecto_sql, "~> 3.10"},
       {:postgrex, ">= 0.0.0"},
       {:phoenix_html, "~> 3.0"},
       {:phoenix_live_reload, "~> 1.2", only: :dev},
-      {:phoenix_live_view, "~> 0.17.0"},
+      {:phoenix_live_view, "~> 0.18.3"},
       {:phoenix_swoosh, "~> 1.0"},
+      {:phoenix_view, "~> 2.0"},
       {:floki, ">= 0.30.0", only: :test},
-      {:phoenix_live_dashboard, "~> 0.6"},
+      {:phoenix_live_dashboard, "~> 0.7"},
       {:esbuild, "~> 0.2", runtime: Mix.env() == :dev},
       {:dart_sass, "~> 0.5", runtime: Mix.env() == :dev},
       {:swoosh, "~> 1.3"},

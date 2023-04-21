@@ -1,64 +1,96 @@
 <div class="mx-3 max-w-7xl sm:mx-auto">
   <%= if @live_action in [:new, :edit] do %>
-    <.live_component module={ClaperWeb.EventLive.EventFormComponent} id="event-create" event={@event} page_title={@page_title} action={@live_action} return_to={Routes.event_index_path(@socket, :index)} current_user={@current_user} />
+    <.live_component
+      module={ClaperWeb.EventLive.EventFormComponent}
+      id="event-create"
+      event={@event}
+      page_title={@page_title}
+      action={@live_action}
+      return_to={Routes.event_index_path(@socket, :index)}
+      current_user={@current_user}
+    />
   <% else %>
-
-
-  <div class="border-b border-gray-200 py-4 flex items-center justify-between">
-    <div class="flex-1 min-w-0">
-      <h1 class="text-2xl font-medium leading-6 text-gray-900 sm:truncate">
-        <%= gettext("My presentations") %>
-      </h1>
+    <div class="border-b border-gray-200 py-4 flex items-center justify-between">
+      <div class="flex-1 min-w-0">
+        <h1 class="text-2xl font-medium leading-6 text-gray-900 sm:truncate">
+          <%= gettext("My presentations") %>
+        </h1>
+      </div>
+      <div class="flex mt-0">
+        <a
+          data-phx-link="patch"
+          data-phx-link-state="push"
+          href={Routes.event_index_path(@socket, :new)}
+          class="relative inline-flex items-center px-5 py-2 text-lg font-medium rounded-md text-white bg-gradient-to-tl from-primary-500 to-secondary-500 bg-size-200 bg-pos-0 hover:bg-pos-100 transition-all duration-500"
+        >
+          <svg
+            class="-ml-1 mr-1 h-5 w-5"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 20 20"
+            fill="currentColor"
+            aria-hidden="true"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
+              clip-rule="evenodd"
+            />
+          </svg>
+          <span>
+            <%= gettext("Create") %>
+          </span>
+        </a>
+      </div>
     </div>
-    <div class="flex mt-0">
-      <a data-phx-link="patch" data-phx-link-state="push" href={Routes.event_index_path(@socket, :new)}
-        class="relative inline-flex items-center px-5 py-2 text-lg font-medium rounded-md text-white bg-gradient-to-tl from-primary-500 to-secondary-500 bg-size-200 bg-pos-0 hover:bg-pos-100 transition-all duration-500">
-        <svg class="-ml-1 mr-1 h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
-          aria-hidden="true">
-          <path fill-rule="evenodd"
-            d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
-            clip-rule="evenodd" />
-        </svg>
-        <span>
-          <%= gettext("Create") %>
-        </span>
-      </a>
-    </div>
-  </div>
 
-  <div class="mt-10 relative">
-    <ul role="event-list" class="divide-y divide-gray-200" phx-update="append" id="events">
+    <div class="mt-10 relative">
+      <ul role="event-list" class="divide-y divide-gray-200" phx-update="append" id="events">
         <% current_time = NaiveDateTime.utc_now() %>
         <%= for event <- @events do %>
-          <.live_component module={ClaperWeb.EventLive.EventCardComponent} id={"event-#{event.uuid}"} event={event} current_time={current_time} />
+          <.live_component
+            module={ClaperWeb.EventLive.EventCardComponent}
+            id={"event-#{event.uuid}"}
+            event={event}
+            current_time={current_time}
+          />
         <% end %>
-    </ul>
-    <%= if Enum.count(@events) == 0 do %>
-    <div class="w-full text-2xl text-black opacity-25 text-center">
-      <img src="/images/icons/arrow.svg" class="h-20 float-right mr-16 -mt-5" />
-      <p class="pt-12 clear-both"> <%= gettext("Create your first presentation") %></p>
+      </ul>
+      <%= if Enum.count(@events) == 0 do %>
+        <div class="w-full text-2xl text-black opacity-25 text-center">
+          <img src="/images/icons/arrow.svg" class="h-20 float-right mr-16 -mt-5" />
+          <p class="pt-12 clear-both"><%= gettext("Create your first presentation") %></p>
+        </div>
+      <% end %>
     </div>
+
+    <%= if length(@managed_events) > 0 do %>
+      <div class="border-b border-gray-200 py-4 flex items-center justify-between mt-12">
+        <div class="flex-1 min-w-0">
+          <h1 class="text-2xl font-medium leading-6 text-gray-900 sm:truncate">
+            <%= gettext("Invited presentations") %>
+          </h1>
+        </div>
+      </div>
+
+      <div class="mt-10 relative">
+        <ul
+          role="managed-event-list"
+          class="divide-y divide-gray-200"
+          id="event-cards"
+          phx-update="replace"
+        >
+          <% current_time = NaiveDateTime.utc_now() %>
+          <%= for event <- @managed_events do %>
+            <.live_component
+              module={ClaperWeb.EventLive.EventCardComponent}
+              id={"managed-event-#{event.uuid}"}
+              is_leader={true}
+              event={event}
+              current_time={current_time}
+            />
+          <% end %>
+        </ul>
+      </div>
     <% end %>
-  </div>
-
-  <%= if length(@managed_events) > 0 do %>
-
-  <div class="border-b border-gray-200 py-4 flex items-center justify-between mt-12">
-    <div class="flex-1 min-w-0">
-      <h1 class="text-2xl font-medium leading-6 text-gray-900 sm:truncate">
-        <%= gettext("Invited presentations") %>
-      </h1>
-    </div>
-  </div>
-
-  <div class="mt-10 relative">
-    <ul role="managed-event-list" class="divide-y divide-gray-200" id="event-cards" phx-update="replace">
-        <% current_time = NaiveDateTime.utc_now() %>
-        <%= for event <- @managed_events do %>
-          <.live_component module={ClaperWeb.EventLive.EventCardComponent} id={"managed-event-#{event.uuid}"} is_leader={true} event={event} current_time={current_time} />
-        <% end %>
-    </ul>
-  </div>
-  <% end %>
   <% end %>
 </div>

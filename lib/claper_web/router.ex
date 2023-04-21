@@ -7,7 +7,7 @@ defmodule ClaperWeb.Router do
     plug(:accepts, ["html"])
     plug(:fetch_session)
     plug(:fetch_live_flash)
-    plug(:put_root_layout, {ClaperWeb.LayoutView, :root})
+    plug(:put_root_layout, html: {ClaperWeb.LayoutView, :root})
     plug(:protect_from_forgery)
     plug(:put_secure_browser_headers)
     plug(:fetch_current_user)
@@ -38,7 +38,7 @@ defmodule ClaperWeb.Router do
   end
 
   live_session :user,
-    root_layout: {ClaperWeb.LayoutView, "user.html"} do
+    root_layout: {ClaperWeb.LayoutView, :user} do
     scope "/", ClaperWeb do
       pipe_through([:browser, :require_authenticated_user])
 
@@ -66,6 +66,7 @@ defmodule ClaperWeb.Router do
       live("/e/:code/manage/add/poll", EventLive.Manage, :add_poll)
       live("/e/:code/manage/edit/poll/:id", EventLive.Manage, :edit_poll)
       live("/e/:code/manage/add/form", EventLive.Manage, :add_form)
+      live("/e/:code/manage/import", EventLive.Manage, :import)
       live("/e/:code/manage/edit/form/:id", EventLive.Manage, :edit_form)
     end
   end

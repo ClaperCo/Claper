@@ -1,4 +1,5 @@
 defmodule ClaperWeb.LayoutView do
+  import Phoenix.Component
   use ClaperWeb, :view
 
   # Phoenix LiveDashboard is available only in development by default,

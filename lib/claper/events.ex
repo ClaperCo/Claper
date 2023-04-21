@@ -259,6 +259,74 @@ defmodule Claper.Events do
   end
 
   @doc """
+  Import interactions from another event
+
+  ## Examples
+
+      iex> import(user_id, from_event_uuid, to_event_uuid)
+      {:ok, %Event{}}
+
+      iex> import(user_id, from_event_uuid, to_event_uuid)
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def import(user_id, from_event_uuid, to_event_uuid) do
+    case Ecto.Multi.new()
+         |> Ecto.Multi.run(:from_event, fn _repo, _changes ->
+           {:ok,
+            get_user_event!(user_id, from_event_uuid,
+              presentation_file: [polls: [:poll_opts], forms: []]
+            )}
+         end)
+         |> Ecto.Multi.run(:to_event, fn _repo, _changes ->
+           {:ok, get_user_event!(user_id, to_event_uuid, presentation_file: [:polls, :forms])}
+         end)
+         |> Ecto.Multi.run(:polls, fn _repo, %{from_event: from_event, to_event: to_event} ->
+           {:ok,
+            from_event.presentation_file.polls
+            |> Enum.each(fn poll ->
+              if poll.position < to_event.presentation_file.length do
+                Claper.Polls.create_poll(%{
+                  title: poll.title,
+                  position: poll.position,
+                  enabled: poll.enabled,
+                  multiple: poll.multiple,
+                  poll_opts:
+                    Enum.map(poll.poll_opts, fn opt ->
+                      %{content: opt.content, vote_count: 0}
+                    end),
+                  presentation_file_id: to_event.presentation_file.id
+                })
+              end
+            end)}
+         end)
+         |> Ecto.Multi.run(:forms, fn _repo, %{from_event: from_event, to_event: to_event} ->
+           {:ok,
+            from_event.presentation_file.forms
+            |> Enum.each(fn form ->
+              if form.position < to_event.presentation_file.length do
+                Claper.Forms.create_form(%{
+                  title: form.title,
+                  position: form.position,
+                  enabled: form.enabled,
+                  fields:
+                    Enum.map(form.fields, fn field ->
+                      %{
+                        name: field.name,
+                        type: field.type
+                      }
+                    end),
+                  presentation_file_id: to_event.presentation_file.id
+                })
+              end
+            end)}
+         end)
+         |> Repo.transaction() do
+      {:ok, %{to_event: to_event}} -> {:ok, to_event}
+    end
+  end
+
+  @doc """
   Deletes a event.
 
   ## Examples
