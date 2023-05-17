@@ -4,6 +4,8 @@ services:
     image: postgres:9
     ports: 
       - 5432:5432
+    volumes:
+      - data:/var/lib/postgresql/data:rw
     environment:
       POSTGRES_PASSWORD: claper
       POSTGRES_USER: claper
@@ -23,3 +25,4 @@ services:
       - db
 volumes:
   uploads:
+  data:
