@@ -1,17 +1,20 @@
 version: "3.0"
 services:
-  db:
+  claper-db:
     image: postgres:9
-    ports: 
-      - 5432:5432
+    container_name: claper-db
+    hostname: claper-db
     volumes:
       - data:/var/lib/postgresql/data:rw
     environment:
       POSTGRES_PASSWORD: claper
       POSTGRES_USER: claper
       POSTGRES_DB: claper
-  app:
+    restart: on-failure:5
+  claper-app:
     image: ghcr.io/claperco/claper:latest
+    container_name: claper-app
+    hostname: claper-app
     ports: 
       - 4000:4000
     volumes:
@@ -22,7 +25,7 @@ services:
       MAIL_TRANSPORT: local
       ENDPOINT_PORT: 4000
     depends_on:
-      - db
+      - claper-db
 volumes:
   uploads:
   data:
