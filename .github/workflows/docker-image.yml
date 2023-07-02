@@ -10,6 +10,9 @@ jobs:
 
     runs-on: ubuntu-latest
 
+    env:
+      ImageOS: ubuntu20
+
     steps:
     - name: Docker meta
       id: meta

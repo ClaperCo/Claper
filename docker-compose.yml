@@ -21,3 +21,5 @@ services:
       ENDPOINT_PORT: 4000
     depends_on:
       - db
+volumes:
+  uploads:
