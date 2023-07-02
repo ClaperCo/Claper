@@ -7,7 +7,7 @@ defmodule ClaperWeb.EventLive.EventFormComponent do
   def update(%{event: event} = assigns, socket) do
     changeset = Events.change_event(event)
 
-    {max_file_size, _} = Integer.parse("#{Application.fetch_env!(:claper, :max_file_size)}")
+    max_file_size = get_max_file_size()
 
     {:ok,
      socket
@@ -209,6 +209,16 @@ defmodule ClaperWeb.EventLive.EventFormComponent do
 
       {:error, %Ecto.Changeset{} = changeset} ->
         {:noreply, assign(socket, :changeset, changeset)}
+    end
+  end
+
+  defp get_max_file_size() do
+    case Application.fetch_env!(:claper, :max_file_size) do
+      {:system, env_var, default} ->
+        String.to_integer(System.get_env(env_var) || default)
+
+      direct_value ->
+        direct_value
     end
   end
 

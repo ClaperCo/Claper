@@ -114,7 +114,7 @@
       <%= for index <- 1..@event.presentation_file.length do %>
         <%= if System.get_env("PRESENTATION_STORAGE", "local") == "local" do %>
           <img
-            class="w-1/3 mx-auto"
+            class="w-1/3 max-h-screen mx-auto"
             src={"/uploads/#{@event.presentation_file.hash}/#{index}.jpg"}
           />
         <% else %>

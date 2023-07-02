@@ -38,6 +38,7 @@ Variable | Values | Default | Required | Description
 --- | --- | --- | --- | ---
 ENABLE_ACCOUNT_CREATION | true, false | true | - | Enable/disable user registration
 MAX_FILE_SIZE_MB | - | 15 | - | Max file size to upload in MB
+GS_JPG_RESOLUTION | - | 300x300 | - | Resolution (DPI) of the JPG generated from PDF, higher resolution means bigger files but better quality
 
 ## Production / Docker
 

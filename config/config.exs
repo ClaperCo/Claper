@@ -66,7 +66,8 @@ config :ex_aws,
   region: {:system, "AWS_REGION"},
   normalize_path: false
 
-config :claper, max_file_size: System.get_env("MAX_FILE_SIZE_MB") || 15
+config :claper,
+  max_file_size: {:system, "MAX_FILE_SIZE_MB", "15"}
 
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.

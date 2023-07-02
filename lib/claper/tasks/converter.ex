@@ -98,12 +98,14 @@ defmodule Claper.Tasks.Converter do
   defp file_to_pdf(_ext, _path, _file), do: %Result{status: 0}
 
   defp pdf_to_jpg(%Result{status: 0}, path, _presentation, _user_id) do
+    resolution = System.get_env("GS_JPG_RESOLUTION", "300x300")
+
     Porcelain.exec(
       "gs",
       [
         "-sDEVICE=png16m",
         "-o#{path}/%d.jpg",
-        "-r300x300",
+        "-r#{resolution}",
         "-dNOPAUSE",
         "-dBATCH",
         "#{path}/original.pdf"
