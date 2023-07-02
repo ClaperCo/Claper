@@ -99,6 +99,7 @@ defmodule Claper.Tasks.Converter do
 
   defp pdf_to_jpg(%Result{status: 0}, path, _presentation, _user_id) do
     resolution = System.get_env("GS_JPG_RESOLUTION", "300x300")
+
     Porcelain.exec(
       "gs",
       [
