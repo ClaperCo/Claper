@@ -1,3 +1,8 @@
+## v1.4.1
+
+- Add GS_JPG_RESOLUTION environement variable to configure the resolution of the JPG generated from PDF (#40 - thanks @mokaddem)
+- Fix MAX_FILE_SIZE_MB not being updated
+
 ## v1.4.0
 
 - Migrate to Phoenix 1.7
