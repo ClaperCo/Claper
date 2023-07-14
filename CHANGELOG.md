@@ -1,5 +1,8 @@
 ## v1.4.2
 
+- Update Moment Timezone, Moment to patch security vulnerabilities
+- Update TailwindCSS 2 to 3
+
 ## v1.4.1
 
 - Add GS_JPG_RESOLUTION environment variable to configure the resolution of the JPG generated from PDF (#40 - thanks @mokaddem)
