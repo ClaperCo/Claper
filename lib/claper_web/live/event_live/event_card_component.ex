@@ -40,7 +40,7 @@ defmodule ClaperWeb.EventLive.EventCardComponent do
               </p>
             </div>
             <div
-              id="event-infos-0"
+              id={"event-infos-#{@event.uuid}"}
               class="flex items-center text-sm text-gray-500 space-x-1"
               phx-update="ignore"
             >
@@ -76,7 +76,7 @@ defmodule ClaperWeb.EventLive.EventCardComponent do
             <%= if @event.presentation_file.status == "done" || (@event.presentation_file.status == "fail" && @event.presentation_file.hash) do %>
               <div class="mt-2 flex flex-col space-y-2 sm:space-y-0 justify-between sm:flex-row items-center">
                 <div
-                  id="event-infos"
+                  id={"event-infos-0-#{@event.uuid}"}
                   class="text-sm w-full space-y-2 sm:w-auto font-medium text-gray-700 sm:flex sm:justify-center sm:space-x-1 sm:space-y-0 sm:items-center"
                   phx-update="ignore"
                 >
@@ -104,7 +104,7 @@ defmodule ClaperWeb.EventLive.EventCardComponent do
                       data-phx-link="patch"
                       data-phx-link-state="push"
                       href={Routes.event_index_path(@socket, :edit, @event.uuid)}
-                      class="flex w-full lg:w-auto text-white rounded-md tracking-wide focus:outline-none focus:shadow-outline text-primary-500 text-sm items-center"
+                      class="flex w-full lg:w-auto rounded-md tracking-wide focus:outline-none focus:shadow-outline text-primary-500 text-sm items-center"
                     >
                       <span><%= gettext("Edit") %></span>
                     </a>
@@ -124,7 +124,7 @@ defmodule ClaperWeb.EventLive.EventCardComponent do
                       data-phx-link="patch"
                       data-phx-link-state="push"
                       href={Routes.event_index_path(@socket, :edit, @event.uuid)}
-                      class="flex w-full lg:w-auto text-white rounded-md tracking-wide focus:outline-none focus:shadow-outline text-primary-500 text-sm items-center"
+                      class="flex w-full lg:w-auto rounded-md tracking-wide focus:outline-none focus:shadow-outline text-primary-500 text-sm items-center"
                     >
                       <span><%= gettext("Edit") %></span>
                     </a>
@@ -144,7 +144,7 @@ defmodule ClaperWeb.EventLive.EventCardComponent do
           <%= if NaiveDateTime.compare(@current_time, @event.expired_at) == :gt do %>
             <div class="mt-2 flex flex-col space-y-2 sm:space-y-0 justify-between sm:flex-row items-center">
               <div
-                id="event-infos-2"
+                id={"event-infos-1-#{@event.uuid}"}
                 class="text-sm w-full space-y-2 sm:w-auto font-medium text-gray-700 sm:flex sm:justify-center sm:space-x-1 sm:space-y-0 sm:items-center"
                 phx-update="ignore"
               >
@@ -179,7 +179,7 @@ defmodule ClaperWeb.EventLive.EventCardComponent do
                         )
                     ],
                     class:
-                      "flex w-full lg:w-auto text-white rounded-md tracking-wide focus:outline-none focus:shadow-outline text-red-500 text-sm items-center"
+                      "flex w-full lg:w-auto rounded-md tracking-wide focus:outline-none focus:shadow-outline text-red-500 text-sm items-center"
                   ) %>
                 <% end %>
               </div>
