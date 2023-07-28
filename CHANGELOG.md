@@ -2,6 +2,7 @@
 
 - Update Moment Timezone, Moment to patch security vulnerabilities
 - Update TailwindCSS 2 to 3
+- Fix event link color being white
 
 ## v1.4.1
 
