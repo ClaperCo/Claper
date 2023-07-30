@@ -125,6 +125,28 @@ Hooks.ScrollIntoDiv = {
   }
 }
 
+Hooks.NicknamePicker = {
+  mounted() {
+    let currentNickname = localStorage.getItem("nickname") || ""
+    if (currentNickname.length > 0) {
+      this.pushEvent("set-nickname", {nickname: currentNickname})
+    }
+
+    this.el.addEventListener("click", (e) => this.clicked(e))
+  },
+  destroy() {
+    this.el.removeEventListener("click", (e) => this.clicked(e))
+  },
+  clicked(e) {
+    let nickname = prompt(this.el.dataset.prompt, localStorage.getItem("nickname") || "")
+
+    if (nickname) {
+      localStorage.setItem("nickname", nickname)
+      this.pushEvent("set-nickname", {nickname: nickname})
+    }
+  },
+}
+
 Hooks.PostForm = {
   onPress(e, submitBtn, TA) {
     if (e.key == "Enter" && !e.shiftKey) {

@@ -650,7 +650,13 @@
                       />
                     <% end %>
 
-                    <p class="text-xl"><%= post.body %></p>
+                    <div class="flex flex-col">
+                      <%= if post.name do %>
+                        <p class="text-black text-sm font-semibold mr-2"><%= post.name %></p>
+                      <% end %>
+
+                      <p class="text-xl"><%= post.body %></p>
+                    </div>
                   </div>
 
                   <%= if post.like_count > 0 || post.love_count > 0 || post.lol_count > 0 do %>

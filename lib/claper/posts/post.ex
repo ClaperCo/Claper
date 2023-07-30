@@ -29,6 +29,7 @@ defmodule Claper.Posts.Post do
       :like_count,
       :love_count,
       :lol_count,
+      :name,
       :position
     ])
     |> validate_required([:body, :position])

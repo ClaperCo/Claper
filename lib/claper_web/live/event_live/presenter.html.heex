@@ -81,6 +81,9 @@
       <%= for post <- @posts do %>
         <div class={if post.__meta__.state == :deleted, do: "hidden"} id={"#{post.id}-post"}>
           <div class="px-4 pb-2 pt-3 rounded-b-lg rounded-tr-lg bg-white shadow-md text-black break-all mt-4">
+            <%= if post.name do %>
+              <p class="text-gray-400 text-lg font-semibold mb-2 mr-2"><%= post.name %></p>
+            <% end %>
             <p class="text-3xl"><%= post.body %></p>
 
             <%= if post.like_count > 0 || post.love_count > 0 || post.lol_count > 0 do %>
