@@ -23,7 +23,7 @@ defmodule Claper.PostsTest do
     test "create_post/1 with valid data creates a post" do
       user = user_fixture()
       event = event_fixture()
-      valid_attrs = %{body: "some body", user_id: user.id, event_id: event.id}
+      valid_attrs = %{body: "some body", user_id: user.id, event_id: event.id, name: "some name"}
 
       assert {:ok, %Post{} = post} = Posts.create_post(event, valid_attrs)
       assert post.body == "some body"
