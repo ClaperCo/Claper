@@ -30,7 +30,7 @@
       >
       </div>
       <span class="font-semibold mb-10 sm:text-3xl md:text-4xl lg:text-6xl">
-        <%= gettext("Or use the code:") %>
+        <%= gettext("Or go to %{url} and use the code:", url: @host) %>
       </span>
       <span class="font-semibold mb-10 sm:text-5xl md:text-6xl lg:text-8xl">
         #<%= String.upcase(@event.code) %>

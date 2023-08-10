@@ -551,7 +551,7 @@
 
     <div class="grid grid-cols-1 grid-rows-2 md:grid-rows-3">
       <div class="bg-gray-200 md:row-span-2">
-        <ul class="flex items-center space-x-3 px-2 mt-2">
+        <ul class="fixed z-20 flex items-center bg-gray-200 space-x-3 px-2 w-full py-2">
           <li class={"rounded-md #{if @list_tab == :posts, do: 'bg-secondary-600 text-white', else: 'bg-white text-gray-600' } px-2 py-0.5 text-sm shadow-sm"}>
             <%= link(gettext("Messages"), to: "#", phx_click: "list-tab", phx_value_tab: :posts) %>
           </li>
@@ -586,7 +586,7 @@
           <% end %>
           <div
             id="post-list"
-            class={"overflow-y-auto #{if Enum.count(@posts) > 0, do: 'max-h-full'} pb-5 px-5"}
+            class={"overflow-y-auto #{if Enum.count(@posts) > 0, do: 'max-h-full'} pb-5 pt-8 px-5"}
             phx-update="append"
             data-posts-nb={Enum.count(@posts)}
             phx-hook="ScrollIntoDiv"
@@ -798,6 +798,14 @@
             <div class="flex space-x-2 items-center mt-3">
               <ClaperWeb.Component.Input.check key={:chat_enabled} checked={@state.chat_enabled} />
               <span><%= gettext("Enable messages") %></span>
+            </div>
+
+            <div class="flex space-x-2 items-center mt-3">
+              <ClaperWeb.Component.Input.check
+                key={:anonymous_chat_enabled}
+                checked={@state.anonymous_chat_enabled}
+              />
+              <span><%= gettext("Enable anonymous messages") %></span>
             </div>
           </div>
         </div>

@@ -66,7 +66,7 @@ defmodule ClaperWeb.EventLive.FormComponent do
                       required="true"
                       value={
                         if is_nil(assigns.current_form_submit),
-                          do: '',
+                          do: ~c"",
                           else: assigns.current_form_submit.response[field.name]
                       }
                     />
@@ -80,7 +80,7 @@ defmodule ClaperWeb.EventLive.FormComponent do
                       required="true"
                       value={
                         if is_nil(assigns.current_form_submit),
-                          do: '',
+                          do: ~c"",
                           else: assigns.current_form_submit.response[field.name]
                       }
                     />

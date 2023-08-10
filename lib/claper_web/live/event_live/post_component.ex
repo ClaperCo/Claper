@@ -75,20 +75,19 @@ defmodule ClaperWeb.EventLive.PostComponent do
         </div>
       <% else %>
         <div class="px-4 pt-3 pb-8 rounded-b-lg rounded-tr-lg bg-white text-black relative z-0 break-all">
-
-        <%= if @post.name || is_a_leader(@post, @event, @leaders) do %>
-          <div class="inline-flex items-center">
-            <%= if @post.name do %>
-              <p class="text-black text-xs font-semibold mb-2 mr-2"><%= @post.name %></p>
-            <% end %>
-            <%= if is_a_leader(@post, @event, @leaders) do %>
-              <div class="inline-flex items-center space-x-1 justify-center px-3 py-0.5 rounded-full text-xs font-medium bg-supporting-yellow-100 text-supporting-yellow-800 mb-2">
-                <img src="/images/icons/star.svg" class="h-3" />
-                <span><%= gettext("Host") %></span>
-              </div>
-            <% end %>
-          </div>
-        <% end %>
+          <%= if @post.name || is_a_leader(@post, @event, @leaders) do %>
+            <div class="inline-flex items-center">
+              <%= if @post.name do %>
+                <p class="text-black text-xs font-semibold mb-2 mr-2"><%= @post.name %></p>
+              <% end %>
+              <%= if is_a_leader(@post, @event, @leaders) do %>
+                <div class="inline-flex items-center space-x-1 justify-center px-3 py-0.5 rounded-full text-xs font-medium bg-supporting-yellow-100 text-supporting-yellow-800 mb-2">
+                  <img src="/images/icons/star.svg" class="h-3" />
+                  <span><%= gettext("Host") %></span>
+                </div>
+              <% end %>
+            </div>
+          <% end %>
 
           <%= if @is_leader do %>
             <button

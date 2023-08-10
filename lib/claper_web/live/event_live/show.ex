@@ -336,7 +336,7 @@ defmodule ClaperWeb.EventLive.Show do
         {:noreply, socket}
 
       {:error, %Ecto.Changeset{} = changeset} ->
-        {:noreply, assign(socket, changeset: changeset)}
+        {:noreply, assign(socket, post_changeset: changeset)}
     end
   end
 
@@ -357,7 +357,25 @@ defmodule ClaperWeb.EventLive.Show do
         {:noreply, socket}
 
       {:error, %Ecto.Changeset{} = changeset} ->
-        {:noreply, assign(socket, changeset: changeset)}
+        {:noreply, assign(socket, post_changeset: changeset)}
+    end
+  end
+
+  @impl true
+  def handle_event(
+        "save-nickname",
+        %{"post" => post_params},
+        socket
+      ) do
+    changeset = Posts.Post.nickname_changeset(%Posts.Post{}, post_params)
+
+    case changeset.valid? do
+      true ->
+        {:noreply, socket |> assign(:nickname, post_params["name"])}
+
+      false ->
+        IO.inspect(changeset)
+        {:noreply, assign(socket, post_changeset: %{changeset | action: :insert})}
     end
   end
 

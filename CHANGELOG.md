@@ -1,3 +1,12 @@
+## 1.5.0
+
+- Add a nickname feature and toggle button to avoid anonymous messages
+- Add url information on the instruction page with QR Code
+- Update Moment Timezone, Moment to patch security vulnerabilities
+- Update TailwindCSS 2 to 3
+- Fix layout on the moderator page for messages list
+- Fix event link color being white
+
 ## v1.4.2
 
 - Update Moment Timezone, Moment to patch security vulnerabilities
