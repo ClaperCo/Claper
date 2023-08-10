@@ -2,6 +2,7 @@
 
 - Add a nickname feature and toggle button to avoid anonymous messages
 - Add url information on the instruction page with QR Code
+- Add German locale (thanks to @Dynnammo)
 - Update Moment Timezone, Moment to patch security vulnerabilities
 - Update TailwindCSS 2 to 3
 - Fix layout on the moderator page for messages list
