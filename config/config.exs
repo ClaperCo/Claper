@@ -19,7 +19,7 @@ config :claper, ClaperWeb.Endpoint,
 
 config :claper, ClaperWeb.Gettext,
   default_locale: "en",
-  locales: ~w(fr en)
+  locales: ~w(fr en de)
 
 # Configures the mailer
 #

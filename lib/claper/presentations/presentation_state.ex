@@ -8,6 +8,7 @@ defmodule Claper.Presentations.PresentationState do
     field :poll_visible, :boolean
     field :join_screen_visible, :boolean
     field :chat_enabled, :boolean
+    field :anonymous_chat_enabled, :boolean
     field :banned, {:array, :string}, default: []
 
     belongs_to :presentation_file, Claper.Presentations.PresentationFile
@@ -25,7 +26,8 @@ defmodule Claper.Presentations.PresentationState do
       :join_screen_visible,
       :banned,
       :presentation_file_id,
-      :chat_enabled
+      :chat_enabled,
+      :anonymous_chat_enabled
     ])
     |> validate_required([])
   end

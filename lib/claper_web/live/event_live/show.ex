@@ -82,6 +82,7 @@ defmodule ClaperWeb.EventLive.Show do
       |> assign(:poll_opt_saved, false)
       |> assign(:event, event)
       |> assign(:state, event.presentation_file.presentation_state)
+      |> assign(:nickname, "")
       |> starting_soon_assigns(event)
       |> get_current_poll(event)
       |> get_current_form(event)
@@ -328,13 +329,14 @@ defmodule ClaperWeb.EventLive.Show do
       post_params
       |> Map.put("user_id", current_user.id)
       |> Map.put("position", socket.assigns.state.position)
+      |> Map.put("name", socket.assigns.nickname)
 
     case Posts.create_post(socket.assigns.event, post_params) do
       {:ok, _post} ->
         {:noreply, socket}
 
       {:error, %Ecto.Changeset{} = changeset} ->
-        {:noreply, assign(socket, changeset: changeset)}
+        {:noreply, assign(socket, post_changeset: changeset)}
     end
   end
 
@@ -348,13 +350,32 @@ defmodule ClaperWeb.EventLive.Show do
       post_params
       |> Map.put("attendee_identifier", attendee_identifier)
       |> Map.put("position", socket.assigns.state.position)
+      |> Map.put("name", socket.assigns.nickname)
 
     case Posts.create_post(socket.assigns.event, post_params) do
       {:ok, _post} ->
         {:noreply, socket}
 
       {:error, %Ecto.Changeset{} = changeset} ->
-        {:noreply, assign(socket, changeset: changeset)}
+        {:noreply, assign(socket, post_changeset: changeset)}
+    end
+  end
+
+  @impl true
+  def handle_event(
+        "save-nickname",
+        %{"post" => post_params},
+        socket
+      ) do
+    changeset = Posts.Post.nickname_changeset(%Posts.Post{}, post_params)
+
+    case changeset.valid? do
+      true ->
+        {:noreply, socket |> assign(:nickname, post_params["name"])}
+
+      false ->
+        IO.inspect(changeset)
+        {:noreply, assign(socket, post_changeset: %{changeset | action: :insert})}
     end
   end
 
@@ -371,6 +392,13 @@ defmodule ClaperWeb.EventLive.Show do
     )
 
     {:noreply, socket}
+  end
+
+  @impl true
+  def handle_event("set-nickname", %{"nickname" => nickname}, socket) do
+    {:noreply,
+     socket
+     |> assign(:nickname, nickname)}
   end
 
   @impl true
@@ -527,6 +555,16 @@ defmodule ClaperWeb.EventLive.Show do
       to: "#side-menu",
       out: "animate__animated animate__slideOutLeft",
       in: "animate__animated animate__slideInLeft"
+    )
+  end
+
+  def toggle_nickname_popup(js \\ %JS{}) do
+    js
+    |> JS.toggle(
+      to: "#nickname-popup",
+      out: "animate__animated animate__slideOutDown",
+      in: "animate__animated animate__slideInUp",
+      display: "flex"
     )
   end
 
