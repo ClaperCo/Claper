@@ -206,18 +206,18 @@ services:
 </span></code></pre><p>and comment as follows:</p><pre><code class="makeup sh" translate="no"><span class="">#export RELEASE_DISTRIBUTION=sname
 </span><span class="">#export RELEASE_NODE=&lt;%= @release.name %&gt;
 </span></code></pre><p>In Kubernetes, you have to use <code class="inline">libcluster</code> to make the nodes discoverable. You can use the following configuration in your <code class="inline">config/prod.exs</code>:</p><pre><code class="makeup elixir" translate="no"><span class="n">config</span><span class="w"> </span><span class="ss">:libcluster</span><span class="p">,</span><span class="w">
-  </span><span class="ss">topologies</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="9531570056-1">[</span><span class="w">
-    </span><span class="ss">default</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="9531570056-2">[</span><span class="w">
+  </span><span class="ss">topologies</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="7858460877-1">[</span><span class="w">
+    </span><span class="ss">default</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="7858460877-2">[</span><span class="w">
       </span><span class="ss">strategy</span><span class="p">:</span><span class="w"> </span><span class="nc">Cluster.Strategy.Kubernetes</span><span class="p">,</span><span class="w">
-      </span><span class="ss">config</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="9531570056-3">[</span><span class="w">
+      </span><span class="ss">config</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="7858460877-3">[</span><span class="w">
         </span><span class="ss">mode</span><span class="p">:</span><span class="w"> </span><span class="ss">:dns</span><span class="p">,</span><span class="w">
         </span><span class="ss">kubernetes_node_basename</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;claper&quot;</span><span class="p">,</span><span class="w">
         </span><span class="ss">kubernetes_selector</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;app=claper&quot;</span><span class="p">,</span><span class="w">
         </span><span class="ss">kubernetes_namespace</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;default&quot;</span><span class="p">,</span><span class="w">
         </span><span class="ss">polling_interval</span><span class="p">:</span><span class="w"> </span><span class="mi">10_000</span><span class="w">
-      </span><span class="p" data-group-id="9531570056-3">]</span><span class="w">
-    </span><span class="p" data-group-id="9531570056-2">]</span><span class="w">
-  </span><span class="p" data-group-id="9531570056-1">]</span></code></pre><h3 id="helm-chart" class="section-heading">
+      </span><span class="p" data-group-id="7858460877-3">]</span><span class="w">
+    </span><span class="p" data-group-id="7858460877-2">]</span><span class="w">
+  </span><span class="p" data-group-id="7858460877-1">]</span></code></pre><h3 id="helm-chart" class="section-heading">
   <a href="#helm-chart" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i>
   <p class="sr-only">helm-chart</p>
   </a>
