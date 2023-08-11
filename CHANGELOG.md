@@ -1,3 +1,13 @@
+## v1.5.0
+
+- Add a nickname feature and toggle button to avoid anonymous messages
+- Add url information on the instruction page with QR Code
+- Add German locale (thanks to @Dynnammo)
+- Update Moment Timezone, Moment to patch security vulnerabilities
+- Update TailwindCSS 2 to 3
+- Fix layout on the moderator page for messages list
+- Fix event link color being white
+
 ## v1.4.1
 
 - Add GS_JPG_RESOLUTION environment variable to configure the resolution of the JPG generated from PDF (#40 - thanks @mokaddem)

@@ -317,6 +317,23 @@ defmodule ClaperWeb.EventLive.Manage do
   @impl true
   def handle_event(
         "checked",
+        %{"key" => "anonymous_chat_enabled", "value" => value},
+        %{assigns: %{state: state}} = socket
+      ) do
+    {:ok, new_state} =
+      Claper.Presentations.update_presentation_state(
+        state,
+        %{
+          :anonymous_chat_enabled => value
+        }
+      )
+
+    {:noreply, socket |> assign(:state, new_state)}
+  end
+
+  @impl true
+  def handle_event(
+        "checked",
         %{"key" => "join_screen_visible", "value" => value},
         %{assigns: %{state: state}} = socket
       ) do

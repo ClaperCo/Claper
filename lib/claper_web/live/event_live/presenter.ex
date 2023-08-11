@@ -33,9 +33,16 @@ defmodule ClaperWeb.EventLive.Presenter do
         )
       end
 
+      host =
+        case get_connect_params(socket) do
+          nil -> ""
+          %{"host" => host} -> host
+        end
+
       socket =
         socket
         |> assign(:attendees_nb, 1)
+        |> assign(:host, host)
         |> assign(:event, event)
         |> assign(:state, event.presentation_file.presentation_state)
         |> assign(:posts, list_posts(socket, event.uuid))

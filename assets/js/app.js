@@ -125,6 +125,40 @@ Hooks.ScrollIntoDiv = {
   }
 }
 
+Hooks.NicknamePicker = {
+  mounted() {
+    let currentNickname = localStorage.getItem("nickname") || ""
+    if (currentNickname.length > 0) {
+      this.pushEvent("set-nickname", {nickname: currentNickname})
+    }
+
+    this.el.addEventListener("click", (e) => this.clicked(e))
+  },
+  destroy() {
+    this.el.removeEventListener("click", (e) => this.clicked(e))
+  },
+  clicked(e) {
+    let nickname = prompt(this.el.dataset.prompt, localStorage.getItem("nickname") || "")
+
+    if (nickname) {
+      localStorage.setItem("nickname", nickname)
+      this.pushEvent("set-nickname", {nickname: nickname})
+    }
+  },
+}
+
+Hooks.EmptyNickname = {
+  mounted() {
+    this.el.addEventListener("click", (e) => this.clicked(e))
+  },
+  destroy() {
+    this.el.removeEventListener("click", (e) => this.clicked(e))
+  },
+  clicked(e) {
+    localStorage.removeItem("nickname")
+  },
+}
+
 Hooks.PostForm = {
   onPress(e, submitBtn, TA) {
     if (e.key == "Enter" && !e.shiftKey) {
@@ -146,11 +180,19 @@ Hooks.PostForm = {
     TA.value = ""
   },
   mounted() {
-    const submitBtn = document.getElementById("submitBtn")
-    const TA = document.getElementById("postFormTA")
-    if (submitBtn && TA) {
-      submitBtn.addEventListener("click", (e) => this.onSubmit(e, TA))
-      TA.addEventListener("keydown",  (e) => this.onPress(e, submitBtn, TA))  
+    setTimeout(() => {
+      const submitBtn = document.getElementById("submitBtn")
+      const TA = document.getElementById("postFormTA")
+      if (submitBtn && TA) {
+        submitBtn.addEventListener("click", (e) => this.onSubmit(e, TA))
+        TA.addEventListener("keydown",  (e) => this.onPress(e, submitBtn, TA))  
+      }
+    }, 500)
+    
+    // set nickname if present
+    let nickname = this.el.dataset.nickname
+    if (nickname) {
+      localStorage.setItem("nickname", nickname)
     }
   },
   updated() {
@@ -419,7 +461,7 @@ Uploaders.S3 = function(entries, onViewError){
 
 let liveSocket = new LiveSocket("/live", Socket, {
   uploaders: Uploaders,
-  params: {_csrf_token: csrfToken, tz: Intl.DateTimeFormat().resolvedOptions().timeZone},
+  params: {_csrf_token: csrfToken, tz: Intl.DateTimeFormat().resolvedOptions().timeZone, host: window.location.host},
   hooks: Hooks,
   dom: {
     onBeforeElUpdated(from, to){
