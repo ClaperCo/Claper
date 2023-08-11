@@ -1,4 +1,4 @@
-## 1.5.0
+## v1.5.0
 
 - Add a nickname feature and toggle button to avoid anonymous messages
 - Add url information on the instruction page with QR Code
