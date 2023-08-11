@@ -18,8 +18,23 @@ ARG RUNNER_IMAGE="debian:bullseye-20210902-slim"
 FROM ${BUILDER_IMAGE} as builder
 
 # install build dependencies
-RUN apt-get update -y && apt-get install -y build-essential git nodejs npm \
+RUN apt-get update -y && apt-get install -y curl build-essential git \
     && apt-get clean && rm -f /var/lib/apt/lists/*_*
+
+ENV NODE_VERSION 16.20.0
+
+# Install nvm with node and npm
+RUN curl https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.4/install.sh | bash \
+    && . $HOME/.nvm/nvm.sh \
+    && nvm install $NODE_VERSION \
+    && nvm alias default $NODE_VERSION \
+    && nvm use default
+
+ENV NODE_PATH $HOME/.nvm/versions/node/v$NODE_VERSION/lib/node_modules 
+ENV PATH      $HOME/.nvm/versions/node/v$NODE_VERSION/bin:$PATH
+
+RUN ln -sf $HOME/.nvm/versions/node/v$NODE_VERSION/bin/npm /usr/bin/npm
+RUN ln -sf $HOME/.nvm/versions/node/v$NODE_VERSION/bin/node /usr/bin/node
 
 # prepare build dir
 WORKDIR /app
