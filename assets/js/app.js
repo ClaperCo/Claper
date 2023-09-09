@@ -392,16 +392,10 @@ Hooks.QRCode = {
         },
         dotsOptions: {
           type: "square",
-          gradient: {
-            type: "linear",
-            rotation: Math.PI * 0.2,
-            colorStops: [{
-              offset: 0,
-              color: '#14bfdb'
-            }, {
-              offset: 1,
-              color: '#b80fef'
-            }]}
+          color: "#ffffff",
+        },
+        backgroundOptions: {
+          color: "#000000",
         },
         imageOptions: {
           crossOrigin: "anonymous",
