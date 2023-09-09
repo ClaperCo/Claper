@@ -1,3 +1,6 @@
+@moduledoc """
+  Plug for user session token.
+"""
 defmodule Claper.Accounts.UserToken do
   use Ecto.Schema
   import Ecto.Query

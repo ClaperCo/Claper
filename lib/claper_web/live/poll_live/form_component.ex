@@ -107,8 +107,7 @@ defmodule ClaperWeb.PollLive.FormComponent do
   defp maybe_enable(poll_params, socket) do
     has_current_poll =
       socket.assigns.polls
-      |> Enum.filter(fn p -> p.position == socket.assigns.position && p.enabled == true end)
-      |> Enum.count() > 0
+      |> Enum.count(fn p -> p.position == socket.assigns.position && p.enabled == true end) > 0
 
     poll_params |> Map.put("enabled", !has_current_poll)
   end

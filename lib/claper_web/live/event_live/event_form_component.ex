@@ -124,20 +124,20 @@ defmodule ClaperWeb.EventLive.EventFormComponent do
 
         [ext | _] = MIME.extensions(MIME.from_path(dest))
 
-        if !Map.has_key?(socket.assigns.event.presentation_file, :id) do
+        if Map.has_key?(socket.assigns.event.presentation_file, :id) do
           after_save.(
             socket,
-            Map.put(event_params, "presentation_file", %{
-              "status" => "progress",
-              "presentation_state" => %{}
-            }),
+            event_params,
             hash,
             ext
           )
         else
           after_save.(
             socket,
-            event_params,
+            Map.put(event_params, "presentation_file", %{
+              "status" => "progress",
+              "presentation_state" => %{}
+            }),
             hash,
             ext
           )
@@ -190,17 +190,7 @@ defmodule ClaperWeb.EventLive.EventFormComponent do
            event_params
          ) do
       {:ok, _event} ->
-        if !is_nil(hash) && !is_nil(ext) do
-          Task.Supervisor.async_nolink(Claper.TaskSupervisor, fn ->
-            Claper.Tasks.Converter.convert(
-              socket.assigns.current_user.id,
-              "original.#{ext}",
-              hash,
-              ext,
-              socket.assigns.event.presentation_file.id
-            )
-          end)
-        end
+        handle_file_conversion(socket, hash, ext)
 
         {:noreply,
          socket
@@ -209,6 +199,22 @@ defmodule ClaperWeb.EventLive.EventFormComponent do
 
       {:error, %Ecto.Changeset{} = changeset} ->
         {:noreply, assign(socket, :changeset, changeset)}
+    end
+  end
+
+  defp handle_file_conversion(socket, hash, ext) do
+    if is_nil(hash) || is_nil(ext) do
+      :ok
+    else
+      Task.Supervisor.async_nolink(Claper.TaskSupervisor, fn ->
+        Claper.Tasks.Converter.convert(
+          socket.assigns.current_user.id,
+          "original.#{ext}",
+          hash,
+          ext,
+          socket.assigns.event.presentation_file.id
+        )
+      end)
     end
   end
 

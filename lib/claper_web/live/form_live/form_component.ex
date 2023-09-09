@@ -107,8 +107,7 @@ defmodule ClaperWeb.FormLive.FormComponent do
   defp maybe_enable(form_params, socket) do
     has_current_form =
       socket.assigns.forms
-      |> Enum.filter(fn f -> f.position == socket.assigns.position && f.enabled == true end)
-      |> Enum.count() > 0
+      |> Enum.count(fn f -> f.position == socket.assigns.position && f.enabled == true end) > 0
 
     form_params |> Map.put("enabled", !has_current_form)
   end

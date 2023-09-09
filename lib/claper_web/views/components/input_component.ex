@@ -1,3 +1,6 @@
+@moduledoc """
+  Input component for forms
+"""
 defmodule ClaperWeb.Component.Input do
   use ClaperWeb, :view_component
 
