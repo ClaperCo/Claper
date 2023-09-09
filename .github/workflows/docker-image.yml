@@ -41,7 +41,7 @@ jobs:
     - name: Log in to registry
       # This is where you will update the PAT to GITHUB_TOKEN
       run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u $ --password-stdin
-    - name: Build and push Docker images
+    - name: Build and push Docker image
       # You may pin to the exact commit or the version.
       # uses: docker/build-push-action@ac9327eae2b366085ac7f6a2d02df8aa8ead720a
       uses: docker/build-push-action@v2.10.0
@@ -49,6 +49,17 @@ jobs:
         context: .
         push: true
         tags: ${{ steps.meta.outputs.tags }}
+        labels: ${{ steps.meta.outputs.labels }}
+        cache-from: type=gha
+        cache-to: type=gha,mode=max
+    - name: Build and push ARM Docker image
+      # You may pin to the exact commit or the version.
+      # uses: docker/build-push-action@ac9327eae2b366085ac7f6a2d02df8aa8ead720a
+      uses: docker/build-push-action@v2.10.0
+      with:
+        context: ./Dockerfile-arm
+        push: true
+        tags: ${{ steps.meta.outputs.tags }}-arm
         labels: ${{ steps.meta.outputs.labels }}
         cache-from: type=gha
         cache-to: type=gha,mode=max
