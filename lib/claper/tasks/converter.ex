@@ -207,5 +207,4 @@ defmodule Claper.Tasks.Converter do
   defp get_resolution do
     Application.get_env(:claper, :presentations) |> Keyword.get(:resolution)
   end
-
 end

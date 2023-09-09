@@ -5,10 +5,10 @@ config_dir = System.get_env("CONFIG_DIR", "/run/secrets")
 
 database_url =
   get_var_from_path_or_env(
-        config_dir,
-        "DATABASE_URL",
-        "postgres://claper:claper@localhost:5432/postgres"
-      )
+    config_dir,
+    "DATABASE_URL",
+    "postgres://claper:claper@localhost:5432/postgres"
+  )
 
 db_ssl = get_var_from_path_or_env(config_dir, "DB_SSL", "false") |> String.to_existing_atom()
 
@@ -45,7 +45,11 @@ endpoint_host = get_var_from_path_or_env(config_dir, "ENDPOINT_HOST", "localhost
 endpoint_port = get_int_from_path_or_env(config_dir, "ENDPOINT_PORT", 4000)
 
 max_file_size = get_int_from_path_or_env(config_dir, "MAX_FILE_SIZE_MB", 15)
-enable_account_creation = get_var_from_path_or_env(config_dir, "ENABLE_ACCOUNT_CREATION", "true") |> String.to_existing_atom()
+
+enable_account_creation =
+  get_var_from_path_or_env(config_dir, "ENABLE_ACCOUNT_CREATION", "true")
+  |> String.to_existing_atom()
+
 pool_size = get_int_from_path_or_env(config_dir, "POOL_SIZE", 10)
 queue_target = get_int_from_path_or_env(config_dir, "QUEUE_TARGET", 5_000)
 
@@ -100,9 +104,11 @@ config :claper, :mail,
   from_name: get_var_from_path_or_env(config_dir, "MAIL_FROM_NAME", "Claper")
 
 config :claper, ClaperWeb.MailboxGuard,
-    username: get_var_from_path_or_env(config_dir, "MAILBOX_USER", nil),
-    password: get_var_from_path_or_env(config_dir, "MAILBOX_PASSWORD", nil),
-    enabled: get_var_from_path_or_env(config_dir, "ENABLE_MAILBOX_ROUTE", "false") |> String.to_existing_atom()
+  username: get_var_from_path_or_env(config_dir, "MAILBOX_USER", nil),
+  password: get_var_from_path_or_env(config_dir, "MAILBOX_PASSWORD", nil),
+  enabled:
+    get_var_from_path_or_env(config_dir, "ENABLE_MAILBOX_ROUTE", "false")
+    |> String.to_existing_atom()
 
 if mail_transport == "smtp" do
   config :claper, Claper.Mailer,

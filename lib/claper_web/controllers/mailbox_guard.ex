@@ -5,11 +5,16 @@ defmodule ClaperWeb.MailboxGuard do
   def init(default), do: default
 
   def call(conn, _params \\ %{}) do
-    mailbox_username = Application.get_env(:claper, ClaperWeb.MailboxGuard) |> Keyword.get(:username)
-    mailbox_password = Application.get_env(:claper, ClaperWeb.MailboxGuard) |> Keyword.get(:password)
-    mailbox_enabled = Application.get_env(:claper, ClaperWeb.MailboxGuard) |> Keyword.get(:enabled)
+    mailbox_username =
+      Application.get_env(:claper, ClaperWeb.MailboxGuard) |> Keyword.get(:username)
 
-    IO.puts mailbox_enabled
+    mailbox_password =
+      Application.get_env(:claper, ClaperWeb.MailboxGuard) |> Keyword.get(:password)
+
+    mailbox_enabled =
+      Application.get_env(:claper, ClaperWeb.MailboxGuard) |> Keyword.get(:enabled)
+
+    IO.puts(mailbox_enabled)
 
     if mailbox_enabled do
       if mailbox_username && mailbox_password do

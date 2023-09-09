@@ -7,7 +7,7 @@ defmodule ClaperWeb.Notifiers.UserNotifier do
     |> to(email)
     |> from(
       {Application.get_env(:claper, :mail) |> Keyword.get(:from_name),
-      Application.get_env(:claper, :mail) |> Keyword.get(:from)}
+       Application.get_env(:claper, :mail) |> Keyword.get(:from)}
     )
     |> subject(gettext("Connect to Claper"))
     |> render_body("magic.html", %{url: url})
@@ -18,7 +18,7 @@ defmodule ClaperWeb.Notifiers.UserNotifier do
     |> to(email)
     |> from(
       {Application.get_env(:claper, :mail) |> Keyword.get(:from_name),
-      Application.get_env(:claper, :mail) |> Keyword.get(:from)}
+       Application.get_env(:claper, :mail) |> Keyword.get(:from)}
     )
     |> subject(gettext("Next steps to boost your presentations"))
     |> render_body("welcome.html", %{email: email})
@@ -29,7 +29,7 @@ defmodule ClaperWeb.Notifiers.UserNotifier do
     |> to(user.email)
     |> from(
       {Application.get_env(:claper, :mail) |> Keyword.get(:from_name),
-      Application.get_env(:claper, :mail) |> Keyword.get(:from)}
+       Application.get_env(:claper, :mail) |> Keyword.get(:from)}
     )
     |> subject(gettext("Update email instructions"))
     |> render_body("change.html", %{user: user, url: url})
