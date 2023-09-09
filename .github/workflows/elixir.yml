@@ -47,6 +47,6 @@ jobs:
     - name: Install dependencies
       run: mix deps.get
     - name: Run tests
-      run: mix test
+      run: DATABASE_URL=postgresql://claper:claper@localhost:5432/claper SECRET_KEY_BASE=QMQE4ypfy0IC1LZI/fygZNvXHPjLslnr49EE7ftcL1wgAC0MwMLdKCVJyrvXPu8z mix test
     - name: Check format
       run: mix format --check-formatted
