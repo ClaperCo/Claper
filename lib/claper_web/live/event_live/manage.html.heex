@@ -358,7 +358,7 @@
               phx-value-page={index}
               class="py-4 focus:outline-none"
             >
-              <%= if System.get_env("PRESENTATION_STORAGE", "local") == "local" do %>
+              <%= if Application.get_env(:claper, :presentations) |> Keyword.get(:storage) == "local" do %>
                 <img
                   class="w-1/3 mx-auto"
                   src={"/uploads/#{@event.presentation_file.hash}/#{index+1}.jpg"}
@@ -366,7 +366,7 @@
               <% else %>
                 <img
                   class="w-1/3 mx-auto"
-                  src={"https://#{System.get_env("AWS_PRES_BUCKET")}.s3.#{System.get_env("AWS_REGION")}.amazonaws.com/presentations/#{@event.presentation_file.hash}/#{index+1}.jpg"}
+                  src={"https://#{Application.get_env(:claper, :presentations) |> Keyword.get(:aws_bucket)}.s3.#{Application.get_env(:ex_aws, :region)}.amazonaws.com/presentations/#{@event.presentation_file.hash}/#{index+1}.jpg"}
                 />
               <% end %>
             </button>

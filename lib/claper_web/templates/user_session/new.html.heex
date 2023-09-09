@@ -69,7 +69,7 @@
           </.form>
 
           <div class="mt-4 text-center">
-            <%= if System.get_env("ENABLE_ACCOUNT_CREATION", "true") == "true" do %>
+            <%= if Application.get_env(:claper, :enable_account_creation) do %>
               <%= link(gettext("Create account"),
                 to: Routes.user_registration_path(@conn, :new),
                 class: "text-white text-sm text-center"

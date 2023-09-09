@@ -213,13 +213,7 @@ defmodule ClaperWeb.EventLive.EventFormComponent do
   end
 
   defp get_max_file_size() do
-    case Application.fetch_env!(:claper, :max_file_size) do
-      {:system, env_var, default} ->
-        String.to_integer(System.get_env(env_var) || default)
-
-      direct_value ->
-        direct_value
-    end
+    Application.get_env(:claper, :max_file_size)
   end
 
   def error_to_string(:too_large), do: gettext("Your file is too large")

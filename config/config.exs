@@ -12,7 +12,6 @@ config :claper,
 
 # Configures the endpoint
 config :claper, ClaperWeb.Endpoint,
-  url: [host: "localhost"],
   render_errors: [view: ClaperWeb.ErrorView, accepts: ~w(html json), layout: false],
   pubsub_server: Claper.PubSub,
   live_view: [signing_salt: "DN0vwriJgVkHG0kn3hF5JKho/DE66onv"]
@@ -59,15 +58,6 @@ config :logger, :console,
 config :phoenix, :json_library, Jason
 
 config :porcelain, driver: Porcelain.Driver.Basic
-
-config :ex_aws,
-  access_key_id: [{:system, "AWS_ACCESS_KEY_ID"}, :instance_role],
-  secret_access_key: [{:system, "AWS_SECRET_ACCESS_KEY"}, :instance_role],
-  region: {:system, "AWS_REGION"},
-  normalize_path: false
-
-config :claper,
-  max_file_size: {:system, "MAX_FILE_SIZE_MB", "15"}
 
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.

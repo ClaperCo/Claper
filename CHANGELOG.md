@@ -1,7 +1,7 @@
 ## v1.6.0
 - Improve QR code readability
 - Add ARM Docker image
-
+- Refactor all runtime configuration
 
 ## v1.5.0
 

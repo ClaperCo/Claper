@@ -1,96 +1,127 @@
 import Config
+import Claper.ConfigHelpers
 
-# config/runtime.exs is executed for all environments, including
-# during releases. It is executed after compilation and before the
-# system starts, so it is typically used to load production configuration
-# and secrets from environment variables or elsewhere. Do not define
-# any compile-time configuration in here, as it won't be applied.
-# The block below contains prod specific runtime configuration.
-if config_env() == :prod do
-  database_url =
-    System.get_env("DATABASE_URL") ||
-      raise """
-      environment variable DATABASE_URL is missing.
-      For example: ecto://USER:PASS@HOST/DATABASE
-      """
+config_dir = System.get_env("CONFIG_DIR", "/run/secrets")
 
-  config :claper, Claper.Repo,
-    url: database_url,
-    ssl: System.get_env("DB_SSL") == "true" || false,
-    ssl_opts: [
-      verify: :verify_none
-    ],
-    prepare: :unnamed,
-    pool_size: String.to_integer(System.get_env("POOL_SIZE") || "10"),
-    queue_target: String.to_integer(System.get_env("QUEUE_TARGET") || "5000")
+database_url =
+  get_var_from_path_or_env(
+        config_dir,
+        "DATABASE_URL",
+        "postgres://claper:claper@localhost:5432/postgres"
+      )
 
-  # The secret key base is used to sign/encrypt cookies and other secrets.
-  # A default value is used in config/dev.exs and config/test.exs but you
-  # want to use a different value for prod and you most likely don't want
-  # to check this value into version control, so we use an environment
-  # variable instead.
-  secret_key_base =
-    System.get_env("SECRET_KEY_BASE") ||
-      raise """
-      environment variable SECRET_KEY_BASE is missing.
-      You can generate one by calling: mix phx.gen.secret
-      """
+db_ssl = get_var_from_path_or_env(config_dir, "DB_SSL", "false") |> String.to_existing_atom()
 
-  config :claper, ClaperWeb.Endpoint,
-    url: [
-      host: System.get_env("ENDPOINT_HOST") || "localhost",
-      port: String.to_integer(System.get_env("ENDPOINT_PORT") || "80")
-    ],
-    http: [
-      # Enable IPv6 and bind on all interfaces.
-      # Set it to  {0, 0, 0, 0, 0, 0, 0, 1} for local network only access.
-      # See the documentation on https://hexdocs.pm/plug_cowboy/Plug.Cowboy.html
-      # for details about using IPv6 vs IPv4 and loopback vs public addresses.
-      ip: {0, 0, 0, 0, 0, 0, 0, 0},
-      port: String.to_integer(System.get_env("PORT") || "4000")
-    ],
-    secret_key_base: secret_key_base
+# Listen IP supports IPv4 and IPv6 addresses.
+listen_ip =
+  (
+    str = get_var_from_path_or_env(config_dir, "LISTEN_IP") || "0.0.0.0"
 
-  # ## Using releases
-  #
-  # If you are doing OTP releases, you need to instruct Phoenix
-  # to start each relevant endpoint:
-  #
-  #     config :claper, ClaperWeb.Endpoint, server: true
-  #
-  # Then you can assemble a release by calling `mix release`.
-  # See `mix help release` for more information.
+    case :inet.parse_address(String.to_charlist(str)) do
+      {:ok, ip_addr} ->
+        ip_addr
 
-  # ## Configuring the mailer
-  #
-  # In production you need to configure the mailer to use a different adapter.
-  # Also, you may need to configure the Swoosh API client of your choice if you
-  # are not using SMTP. Here is an example of the configuration:
-  #
-  #     config :claper, Claper.Mailer,
-  #       adapter: Swoosh.Adapters.Mailgun,
-  #       api_key: System.get_env("MAILGUN_API_KEY"),
-  #       domain: System.get_env("MAILGUN_DOMAIN")
-  #
-  # For this example you need include a HTTP client required by Swoosh API client.
-  # Swoosh supports Hackney and Finch out of the box:
-  #
+      {:error, reason} ->
+        raise "Invalid LISTEN_IP '#{str}' error: #{inspect(reason)}"
+    end
+  )
 
-  if System.get_env("MAIL_TRANSPORT", "local") == "smtp" do
-    config :claper, Claper.Mailer,
-      adapter: Swoosh.Adapters.SMTP,
-      relay: System.get_env("SMTP_RELAY"),
-      username: System.get_env("SMTP_USERNAME"),
-      password: System.get_env("SMTP_PASSWORD"),
-      ssl: System.get_env("SMTP_SSL", "true") == "true",
-      # always, never, if_available
-      tls: String.to_atom(System.get_env("SMTP_TLS", "always")),
-      # always, never, if_available
-      auth: String.to_atom(System.get_env("SMTP_AUTH", "always")),
-      port: String.to_integer(System.get_env("SMTP_PORT", "25"))
-  end
+port = get_int_from_path_or_env(config_dir, "PORT", "4000")
 
-  config :swoosh, :api_client, Swoosh.ApiClient.Finch
-  #
-  # See https://hexdocs.pm/swoosh/Swoosh.html#module-installation for details.
+secret_key_base = get_var_from_path_or_env(config_dir, "SECRET_KEY_BASE", nil)
+
+case secret_key_base do
+  nil ->
+    raise "SECRET_KEY_BASE configuration option is required. See https://docs.claper.co/configuration.html#production-docker"
+
+  key when byte_size(key) < 32 ->
+    raise "SECRET_KEY_BASE must be at least 32 bytes long. See https://docs.claper.co/configuration.html#production-docker"
+
+  _ ->
+    nil
 end
+
+endpoint_host = get_var_from_path_or_env(config_dir, "ENDPOINT_HOST", "localhost")
+endpoint_port = get_int_from_path_or_env(config_dir, "ENDPOINT_PORT", 4000)
+
+max_file_size = get_int_from_path_or_env(config_dir, "MAX_FILE_SIZE_MB", 15)
+enable_account_creation = get_var_from_path_or_env(config_dir, "ENABLE_ACCOUNT_CREATION", "true") |> String.to_existing_atom()
+pool_size = get_int_from_path_or_env(config_dir, "POOL_SIZE", 10)
+queue_target = get_int_from_path_or_env(config_dir, "QUEUE_TARGET", 5_000)
+
+mail_transport = get_var_from_path_or_env(config_dir, "MAIL_TRANSPORT", "local")
+
+smtp_relay = get_var_from_path_or_env(config_dir, "SMTP_RELAY", nil)
+smtp_username = get_var_from_path_or_env(config_dir, "SMTP_USERNAME", nil)
+smtp_password = get_var_from_path_or_env(config_dir, "SMTP_PASSWORD", nil)
+smtp_ssl = get_var_from_path_or_env(config_dir, "SMTP_SSL", "true") |> String.to_existing_atom()
+smtp_tls = get_var_from_path_or_env(config_dir, "SMTP_TLS", "always")
+smtp_auth = get_var_from_path_or_env(config_dir, "SMTP_AUTH", "always")
+smtp_port = get_int_from_path_or_env(config_dir, "SMTP_PORT", 25)
+
+aws_access_key_id = get_var_from_path_or_env(config_dir, "AWS_ACCESS_KEY_ID", nil)
+aws_secret_access_key = get_var_from_path_or_env(config_dir, "AWS_SECRET_ACCESS_KEY", nil)
+aws_region = get_var_from_path_or_env(config_dir, "AWS_REGION", nil)
+
+config :claper, Claper.Repo,
+  url: database_url,
+  ssl: db_ssl,
+  ssl_opts: [
+    verify: :verify_none
+  ],
+  prepare: :unnamed,
+  pool_size: pool_size,
+  queue_target: queue_target
+
+config :claper, ClaperWeb.Endpoint,
+  url: [
+    host: endpoint_host,
+    port: endpoint_port
+  ],
+  http: [
+    ip: listen_ip,
+    port: port,
+    transport_options: [max_connections: :infinity],
+    protocol_options: [max_request_line_length: 8192, max_header_value_length: 8192]
+  ],
+  secret_key_base: secret_key_base
+
+config :claper,
+  max_file_size: max_file_size,
+  enable_account_creation: enable_account_creation
+
+config :claper, :presentations,
+  storage: get_var_from_path_or_env(config_dir, "PRESENTATION_STORAGE", "local"),
+  aws_bucket: get_var_from_path_or_env(config_dir, "AWS_PRES_BUCKET", nil),
+  resolution: get_var_from_path_or_env(config_dir, "GS_JPG_RESOLUTION", "300x300")
+
+config :claper, :mail,
+  from: get_var_from_path_or_env(config_dir, "MAIL_FROM", "noreply@claper.co"),
+  from_name: get_var_from_path_or_env(config_dir, "MAIL_FROM_NAME", "Claper")
+
+config :claper, ClaperWeb.MailboxGuard,
+    username: get_var_from_path_or_env(config_dir, "MAILBOX_USER", nil),
+    password: get_var_from_path_or_env(config_dir, "MAILBOX_PASSWORD", nil),
+    enabled: get_var_from_path_or_env(config_dir, "ENABLE_MAILBOX_ROUTE", "false") |> String.to_existing_atom()
+
+if mail_transport == "smtp" do
+  config :claper, Claper.Mailer,
+    adapter: Swoosh.Adapters.SMTP,
+    relay: smtp_relay,
+    username: smtp_username,
+    password: smtp_password,
+    ssl: smtp_ssl,
+    # always, never, if_available
+    tls: smtp_tls,
+    # always, never, if_available
+    auth: smtp_auth,
+    port: smtp_port
+end
+
+config :ex_aws,
+  access_key_id: aws_access_key_id,
+  secret_access_key: aws_secret_access_key,
+  region: aws_region,
+  normalize_path: false
+
+config :swoosh, :api_client, Swoosh.ApiClient.Finch
