@@ -4,6 +4,8 @@ services:
     image: postgres:9
     ports: 
       - 5432:5432
+    volumes:
+      - ./postgres-data:/var/lib/postgresql/data
     environment:
       POSTGRES_PASSWORD: claper
       POSTGRES_USER: claper
@@ -19,6 +21,9 @@ services:
       SECRET_KEY_BASE: 0LZiQBLw4WvqPlz4cz8RsHJlxNiSqM9B48y4ChyJ5v1oA0L/TPIqRjQNdPZN3iEG
       MAIL_TRANSPORT: local
       ENDPOINT_PORT: 4000
+      PRESENTATION_STORAGE: local
+      MAX_FILE_SIZE_MB: 15
+      ENABLE_ACCOUNT_CREATION: true
     depends_on:
       - db
 volumes:
