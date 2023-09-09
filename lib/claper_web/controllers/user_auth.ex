@@ -1,7 +1,8 @@
-@moduledoc """
-  Plug for user authentication.
-"""
 defmodule ClaperWeb.UserAuth do
+  @moduledoc """
+    Plug for user authentication.
+  """
+
   import Plug.Conn
   import Phoenix.Controller
 
