@@ -1,9 +1,13 @@
 name: Docker Image CI
 
 on:
-  push:
+  workflow_run:
+    workflows: ["Elixir CI"]
     branches: [ "main", "dev" ]
     tags: ['v*']
+    types: 
+      - completed
+
 jobs:
 
   build:
@@ -47,7 +51,6 @@ jobs:
       uses: docker/build-push-action@v2.10.0
       with:
         context: .
-        platform: linux/amd64
         push: true
         tags: ${{ steps.meta.outputs.tags }}
         labels: ${{ steps.meta.outputs.labels }}
@@ -61,7 +64,6 @@ jobs:
         context: .
         file: ./Dockerfile-arm
         push: true
-        platforms: linux/arm64
         tags: ${{ steps.meta.outputs.tags }}-arm
         labels: ${{ steps.meta.outputs.labels }}
         cache-from: type=gha

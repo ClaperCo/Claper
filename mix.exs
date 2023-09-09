@@ -116,7 +116,8 @@ defmodule Claper.MixProject do
       {:porcelain, "~> 2.0"},
       {:hackney, "~> 1.18"},
       {:gen_smtp, "~> 1.2"},
-      {:csv, "~> 3.0"}
+      {:csv, "~> 3.0"},
+      {:credo, "~> 1.7", only: [:dev, :test], runtime: false}
     ]
   end
 
