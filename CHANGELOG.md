@@ -2,6 +2,9 @@
 - Improve QR code readability
 - Add ARM Docker image
 - Refactor all runtime configuration
+- Fix poll panel scroll on mobile
+- Fix message length validation
+- Fix message word break
 
 ## v1.5.0
 

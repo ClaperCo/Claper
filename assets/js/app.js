@@ -165,12 +165,14 @@ Hooks.PostForm = {
       e.preventDefault()
       submitBtn.click()
     } else {
-      if (TA.value.length > 2) {
+      if (TA.value.length > 1 && TA.value.length < 256) {
         submitBtn.classList.remove("opacity-50")
         submitBtn.classList.add("opacity-100")
+        submitBtn.disabled = false
       } else {
         submitBtn.classList.add("opacity-50")
         submitBtn.classList.remove("opacity-100")
+        submitBtn.disabled = true
       }
     }
   },
@@ -198,12 +200,14 @@ Hooks.PostForm = {
   updated() {
     const submitBtn = document.getElementById("submitBtn")
     const TA = document.getElementById("postFormTA")
-    if (TA.value.length > 2) {
+    if (TA.value.length > 1 && TA.value.length < 256) {
       submitBtn.classList.remove("opacity-50")
       submitBtn.classList.add("opacity-100")
+      submitBtn.disabled = false
     } else {
       submitBtn.classList.add("opacity-50")
       submitBtn.classList.remove("opacity-100")
+      submitBtn.disabled = true
     }
   },
   destroyed() {
@@ -478,6 +482,19 @@ window.addEventListener("phx:page-loading-stop", info => {
   clearTimeout(topBarScheduled)
   topBarScheduled = undefined
   topbar.hide()
+})
+
+// Used to fix the scroll issue on mobile on poll panel
+window.addEventListener("claper:toggle-poll", (event) => {
+  let extended = document.getElementById("extended-poll")
+  let parent = document.getElementById("poll-wrapper-parent")
+  if (extended.style.display == "block") {
+    parent.classList.add("overflow-y-auto")
+    parent.classList.add("h-full")
+  } else {
+    parent.classList.remove("overflow-y-auto")
+    parent.classList.remove("h-full")
+  }
 })
 
 const renderOnlineUsers = function(presences) {

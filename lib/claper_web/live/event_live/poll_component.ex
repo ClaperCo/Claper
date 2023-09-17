@@ -134,5 +134,6 @@ defmodule ClaperWeb.EventLive.PollComponent do
       in: "animate__animated animate__zoomIn",
       to: "#extended-poll"
     )
+    |> JS.dispatch("claper:toggle-poll", to: "#poll-wrapper-parent")
   end
 end
