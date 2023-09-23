@@ -20,8 +20,12 @@ defmodule ClaperWeb.Endpoint do
     at: "/",
     from: :claper,
     gzip: false,
-    only:
-      ~w(assets fonts .well-known uploads images favicon.ico robots.txt loaderio-eb3b956a176cdd4f54eb8570ce8bbb06.txt)
+    only: ~w(assets fonts .well-known uploads images favicon.ico robots.txt loaderio-eb3b956a176cdd4f54eb8570ce8bbb06.txt)
+
+  plug Plug.Static,
+    at: "/uploads",
+    from: Path.join([Application.compile_env(:claper, :presentations) |> Keyword.get(:storage_dir), "uploads"]),
+    gzip: false
 
   # Code reloading can be explicitly enabled under the
   # :code_reloader configuration of your endpoint.

@@ -59,6 +59,12 @@ config :phoenix, :json_library, Jason
 
 config :porcelain, driver: Porcelain.Driver.Basic
 
+config :claper, :presentations,
+  storage_dir: System.get_env("PRESENTATION_STORAGE_DIR") || Path.join([:code.priv_dir(:claper), "static"]),
+  storage: System.get_env("PRESENTATION_STORAGE") || "local",
+  aws_bucket: System.get_env("AWS_PRES_BUCKET"),
+  resolution: System.get_env("GS_JPG_RESOLUTION") || "300x300"
+
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
 import_config "#{config_env()}.exs"

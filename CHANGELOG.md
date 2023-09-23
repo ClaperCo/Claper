@@ -2,6 +2,7 @@
 - Improve QR code readability
 - Add ARM Docker image
 - Refactor all runtime configuration
+- Improve local storage with PRESENTATION_STORAGE_DIR environment variable
 - Fix poll panel scroll on mobile
 - Fix message length validation
 - Fix message word break

@@ -22,6 +22,7 @@ RUN apt-get update -y && apt-get install -y curl build-essential git \
     && apt-get clean && rm -f /var/lib/apt/lists/*_*
 
 ENV NODE_VERSION 16.20.0
+ENV PRESENTATION_STORAGE_DIR /app/uploads
 
 # Install nvm with node and npm
 RUN curl https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.4/install.sh | bash \
@@ -97,6 +98,7 @@ ENV HOME "/home/nobody"
 RUN mkdir /home/nobody && chown nobody /home/nobody
 
 WORKDIR "/app"
+RUN mkdir /app/uploads
 RUN chown nobody /app
 
 # Only copy the final release from the build stage

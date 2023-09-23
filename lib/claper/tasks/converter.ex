@@ -27,8 +27,7 @@ defmodule Claper.Tasks.Converter do
 
     path =
       Path.join([
-        :code.priv_dir(:claper),
-        "static",
+        get_presentation_storage_dir(),
         "uploads",
         "#{hash}"
       ])
@@ -49,8 +48,7 @@ defmodule Claper.Tasks.Converter do
     if get_presentation_storage() == "local" do
       File.rm_rf(
         Path.join([
-          :code.priv_dir(:claper),
-          "static",
+          get_presentation_storage_dir(),
           "uploads",
           "#{hash}"
         ])
@@ -126,14 +124,12 @@ defmodule Claper.Tasks.Converter do
     if get_presentation_storage() == "local" do
       File.rename(
         Path.join([
-          :code.priv_dir(:claper),
-          "static",
+          get_presentation_storage_dir(),
           "uploads",
           "#{hash}"
         ]),
         Path.join([
-          :code.priv_dir(:claper),
-          "static",
+          get_presentation_storage_dir(),
           "uploads",
           "#{new_hash}"
         ])
@@ -198,6 +194,10 @@ defmodule Claper.Tasks.Converter do
 
   defp get_presentation_storage do
     Application.get_env(:claper, :presentations) |> Keyword.get(:storage)
+  end
+
+  defp get_presentation_storage_dir do
+    Application.get_env(:claper, :presentations) |> Keyword.get(:storage_dir)
   end
 
   defp get_aws_bucket do
