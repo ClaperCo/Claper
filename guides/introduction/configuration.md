@@ -9,7 +9,7 @@ All configuration used by the app is stored in the `.env` file. You can find an 
 Variable | Values | Default | Required | Description
 --- | --- | --- | --- | ---
 PRESENTATION_STORAGE | local, s3 | local | - |  Define where the presentation files will be stored
-PRESENTATION_STORAGE_DIR | - | priv/static (/app/uploads for Docker) | - |  If `local` storage is used, this is the directory where the presentation files will be stored
+PRESENTATION_STORAGE_DIR | - | priv/static (/app/uploads for Docker) | - |  If `local` storage is used, this is the directory where the presentation files will be stored. Compile-time config, so you need to recompile the app if you change it (or rebuild the Docker image).
 AWS_ACCESS_KEY_ID | - | - | _only for s3_ | Your AWS Access Key ID
 AWS_SECRET_ACCESS_KEY | - | - | _only for s3_ | Your AWS Secret Access Key
 AWS_PRES_BUCKET | - | - | _only for s3_ | The name of the bucket where the presentation files will be stored

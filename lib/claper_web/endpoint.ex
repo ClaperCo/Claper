@@ -24,7 +24,7 @@ defmodule ClaperWeb.Endpoint do
 
   plug Plug.Static,
     at: "/uploads",
-    from: Path.join([Application.compile_env(:claper, :presentations) |> Keyword.get(:storage_dir), "uploads"]),
+    from: Path.join([Application.compile_env(:claper, :storage_dir), "uploads"]),
     gzip: false
 
   # Code reloading can be explicitly enabled under the

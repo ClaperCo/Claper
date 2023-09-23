@@ -91,10 +91,10 @@ config :claper, ClaperWeb.Endpoint,
   secret_key_base: secret_key_base
 
 config :claper,
-  max_file_size: max_file_size,
   enable_account_creation: enable_account_creation
 
 config :claper, :presentations,
+  max_file_size: max_file_size,
   storage: get_var_from_path_or_env(config_dir, "PRESENTATION_STORAGE", "local"),
   aws_bucket: get_var_from_path_or_env(config_dir, "AWS_PRES_BUCKET", nil),
   resolution: get_var_from_path_or_env(config_dir, "GS_JPG_RESOLUTION", "300x300")

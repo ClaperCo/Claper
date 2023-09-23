@@ -197,7 +197,7 @@ defmodule Claper.Tasks.Converter do
   end
 
   defp get_presentation_storage_dir do
-    Application.get_env(:claper, :presentations) |> Keyword.get(:storage_dir)
+    Application.get_env(:claper, :storage_dir)
   end
 
   defp get_aws_bucket do

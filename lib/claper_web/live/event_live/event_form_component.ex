@@ -218,11 +218,11 @@ defmodule ClaperWeb.EventLive.EventFormComponent do
   end
 
   defp get_max_file_size() do
-    Application.get_env(:claper, :max_file_size)
+    Application.get_env(:claper, :presentations) |> Keyword.get(:max_file_size)
   end
 
   defp get_presentation_storage_dir do
-    Application.get_env(:claper, :presentations) |> Keyword.get(:storage_dir)
+    Application.get_env(:claper, :storage_dir)
   end
 
   def error_to_string(:too_large), do: gettext("Your file is too large")
