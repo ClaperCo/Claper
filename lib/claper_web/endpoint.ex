@@ -20,7 +20,8 @@ defmodule ClaperWeb.Endpoint do
     at: "/",
     from: :claper,
     gzip: false,
-    only: ~w(assets fonts .well-known images favicon.ico robots.txt loaderio-eb3b956a176cdd4f54eb8570ce8bbb06.txt)
+    only:
+      ~w(assets fonts .well-known images favicon.ico robots.txt loaderio-eb3b956a176cdd4f54eb8570ce8bbb06.txt)
 
   plug Plug.Static,
     at: "/uploads",
