@@ -5,15 +5,15 @@
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="generator" content="ExDoc v0.29.4">
-    <meta name="project" content="Claper v1.5.0">
+    <meta name="project" content="Claper v1.6.0">
 
-    <title>ClaperWeb.Plugs.Locale — Claper v1.5.0</title>
+    <title>ClaperWeb.Plugs.Locale — Claper v1.6.0</title>
     <link rel="stylesheet" href="dist/html-elixir-HHVY3JYD.css" />
 
 
     <script src="dist/handlebars.runtime-NWIB6V2M.js"></script>
     <script src="dist/handlebars.templates-XWGFFSCD.js"></script>
-    <script src="dist/sidebar_items-F19A6797.js"></script>
+    <script src="dist/sidebar_items-352DAC97.js"></script>
 
       <script src="docs_config.js"></script>
 
@@ -72,7 +72,7 @@
 Claper
       </a>
       <div class="sidebar-projectVersion" translate="no">
-        v1.5.0
+        v1.6.0
       </div>
     </div>
     <ul class="sidebar-listNav">
@@ -106,10 +106,33 @@ Claper
     </a>
 
   <span translate="no">ClaperWeb.Plugs.Locale</span> 
-  <small class="app-vsn" translate="no">(Claper v1.5.0)</small>
+  <small class="app-vsn" translate="no">(Claper v1.6.0)</small>
 
 </h1>
 
+
+  <section id="moduledoc">
+<p>  Plug to set the locale based on the Accept-Language header.</p><p>  ## Usage</p><p>  Add the plug to your pipeline in <code class="inline">router.ex</code>:</p><pre><code class="makeup elixir" translate="no"><span class="w">  </span><span class="n">pipeline</span><span class="w"> </span><span class="ss">:browser</span><span class="w"> </span><span class="k" data-group-id="8425895741-1">do</span><span class="w">
+    </span><span class="n">...</span><span class="w">
+    </span><span class="n">plug</span><span class="w"> </span><span class="nc">ClaperWeb.Plugs.Locale</span><span class="w">
+  </span><span class="k" data-group-id="8425895741-1">end</span></code></pre><p>  ## Configuration</p><p>  The plug will use the <code class="inline">:default_locale</code> configuration value as the default
+  locale. If the <code class="inline">:default_locale</code> is not set, it will default to <code class="inline">:en</code>.</p><p>  ## Accept-Language header</p><p>  The plug will parse the <code class="inline">Accept-Language</code> header and set the locale to the
+  first language in the list that is known to the application. If no language
+  is known, the locale will not be changed.</p><p>  The <code class="inline">Accept-Language</code> header is a comma-separated list of language tags with
+  optional quality values. The quality value is a number between 0 and 1,
+  where 1 is the highest quality. The quality value is optional and defaults
+  to 1.</p><p>  Examples:</p><pre><code class="makeup elixir" translate="no"><span class="w">  </span><span class="nc">Accept</span><span class="o">-</span><span class="ss">Language</span><span class="p">:</span><span class="w"> </span><span class="n">en</span><span class="o">-</span><span class="nc">US</span><span class="p">,</span><span class="n">en</span><span class="p">;</span><span class="n">q</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span><span class="n">da</span><span class="p">;</span><span class="n">q</span><span class="o">=</span><span class="mf">0.6</span></code></pre><p>  The above example will set the locale to <code class="inline">:en</code> if it is known to the
+  application. If <code class="inline">:en</code> is not known, it will set the locale to <code class="inline">:da</code> if it is
+  known to the application. If neither <code class="inline">:en</code> nor <code class="inline">:da</code> is known, the locale
+  will not be changed.</p><pre><code class="makeup elixir" translate="no"><span class="w">  </span><span class="nc">Accept</span><span class="o">-</span><span class="ss">Language</span><span class="p">:</span><span class="w"> </span><span class="n">en</span><span class="o">-</span><span class="nc">US</span><span class="p">,</span><span class="n">en</span><span class="p">;</span><span class="n">q</span><span class="o">=</span><span class="mf">0.8</span></code></pre><p>  The above example will set the locale to <code class="inline">:en</code> if it is known to the
+  application. If <code class="inline">:en</code> is not known, the locale will not be changed.</p><pre><code class="makeup elixir" translate="no"><span class="w">  </span><span class="nc">Accept</span><span class="o">-</span><span class="ss">Language</span><span class="p">:</span><span class="w"> </span><span class="n">en</span><span class="o">-</span><span class="nc">US</span></code></pre><p>  The above example will set the locale to <code class="inline">:en</code> if it is known to the
+  application. If <code class="inline">:en</code> is not known, the locale will not be changed.</p><p>  ## Known locales</p><p>  The plug will only set the locale if it is known to the application. The
+  known locales are determined by the <code class="inline">:gettext</code> configuration. The
+  <code class="inline">:gettext</code> configuration is set in <code class="inline">config/config.exs</code>:</p><pre><code class="makeup elixir" translate="no"><span class="w">  </span><span class="n">config</span><span class="w"> </span><span class="ss">:claper</span><span class="p">,</span><span class="w"> </span><span class="nc">ClaperWeb.Gettext</span><span class="p">,</span><span class="w">
+    </span><span class="ss">default_locale</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;en&quot;</span><span class="p">,</span><span class="w">
+    </span><span class="ss">default_domain</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;claper&quot;</span><span class="p">,</span><span class="w">
+    </span><span class="ss">available_locales</span><span class="p">:</span><span class="w"> </span><span class="sx">~w(en fr)</span></code></pre><p>  The <code class="inline">:available_locales</code> option is</p>
+  </section>
 
 
   <section id="summary" class="details-list">
@@ -172,7 +195,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">call(conn, opts)</h1>
 
-      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper_web/plugs/locale.ex#L6" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper_web/plugs/locale.ex#L67" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -194,7 +217,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">extract_accept_language(conn)</h1>
 
-      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper_web/plugs/locale.ex#L25" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper_web/plugs/locale.ex#L86" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -216,7 +239,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">init(opts)</h1>
 
-      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper_web/plugs/locale.ex#L4" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper_web/plugs/locale.ex#L65" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>

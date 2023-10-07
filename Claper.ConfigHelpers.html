@@ -7,7 +7,7 @@
     <meta name="generator" content="ExDoc v0.29.4">
     <meta name="project" content="Claper v1.6.0">
 
-    <title>ClaperWeb.Router — Claper v1.6.0</title>
+    <title>Claper.ConfigHelpers — Claper v1.6.0</title>
     <link rel="stylesheet" href="dist/html-elixir-HHVY3JYD.css" />
 
 
@@ -100,12 +100,12 @@ Claper
 </button>
 
 
-    <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper_web/router.ex#L1" title="View Source" class="icon-action" rel="help">
+    <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper/helpers/config.ex#L1" title="View Source" class="icon-action" rel="help">
       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
       <span class="sr-only">View Source</span>
     </a>
 
-  <span translate="no">ClaperWeb.Router</span> 
+  <span translate="no">Claper.ConfigHelpers</span> 
   <small class="app-vsn" translate="no">(Claper v1.6.0)</small>
 
 </h1>
@@ -127,7 +127,7 @@ Claper
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#api/2" translate="no">api(conn, _)</a>
+        <a href="#get_int_from_path_or_env/3" translate="no">get_int_from_path_or_env(config_dir, var_name, default \\ nil)</a>
 
       </div>
 
@@ -135,44 +135,7 @@ Claper
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#attendee_registration/2" translate="no">attendee_registration(conn, _)</a>
-
-      </div>
-
-    </div>
-
-    <div class="summary-row">
-      <div class="summary-signature">
-        <a href="#browser/2" translate="no">browser(conn, _)</a>
-
-      </div>
-
-    </div>
-
-    <div class="summary-row">
-      <div class="summary-signature">
-        <a href="#call/2" translate="no">call(conn, opts)</a>
-
-      </div>
-
-        <div class="summary-synopsis"><p>Callback invoked by Plug on every request.</p></div>
-
-    </div>
-
-    <div class="summary-row">
-      <div class="summary-signature">
-        <a href="#init/1" translate="no">init(opts)</a>
-
-      </div>
-
-        <div class="summary-synopsis"><p>Callback required by Plug that initializes the router
-for serving web requests.</p></div>
-
-    </div>
-
-    <div class="summary-row">
-      <div class="summary-signature">
-        <a href="#protect_mailbox/2" translate="no">protect_mailbox(conn, _)</a>
+        <a href="#get_var_from_path_or_env/3" translate="no">get_var_from_path_or_env(config_dir, var_name, default \\ nil)</a>
 
       </div>
 
@@ -192,16 +155,18 @@ for serving web requests.</p></div>
 Functions
     </h1>
     <div class="functions-list">
-<section class="detail" id="api/2">
+<section class="detail" id="get_int_from_path_or_env/3">
+
+    <span id="get_int_from_path_or_env/2"></span>
 
   <div class="detail-header">
-    <a href="#api/2" class="detail-link" title="Link to this function">
+    <a href="#get_int_from_path_or_env/3" class="detail-link" title="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this function</span>
     </a>
-    <h1 class="signature" translate="no">api(conn, _)</h1>
+    <h1 class="signature" translate="no">get_int_from_path_or_env(config_dir, var_name, default \\ nil)</h1>
 
-      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper_web/router.ex#L21" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper/helpers/config.ex#L12" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -214,105 +179,18 @@ Functions
 
   </section>
 </section>
-<section class="detail" id="attendee_registration/2">
+<section class="detail" id="get_var_from_path_or_env/3">
+
+    <span id="get_var_from_path_or_env/2"></span>
 
   <div class="detail-header">
-    <a href="#attendee_registration/2" class="detail-link" title="Link to this function">
+    <a href="#get_var_from_path_or_env/3" class="detail-link" title="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this function</span>
     </a>
-    <h1 class="signature" translate="no">attendee_registration(conn, _)</h1>
+    <h1 class="signature" translate="no">get_var_from_path_or_env(config_dir, var_name, default \\ nil)</h1>
 
-      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper_web/router.ex#L26" class="icon-action" rel="help" title="View Source">
-       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
-     </a>
-
-
-  </div>
-
-  <section class="docstring">
-
-
-  </section>
-</section>
-<section class="detail" id="browser/2">
-
-  <div class="detail-header">
-    <a href="#browser/2" class="detail-link" title="Link to this function">
-      <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
-    </a>
-    <h1 class="signature" translate="no">browser(conn, _)</h1>
-
-      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper_web/router.ex#L6" class="icon-action" rel="help" title="View Source">
-       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
-     </a>
-
-
-  </div>
-
-  <section class="docstring">
-
-
-  </section>
-</section>
-<section class="detail" id="call/2">
-
-  <div class="detail-header">
-    <a href="#call/2" class="detail-link" title="Link to this function">
-      <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
-    </a>
-    <h1 class="signature" translate="no">call(conn, opts)</h1>
-
-      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper_web/router.ex#L2" class="icon-action" rel="help" title="View Source">
-       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
-     </a>
-
-
-  </div>
-
-  <section class="docstring">
-
-<p>Callback invoked by Plug on every request.</p>
-  </section>
-</section>
-<section class="detail" id="init/1">
-
-  <div class="detail-header">
-    <a href="#init/1" class="detail-link" title="Link to this function">
-      <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
-    </a>
-    <h1 class="signature" translate="no">init(opts)</h1>
-
-      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper_web/router.ex#L2" class="icon-action" rel="help" title="View Source">
-       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
-     </a>
-
-
-  </div>
-
-  <section class="docstring">
-
-<p>Callback required by Plug that initializes the router
-for serving web requests.</p>
-  </section>
-</section>
-<section class="detail" id="protect_mailbox/2">
-
-  <div class="detail-header">
-    <a href="#protect_mailbox/2" class="detail-link" title="Link to this function">
-      <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
-    </a>
-    <h1 class="signature" translate="no">protect_mailbox(conn, _)</h1>
-
-      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper_web/router.ex#L17" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper/helpers/config.ex#L2" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
