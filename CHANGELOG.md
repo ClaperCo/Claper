@@ -6,6 +6,7 @@
 - Fix poll/form panel scroll on mobile
 - Fix message length validation
 - Fix message word break
+- Fix date translations
 - Minor fixes on form management
 
 ## v1.5.0
