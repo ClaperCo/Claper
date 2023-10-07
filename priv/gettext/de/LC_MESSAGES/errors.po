@@ -1,85 +1,849 @@
-##
-## Do not add, change, or remove `msgid`s manually here as
-## they're tied to the ones in the corresponding POT file
-## (with the same domain).
-##
-## Use `mix gettext.extract --merge` or `mix gettext.merge`
-## to merge POT files into PO files.
 msgid ""
 msgstr ""
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: POEditor.com\n"
+"Project-Id-Version: Claper\n"
 "Language: de\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
+#: lib/claper_web/live/user_settings_live/show.ex:48
+#: lib/claper_web/live/user_settings_live/show.html.heex:5
+#: lib/claper_web/templates/layout/_user_menu.html.heex:2
+msgid "Settings"
+msgstr "Einstellungen"
+
+#: lib/claper_web/live/event_live/manage.ex:438
+#: lib/claper_web/live/form_live/form_component.html.heex:37
+#: lib/claper_web/live/user_settings_live/show.html.heex:34
+#: lib/claper_web/templates/user_registration/new.html.heex:34
+#: lib/claper_web/templates/user_session/new.html.heex:47
+msgid "Email"
+msgstr "E-Mail"
+
+#: lib/claper_web/templates/user_registration/new.html.heex:12
+msgid "Join the Claper experience"
+msgstr "Werden Sie Teil der Claper Erfahrung"
+
+#: lib/claper_web/templates/user_registration/new.html.heex:24
+msgid "Oops, check that all fields are filled in correctly."
+msgstr "Überprüfen Sie, ob alle Felder korrekt ausgefüllt sind."
+
+#: lib/claper_web/live/user_settings_live/show.html.heex:108
+#: lib/claper_web/live/user_settings_live/show.html.heex:121
+msgid "Change"
+msgstr "Ändern"
+
+#: lib/claper_web/live/event_live/event_form_component.html.heex:237
+msgid "Code"
+msgstr "Code"
+
+#: lib/claper_web/live/user_settings_live/show.html.heex:103
+msgid "Email address"
+msgstr "E-Mail Adresse"
+
+#: lib/claper_web/templates/layout/_user_menu.html.heex:8
+msgid "Logout"
+msgstr "Ausloggen"
+
+#: lib/claper_web/live/user_settings_live/show.html.heex:93
+msgid "Personal informations"
+msgstr "Persönliche Informationen"
+
+#: lib/claper_web/templates/user_registration/confirm.html.heex:13
+msgid "We already sent you an email to login, please retry in 5 minutes."
+msgstr "Wir haben Ihnen bereits eine E-Mail zur Anmeldung geschickt, bitte versuchen Sie es in 5 Minuten erneut."
+
+#: lib/claper_web/templates/user_registration/confirm.html.heex:16
+msgid "We sent you an email at"
+msgstr "Wir haben Ihnen eine E-Mail geschickt an"
+
+#: lib/claper_web/live/user_settings_live/show.html.heex:96
+msgid "Your personal informations only visible by you"
+msgstr "Ihre persönlichen Informationen sind nur für Sie sichtbar"
+
+#: lib/claper_web/live/event_live/show.html.heex:249
+msgid "days"
+msgstr "Tage"
+
+#: lib/claper_web/live/event_live/show.html.heex:255
+msgid "hours"
+msgstr "Stunden"
+
+#: lib/claper_web/live/event_live/show.html.heex:261
+msgid "minutes"
+msgstr "Minuten"
+
+#: lib/claper_web/live/event_live/show.html.heex:112
+msgid "Be the first to react !"
+msgstr "Seien Sie der Erste, der reagiert!"
+
+#: lib/claper_web/live/event_live/event_card_component.ex:98
+#: lib/claper_web/live/event_live/join.ex:42
+#: lib/claper_web/live/event_live/join.html.heex:106
+msgid "Join"
+msgstr "Teilnehmen"
+
+#: lib/claper_web/live/event_live/index.ex:82
+#: lib/claper_web/live/event_live/join.html.heex:26
+#: lib/claper_web/live/event_live/join.html.heex:47
+msgid "Dashboard"
+msgstr "Dashboard"
+
+#: lib/claper_web/live/event_live/post_component.ex:66
+msgid "Host"
+msgstr "Host"
+
+#: lib/claper_web/live/event_live/show.html.heex:267
+msgid "seconds"
+msgstr "Sekunden"
+
+#: lib/claper_web/live/event_live/index.html.heex:61
+msgid "Create your first presentation"
+msgstr "Erstellen Sie Ihre erste Präsentation"
+
+#: lib/claper_web/live/event_live/event_card_component.ex:50
+#: lib/claper_web/live/event_live/manage.html.heex:80
+msgid "Finish on"
+msgstr "Endet um"
+
+#: lib/claper_web/live/event_live/event_card_component.ex:30
+msgid "Finished"
+msgstr "Beendet"
+
+#: lib/claper_web/live/event_live/event_card_component.ex:62
+msgid "Finished on"
+msgstr "Beendet um"
+
+#: lib/claper_web/live/event_live/event_card_component.ex:20
+msgid "In progress"
+msgstr "Läuft"
+
+#: lib/claper_web/live/event_live/event_card_component.ex:25
+msgid "Incoming"
+msgstr "Kommende"
+
+#: lib/claper_web/live/event_live/show.html.heex:26
+msgid "Leave"
+msgstr "Verlassen"
+
+#: lib/claper_web/live/event_live/index.html.heex:16
+msgid "My presentations"
+msgstr "Meine Präsentationen"
+
+#: lib/claper_web/live/event_live/event_form_component.html.heex:226
+msgid "Name of your presentation"
+msgstr "Name Ihrer Präsentation"
+
+#: lib/claper_web/live/event_live/presenter.html.heex:21
+#: lib/claper_web/live/event_live/show.html.heex:276
+msgid "Scan to interact in real-time"
+msgstr "Scannen und in Echtzeit interagieren"
+
+#: lib/claper_web/live/event_live/event_card_component.ex:56
+msgid "Starting on"
+msgstr "Startet um"
+
+#: lib/claper_web/live/event_live/event_form_component.ex:205
+msgid "Updated successfully"
+msgstr "Erfolgreich aktualisiert"
+
+#: lib/claper_web/live/event_live/event_form_component.html.heex:247
+msgid "When your presentation will be available ?"
+msgstr "Wann wird Ihre Präsentation verfügbar sein?"
+
+#: lib/claper_web/live/event_live/join.html.heex:72
+msgid "Return to your last presentation"
+msgstr "Zurück zu Ihrer letzten Präsentation"
+
+#: lib/claper_web/templates/user_session/new.html.heex:22
+msgid "It's time to empower your presentations."
+msgstr "Es ist an der Zeit, Ihren Präsentationen mehr Bedeutung zu verleihen."
+
+#: lib/claper_web/templates/error/404.html.heex:44
+#: lib/claper_web/templates/error/500.html.heex:45
+#: lib/claper_web/templates/user_registration/confirm.html.heex:28
+msgid "Return to home"
+msgstr "Zurück zur Startseite"
+
+#: lib/claper_web/live/event_live/event_form_component.ex:177
+msgid "Created successfully"
+msgstr "Erfolgreich erstellt"
+
+#: lib/claper_web/live/event_live/manage.ex:23
+#: lib/claper_web/live/event_live/presenter.ex:21
+#: lib/claper_web/live/event_live/show.ex:24
+msgid "Presentation doesn't exist"
+msgstr "Präsentation existiert nicht"
+
+#: lib/claper_web/live/event_live/event_card_component.ex:109
+#: lib/claper_web/live/event_live/event_card_component.ex:129
+#: lib/claper_web/live/event_live/form_component.ex:96
+#: lib/claper_web/live/event_live/index.ex:65
+msgid "Edit"
+msgstr "Ändern"
+
+#: lib/claper_web/live/event_live/event_form_component.html.heex:18
+#: lib/claper_web/live/event_live/event_form_component.html.heex:25
+#: lib/claper_web/live/event_live/index.ex:71
+#: lib/claper_web/live/event_live/index.html.heex:40
+#: lib/claper_web/live/form_live/form_component.html.heex:98
+#: lib/claper_web/live/poll_live/form_component.html.heex:94
+msgid "Create"
+msgstr "Erstellen"
+
+#: lib/claper_web/live/event_live/event_card_component.ex:171
+#: lib/claper_web/live/event_live/event_form_component.html.heex:30
+#: lib/claper_web/live/event_live/manage.html.heex:631
+#: lib/claper_web/live/event_live/manage.html.heex:725
+#: lib/claper_web/live/event_live/post_component.ex:29
+#: lib/claper_web/live/event_live/post_component.ex:94
+#: lib/claper_web/live/form_live/form_component.html.heex:103
+#: lib/claper_web/live/poll_live/form_component.html.heex:99
+msgid "Delete"
+msgstr "Löschen"
+
+#: lib/claper_web/live/event_live/event_form_component.html.heex:17
+#: lib/claper_web/live/event_live/event_form_component.html.heex:24
+#: lib/claper_web/live/form_live/form_component.html.heex:99
+#: lib/claper_web/live/poll_live/form_component.html.heex:95
+#: lib/claper_web/live/user_settings_live/show.html.heex:38
+#: lib/claper_web/live/user_settings_live/show.html.heex:80
+msgid "Save"
+msgstr "Speichern"
+
+#: lib/claper_web/live/user_settings_live/show.ex:69
+msgid "A link to confirm your email change has been sent to the new address."
+msgstr "Ein Link zur Bestätigung Ihrer E-Mail-Änderung wurde an die neue Adresse gesendet."
+
+#: lib/claper_web/live/user_settings_live/show.ex:33
+msgid "Change the email address you want associated with your account."
+msgstr "Ändern Sie die E-Mail-Adresse, die Sie mit Ihrem Konto verknüpfen möchten."
+
+#: lib/claper_web/live/user_settings_live/show.ex:30
+msgid "Update your email"
+msgstr "Ihre E-Mail ändern"
+
+#: lib/claper_web/notifiers/user_notifier.ex:12
+#: lib/claper_web/templates/user_notifier/magic.html.heex:17
+msgid "Connect to Claper"
+msgstr "Einloggen zu Claper"
+
+#: lib/claper_web/templates/user_notifier/magic.html.heex:29
+msgid "ACCESS TO MY ACCOUNT"
+msgstr "ZUGANG ZU MEINEM KONTO"
+
+#: lib/claper_web/notifiers/user_notifier.ex:34
+msgid "Update email instructions"
+msgstr "Email-Einweisung ändern"
+
+#: lib/claper_web/templates/user_notifier/change.html.heex:29
+msgid "CONFIRM EMAIL"
+msgstr "E-MAIL BESTÄTIGEN"
+
+#: lib/claper_web/templates/user_notifier/change.html.heex:17
+msgid "Confirm email"
+msgstr "E-Mail bestätigen"
+
+#: lib/claper_web/templates/user_notifier/change.html.heex:32
+#: lib/claper_web/templates/user_notifier/magic.html.heex:32
+msgid "If you didn't create an account with us, please ignore this."
+msgstr "Wenn Sie kein Konto bei uns erstellt haben, ignorieren Sie dies bitte."
+
+#: lib/claper_web/templates/user_notifier/magic.html.heex:22
+msgid "You can log into your account by clicking here."
+msgstr "Sie können sich bei Ihrem Konto anmelden, indem Sie hier klicken."
+
+#: lib/claper_web/live/event_live/event_form_component.html.heex:34
+#: lib/claper_web/live/event_live/post_component.ex:34
+#: lib/claper_web/live/event_live/post_component.ex:99
+msgid "Are you sure?"
+msgstr "Sind Sie sicher?"
+
+#: lib/claper_web/live/event_live/event_form_component.html.heex:147
+msgid "Presentation attached"
+msgstr "Präsentation angehängt"
+
+#: lib/claper_web/live/event_live/event_form_component.html.heex:107
+msgid "Presentation uploaded"
+msgstr "Präsentation hochgeladen"
+
+#: lib/claper_web/live/event_live/event_form_component.html.heex:118
+#: lib/claper_web/live/event_live/event_form_component.html.heex:196
+#: lib/claper_web/live/event_live/event_form_component.html.heex:321
+#: lib/claper_web/live/event_live/event_form_component.html.heex:344
+msgid "Remove"
+msgstr "Entfernen"
+
+#: lib/claper_web/live/event_live/event_form_component.html.heex:45
+#: lib/claper_web/live/event_live/event_form_component.html.heex:128
+msgid "Select your presentation"
+msgstr "Wählen Sie Ihre Präsentation"
+
+#: lib/claper_web/live/event_live/event_form_component.html.heex:72
+msgid "Upload a file"
+msgstr "Datei hochladen"
+
+#: lib/claper_web/live/event_live/event_form_component.html.heex:76
+msgid "or drag and drop"
+msgstr "oder drag and drop"
+
+#: lib/claper_web/live/event_live/event_form_component.ex:214
+msgid "You have selected an incorrect file type"
+msgstr "Sie haben einen falschen Dateityp ausgewählt"
+
+#: lib/claper_web/live/event_live/event_form_component.ex:213
+msgid "Your file is too large"
+msgstr "Ihre Datei ist zu groß"
+
+#: lib/claper_web/live/event_live/event_form_component.html.heex:157
+msgid "Change file"
+msgstr "Datei ändern"
+
+#: lib/claper_web/live/event_live/event_form_component.html.heex:183
+msgid "Presentation replaced"
+msgstr "Präsentation ersetzt"
+
+#: lib/claper_web/live/event_live/manage.html.heex:256
+msgid "Edit poll"
+msgstr "Umfrage bearbeiten"
+
+#: lib/claper_web/live/event_live/manage.html.heex:255
+msgid "New poll"
+msgstr "Neue Umfrage"
+
+#: lib/claper_web/live/poll_live/form_component.html.heex:14
+msgid "Title of your poll"
+msgstr "Titel Ihrer Umfrage"
+
+#: lib/claper_web/live/event_live/event_form_component.ex:215
+msgid "Upload failed"
+msgstr "Hochladen fehlgeschlagen"
+
+#: lib/claper_web/live/event_live/manage.html.heex:176
+msgid "Add poll to know opinion of your public."
+msgstr "Fügen Sie eine Umfrage hinzu, um die Meinung Ihres Publikums zu erfahren."
+
+#: lib/claper_web/live/event_live/manage.html.heex:174
+#: lib/claper_web/live/event_live/manage.html.heex:395
+msgid "Poll"
+msgstr "Umfrage"
+
+#: lib/claper_web/live/poll_live/form_component.html.heex:35
+msgid "Choice %{count}"
+msgid_plural "Choice %{count}"
+msgstr[0] "Wahl %{count}"
+msgstr[1] "Wähle %{count}"
+
+#: lib/claper_web/live/event_live/poll_component.ex:47
+msgid "Current poll"
+msgstr "Aktuelle Umfrage"
+
+#: lib/claper_web/live/event_live/poll_component.ex:28
+msgid "See current poll"
+msgstr "Aktuelle Umfrage anzeigen"
+
+#: lib/claper_web/live/event_live/poll_component.ex:107
+#: lib/claper_web/live/event_live/poll_component.ex:115
+msgid "Vote"
+msgstr "Abstimmen"
+
+#: lib/claper_web/live/event_live/index.html.heex:70
+msgid "Invited presentations"
+msgstr "Vorstellung eingeladet"
+
+#: lib/claper_web/live/event_live/event_form_component.html.heex:311
+#: lib/claper_web/live/event_live/event_form_component.html.heex:328
+msgid "User email address"
+msgstr "Benutzer Email-Adresse"
+
+#: lib/claper_web/live/event_live/event_card_component.ex:90
+msgid "Present/Customize"
+msgstr "Vorstellen/Ändern"
+
+#: lib/claper_web/live/event_live/manage.html.heex:408
+#: lib/claper_web/live/event_live/manage.html.heex:484
+msgid "Active"
+msgstr "Aktiv"
+
+#: lib/claper_web/live/event_live/event_form_component.html.heex:162
+msgid "Changing your file will remove all interaction elements like polls associated."
+msgstr "Wenn Sie Ihre Datei ändern, werden alle damit verbundenen Interaktionselemente wie Umfragen entfernt."
+
+#: lib/claper_web/live/event_live/manage.html.heex:584
+msgid "Messages from attendees will appear here."
+msgstr "Nachrichten von Teilnehmern werden hier erscheinen."
+
+#: lib/claper_web/live/event_live/manage.html.heex:764
+msgid "On screen settings"
+msgstr "Bildschirmeinstellungen"
+
+#: lib/claper_web/live/event_live/event_card_component.ex:139
+msgid "Processing your file..."
+msgstr "Verarbeitung der Datei..."
+
+#: lib/claper_web/live/poll_live/form_component.html.heex:106
+msgid "This will delete all responses associated and the poll itself, are you sure?"
+msgstr "Dadurch werden alle zugehörigen Antworten und die Umfrage selbst gelöscht, sind Sie sicher?"
+
+#: lib/claper_web/live/event_live/manage.html.heex:112
+msgid "Start"
+msgstr "Start"
+
+#: lib/claper_web/live/event_live/manage.html.heex:88
+msgid "Press <strong>F</strong> in the presentation window to enable fullscreen"
+msgstr "Drücken Sie <strong>F</strong> im Präsentationsfenster, um den Vollbildmodus zu aktivieren"
+
+#: lib/claper_web/live/event_live/show.html.heex:153
+msgid "Ask, comment..."
+msgstr "Fragen, kommentieren..."
+
+#: lib/claper_web/live/event_live/manage.html.heex:556
+#: lib/claper_web/live/stat_live/index.html.heex:71
+msgid "Messages"
+msgstr "Nachrichten"
+
+#: lib/claper_web/live/event_live/manage.html.heex:416
+#: lib/claper_web/live/event_live/manage.html.heex:492
+msgid "Set active"
+msgstr "Aktivieren"
+
+#: lib/claper_web/live/event_live/event_form_component.html.heex:293
+msgid "Add facilitator"
+msgstr "Moderator hinzufügen"
+
+#: lib/claper_web/templates/error/404.html.heex:40
+msgid "Oops, page doesn't exist."
+msgstr "Hoppla, Seite existiert nicht."
+
+#: lib/claper_web/templates/error/500.html.heex:40
+msgid "The site is under maintenance, we'll be back very soon!"
+msgstr "Die Seite wird gerade gewartet, wir sind bald wieder da!"
+
+#: lib/claper_web/live/event_live/event_form_component.html.heex:273
+msgid "Facilitators can present and manage interactions"
+msgstr "Moderatoren können präsentieren und Interaktionen steuern"
+
+#: lib/claper_web/templates/user_notifier/change.html.heex:42
+#: lib/claper_web/templates/user_notifier/magic.html.heex:42
+msgid "If you’re having trouble with the button above, copy and paste the URL below into your web browser"
+msgstr "Wenn Sie Probleme mit der obigen Schaltfläche haben, kopieren Sie die folgende URL und fügen Sie sie in Ihren Webbrowser ein"
+
+#: lib/claper_web/templates/user_notifier/change.html.heex:22
+msgid "You can change your email by visiting the URL below"
+msgstr "Sie können Ihre E-Mail-Adresse ändern, indem Sie die folgende URL aufrufen"
+
+#: lib/claper_web/live/event_live/manage.html.heex:525
+msgid "Add interaction"
+msgstr "Interaktion hinzufügen"
+
+#: lib/claper_web/live/event_live/manage.html.heex:607
+#: lib/claper_web/live/event_live/manage.html.heex:622
+msgid "Blocking this user will delete all his messages and he will not be able to join again, confirm ?"
+msgstr "Wenn Sie diesen Benutzer sperren, werden alle seine Nachrichten gelöscht, und er kann nicht mehr beitreten. Bestätigen?"
+
+#: lib/claper_web/live/event_live/show.ex:50
+#: lib/claper_web/live/event_live/show.ex:196
+#: lib/claper_web/live/event_live/show.ex:211
+msgid "You have been banned from this event"
+msgstr "Sie wurden von dieser Veranstaltung ausgeschlossen"
+
+#: lib/claper_web/live/event_live/manage.html.heex:601
+#: lib/claper_web/live/event_live/manage.html.heex:616
+msgid "Ban"
+msgstr "Ban"
+
+#: lib/claper_web/templates/user_registration/confirm.html.heex:18
+msgid ", click on the provided link to connect (check your spam !)"
+msgstr ", klicken Sie auf den angegebenen Link, um sich zu verbinden (überprüfen Sie Ihren Spam!)"
+
+#: lib/claper_web/templates/user_notifier/welcome.html.heex:29
+msgid "<span style='font-weight: 700'>Export your current presentation</span> to PDF from your favorite slide presentation software (PowerPoint, etc)"
+msgstr "<span style='font-weight: 700'>Exportieren Sie Ihre aktuelle Präsentation</span> als PDF aus Ihrer bevorzugten Präsentations-Software (PowerPoint, etc.)"
+
+#: lib/claper_web/templates/user_notifier/welcome.html.heex:50
+msgid "<span style='font-weight: 700'>Wait few minutes</span> for your file to be processed"
+msgstr "<span style='font-weight: 700'>Warten Sie einige Minuten</span>, bis Ihre Datei verarbeitet ist"
+
+#: lib/claper_web/templates/user_notifier/welcome.html.heex:43
+msgid "Choose <span style='font-weight: 700'>a name</span> for your event, <span style='font-weight: 700'>a code</span> for your attendees to join and <span style='font-weight: 700'>dates when your attendees could start interacting</span>"
+msgstr "Wählen Sie <span style='font-weight: 700'>einen Namen</span> für Ihre Veranstaltung, <span style='font-weight: 700'>einen Code</span> für den Beitritt der Teilnehmer und <span style ='font-weight: 700'>das Datum, ab dem Ihre Teilnehmer mit der Interaktion beginnen könnten</span>"
+
+#: lib/claper_web/templates/user_notifier/welcome.html.heex:64
+msgid "Click <span style='font-weight: 700'>Start</span> to open your presentation and move the window on the big screen"
+msgstr "Klicken Sie auf <span style='font-weight: 700'>Start</span>, um Ihre Präsentation zu öffnen und verschieben das Fenster auf den großen Bildschirm"
+
+#: lib/claper_web/templates/user_notifier/welcome.html.heex:57
+msgid "Click on <span style='font-weight: 700'>Present/Customize</span> to add interaction on your slides"
+msgstr "Klicken Sie auf <span style='font-weight: 700'>Präsentieren/Anpassen</span>, um Ihren Folien Interaktion hinzuzufügen"
+
+#: lib/claper_web/templates/user_notifier/welcome.html.heex:22
+msgid "Congrats! You've taken the first step to improving your presentations. Here are the next steps to create step up your presentations with Claper:"
+msgstr "Herzlichen Glückwunsch! Sie haben den ersten Schritt zur Verbesserung Ihrer Präsentationen getan. Hier sind die nächsten Schritte, um Ihre Präsentationen mit Claper noch besser zu gestalten:"
+
+#: lib/claper_web/templates/user_notifier/welcome.html.heex:69
+msgid "Enjoy ! ✨"
+msgstr "Viel Spaß! ✨"
+
+#: lib/claper_web/templates/user_registration/confirm.html.heex:20
+msgid "We sent you an email, click on the provided link to connect (check your spam !)"
+msgstr "Wir haben Ihnen eine E-Mail geschickt, klicken Sie auf den angegebenen Link, um sich zu verbinden (überprüfen Sie Ihren Spam!)"
+
+#: lib/claper_web/templates/user_notifier/welcome.html.heex:17
+msgid "Welcome !"
+msgstr "Willkommen!"
+
+#: lib/claper_web/templates/user_notifier/welcome.html.heex:36
+msgid "Click on the <span style='font-weight: 700'>create button</span> on your dashboard"
+msgstr "Klicken Sie auf die Schaltfläche <span style='font-weight: 700'>Erstellen</span> in Ihrem Dashboard"
+
+#: lib/claper_web/notifiers/user_notifier.ex:23
+msgid "Next steps to boost your presentations"
+msgstr "Nächste Schritte zur Verbesserung Ihrer Präsentationen"
+
+#: lib/claper_web/live/stat_live/index.html.heex:78
+msgid "from %{count} people"
+msgid_plural "from %{count} peoples"
+msgstr[0] "von %{count} Personen"
+msgstr[1] "von %{count} Personen"
+
+#: lib/claper_web/live/stat_live/index.html.heex:115
+msgid "from %{count} poll"
+msgid_plural "from %{count} polls"
+msgstr[0] "von %{count} Umfrage"
+msgstr[1] "von %{count} Umfragen"
+
+#: lib/claper_web/live/stat_live/index.html.heex:108
+msgid "Average voters"
+msgstr "Durchschnittliche Wähler"
+
+#: lib/claper_web/live/stat_live/index.html.heex:15
+msgid "Event"
+msgstr "Veranstaltung"
+
+#: lib/claper_web/live/stat_live/index.html.heex:158
+msgid "Interactions history"
+msgstr "Interaktionsgeschichte"
+
+#: lib/claper_web/live/stat_live/index.html.heex:260
+msgid "No messages has been sent"
+msgstr "Es wurden keine Nachrichten gesendet"
+
+#: lib/claper_web/live/event_live/event_card_component.ex:166
+msgid "Report"
+msgstr "Bericht"
+
+#: lib/claper_web/live/event_live/event_card_component.ex:177
+msgid "This will delete all data related to your event, this cannot be undone. Confirm ?"
+msgstr "Dadurch werden alle Daten im Zusammenhang mit Ihrer Veranstaltung gelöscht. Dies kann nicht rückgängig gemacht werden. Bestätigen?"
+
+#: lib/claper_web/live/stat_live/index.html.heex:45
+msgid "attendee"
+msgid_plural "attendees"
+msgstr[0] "Teilnehmer"
+msgstr[1] "Teilnehmer"
+
+#: lib/claper_web/live/stat_live/index.html.heex:38
+msgid "Audience peak"
+msgstr "Max. Zuschauer"
+
+#: lib/claper_web/live/stat_live/index.html.heex:146
+msgid "Engagement rate"
+msgstr "Engagementquote"
+
+#: lib/claper_web/live/event_live/event_card_component.ex:119
+msgid "Error when processing the file"
+msgstr "Fehler beim Verarbeiten der Datei"
+
+#: lib/claper_web/live/event_live/event_card_component.ex:71
+msgid "Error when processing the new file"
+msgstr "Fehler beim Verarbeiten der neuen Datei"
+
+#: lib/claper_web/live/event_live/join.html.heex:23
+#: lib/claper_web/live/event_live/join.html.heex:44
+msgid "About"
+msgstr "Über"
+
+#: lib/claper_web/live/event_live/join.html.heex:32
+#: lib/claper_web/live/event_live/join.html.heex:53
+#: lib/claper_web/templates/user_session/new.html.heex:66
+msgid "Login"
+msgstr "Anmeldung"
+
+#: lib/claper_web/templates/user_session/new.html.heex:25
+msgid "Connect to your account"
+msgstr "Verbinden Sie sich mit Ihrem Konto"
+
+#: lib/claper_web/live/event_live/presenter.html.heex:33
+#: lib/claper_web/live/event_live/show.html.heex:285
+msgid "Or use the code:"
+msgstr "Oder verwenden Sie den Code:"
+
+#: lib/claper_web/templates/user_registration/new.html.heex:51
+#: lib/claper_web/templates/user_session/new.html.heex:73
+msgid "Create account"
+msgstr "Benutzerkonto erstellen"
+
+#: lib/claper_web/live/user_settings_live/show.html.heex:116
+#: lib/claper_web/templates/user_registration/new.html.heex:42
+#: lib/claper_web/templates/user_session/new.html.heex:57
+msgid "Password"
+msgstr "Passwort"
+
+#: lib/claper_web/templates/user_session/new.html.heex:45
+msgid "Your email address"
+msgstr "Ihre E-Mail-Adresse"
+
+#: lib/claper_web/templates/user_session/new.html.heex:55
+msgid "Your password"
+msgstr "Ihr Passwort"
+
+#: lib/claper_web/live/user_settings_live/show.ex:42
+msgid "Change the password used to access your account."
+msgstr "Ändern Sie das Passwort, mit dem Sie auf Ihr Konto zugreifen."
+
+#: lib/claper_web/live/user_settings_live/show.html.heex:70
+msgid "Current password"
+msgstr "Aktuelles Passwort"
+
+#: lib/claper_web/live/user_settings_live/show.html.heex:76
+msgid "New password"
+msgstr "Neues Kennwort"
+
+#: lib/claper_web/live/user_settings_live/show.ex:39
+msgid "Update your password"
+msgstr "Aktualisieren Sie Ihr Passwort"
+
+#: lib/claper_web/live/user_settings_live/show.ex:91
+msgid "Your password has been updated."
+msgstr "Dein Passwort wurde aktualisiert."
+
+#: lib/claper_web/live/form_live/form_component.html.heex:30
+msgid "Field %{count}"
+msgid_plural "Field %{count}"
+msgstr[0] "Feld %{count}"
+msgstr[1] "Feld %{count}"
+
+#: lib/claper_web/live/event_live/manage.html.heex:213
+msgid "Add form to collect data from your public."
+msgstr "Fügen Sie ein Formular hinzu, um Daten von Ihrem Publikum zu sammeln."
+
+#: lib/claper_web/live/event_live/form_component.ex:51
+msgid "Current form"
+msgstr "Aktuelles Formular"
+
+#: lib/claper_web/live/event_live/manage.html.heex:277
+msgid "Edit form"
+msgstr "Formular bearbeiten"
+
+#: lib/claper_web/live/event_live/manage.html.heex:211
+#: lib/claper_web/live/event_live/manage.html.heex:471
+#: lib/claper_web/live/stat_live/index.html.heex:215
+msgid "Form"
+msgstr "Formular"
+
+#: lib/claper_web/live/event_live/manage.html.heex:559
+msgid "Form submissions"
+msgstr "Abgeschickte Formulare"
+
+#: lib/claper_web/live/event_live/manage.html.heex:705
+msgid "Form submissions from attendees will appear here."
+msgstr "Formulareinsendungen der Teilnehmer werden hier angezeigt."
+
+#: lib/claper_web/live/event_live/manage.ex:437
+msgid "Name"
+msgstr "Name"
+
+#: lib/claper_web/live/event_live/manage.html.heex:276
+msgid "New form"
+msgstr "Neues Formular"
+
+#: lib/claper_web/live/stat_live/index.html.heex:225
+msgid "No form submission has been sent"
+msgstr "Es wurde kein Formular gesendet"
+
+#: lib/claper_web/live/event_live/form_component.ex:32
+msgid "See current form"
+msgstr "Siehe aktuelles Formular"
+
+#: lib/claper_web/live/event_live/form_component.ex:96
+msgid "Submit"
+msgstr "Abschicken"
+
+#: lib/claper_web/live/form_live/form_component.html.heex:37
+msgid "Text"
+msgstr "Text"
+
+#: lib/claper_web/live/event_live/manage.html.heex:730
+msgid "This cannot be undone, confirm ?"
+msgstr "Dies kann nicht rückgängig gemacht werden. Bestätigen?"
+
+#: lib/claper_web/live/form_live/form_component.html.heex:110
+msgid "This will delete all responses associated and the form itself, are you sure?"
+msgstr "Dadurch werden alle zugehörigen Antworten und das Formular selbst gelöscht. Sind Sie sicher?"
+
+#: lib/claper_web/live/form_live/form_component.html.heex:14
+msgid "Title of your form"
+msgstr "Titel Ihres Formulars"
+
+#: lib/claper_web/live/form_live/form_component.html.heex:40
+msgid "Type"
+msgstr "Typ"
+
+#: lib/claper_web/live/stat_live/index.html.heex:220
+msgid "Export all submissions"
+msgstr "Alle Einsendungen exportieren"
+
+#: lib/claper_web/live/event_live/poll_component.ex:52
+msgid "Select one option"
+msgstr "Wählen Sie eine Option aus"
+
+#: lib/claper_web/live/event_live/poll_component.ex:50
+msgid "Select one or multiple options"
+msgstr "Wählen Sie eine oder mehrere Optionen aus"
+
+#: lib/claper_web/live/poll_live/form_component.html.heex:24
+msgid "Multiple answers"
+msgstr "Mehrere Antworten"
+
+#: lib/claper_web/live/event_live/manage.html.heex:244
+msgid "Import all interactions from another presentation"
+msgstr "Importieren Sie alle Interaktionen aus einer anderen Präsentation"
+
+#: lib/claper_web/live/event_live/manage.ex:181
+msgid "Interactions import failed"
+msgstr "Der Import der Interaktionen ist fehlgeschlagen"
+
+#: lib/claper_web/live/event_live/manage.ex:174
+msgid "Interactions imported successfully"
+msgstr "Interaktionen erfolgreich importiert"
+
+#: lib/claper_web/live/event_live/manage.html.heex:295
+msgid "Select presentation"
+msgstr "Präsentation auswählen"
+
+#: lib/claper_web/live/event_live/event_form_component.html.heex:78
+msgid "PDF, PPT, PPTX up to %{size} MB"
+msgstr "PDF, PPT, PPTX bis zu %{size} MB"
+
+#: lib/claper_web/live/event_live/manage.html.heex:790
+msgid "Attendees settings"
+msgstr "Teilnehmereinstellungen"
+
+#: lib/claper_web/live/event_live/manage.html.heex:797
+msgid "Enable messages"
+msgstr "Nachrichten aktivieren"
+
+#: lib/claper_web/live/event_live/manage.html.heex:771
+msgid "Show instructions"
+msgstr "Anleitung anzeigen"
+
+#: lib/claper_web/live/event_live/manage.html.heex:776
+msgid "Show messages"
+msgstr "Nachrichten anzeigen"
+
+#: lib/claper_web/live/event_live/manage.html.heex:785
+msgid "Show poll results"
+msgstr "Umfrageergebnisse anzeigen"
+
+#: lib/claper_web/live/event_live/show.html.heex:179
+msgid "Messages deactivated"
+msgstr "Nachrichten deaktiviert"
+
+#: 
 msgid "can't be blank"
 msgstr "darf nicht leer sein"
 
+#: 
 msgid "has already been taken"
 msgstr "ist bereits vergeben"
 
+#: 
 msgid "is invalid"
 msgstr "ist ungültig"
 
+#: 
 msgid "must be accepted"
 msgstr "muss akzeptiert werden"
 
+#: 
 msgid "has invalid format"
 msgstr "hat ein ungültiges Format"
 
+#: 
 msgid "has an invalid entry"
 msgstr "hat einen ungültigen Eintrag"
 
+#: 
 msgid "is reserved"
 msgstr "ist reserviert"
 
+#: 
 msgid "does not match confirmation"
 msgstr "stimmt nicht mit der Bestätigung überein"
 
+#: 
 msgid "is still associated with this entry"
 msgstr "ist immer noch mit diesem Eintrag verknüpft"
 
+#: 
 msgid "are still associated with this entry"
 msgstr "sind noch mit diesem Eintrag verknüpft"
 
+#: 
 msgid "should be %{count} character(s)"
 msgid_plural "should be %{count} character(s)"
-msgstr[0] "sollte %{count} Zeichen sein"
-msgstr[1] "sollte %{count} Zeichen sein"
+msgstr[0] "sollte %{count} Zeichen lang sein"
+msgstr[1] "sollte %{count} Zeichen lang sein"
 
+#: 
 msgid "should have %{count} item(s)"
 msgid_plural "should have %{count} item(s)"
 msgstr[0] "sollte %{count} item(s) haben"
 msgstr[1] "sollte %{count} item(s) haben"
 
+#: 
 msgid "should be at least %{count} character(s)"
 msgid_plural "should be at least %{count} character(s)"
-msgstr[0] "sollte mindestens %{count} Zeichen umfassen"
-msgstr[1] "sollte mindestens %{count} Zeichen umfassen"
+msgstr[0] "sollte mindestens %{count} Zeichen lang sein"
+msgstr[1] "sollte mindestens %{count} Zeichen lang sein"
 
+#: 
 msgid "should have at least %{count} item(s)"
 msgid_plural "should have at least %{count} item(s)"
 msgstr[0] "sollte mindestens %{count} item(s) haben"
 msgstr[1] "sollte mindestens %{count} item(s) haben"
 
+#: 
 msgid "should be at most %{count} character(s)"
 msgid_plural "should be at most %{count} character(s)"
 msgstr[0] "sollte höchstens %{count} Zeichen lang sein"
 msgstr[1] "sollte höchstens %{count} Zeichen lang sein"
 
+#: 
 msgid "should have at most %{count} item(s)"
 msgid_plural "should have at most %{count} item(s)"
 msgstr[0] "sollte höchstens %{count} item(s) haben"
 msgstr[1] "sollte höchstens %{count} item(s) haben"
 
+#: 
 msgid "must be less than %{number}"
 msgstr "muss kleiner sein als %{number}"
 
+#: 
 msgid "must be greater than %{number}"
 msgstr "muss größer sein als %{number}"
 
+#: 
 msgid "must be less than or equal to %{number}"
 msgstr "muss kleiner oder gleich %{number} sein"
 
+#: 
 msgid "must be greater than or equal to %{number}"
 msgstr "muss größer oder gleich %{number} sein"
 
+#: 
 msgid "must be equal to %{number}"
 msgstr "muss gleich %{number} sein"
+
