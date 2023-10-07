@@ -26,7 +26,7 @@
         data-dynamic="true"
         id="qr"
         phx-update="ignore"
-        class="rounded-lg mx-auto bg-white flex items-center justify-center mb-14"
+        class="rounded-lg mx-auto flex items-center justify-center mb-14"
       >
       </div>
       <span class="font-semibold mb-10 sm:text-3xl md:text-4xl lg:text-6xl">
@@ -80,7 +80,7 @@
     >
       <%= for post <- @posts do %>
         <div class={if post.__meta__.state == :deleted, do: "hidden"} id={"#{post.id}-post"}>
-          <div class="px-4 pb-2 pt-3 rounded-b-lg rounded-tr-lg bg-white shadow-md text-black break-all mt-4">
+          <div class="px-4 pb-2 pt-3 rounded-b-lg rounded-tr-lg bg-white shadow-md text-black break-word mt-4">
             <%= if post.name do %>
               <p class="text-gray-400 text-lg font-semibold mb-2 mr-2"><%= post.name %></p>
             <% end %>
@@ -115,7 +115,7 @@
     <!-- SLIDES -->
     <div id="slider" phx-update="ignore">
       <%= for index <- 1..@event.presentation_file.length do %>
-        <%= if System.get_env("PRESENTATION_STORAGE", "local") == "local" do %>
+        <%= if Application.get_env(:claper, :presentations) |> Keyword.get(:storage) == "local" do %>
           <img
             class="w-1/3 max-h-screen mx-auto"
             src={"/uploads/#{@event.presentation_file.hash}/#{index}.jpg"}
@@ -123,7 +123,7 @@
         <% else %>
           <img
             class="w-full max-h-screen mx-auto inline-block"
-            src={"https://#{System.get_env("AWS_PRES_BUCKET")}.s3.#{System.get_env("AWS_REGION")}.amazonaws.com/presentations/#{@event.presentation_file.hash}/#{index}.jpg"}
+            src={"https://#{Application.get_env(:claper, :presentations) |> Keyword.get(:aws_bucket)}.s3.#{Application.get_env(:ex_aws, :region)}.amazonaws.com/presentations/#{@event.presentation_file.hash}/#{index}.jpg"}
           />
         <% end %>
       <% end %>

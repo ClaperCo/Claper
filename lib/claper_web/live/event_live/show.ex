@@ -89,7 +89,7 @@ defmodule ClaperWeb.EventLive.Show do
       |> check_leader(event)
       |> leader_list(event)
 
-    {:ok, socket |> assign(:empty_room, Enum.count(socket.assigns.posts) == 0),
+    {:ok, socket |> assign(:empty_room, Enum.empty?(socket.assigns.posts)),
      temporary_assigns: [posts: []]}
   end
 
@@ -114,7 +114,9 @@ defmodule ClaperWeb.EventLive.Show do
   defp check_leader(socket, _event), do: socket |> assign(:is_leader, false)
 
   defp starting_soon_assigns(socket, event) do
-    if not Claper.Events.Event.started?(event) do
+    if Claper.Events.Event.started?(event) do
+      socket |> assign(:started, true)
+    else
       :timer.send_interval(1000, self(), :tick)
 
       diff =
@@ -130,13 +132,11 @@ defmodule ClaperWeb.EventLive.Show do
         |> assign(:diff, diff)
         |> assign(:started, false)
       end
-    else
-      socket |> assign(:started, true)
     end
   end
 
   defp seconds_to_d_h_m_s(seconds) do
-    {div(seconds, 86400), rem(seconds, 86400) |> div(3600), rem(seconds, 3600) |> div(60),
+    {div(seconds, 86_400), rem(seconds, 86_400) |> div(3600), rem(seconds, 3600) |> div(60),
      rem(seconds, 3600) |> rem(60)}
   end
 
@@ -374,7 +374,6 @@ defmodule ClaperWeb.EventLive.Show do
         {:noreply, socket |> assign(:nickname, post_params["name"])}
 
       false ->
-        IO.inspect(changeset)
         {:noreply, assign(socket, post_changeset: %{changeset | action: :insert})}
     end
   end

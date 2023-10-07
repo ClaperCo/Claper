@@ -1,4 +1,7 @@
 defmodule ClaperWeb.Component.Input do
+  @moduledoc """
+    Input component for forms
+  """
   use ClaperWeb, :view_component
 
   def text(assigns) do

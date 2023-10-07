@@ -8,6 +8,10 @@ Each presentation has a unique hash that is generated in two steps, first with `
 
 The local storage is the default storage option. It stores the presentations in the `priv/static/uploads/[hash]` folder.
 
+You can change the directory where the presentations are stored by changing the `PRESENTATION_STORAGE_DIR` variable in the `.env` file.
+
+The `uploads` folder will be created automatically if it doesn't exist.
+
 ## S3 storage
 
 You can use S3 storage to store your presentations.

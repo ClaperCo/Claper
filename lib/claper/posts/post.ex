@@ -33,7 +33,7 @@ defmodule Claper.Posts.Post do
       :position
     ])
     |> validate_required([:body, :position])
-    |> validate_length(:body, min: 2, max: 250)
+    |> validate_length(:body, min: 2, max: 255)
   end
 
   def nickname_changeset(post, attrs) do

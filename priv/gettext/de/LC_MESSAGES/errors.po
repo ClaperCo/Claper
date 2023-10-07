@@ -1,13 +1,12 @@
-##
-## Do not add, change, or remove `msgid`s manually here as
-## they're tied to the ones in the corresponding POT file
-## (with the same domain).
-##
-## Use `mix gettext.extract --merge` or `mix gettext.merge`
-## to merge POT files into PO files.
 msgid ""
 msgstr ""
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: POEditor.com\n"
+"Project-Id-Version: Claper\n"
 "Language: de\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 msgid "can't be blank"
 msgstr "darf nicht leer sein"
@@ -41,8 +40,8 @@ msgstr "sind noch mit diesem Eintrag verknüpft"
 
 msgid "should be %{count} character(s)"
 msgid_plural "should be %{count} character(s)"
-msgstr[0] "sollte %{count} Zeichen sein"
-msgstr[1] "sollte %{count} Zeichen sein"
+msgstr[0] "sollte %{count} Zeichen lang sein"
+msgstr[1] "sollte %{count} Zeichen lang sein"
 
 msgid "should have %{count} item(s)"
 msgid_plural "should have %{count} item(s)"
@@ -51,8 +50,8 @@ msgstr[1] "sollte %{count} item(s) haben"
 
 msgid "should be at least %{count} character(s)"
 msgid_plural "should be at least %{count} character(s)"
-msgstr[0] "sollte mindestens %{count} Zeichen umfassen"
-msgstr[1] "sollte mindestens %{count} Zeichen umfassen"
+msgstr[0] "sollte mindestens %{count} Zeichen lang sein"
+msgstr[1] "sollte mindestens %{count} Zeichen lang sein"
 
 msgid "should have at least %{count} item(s)"
 msgid_plural "should have at least %{count} item(s)"

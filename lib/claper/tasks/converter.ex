@@ -27,8 +27,7 @@ defmodule Claper.Tasks.Converter do
 
     path =
       Path.join([
-        :code.priv_dir(:claper),
-        "static",
+        get_presentation_storage_dir(),
         "uploads",
         "#{hash}"
       ])
@@ -46,22 +45,21 @@ defmodule Claper.Tasks.Converter do
   def clear(hash) do
     IO.puts("Clearing #{hash}...")
 
-    if System.get_env("PRESENTATION_STORAGE", "local") == "local" do
+    if get_presentation_storage() == "local" do
       File.rm_rf(
         Path.join([
-          :code.priv_dir(:claper),
-          "static",
+          get_presentation_storage_dir(),
           "uploads",
           "#{hash}"
         ])
       )
     else
       stream =
-        ExAws.S3.list_objects(System.get_env("AWS_PRES_BUCKET"), prefix: "presentations/#{hash}")
+        ExAws.S3.list_objects(get_aws_bucket(), prefix: "presentations/#{hash}")
         |> ExAws.stream!()
         |> Stream.map(& &1.key)
 
-      ExAws.S3.delete_all_objects(System.get_env("AWS_PRES_BUCKET"), stream) |> ExAws.request()
+      ExAws.S3.delete_all_objects(get_aws_bucket(), stream) |> ExAws.request()
     end
   end
 
@@ -98,7 +96,7 @@ defmodule Claper.Tasks.Converter do
   defp file_to_pdf(_ext, _path, _file), do: %Result{status: 0}
 
   defp pdf_to_jpg(%Result{status: 0}, path, _presentation, _user_id) do
-    resolution = System.get_env("GS_JPG_RESOLUTION", "300x300")
+    resolution = get_resolution()
 
     Porcelain.exec(
       "gs",
@@ -123,17 +121,15 @@ defmodule Claper.Tasks.Converter do
     # assign new hash to avoid cache issues
     new_hash = :erlang.phash2("#{hash}-#{System.system_time(:second)}")
 
-    if System.get_env("PRESENTATION_STORAGE", "local") == "local" do
+    if get_presentation_storage() == "local" do
       File.rename(
         Path.join([
-          :code.priv_dir(:claper),
-          "static",
+          get_presentation_storage_dir(),
           "uploads",
           "#{hash}"
         ]),
         Path.join([
-          :code.priv_dir(:claper),
-          "static",
+          get_presentation_storage_dir(),
           "uploads",
           "#{new_hash}"
         ])
@@ -145,7 +141,7 @@ defmodule Claper.Tasks.Converter do
         f
         |> S3.Upload.stream_file()
         |> S3.upload(
-          System.get_env("AWS_PRES_BUCKET"),
+          get_aws_bucket(),
           "presentations/#{new_hash}/#{Path.basename(f)}",
           acl: "public-read"
         )
@@ -171,7 +167,7 @@ defmodule Claper.Tasks.Converter do
              "length" => length,
              "status" => "done"
            }) do
-      unless System.get_env("PRESENTATION_STORAGE", "local") == "local", do: File.rm_rf!(path)
+      unless get_presentation_storage() == "local", do: File.rm_rf!(path)
 
       Phoenix.PubSub.broadcast(
         Claper.PubSub,
@@ -194,5 +190,21 @@ defmodule Claper.Tasks.Converter do
         {:presentation_file_process_done, presentation}
       )
     end
+  end
+
+  defp get_presentation_storage do
+    Application.get_env(:claper, :presentations) |> Keyword.get(:storage)
+  end
+
+  defp get_presentation_storage_dir do
+    Application.get_env(:claper, :storage_dir)
+  end
+
+  defp get_aws_bucket do
+    Application.get_env(:claper, :presentations) |> Keyword.get(:aws_bucket)
+  end
+
+  defp get_resolution do
+    Application.get_env(:claper, :presentations) |> Keyword.get(:resolution)
   end
 end

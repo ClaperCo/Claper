@@ -12,7 +12,7 @@
 #   - https://pkgs.org/ - resource for finding needed packages
 #   - Ex: hexpm/elixir:1.13.2-erlang-24.2.1-debian-bullseye-20210902-slim
 #
-ARG BUILDER_IMAGE="hexpm/elixir:1.13.2-erlang-24.2.1-debian-bullseye-20210902-slim"
+ARG BUILDER_IMAGE="hexpm/elixir-arm64:1.13.2-erlang-24.2.1-debian-bullseye-20210902-slim"
 ARG RUNNER_IMAGE="debian:bullseye-20210902-slim"
 
 FROM ${BUILDER_IMAGE} as builder
@@ -99,7 +99,7 @@ RUN mkdir /home/nobody && chown nobody /home/nobody
 
 WORKDIR "/app"
 RUN mkdir /app/uploads
-RUN chown nobody /app
+RUN chown nobody /app -R
 
 # Only copy the final release from the build stage
 COPY --from=builder --chown=nobody:root /app/_build/prod/rel/claper ./

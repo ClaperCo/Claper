@@ -50,7 +50,10 @@
     </div>
 
     <%= if @current_poll do %>
-      <div class="animate__animated animate__zoomInDown w-full lg:w-1/3 lg:mx-auto fixed top-16 z-10 px-2 lg:px-7">
+      <div
+        id="poll-wrapper-parent"
+        class="animate__animated animate__zoomInDown w-full lg:w-1/3 lg:mx-auto fixed top-16 z-10 px-2 lg:px-7 pb-6 max-h-screen overflow-y-auto"
+      >
         <div class="transition-all" id="poll-wrapper">
           <.live_component
             module={ClaperWeb.EventLive.PollComponent}
@@ -67,7 +70,10 @@
     <% end %>
 
     <%= if @current_form do %>
-      <div class="animate__animated animate__zoomInDown w-full lg:w-1/3 lg:mx-auto fixed top-16 z-10 px-2 lg:px-7">
+      <div
+        id="form-wrapper-parent"
+        class="animate__animated animate__zoomInDown w-full lg:w-1/3 lg:mx-auto fixed top-16 z-10 px-2 pb-6 lg:px-7 max-h-screen overflow-y-auto"
+      >
         <div class="transition-all" id="form-wrapper">
           <.live_component
             module={ClaperWeb.EventLive.FormComponent}
@@ -411,7 +417,7 @@
               phx-hook="QRCode"
               id="qr"
               phx-update="ignore"
-              class="rounded-lg mx-auto bg-white w-64 h-64 p-12 flex items-center justify-center mb-14"
+              class="rounded-lg mx-auto bg-black h-64 w-64 p-12 flex items-center justify-center mb-14"
             >
             </div>
             <span class="text-4xl font-semibold mb-10"><%= gettext("Or use the code:") %></span>

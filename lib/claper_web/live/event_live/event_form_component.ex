@@ -96,8 +96,7 @@ defmodule ClaperWeb.EventLive.EventFormComponent do
 
     static_path =
       Path.join([
-        :code.priv_dir(:claper),
-        "static",
+        get_presentation_storage_dir(),
         "uploads",
         "#{hash}"
       ])
@@ -114,7 +113,7 @@ defmodule ClaperWeb.EventLive.EventFormComponent do
                 "original.#{ext}"
               ])
 
-            # The `static/uploads` directory must exist for `File.cp!/2` to work.
+            # The storage directory must exist for `File.cp!/2` to work.
             File.mkdir_p!(static_path)
 
             File.cp!(path, dest)
@@ -124,20 +123,20 @@ defmodule ClaperWeb.EventLive.EventFormComponent do
 
         [ext | _] = MIME.extensions(MIME.from_path(dest))
 
-        if !Map.has_key?(socket.assigns.event.presentation_file, :id) do
+        if Map.has_key?(socket.assigns.event.presentation_file, :id) do
           after_save.(
             socket,
-            Map.put(event_params, "presentation_file", %{
-              "status" => "progress",
-              "presentation_state" => %{}
-            }),
+            event_params,
             hash,
             ext
           )
         else
           after_save.(
             socket,
-            event_params,
+            Map.put(event_params, "presentation_file", %{
+              "status" => "progress",
+              "presentation_state" => %{}
+            }),
             hash,
             ext
           )
@@ -190,17 +189,7 @@ defmodule ClaperWeb.EventLive.EventFormComponent do
            event_params
          ) do
       {:ok, _event} ->
-        if !is_nil(hash) && !is_nil(ext) do
-          Task.Supervisor.async_nolink(Claper.TaskSupervisor, fn ->
-            Claper.Tasks.Converter.convert(
-              socket.assigns.current_user.id,
-              "original.#{ext}",
-              hash,
-              ext,
-              socket.assigns.event.presentation_file.id
-            )
-          end)
-        end
+        handle_file_conversion(socket, hash, ext)
 
         {:noreply,
          socket
@@ -212,14 +201,28 @@ defmodule ClaperWeb.EventLive.EventFormComponent do
     end
   end
 
-  defp get_max_file_size() do
-    case Application.fetch_env!(:claper, :max_file_size) do
-      {:system, env_var, default} ->
-        String.to_integer(System.get_env(env_var) || default)
-
-      direct_value ->
-        direct_value
+  defp handle_file_conversion(socket, hash, ext) do
+    if is_nil(hash) || is_nil(ext) do
+      :ok
+    else
+      Task.Supervisor.async_nolink(Claper.TaskSupervisor, fn ->
+        Claper.Tasks.Converter.convert(
+          socket.assigns.current_user.id,
+          "original.#{ext}",
+          hash,
+          ext,
+          socket.assigns.event.presentation_file.id
+        )
+      end)
     end
+  end
+
+  defp get_max_file_size() do
+    Application.get_env(:claper, :presentations) |> Keyword.get(:max_file_size)
+  end
+
+  defp get_presentation_storage_dir do
+    Application.get_env(:claper, :storage_dir)
   end
 
   def error_to_string(:too_large), do: gettext("Your file is too large")

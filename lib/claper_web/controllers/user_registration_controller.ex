@@ -6,8 +6,14 @@ defmodule ClaperWeb.UserRegistrationController do
   alias ClaperWeb.UserAuth
 
   def new(conn, _params) do
-    changeset = Accounts.change_user_registration(%User{})
-    render(conn, "new.html", changeset: changeset)
+    if Application.get_env(:claper, :enable_account_creation) do
+      changeset = Accounts.change_user_registration(%User{})
+      render(conn, "new.html", changeset: changeset)
+    else
+      conn
+      |> put_flash(:error, gettext("Account creation is disabled"))
+      |> redirect(to: "/")
+    end
   end
 
   def confirm(conn, _params) do

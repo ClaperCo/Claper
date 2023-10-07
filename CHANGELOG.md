@@ -1,3 +1,14 @@
+## v1.6.0
+- Improve QR code readability
+- Add ARM Docker image
+- Refactor all runtime configuration
+- Improve local storage with PRESENTATION_STORAGE_DIR environment variable
+- Fix poll/form panel scroll on mobile
+- Fix message length validation
+- Fix message word break
+- Fix date translations
+- Minor fixes on form management
+
 ## v1.5.0
 
 - Add a nickname feature and toggle button to avoid anonymous messages

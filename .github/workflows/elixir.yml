@@ -31,8 +31,14 @@ jobs:
           --health-retries 5
     env:
       ImageOS: ubuntu20
+      MIX_ENV: test
+      DATABASE_URL: postgresql://claper:claper@localhost:5432/claper
+      SECRET_KEY_BASE: QMQE4ypfy0IC1LZI/fygZNvXHPjLslnr49EE7ftcL1wgAC0MwMLdKCVJyrvXPu8z
+
     steps:
     - uses: actions/checkout@v3
+      with:
+        fetch-depth: 0
     - name: Set up Elixir
       uses: erlef/setup-beam@988e02bfe678367a02564f65ca2e37726dc0268f
       with:
@@ -46,7 +52,9 @@ jobs:
         restore-keys: ${{ runner.os }}-mix-
     - name: Install dependencies
       run: mix deps.get
+    - name: Check Formatting
+      run: mix format --check-formatted
+    - name: Check Credo Warnings
+      run: mix credo diff --from-git-merge-base origin/main
     - name: Run tests
       run: mix test
-    - name: Check format
-      run: mix format --check-formatted
