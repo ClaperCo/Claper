@@ -77,7 +77,7 @@ defmodule ClaperWeb.PollLive.FormComponent do
            poll_params
            |> Map.put("presentation_file_id", socket.assigns.presentation_file.id)
            |> Map.put("position", socket.assigns.position)
-           |> maybe_enable(socket)
+           |> Map.put("enabled", false)
          ) do
       {:ok, poll} ->
         {:noreply,
@@ -103,14 +103,6 @@ defmodule ClaperWeb.PollLive.FormComponent do
   end
 
   defp maybe_change_current_poll(socket, _), do: socket
-
-  defp maybe_enable(poll_params, socket) do
-    has_current_poll =
-      socket.assigns.polls
-      |> Enum.count(fn p -> p.position == socket.assigns.position && p.enabled == true end) > 0
-
-    poll_params |> Map.put("enabled", !has_current_poll)
-  end
 
   defp list_polls(assigns) do
     Polls.list_polls(assigns.presentation_file.id)

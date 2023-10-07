@@ -48,6 +48,7 @@ defmodule ClaperWeb.EventLive.Presenter do
         |> assign(:posts, list_posts(socket, event.uuid))
         |> assign(:reacts, [])
         |> poll_at_position
+        |> form_at_position
 
       {:ok, socket, temporary_assigns: [posts: []]}
     end
@@ -198,6 +199,16 @@ defmodule ClaperWeb.EventLive.Presenter do
              state.position
            ) do
       socket |> assign(:current_poll, poll)
+    end
+  end
+
+  defp form_at_position(%{assigns: %{event: event, state: state}} = socket) do
+    with form <-
+           Claper.Forms.get_form_current_position(
+             event.presentation_file.id,
+             state.position
+           ) do
+      socket |> assign(:current_form, form)
     end
   end
 

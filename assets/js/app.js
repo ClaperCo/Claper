@@ -484,19 +484,6 @@ window.addEventListener("phx:page-loading-stop", info => {
   topbar.hide()
 })
 
-// Used to fix the scroll issue on mobile on poll panel
-window.addEventListener("claper:toggle-poll", (event) => {
-  let extended = document.getElementById("extended-poll")
-  let parent = document.getElementById("poll-wrapper-parent")
-  if (extended.style.display == "block") {
-    parent.classList.add("overflow-y-auto")
-    parent.classList.add("h-full")
-  } else {
-    parent.classList.remove("overflow-y-auto")
-    parent.classList.remove("h-full")
-  }
-})
-
 const renderOnlineUsers = function(presences) {
   let onlineUsers = Presence.list(presences, (_id, {metas: [user, ...rest]}) => {
     return onlineUserTemplate(user);

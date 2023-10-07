@@ -77,7 +77,7 @@ defmodule ClaperWeb.FormLive.FormComponent do
            form_params
            |> Map.put("presentation_file_id", socket.assigns.presentation_file.id)
            |> Map.put("position", socket.assigns.position)
-           |> maybe_enable(socket)
+           |> Map.put("enabled", false)
          ) do
       {:ok, form} ->
         {:noreply,
@@ -103,14 +103,6 @@ defmodule ClaperWeb.FormLive.FormComponent do
   end
 
   defp maybe_change_current_form(socket, _), do: socket
-
-  defp maybe_enable(form_params, socket) do
-    has_current_form =
-      socket.assigns.forms
-      |> Enum.count(fn f -> f.position == socket.assigns.position && f.enabled == true end) > 0
-
-    form_params |> Map.put("enabled", !has_current_form)
-  end
 
   defp list_forms(assigns) do
     Forms.list_forms(assigns.presentation_file.id)

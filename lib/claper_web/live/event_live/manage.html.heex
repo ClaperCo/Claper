@@ -714,7 +714,7 @@
           <% end %>
           <div
             id="form-list"
-            class={"overflow-y-auto #{if Enum.count(@form_submits) > 0, do: 'max-h-full'} pb-5 px-5"}
+            class={"overflow-y-auto #{if Enum.count(@form_submits) > 0, do: 'max-h-full'} pb-5 pt-8 px-5"}
             phx-update="append"
             data-forms-nb={Enum.count(@form_submits)}
             phx-hook="ScrollIntoDiv"

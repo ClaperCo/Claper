@@ -51,6 +51,7 @@ defmodule ClaperWeb.EventLive.Manage do
           timeout: 500
         })
         |> poll_at_position(false)
+        |> form_at_position(false)
 
       {:ok, socket, temporary_assigns: [posts: [], form_submits: []]}
     end
@@ -157,7 +158,8 @@ defmodule ClaperWeb.EventLive.Manage do
     {:noreply,
      socket
      |> assign(:state, new_state)
-     |> poll_at_position}
+     |> poll_at_position
+     |> form_at_position}
   end
 
   @impl true
@@ -490,6 +492,27 @@ defmodule ClaperWeb.EventLive.Manage do
       end
 
       socket |> assign(:current_poll, poll)
+    end
+  end
+
+  defp form_at_position(
+         %{assigns: %{event: event, state: state}} = socket,
+         broadcast \\ true
+       ) do
+    with form <-
+           Claper.Forms.get_form_current_position(
+             event.presentation_file.id,
+             state.position
+           ) do
+      if broadcast do
+        Phoenix.PubSub.broadcast(
+          Claper.PubSub,
+          "event:#{event.uuid}",
+          {:current_form, form}
+        )
+      end
+
+      socket |> assign(:current_form, form)
     end
   end
 
