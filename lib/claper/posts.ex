@@ -98,12 +98,14 @@ defmodule Claper.Posts do
       {:error, %Ecto.Changeset{}}
 
   """
-  def update_post(%Post{} = post, attrs) do
-    post
-    |> Post.changeset(attrs)
-    |> Repo.update()
-    |> broadcast(:post_updated)
-  end
+def update_post(%Post{} = post, attrs) do
+  changeset = Post.changeset(post, attrs)
+
+  result = changeset |> Repo.update()
+
+  result |> broadcast(:post_updated)
+end
+
 
   @doc """
   Deletes a post.

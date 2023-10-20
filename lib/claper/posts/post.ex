@@ -31,7 +31,8 @@ defmodule Claper.Posts.Post do
       :love_count,
       :lol_count,
       :name,
-      :position
+      :position,
+      :pinned
     ])
     |> validate_required([:body, :position])
     |> validate_length(:body, min: 2, max: 255)

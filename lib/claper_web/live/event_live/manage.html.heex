@@ -597,6 +597,15 @@
                 <div class="px-4 pb-2 pt-3 rounded-b-lg rounded-tr-lg bg-white relative shadow-md text-black break-all mt-4">
                   <div class="float-right mr-1">
                     <%= if post.attendee_identifier do %>
+                      <span class="text-yellow-500">
+                        <%= link(gettext("Pin"),
+                          to: "#",
+                          phx_click: "pin",
+                          phx_value_id: post.uuid,
+                          phx_value_event_id: @event.uuid
+                        ) %>
+                      </span>
+                      /
                       <span class="text-red-500">
                         <%= link(gettext("Ban"),
                           to: "#",
@@ -612,6 +621,15 @@
                       </span>
                       /
                     <% else %>
+                      <span class="text-yellow-500">
+                        <%= link(gettext("Pin"),
+                          to: "#",
+                          phx_click: "pin",
+                          phx_value_id: post.uuid,
+                          phx_value_event_id: @event.uuid
+                        ) %>
+                      </span>
+                      /
                       <span class="text-red-500">
                         <%= link(gettext("Ban"),
                           to: "#",
@@ -781,6 +799,14 @@
               <ClaperWeb.Component.Input.check key={:chat_visible} checked={@state.chat_visible} />
               <span><%= gettext("Show messages") %></span>
             </div>
+
+            <div class="flex space-x-2 items-center mt-3">
+              <ClaperWeb.Component.Input.check
+                  key={:show_only_pinned}
+                  checked={@state.show_only_pinned}
+              />
+              <span><%= gettext("Show only pinned messages") %></span>
+          </div>
 
             <div class={"#{if !@current_poll, do: 'opacity-50'} flex space-x-2 items-center mt-3"}>
               <ClaperWeb.Component.Input.check

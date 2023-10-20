@@ -255,6 +255,26 @@ defmodule ClaperWeb.EventLive.Manage do
   end
 
   @impl true
+  def handle_event("pin", %{"event-id" => event_id, "id" => id}, socket) do
+    post = Claper.Posts.get_post!(id, [:event])
+
+    new_state = not post.pinned
+
+    case Claper.Posts.update_post(post, %{pinned: new_state}) do
+      {:ok, updatedPost} ->
+        # Update the list of posts
+        updated_posts = list_posts(socket, event_id)
+        {:noreply, assign(socket, :posts, updated_posts)}
+
+      {:error, _changeset} ->
+        # Handle error
+        {:noreply, socket}
+    end
+  end
+
+
+
+  @impl true
   def handle_event(
         "ban",
         %{"user-id" => user_id},
@@ -332,6 +352,24 @@ defmodule ClaperWeb.EventLive.Manage do
 
     {:noreply, socket |> assign(:state, new_state)}
   end
+
+  @impl true
+  def handle_event(
+        "checked",
+        %{"key" => "show_only_pinned", "value" => value},
+        %{assigns: %{state: state}} = socket
+      ) do
+    {:ok, new_state} =
+      Claper.Presentations.update_presentation_state(
+        state,
+        %{
+          :show_only_pinned => value
+        }
+      )
+
+    {:noreply, socket |> assign(:state, new_state)}
+  end
+
 
   @impl true
   def handle_event(
