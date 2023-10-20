@@ -11,6 +11,7 @@ defmodule Claper.Posts.Post do
     field :name, :string
     field :attendee_identifier, :string
     field :position, :integer, default: 0
+    field :pinned, :boolean, default: false
 
     belongs_to :event, Claper.Events.Event
     belongs_to :user, Claper.Accounts.User

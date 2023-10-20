@@ -10,6 +10,7 @@ defmodule Claper.Presentations.PresentationState do
     field :chat_enabled, :boolean
     field :anonymous_chat_enabled, :boolean
     field :banned, {:array, :string}, default: []
+    field :show_only_pinned, :boolean, default: false
 
     belongs_to :presentation_file, Claper.Presentations.PresentationFile
 
