@@ -16,7 +16,7 @@ defmodule Claper.MixProject do
       # Docs
       name: "Claper",
       source_url: "https://github.com/ClaperCo/Claper",
-      homepage_url: "https://get.claper.co",
+      homepage_url: "https://claper.co",
       docs: [
         main: "overview",
         assets: "guides/assets",
