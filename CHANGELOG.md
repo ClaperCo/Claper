@@ -1,3 +1,7 @@
+## v1.6.1
+
+- Add reset password feature
+
 ## v1.6.0
 - Improve QR code readability
 - Add ARM Docker image
