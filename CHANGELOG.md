@@ -1,6 +1,7 @@
 ## v1.6.1
 
 - Add reset password feature
+- Security updates
 
 ## v1.6.0
 - Improve QR code readability
