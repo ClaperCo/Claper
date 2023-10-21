@@ -40,7 +40,7 @@ defmodule ClaperWeb.EventLive.Manage do
         |> assign(:attendees_nb, 1)
         |> assign(:event, event)
         |> assign(:state, event.presentation_file.presentation_state)
-        |> assign(:posts, list_posts(socket, event.uuid))
+        |> assign(:posts, list_posts_with_pinned_first(socket, event.uuid)) # using the pinned function for correct order
         |> assign(:polls, list_polls(socket, event.presentation_file.id))
         |> assign(:forms, list_forms(socket, event.presentation_file.id))
         |> assign(:create, nil)
@@ -255,24 +255,10 @@ defmodule ClaperWeb.EventLive.Manage do
   end
 
   @impl true
-  def handle_event("pin", %{"event-id" => event_id, "id" => id}, socket) do
+  def handle_event("pin", %{"id" => id}, socket) do
     post = Claper.Posts.get_post!(id, [:event])
-
-    new_state = not post.pinned
-
-    case Claper.Posts.update_post(post, %{pinned: new_state}) do
-      {:ok, updatedPost} ->
-        # Update the list of posts
-        updated_posts = list_posts(socket, event_id)
-        {:noreply, assign(socket, :posts, updated_posts)}
-
-      {:error, _changeset} ->
-        # Handle error
-        {:noreply, socket}
-    end
+    pin(post, socket)
   end
-
-
 
   @impl true
   def handle_event(
@@ -393,7 +379,7 @@ defmodule ClaperWeb.EventLive.Manage do
     post = Claper.Posts.get_post!(id, [:event])
     {:ok, _} = Claper.Posts.delete_post(post)
 
-    {:noreply, assign(socket, :posts, list_posts(socket, event_id))}
+    {:noreply, assign(socket, :posts, list_posts_with_pinned_first(socket, event_id))}
   end
 
   @impl true
@@ -416,7 +402,7 @@ defmodule ClaperWeb.EventLive.Manage do
     socket =
       case tab do
         "posts" ->
-          assign(socket, :posts, list_posts(socket, socket.assigns.event.uuid))
+          assign(socket, :posts, list_posts_with_pinned_first(socket, socket.assigns.event.uuid))
 
         "forms" ->
           assign(
@@ -554,6 +540,18 @@ defmodule ClaperWeb.EventLive.Manage do
     end
   end
 
+  defp pin(post, %{assigns: %{event: _event}} = socket) do
+    case Claper.Posts.toggle_pin_post(post) do
+      {:ok, _updatedPost} ->
+        updated_posts = list_posts_with_pinned_first(socket, socket.assigns.event.uuid)
+       {:noreply, assign(socket, :posts, updated_posts)}
+
+      {:error, _changeset} ->
+        {:noreply, socket}
+    end
+  end
+
+
   defp ban(user, %{assigns: %{event: event, state: state}} = socket) do
     {:ok, new_state} =
       Claper.Presentations.update_presentation_state(state, %{
@@ -569,8 +567,8 @@ defmodule ClaperWeb.EventLive.Manage do
     {:noreply, socket |> assign(:state, new_state)}
   end
 
-  defp list_posts(_socket, event_id) do
-    Claper.Posts.list_posts(event_id, [:event, :reactions])
+  defp list_posts_with_pinned_first(_socket, event_id) do
+    Claper.Posts.list_posts_with_pinned_first(event_id, [:event, :reactions]) # utilize new sort function to place pinned first
   end
 
   defp list_polls(_socket, presentation_file_id) do

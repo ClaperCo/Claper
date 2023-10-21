@@ -24,6 +24,24 @@ defmodule Claper.Posts do
     |> Repo.preload(preload)
   end
 
+  @doc """
+  Get event posts with pinned posts first
+  """
+  def list_posts_with_pinned_first(event_id, preload \\ []) do
+    query = from(p in Post,
+      join: e in Claper.Events.Event,
+      on: p.event_id == e.id,
+      select: p,
+      where: e.uuid == ^event_id,
+      order_by: [desc: p.pinned, asc: p.id]
+    )
+      posts = Repo.all(query)
+      # IO.inspect(posts, label: "List of Posts")
+      posts
+      |> Repo.preload(preload)
+  end
+
+
   def reacted_posts(event_id, user_id, icon) when is_number(user_id) do
     from(reaction in Claper.Posts.Reaction,
       join: post in Claper.Posts.Post,
@@ -49,6 +67,8 @@ defmodule Claper.Posts do
     )
     |> Repo.all()
   end
+
+
 
   @doc """
   Gets a single post.
@@ -105,6 +125,35 @@ def update_post(%Post{} = post, attrs) do
 
   result |> broadcast(:post_updated)
 end
+
+  @doc """
+  Pins or unpins a post based on its current state.
+
+  ## Examples
+
+      iex> toggle_pin_post(post)
+      {:ok, %Post{}}
+
+      iex> toggle_pin_post(invalid_post)
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def toggle_pin_post(%Post{} = post) do
+    # Toggling the pinned state
+    new_pinned_state = not post.pinned
+    changeset = Post.changeset(post, %{pinned: new_pinned_state})
+
+    result = changeset |> Repo.update()
+
+    # Broadcast the appropriate message based on the new state
+    broadcast_message = if new_pinned_state do
+      :post_pinned
+    else
+      :post_unpinned
+    end
+
+    result |> broadcast(broadcast_message)
+  end
 
 
   @doc """

@@ -587,7 +587,7 @@
           <div
             id="post-list"
             class={"overflow-y-auto #{if Enum.count(@posts) > 0, do: 'max-h-full'} pb-5 pt-8 px-5"}
-            phx-update="append"
+            phx-update="replace"
             data-posts-nb={Enum.count(@posts)}
             phx-hook="ScrollIntoDiv"
             data-target="#post-list"
@@ -598,7 +598,12 @@
                   <div class="float-right mr-1">
                     <%= if post.attendee_identifier do %>
                       <span class="text-yellow-500">
-                        <%= link(gettext("Pin"),
+                        <%= link(
+                          if post.pinned do
+                            gettext("Unpin")
+                          else
+                            gettext("Pin")
+                          end,
                           to: "#",
                           phx_click: "pin",
                           phx_value_id: post.uuid,
@@ -621,14 +626,19 @@
                       </span>
                       /
                     <% else %>
-                      <span class="text-yellow-500">
-                        <%= link(gettext("Pin"),
-                          to: "#",
-                          phx_click: "pin",
-                          phx_value_id: post.uuid,
-                          phx_value_event_id: @event.uuid
-                        ) %>
-                      </span>
+                    <span class="text-yellow-500">
+                      <%= link(
+                        if post.pinned do
+                          gettext("Unpin")
+                        else
+                          gettext("Pin")
+                        end,
+                        to: "#",
+                        phx_click: "pin",
+                        phx_value_id: post.uuid,
+                        phx_value_event_id: @event.uuid
+                      ) %>
+                    </span>
                       /
                       <span class="text-red-500">
                         <%= link(gettext("Ban"),
@@ -733,7 +743,7 @@
           <div
             id="form-list"
             class={"overflow-y-auto #{if Enum.count(@form_submits) > 0, do: 'max-h-full'} pb-5 pt-8 px-5"}
-            phx-update="append"
+            phx-update="replace"
             data-forms-nb={Enum.count(@form_submits)}
             phx-hook="ScrollIntoDiv"
             data-target="#form-list"
