@@ -80,27 +80,25 @@ const colors = {
 
 module.exports = {
   mode: 'jit',
-  purge: {
-    content: [
-      './js/**/*.js',
-      '../lib/*_web/**/*.*ex'
-    ],
-    safelist: [
-      '-top-1.5',
-      'top-1',
-      'left-3',
-      'top-6',
-      'h-5',
-      'left-2.5',
-      'top-3',
-      'h-7',
-      'bg-secondary-600',
-      'text-white',
-      'bg-white',
-      'text-gray-600'
-    ]
-  },
-  darkMode: false, // or 'media' or 'class'
+  content: [
+    './js/**/*.js',
+    '../lib/*_web/**/*.*ex'
+  ],
+  safelist: [
+    '-top-1.5',
+    'top-1',
+    'left-3',
+    'top-6',
+    'h-5',
+    'left-2.5',
+    'top-3',
+    'h-7',
+    'bg-secondary-600',
+    'text-white',
+    'bg-white',
+    'text-gray-600'
+  ],
+  darkMode: 'media',
   theme: {
     extend: {
       backgroundSize: {
