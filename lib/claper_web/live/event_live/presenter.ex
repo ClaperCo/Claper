@@ -215,4 +215,8 @@ defmodule ClaperWeb.EventLive.Presenter do
   defp list_posts(_socket, event_id) do
     Claper.Posts.list_posts(event_id, [:event, :reactions])
   end
+
+  defp list_only_pinned_posts(_socket, event_id) do
+    Claper.Posts.list_only_pinned_posts(event_id, [:event, :reactions])
+  end
 end

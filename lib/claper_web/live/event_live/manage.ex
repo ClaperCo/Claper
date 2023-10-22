@@ -343,7 +343,7 @@ defmodule ClaperWeb.EventLive.Manage do
   def handle_event(
         "checked",
         %{"key" => "show_only_pinned", "value" => value},
-        %{assigns: %{state: state}} = socket
+        %{assigns: %{event: event, state: state}} = socket
       ) do
     {:ok, new_state} =
       Claper.Presentations.update_presentation_state(
@@ -352,6 +352,16 @@ defmodule ClaperWeb.EventLive.Manage do
           :show_only_pinned => value
         }
       )
+
+      # Print the new_state to the logs
+      IO.inspect(new_state, label: "new prez state")
+
+
+      # Phoenix.PubSub.broadcast(
+      #   Claper.PubSub,
+      #   "event:#{socket.assigns.event.uuid}",
+      #   {:show_only_pinned, value}
+      # )
 
     {:noreply, socket |> assign(:state, new_state)}
   end

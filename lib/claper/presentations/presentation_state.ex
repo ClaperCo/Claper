@@ -28,7 +28,8 @@ defmodule Claper.Presentations.PresentationState do
       :banned,
       :presentation_file_id,
       :chat_enabled,
-      :anonymous_chat_enabled
+      :anonymous_chat_enabled,
+      :show_only_pinned
     ])
     |> validate_required([])
   end

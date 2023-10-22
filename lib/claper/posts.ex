@@ -41,6 +41,21 @@ defmodule Claper.Posts do
       |> Repo.preload(preload)
   end
 
+  @doc """
+  Get only the pinned event posts.
+  """
+  def list_only_pinned_posts(event_id, preload \\ []) do
+    from(p in Post,
+      join: e in Claper.Events.Event,
+      on: p.event_id == e.id,
+      select: p,
+      where: e.uuid == ^event_id and p.pinned == true, # Only pinned posts
+      order_by: [asc: p.id]
+    )
+    |> Repo.all()
+    |> Repo.preload(preload)
+  end
+
 
   def reacted_posts(event_id, user_id, icon) when is_number(user_id) do
     from(reaction in Claper.Posts.Reaction,

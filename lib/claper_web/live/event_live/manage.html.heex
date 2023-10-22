@@ -587,7 +587,7 @@
           <div
             id="post-list"
             class={"overflow-y-auto #{if Enum.count(@posts) > 0, do: 'max-h-full'} pb-5 pt-8 px-5"}
-            phx-update="replace"
+            phx-update="append"
             data-posts-nb={Enum.count(@posts)}
             phx-hook="ScrollIntoDiv"
             data-target="#post-list"
@@ -743,7 +743,7 @@
           <div
             id="form-list"
             class={"overflow-y-auto #{if Enum.count(@form_submits) > 0, do: 'max-h-full'} pb-5 pt-8 px-5"}
-            phx-update="replace"
+            phx-update="append"
             data-forms-nb={Enum.count(@form_submits)}
             phx-hook="ScrollIntoDiv"
             data-target="#form-list"
