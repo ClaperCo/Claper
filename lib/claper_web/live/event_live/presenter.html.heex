@@ -76,7 +76,7 @@
     <div
       class={"#{if @state.chat_visible, do: 'opacity-100 w-3/12 px-4 showed', else: 'opacity-0 w-0 p-0'} transition-all duration-150 flex flex-col h-screen py-5 justify-end max-h-screen bg-black"}
       id="post-list"
-      phx-update="append"
+      phx-update = "append"
     >
       <%= for post <- @posts do %>
         <div class={if post.__meta__.state == :deleted, do: "hidden"} id={"#{post.id}-post"}>
