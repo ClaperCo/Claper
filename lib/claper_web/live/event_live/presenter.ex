@@ -47,6 +47,7 @@ defmodule ClaperWeb.EventLive.Presenter do
         |> assign(:state, event.presentation_file.presentation_state)
         |> assign(:posts, list_posts(socket, event.uuid))
         |> assign(:pinned_posts, list_pinned_posts(socket, event.uuid))
+        |> assign(:show_only_pinned, event.presentation_file.presentation_state.show_only_pinned)
         |> assign(:reacts, [])
         |> poll_at_position
         |> form_at_position
@@ -78,6 +79,7 @@ defmodule ClaperWeb.EventLive.Presenter do
   def handle_info({:post_pinned, post}, socket) do
     {:noreply,
      socket
+     |> assign(:pinned_posts, list_pinned_posts(socket, socket.event.uuid))
      |> update(:pinned_posts, fn pinned_posts -> [post | pinned_posts] end)}
   end
 
@@ -160,6 +162,7 @@ defmodule ClaperWeb.EventLive.Presenter do
      socket
      |> push_event("show_only_pinned", %{value: value})
      |> update(:show_only_pinned, fn _show_only_pinned -> value end)}
+
   end
 
   @impl true

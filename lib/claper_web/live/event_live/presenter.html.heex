@@ -73,96 +73,92 @@
     id="slider-wrapper"
     class="w-full min-h-screen flex items-center justify-center relative bg-black"
   >
-
     <div
-      id="pinned-posts-wrapper"
+      class={"#{if @state.chat_visible, do: 'opacity-100 w-3/12 px-4 showed', else: 'opacity-0 w-0 p-0'} transition-all duration-150 flex flex-col h-screen py-5 justify-end max-h-screen bg-black"}
+      id="test"
       phx-update="replace"
-      class={"#{if @state.chat_visible && @state.show_only_pinned, do: 'opacity-100 w-3/12 px-4 showed', else: 'opacity-0 w-0 p-0'} transition-all duration-150 flex flex-col h-screen py-5 justify-end max-h-screen bg-black"}
       >
-      <div
-        id="pinned-posts-list"
-        phx-update="append">
-
-      <%= for post <- @pinned_posts do %>
-            <div class={if post.__meta__.state == :deleted, do: "hidden"} id={"#{post.id}-post"}>
-              <div class="px-4 pb-2 pt-3 rounded-b-lg rounded-tr-lg bg-white shadow-md text-black break-word mt-4">
-                <%= if post.name do %>
-                  <p class="text-gray-400 text-lg font-semibold mb-2 mr-2"><%= post.name %></p>
-                <% end %>
-                <p class="text-3xl"><%= post.body %></p>
-
-                <%= if post.like_count > 0 || post.love_count > 0 || post.lol_count > 0 do %>
-                  <div class="flex h-6 space-x-2 text-lg text-gray-500 pb-3 items-center mt-5">
-                    <div class="flex items-center">
-                      <%= if post.like_count > 0 do %>
-                        <img src="/images/icons/thumb.svg" class="h-7" />
-                        <span class="ml-1"><%= post.like_count %></span>
-                      <% end %>
-                    </div>
-                    <div class="flex items-center">
-                      <%= if post.love_count > 0 do %>
-                        <img src="/images/icons/heart.svg" class="h-7" />
-                        <span class="ml-1"><%= post.love_count %></span>
-                      <% end %>
-                    </div>
-                    <div class="flex items-center">
-                      <%= if post.lol_count > 0 do %>
-                        <img src="/images/icons/laugh.svg" class="h-7" />
-                        <span class="ml-1"><%= post.lol_count %></span>
-                      <% end %>
-                    </div>
-                  </div>
-                <% end %>
-              </div>
-            </div>
-          <% end %>
-        </div>
-      </div>
-
-      <div
-      id="all-posts-wrapper"
-      phx-update="replace"
-      class={"#{if @state.chat_visible && not @state.show_only_pinned, do: 'opacity-100 w-3/12 px-4 showed', else: 'opacity-0 w-0 p-0'} transition-all duration-150 flex flex-col h-screen py-5 justify-end max-h-screen bg-black"}
-      >
-        <div
-        id="all-posts-list"
-        phx-update="append">
-      
+    <%= if @state.show_only_pinned == false do %>
+    <p class="text-gray-200 text-lg font-semibold mb-2 mr-2">All posts: </p>
+      <div id="all-posts" phx-update="append">
         <%= for post <- @posts do %>
-            <div class={if post.__meta__.state == :deleted, do: "hidden"} id={"#{post.id}-post"}>
-              <div class="px-4 pb-2 pt-3 rounded-b-lg rounded-tr-lg bg-white shadow-md text-black break-word mt-4">
-                <%= if post.name do %>
-                  <p class="text-gray-400 text-lg font-semibold mb-2 mr-2"><%= post.name %></p>
-                <% end %>
-                <p class="text-3xl"><%= post.body %></p>
+          <div class={if post.__meta__.state == :deleted, do: "hidden"} id={"#{post.id}-post"}>
+            <div class="px-4 pb-2 pt-3 rounded-b-lg rounded-tr-lg bg-white shadow-md text-black break-word mt-4">
+              <%= if post.name do %>
+                <p class="text-gray-400 text-lg font-semibold mb-2 mr-2"><%= post.name %></p>
+              <% end %>
+              <p class="text-3xl"><%= post.body %></p>
 
-                <%= if post.like_count > 0 || post.love_count > 0 || post.lol_count > 0 do %>
-                  <div class="flex h-6 space-x-2 text-lg text-gray-500 pb-3 items-center mt-5">
-                    <div class="flex items-center">
-                      <%= if post.like_count > 0 do %>
-                        <img src="/images/icons/thumb.svg" class="h-7" />
-                        <span class="ml-1"><%= post.like_count %></span>
-                      <% end %>
-                    </div>
-                    <div class="flex items-center">
-                      <%= if post.love_count > 0 do %>
-                        <img src="/images/icons/heart.svg" class="h-7" />
-                        <span class="ml-1"><%= post.love_count %></span>
-                      <% end %>
-                    </div>
-                    <div class="flex items-center">
-                      <%= if post.lol_count > 0 do %>
-                        <img src="/images/icons/laugh.svg" class="h-7" />
-                        <span class="ml-1"><%= post.lol_count %></span>
-                      <% end %>
-                    </div>
+              <%= if post.like_count > 0 || post.love_count > 0 || post.lol_count > 0 do %>
+                <div class="flex h-6 space-x-2 text-lg text-gray-500 pb-3 items-center mt-5">
+                  <div class="flex items-center">
+                    <%= if post.like_count > 0 do %>
+                      <img src="/images/icons/thumb.svg" class="h-7" />
+                      <span class="ml-1"><%= post.like_count %></span>
+                    <% end %>
                   </div>
-                <% end %>
-              </div>
+                  <div class="flex items-center">
+                    <%= if post.love_count > 0 do %>
+                      <img src="/images/icons/heart.svg" class="h-7" />
+                      <span class="ml-1"><%= post.love_count %></span>
+                    <% end %>
+                  </div>
+                  <div class="flex items-center">
+                    <%= if post.lol_count > 0 do %>
+                      <img src="/images/icons/laugh.svg" class="h-7" />
+                      <span class="ml-1"><%= post.lol_count %></span>
+                    <% end %>
+                  </div>
+                </div>
+              <% end %>
             </div>
-          <% end %>
-      </div>  
+          </div>
+        <% end %>
+      </div>
+    <% else %>
+      <p class="text-gray-200 text-lg font-semibold mb-2 mr-2">Pinned posts: </p>
+      <div id="pinned-posts" phx-update="replace">
+        <%= for post <- @pinned_posts do %>
+          <div class={if post.__meta__.state == :deleted, do: "hidden"} id={"#{post.id}-post"}>
+            <div class="px-4 pb-2 pt-3 rounded-b-lg rounded-tr-lg bg-white shadow-md text-black break-word mt-4">
+              <%= if post.name do %>
+                <p class="text-gray-400 text-lg font-semibold mb-2 mr-2"><%= post.name %></p>
+              <% end %>
+              <p class="text-3xl"><%= post.body %></p>
+
+              <%= if post.like_count > 0 || post.love_count > 0 || post.lol_count > 0 do %>
+                <div class="flex h-6 space-x-2 text-lg text-gray-500 pb-3 items-center mt-5">
+                  <div class="flex items-center">
+                    <%= if post.like_count > 0 do %>
+                      <img src="/images/icons/thumb.svg" class="h-7" />
+                      <span class="ml-1"><%= post.like_count %></span>
+                    <% end %>
+                  </div>
+                  <div class="flex items-center">
+                    <%= if post.love_count > 0 do %>
+                      <img src="/images/icons/heart.svg" class="h-7" />
+                      <span class="ml-1"><%= post.love_count %></span>
+                    <% end %>
+                  </div>
+                  <div class="flex items-center">
+                    <%= if post.lol_count > 0 do %>
+                      <img src="/images/icons/laugh.svg" class="h-7" />
+                      <span class="ml-1"><%= post.lol_count %></span>
+                    <% end %>
+                  </div>
+                </div>
+              <% end %>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    <% end %>
     </div>
+
+
+
+
+    
     <!-- SLIDES -->
     <div id="slider" phx-update="ignore">
       <%= for index <- 1..@event.presentation_file.length do %>
