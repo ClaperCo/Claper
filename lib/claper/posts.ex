@@ -25,26 +25,9 @@ defmodule Claper.Posts do
   end
 
   @doc """
-  Get event posts with pinned posts first
-  """
-  def list_posts_with_pinned_first(event_id, preload \\ []) do
-    query = from(p in Post,
-      join: e in Claper.Events.Event,
-      on: p.event_id == e.id,
-      select: p,
-      where: e.uuid == ^event_id,
-      order_by: [desc: p.pinned, asc: p.id]
-    )
-      posts = Repo.all(query)
-      # IO.inspect(posts, label: "List of Posts")
-      posts
-      |> Repo.preload(preload)
-  end
-
-  @doc """
   Get only the pinned event posts.
   """
-  def list_only_pinned_posts(event_id, preload \\ []) do
+  def list_pinned_posts(event_id, preload \\ []) do
     from(p in Post,
       join: e in Claper.Events.Event,
       on: p.event_id == e.id,
@@ -56,6 +39,20 @@ defmodule Claper.Posts do
     |> Repo.preload(preload)
   end
 
+  @doc """
+  Get only the unpinned event posts.
+  """
+  def list_unpinned_posts(event_id, preload \\ []) do
+    from(p in Post,
+      join: e in Claper.Events.Event,
+      on: p.event_id == e.id,
+      select: p,
+      where: e.uuid == ^event_id and p.pinned == false, # Only unpinned posts
+      order_by: [asc: p.id]
+    )
+    |> Repo.all()
+    |> Repo.preload(preload)
+  end
 
   def reacted_posts(event_id, user_id, icon) when is_number(user_id) do
     from(reaction in Claper.Posts.Reaction,

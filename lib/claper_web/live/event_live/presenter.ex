@@ -45,7 +45,8 @@ defmodule ClaperWeb.EventLive.Presenter do
         |> assign(:host, host)
         |> assign(:event, event)
         |> assign(:state, event.presentation_file.presentation_state)
-        |> assign(:posts, get_posts(socket, event.uuid, event.presentation_file.presentation_state.show_only_pinned))
+        |> assign(:posts, list_posts(socket, event.uuid))
+        |> assign(:pinned_posts, list_pinned_posts(socket, event.uuid))
         |> assign(:reacts, [])
         |> poll_at_position
         |> form_at_position
@@ -71,6 +72,20 @@ defmodule ClaperWeb.EventLive.Presenter do
     {:noreply,
      socket
      |> update(:posts, fn posts -> [post | posts] end)}
+  end
+
+  @impl true
+  def handle_info({:post_pinned, post}, socket) do
+    {:noreply,
+     socket
+     |> update(:pinned_posts, fn pinned_posts -> [post | pinned_posts] end)}
+  end
+
+  @impl true
+  def handle_info({:post_unpinned, post}, socket) do
+    {:noreply,
+     socket
+     |> update(:pinned_posts, fn pinned_posts -> Enum.reject(pinned_posts, fn p -> p.id == post.id end) end)}
   end
 
   @impl true
@@ -147,7 +162,6 @@ defmodule ClaperWeb.EventLive.Presenter do
      |> update(:show_only_pinned, fn _show_only_pinned -> value end)}
   end
 
-
   @impl true
   def handle_info({:poll_visible, value}, socket) do
     {:noreply,
@@ -221,19 +235,12 @@ defmodule ClaperWeb.EventLive.Presenter do
     end
   end
 
-  defp get_posts(socket, event_id, show_only_pinned) do
-    if show_only_pinned do
-      list_only_pinned_posts(socket, event_id)
-    else
-      list_posts(socket, event_id)
-    end
-  end
-
   defp list_posts(_socket, event_id) do
     Claper.Posts.list_posts(event_id, [:event, :reactions])
   end
 
-  defp list_only_pinned_posts(_socket, event_id) do
-    Claper.Posts.list_only_pinned_posts(event_id, [:event, :reactions])
+  defp list_pinned_posts(_socket, event_id) do
+    Claper.Posts.list_pinned_posts(event_id, [:event, :reactions])
   end
+
 end

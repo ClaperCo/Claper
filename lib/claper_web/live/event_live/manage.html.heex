@@ -564,7 +564,7 @@
           </li>
         </ul>
         <%= if @list_tab == :posts do %>
-          <%= if Enum.count(@posts) == 0 do %>
+          <%= if Enum.count(@unpinned_posts) == 0 && Enum.count(@pinned_posts) == 0 do %>
             <div class="text-center h-full flex flex-col space-y-5 items-center justify-center text-gray-400">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -584,15 +584,152 @@
               <p class="text-lg"><%= gettext("Messages from attendees will appear here.") %></p>
             </div>
           <% end %>
+
+
+          
+          <%= if Enum.any?(@pinned_posts) do %>
+          <div
+            id="pinned-post-list"
+            class={"overflow-y-auto #{if Enum.count(@pinned_posts) > 0, do: 'max-h-full'} pt-8 px-5"}
+            phx-update="replace"
+            data-posts-nb={Enum.count(@pinned_posts)}
+            phx-hook="ScrollIntoDiv"
+            data-target="#pinned-post-list"
+          >
+            
+          <%= for post <- @pinned_posts do %>
+              <div class={if post.__meta__.state == :deleted, do: "hidden"} id={"#{post.id}-post"}>
+                <div class="px-4 pb-2 pt-3 rounded-b-lg rounded-tr-lg bg-white relative shadow-md text-black break-all mt-4">
+                  <div class="float-right mr-1">
+                    <%= if post.attendee_identifier do %>
+                      <span class="text-yellow-500">
+                        <%= link(
+                          if post.pinned do
+                            gettext("Unpin")
+                          else
+                            gettext("Pin")
+                          end,
+                          to: "#",
+                          phx_click: "pin",
+                          phx_value_id: post.uuid,
+                          phx_value_event_id: @event.uuid
+                        ) %>
+                      </span>
+                      /
+                      <span class="text-red-500">
+                        <%= link(gettext("Ban"),
+                          to: "#",
+                          phx_click: "ban",
+                          phx_value_attendee_identifier: post.attendee_identifier,
+                          data: [
+                            confirm:
+                              gettext(
+                                "Blocking this user will delete all his messages and he will not be able to join again, confirm ?"
+                              )
+                          ]
+                        ) %>
+                      </span>
+                      /
+                    <% else %>
+                    <span class="text-yellow-500">
+                      <%= link(
+                        if post.pinned do
+                          gettext("Unpin")
+                        else
+                          gettext("Pin")
+                        end,
+                        to: "#",
+                        phx_click: "pin",
+                        phx_value_id: post.uuid,
+                        phx_value_event_id: @event.uuid
+                      ) %>
+                    </span>
+                      /
+                      <span class="text-red-500">
+                        <%= link(gettext("Ban"),
+                          to: "#",
+                          phx_click: "ban",
+                          phx_value_user_id: post.user_id,
+                          data: [
+                            confirm:
+                              gettext(
+                                "Blocking this user will delete all his messages and he will not be able to join again, confirm ?"
+                              )
+                          ]
+                        ) %>
+                      </span>
+                      /
+                    <% end %>
+                    <span class="text-red-500">
+                      <%= link(gettext("Delete"),
+                        to: "#",
+                        phx_click: "delete",
+                        phx_value_id: post.uuid,
+                        phx_value_event_id: @event.uuid
+                      ) %>
+                    </span>
+                  </div>
+
+                  <div class="flex space-x-3 items-center">
+                    <%= if post.attendee_identifier do %>
+                      <img
+                        class="h-8 w-8"
+                        src={"https://avatars.dicebear.com/api/identicon/#{post.attendee_identifier}.svg"}
+                      />
+                    <% else %>
+                      <img
+                        class="h-8 w-8"
+                        src={"https://avatars.dicebear.com/api/identicon/#{post.user_id}.svg"}
+                      />
+                    <% end %>
+
+                    <div class="flex flex-col">
+                      <%= if post.name do %>
+                        <p class="text-black text-sm font-semibold mr-2"><%= post.name %></p>
+                      <% end %>
+
+                      <p class="text-xl"><%= post.body %></p>
+                    </div>
+                  </div>
+
+                  <%= if post.like_count > 0 || post.love_count > 0 || post.lol_count > 0 do %>
+                    <div class="flex h-6 space-x-2 text-base text-gray-500 pb-3 items-center mt-5">
+                      <div class="flex items-center">
+                        <%= if post.like_count > 0 do %>
+                          <img src="/images/icons/thumb.svg" class="h-4" />
+                          <span class="ml-1"><%= post.like_count %></span>
+                        <% end %>
+                      </div>
+                      <div class="flex items-center">
+                        <%= if post.love_count > 0 do %>
+                          <img src="/images/icons/heart.svg" class="h-4" />
+                          <span class="ml-1"><%= post.love_count %></span>
+                        <% end %>
+                      </div>
+                      <div class="flex items-center">
+                        <%= if post.lol_count > 0 do %>
+                          <img src="/images/icons/laugh.svg" class="h-4" />
+                          <span class="ml-1"><%= post.lol_count %></span>
+                        <% end %>
+                      </div>
+                    </div>
+                  <% end %>
+                </div>
+              </div>
+            <% end %>
+
+          </div>
+          <% end %>
+          
           <div
             id="post-list"
-            class={"overflow-y-auto #{if Enum.count(@posts) > 0, do: 'max-h-full'} pb-5 pt-8 px-5"}
-            phx-update="append"
-            data-posts-nb={Enum.count(@posts)}
+            class={"overflow-y-auto #{if Enum.count(@unpinned_posts) > 0, do: 'max-h-full'} pb-5 #{if Enum.count(@pinned_posts) == 0, do: 'pt-8', else: 'pt-0'} px-5"}            phx-update="append"
+            data-posts-nb={Enum.count(@unpinned_posts)}
             phx-hook="ScrollIntoDiv"
             data-target="#post-list"
           >
-            <%= for post <- @posts do %>
+            
+            <%= for post <- @unpinned_posts do %>
               <div class={if post.__meta__.state == :deleted, do: "hidden"} id={"#{post.id}-post"}>
                 <div class="px-4 pb-2 pt-3 rounded-b-lg rounded-tr-lg bg-white relative shadow-md text-black break-all mt-4">
                   <div class="float-right mr-1">

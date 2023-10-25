@@ -41,6 +41,17 @@ export class Presenter {
       }
     })
 
+
+    this.context.handleEvent('chat-visible', data => {
+      if (data.value) {
+        document.getElementById("pinned-post-list").classList.remove("animate__animated", "animate__fadeOutLeft")
+        document.getElementById("pinned-post-list").classList.add("animate__animated", "animate__fadeInLeft")
+      } else {
+        document.getElementById("pinned-post-list").classList.remove("animate__animated", "animate__fadeInLeft")
+        document.getElementById("pinned-post-list").classList.add("animate__animated", "animate__fadeOutLeft")
+      }
+    })
+
     this.context.handleEvent('poll-visible', data => {
       if (data.value) {
         document.getElementById("poll").classList.remove("animate__animated", "animate__fadeOut")
