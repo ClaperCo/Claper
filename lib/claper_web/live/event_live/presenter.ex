@@ -52,7 +52,7 @@ defmodule ClaperWeb.EventLive.Presenter do
         |> poll_at_position
         |> form_at_position
 
-      {:ok, socket, temporary_assigns: [posts: []]}
+      {:ok, socket, temporary_assigns: []}
     end
   end
 
@@ -70,6 +70,7 @@ defmodule ClaperWeb.EventLive.Presenter do
 
   @impl true
   def handle_info({:post_created, post}, socket) do
+    IO.
     {:noreply,
      socket
      |> update(:posts, fn posts -> [post | posts] end)}
@@ -79,7 +80,6 @@ defmodule ClaperWeb.EventLive.Presenter do
   def handle_info({:post_pinned, post}, socket) do
     {:noreply,
      socket
-     |> assign(:pinned_posts, list_pinned_posts(socket, socket.event.uuid))
      |> update(:pinned_posts, fn pinned_posts -> [post | pinned_posts] end)}
   end
 

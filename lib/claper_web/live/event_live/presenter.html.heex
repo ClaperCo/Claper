@@ -81,7 +81,7 @@
     <%= if @state.show_only_pinned == false do %>
     <p class="text-gray-200 text-lg font-semibold mb-2 mr-2">All posts: </p>
       <div id="all-posts" phx-update="append">
-        <%= for post <- @posts do %>
+        <%= for post <- @posts do %>     
           <div class={if post.__meta__.state == :deleted, do: "hidden"} id={"#{post.id}-post"}>
             <div class="px-4 pb-2 pt-3 rounded-b-lg rounded-tr-lg bg-white shadow-md text-black break-word mt-4">
               <%= if post.name do %>
@@ -158,7 +158,7 @@
 
 
 
-    
+
     <!-- SLIDES -->
     <div id="slider" phx-update="ignore">
       <%= for index <- 1..@event.presentation_file.length do %>
