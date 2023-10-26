@@ -79,8 +79,7 @@
       phx-update="replace"
       >
     <%= if @state.show_only_pinned == false do %>
-    <p class="text-gray-200 text-lg font-semibold mb-2 mr-2">All posts: </p>
-      <div id="all-posts" phx-update="append">
+      <div id="post-list">
         <%= for post <- @posts do %>     
           <div class={if post.__meta__.state == :deleted, do: "hidden"} id={"#{post.id}-post"}>
             <div class="px-4 pb-2 pt-3 rounded-b-lg rounded-tr-lg bg-white shadow-md text-black break-word mt-4">
@@ -116,7 +115,6 @@
         <% end %>
       </div>
     <% else %>
-      <p class="text-gray-200 text-lg font-semibold mb-2 mr-2">Pinned posts: </p>
       <div id="pinned-posts" phx-update="replace">
         <%= for post <- @pinned_posts do %>
           <div class={if post.__meta__.state == :deleted, do: "hidden"} id={"#{post.id}-post"}>

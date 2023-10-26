@@ -723,7 +723,8 @@
           
           <div
             id="post-list"
-            class={"overflow-y-auto #{if Enum.count(@unpinned_posts) > 0, do: 'max-h-full'} pb-5 #{if Enum.count(@pinned_posts) == 0, do: 'pt-8', else: 'pt-0'} px-5"}            phx-update="append"
+            class={"overflow-y-auto #{if Enum.count(@unpinned_posts) > 0, do: 'max-h-full'} pb-5 #{if Enum.count(@pinned_posts) == 0, do: 'pt-8', else: 'pt-0'} px-5"}         
+            phx-update="append"
             data-posts-nb={Enum.count(@unpinned_posts)}
             phx-hook="ScrollIntoDiv"
             data-target="#post-list"

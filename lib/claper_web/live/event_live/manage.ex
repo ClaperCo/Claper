@@ -81,33 +81,9 @@ defmodule ClaperWeb.EventLive.Manage do
   def handle_info({:post_updated, post}, socket) do
     updated_socket =
       if post.pinned do
-        update(socket, :pinned_posts, fn pinned_posts -> [post | pinned_posts] end)
+        assign(socket, :pinned_posts,  socket.assigns.pinned_posts)
       else
-        update(socket, :unpinned_posts, fn unpinned_posts -> [post | unpinned_posts] end)
-      end
-
-    {:noreply, updated_socket}
-  end
-
-  @impl true
-  def handle_info({:reaction_added, post}, socket) do
-    updated_socket =
-      if post.pinned do
-        update(socket, :pinned_posts, fn pinned_posts -> [post | pinned_posts] end)
-      else
-        update(socket, :unpinned_posts, fn unpinned_posts -> [post | unpinned_posts] end)
-      end
-
-    {:noreply, updated_socket}
-  end
-
-  @impl true
-  def handle_info({:reaction_removed, post}, socket) do
-    updated_socket =
-      if post.pinned do
-        update(socket, :pinned_posts, fn pinned_posts -> [post | pinned_posts] end)
-      else
-        update(socket, :unpinned_posts, fn unpinned_posts -> [post | unpinned_posts] end)
+        assign(socket, :unpinned_posts,  socket.assigns.unpinned_posts)
       end
 
     {:noreply, updated_socket}

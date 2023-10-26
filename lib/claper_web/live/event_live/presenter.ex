@@ -70,7 +70,6 @@ defmodule ClaperWeb.EventLive.Presenter do
 
   @impl true
   def handle_info({:post_created, post}, socket) do
-    IO.
     {:noreply,
      socket
      |> update(:posts, fn posts -> [post | posts] end)}
@@ -102,22 +101,15 @@ defmodule ClaperWeb.EventLive.Presenter do
 
   @impl true
   def handle_info({:post_updated, post}, socket) do
-    {:noreply, socket |> update(:posts, fn posts -> [post | posts] end)}
-  end
-
-  @impl true
-  def handle_info({:reaction_added, post}, socket) do
-    {:noreply, socket |> update(:posts, fn posts -> [post | posts] end)}
-  end
-
-  @impl true
-  def handle_info({:reaction_removed, post}, socket) do
+    IO.puts("Hello")
     {:noreply, socket |> update(:posts, fn posts -> [post | posts] end)}
   end
 
   @impl true
   def handle_info({:post_deleted, post}, socket) do
+    IO.puts("Received post_deleted message for post: #{post.id}")
     {:noreply, socket |> update(:posts, fn posts -> [post | posts] end)}
+    {:noreply, socket |> update(:pinned_posts, fn pinned_posts -> Enum.reject(pinned_posts, fn p-> p.id == post.id end) end)}
   end
 
   @impl true
