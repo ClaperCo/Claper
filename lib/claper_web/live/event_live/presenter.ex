@@ -56,6 +56,13 @@ defmodule ClaperWeb.EventLive.Presenter do
     end
   end
 
+
+  defp update_post_in_list(posts, updated_post) do
+    Enum.map(posts, fn post ->
+      if post.id == updated_post.id, do: updated_post, else: post
+    end)
+  end
+
   defp is_leader(%{assigns: %{current_user: current_user}} = _socket, event) do
     Claper.Events.is_leaded_by(current_user.email, event) || event.user.id == current_user.id
   end
@@ -100,17 +107,25 @@ defmodule ClaperWeb.EventLive.Presenter do
   end
 
   @impl true
-  def handle_info({:post_updated, post}, socket) do
-    IO.puts("Hello")
-    {:noreply, socket |> update(:posts, fn posts -> [post | posts] end)}
+  def handle_info({:post_updated, updated_post}, socket) do
+    updated_posts = update_post_in_list(socket.assigns.posts, updated_post)
+    updated_pinned_posts = update_post_in_list(socket.assigns.pinned_posts, updated_post)
+
+    {:noreply,
+      socket
+      |> assign(:posts, updated_posts)
+      |> assign(:pinned_posts, updated_pinned_posts)
+    }
   end
 
   @impl true
   def handle_info({:post_deleted, post}, socket) do
-    IO.puts("Received post_deleted message for post: #{post.id}")
-    {:noreply, socket |> update(:posts, fn posts -> [post | posts] end)}
-    {:noreply, socket |> update(:pinned_posts, fn pinned_posts -> Enum.reject(pinned_posts, fn p-> p.id == post.id end) end)}
+    updated_posts = Enum.reject(socket.assigns.posts, fn p -> p.id == post.id end)
+    updated_pinned_posts = Enum.reject(socket.assigns.pinned_posts, fn p -> p.id == post.id end)
+
+    {:noreply, socket |> assign(:posts, updated_posts) |> assign(:pinned_posts, updated_pinned_posts)}
   end
+
 
   @impl true
   def handle_info({:poll_updated, poll}, socket) do

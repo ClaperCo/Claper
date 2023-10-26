@@ -79,7 +79,7 @@
       phx-update="replace"
       >
     <%= if @state.show_only_pinned == false do %>
-      <div id="post-list">
+      <div id="post-list" phx-update="replace">
         <%= for post <- @posts do %>     
           <div class={if post.__meta__.state == :deleted, do: "hidden"} id={"#{post.id}-post"}>
             <div class="px-4 pb-2 pt-3 rounded-b-lg rounded-tr-lg bg-white shadow-md text-black break-word mt-4">
