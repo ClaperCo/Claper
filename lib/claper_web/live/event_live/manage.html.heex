@@ -382,10 +382,9 @@
               </p>
             </div>
             <% end %>
-            
-              <div id="x" class="overflow-y-auto h-[31rem]">
+              <div id="x" class="overflow-y-auto border-2" style="height: 100%;">
               <%= if Enum.any?(@pinned_posts) do %>
-                <div id="pinned-post-list" class={"overflow-y-auto #{if Enum.count(@pinned_posts)> 0, do: ''}
+                <div id="pinned-post-list" class={"overflow-y-auto #{if Enum.count(@pinned_posts)> 0, do: 'max-h-fit'}
                   pt-8 px-5"}
                   phx-update="replace"
                   data-posts-nb={Enum.count(@pinned_posts)}
@@ -488,8 +487,8 @@
                 </div>
                 <% end %>
 
-                  <div id="post-list" class={"overflow-y-auto #{if Enum.count(@unpinned_posts)> 0, do: ''} pb-5
-                    #{if Enum.count(@pinned_posts) == 0, do: 'pt-8', else: 'pt-0'} px-5"}
+                  <div id="post-list" class={"overflow-y-auto #{if Enum.count(@unpinned_posts)> 0, do: 'max-h-fit'} pb-5
+                    #{if Enum.count(@pinned_posts) == 0, do: 'pt-8', else: 'pt-0'} max-h-full px-5"}
                     phx-update="replace"
                     data-posts-nb={Enum.count(@unpinned_posts)}
                     phx-hook="ScrollIntoDiv"
