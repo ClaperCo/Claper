@@ -251,6 +251,11 @@ defmodule ClaperWeb.EventLive.Show do
   end
 
   @impl true
+  def handle_info({:post_pinned, post}, socket) do
+    {:noreply, socket |> update(:posts, fn posts -> [post | posts] end)}
+  end
+
+  @impl true
   def handle_info({:reaction_added, post}, socket) do
     {:noreply, socket |> update(:posts, fn posts -> [post | posts] end)}
   end

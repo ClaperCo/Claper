@@ -354,8 +354,8 @@
       </div>
     </div>
 
-    <div class="grid grid-cols-1 grid-rows-2 md:grid-rows-3">
-      <div class="bg-gray-200 md:row-span-2">
+    <div class="grid grid-cols-1 grid-rows-2 md:grid-rows-3" style="height: 100%;" >
+      <div class="bg-gray-200 md:row-span-2 border-2">
         <ul class="fixed z-20 flex items-center bg-gray-200 space-x-3 px-2 w-full py-2">
           <li class={"rounded-md #{if @list_tab==:posts, do: 'bg-secondary-600 text-white' ,
             else: 'bg-white text-gray-600' } px-2 py-0.5 text-sm shadow-sm"}>
@@ -370,7 +370,7 @@
 
         <%= if @list_tab==:posts do %>
           <%= if Enum.count(@unpinned_posts)==0 && Enum.count(@pinned_posts)==0 do %>
-            <div class="text-center h-full flex flex-col space-y-5 items-center justify-center text-gray-400">
+            <div class="text-center flex flex-col space-y-5 items-center justify-center text-gray-400" style="height: 100%;">
               <svg xmlns="http://www.w3.org/2000/svg" class="h-36 w-36" fill="none" viewBox="0 0 24 24"
                 stroke="currentColor" stroke-width="2">
                 <path stroke-linecap="round" stroke-linejoin="round"
@@ -382,9 +382,9 @@
               </p>
             </div>
             <% end %>
-              <div id="x" class="overflow-y-auto border-2" style="height: 100%;">
-              <%= if Enum.any?(@pinned_posts) do %>
-                <div id="pinned-post-list" class={"overflow-y-auto #{if Enum.count(@pinned_posts)> 0, do: 'max-h-fit'}
+            <div id="x" class={"overflow-y-auto #{if Enum.any?(@pinned_posts) or Enum.any?(@unpinned_posts), do: 'h-full', else: 'h-1/2'}"} >                <%= if Enum.any?(@pinned_posts) do %>
+                <div id="pinned-post-list" 
+                class={"overflow-y-auto #{if Enum.count(@pinned_posts)> 0, do: 'h-full'}
                   pt-8 px-5"}
                   phx-update="replace"
                   data-posts-nb={Enum.count(@pinned_posts)}
