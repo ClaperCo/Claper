@@ -58,12 +58,22 @@ defmodule ClaperWeb.EventLive.Manage do
     end
   end
 
+  defp delete_post_from_list(posts, deleted_post) do
+    Enum.reject(posts, fn post -> post.id == deleted_post.id end)
+  end
+
+  defp update_post_in_list(posts, updated_post) do
+    Enum.map(posts, fn post ->
+      if post.id == updated_post.id, do: updated_post, else: post
+    end)
+  end
+
   defp is_leader(%{assigns: %{current_user: current_user}} = _socket, event) do
     Claper.Events.is_leaded_by(current_user.email, event) || event.user.id == current_user.id
   end
 
-  defp is_leader(_socket, _event), do: false
 
+  defp is_leader(_socket, _event), do: false
 
   @impl true
   def handle_info(%{event: "presence_diff"}, %{assigns: %{event: event}} = socket) do
@@ -74,31 +84,28 @@ defmodule ClaperWeb.EventLive.Manage do
   @impl true
   def handle_info({:post_created, post}, socket) do
     {:noreply,
-     socket |> update(:unpinned_posts, fn posts -> [post | posts] end) |> push_event("scroll", %{})}
+     socket |> assign(:unpinned_posts, [post | socket.assigns.unpinned_posts] ) |> push_event("scroll", %{})}
   end
 
   @impl true
-  def handle_info({:post_updated, post}, socket) do
-    updated_socket =
-      if post.pinned do
-        assign(socket, :pinned_posts,  socket.assigns.pinned_posts)
-      else
-        assign(socket, :unpinned_posts,  socket.assigns.unpinned_posts)
-      end
+  def handle_info({:post_updated, updated_post}, socket) do
+    updated_posts = update_post_in_list(socket.assigns.unpinned_posts, updated_post)
+    updated_pinned_posts = update_post_in_list(socket.assigns.pinned_posts, updated_post)
 
-    {:noreply, updated_socket}
+    {:noreply,
+      socket
+      |> assign(:unpinned_posts, updated_posts)
+      |> assign(:pinned_posts, updated_pinned_posts)
+    }
   end
 
   @impl true
-  def handle_info({:post_deleted, post}, socket) do
-    updated_socket =
-      if post.pinned do
-        update(socket, :pinned_posts, fn pinned_posts -> [post | pinned_posts] end)
-      else
-        update(socket, :unpinned_posts, fn unpinned_posts -> [post | unpinned_posts] end)
-      end
-
-    {:noreply, updated_socket}
+  def handle_info({:post_deleted, deleted_post}, socket) do
+    {:noreply,
+      socket
+      |> update(:unpinned_posts, fn posts -> delete_post_from_list(posts, deleted_post) end)
+      |> update(:pinned_posts, fn pinned_posts -> delete_post_from_list(pinned_posts, deleted_post) end)
+    }
   end
 
   @impl true
