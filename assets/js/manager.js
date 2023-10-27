@@ -18,14 +18,14 @@ export class Manager {
           document.getElementById("slide-preview-" + data.current_page).scrollIntoView({
             block: 'center',
             behavior: 'smooth'
-          });  
+          });
         }, data.timeout ? data.timeout : 0)
       }
     })
 
     window.addEventListener('keydown', (e) => {
-      
-      if (e.target.tagName.toLowerCase() != "input") {
+
+      if ((e.target.tagName || '').toLowerCase() != "input") {
         e.preventDefault()
 
         switch (e.key) {
@@ -41,7 +41,7 @@ export class Manager {
           case 'ArrowDown':
             this.nextPage()
             break
-        }  
+        }
       }
     });
   }
@@ -54,25 +54,25 @@ export class Manager {
       document.getElementById("slide-preview-" + this.currentPage).scrollIntoView({
         block: 'center',
         behavior: 'smooth'
-      });  
+      });
     }
   }
 
   nextPage() {
-    if(this.currentPage == this.maxPage - 1) 
-      return;    
- 
-    this.currentPage += 1;
-    this.context.pushEventTo(this.context.el, "current-page", {"page": this.currentPage.toString()});
-  }
-  
-  prevPage() {
-    if(this.currentPage == 0) 
+    if (this.currentPage == this.maxPage - 1)
       return;
-      
+
+    this.currentPage += 1;
+    this.context.pushEventTo(this.context.el, "current-page", { "page": this.currentPage.toString() });
+  }
+
+  prevPage() {
+    if (this.currentPage == 0)
+      return;
+
     this.currentPage -= 1;
-    this.context.pushEventTo(this.context.el, "current-page", {"page": this.currentPage.toString()});
+    this.context.pushEventTo(this.context.el, "current-page", { "page": this.currentPage.toString() });
 
   }
-  
+
 }
