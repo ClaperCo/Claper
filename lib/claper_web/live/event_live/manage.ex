@@ -583,7 +583,7 @@ defmodule ClaperWeb.EventLive.Manage do
   end
 
   defp pin(post, socket) do
-    {:ok, _updatedPost} = Claper.Posts.toggle_pin_post(post)
+    {:ok, _updated_post} = Claper.Posts.toggle_pin_post(post)
 
     updated_socket =
       socket
