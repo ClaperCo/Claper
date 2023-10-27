@@ -1,6 +1,7 @@
 ## v1.6.1
 
 - Add reset password feature
+- Add Postmark adapter
 - Security updates
 
 ## v1.6.0
