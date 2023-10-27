@@ -1,3 +1,10 @@
+## v1.6.1
+
+- Add reset password feature
+- Add Postmark adapter
+- Allow navigation within presenter window (#63) (@railsmechanic)
+- Security updates
+
 ## v1.6.0
 - Improve QR code readability
 - Add ARM Docker image

@@ -19,6 +19,7 @@ msgstr "Paramètres"
 #: lib/claper_web/live/form_live/form_component.html.heex:37
 #: lib/claper_web/live/user_settings_live/show.html.heex:34
 #: lib/claper_web/templates/user_registration/new.html.heex:34
+#: lib/claper_web/templates/user_reset_password/new.html.heex:33
 #: lib/claper_web/templates/user_session/new.html.heex:47
 #, elixir-autogen, elixir-format
 msgid "Email"
@@ -30,6 +31,8 @@ msgid "Join the Claper experience"
 msgstr "Rejoignez l'expérience Claper"
 
 #: lib/claper_web/templates/user_registration/new.html.heex:24
+#: lib/claper_web/templates/user_reset_password/edit.html.heex:25
+#: lib/claper_web/templates/user_reset_password/new.html.heex:24
 #, elixir-autogen, elixir-format
 msgid "Oops, check that all fields are filled in correctly."
 msgstr "Oups, vérifiez que tous les champs sont remplis correctement."
@@ -712,13 +715,14 @@ msgid "Or use the code:"
 msgstr "Ou utilisez le code:"
 
 #: lib/claper_web/templates/user_registration/new.html.heex:51
-#: lib/claper_web/templates/user_session/new.html.heex:73
+#: lib/claper_web/templates/user_session/new.html.heex:77
 #, elixir-autogen, elixir-format, fuzzy
 msgid "Create account"
 msgstr "Créer un compte"
 
 #: lib/claper_web/live/user_settings_live/show.html.heex:116
 #: lib/claper_web/templates/user_registration/new.html.heex:42
+#: lib/claper_web/templates/user_reset_password/edit.html.heex:34
 #: lib/claper_web/templates/user_session/new.html.heex:57
 #, elixir-autogen, elixir-format
 msgid "Password"
@@ -966,3 +970,44 @@ msgstr "désactivé"
 #, elixir-autogen, elixir-format
 msgid "Account creation is disabled"
 msgstr "La création de compte est désactivée"
+
+#: lib/claper_web/templates/user_reset_password/edit.html.heex:51
+#, elixir-autogen, elixir-format
+msgid "Confirm new password"
+msgstr "Confirmer le nouveau mot de passe"
+
+#: lib/claper_web/templates/user_session/new.html.heex:72
+#, elixir-autogen, elixir-format
+msgid "Forgot your password?"
+msgstr "Mot de passe oublié ?"
+
+#: lib/claper_web/controllers/user_reset_password_controller.ex:26
+#, elixir-autogen, elixir-format
+msgid "If your email is in our system, you'll receive instructions to reset your password shortly."
+msgstr "Si votre adresse électronique se trouve dans notre système, vous recevrez sous peu des instructions pour réinitialiser votre mot de passe."
+
+#: lib/claper_web/templates/user_reset_password/edit.html.heex:42
+#, elixir-autogen, elixir-format
+msgid "Password confirmation"
+msgstr "Confirmation du mot de passe"
+
+#: lib/claper_web/controllers/user_reset_password_controller.ex:42
+#, elixir-autogen, elixir-format
+msgid "Password updated successfully."
+msgstr "Le mot de passe a été mis à jour."
+
+#: lib/claper_web/controllers/user_reset_password_controller.ex:56
+#, elixir-autogen, elixir-format
+msgid "Reset password link is invalid or it has expired."
+msgstr "Le lien de réinitialisation du mot de passe n'est pas valide ou a expiré."
+
+#: lib/claper_web/templates/user_reset_password/edit.html.heex:12
+#: lib/claper_web/templates/user_reset_password/new.html.heex:12
+#, elixir-autogen, elixir-format, fuzzy
+msgid "Reset your password"
+msgstr "Changer votre mot de passe"
+
+#: lib/claper_web/templates/user_reset_password/new.html.heex:41
+#, elixir-autogen, elixir-format
+msgid "Send link to reset password"
+msgstr "Envoyer le lien pour réinitialiser le mot de passe"

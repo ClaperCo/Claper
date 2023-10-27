@@ -1,0 +1,48 @@
+<div>
+  <div class="relative min-h-screen bg-black">
+    <div class="flex justify-center md:items-center h-screen w-full p-8 md:p-10 lg:p-14 sm:rounded-lg md:rounded-none ">
+      <div class="max-w-xl w-full space-y-4 mx-auto">
+        <div class="text-center">
+          <h2 class="mt-6 font-bold text-gray-100">
+            <a href="/">
+              <img src="/images/logo.svg" class="h-10 w-auto inline" />
+            </a>
+          </h2>
+          <h2 class="mt-6 text-3xl font-bold text-gray-100">
+            <%= gettext("Reset your password") %>
+          </h2>
+        </div>
+
+        <.form
+          :let={f}
+          for={@changeset}
+          action={Routes.user_reset_password_path(@conn, :create)}
+          class="mt-8 space-y-6"
+        >
+          <%= if @changeset.action do %>
+            <ClaperWeb.Component.Alert.error
+              message={gettext("Oops, check that all fields are filled in correctly.")}
+              stick={true}
+            />
+          <% end %>
+          <ClaperWeb.Component.Input.email
+            form={f}
+            key={:email}
+            labelClass="text-white"
+            fieldClass="bg-gray-700 text-white"
+            name={gettext("Email")}
+            required="true"
+          />
+          <div>
+            <button
+              type="submit"
+              class="w-full flex justify-center text-white p-4 rounded-full tracking-wide font-bold focus:outline-none focus:shadow-outline shadow-lg bg-gradient-to-tl from-primary-500 to-secondary-500 bg-size-200 bg-pos-0 hover:bg-pos-100 transition-all duration-500"
+            >
+              <%= gettext("Send link to reset password") %>
+            </button>
+          </div>
+        </.form>
+      </div>
+    </div>
+  </div>
+</div>
