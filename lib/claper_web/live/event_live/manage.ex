@@ -72,7 +72,6 @@ defmodule ClaperWeb.EventLive.Manage do
     Claper.Events.is_leaded_by(current_user.email, event) || event.user.id == current_user.id
   end
 
-
   defp is_leader(_socket, _event), do: false
 
   @impl true
@@ -84,7 +83,9 @@ defmodule ClaperWeb.EventLive.Manage do
   @impl true
   def handle_info({:post_created, post}, socket) do
     {:noreply,
-     socket |> assign(:unpinned_posts, [post | socket.assigns.unpinned_posts] ) |> push_event("scroll", %{})}
+     socket
+     |> assign(:unpinned_posts, [post | socket.assigns.unpinned_posts])
+     |> push_event("scroll", %{})}
   end
 
   @impl true
@@ -93,19 +94,19 @@ defmodule ClaperWeb.EventLive.Manage do
     updated_pinned_posts = update_post_in_list(socket.assigns.pinned_posts, updated_post)
 
     {:noreply,
-      socket
-      |> assign(:unpinned_posts, updated_posts)
-      |> assign(:pinned_posts, updated_pinned_posts)
-    }
+     socket
+     |> assign(:unpinned_posts, updated_posts)
+     |> assign(:pinned_posts, updated_pinned_posts)}
   end
 
   @impl true
   def handle_info({:post_deleted, deleted_post}, socket) do
     {:noreply,
-      socket
-      |> update(:unpinned_posts, fn posts -> delete_post_from_list(posts, deleted_post) end)
-      |> update(:pinned_posts, fn pinned_posts -> delete_post_from_list(pinned_posts, deleted_post) end)
-    }
+     socket
+     |> update(:unpinned_posts, fn posts -> delete_post_from_list(posts, deleted_post) end)
+     |> update(:pinned_posts, fn pinned_posts ->
+       delete_post_from_list(pinned_posts, deleted_post)
+     end)}
   end
 
   @impl true
@@ -389,7 +390,6 @@ defmodule ClaperWeb.EventLive.Manage do
     {:noreply, socket |> assign(:state, new_state)}
   end
 
-
   @impl true
   def handle_event(
         "checked",
@@ -416,11 +416,11 @@ defmodule ClaperWeb.EventLive.Manage do
       if post.pinned do
         assign(socket, :pinned_posts, list_pinned_posts(socket, socket.assigns.event.uuid))
       else
-        assign(socket, :unpinned_posts,  list_unpinned_posts(socket, socket.assigns.event.uuid))
+        assign(socket, :unpinned_posts, list_unpinned_posts(socket, socket.assigns.event.uuid))
       end
+
     {:noreply, updated_socket}
   end
-
 
   @impl true
   def handle_event("delete-form-submit", %{"event-id" => event_id, "id" => id}, socket) do
@@ -456,7 +456,6 @@ defmodule ClaperWeb.EventLive.Manage do
 
     {:noreply, socket}
   end
-
 
   @impl true
   def handle_event("maybe-redirect", _params, socket) do
@@ -628,5 +627,4 @@ defmodule ClaperWeb.EventLive.Manage do
   defp list_form_submits(_socket, presentation_file_id) do
     Claper.Forms.list_form_submits(presentation_file_id)
   end
-
 end

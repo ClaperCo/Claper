@@ -32,7 +32,8 @@ defmodule Claper.Posts do
       join: e in Claper.Events.Event,
       on: p.event_id == e.id,
       select: p,
-      where: e.uuid == ^event_id and p.pinned == true, # Only pinned posts
+      # Only pinned posts
+      where: e.uuid == ^event_id and p.pinned == true,
       order_by: [asc: p.id]
     )
     |> Repo.all()
@@ -47,7 +48,8 @@ defmodule Claper.Posts do
       join: e in Claper.Events.Event,
       on: p.event_id == e.id,
       select: p,
-      where: e.uuid == ^event_id and p.pinned == false, # Only unpinned posts
+      # Only unpinned posts
+      where: e.uuid == ^event_id and p.pinned == false,
       order_by: [asc: p.id]
     )
     |> Repo.all()
@@ -79,8 +81,6 @@ defmodule Claper.Posts do
     )
     |> Repo.all()
   end
-
-
 
   @doc """
   Gets a single post.
@@ -130,13 +130,13 @@ defmodule Claper.Posts do
       {:error, %Ecto.Changeset{}}
 
   """
-def update_post(%Post{} = post, attrs) do
-  changeset = Post.changeset(post, attrs)
+  def update_post(%Post{} = post, attrs) do
+    changeset = Post.changeset(post, attrs)
 
-  result = changeset |> Repo.update()
+    result = changeset |> Repo.update()
 
-  result |> broadcast(:post_updated)
-end
+    result |> broadcast(:post_updated)
+  end
 
   @doc """
   Pins or unpins a post based on its current state.
@@ -158,15 +158,15 @@ end
     result = changeset |> Repo.update()
 
     # Broadcast the appropriate message based on the new state
-    broadcast_message = if new_pinned_state do
-      :post_pinned
-    else
-      :post_unpinned
-    end
+    broadcast_message =
+      if new_pinned_state do
+        :post_pinned
+      else
+        :post_unpinned
+      end
 
     result |> broadcast(broadcast_message)
   end
-
 
   @doc """
   Deletes a post.

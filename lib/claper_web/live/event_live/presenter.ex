@@ -56,7 +56,6 @@ defmodule ClaperWeb.EventLive.Presenter do
     end
   end
 
-
   defp update_post_in_list(posts, updated_post) do
     Enum.map(posts, fn post ->
       if post.id == updated_post.id, do: updated_post, else: post
@@ -93,7 +92,9 @@ defmodule ClaperWeb.EventLive.Presenter do
   def handle_info({:post_unpinned, post}, socket) do
     {:noreply,
      socket
-     |> update(:pinned_posts, fn pinned_posts -> Enum.reject(pinned_posts, fn p -> p.id == post.id end) end)}
+     |> update(:pinned_posts, fn pinned_posts ->
+       Enum.reject(pinned_posts, fn p -> p.id == post.id end)
+     end)}
   end
 
   @impl true
@@ -112,10 +113,9 @@ defmodule ClaperWeb.EventLive.Presenter do
     updated_pinned_posts = update_post_in_list(socket.assigns.pinned_posts, updated_post)
 
     {:noreply,
-      socket
-      |> assign(:posts, updated_posts)
-      |> assign(:pinned_posts, updated_pinned_posts)
-    }
+     socket
+     |> assign(:posts, updated_posts)
+     |> assign(:pinned_posts, updated_pinned_posts)}
   end
 
   @impl true
@@ -123,9 +123,9 @@ defmodule ClaperWeb.EventLive.Presenter do
     updated_posts = Enum.reject(socket.assigns.posts, fn p -> p.id == post.id end)
     updated_pinned_posts = Enum.reject(socket.assigns.pinned_posts, fn p -> p.id == post.id end)
 
-    {:noreply, socket |> assign(:posts, updated_posts) |> assign(:pinned_posts, updated_pinned_posts)}
+    {:noreply,
+     socket |> assign(:posts, updated_posts) |> assign(:pinned_posts, updated_pinned_posts)}
   end
-
 
   @impl true
   def handle_info({:poll_updated, poll}, socket) do
@@ -169,7 +169,6 @@ defmodule ClaperWeb.EventLive.Presenter do
      socket
      |> push_event("show_only_pinned", %{value: value})
      |> update(:show_only_pinned, fn _show_only_pinned -> value end)}
-
   end
 
   @impl true
@@ -252,5 +251,4 @@ defmodule ClaperWeb.EventLive.Presenter do
   defp list_pinned_posts(_socket, event_id) do
     Claper.Posts.list_pinned_posts(event_id, [:event, :reactions])
   end
-
 end
