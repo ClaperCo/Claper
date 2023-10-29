@@ -10,6 +10,11 @@ services:
       POSTGRES_PASSWORD: claper
       POSTGRES_USER: claper
       POSTGRES_DB: claper
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U claper"]
+      interval: 5s
+      timeout: 5s
+      retries: 10 
   app:
     image: ghcr.io/claperco/claper:latest
     ports: 
@@ -25,6 +30,7 @@ services:
       MAX_FILE_SIZE_MB: 15
       ENABLE_ACCOUNT_CREATION: true
     depends_on:
-      - db
+      db:
+        condition: service_healthy
 volumes:
   uploads:
