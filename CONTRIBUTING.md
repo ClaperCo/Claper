@@ -7,8 +7,8 @@ Don't forget to give the project a star! Thanks again!
 2. Create your Feature Branch (`git checkout -b feature/amazing_feature`)
 3. Commit your Changes (`git commit -m 'Add some amazing feature'`)
 4. Push to the Branch (`git push origin feature/amazing_feature`)
-5. Open a Pull Request
+5. Open a Pull Request on `dev` branch
 
 ## Translations
 
-You can contribute to the translations of this project by joining the POEditor project [here](https://poeditor.com/join/project/HbRyvyt3TT).
+You can contribute to the translations by editing or addind PO files in `/priv/gettext/`

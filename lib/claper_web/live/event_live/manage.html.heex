@@ -897,13 +897,18 @@
               <ClaperWeb.Component.Input.check
                 key={:join_screen_visible}
                 checked={@state.join_screen_visible}
+                shortcut="Q"
               />
-              <span><%= gettext("Show instructions") %></span>
+              <span><%= gettext("Show instructions") %><code class="pl-1">(Q)</code></span>
             </div>
 
             <div class="flex space-x-2 items-center mt-3">
-              <ClaperWeb.Component.Input.check key={:chat_visible} checked={@state.chat_visible} />
-              <span><%= gettext("Show messages") %></span>
+              <ClaperWeb.Component.Input.check
+                key={:chat_visible}
+                checked={@state.chat_visible}
+                shortcut="W"
+              />
+              <span><%= gettext("Show messages") %><code class="pl-1">(W)</code></span>
             </div>
 
             <div class={"#{if !@current_poll, do: 'opacity-50'} flex space-x-2 items-center mt-3"}>
@@ -911,8 +916,9 @@
                 key={:poll_visible}
                 disabled={!@current_poll}
                 checked={@state.poll_visible}
+                shortcut="E"
               />
-              <span><%= gettext("Show poll results") %></span>
+              <span><%= gettext("Show poll results") %><code class="pl-1">(E)</code></span>
             </div>
           </div>
 
@@ -920,16 +926,23 @@
             <span class="font-semibold text-lg"><%= gettext("Attendees settings") %></span>
 
             <div class="flex space-x-2 items-center mt-3">
-              <ClaperWeb.Component.Input.check key={:chat_enabled} checked={@state.chat_enabled} />
-              <span><%= gettext("Enable messages") %></span>
+              <ClaperWeb.Component.Input.check
+                key={:chat_enabled}
+                checked={@state.chat_enabled}
+                shortcut="A"
+              />
+              <span><%= gettext("Enable messages") %><code class="pl-1">(A)</code></span>
             </div>
 
             <div class="flex space-x-2 items-center mt-3">
               <ClaperWeb.Component.Input.check
                 key={:anonymous_chat_enabled}
                 checked={@state.anonymous_chat_enabled}
+                shortcut="S"
               />
-              <span><%= gettext("Enable anonymous messages") %></span>
+              <span>
+                <%= gettext("Enable anonymous messages") %><code class="pl-1">(S)</code>
+              </span>
             </div>
           </div>
         </div>

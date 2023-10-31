@@ -68,7 +68,11 @@
             </div>
           </.form>
 
-          <div class="mt-4 text-center">
+          <div class="mt-4 text-center flex gap-x-2 justify-center">
+            <%= link(gettext("Forgot your password?"),
+              to: Routes.user_reset_password_path(@conn, :new),
+              class: "text-white text-sm text-center"
+            ) %>
             <%= if Application.get_env(:claper, :enable_account_creation) do %>
               <%= link(gettext("Create account"),
                 to: Routes.user_registration_path(@conn, :new),

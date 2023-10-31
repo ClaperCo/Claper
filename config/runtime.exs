@@ -110,18 +110,32 @@ config :claper, ClaperWeb.MailboxGuard,
     get_var_from_path_or_env(config_dir, "ENABLE_MAILBOX_ROUTE", "false")
     |> String.to_existing_atom()
 
-if mail_transport == "smtp" do
-  config :claper, Claper.Mailer,
-    adapter: Swoosh.Adapters.SMTP,
-    relay: smtp_relay,
-    username: smtp_username,
-    password: smtp_password,
-    ssl: smtp_ssl,
-    # always, never, if_available
-    tls: smtp_tls,
-    # always, never, if_available
-    auth: smtp_auth,
-    port: smtp_port
+case mail_transport do
+  "smtp" ->
+    config :claper, Claper.Mailer,
+      adapter: Swoosh.Adapters.SMTP,
+      relay: smtp_relay,
+      username: smtp_username,
+      password: smtp_password,
+      ssl: smtp_ssl,
+      # always, never, if_available
+      tls: smtp_tls,
+      # always, never, if_available
+      auth: smtp_auth,
+      port: smtp_port
+
+    config :swoosh, :api_client, false
+
+  "postmark" ->
+    config :claper, Claper.Mailer,
+      adapter: Swoosh.Adapters.Postmark,
+      api_key: get_var_from_path_or_env(config_dir, "POSTMARK_API_KEY", nil)
+
+    config :swoosh, :api_client, Swoosh.ApiClient.Hackney
+
+  _ ->
+    config :claper, Claper.Mailer, adapter: Swoosh.Adapters.Local
+    config :swoosh, :api_client, false
 end
 
 config :ex_aws,

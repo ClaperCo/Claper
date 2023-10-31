@@ -5,10 +5,13 @@ defmodule Claper.Accounts.UserNotifier do
 
   # Delivers the email using the application mailer.
   defp deliver(recipient, subject, body) do
+    from_name = Application.get_env(:claper, :mail)[:from_name]
+    from_email = Application.get_env(:claper, :mail)[:from]
+
     email =
       new()
       |> to(recipient)
-      |> from({"MyApp", "contact@example.com"})
+      |> from({from_name, from_email})
       |> subject(subject)
       |> text_body(body)
 

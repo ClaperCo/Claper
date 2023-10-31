@@ -19,7 +19,7 @@ AWS_REGION | - | - | _only for s3_ | The region where the bucket is located
 
 Variable | Values | Default | Required | Description
 --- | --- | --- | --- | ---
-MAIL_TRANSPORT | local, smtp | local | - | Define how the emails will be sent
+MAIL_TRANSPORT | local, smtp, postmark | local | - | Define how the emails will be sent
 MAIL_FROM | - | Claper | - | Email address used to send emails
 MAIL_FROM_NAME | - | noreply@claper.co | - | Name used to send emails
 SMTP_RELAY | - | - |  _only for smtp_ | SMTP relay server
@@ -32,6 +32,7 @@ SMTP_SSL | true, false | true | - | SMTP SSL
 ENABLE_MAILBOX_ROUTE | true, false | false | - | Enable/disable route to local mailbox (`/dev/mailbox`)
 MAILBOX_USER | - | - | - | Basic auth user for mailbox route
 MAILBOX_PASSWORD | - | - | - | Basic auth password for mailbox route
+POSTMARK_API_KEY | - | - | _only for postmark_ | Postmark API key
 
 ### Application
 
