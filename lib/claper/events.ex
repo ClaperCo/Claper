@@ -275,11 +275,12 @@ defmodule Claper.Events do
          |> Ecto.Multi.run(:from_event, fn _repo, _changes ->
            {:ok,
             get_user_event!(user_id, from_event_uuid,
-              presentation_file: [polls: [:poll_opts], forms: []]
+              presentation_file: [polls: [:poll_opts], forms: [], embeds: []]
             )}
          end)
          |> Ecto.Multi.run(:to_event, fn _repo, _changes ->
-           {:ok, get_user_event!(user_id, to_event_uuid, presentation_file: [:polls, :forms])}
+           {:ok,
+            get_user_event!(user_id, to_event_uuid, presentation_file: [:polls, :forms, :embeds])}
          end)
          |> Ecto.Multi.run(:polls, fn _repo, %{from_event: from_event, to_event: to_event} ->
            {:ok,
@@ -316,6 +317,21 @@ defmodule Claper.Events do
                         type: field.type
                       }
                     end),
+                  presentation_file_id: to_event.presentation_file.id
+                })
+              end
+            end)}
+         end)
+         |> Ecto.Multi.run(:embeds, fn _repo, %{from_event: from_event, to_event: to_event} ->
+           {:ok,
+            from_event.presentation_file.embeds
+            |> Enum.each(fn embed ->
+              if embed.position < to_event.presentation_file.length do
+                Claper.Embeds.create_embed(%{
+                  title: embed.title,
+                  content: embed.content,
+                  position: embed.position,
+                  enabled: embed.enabled,
                   presentation_file_id: to_event.presentation_file.id
                 })
               end

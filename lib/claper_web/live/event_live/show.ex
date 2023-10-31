@@ -1,7 +1,7 @@
 defmodule ClaperWeb.EventLive.Show do
   use ClaperWeb, :live_view
 
-  alias Claper.{Posts, Polls, Forms}
+  alias Claper.{Posts, Polls, Forms, Embeds}
   alias ClaperWeb.Presence
 
   on_mount(ClaperWeb.AttendeeLiveAuth)
@@ -86,6 +86,7 @@ defmodule ClaperWeb.EventLive.Show do
       |> starting_soon_assigns(event)
       |> get_current_poll(event)
       |> get_current_form(event)
+      |> get_current_embed(event)
       |> check_leader(event)
       |> leader_list(event)
 
@@ -246,6 +247,14 @@ defmodule ClaperWeb.EventLive.Show do
   end
 
   @impl true
+  def handle_info(
+        {:current_embed, embed},
+        socket
+      ) do
+    {:noreply, socket |> assign(:current_embed, embed)}
+  end
+
+  @impl true
   def handle_info({:post_updated, post}, socket) do
     {:noreply, socket |> update(:posts, fn posts -> [post | posts] end)}
   end
@@ -291,6 +300,20 @@ defmodule ClaperWeb.EventLive.Show do
     {:noreply,
      socket
      |> update(:current_form, fn _current_form -> nil end)}
+  end
+
+  @impl true
+  def handle_info({:embed_updated, embed}, socket) do
+    {:noreply,
+     socket
+     |> update(:current_embed, fn _current_embed -> embed end)}
+  end
+
+  @impl true
+  def handle_info({:embed_deleted, _embed}, socket) do
+    {:noreply,
+     socket
+     |> update(:current_embed, fn _current_embed -> nil end)}
   end
 
   @impl true
@@ -644,6 +667,16 @@ defmodule ClaperWeb.EventLive.Show do
       else
         socket |> assign(:current_form, form) |> get_current_form_submit(form.id)
       end
+    end
+  end
+
+  defp get_current_embed(socket, event) do
+    with embed <-
+           Embeds.get_embed_current_position(
+             event.presentation_file.id,
+             event.presentation_file.presentation_state.position
+           ) do
+      socket |> assign(:current_embed, embed)
     end
   end
 

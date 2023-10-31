@@ -68,6 +68,20 @@
       </div>
     </div>
   <% end %>
+  <!-- EMBED -->
+  <%= if @current_embed do %>
+    <div
+      id="embed"
+      class="h-full w-full flex flex-col justify-center bg-black bg-opacity-90 absolute z-30 left-1/2 top-1/2 transform -translate-y-1/2 -translate-x-1/2 p-10 transition-opacity"
+    >
+      <div class="w-1/2 mx-auto">
+        <p class="text-white font-bold text-5xl mb-24"><%= @current_embed.title %></p>
+        <div class="flex flex-col space-y-10 justify-center items-center">
+          <%= raw(@current_embed.content) %>
+        </div>
+      </div>
+    </div>
+  <% end %>
   <!-- MESSAGES -->
   <div
     id="slider-wrapper"
