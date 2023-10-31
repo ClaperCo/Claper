@@ -44,6 +44,7 @@ defmodule Claper.EmbedsTest do
 
       assert {:ok, %Embed{} = embed} = Embeds.create_embed(valid_attrs)
       assert embed.title == "some title"
+
       assert embed.content ==
                "<iframe src=\"https://www.youtube.com/embed/9bZkp7q19f0\" frameborder=\"0\" allowfullscreen></iframe>"
     end
@@ -66,7 +67,9 @@ defmodule Claper.EmbedsTest do
                Embeds.update_embed(presentation_file.event_id, embed, update_attrs)
 
       assert embed.title == "some updated title"
-      assert embed.content == "<iframe src=\"https://www.youtube.com/embed/9bZkp7q19f0\" frameborder=\"0\"></iframe>"
+
+      assert embed.content ==
+               "<iframe src=\"https://www.youtube.com/embed/9bZkp7q19f0\" frameborder=\"0\"></iframe>"
     end
 
     test "update_embed/3 with invalid data returns error changeset" do
