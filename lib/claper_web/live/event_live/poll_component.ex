@@ -65,10 +65,17 @@ defmodule ClaperWeb.EventLive.PollComponent do
                     </div>
                     <div class="flex space-x-3 z-10 text-left">
                       <%= if (length Enum.filter(@current_poll_vote, fn(vote) -> vote.poll_opt_id == opt.id end)) > 0 do %>
-                        <span class="h-5 w-5 mt-0.5 rounded-full point-select bg-white"></span>
+                        <%= if @poll.multiple do %>
+                          <span class="h-5 w-5 mt-0.5 point-select bg-white"></span>
+                        <% else %>
+                          <span class="h-5 w-5 mt-0.5 rounded-full point-select bg-white"></span>
+                        <% end %>
                       <% else %>
-                        <span class="h-5 w-5 mt-0.5 rounded-full point-select border-2 border-white">
-                        </span>
+                        <%= if @poll.multiple do %>
+                          <span class="h-5 w-5 mt-0.5 point-select border-2 border-white"></span>
+                        <% else %>
+                          <span class="h-5 w-5 mt-0.5 rounded-full point-select border-2 border-white"></span>
+                        <% end %>
                       <% end %>
                       <span class="flex-1"><%= opt.content %></span>
                     </div>
@@ -88,10 +95,17 @@ defmodule ClaperWeb.EventLive.PollComponent do
                     </div>
                     <div class="flex space-x-3 z-10 text-left">
                       <%= if Enum.member?(@selected_poll_opt, "#{idx}") do %>
-                        <span class="h-5 w-5 mt-0.5 rounded-full point-select bg-white"></span>
+                        <%= if @poll.multiple do %>
+                          <span class="h-5 w-5 mt-0.5 point-select bg-white"></span>
+                        <% else %>
+                          <span class="h-5 w-5 mt-0.5 rounded-full point-select bg-white"></span>
+                        <% end %>
                       <% else %>
-                        <span class="h-5 w-5 mt-0.5 rounded-full point-select border-2 border-white">
-                        </span>
+                        <%= if @poll.multiple do %>
+                          <span class="h-5 w-5 mt-0.5 point-select border-2 border-white"></span>
+                        <% else %>
+                          <span class="h-5 w-5 mt-0.5 rounded-full point-select border-2 border-white"></span>
+                        <% end %>
                       <% end %>
                       <span class="flex-1"><%= opt.content %></span>
                     </div>
