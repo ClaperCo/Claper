@@ -157,20 +157,22 @@ defmodule Claper.Embeds do
     |> Repo.update_all(set: [enabled: false])
   end
 
-  def set_default(id, presentation_file_id, position) do
-    from(e in Embed,
-      where:
-        e.presentation_file_id == ^presentation_file_id and e.position == ^position and
-          e.id != ^id
-    )
-    |> Repo.update_all(set: [enabled: false])
+  def set_status(id, presentation_file_id, position, status) do
+    if status do
+      from(e in Embed,
+        where:
+          e.presentation_file_id == ^presentation_file_id and e.position == ^position and
+            e.id != ^id
+      )
+      |> Repo.update_all(set: [enabled: false])
+    end
 
     from(e in Embed,
       where:
         e.presentation_file_id == ^presentation_file_id and e.position == ^position and
           e.id == ^id
     )
-    |> Repo.update_all(set: [enabled: true])
+    |> Repo.update_all(set: [enabled: status])
   end
 
   defp broadcast({:error, _reason} = error, _embed), do: error

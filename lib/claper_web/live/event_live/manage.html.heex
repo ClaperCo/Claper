@@ -448,7 +448,11 @@
                     </span>
                     <%= if @state.position == index do %>
                       <%= if poll.enabled do %>
-                        <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-supporting-green-100 text-supporting-green-800">
+                        <button
+                          phx-click="poll-set-inactive"
+                          phx-value-id={poll.id}
+                          class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-supporting-green-100 text-supporting-green-800"
+                        >
                           <svg
                             style="--animate-duration: 10s;"
                             class="mr-1.5 h-2 w-2 text-supporting-green-400 animate__animated animate__flash animate__infinite"
@@ -458,10 +462,10 @@
                             <circle cx="4" cy="4" r="3" />
                           </svg>
                           <%= gettext("Active") %>
-                        </span>
+                        </button>
                       <% else %>
                         <button
-                          phx-click="poll-set-default"
+                          phx-click="poll-set-active"
                           phx-value-id={poll.id}
                           class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-primary-100 text-primary-800"
                         >
@@ -524,7 +528,11 @@
                     </span>
                     <%= if @state.position == index do %>
                       <%= if form.enabled do %>
-                        <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-supporting-green-100 text-supporting-green-800">
+                        <button
+                          phx-click="form-set-inactive"
+                          phx-value-id={form.id}
+                          class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-supporting-green-100 text-supporting-green-800"
+                        >
                           <svg
                             style="--animate-duration: 10s;"
                             class="mr-1.5 h-2 w-2 text-supporting-green-400 animate__animated animate__flash animate__infinite"
@@ -534,10 +542,10 @@
                             <circle cx="4" cy="4" r="3" />
                           </svg>
                           <%= gettext("Active") %>
-                        </span>
+                        </button>
                       <% else %>
                         <button
-                          phx-click="form-set-default"
+                          phx-click="form-set-active"
                           phx-value-id={form.id}
                           class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-primary-100 text-primary-800"
                         >
@@ -594,7 +602,11 @@
                     </span>
                     <%= if @state.position == index do %>
                       <%= if embed.enabled do %>
-                        <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-supporting-green-100 text-supporting-green-800">
+                        <button
+                          phx-click="embed-set-inactive"
+                          phx-value-id={embed.id}
+                          class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-supporting-green-100 text-supporting-green-800"
+                        >
                           <svg
                             style="--animate-duration: 10s;"
                             class="mr-1.5 h-2 w-2 text-supporting-green-400 animate__animated animate__flash animate__infinite"
@@ -604,10 +616,10 @@
                             <circle cx="4" cy="4" r="3" />
                           </svg>
                           <%= gettext("Active") %>
-                        </span>
+                        </button>
                       <% else %>
                         <button
-                          phx-click="embed-set-default"
+                          phx-click="embed-set-active"
                           phx-value-id={embed.id}
                           class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-primary-100 text-primary-800"
                         >
