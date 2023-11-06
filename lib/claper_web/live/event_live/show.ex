@@ -276,9 +276,15 @@ defmodule ClaperWeb.EventLive.Show do
 
   @impl true
   def handle_info({:poll_updated, poll}, socket) do
-    {:noreply,
-     socket
-     |> update(:current_poll, fn _current_poll -> poll end)}
+    if poll.enabled do
+      {:noreply,
+       socket
+       |> update(:current_poll, fn _current_poll -> poll end)}
+    else
+      {:noreply,
+       socket
+       |> update(:current_poll, fn _current_poll -> nil end)}
+    end
   end
 
   @impl true
@@ -290,9 +296,15 @@ defmodule ClaperWeb.EventLive.Show do
 
   @impl true
   def handle_info({:form_updated, form}, socket) do
-    {:noreply,
-     socket
-     |> update(:current_form, fn _current_form -> form end)}
+    if form.enabled do
+      {:noreply,
+       socket
+       |> update(:current_form, fn _current_form -> form end)}
+    else
+      {:noreply,
+       socket
+       |> update(:current_form, fn _current_form -> nil end)}
+    end
   end
 
   @impl true
@@ -304,9 +316,15 @@ defmodule ClaperWeb.EventLive.Show do
 
   @impl true
   def handle_info({:embed_updated, embed}, socket) do
-    {:noreply,
-     socket
-     |> update(:current_embed, fn _current_embed -> embed end)}
+    if embed.enabled do
+      {:noreply,
+       socket
+       |> update(:current_embed, fn _current_embed -> embed end)}
+    else
+      {:noreply,
+       socket
+       |> update(:current_embed, fn _current_embed -> nil end)}
+    end
   end
 
   @impl true
