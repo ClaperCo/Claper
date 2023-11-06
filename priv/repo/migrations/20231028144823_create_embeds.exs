@@ -7,6 +7,7 @@ defmodule Claper.Repo.Migrations.CreateEmbeds do
       add :content, :text, null: false
       add :position, :integer, default: 0
       add :enabled, :boolean, default: true
+      add :attendee_visibility, :boolean, default: false
       add :presentation_file_id, references(:presentation_files, on_delete: :nilify_all)
 
       timestamps()

@@ -17,7 +17,8 @@ defmodule Claper.EmbedsFixtures do
         content:
           "<iframe src=\"https://www.youtube.com/embed/9bZkp7q19f0\" frameborder=\"0\" allowfullscreen></iframe>",
         position: 0,
-        enabled: true
+        enabled: true,
+        attendee_visibility: true
       })
       |> Claper.Embeds.create_embed()
 

@@ -332,6 +332,7 @@ defmodule Claper.Events do
                   content: embed.content,
                   position: embed.position,
                   enabled: embed.enabled,
+                  attendee_visibility: embed.attendee_visibility,
                   presentation_file_id: to_event.presentation_file.id
                 })
               end

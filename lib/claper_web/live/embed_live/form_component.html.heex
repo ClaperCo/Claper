@@ -26,6 +26,13 @@
         autofocus="true"
         required="true"
       />
+
+      <div class="flex gap-x-2 mb-5 mt-3">
+        <%= checkbox(f, :attendee_visibility, class: "h-4 w-5") %>
+        <%= label(f, :attendee_visibility, gettext("Attendee can access the embed on the device"),
+          class: "text-sm font-medium"
+        ) %>
+      </div>
     </div>
 
     <div class="flex space-x-3">
