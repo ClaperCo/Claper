@@ -107,6 +107,18 @@ defmodule ClaperWeb.Component.Input do
 
     ~H"""
     <!-- Enabled: "bg-indigo-600", Not Enabled: "bg-gray-200" -->
+    <script>
+      document.addEventListener('keydown', function(ev) {
+        const isInputField = ['INPUT', 'TEXTAREA'].includes(document.activeElement.tagName);
+        if (isInputField) {
+          return;
+        }
+        if (ev.key === "<%= @shortcut %>" && <%= not @disabled %>) {
+          document.getElementById("check-<%= @key %>")?.click()
+        }
+      });
+    </script>
+
     <button
       phx-click={checked(@checked, @key)}
       disabled={@disabled}
@@ -116,8 +128,6 @@ defmodule ClaperWeb.Component.Input do
       class={"#{if @checked, do: 'bg-primary-600', else: 'bg-gray-200'} relative inline-flex flex-shrink-0 h-8 w-14 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200"}
       role="switch"
       aria-checked="false"
-      phx-key={@shortcut}
-      phx-window-keydown={if @shortcut && not @disabled, do: checked(@checked, @key)}
     >
       <!-- Enabled: "translate-x-5", Not Enabled: "translate-x-0" -->
       <span class={"#{if @checked, do: 'translate-x-6', else: 'translate-x-0'} pointer-events-none relative inline-block h-7 w-7 rounded-full bg-white shadow transform ring-0 transition ease-in-out duration-200"}>
