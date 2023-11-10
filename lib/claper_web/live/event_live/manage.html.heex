@@ -909,7 +909,7 @@
               <ClaperWeb.Component.Input.check
                 key={:join_screen_visible}
                 checked={@state.join_screen_visible}
-                shortcut="Q"
+                shortcut={if @create == nil, do: "Q", else: nil}
               />
               <span><%= gettext("Show instructions") %><code class="pl-1">(Q)</code></span>
             </div>
@@ -918,7 +918,7 @@
               <ClaperWeb.Component.Input.check
                 key={:chat_visible}
                 checked={@state.chat_visible}
-                shortcut="W"
+                shortcut={if @create == nil, do: "W", else: nil}
               />
               <span><%= gettext("Show messages") %><code class="pl-1">(W)</code></span>
             </div>
@@ -928,7 +928,7 @@
                 key={:poll_visible}
                 disabled={!@current_poll}
                 checked={@state.poll_visible}
-                shortcut="E"
+                shortcut={if @create == nil, do: "E", else: nil}
               />
               <span><%= gettext("Show poll results") %><code class="pl-1">(E)</code></span>
             </div>
@@ -941,7 +941,7 @@
               <ClaperWeb.Component.Input.check
                 key={:chat_enabled}
                 checked={@state.chat_enabled}
-                shortcut="A"
+                shortcut={if @create == nil, do: "A", else: nil}
               />
               <span><%= gettext("Enable messages") %><code class="pl-1">(A)</code></span>
             </div>
@@ -950,7 +950,7 @@
               <ClaperWeb.Component.Input.check
                 key={:anonymous_chat_enabled}
                 checked={@state.anonymous_chat_enabled}
-                shortcut="S"
+                shortcut={if @create == nil, do: "S", else: nil}
               />
               <span>
                 <%= gettext("Enable anonymous messages") %><code class="pl-1">(S)</code>
