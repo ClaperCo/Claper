@@ -33,5 +33,6 @@ defmodule Claper.Embeds.Embed do
       :position,
       :attendee_visibility
     ])
+    |> validate_format(:content, ~r/<iframe.*<\/iframe>/, message: "Invalid embed format")
   end
 end
