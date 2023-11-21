@@ -415,6 +415,7 @@ defmodule ClaperWeb.EventLive.Manage do
     updated_socket =
       if post.pinned do
         assign(socket, :pinned_posts, list_pinned_posts(socket, socket.assigns.event.uuid))
+        assign(socket, :all_posts, list_all_posts(socket, socket.assigns.event.uuid))
       else
         assign(socket, :all_posts, list_all_posts(socket, socket.assigns.event.uuid))
       end

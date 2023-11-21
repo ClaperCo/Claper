@@ -575,7 +575,7 @@
           </li>
           <li class={"rounded-md #{if @list_tab==:pinned_posts, do: 'bg-secondary-600 text-white' ,
             else: 'bg-white text-gray-600' } px-2 py-0.5 text-sm shadow-sm"}>
-            <%= link(gettext("Pinned messages"), to: "#", phx_click: "list-tab", phx_value_tab: :pinned_posts) %>
+            <%= link(gettext("Pinned messages") <> " (#{ length(@pinned_posts)})", to: "#", phx_click: "list-tab", phx_value_tab: :pinned_posts) %>
           </li>
           <li class={"rounded-md #{if @list_tab==:forms, do: 'bg-secondary-600 text-white' ,
             else: 'bg-white text-gray-600' } px-2 py-0.5 text-sm shadow-sm"}>
@@ -811,7 +811,7 @@
                   <div
                     class={if post.__meta__.state == :deleted, do: "hidden"}
                     id={"#{post.id}-post"}
-                  >
+                  >                  
                     <div class="px-4 pb-2 pt-3 rounded-b-lg rounded-tr-lg bg-white relative shadow-md text-black break-all mt-4">
                       <div class="float-right mr-1">
                         <%= if post.attendee_identifier do %>
