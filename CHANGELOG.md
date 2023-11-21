@@ -1,5 +1,6 @@
-## v1.6.1
+## v1.7.0
 
+- Add keyboard shortcuts to control settings (#64) (@Dhanus3133)
 - Add reset password feature
 - Add Postmark adapter
 - Allow navigation within presenter window (#63) (@railsmechanic)
