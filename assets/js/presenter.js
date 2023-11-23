@@ -35,11 +35,18 @@ export class Presenter {
       if (data.value) {
         document.getElementById("post-list").classList.remove("animate__animated", "animate__fadeOutLeft")
         document.getElementById("post-list").classList.add("animate__animated", "animate__fadeInLeft")
+        
+        document.getElementById("pinned-post-list").classList.remove("animate__animated", "animate__fadeOutLeft")
+        document.getElementById("pinned-post-list").classList.add("animate__animated", "animate__fadeInLeft")
       } else {
         document.getElementById("post-list").classList.remove("animate__animated", "animate__fadeInLeft")
         document.getElementById("post-list").classList.add("animate__animated", "animate__fadeOutLeft")
+
+        document.getElementById("pinned-post-list").classList.remove("animate__animated", "animate__fadeInLeft")
+        document.getElementById("pinned-post-list").classList.add("animate__animated", "animate__fadeOutLeft")
       }
     })
+
 
     this.context.handleEvent('poll-visible', data => {
       if (data.value) {

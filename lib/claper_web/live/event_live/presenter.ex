@@ -46,13 +46,21 @@ defmodule ClaperWeb.EventLive.Presenter do
         |> assign(:event, event)
         |> assign(:state, event.presentation_file.presentation_state)
         |> assign(:posts, list_posts(socket, event.uuid))
+        |> assign(:pinned_posts, list_pinned_posts(socket, event.uuid))
+        |> assign(:show_only_pinned, event.presentation_file.presentation_state.show_only_pinned)
         |> assign(:reacts, [])
         |> poll_at_position
         |> form_at_position
         |> embed_at_position
 
-      {:ok, socket, temporary_assigns: [posts: []]}
+      {:ok, socket, temporary_assigns: []}
     end
+  end
+
+  defp update_post_in_list(posts, updated_post) do
+    Enum.map(posts, fn post ->
+      if post.id == updated_post.id, do: updated_post, else: post
+    end)
   end
 
   defp is_leader(%{assigns: %{current_user: current_user}} = _socket, event) do
@@ -75,6 +83,22 @@ defmodule ClaperWeb.EventLive.Presenter do
   end
 
   @impl true
+  def handle_info({:post_pinned, post}, socket) do
+    {:noreply,
+     socket
+     |> update(:pinned_posts, fn pinned_posts -> [post | pinned_posts] end)}
+  end
+
+  @impl true
+  def handle_info({:post_unpinned, post}, socket) do
+    {:noreply,
+     socket
+     |> update(:pinned_posts, fn pinned_posts ->
+       Enum.reject(pinned_posts, fn p -> p.id == post.id end)
+     end)}
+  end
+
+  @impl true
   def handle_info({:state_updated, state}, socket) do
     {:noreply,
      socket
@@ -86,23 +110,23 @@ defmodule ClaperWeb.EventLive.Presenter do
   end
 
   @impl true
-  def handle_info({:post_updated, post}, socket) do
-    {:noreply, socket |> update(:posts, fn posts -> [post | posts] end)}
-  end
+  def handle_info({:post_updated, updated_post}, socket) do
+    updated_posts = update_post_in_list(socket.assigns.posts, updated_post)
+    updated_pinned_posts = update_post_in_list(socket.assigns.pinned_posts, updated_post)
 
-  @impl true
-  def handle_info({:reaction_added, post}, socket) do
-    {:noreply, socket |> update(:posts, fn posts -> [post | posts] end)}
-  end
-
-  @impl true
-  def handle_info({:reaction_removed, post}, socket) do
-    {:noreply, socket |> update(:posts, fn posts -> [post | posts] end)}
+    {:noreply,
+     socket
+     |> assign(:posts, updated_posts)
+     |> assign(:pinned_posts, updated_pinned_posts)}
   end
 
   @impl true
   def handle_info({:post_deleted, post}, socket) do
-    {:noreply, socket |> update(:posts, fn posts -> [post | posts] end)}
+    updated_posts = Enum.reject(socket.assigns.posts, fn p -> p.id == post.id end)
+    updated_pinned_posts = Enum.reject(socket.assigns.pinned_posts, fn p -> p.id == post.id end)
+
+    {:noreply,
+     socket |> assign(:posts, updated_posts) |> assign(:pinned_posts, updated_pinned_posts)}
   end
 
   @impl true
@@ -171,6 +195,14 @@ defmodule ClaperWeb.EventLive.Presenter do
      socket
      |> push_event("chat-visible", %{value: value})
      |> update(:chat_visible, fn _chat_visible -> value end)}
+  end
+
+  @impl true
+  def handle_info({:show_only_pinned, value}, socket) do
+    {:noreply,
+     socket
+     |> push_event("show_only_pinned", %{value: value})
+     |> update(:show_only_pinned, fn _show_only_pinned -> value end)}
   end
 
   @impl true
@@ -266,5 +298,9 @@ defmodule ClaperWeb.EventLive.Presenter do
 
   defp list_posts(_socket, event_id) do
     Claper.Posts.list_posts(event_id, [:event, :reactions])
+  end
+
+  defp list_pinned_posts(_socket, event_id) do
+    Claper.Posts.list_pinned_posts(event_id, [:event, :reactions])
   end
 end
