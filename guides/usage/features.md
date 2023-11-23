@@ -12,6 +12,8 @@ Users can send instant message during the presentation and interact to others me
 
 You can choose to be anoynmous or use your own name before sending a message.
 
+You can also pin a message to the screen to highlight it and only show pinned messages.
+
 ## Polls
 
 You can add polls during your presentation. Users can vote to the poll and see the results in real time. 
