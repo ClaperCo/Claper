@@ -10,6 +10,7 @@ defmodule Claper.Presentations.PresentationFile do
     belongs_to :event, Claper.Events.Event
     has_many :polls, Claper.Polls.Poll
     has_many :forms, Claper.Forms.Form
+    has_many :embeds, Claper.Embeds.Embed
     has_one :presentation_state, Claper.Presentations.PresentationState, on_replace: :delete
 
     timestamps()

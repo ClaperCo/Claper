@@ -275,20 +275,22 @@ defmodule Claper.Polls do
     |> Repo.update_all(set: [enabled: false])
   end
 
-  def set_default(id, presentation_file_id, position) do
-    from(p in Poll,
-      where:
-        p.presentation_file_id == ^presentation_file_id and p.position == ^position and
-          p.id != ^id
-    )
-    |> Repo.update_all(set: [enabled: false])
+  def set_status(id, presentation_file_id, position, status) do
+    if status do
+      from(p in Poll,
+        where:
+          p.presentation_file_id == ^presentation_file_id and p.position == ^position and
+            p.id != ^id
+      )
+      |> Repo.update_all(set: [enabled: false])
+    end
 
     from(p in Poll,
       where:
         p.presentation_file_id == ^presentation_file_id and p.position == ^position and
           p.id == ^id
     )
-    |> Repo.update_all(set: [enabled: true])
+    |> Repo.update_all(set: [enabled: status])
   end
 
   defp broadcast({:error, _reason} = error, _poll), do: error
