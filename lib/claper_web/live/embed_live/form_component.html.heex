@@ -11,25 +11,28 @@
       <ClaperWeb.Component.Input.text
         form={f}
         key={:title}
-        name={gettext("Title of your embed")}
-        labelClass={if @dark, do: "text-white"}
-        fieldClass={if @dark, do: "bg-gray-700 text-white"}
-        autofocus="true"
-        required="true"
-      />
-      <ClaperWeb.Component.Input.textarea
-        form={f}
-        key={:content}
-        name={gettext("Content of your embed")}
+        name={gettext("Title")}
         labelClass={if @dark, do: "text-white"}
         fieldClass={if @dark, do: "bg-gray-700 text-white"}
         autofocus="true"
         required="true"
       />
 
+      <div class="mt-3">
+        <ClaperWeb.Component.Input.textarea
+          form={f}
+          key={:content}
+          name={gettext("The iframe component")}
+          labelClass={if @dark, do: "text-white"}
+          fieldClass={if @dark, do: "bg-gray-700 text-white"}
+          autofocus="true"
+          required="true"
+        />
+      </div>
+
       <div class="flex gap-x-2 mb-5 mt-3">
         <%= checkbox(f, :attendee_visibility, class: "h-4 w-5") %>
-        <%= label(f, :attendee_visibility, gettext("Attendee can access the embed on the device"),
+        <%= label(f, :attendee_visibility, gettext("Attendee can view the web content on their device"),
           class: "text-sm font-medium"
         ) %>
       </div>
@@ -53,7 +56,7 @@
           phx_target: @myself,
           phx_value_id: @embed.id,
           data: [
-            confirm: gettext("This will delete the embed, are you sure?")
+            confirm: gettext("This will delete the web content, are you sure?")
           ],
           class:
             "w-full lg:w-auto px-6 text-center text-white py-2 rounded-md tracking-wide font-bold focus:outline-none focus:shadow-outline bg-gradient-to-tl from-supporting-red-600 to-supporting-red-400 bg-size-200 bg-pos-0 hover:bg-pos-100 transition-all duration-500"

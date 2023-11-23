@@ -254,7 +254,7 @@
 
         <%= for embed <- Enum.filter(@event.presentation_file.embeds , fn e -> e.position == position end) do %>
           <span class="text-2xl font-semibold text-gray-900 mb-4">
-            <%= gettext("Embed") %>: <%= embed.title %>
+            <%= gettext("Web content") %>: <%= embed.title %>
           </span>
           <div class="px-4 pb-2 pt-3 rounded-b-lg rounded-tr-lg bg-white relative shadow-md text-black break-all mt-4">
             <div class="flex space-x-3 items-center">

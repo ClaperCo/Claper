@@ -325,8 +325,8 @@
           <div class="scroll-py-3 overflow-y-auto bg-gray-100 p-3">
             <p class="text-xl font-bold">
               <%= case @create_action do
-                :new -> gettext("New Embed")
-                :edit -> gettext("Edit Embed")
+                :new -> gettext("New web content")
+                :edit -> gettext("Edit web content")
               end %>
             </p>
             <.live_component
@@ -598,7 +598,7 @@
                   </div>
                   <div class="flex space-x-2">
                     <span>
-                      <span class="font-semibold"><%= gettext "Embed" %></span>: <%= embed.title %>
+                      <span class="font-semibold"><%= gettext "Web content" %></span>: <%= embed.title %>
                     </span>
                     <%= if @state.position == index do %>
                       <%= if embed.enabled do %>

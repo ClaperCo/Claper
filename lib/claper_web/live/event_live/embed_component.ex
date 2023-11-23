@@ -33,7 +33,7 @@ defmodule ClaperWeb.EventLive.EmbedComponent do
               <path d="M17 12h.01"></path>
               <path d="M13 12h.01"></path>
             </svg>
-            <span class="font-bold"><%= gettext("See current embed") %></span>
+            <span class="font-bold"><%= gettext("See current web content") %></span>
           </div>
         </div>
       </div>
@@ -56,7 +56,7 @@ defmodule ClaperWeb.EventLive.EmbedComponent do
             </svg>
           </div>
 
-          <p class="text-xs text-gray-500 my-1"><%= gettext("Current embed") %></p>
+          <p class="text-xs text-gray-500 my-1"><%= gettext("Current web content") %></p>
           <p class="text-white text-lg font-semibold mb-4"><%= @embed.title %></p>
         </div>
         <div class="flex flex-col space-y-3">
