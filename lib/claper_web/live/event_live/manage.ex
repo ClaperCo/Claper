@@ -589,7 +589,6 @@ defmodule ClaperWeb.EventLive.Manage do
         "pinned_posts" ->
           socket
           |> assign(:pinned_posts, list_pinned_posts(socket, socket.assigns.event.uuid))
-
       end
 
     {:noreply, socket}

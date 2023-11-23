@@ -74,7 +74,8 @@ defmodule ClaperWeb.EventLive.PollComponent do
                         <%= if @poll.multiple do %>
                           <span class="h-5 w-5 mt-0.5 point-select border-2 border-white"></span>
                         <% else %>
-                          <span class="h-5 w-5 mt-0.5 rounded-full point-select border-2 border-white"></span>
+                          <span class="h-5 w-5 mt-0.5 rounded-full point-select border-2 border-white">
+                          </span>
                         <% end %>
                       <% end %>
                       <span class="flex-1"><%= opt.content %></span>
@@ -104,7 +105,8 @@ defmodule ClaperWeb.EventLive.PollComponent do
                         <%= if @poll.multiple do %>
                           <span class="h-5 w-5 mt-0.5 point-select border-2 border-white"></span>
                         <% else %>
-                          <span class="h-5 w-5 mt-0.5 rounded-full point-select border-2 border-white"></span>
+                          <span class="h-5 w-5 mt-0.5 rounded-full point-select border-2 border-white">
+                          </span>
                         <% end %>
                       <% end %>
                       <span class="flex-1"><%= opt.content %></span>

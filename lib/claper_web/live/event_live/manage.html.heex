@@ -711,7 +711,11 @@
           </li>
           <li class={"rounded-md #{if @list_tab==:pinned_posts, do: 'bg-secondary-600 text-white' ,
             else: 'bg-white text-gray-600' } px-2 py-0.5 text-sm shadow-sm"}>
-            <%= link(gettext("Pinned messages") <> " (#{ length(@pinned_posts)})", to: "#", phx_click: "list-tab", phx_value_tab: :pinned_posts) %>
+            <%= link(gettext("Pinned messages") <> " (#{length(@pinned_posts)})",
+              to: "#",
+              phx_click: "list-tab",
+              phx_value_tab: :pinned_posts
+            ) %>
           </li>
           <li class={"rounded-md #{if @list_tab==:forms, do: 'bg-secondary-600 text-white' ,
             else: 'bg-white text-gray-600' } px-2 py-0.5 text-sm shadow-sm"}>
@@ -900,27 +904,37 @@
         <% end %>
         <%= if @list_tab == :pinned_posts do %>
           <%= if Enum.count(@pinned_posts) == 0 do %>
-              <div
-                class="text-center flex flex-col space-y-5 items-center justify-center text-gray-400"
-                style="height: 100%;"
-              >
-
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-36 w-36" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M15 4.5l-4 4l-4 1.5l-1.5 1.5l7 7l1.5 -1.5l1.5 -4l4 -4" /><path d="M9 15l-4.5 4.5" /><path d="M14.5 4l5.5 5.5" /></svg>
-
-                <p class="text-lg">
-                  <%= gettext("Pinned messages will appear here.") %>
-                </p>
-              </div>
-            <% end %>
-
             <div
+              class="text-center flex flex-col space-y-5 items-center justify-center text-gray-400"
+              style="height: 100%;"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-36 w-36"
+                viewBox="0 0 24 24"
+                stroke-width="2"
+                stroke="currentColor"
+                fill="none"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M15 4.5l-4 4l-4 1.5l-1.5 1.5l7 7l1.5 -1.5l1.5 -4l4 -4" /><path d="M9 15l-4.5 4.5" /><path d="M14.5 4l5.5 5.5" />
+              </svg>
+
+              <p class="text-lg">
+                <%= gettext("Pinned messages will appear here.") %>
+              </p>
+            </div>
+          <% end %>
+
+          <div
             id="x-pinned"
             class={"overflow-y-auto #{if Enum.any?(@pinned_posts), do: 'h-full', else: 'h-1/2'}"}
           >
             <%= if Enum.any?(@pinned_posts) do %>
               <div
                 id="pinned-post-list"
-                class={"overflow-y-auto pb-5 pt-8 px-5"}
+                class="overflow-y-auto pb-5 pt-8 px-5"
                 phx-update="replace"
                 data-posts-nb={Enum.count(@pinned_posts)}
                 phx-hook="ScrollIntoDiv"
@@ -930,7 +944,7 @@
                   <div
                     class={if post.__meta__.state == :deleted, do: "hidden"}
                     id={"#{post.id}-post"}
-                  >                  
+                  >
                     <div class="px-4 pb-2 pt-3 rounded-b-lg rounded-tr-lg bg-white relative shadow-md text-black break-all mt-4">
                       <div class="float-right mr-1">
                         <%= if post.attendee_identifier do %>
@@ -1063,7 +1077,6 @@
             <% end %>
           </div>
         <% end %>
-
 
         <%= if @list_tab==:forms do %>
           <%= if Enum.count(@form_submits)==0 do %>
