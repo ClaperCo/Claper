@@ -976,11 +976,6 @@ msgstr "Account creation is disabled"
 msgid "Add a Youtube video or any web content."
 msgstr "Add a Youtube video or any web content."
 
-#: lib/claper_web/live/event_live/manage.html.heex:242
-#, elixir-autogen, elixir-format
-msgid "Embeded"
-msgstr "Embeded"
-
 #: lib/claper_web/templates/user_reset_password/edit.html.heex:51
 #, elixir-autogen, elixir-format
 msgid "Confirm new password"
@@ -1062,8 +1057,14 @@ msgstr "This will delete the embed, are you sure?"
 msgid "Title"
 msgstr ""
 
+#: lib/claper_web/live/event_live/manage.html.heex:242
 #: lib/claper_web/live/event_live/manage.html.heex:601
 #: lib/claper_web/live/stat_live/index.html.heex:257
 #, elixir-autogen, elixir-format
 msgid "Web content"
+msgstr ""
+
+#: lib/claper/embeds/embed.ex:37
+#, elixir-autogen, elixir-format, fuzzy
+msgid "Invalid embed format (should start with <iframe> and end with </iframe>)"
 msgstr ""

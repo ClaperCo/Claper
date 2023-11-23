@@ -978,11 +978,6 @@ msgstr ""
 msgid "Add a Youtube video or any web content."
 msgstr ""
 
-#: lib/claper_web/live/event_live/manage.html.heex:242
-#, elixir-autogen, elixir-format
-msgid "Embeded"
-msgstr ""
-
 #: lib/claper_web/templates/user_reset_password/edit.html.heex:51
 #, elixir-autogen, elixir-format
 msgid "Confirm new password"
@@ -1064,8 +1059,14 @@ msgstr ""
 msgid "Title"
 msgstr ""
 
+#: lib/claper_web/live/event_live/manage.html.heex:242
 #: lib/claper_web/live/event_live/manage.html.heex:601
 #: lib/claper_web/live/stat_live/index.html.heex:257
 #, elixir-autogen, elixir-format
 msgid "Web content"
+msgstr ""
+
+#: lib/claper/embeds/embed.ex:37
+#, elixir-autogen, elixir-format
+msgid "Invalid embed format (should start with <iframe> and end with </iframe>)"
 msgstr ""
