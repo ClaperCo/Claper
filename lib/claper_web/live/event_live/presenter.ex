@@ -79,14 +79,14 @@ defmodule ClaperWeb.EventLive.Presenter do
   def handle_info({:post_created, post}, socket) do
     {:noreply,
      socket
-     |> update(:posts, fn posts -> [post | posts] end)}
+     |> update(:posts, fn posts -> posts ++ [post] end)}
   end
 
   @impl true
   def handle_info({:post_pinned, post}, socket) do
     {:noreply,
      socket
-     |> update(:pinned_posts, fn pinned_posts -> [post | pinned_posts] end)}
+     |> update(:pinned_posts, fn pinned_posts -> pinned_posts ++ [post] end)}
   end
 
   @impl true

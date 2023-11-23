@@ -753,7 +753,6 @@
             id="x"
             class={"overflow-y-auto #{if Enum.any?(@pinned_posts) or Enum.any?(@all_posts), do: 'h-full', else: 'h-1/2'}"}
           >
-
             <div
               id="post-list"
               class={"overflow-y-auto #{if Enum.count(@all_posts)> 0, do: ''} pb-5 pt-8 px-5"}
@@ -899,26 +898,14 @@
             <!-- The div below encompasses the 2 post lists -->
           </div>
         <% end %>
-        <%= if @list_tab==:pinned_posts do %>
-          <%= if Enum.count(@pinned_posts)==0 do %>
+        <%= if @list_tab == :pinned_posts do %>
+          <%= if Enum.count(@pinned_posts) == 0 do %>
               <div
                 class="text-center flex flex-col space-y-5 items-center justify-center text-gray-400"
                 style="height: 100%;"
               >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  class="h-36 w-36"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  stroke-width="2"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-1.414-.586m0 0L11 14h4a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2v4l.586-.586z"
-                  />
-                </svg>
+
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-36 w-36" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M15 4.5l-4 4l-4 1.5l-1.5 1.5l7 7l1.5 -1.5l1.5 -4l4 -4" /><path d="M9 15l-4.5 4.5" /><path d="M14.5 4l5.5 5.5" /></svg>
 
                 <p class="text-lg">
                   <%= gettext("Pinned messages will appear here.") %>
@@ -926,18 +913,14 @@
               </div>
             <% end %>
 
-
-
-
             <div
-            id="x"
-            class={"overflow-y-auto #{if Enum.any?(@pinned_posts) or Enum.any?(@all_posts), do: 'h-full', else: 'h-1/2'}"}
+            id="x-pinned"
+            class={"overflow-y-auto #{if Enum.any?(@pinned_posts), do: 'h-full', else: 'h-1/2'}"}
           >
             <%= if Enum.any?(@pinned_posts) do %>
               <div
                 id="pinned-post-list"
-                class={"overflow-y-auto #{if Enum.count(@pinned_posts)> 0, do: ''}
-                  pt-8 px-5"}
+                class={"overflow-y-auto pb-5 pt-8 px-5"}
                 phx-update="replace"
                 data-posts-nb={Enum.count(@pinned_posts)}
                 phx-hook="ScrollIntoDiv"
@@ -1196,9 +1179,10 @@
               <ClaperWeb.Component.Input.check
                 key={:show_only_pinned}
                 checked={@state.show_only_pinned}
+                shortcut={if @create == nil, do: "E", else: nil}
               />
               <span>
-                <%= gettext("Show only pinned messages") %>
+                <%= gettext("Show only pinned messages") %><code class="pl-1">(E)</code>
               </span>
             </div>
 
@@ -1207,9 +1191,9 @@
                 key={:poll_visible}
                 disabled={!@current_poll}
                 checked={@state.poll_visible}
-                shortcut={if @create == nil, do: "E", else: nil}
+                shortcut={if @create == nil, do: "R", else: nil}
               />
-              <span><%= gettext("Show poll results") %><code class="pl-1">(E)</code></span>
+              <span><%= gettext("Show poll results") %><code class="pl-1">(R)</code></span>
             </div>
           </div>
 

@@ -89,7 +89,7 @@
   >
     <div
       class={"#{if @state.chat_visible, do: 'opacity-100 w-3/12 px-4 showed', else: 'opacity-0 w-0 p-0'} transition-all duration-150 flex flex-col h-screen py-5 justify-end max-h-screen bg-black"}
-      id="test"
+      id="post-list-wrapper"
       phx-update="replace"
     >
       <%= if @state.show_only_pinned == false do %>

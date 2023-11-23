@@ -586,7 +586,6 @@ defmodule ClaperWeb.EventLive.Manage do
             list_form_submits(socket, socket.assigns.event.presentation_file.id)
           )
 
-
         "pinned_posts" ->
           socket
           |> assign(:pinned_posts, list_pinned_posts(socket, socket.assigns.event.uuid))
@@ -746,7 +745,7 @@ defmodule ClaperWeb.EventLive.Manage do
 
     {:noreply, updated_socket}
   end
-  
+
   defp embed_at_position(
          %{assigns: %{event: event, state: state}} = socket,
          broadcast \\ true
