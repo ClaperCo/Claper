@@ -51,6 +51,7 @@ defmodule ClaperWeb.EventLive.Presenter do
         |> assign(:reacts, [])
         |> poll_at_position
         |> form_at_position
+        |> embed_at_position
 
       {:ok, socket, temporary_assigns: []}
     end
@@ -104,7 +105,8 @@ defmodule ClaperWeb.EventLive.Presenter do
      |> assign(:state, state)
      |> push_event("page", %{current_page: state.position})
      |> push_event("reset-global-react", %{})
-     |> poll_at_position}
+     |> poll_at_position
+     |> embed_at_position}
   end
 
   @impl true
@@ -129,9 +131,15 @@ defmodule ClaperWeb.EventLive.Presenter do
 
   @impl true
   def handle_info({:poll_updated, poll}, socket) do
-    {:noreply,
-     socket
-     |> update(:current_poll, fn _current_poll -> poll end)}
+    if poll.enabled do
+      {:noreply,
+       socket
+       |> update(:current_poll, fn _current_poll -> poll end)}
+    else
+      {:noreply,
+       socket
+       |> update(:current_poll, fn _current_poll -> nil end)}
+    end
   end
 
   @impl true
@@ -143,9 +151,15 @@ defmodule ClaperWeb.EventLive.Presenter do
 
   @impl true
   def handle_info({:form_updated, form}, socket) do
-    {:noreply,
-     socket
-     |> update(:current_form, fn _current_form -> form end)}
+    if form.active do
+      {:noreply,
+       socket
+       |> update(:current_form, fn _current_form -> form end)}
+    else
+      {:noreply,
+       socket
+       |> update(:current_form, fn _current_form -> nil end)}
+    end
   end
 
   @impl true
@@ -153,6 +167,26 @@ defmodule ClaperWeb.EventLive.Presenter do
     {:noreply,
      socket
      |> update(:current_form, fn _current_form -> nil end)}
+  end
+
+  @impl true
+  def handle_info({:embed_updated, embed}, socket) do
+    if embed.active do
+      {:noreply,
+       socket
+       |> update(:current_embed, fn _current_embed -> embed end)}
+    else
+      {:noreply,
+       socket
+       |> update(:current_embed, fn _current_embed -> nil end)}
+    end
+  end
+
+  @impl true
+  def handle_info({:embed_deleted, _embed}, socket) do
+    {:noreply,
+     socket
+     |> update(:current_embed, fn _current_embed -> nil end)}
   end
 
   @impl true
@@ -211,6 +245,14 @@ defmodule ClaperWeb.EventLive.Presenter do
   end
 
   @impl true
+  def handle_info(
+        {:current_embed, embed},
+        socket
+      ) do
+    {:noreply, socket |> assign(:current_embed, embed)}
+  end
+
+  @impl true
   def handle_info(_, socket) do
     {:noreply, socket}
   end
@@ -241,6 +283,16 @@ defmodule ClaperWeb.EventLive.Presenter do
              state.position
            ) do
       socket |> assign(:current_form, form)
+    end
+  end
+
+  defp embed_at_position(%{assigns: %{event: event, state: state}} = socket) do
+    with embed <-
+           Claper.Embeds.get_embed_current_position(
+             event.presentation_file.id,
+             state.position
+           ) do
+      socket |> assign(:current_embed, embed)
     end
   end
 

@@ -151,7 +151,7 @@ Distributed under the GPLv3 License. See `LICENSE.txt` for more information.
 <!-- CONTACT -->
 ## Contact
 
-[![](https://img.shields.io/badge/@alxlion__-1DA1F2?style=for-the-badge&logo=twitter&logoColor=white)](https://twitter.com/alxlion_) 
+[![](https://img.shields.io/badge/@alxlion__-000000?style=for-the-badge&logo=x&logoColor=white)](https://x.com/alxlion_)
 
 Project Link: [https://github.com/ClaperCo/Claper](https://github.com/ClaperCo/Claper)
 

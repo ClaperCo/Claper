@@ -37,6 +37,39 @@ defmodule ClaperWeb.Component.Input do
     """
   end
 
+  def textarea(assigns) do
+    assigns =
+      assigns
+      |> assign_new(:required, fn -> false end)
+      |> assign_new(:autofocus, fn -> false end)
+      |> assign_new(:placeholder, fn -> false end)
+      |> assign_new(:readonly, fn -> false end)
+      |> assign_new(:labelClass, fn -> "text-gray-700" end)
+      |> assign_new(:fieldClass, fn -> "bg-white" end)
+      |> assign_new(:value, fn -> input_value(assigns.form, assigns.key) end)
+
+    ~H"""
+    <div class="relative">
+      <%= label(@form, @key, @name, class: "block text-sm font-medium #{@labelClass}") %>
+      <div class="mt-1">
+        <%= text_input(@form, @key,
+          required: @required,
+          readonly: @readonly,
+          autofocus: @autofocus,
+          placeholder: @placeholder,
+          autocomplete: @key,
+          value: @value,
+          class:
+            "#{@fieldClass} read-only:opacity-50 outline-none shadow-base focus:ring-primary-500 focus:border-primary-500 focus:ring-2 block w-full text-lg border-gray-300 rounded-md py-4 px-3"
+        ) %>
+      </div>
+      <%= if Keyword.has_key?(@form.errors, @key) do %>
+        <p class="text-supporting-red-500 text-sm"><%= error_tag(@form, @key) %></p>
+      <% end %>
+    </div>
+    """
+  end
+
   def select(assigns) do
     assigns =
       assigns
