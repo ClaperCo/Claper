@@ -328,8 +328,6 @@ Hooks.QRCode = {
         width: this.el.dataset.dynamic ? document.documentElement.clientWidth * .25 : 240,
         height: this.el.dataset.dynamic ? document.documentElement.clientWidth * .25 : 240,
         margin: 0,
-        image:
-          "/images/logo.png",
         data: url,
         cornersSquareOptions: {
           type: "square"
