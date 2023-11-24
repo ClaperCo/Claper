@@ -704,14 +704,14 @@
 
     <div class="grid grid-cols-1 grid-rows-2 md:grid-rows-3" style="height: 100%;">
       <div class="bg-gray-200 md:row-span-2 border-2">
-        <ul class="fixed z-20 flex items-center bg-gray-200 space-x-3 px-2 w-full py-2">
+        <ul id="menu" phx-update="replace" class="fixed z-20 flex items-center bg-gray-200 space-x-3 px-2 w-full py-2">
           <li class={"rounded-md #{if @list_tab==:posts, do: 'bg-secondary-600 text-white' ,
             else: 'bg-white text-gray-600' } px-2 py-0.5 text-sm shadow-sm"}>
             <%= link(gettext("Messages"), to: "#", phx_click: "list-tab", phx_value_tab: :posts) %>
           </li>
           <li class={"rounded-md #{if @list_tab==:pinned_posts, do: 'bg-secondary-600 text-white' ,
             else: 'bg-white text-gray-600' } px-2 py-0.5 text-sm shadow-sm"}>
-            <%= link(gettext("Pinned messages") <> " (#{length(@pinned_posts)})",
+            <%= link(gettext("Pinned messages") <> " (#{@pinned_post_count})",
               to: "#",
               phx_click: "list-tab",
               phx_value_tab: :pinned_posts
@@ -935,14 +935,14 @@
               <div
                 id="pinned-post-list"
                 class="overflow-y-auto pb-5 pt-8 px-5"
-                phx-update="replace"
+                phx-update="append"
                 data-posts-nb={Enum.count(@pinned_posts)}
                 phx-hook="ScrollIntoDiv"
                 data-target="#pinned-post-list"
               >
                 <%= for post <- @pinned_posts do %>
                   <div
-                    class={if post.__meta__.state == :deleted, do: "hidden"}
+                    class={if post.__meta__.state == :deleted || !post.pinned, do: "hidden"}
                     id={"#{post.id}-post"}
                   >
                     <div class="px-4 pb-2 pt-3 rounded-b-lg rounded-tr-lg bg-white relative shadow-md text-black break-all mt-4">

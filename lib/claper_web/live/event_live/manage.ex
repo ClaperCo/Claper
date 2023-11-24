@@ -43,6 +43,7 @@ defmodule ClaperWeb.EventLive.Manage do
         |> assign(:state, event.presentation_file.presentation_state)
         |> assign(:pinned_posts, list_pinned_posts(socket, event.uuid))
         |> assign(:all_posts, list_all_posts(socket, event.uuid))
+        |> assign(:pinned_post_count, length(list_pinned_posts(socket, event.uuid)))
         |> assign(:polls, list_polls(socket, event.presentation_file.id))
         |> assign(:forms, list_forms(socket, event.presentation_file.id))
         |> assign(:embeds, list_embeds(socket, event.presentation_file.id))
@@ -57,18 +58,8 @@ defmodule ClaperWeb.EventLive.Manage do
         |> form_at_position(false)
         |> embed_at_position(false)
 
-      {:ok, socket, temporary_assigns: [posts: [], form_submits: []]}
+      {:ok, socket, temporary_assigns: [all_posts: [], pinned_posts: [], form_submits: []]}
     end
-  end
-
-  defp delete_post_from_list(posts, deleted_post) do
-    Enum.reject(posts, fn post -> post.id == deleted_post.id end)
-  end
-
-  defp update_post_in_list(posts, updated_post) do
-    Enum.map(posts, fn post ->
-      if post.id == updated_post.id, do: updated_post, else: post
-    end)
   end
 
   defp is_leader(%{assigns: %{current_user: current_user}} = _socket, event) do
@@ -93,13 +84,11 @@ defmodule ClaperWeb.EventLive.Manage do
 
   @impl true
   def handle_info({:post_updated, updated_post}, socket) do
-    updated_posts = update_post_in_list(socket.assigns.all_posts, updated_post)
-    updated_pinned_posts = update_post_in_list(socket.assigns.pinned_posts, updated_post)
-
     {:noreply,
      socket
-     |> assign(:all_posts, updated_posts)
-     |> assign(:pinned_posts, updated_pinned_posts)}
+     |> update(:all_posts, fn posts -> [updated_post | posts] end)
+     |> update(:pinned_posts, fn posts -> [updated_post | posts] end)
+    }
   end
 
   @impl true
@@ -107,28 +96,29 @@ defmodule ClaperWeb.EventLive.Manage do
     {:noreply,
      socket
      |> update(:all_posts, fn posts -> [deleted_post | posts] end)
-     |> update(:pinned_posts, fn pinned_posts ->
-       delete_post_from_list(pinned_posts, deleted_post)
-     end)}
+     |> update(:pinned_posts, fn posts -> [deleted_post | posts] end)
+     |> update(:pinned_post_count, fn pinned_post_count -> pinned_post_count - if deleted_post.pinned, do: 1, else: 0 end)
+    }
   end
 
   @impl true
-  def handle_info({:post_pinned, _post}, socket) do
+  def handle_info({:post_pinned, post}, socket) do
     updated_socket =
       socket
-      |> update(:all_posts, fn _all_posts -> socket.assigns.all_posts end)
-      |> update(:pinned_posts, fn _pinned_posts -> socket.assigns.pinned_posts end)
+      |> update(:all_posts, fn all_posts -> [post | all_posts] end)
+      |> update(:pinned_posts, fn pinned_posts -> [post | pinned_posts] end)
+      |> assign(:pinned_post_count, socket.assigns.pinned_post_count + 1)
 
     {:noreply, updated_socket}
   end
 
   @impl true
-  def handle_info({:post_unpinned, _post}, socket) do
+  def handle_info({:post_unpinned, post}, socket) do
     updated_socket =
       socket
-      |> update(:all_posts, fn _all_posts -> socket.assigns.all_posts end)
-      |> update(:pinned_posts, fn _pinned_posts -> socket.assigns.pinned_posts end)
-
+      |> update(:all_posts, fn all_posts -> [post | all_posts] end)
+      |> update(:pinned_posts, fn pinned_posts -> [post | pinned_posts] end)
+      |> assign(:pinned_post_count, socket.assigns.pinned_post_count - 1)
     {:noreply, updated_socket}
   end
 
@@ -737,12 +727,7 @@ defmodule ClaperWeb.EventLive.Manage do
   defp pin(post, socket) do
     {:ok, _updated_post} = Claper.Posts.toggle_pin_post(post)
 
-    updated_socket =
-      socket
-      |> assign(:all_posts, list_all_posts(socket, socket.assigns.event.uuid))
-      |> assign(:pinned_posts, list_pinned_posts(socket, socket.assigns.event.uuid))
-
-    {:noreply, updated_socket}
+    {:noreply, socket}
   end
 
   defp embed_at_position(

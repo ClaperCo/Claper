@@ -22,7 +22,7 @@ defmodule ClaperWeb.EventLive.PostComponent do
             <img src="/images/icons/ellipsis-horizontal-white.svg" class="h-5" />
           </button>
 
-          <%= if @post.name || is_a_leader(@post, @event, @leaders) do %>
+          <%= if @post.name || is_a_leader(@post, @event, @leaders) || is_pinned(@post) do %>
             <div class="inline-flex items-center">
               <%= if @post.name do %>
                 <p class="text-white text-xs font-semibold mb-2 mr-2"><%= @post.name %></p>
