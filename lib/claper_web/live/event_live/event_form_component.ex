@@ -173,7 +173,11 @@ defmodule ClaperWeb.EventLive.EventFormComponent do
           end)
 
           Enum.each(e.leaders, fn leader ->
-            Claper.Accounts.LeaderNotifier.deliver_event_invitation(e.name, leader.email, Routes.event_index_url(socket, :index))
+            Claper.Accounts.LeaderNotifier.deliver_event_invitation(
+              e.name,
+              leader.email,
+              Routes.event_index_url(socket, :index)
+            )
           end)
         end
 
@@ -239,7 +243,11 @@ defmodule ClaperWeb.EventLive.EventFormComponent do
       Enum.each(e.leaders, fn leader ->
         # Only send email if leader was not present before the update
         unless Enum.member?(previous_leaders, leader) do
-          Claper.Accounts.LeaderNotifier.deliver_event_invitation(e.name, leader.email, Routes.event_index_url(socket, :index))
+          Claper.Accounts.LeaderNotifier.deliver_event_invitation(
+            e.name,
+            leader.email,
+            Routes.event_index_url(socket, :index)
+          )
         end
       end)
     end

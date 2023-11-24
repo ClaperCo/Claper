@@ -22,7 +22,10 @@
             <%= gettext("Someone invited you to manage the event: %{name}", name: @event_name) %>
           </p>
           <p style="color:#455056; font-size:15px;line-height:24px; margin:0;">
-            <%= gettext("To accept the invitation, please login or create an account with this email: %{email}", email: @leader_email) %>
+            <%= gettext(
+              "To accept the invitation, please login or create an account with this email: %{email}",
+              email: @leader_email
+            ) %>
           </p>
           <a
             href={@url}

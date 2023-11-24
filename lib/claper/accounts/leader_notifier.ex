@@ -8,5 +8,4 @@ defmodule Claper.Accounts.LeaderNotifier do
       {:ok, email}
     end
   end
-
 end
