@@ -5,6 +5,7 @@
 - Add pinned messages (#62) (@haruncurak)
 - Add reset password feature
 - Add Postmark adapter
+- Add the ability to send mail to facilitators invited to manage an event
 - Allow navigation within presenter window (#63) (@railsmechanic)
 - Security updates
 

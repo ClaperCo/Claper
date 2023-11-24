@@ -161,7 +161,7 @@ defmodule ClaperWeb.EventLive.EventFormComponent do
            |> Map.put("user_id", socket.assigns.current_user.id)
          ) do
       {:ok, event} ->
-        with e <- Events.get_event!(event.uuid, [:presentation_file]) do
+        with e <- Events.get_event!(event.uuid, [:presentation_file, :leaders]) do
           Task.Supervisor.async_nolink(Claper.TaskSupervisor, fn ->
             Claper.Tasks.Converter.convert(
               socket.assigns.current_user.id,
@@ -170,6 +170,10 @@ defmodule ClaperWeb.EventLive.EventFormComponent do
               ext,
               e.presentation_file.id
             )
+          end)
+
+          Enum.each(e.leaders, fn leader ->
+            Claper.Accounts.LeaderNotifier.deliver_event_invitation(e.name, leader.email, Routes.event_index_url(socket, :index))
           end)
         end
 
@@ -188,8 +192,10 @@ defmodule ClaperWeb.EventLive.EventFormComponent do
            socket.assigns.event,
            event_params
          ) do
-      {:ok, _event} ->
+      {:ok, event} ->
         handle_file_conversion(socket, hash, ext)
+
+        send_email_to_leaders(socket, event)
 
         {:noreply,
          socket
@@ -223,6 +229,20 @@ defmodule ClaperWeb.EventLive.EventFormComponent do
 
   defp get_presentation_storage_dir do
     Application.get_env(:claper, :storage_dir)
+  end
+
+  defp send_email_to_leaders(socket, event) do
+    with e <- Events.get_event!(event.uuid, [:leaders]) do
+      # Get the leaders before the update
+      previous_leaders = socket.assigns.event.leaders
+
+      Enum.each(e.leaders, fn leader ->
+        # Only send email if leader was not present before the update
+        unless Enum.member?(previous_leaders, leader) do
+          Claper.Accounts.LeaderNotifier.deliver_event_invitation(e.name, leader.email, Routes.event_index_url(socket, :index))
+        end
+      end)
+    end
   end
 
   def error_to_string(:too_large), do: gettext("Your file is too large")
