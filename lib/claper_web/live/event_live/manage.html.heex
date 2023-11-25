@@ -845,12 +845,12 @@
                       <%= if post.attendee_identifier do %>
                         <img
                           class="h-8 w-8"
-                          src={"https://avatars.dicebear.com/api/identicon/#{post.attendee_identifier}.svg"}
+                          src={"https://api.dicebear.com/7.x/personas/svg?seed=#{post.attendee_identifier}"}
                         />
                       <% else %>
                         <img
                           class="h-8 w-8"
-                          src={"https://avatars.dicebear.com/api/identicon/#{post.user_id}.svg"}
+                          src={"https://api.dicebear.com/7.x/personas/svg?seed=#{post.user_id}"}
                         />
                       <% end %>
 
@@ -1020,12 +1020,12 @@
                         <%= if post.attendee_identifier do %>
                           <img
                             class="h-8 w-8"
-                            src={"https://avatars.dicebear.com/api/identicon/#{post.attendee_identifier}.svg"}
+                            src={"https://api.dicebear.com/7.x/personas/svg?seed=#{post.attendee_identifier}"}
                           />
                         <% else %>
                           <img
                             class="h-8 w-8"
-                            src={"https://avatars.dicebear.com/api/identicon/#{post.user_id}.svg"}
+                            src={"https://api.dicebear.com/7.x/personas/svg?seed=#{post.user_id}"}
                           />
                         <% end %>
 
@@ -1136,12 +1136,12 @@
                     <%= if submission.attendee_identifier do %>
                       <img
                         class="h-8 w-8"
-                        src={"https://avatars.dicebear.com/api/identicon/#{submission.attendee_identifier}.svg"}
+                        src={"https://api.dicebear.com/7.x/personas/svg?seed=#{submission.attendee_identifier}"}
                       />
                     <% else %>
                       <img
                         class="h-8 w-8"
-                        src={"https://avatars.dicebear.com/api/identicon/#{submission.user_id}.svg"}
+                        src={"https://api.dicebear.com/7.x/personas/svg?seed=#{submission.user_id}"}
                       />
                     <% end %>
 
