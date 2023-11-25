@@ -4,9 +4,11 @@
 - Add embed (Youtube or any web content) as an interraction (#72) (@Dhanus3133)
 - Add pinned messages (#62) (@haruncurak)
 - Add reset password feature
+- Add indication when a form is saved
 - Add Postmark adapter
 - Add the ability to send mail to facilitators invited to manage an event
 - Allow navigation within presenter window (#63) (@railsmechanic)
+- Change default avatar style
 - Security updates
 
 ## v1.6.0
