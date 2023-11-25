@@ -89,12 +89,21 @@ defmodule ClaperWeb.EventLive.FormComponent do
             <% end %>
           </div>
 
+         <div class="flex items-center gap-4">
           <button
-            type="submit"
-            class="px-3 py-2 text-white font-semibold bg-primary-500 hover:bg-primary-600 rounded-md my-5"
-          >
-            <%= if is_nil(assigns.current_form_submit), do: gettext("Submit"), else: gettext("Edit") %>
-          </button>
+              type="submit"
+              class="px-3 py-2 text-white font-semibold bg-primary-500 hover:bg-primary-600 rounded-md my-5"
+            >
+              <%= if is_nil(assigns.current_form_submit), do: gettext("Submit"), else: gettext("Edit") %>
+            </button>
+
+            <%= unless is_nil(assigns.current_form_submit) do %>
+              <div class="flex gap-1 text-green-500 text-sm">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0" /><path d="M9 12l2 2l4 -4" /></svg>
+                <span><%= gettext("Saved") %></span>
+              </div>
+            <% end %>
+          </div>
         <% end %>
       </div>
     </div>
