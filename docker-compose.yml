@@ -17,6 +17,7 @@ services:
       retries: 10 
   app:
     image: ghcr.io/claperco/claper:latest
+    user: 0:0
     ports: 
       - 4000:4000
     volumes:
