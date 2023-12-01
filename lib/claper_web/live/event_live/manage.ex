@@ -87,8 +87,7 @@ defmodule ClaperWeb.EventLive.Manage do
     {:noreply,
      socket
      |> update(:all_posts, fn posts -> [updated_post | posts] end)
-     |> update(:pinned_posts, fn posts -> [updated_post | posts] end)
-    }
+     |> update(:pinned_posts, fn posts -> [updated_post | posts] end)}
   end
 
   @impl true
@@ -97,8 +96,9 @@ defmodule ClaperWeb.EventLive.Manage do
      socket
      |> update(:all_posts, fn posts -> [deleted_post | posts] end)
      |> update(:pinned_posts, fn posts -> [deleted_post | posts] end)
-     |> update(:pinned_post_count, fn pinned_post_count -> pinned_post_count - if deleted_post.pinned, do: 1, else: 0 end)
-    }
+     |> update(:pinned_post_count, fn pinned_post_count ->
+       pinned_post_count - if deleted_post.pinned, do: 1, else: 0
+     end)}
   end
 
   @impl true
@@ -119,6 +119,7 @@ defmodule ClaperWeb.EventLive.Manage do
       |> update(:all_posts, fn all_posts -> [post | all_posts] end)
       |> update(:pinned_posts, fn pinned_posts -> [post | pinned_posts] end)
       |> assign(:pinned_post_count, socket.assigns.pinned_post_count - 1)
+
     {:noreply, updated_socket}
   end
 
