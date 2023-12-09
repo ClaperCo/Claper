@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="ExDoc v0.29.4">
+    <meta name="project" content="Claper v1.7.0">
+
+    <title>Claper.Embeds — Claper v1.7.0</title>
+    <link rel="stylesheet" href="dist/html-elixir-HHVY3JYD.css" />
+
+
+    <script src="dist/handlebars.runtime-NWIB6V2M.js"></script>
+    <script src="dist/handlebars.templates-XWGFFSCD.js"></script>
+    <script src="dist/sidebar_items-E6912480.js"></script>
+
+      <script src="docs_config.js"></script>
+
+    <script async src="dist/html-JDI3AVDD.js"></script>
+
+
+  </head>
+  <body data-type="modules" class="page-module">
+    <script>
+
+      try {
+        var settings = JSON.parse(localStorage.getItem('ex_doc:settings') || '{}');
+
+        if (settings.theme === 'dark' ||
+           ((settings.theme === 'system' || settings.theme == null) &&
+             window.matchMedia('(prefers-color-scheme: dark)').matches)
+           ) {
+          document.body.classList.add('dark')
+        }
+      } catch (error) { }
+    </script>
+
+<div class="main">
+
+<button class="sidebar-button sidebar-toggle" aria-label="toggle sidebar">
+  <i class="ri-menu-line ri-lg" title="Collapse/expand sidebar"></i>
+</button>
+
+<section class="sidebar">
+  <form class="sidebar-search" action="search.html">
+    <button type="submit" class="search-button" aria-label="Submit Search">
+      <i class="ri-search-2-line" aria-hidden="true" title="Submit search"></i>
+    </button>
+    <button type="button" tabindex="-1" class="search-close-button" aria-label="Cancel Search">
+      <i class="ri-close-line ri-lg" aria-hidden="true" title="Cancel search"></i>
+    </button>
+    <label class="search-label">
+      <p class="sr-only">Search</p>
+      <input name="q" type="text" class="search-input" placeholder="Search..." aria-label="Input your search terms" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+    </label>
+  </form>
+
+  <div class="autocomplete">
+    <div class="autocomplete-results">
+    </div>
+  </div>
+
+  <div class="sidebar-header">
+
+      <a href="https://claper.co">
+        <img src="assets/logo.png" alt="Claper" class="sidebar-projectImage">
+      </a>
+
+    <div class="sidebar-projectDetails">
+      <a href="https://claper.co" class="sidebar-projectName" translate="no">
+Claper
+      </a>
+      <div class="sidebar-projectVersion" translate="no">
+        v1.7.0
+      </div>
+    </div>
+    <ul class="sidebar-listNav">
+      <li><a id="extras-list-link" href="#full-list">GUIDES</a></li>
+
+        <li><a id="modules-list-link" href="#full-list">Modules</a></li>
+
+
+    </ul>
+  </div>
+
+  <div class="gradient"></div>
+  <ul id="full-list"></ul>
+</section>
+
+<section class="content">
+  <output role="status" id="toast"></output>
+  <div class="content-outer">
+    <div id="content" class="content-inner">
+
+<h1>
+<button class="icon-action display-settings">
+  <i class="ri-settings-3-line"></i>
+  <span class="sr-only">Settings</span>
+</button>
+
+
+    <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper/embeds.ex#L1" title="View Source" class="icon-action" rel="help">
+      <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+      <span class="sr-only">View Source</span>
+    </a>
+
+  <span translate="no">Claper.Embeds</span> 
+  <small class="app-vsn" translate="no">(Claper v1.7.0)</small>
+
+</h1>
+
+
+  <section id="moduledoc">
+<p>The Embeds context.</p>
+  </section>
+
+
+  <section id="summary" class="details-list">
+    <h1 class="section-heading">
+      <a class="hover-link" href="#summary">
+        <i class="ri-link-m" aria-hidden="true"></i>
+        <span class="sr-only">Link to this section</span>
+      </a>
+      Summary
+    </h1>
+<div class="summary-functions summary">
+  <h2>
+    <a href="#functions">Functions</a>
+  </h2>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#change_embed/2" translate="no">change_embed(embed, attrs \\ %{})</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Returns an <code class="inline">%Ecto.Changeset{}</code> for tracking embed changes.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#create_embed/1" translate="no">create_embed(attrs \\ %{})</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Creates a embed.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#delete_embed/2" translate="no">delete_embed(event_uuid, embed)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Deletes a embed.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#disable_all/2" translate="no">disable_all(presentation_file_id, position)</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#get_embed!/2" translate="no">get_embed!(id, preload \\ [])</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Gets a single embed.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#get_embed_current_position/2" translate="no">get_embed_current_position(presentation_file_id, position)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Gets a single embed for a given position.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#list_embeds/1" translate="no">list_embeds(presentation_file_id)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Returns the list of embeds for a given presentation file.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#list_embeds_at_position/2" translate="no">list_embeds_at_position(presentation_file_id, position)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Returns the list of embeds for a given presentation file and a given position.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#set_status/4" translate="no">set_status(id, presentation_file_id, position, status)</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#update_embed/3" translate="no">update_embed(event_uuid, embed, attrs)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Updates a embed.</p></div>
+
+    </div>
+
+</div>
+
+  </section>
+
+
+  <section id="functions" class="details-list">
+    <h1 class="section-heading">
+      <a class="hover-link" href="#functions">
+        <i class="ri-link-m" aria-hidden="true"></i>
+        <span class="sr-only">Link to this section</span>
+      </a>
+Functions
+    </h1>
+    <div class="functions-list">
+<section class="detail" id="change_embed/2">
+
+    <span id="change_embed/1"></span>
+
+  <div class="detail-header">
+    <a href="#change_embed/2" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">change_embed(embed, attrs \\ %{})</h1>
+
+      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper/embeds.ex#L149" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+<p>Returns an <code class="inline">%Ecto.Changeset{}</code> for tracking embed changes.</p><h2 id="change_embed/2-examples" class="section-heading">
+  <a href="#change_embed/2-examples" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i>
+  <p class="sr-only">examples</p>
+  </a>
+  Examples
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">change_embed</span><span class="p" data-group-id="9693669400-1">(</span><span class="n">embed</span><span class="p" data-group-id="9693669400-1">)</span><span class="w">
+</span><span class="p" data-group-id="9693669400-2">%</span><span class="nc" data-group-id="9693669400-2">Ecto.Changeset</span><span class="p" data-group-id="9693669400-2">{</span><span class="ss">data</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="9693669400-3">%</span><span class="nc" data-group-id="9693669400-3">Embed</span><span class="p" data-group-id="9693669400-3">{</span><span class="p" data-group-id="9693669400-3">}</span><span class="p" data-group-id="9693669400-2">}</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="create_embed/1">
+
+    <span id="create_embed/0"></span>
+
+  <div class="detail-header">
+    <a href="#create_embed/1" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">create_embed(attrs \\ %{})</h1>
+
+      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper/embeds.ex#L92" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+<p>Creates a embed.</p><h2 id="create_embed/1-examples" class="section-heading">
+  <a href="#create_embed/1-examples" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i>
+  <p class="sr-only">examples</p>
+  </a>
+  Examples
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">create_embed</span><span class="p" data-group-id="3846802244-1">(</span><span class="p" data-group-id="3846802244-2">%{</span><span class="ss">field</span><span class="p">:</span><span class="w"> </span><span class="n">value</span><span class="p" data-group-id="3846802244-2">}</span><span class="p" data-group-id="3846802244-1">)</span><span class="w">
+</span><span class="p" data-group-id="3846802244-3">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="3846802244-4">%</span><span class="nc" data-group-id="3846802244-4">Embed</span><span class="p" data-group-id="3846802244-4">{</span><span class="p" data-group-id="3846802244-4">}</span><span class="p" data-group-id="3846802244-3">}</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="n">create_embed</span><span class="p" data-group-id="3846802244-5">(</span><span class="p" data-group-id="3846802244-6">%{</span><span class="ss">field</span><span class="p">:</span><span class="w"> </span><span class="n">bad_value</span><span class="p" data-group-id="3846802244-6">}</span><span class="p" data-group-id="3846802244-5">)</span><span class="w">
+</span><span class="p" data-group-id="3846802244-7">{</span><span class="ss">:error</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="3846802244-8">%</span><span class="nc" data-group-id="3846802244-8">Ecto.Changeset</span><span class="p" data-group-id="3846802244-8">{</span><span class="p" data-group-id="3846802244-8">}</span><span class="p" data-group-id="3846802244-7">}</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="delete_embed/2">
+
+  <div class="detail-header">
+    <a href="#delete_embed/2" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">delete_embed(event_uuid, embed)</h1>
+
+      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper/embeds.ex#L135" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+<p>Deletes a embed.</p><h2 id="delete_embed/2-examples" class="section-heading">
+  <a href="#delete_embed/2-examples" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i>
+  <p class="sr-only">examples</p>
+  </a>
+  Examples
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">delete_embed</span><span class="p" data-group-id="2186525010-1">(</span><span class="s">&quot;123e4567-e89b-12d3-a456-426614174000&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">embed</span><span class="p" data-group-id="2186525010-1">)</span><span class="w">
+</span><span class="p" data-group-id="2186525010-2">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="2186525010-3">%</span><span class="nc" data-group-id="2186525010-3">Embed</span><span class="p" data-group-id="2186525010-3">{</span><span class="p" data-group-id="2186525010-3">}</span><span class="p" data-group-id="2186525010-2">}</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="n">delete_embed</span><span class="p" data-group-id="2186525010-4">(</span><span class="s">&quot;123e4567-e89b-12d3-a456-426614174000&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">embed</span><span class="p" data-group-id="2186525010-4">)</span><span class="w">
+</span><span class="p" data-group-id="2186525010-5">{</span><span class="ss">:error</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="2186525010-6">%</span><span class="nc" data-group-id="2186525010-6">Ecto.Changeset</span><span class="p" data-group-id="2186525010-6">{</span><span class="p" data-group-id="2186525010-6">}</span><span class="p" data-group-id="2186525010-5">}</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="disable_all/2">
+
+  <div class="detail-header">
+    <a href="#disable_all/2" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">disable_all(presentation_file_id, position)</h1>
+
+      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper/embeds.ex#L153" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="get_embed!/2">
+
+    <span id="get_embed!/1"></span>
+
+  <div class="detail-header">
+    <a href="#get_embed!/2" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">get_embed!(id, preload \\ [])</h1>
+
+      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper/embeds.ex#L59" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+<p>Gets a single embed.</p><p>Raises <a href="https://hexdocs.pm/ecto/3.10.1/Ecto.NoResultsError.html"><code class="inline">Ecto.NoResultsError</code></a> if the Embed does not exist.</p><h2 id="get_embed!/2-examples" class="section-heading">
+  <a href="#get_embed!/2-examples" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i>
+  <p class="sr-only">examples</p>
+  </a>
+  Examples
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">get_embed!</span><span class="p" data-group-id="3576222950-1">(</span><span class="mi">123</span><span class="p" data-group-id="3576222950-1">)</span><span class="w">
+</span><span class="p" data-group-id="3576222950-2">%</span><span class="nc" data-group-id="3576222950-2">Embed</span><span class="p" data-group-id="3576222950-2">{</span><span class="p" data-group-id="3576222950-2">}</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="n">get_embed!</span><span class="p" data-group-id="3576222950-3">(</span><span class="mi">456</span><span class="p" data-group-id="3576222950-3">)</span><span class="w">
+</span><span class="gt">** (Ecto.NoResultsError)</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="get_embed_current_position/2">
+
+  <div class="detail-header">
+    <a href="#get_embed_current_position/2" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">get_embed_current_position(presentation_file_id, position)</h1>
+
+      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper/embeds.ex#L71" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+<p>Gets a single embed for a given position.</p><h2 id="get_embed_current_position/2-examples" class="section-heading">
+  <a href="#get_embed_current_position/2-examples" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i>
+  <p class="sr-only">examples</p>
+  </a>
+  Examples
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">get_embed_current_position</span><span class="p" data-group-id="9074675429-1">(</span><span class="mi">123</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p" data-group-id="9074675429-1">)</span><span class="w">
+</span><span class="p" data-group-id="9074675429-2">%</span><span class="nc" data-group-id="9074675429-2">Embed</span><span class="p" data-group-id="9074675429-2">{</span><span class="p" data-group-id="9074675429-2">}</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="list_embeds/1">
+
+  <div class="detail-header">
+    <a href="#list_embeds/1" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">list_embeds(presentation_file_id)</h1>
+
+      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper/embeds.ex#L20" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+<p>Returns the list of embeds for a given presentation file.</p><h2 id="list_embeds/1-examples" class="section-heading">
+  <a href="#list_embeds/1-examples" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i>
+  <p class="sr-only">examples</p>
+  </a>
+  Examples
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">list_embeds</span><span class="p" data-group-id="6904042300-1">(</span><span class="mi">123</span><span class="p" data-group-id="6904042300-1">)</span><span class="w">
+</span><span class="p" data-group-id="6904042300-2">[</span><span class="p" data-group-id="6904042300-3">%</span><span class="nc" data-group-id="6904042300-3">Embed</span><span class="p" data-group-id="6904042300-3">{</span><span class="p" data-group-id="6904042300-3">}</span><span class="p">,</span><span class="w"> </span><span class="n">...</span><span class="p" data-group-id="6904042300-2">]</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="list_embeds_at_position/2">
+
+  <div class="detail-header">
+    <a href="#list_embeds_at_position/2" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">list_embeds_at_position(presentation_file_id, position)</h1>
+
+      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper/embeds.ex#L37" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+<p>Returns the list of embeds for a given presentation file and a given position.</p><h2 id="list_embeds_at_position/2-examples" class="section-heading">
+  <a href="#list_embeds_at_position/2-examples" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i>
+  <p class="sr-only">examples</p>
+  </a>
+  Examples
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">list_embeds_at_position</span><span class="p" data-group-id="1274377975-1">(</span><span class="mi">123</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p" data-group-id="1274377975-1">)</span><span class="w">
+</span><span class="p" data-group-id="1274377975-2">[</span><span class="p" data-group-id="1274377975-3">%</span><span class="nc" data-group-id="1274377975-3">Embed</span><span class="p" data-group-id="1274377975-3">{</span><span class="p" data-group-id="1274377975-3">}</span><span class="p">,</span><span class="w"> </span><span class="n">...</span><span class="p" data-group-id="1274377975-2">]</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="set_status/4">
+
+  <div class="detail-header">
+    <a href="#set_status/4" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">set_status(id, presentation_file_id, position, status)</h1>
+
+      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper/embeds.ex#L160" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="update_embed/3">
+
+  <div class="detail-header">
+    <a href="#update_embed/3" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">update_embed(event_uuid, embed, attrs)</h1>
+
+      <a href="https://github.com/ClaperCo/Claper/blob/main/lib/claper/embeds.ex#L110" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+<p>Updates a embed.</p><h2 id="update_embed/3-examples" class="section-heading">
+  <a href="#update_embed/3-examples" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i>
+  <p class="sr-only">examples</p>
+  </a>
+  Examples
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">update_embed</span><span class="p" data-group-id="3677254115-1">(</span><span class="s">&quot;123e4567-e89b-12d3-a456-426614174000&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">embed</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="3677254115-2">%{</span><span class="ss">field</span><span class="p">:</span><span class="w"> </span><span class="n">new_value</span><span class="p" data-group-id="3677254115-2">}</span><span class="p" data-group-id="3677254115-1">)</span><span class="w">
+</span><span class="p" data-group-id="3677254115-3">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="3677254115-4">%</span><span class="nc" data-group-id="3677254115-4">Embed</span><span class="p" data-group-id="3677254115-4">{</span><span class="p" data-group-id="3677254115-4">}</span><span class="p" data-group-id="3677254115-3">}</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="n">update_embed</span><span class="p" data-group-id="3677254115-5">(</span><span class="s">&quot;123e4567-e89b-12d3-a456-426614174000&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">embed</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="3677254115-6">%{</span><span class="ss">field</span><span class="p">:</span><span class="w"> </span><span class="n">bad_value</span><span class="p" data-group-id="3677254115-6">}</span><span class="p" data-group-id="3677254115-5">)</span><span class="w">
+</span><span class="p" data-group-id="3677254115-7">{</span><span class="ss">:error</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="3677254115-8">%</span><span class="nc" data-group-id="3677254115-8">Ecto.Changeset</span><span class="p" data-group-id="3677254115-8">{</span><span class="p" data-group-id="3677254115-8">}</span><span class="p" data-group-id="3677254115-7">}</span></code></pre>
+  </section>
+</section>
+
+    </div>
+  </section>
+
+      <footer class="footer">
+        <p>
+
+          <span class="line">
+            <button class="a-main footer-button display-quick-switch" title="Search HexDocs packages">
+              Search HexDocs
+            </button>
+
+              <a href="Claper.epub" title="ePub version">
+                Download ePub version
+              </a>
+
+          </span>
+        </p>
+
+        <p class="built-using">
+          Built using
+          <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.29.4) for the
+
+            <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
+
+        </p>
+      </footer>
+    </div>
+  </div>
+</section>
+</div>
+
+
+  </body>
+</html>

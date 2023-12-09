@@ -5,15 +5,15 @@
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="generator" content="ExDoc v0.29.4">
-    <meta name="project" content="Claper v1.6.0">
+    <meta name="project" content="Claper v1.7.0">
 
-    <title>Configuration — Claper v1.6.0</title>
+    <title>Configuration — Claper v1.7.0</title>
     <link rel="stylesheet" href="dist/html-elixir-HHVY3JYD.css" />
 
 
     <script src="dist/handlebars.runtime-NWIB6V2M.js"></script>
     <script src="dist/handlebars.templates-XWGFFSCD.js"></script>
-    <script src="dist/sidebar_items-352DAC97.js"></script>
+    <script src="dist/sidebar_items-E6912480.js"></script>
 
       <script src="docs_config.js"></script>
 
@@ -63,16 +63,16 @@
 
   <div class="sidebar-header">
 
-      <a href="https://get.claper.co">
+      <a href="https://claper.co">
         <img src="assets/logo.png" alt="Claper" class="sidebar-projectImage">
       </a>
 
     <div class="sidebar-projectDetails">
-      <a href="https://get.claper.co" class="sidebar-projectName" translate="no">
+      <a href="https://claper.co" class="sidebar-projectName" translate="no">
 Claper
       </a>
       <div class="sidebar-projectVersion" translate="no">
-        v1.6.0
+        v1.7.0
       </div>
     </div>
     <ul class="sidebar-listNav">
@@ -127,7 +127,7 @@ Claper
   </a>
   Mail
 </h3>
-<table><thead><tr><th style="text-align: left;">Variable</th><th style="text-align: left;">Values</th><th style="text-align: left;">Default</th><th style="text-align: left;">Required</th><th style="text-align: left;">Description</th></tr></thead><tbody><tr><td style="text-align: left;">MAIL_TRANSPORT</td><td style="text-align: left;">local, smtp</td><td style="text-align: left;">local</td><td style="text-align: left;">-</td><td style="text-align: left;">Define how the emails will be sent</td></tr><tr><td style="text-align: left;">MAIL_FROM</td><td style="text-align: left;">-</td><td style="text-align: left;">Claper</td><td style="text-align: left;">-</td><td style="text-align: left;">Email address used to send emails</td></tr><tr><td style="text-align: left;">MAIL_FROM_NAME</td><td style="text-align: left;">-</td><td style="text-align: left;">noreply@claper.co</td><td style="text-align: left;">-</td><td style="text-align: left;">Name used to send emails</td></tr><tr><td style="text-align: left;">SMTP_RELAY</td><td style="text-align: left;">-</td><td style="text-align: left;">-</td><td style="text-align: left;"><em>only for smtp</em></td><td style="text-align: left;">SMTP relay server</td></tr><tr><td style="text-align: left;">SMTP_USERNAME</td><td style="text-align: left;">-</td><td style="text-align: left;">-</td><td style="text-align: left;"><em>only for smtp</em></td><td style="text-align: left;">SMTP username</td></tr><tr><td style="text-align: left;">SMTP_PASSWORD</td><td style="text-align: left;">-</td><td style="text-align: left;">-</td><td style="text-align: left;"><em>only for smtp</em></td><td style="text-align: left;">SMTP password</td></tr><tr><td style="text-align: left;">SMTP_PORT</td><td style="text-align: left;">-</td><td style="text-align: left;">25</td><td style="text-align: left;">-</td><td style="text-align: left;">SMTP port</td></tr><tr><td style="text-align: left;">SMTP_TLS</td><td style="text-align: left;">always, never, if_available</td><td style="text-align: left;">always</td><td style="text-align: left;">-</td><td style="text-align: left;">SMTP TLS</td></tr><tr><td style="text-align: left;">SMTP_AUTH</td><td style="text-align: left;">always, never, if_available</td><td style="text-align: left;">always</td><td style="text-align: left;">-</td><td style="text-align: left;">SMTP Auth</td></tr><tr><td style="text-align: left;">SMTP_SSL</td><td style="text-align: left;">true, false</td><td style="text-align: left;">true</td><td style="text-align: left;">-</td><td style="text-align: left;">SMTP SSL</td></tr><tr><td style="text-align: left;">ENABLE_MAILBOX_ROUTE</td><td style="text-align: left;">true, false</td><td style="text-align: left;">false</td><td style="text-align: left;">-</td><td style="text-align: left;">Enable/disable route to local mailbox (<code class="inline">/dev/mailbox</code>)</td></tr><tr><td style="text-align: left;">MAILBOX_USER</td><td style="text-align: left;">-</td><td style="text-align: left;">-</td><td style="text-align: left;">-</td><td style="text-align: left;">Basic auth user for mailbox route</td></tr><tr><td style="text-align: left;">MAILBOX_PASSWORD</td><td style="text-align: left;">-</td><td style="text-align: left;">-</td><td style="text-align: left;">-</td><td style="text-align: left;">Basic auth password for mailbox route</td></tr></tbody></table><h3 id="application" class="section-heading">
+<table><thead><tr><th style="text-align: left;">Variable</th><th style="text-align: left;">Values</th><th style="text-align: left;">Default</th><th style="text-align: left;">Required</th><th style="text-align: left;">Description</th></tr></thead><tbody><tr><td style="text-align: left;">MAIL_TRANSPORT</td><td style="text-align: left;">local, smtp, postmark</td><td style="text-align: left;">local</td><td style="text-align: left;">-</td><td style="text-align: left;">Define how the emails will be sent</td></tr><tr><td style="text-align: left;">MAIL_FROM</td><td style="text-align: left;">-</td><td style="text-align: left;">Claper</td><td style="text-align: left;">-</td><td style="text-align: left;">Email address used to send emails</td></tr><tr><td style="text-align: left;">MAIL_FROM_NAME</td><td style="text-align: left;">-</td><td style="text-align: left;">noreply@claper.co</td><td style="text-align: left;">-</td><td style="text-align: left;">Name used to send emails</td></tr><tr><td style="text-align: left;">SMTP_RELAY</td><td style="text-align: left;">-</td><td style="text-align: left;">-</td><td style="text-align: left;"><em>only for smtp</em></td><td style="text-align: left;">SMTP relay server</td></tr><tr><td style="text-align: left;">SMTP_USERNAME</td><td style="text-align: left;">-</td><td style="text-align: left;">-</td><td style="text-align: left;"><em>only for smtp</em></td><td style="text-align: left;">SMTP username</td></tr><tr><td style="text-align: left;">SMTP_PASSWORD</td><td style="text-align: left;">-</td><td style="text-align: left;">-</td><td style="text-align: left;"><em>only for smtp</em></td><td style="text-align: left;">SMTP password</td></tr><tr><td style="text-align: left;">SMTP_PORT</td><td style="text-align: left;">-</td><td style="text-align: left;">25</td><td style="text-align: left;">-</td><td style="text-align: left;">SMTP port</td></tr><tr><td style="text-align: left;">SMTP_TLS</td><td style="text-align: left;">always, never, if_available</td><td style="text-align: left;">always</td><td style="text-align: left;">-</td><td style="text-align: left;">SMTP TLS</td></tr><tr><td style="text-align: left;">SMTP_AUTH</td><td style="text-align: left;">always, never, if_available</td><td style="text-align: left;">always</td><td style="text-align: left;">-</td><td style="text-align: left;">SMTP Auth</td></tr><tr><td style="text-align: left;">SMTP_SSL</td><td style="text-align: left;">true, false</td><td style="text-align: left;">true</td><td style="text-align: left;">-</td><td style="text-align: left;">SMTP SSL</td></tr><tr><td style="text-align: left;">ENABLE_MAILBOX_ROUTE</td><td style="text-align: left;">true, false</td><td style="text-align: left;">false</td><td style="text-align: left;">-</td><td style="text-align: left;">Enable/disable route to local mailbox (<code class="inline">/dev/mailbox</code>)</td></tr><tr><td style="text-align: left;">MAILBOX_USER</td><td style="text-align: left;">-</td><td style="text-align: left;">-</td><td style="text-align: left;">-</td><td style="text-align: left;">Basic auth user for mailbox route</td></tr><tr><td style="text-align: left;">MAILBOX_PASSWORD</td><td style="text-align: left;">-</td><td style="text-align: left;">-</td><td style="text-align: left;">-</td><td style="text-align: left;">Basic auth password for mailbox route</td></tr><tr><td style="text-align: left;">POSTMARK_API_KEY</td><td style="text-align: left;">-</td><td style="text-align: left;">-</td><td style="text-align: left;"><em>only for postmark</em></td><td style="text-align: left;">Postmark API key</td></tr></tbody></table><h3 id="application" class="section-heading">
   <a href="#application" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i>
   <p class="sr-only">application</p>
   </a>
