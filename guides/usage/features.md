@@ -12,6 +12,8 @@ Users can send instant message during the presentation and interact to others me
 
 You can choose to be anoynmous or use your own name before sending a message.
 
+You can also pin a message to the screen to highlight it and only show pinned messages.
+
 ## Polls
 
 You can add polls during your presentation. Users can vote to the poll and see the results in real time. 
@@ -31,6 +33,14 @@ You can also add forms during your presentation. Users can fill the form and you
 When you create a new presentation, click on **Present/Customize**, select the slide where you want to add form and click **Add interaction**.
 
 After your presentation, you can export all the submissions in CSV format.
+
+## Web content
+
+Any web content like Youtube, Slideshare, Google Slides, etc. can be embedded in your presentation.
+
+When you create a new presentation, click on **Present/Customize**, select the slide where you want to add embed and click **Add interaction**.
+
+You can choose to show the embed in the attendee side, so your audience can see the embed content during your presentation.
 
 ## Moderation tools
 

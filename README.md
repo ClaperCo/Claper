@@ -113,8 +113,20 @@ A Docker Compose [reference file](https://github.com/ClaperCo/Claper/blob/main/d
 ```sh
 git clone https://github.com/ClaperCo/Claper.git
 cd Claper
-docker-compose up
+docker compose up
 ```
+
+
+### Using Docker Compose for Dev
+
+To easy check new features, it is possible to directly build the Docker image from the source code and run the container with the [docker-compose-dev.yml](https://github.com/ClaperCo/Claper/blob/main/docker-compose-dev.yml) file.
+
+```sh
+git clone https://github.com/ClaperCo/Claper.git
+cd Claper
+docker compose -f docker-compose-dev.yml up
+```
+
 
 <!-- CONTRIBUTING -->
 ## Contributing
@@ -139,7 +151,7 @@ Distributed under the GPLv3 License. See `LICENSE.txt` for more information.
 <!-- CONTACT -->
 ## Contact
 
-[![](https://img.shields.io/badge/@alxlion__-1DA1F2?style=for-the-badge&logo=twitter&logoColor=white)](https://twitter.com/alxlion_) 
+[![](https://img.shields.io/badge/@alxlion__-000000?style=for-the-badge&logo=x&logoColor=white)](https://x.com/alxlion_)
 
 Project Link: [https://github.com/ClaperCo/Claper](https://github.com/ClaperCo/Claper)
 

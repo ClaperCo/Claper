@@ -18,11 +18,11 @@ export class Presenter {
       slideBy: 'page',
       center: true,
       autoplay: false,
-    	controls: false,
+      controls: false,
       swipeAngle: false,
       startIndex: this.currentPage,
       loop: false,
-    	nav: false
+      nav: false
     });
 
     this.context.handleEvent('page', data => {
@@ -35,11 +35,18 @@ export class Presenter {
       if (data.value) {
         document.getElementById("post-list").classList.remove("animate__animated", "animate__fadeOutLeft")
         document.getElementById("post-list").classList.add("animate__animated", "animate__fadeInLeft")
+        
+        document.getElementById("pinned-post-list").classList.remove("animate__animated", "animate__fadeOutLeft")
+        document.getElementById("pinned-post-list").classList.add("animate__animated", "animate__fadeInLeft")
       } else {
         document.getElementById("post-list").classList.remove("animate__animated", "animate__fadeInLeft")
         document.getElementById("post-list").classList.add("animate__animated", "animate__fadeOutLeft")
+
+        document.getElementById("pinned-post-list").classList.remove("animate__animated", "animate__fadeInLeft")
+        document.getElementById("pinned-post-list").classList.add("animate__animated", "animate__fadeOutLeft")
       }
     })
+
 
     this.context.handleEvent('poll-visible', data => {
       if (data.value) {
@@ -69,37 +76,49 @@ export class Presenter {
           case 'f': // F
             this.fullscreen()
             break
-        }  
+          case 'ArrowUp':
+            window.opener.dispatchEvent(new KeyboardEvent('keydown', { 'key': 'ArrowUp' }));
+            break
+          case 'ArrowLeft':
+            window.opener.dispatchEvent(new KeyboardEvent('keydown', { 'key': 'ArrowLeft' }));
+            break
+          case 'ArrowRight':
+            window.opener.dispatchEvent(new KeyboardEvent('keydown', { 'key': 'ArrowRight' }));
+            break
+          case 'ArrowDown':
+            window.opener.dispatchEvent(new KeyboardEvent('keydown', { 'key': 'ArrowDown' }));
+            break
+        }
       }
     });
   }
-   
+
   fullscreen() {
 
-      var docEl = document.getElementById("presenter")
+    var docEl = document.getElementById("presenter")
 
-      try {
-        docEl.webkitRequestFullscreen()
-        .then(function() {
+    try {
+      docEl.webkitRequestFullscreen()
+        .then(function () {
         })
-        .catch(function(error) {
-         
+        .catch(function (error) {
+
         });
-      } catch (e) {
-        docEl.requestFullscreen()
-        .then(function() {
+    } catch (e) {
+      docEl.requestFullscreen()
+        .then(function () {
         })
-        .catch(function(error) {
+        .catch(function (error) {
         });
-  
-        docEl.mozRequestFullScreen()
-        .then(function() {
+
+      docEl.mozRequestFullScreen()
+        .then(function () {
         })
-        .catch(function(error) {
+        .catch(function (error) {
         });
-      }
-        
+    }
+
 
   }
-  
+
 }

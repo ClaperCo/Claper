@@ -24,6 +24,38 @@ defmodule Claper.Posts do
     |> Repo.preload(preload)
   end
 
+  @doc """
+  Get only the pinned event posts.
+  """
+  def list_pinned_posts(event_id, preload \\ []) do
+    from(p in Post,
+      join: e in Claper.Events.Event,
+      on: p.event_id == e.id,
+      select: p,
+      # Only pinned posts
+      where: e.uuid == ^event_id and p.pinned == true,
+      order_by: [asc: p.id]
+    )
+    |> Repo.all()
+    |> Repo.preload(preload)
+  end
+
+  @doc """
+  Get only the unpinned event posts.
+  """
+  def list_unpinned_posts(event_id, preload \\ []) do
+    from(p in Post,
+      join: e in Claper.Events.Event,
+      on: p.event_id == e.id,
+      select: p,
+      # Only unpinned posts
+      where: e.uuid == ^event_id and p.pinned == false,
+      order_by: [asc: p.id]
+    )
+    |> Repo.all()
+    |> Repo.preload(preload)
+  end
+
   def reacted_posts(event_id, user_id, icon) when is_number(user_id) do
     from(reaction in Claper.Posts.Reaction,
       join: post in Claper.Posts.Post,
@@ -99,10 +131,41 @@ defmodule Claper.Posts do
 
   """
   def update_post(%Post{} = post, attrs) do
-    post
-    |> Post.changeset(attrs)
-    |> Repo.update()
-    |> broadcast(:post_updated)
+    changeset = Post.changeset(post, attrs)
+
+    result = changeset |> Repo.update()
+
+    result |> broadcast(:post_updated)
+  end
+
+  @doc """
+  Pins or unpins a post based on its current state.
+
+  ## Examples
+
+      iex> toggle_pin_post(post)
+      {:ok, %Post{}}
+
+      iex> toggle_pin_post(invalid_post)
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def toggle_pin_post(%Post{} = post) do
+    # Toggling the pinned state
+    new_pinned_state = not post.pinned
+    changeset = Post.changeset(post, %{pinned: new_pinned_state})
+
+    result = changeset |> Repo.update()
+
+    # Broadcast the appropriate message based on the new state
+    broadcast_message =
+      if new_pinned_state do
+        :post_pinned
+      else
+        :post_unpinned
+      end
+
+    result |> broadcast(broadcast_message)
   end
 
   @doc """

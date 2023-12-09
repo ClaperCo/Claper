@@ -20,18 +20,6 @@ config :claper, ClaperWeb.Gettext,
   default_locale: "en",
   locales: ~w(fr en de)
 
-# Configures the mailer
-#
-# By default it uses the "Local" adapter which stores the emails
-# locally. You can see the emails in your browser, at "/dev/mailbox".
-#
-# For production it's recommended to configure a different adapter
-# at the `config/runtime.exs`.
-config :claper, Claper.Mailer, adapter: Swoosh.Adapters.Local
-
-# Swoosh API client is needed for adapters other than SMTP.
-config :swoosh, :api_client, false
-
 config :dart_sass,
   version: "1.58.0",
   default: [

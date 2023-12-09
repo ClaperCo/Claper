@@ -53,8 +53,19 @@ A Docker Compose [reference file](https://github.com/ClaperCo/Claper/blob/main/d
 ```sh
 git clone https://github.com/ClaperCo/Claper.git
 cd Claper
-docker-compose up
+docker compose up
 ```
+
+## Using Docker Compose for Dev
+
+To easy check new features, it is possible to directly build the Docker image from the source code and run the container with the [docker-compose-dev.yml](https://github.com/ClaperCo/Claper/blob/main/docker-compose-dev.yml) file.
+
+```sh
+git clone https://github.com/ClaperCo/Claper.git
+cd Claper
+docker compose -f docker-compose-dev.yml up
+```
+
 
 ### ARM architecture
 

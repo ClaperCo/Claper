@@ -1,7 +1,12 @@
 <style>
   body {
-      background: black;
-    }
+    background: black;
+  }
+
+  iframe {
+    width: 100%;
+    height: 100%;
+  }
 </style>
 
 <div
@@ -14,7 +19,7 @@
   <!-- JOIN SCREEN -->
   <div
     id="joinScreen"
-    class={"#{if @state.join_screen_visible, do: 'opacity-100', else: 'opacity-0'} h-full w-full flex flex-col justify-center bg-black absolute z-30 transition-opacity"}
+    class={"#{if @state.join_screen_visible, do: 'opacity-100 z-40', else: 'opacity-0'} h-full w-full flex flex-col justify-center bg-black absolute transition-opacity"}
   >
     <div class="h-full bg-black text-white bg-opacity-50 text-center flex flex-col items-center justify-center">
       <span class="font-semibold mb-10 sm:text-3xl md:text-4xl lg:text-6xl">
@@ -68,6 +73,15 @@
       </div>
     </div>
   <% end %>
+  <%= if @current_embed do %>
+    <!-- EMBED -->
+    <div
+      id="embed"
+      class={"#{if @state.chat_visible, do: 'h-5/6 w-9/12 right-0', else: 'h-screen w-full'} transition-all duration-150 inline-block transform -translate-y-1/2 top-1/2 z-30 absolute transition-opacity"}
+    >
+      <%= raw(@current_embed.content) %>
+    </div>
+  <% end %>
   <!-- MESSAGES -->
   <div
     id="slider-wrapper"
@@ -75,40 +89,80 @@
   >
     <div
       class={"#{if @state.chat_visible, do: 'opacity-100 w-3/12 px-4 showed', else: 'opacity-0 w-0 p-0'} transition-all duration-150 flex flex-col h-screen py-5 justify-end max-h-screen bg-black"}
-      id="post-list"
-      phx-update="append"
+      id="post-list-wrapper"
+      phx-update="replace"
     >
-      <%= for post <- @posts do %>
-        <div class={if post.__meta__.state == :deleted, do: "hidden"} id={"#{post.id}-post"}>
-          <div class="px-4 pb-2 pt-3 rounded-b-lg rounded-tr-lg bg-white shadow-md text-black break-word mt-4">
-            <%= if post.name do %>
-              <p class="text-gray-400 text-lg font-semibold mb-2 mr-2"><%= post.name %></p>
-            <% end %>
-            <p class="text-3xl"><%= post.body %></p>
+      <%= if @state.show_only_pinned == false do %>
+        <div id="post-list" phx-update="replace">
+          <%= for post <- @posts do %>
+            <div class={if post.__meta__.state == :deleted, do: "hidden"} id={"#{post.id}-post"}>
+              <div class="px-4 pb-2 pt-3 rounded-b-lg rounded-tr-lg bg-white shadow-md text-black break-word mt-4">
+                <%= if post.name do %>
+                  <p class="text-gray-400 text-lg font-semibold mb-2 mr-2"><%= post.name %></p>
+                <% end %>
+                <p class="text-3xl"><%= post.body %></p>
 
-            <%= if post.like_count > 0 || post.love_count > 0 || post.lol_count > 0 do %>
-              <div class="flex h-6 space-x-2 text-lg text-gray-500 pb-3 items-center mt-5">
-                <div class="flex items-center">
-                  <%= if post.like_count > 0 do %>
-                    <img src="/images/icons/thumb.svg" class="h-7" />
-                    <span class="ml-1"><%= post.like_count %></span>
-                  <% end %>
-                </div>
-                <div class="flex items-center">
-                  <%= if post.love_count > 0 do %>
-                    <img src="/images/icons/heart.svg" class="h-7" />
-                    <span class="ml-1"><%= post.love_count %></span>
-                  <% end %>
-                </div>
-                <div class="flex items-center">
-                  <%= if post.lol_count > 0 do %>
-                    <img src="/images/icons/laugh.svg" class="h-7" />
-                    <span class="ml-1"><%= post.lol_count %></span>
-                  <% end %>
-                </div>
+                <%= if post.like_count > 0 || post.love_count > 0 || post.lol_count > 0 do %>
+                  <div class="flex h-6 space-x-2 text-lg text-gray-500 pb-3 items-center mt-5">
+                    <div class="flex items-center">
+                      <%= if post.like_count > 0 do %>
+                        <img src="/images/icons/thumb.svg" class="h-7" />
+                        <span class="ml-1"><%= post.like_count %></span>
+                      <% end %>
+                    </div>
+                    <div class="flex items-center">
+                      <%= if post.love_count > 0 do %>
+                        <img src="/images/icons/heart.svg" class="h-7" />
+                        <span class="ml-1"><%= post.love_count %></span>
+                      <% end %>
+                    </div>
+                    <div class="flex items-center">
+                      <%= if post.lol_count > 0 do %>
+                        <img src="/images/icons/laugh.svg" class="h-7" />
+                        <span class="ml-1"><%= post.lol_count %></span>
+                      <% end %>
+                    </div>
+                  </div>
+                <% end %>
               </div>
-            <% end %>
-          </div>
+            </div>
+          <% end %>
+        </div>
+      <% else %>
+        <div id="pinned-posts" phx-update="replace">
+          <%= for post <- @pinned_posts do %>
+            <div class={if post.__meta__.state == :deleted, do: "hidden"} id={"#{post.id}-post"}>
+              <div class="px-4 pb-2 pt-3 rounded-b-lg rounded-tr-lg bg-white shadow-md text-black break-word mt-4">
+                <%= if post.name do %>
+                  <p class="text-gray-400 text-lg font-semibold mb-2 mr-2"><%= post.name %></p>
+                <% end %>
+                <p class="text-3xl"><%= post.body %></p>
+
+                <%= if post.like_count > 0 || post.love_count > 0 || post.lol_count > 0 do %>
+                  <div class="flex h-6 space-x-2 text-lg text-gray-500 pb-3 items-center mt-5">
+                    <div class="flex items-center">
+                      <%= if post.like_count > 0 do %>
+                        <img src="/images/icons/thumb.svg" class="h-7" />
+                        <span class="ml-1"><%= post.like_count %></span>
+                      <% end %>
+                    </div>
+                    <div class="flex items-center">
+                      <%= if post.love_count > 0 do %>
+                        <img src="/images/icons/heart.svg" class="h-7" />
+                        <span class="ml-1"><%= post.love_count %></span>
+                      <% end %>
+                    </div>
+                    <div class="flex items-center">
+                      <%= if post.lol_count > 0 do %>
+                        <img src="/images/icons/laugh.svg" class="h-7" />
+                        <span class="ml-1"><%= post.lol_count %></span>
+                      <% end %>
+                    </div>
+                  </div>
+                <% end %>
+              </div>
+            </div>
+          <% end %>
         </div>
       <% end %>
     </div>

@@ -1,7 +1,7 @@
 defmodule Claper.MixProject do
   use Mix.Project
 
-  @version "1.6.0"
+  @version "1.7.0"
 
   def project do
     [
@@ -16,7 +16,7 @@ defmodule Claper.MixProject do
       # Docs
       name: "Claper",
       source_url: "https://github.com/ClaperCo/Claper",
-      homepage_url: "https://get.claper.co",
+      homepage_url: "https://claper.co",
       docs: [
         main: "overview",
         assets: "guides/assets",
@@ -102,8 +102,8 @@ defmodule Claper.MixProject do
       {:phoenix_live_dashboard, "~> 0.7"},
       {:esbuild, "~> 0.2", runtime: Mix.env() == :dev},
       {:dart_sass, "~> 0.5", runtime: Mix.env() == :dev},
-      {:swoosh, "~> 1.3"},
-      {:finch, "~> 0.8"},
+      {:swoosh, "~> 1.12"},
+      {:finch, "~> 0.16"},
       {:telemetry_metrics, "~> 0.6"},
       {:telemetry_poller, "~> 1.0"},
       {:gettext, "~> 0.18"},

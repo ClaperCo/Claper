@@ -4,6 +4,7 @@ defmodule ClaperWeb.EventLive.Manage do
   alias ClaperWeb.Presence
   alias Claper.Polls
   alias Claper.Forms
+  alias Claper.Embeds
 
   @impl true
   def mount(%{"code" => code}, session, socket) do
@@ -40,9 +41,12 @@ defmodule ClaperWeb.EventLive.Manage do
         |> assign(:attendees_nb, 1)
         |> assign(:event, event)
         |> assign(:state, event.presentation_file.presentation_state)
-        |> assign(:posts, list_posts(socket, event.uuid))
+        |> assign(:pinned_posts, list_pinned_posts(socket, event.uuid))
+        |> assign(:all_posts, list_all_posts(socket, event.uuid))
+        |> assign(:pinned_post_count, length(list_pinned_posts(socket, event.uuid)))
         |> assign(:polls, list_polls(socket, event.presentation_file.id))
         |> assign(:forms, list_forms(socket, event.presentation_file.id))
+        |> assign(:embeds, list_embeds(socket, event.presentation_file.id))
         |> assign(:create, nil)
         |> assign(:list_tab, :posts)
         |> assign(:create_action, :new)
@@ -52,8 +56,9 @@ defmodule ClaperWeb.EventLive.Manage do
         })
         |> poll_at_position(false)
         |> form_at_position(false)
+        |> embed_at_position(false)
 
-      {:ok, socket, temporary_assigns: [posts: [], form_submits: []]}
+      {:ok, socket, temporary_assigns: [all_posts: [], pinned_posts: [], form_submits: []]}
     end
   end
 
@@ -72,27 +77,50 @@ defmodule ClaperWeb.EventLive.Manage do
   @impl true
   def handle_info({:post_created, post}, socket) do
     {:noreply,
-     socket |> update(:posts, fn posts -> [post | posts] end) |> push_event("scroll", %{})}
+     socket
+     |> assign(:all_posts, [post | socket.assigns.all_posts])
+     |> push_event("scroll", %{})}
   end
 
   @impl true
-  def handle_info({:post_updated, post}, socket) do
-    {:noreply, socket |> update(:posts, fn posts -> [post | posts] end)}
+  def handle_info({:post_updated, updated_post}, socket) do
+    {:noreply,
+     socket
+     |> update(:all_posts, fn posts -> [updated_post | posts] end)
+     |> update(:pinned_posts, fn posts -> [updated_post | posts] end)}
   end
 
   @impl true
-  def handle_info({:reaction_added, post}, socket) do
-    {:noreply, socket |> update(:posts, fn posts -> [post | posts] end)}
+  def handle_info({:post_deleted, deleted_post}, socket) do
+    {:noreply,
+     socket
+     |> update(:all_posts, fn posts -> [deleted_post | posts] end)
+     |> update(:pinned_posts, fn posts -> [deleted_post | posts] end)
+     |> update(:pinned_post_count, fn pinned_post_count ->
+       pinned_post_count - if deleted_post.pinned, do: 1, else: 0
+     end)}
   end
 
   @impl true
-  def handle_info({:reaction_removed, post}, socket) do
-    {:noreply, socket |> update(:posts, fn posts -> [post | posts] end)}
+  def handle_info({:post_pinned, post}, socket) do
+    updated_socket =
+      socket
+      |> update(:all_posts, fn all_posts -> [post | all_posts] end)
+      |> update(:pinned_posts, fn pinned_posts -> [post | pinned_posts] end)
+      |> assign(:pinned_post_count, socket.assigns.pinned_post_count + 1)
+
+    {:noreply, updated_socket}
   end
 
   @impl true
-  def handle_info({:post_deleted, post}, socket) do
-    {:noreply, socket |> update(:posts, fn posts -> [post | posts] end)}
+  def handle_info({:post_unpinned, post}, socket) do
+    updated_socket =
+      socket
+      |> update(:all_posts, fn all_posts -> [post | all_posts] end)
+      |> update(:pinned_posts, fn pinned_posts -> [post | pinned_posts] end)
+      |> assign(:pinned_post_count, socket.assigns.pinned_post_count - 1)
+
+    {:noreply, updated_socket}
   end
 
   @impl true
@@ -129,6 +157,21 @@ defmodule ClaperWeb.EventLive.Manage do
   end
 
   @impl true
+  def handle_info({:embed_updated, embed}, socket) do
+    {:noreply,
+     socket
+     |> update(:current_embed, fn _current_embed -> embed end)}
+  end
+
+  @impl true
+  def handle_info(
+        {:current_embed, embed},
+        socket
+      ) do
+    {:noreply, socket |> assign(:current_embed, embed)}
+  end
+
+  @impl true
   def handle_info(_, socket) do
     {:noreply, socket}
   end
@@ -159,7 +202,8 @@ defmodule ClaperWeb.EventLive.Manage do
      socket
      |> assign(:state, new_state)
      |> poll_at_position
-     |> form_at_position}
+     |> form_at_position
+     |> embed_at_position}
   end
 
   @impl true
@@ -185,13 +229,15 @@ defmodule ClaperWeb.EventLive.Manage do
     end
   end
 
-  def handle_event("poll-set-default", %{"id" => id}, socket) do
+  def handle_event("poll-set-active", %{"id" => id}, socket) do
     Forms.disable_all(socket.assigns.event.presentation_file.id, socket.assigns.state.position)
+    Embeds.disable_all(socket.assigns.event.presentation_file.id, socket.assigns.state.position)
 
-    Polls.set_default(
+    Polls.set_status(
       id,
       socket.assigns.event.presentation_file.id,
-      socket.assigns.state.position
+      socket.assigns.state.position,
+      true
     )
 
     poll = Polls.get_poll!(id)
@@ -208,19 +254,28 @@ defmodule ClaperWeb.EventLive.Manage do
       {:current_form, nil}
     )
 
+    Phoenix.PubSub.broadcast(
+      Claper.PubSub,
+      "event:#{socket.assigns.event.uuid}",
+      {:current_embed, nil}
+    )
+
     {:noreply,
      socket
      |> assign(:polls, list_polls(socket, socket.assigns.event.presentation_file.id))
-     |> assign(:forms, list_forms(socket, socket.assigns.event.presentation_file.id))}
+     |> assign(:forms, list_forms(socket, socket.assigns.event.presentation_file.id))
+     |> assign(:embeds, list_embeds(socket, socket.assigns.event.presentation_file.id))}
   end
 
-  def handle_event("form-set-default", %{"id" => id}, socket) do
+  def handle_event("form-set-active", %{"id" => id}, socket) do
     Polls.disable_all(socket.assigns.event.presentation_file.id, socket.assigns.state.position)
+    Embeds.disable_all(socket.assigns.event.presentation_file.id, socket.assigns.state.position)
 
-    Forms.set_default(
+    Forms.set_status(
       id,
       socket.assigns.event.presentation_file.id,
-      socket.assigns.state.position
+      socket.assigns.state.position,
+      true
     )
 
     form = Forms.get_form!(id)
@@ -237,10 +292,112 @@ defmodule ClaperWeb.EventLive.Manage do
       {:current_poll, nil}
     )
 
+    Phoenix.PubSub.broadcast(
+      Claper.PubSub,
+      "event:#{socket.assigns.event.uuid}",
+      {:current_embed, nil}
+    )
+
     {:noreply,
      socket
      |> assign(:polls, list_polls(socket, socket.assigns.event.presentation_file.id))
+     |> assign(:forms, list_forms(socket, socket.assigns.event.presentation_file.id))
+     |> assign(:embeds, list_embeds(socket, socket.assigns.event.presentation_file.id))}
+  end
+
+  def handle_event("embed-set-active", %{"id" => id}, socket) do
+    Polls.disable_all(socket.assigns.event.presentation_file.id, socket.assigns.state.position)
+    Forms.disable_all(socket.assigns.event.presentation_file.id, socket.assigns.state.position)
+
+    Embeds.set_status(
+      id,
+      socket.assigns.event.presentation_file.id,
+      socket.assigns.state.position,
+      true
+    )
+
+    embed = Embeds.get_embed!(id)
+
+    Phoenix.PubSub.broadcast(
+      Claper.PubSub,
+      "event:#{socket.assigns.event.uuid}",
+      {:current_embed, embed}
+    )
+
+    Phoenix.PubSub.broadcast(
+      Claper.PubSub,
+      "event:#{socket.assigns.event.uuid}",
+      {:current_poll, nil}
+    )
+
+    Phoenix.PubSub.broadcast(
+      Claper.PubSub,
+      "event:#{socket.assigns.event.uuid}",
+      {:current_form, nil}
+    )
+
+    {:noreply,
+     socket
+     |> assign(:polls, list_polls(socket, socket.assigns.event.presentation_file.id))
+     |> assign(:forms, list_forms(socket, socket.assigns.event.presentation_file.id))
+     |> assign(:embeds, list_embeds(socket, socket.assigns.event.presentation_file.id))}
+  end
+
+  def handle_event("poll-set-inactive", %{"id" => id}, socket) do
+    Polls.set_status(
+      id,
+      socket.assigns.event.presentation_file.id,
+      socket.assigns.state.position,
+      false
+    )
+
+    Phoenix.PubSub.broadcast(
+      Claper.PubSub,
+      "event:#{socket.assigns.event.uuid}",
+      {:current_poll, nil}
+    )
+
+    {:noreply,
+     socket
+     |> assign(:polls, list_polls(socket, socket.assigns.event.presentation_file.id))}
+  end
+
+  def handle_event("form-set-inactive", %{"id" => id}, socket) do
+    Forms.set_status(
+      id,
+      socket.assigns.event.presentation_file.id,
+      socket.assigns.state.position,
+      false
+    )
+
+    Phoenix.PubSub.broadcast(
+      Claper.PubSub,
+      "event:#{socket.assigns.event.uuid}",
+      {:current_form, nil}
+    )
+
+    {:noreply,
+     socket
      |> assign(:forms, list_forms(socket, socket.assigns.event.presentation_file.id))}
+  end
+
+  def handle_event("embed-set-inactive", %{"id" => id}, socket) do
+    Embeds.set_status(
+      id,
+      socket.assigns.event.presentation_file.id,
+      socket.assigns.state.position,
+      false
+    )
+
+    Phoenix.PubSub.broadcast(
+      Claper.PubSub,
+      "event:#{socket.assigns.event.uuid}",
+      {:current_embed, nil}
+    )
+
+    {:noreply,
+     socket
+     |> assign(:embeds, list_embeds(socket, socket.assigns.event.presentation_file.id))}
   end
 
   @impl true
@@ -252,6 +409,12 @@ defmodule ClaperWeb.EventLive.Manage do
     Claper.Posts.delete_all_posts(:attendee_identifier, attendee_identifier, event)
 
     ban(attendee_identifier, socket)
+  end
+
+  @impl true
+  def handle_event("pin", %{"id" => id}, socket) do
+    post = Claper.Posts.get_post!(id, [:event])
+    pin(post, socket)
   end
 
   @impl true
@@ -336,6 +499,23 @@ defmodule ClaperWeb.EventLive.Manage do
   @impl true
   def handle_event(
         "checked",
+        %{"key" => "show_only_pinned", "value" => value},
+        %{assigns: %{event: _event, state: state}} = socket
+      ) do
+    {:ok, new_state} =
+      Claper.Presentations.update_presentation_state(
+        state,
+        %{
+          :show_only_pinned => value
+        }
+      )
+
+    {:noreply, socket |> assign(:state, new_state)}
+  end
+
+  @impl true
+  def handle_event(
+        "checked",
         %{"key" => "join_screen_visible", "value" => value},
         %{assigns: %{state: state}} = socket
       ) do
@@ -351,11 +531,19 @@ defmodule ClaperWeb.EventLive.Manage do
   end
 
   @impl true
-  def handle_event("delete", %{"event-id" => event_id, "id" => id}, socket) do
+  def handle_event("delete", %{"id" => id}, socket) do
     post = Claper.Posts.get_post!(id, [:event])
     {:ok, _} = Claper.Posts.delete_post(post)
 
-    {:noreply, assign(socket, :posts, list_posts(socket, event_id))}
+    updated_socket =
+      if post.pinned do
+        assign(socket, :pinned_posts, list_pinned_posts(socket, socket.assigns.event.uuid))
+        assign(socket, :all_posts, list_all_posts(socket, socket.assigns.event.uuid))
+      else
+        assign(socket, :all_posts, list_all_posts(socket, socket.assigns.event.uuid))
+      end
+
+    {:noreply, updated_socket}
   end
 
   @impl true
@@ -378,7 +566,9 @@ defmodule ClaperWeb.EventLive.Manage do
     socket =
       case tab do
         "posts" ->
-          assign(socket, :posts, list_posts(socket, socket.assigns.event.uuid))
+          socket
+          |> assign(:pinned_posts, list_pinned_posts(socket, socket.assigns.event.uuid))
+          |> assign(:all_posts, list_all_posts(socket, socket.assigns.event.uuid))
 
         "forms" ->
           assign(
@@ -386,6 +576,10 @@ defmodule ClaperWeb.EventLive.Manage do
             :form_submits,
             list_form_submits(socket, socket.assigns.event.presentation_file.id)
           )
+
+        "pinned_posts" ->
+          socket
+          |> assign(:pinned_posts, list_pinned_posts(socket, socket.assigns.event.uuid))
       end
 
     {:noreply, socket}
@@ -459,6 +653,12 @@ defmodule ClaperWeb.EventLive.Manage do
     })
   end
 
+  defp apply_action(socket, :add_embed, _params) do
+    socket
+    |> assign(:create, "embed")
+    |> assign(:embed, %Embeds.Embed{})
+  end
+
   defp apply_action(socket, :import, _params) do
     socket
     |> assign(:create, "import")
@@ -472,6 +672,15 @@ defmodule ClaperWeb.EventLive.Manage do
     |> assign(:create, "form")
     |> assign(:create_action, :edit)
     |> assign(:form, form)
+  end
+
+  defp apply_action(socket, :edit_embed, %{"id" => id}) do
+    embed = Embeds.get_embed!(id)
+
+    socket
+    |> assign(:create, "embed")
+    |> assign(:create_action, :edit)
+    |> assign(:embed, embed)
   end
 
   defp poll_at_position(
@@ -516,6 +725,33 @@ defmodule ClaperWeb.EventLive.Manage do
     end
   end
 
+  defp pin(post, socket) do
+    {:ok, _updated_post} = Claper.Posts.toggle_pin_post(post)
+
+    {:noreply, socket}
+  end
+
+  defp embed_at_position(
+         %{assigns: %{event: event, state: state}} = socket,
+         broadcast \\ true
+       ) do
+    with embed <-
+           Claper.Embeds.get_embed_current_position(
+             event.presentation_file.id,
+             state.position
+           ) do
+      if broadcast do
+        Phoenix.PubSub.broadcast(
+          Claper.PubSub,
+          "event:#{event.uuid}",
+          {:current_embed, embed}
+        )
+      end
+
+      socket |> assign(:current_embed, embed)
+    end
+  end
+
   defp ban(user, %{assigns: %{event: event, state: state}} = socket) do
     {:ok, new_state} =
       Claper.Presentations.update_presentation_state(state, %{
@@ -531,7 +767,11 @@ defmodule ClaperWeb.EventLive.Manage do
     {:noreply, socket |> assign(:state, new_state)}
   end
 
-  defp list_posts(_socket, event_id) do
+  defp list_pinned_posts(_socket, event_id) do
+    Claper.Posts.list_pinned_posts(event_id, [:event, :reactions])
+  end
+
+  defp list_all_posts(_socket, event_id) do
     Claper.Posts.list_posts(event_id, [:event, :reactions])
   end
 
@@ -541,6 +781,10 @@ defmodule ClaperWeb.EventLive.Manage do
 
   defp list_forms(_socket, presentation_file_id) do
     Claper.Forms.list_forms(presentation_file_id)
+  end
+
+  defp list_embeds(_socket, presentation_file_id) do
+    Claper.Embeds.list_embeds(presentation_file_id)
   end
 
   defp list_form_submits(_socket, presentation_file_id) do

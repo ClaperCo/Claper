@@ -181,20 +181,22 @@ defmodule Claper.Forms do
     |> Repo.update_all(set: [enabled: false])
   end
 
-  def set_default(id, presentation_file_id, position) do
-    from(f in Form,
-      where:
-        f.presentation_file_id == ^presentation_file_id and f.position == ^position and
-          f.id != ^id
-    )
-    |> Repo.update_all(set: [enabled: false])
+  def set_status(id, presentation_file_id, position, status) do
+    if status do
+      from(f in Form,
+        where:
+          f.presentation_file_id == ^presentation_file_id and f.position == ^position and
+            f.id != ^id
+      )
+      |> Repo.update_all(set: [enabled: false])
+    end
 
     from(f in Form,
       where:
         f.presentation_file_id == ^presentation_file_id and f.position == ^position and
           f.id == ^id
     )
-    |> Repo.update_all(set: [enabled: true])
+    |> Repo.update_all(set: [enabled: status])
   end
 
   defp broadcast({:error, _reason} = error, _form), do: error
