@@ -149,8 +149,6 @@ defmodule ClaperWeb.EventLive.EventCardComponent do
                 phx-update="ignore"
               >
                 <a
-                  data-phx-link="patch"
-                  data-phx-link-state="push"
                   href={Routes.stat_index_path(@socket, :index, @event.uuid)}
                   class="flex w-full lg:w-auto px-6 text-white py-2 justify-center rounded-md tracking-wide font-bold focus:outline-none focus:shadow-outline hover:bg-primary-600 bg-primary-500 space-x-2"
                 >

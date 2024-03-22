@@ -1,20 +1,3 @@
-// If you want to use Phoenix channels, run `mix help phx.gen.channel`
-// to get started and then uncomment the line below.
-// import "./user_socket.js"
-
-// You can include dependencies in two ways.
-//
-// The simplest option is to put them in assets/vendor and
-// import them using relative paths:
-//
-//     import "./vendor/some-package.js"
-//
-// Alternatively, you can `npm install some-package` and import
-// them using a path starting with the package name:
-//
-//     import "some-package"
-//
-
 // Include phoenix_html to handle method=PUT/DELETE in forms and buttons.
 import "phoenix_html"
 // Establish Phoenix Socket and LiveView configuration.
@@ -29,6 +12,7 @@ import 'moment/locale/fr'
 import QRCodeStyling from "qr-code-styling"
 import { Presenter } from "./presenter"
 import { Manager } from "./manager"
+import Split from "split-grid"
 window.moment = moment
 
 window.moment.locale("en")
@@ -38,6 +22,59 @@ Alpine.start()
 
 let csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute("content")
 let Hooks = {}
+
+Hooks.Split = {
+  mounted() {
+    const type = this.el.dataset.type
+    const gutter = this.el.dataset.gutter
+    const columnSlitValue = localStorage.getItem('column-split') || '1fr 10px 1fr'
+    const rowSlitValue = localStorage.getItem('row-split') || '1fr 10px 1fr'
+
+    if (type === "column") {
+      this.columnSplit = Split({
+        columnGutters: [{
+          track: 1,
+          element: this.el.querySelector(gutter)
+        }],
+        onDragEnd: () => {
+          const currentPosition = this.el.style['grid-template-columns']
+          localStorage.setItem('column-split', currentPosition)
+        },
+      })
+      this.el.style['grid-template-columns'] = columnSlitValue
+    } else {
+      this.rowSplit = Split({
+        rowGutters: [{
+          track: 1,
+          element: this.el.querySelector(gutter)
+        }],
+        onDragEnd: () => {
+          const value = this.el.style['grid-template-rows']
+          localStorage.setItem('row-split', value)
+        },
+      })
+      this.el.style['grid-template-rows'] = rowSlitValue
+    }
+  },
+  updated() {
+    if (this.columnSplit) {
+      const value = localStorage.getItem('column-split') || '1fr 10px 1fr'
+      this.el.style['grid-template-columns'] = value
+    } 
+    if (this.rowSplit) {
+      const value = localStorage.getItem('row-split') || '1fr 10px 1fr'
+      this.el.style['grid-template-rows'] = value
+    }
+  },
+  destroy() {
+    if (this.columnSplit) {
+      this.columnSplit.destroy()
+    }
+    if (this.rowSplit) {
+      this.rowSplit.destroy()
+    }
+  }
+}
 
 Hooks.Scroll = {
   mounted() {
@@ -53,15 +90,14 @@ Hooks.Scroll = {
 
 Hooks.ScrollIntoDiv = {
   mounted() {
-    let t = document.querySelector(this.el.dataset.target)
-    if (this.el.dataset.postsNb > 4) t.scrollTo({top: t.scrollHeight, behavior: 'smooth'});
-
-    this.handleEvent("scroll", () => {
-      let t = document.querySelector(this.el.dataset.target);
-      if (this.el.childElementCount > 4 && (t.scrollHeight - t.scrollTop < t.clientHeight + 100)) {
-        t.scrollTo({top: t.scrollHeight, behavior: 'smooth'});
-      }
-    })
+    this.scrollElement(true);
+    this.handleEvent("scroll", this.scrollElement.bind(this));
+  },
+  scrollElement(firstScroll) {
+    let t = this.el.parentElement;
+    if (firstScroll === true || (t.scrollHeight - t.scrollTop - t.clientHeight) <= 100) {
+      t.scrollTo({top: t.scrollHeight, behavior: 'smooth'})
+    }
   }
 }
 

@@ -15,8 +15,9 @@ export class Manager {
 
       if (el) {
         setTimeout(() => {
-          document.getElementById("slide-preview-" + data.current_page).scrollIntoView({
-            block: 'center',
+          document.getElementById("slides").scrollTo({
+            top: el.offsetTop - el.scrollHeight,
+            left: 0,
             behavior: 'smooth'
           });
         }, data.timeout ? data.timeout : 0)
@@ -51,8 +52,9 @@ export class Manager {
     var el = document.getElementById("slide-preview-" + this.currentPage)
 
     if (el) {
-      document.getElementById("slide-preview-" + this.currentPage).scrollIntoView({
-        block: 'center',
+      document.getElementById("slides").scrollTo({
+        top: el.offsetTop - el.scrollHeight,
+        left: 0,
         behavior: 'smooth'
       });
     }

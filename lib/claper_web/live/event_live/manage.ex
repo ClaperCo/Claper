@@ -44,6 +44,8 @@ defmodule ClaperWeb.EventLive.Manage do
         |> assign(:pinned_posts, list_pinned_posts(socket, event.uuid))
         |> assign(:all_posts, list_all_posts(socket, event.uuid))
         |> assign(:pinned_post_count, length(list_pinned_posts(socket, event.uuid)))
+        |> assign(:post_count, length(list_all_posts(socket, event.uuid)))
+        |> assign(:form_submit_count, length(list_form_submits(socket, event.presentation_file.id)))
         |> assign(:polls, list_polls(socket, event.presentation_file.id))
         |> assign(:forms, list_forms(socket, event.presentation_file.id))
         |> assign(:embeds, list_embeds(socket, event.presentation_file.id))
@@ -79,6 +81,7 @@ defmodule ClaperWeb.EventLive.Manage do
     {:noreply,
      socket
      |> assign(:all_posts, [post | socket.assigns.all_posts])
+     |> update(:post_count, fn post_count -> post_count + 1 end)
      |> push_event("scroll", %{})}
   end
 
@@ -98,7 +101,9 @@ defmodule ClaperWeb.EventLive.Manage do
      |> update(:pinned_posts, fn posts -> [deleted_post | posts] end)
      |> update(:pinned_post_count, fn pinned_post_count ->
        pinned_post_count - if deleted_post.pinned, do: 1, else: 0
-     end)}
+     end)
+      |> update(:post_count, fn post_count -> post_count - 1 end)
+    }
   end
 
   @impl true
@@ -128,6 +133,7 @@ defmodule ClaperWeb.EventLive.Manage do
     {:noreply,
      socket
      |> update(:form_submits, fn form_submits -> [fs | form_submits] end)
+     |> update(:form_submit_count, fn form_submit_count -> form_submit_count + 1 end)
      |> push_event("scroll", %{})}
   end
 
@@ -138,7 +144,11 @@ defmodule ClaperWeb.EventLive.Manage do
 
   @impl true
   def handle_info({:form_submit_deleted, fs}, socket) do
-    {:noreply, socket |> update(:form_submits, fn form_submits -> [fs | form_submits] end)}
+    {:noreply,
+    socket
+    |> update(:form_submits, fn form_submits -> [fs | form_submits] end)
+    |> update(:form_submit_count, fn form_submit_count -> form_submit_count - 1 end)
+  }
   end
 
   @impl true

@@ -16,11 +16,11 @@ defmodule Claper.Stats do
 
   def total_vote_count(presentation_file_id) do
     from(p in Claper.Polls.Poll,
-      join: o in Claper.Polls.PollOpt,
-      on: o.poll_id == p.id,
+      join: pv in Claper.Polls.PollVote,
+      on: pv.poll_id == p.id,
       where: p.presentation_file_id == ^presentation_file_id,
-      group_by: o.poll_id,
-      select: sum(o.vote_count)
+      group_by: p.presentation_file_id,
+      select: count(fragment("DISTINCT COALESCE(?, CAST(? AS varchar))", pv.attendee_identifier, pv.user_id))
     )
     |> Repo.all()
   end

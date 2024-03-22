@@ -232,12 +232,12 @@
                   <%= if fs.attendee_identifier do %>
                     <img
                       class="h-8 w-8"
-                      src={"https://avatars.dicebear.com/api/identicon/#{fs.attendee_identifier}.svg"}
+                      src={"https://api.dicebear.com/7.x/personas/svg?seed=#{fs.attendee_identifier}.svg"}
                     />
                   <% else %>
                     <img
                       class="h-8 w-8"
-                      src={"https://avatars.dicebear.com/api/identicon/#{fs.user_id}.svg"}
+                      src={"https://api.dicebear.com/7.x/personas/svg?seed=#{fs.user_id}.svg"}
                     />
                   <% end %>
 
@@ -279,12 +279,12 @@
                   <%= if post.attendee_identifier do %>
                     <img
                       class="h-8 w-8"
-                      src={"https://avatars.dicebear.com/api/identicon/#{post.attendee_identifier}.svg"}
+                      src={"https://api.dicebear.com/7.x/personas/svg?seed=#{post.attendee_identifier}.svg"}
                     />
                   <% else %>
                     <img
                       class="h-8 w-8"
-                      src={"https://avatars.dicebear.com/api/identicon/#{post.user_id}.svg"}
+                      src={"https://api.dicebear.com/7.x/personas/svg?seed=#{post.user_id}.svg"}
                     />
                   <% end %>
 
