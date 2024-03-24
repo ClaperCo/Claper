@@ -118,7 +118,7 @@ defmodule ClaperWeb.EventLive.EventFormComponent do
 
             File.cp!(path, dest)
 
-            {:ok, Routes.static_path(socket, "/uploads/#{hash}/#{Path.basename(dest)}")}
+            {:ok, "/uploads/#{hash}/#{Path.basename(dest)}"}
           end)
 
         [ext | _] = MIME.extensions(MIME.from_path(dest))
@@ -176,7 +176,7 @@ defmodule ClaperWeb.EventLive.EventFormComponent do
             Claper.Accounts.LeaderNotifier.deliver_event_invitation(
               e.name,
               leader.email,
-              Routes.event_index_url(socket, :index)
+              url(~p"/events")
             )
           end)
         end
@@ -246,7 +246,7 @@ defmodule ClaperWeb.EventLive.EventFormComponent do
           Claper.Accounts.LeaderNotifier.deliver_event_invitation(
             e.name,
             leader.email,
-            Routes.event_index_url(socket, :index)
+            url(~p"/events")
           )
         end
       end)

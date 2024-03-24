@@ -5,19 +5,19 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <%= csrf_meta_tag() %>
-    <%= live_title_tag(assigns[:page_title] || "Claper", suffix: " · Claper") %>
-    <link rel="icon" type="image/png" href={Routes.static_path(@conn, "/images/favicon.png")} />
-    <link phx-track-static rel="stylesheet" href={Routes.static_path(@conn, "/assets/app.css")} />
+    <.live_title suffix=" · Claper")><%= assigns[:page_title] || "Claper" %></.live_title>
+    <link rel="icon" type="image/png" href="/images/favicon.png" />
+    <link phx-track-static rel="stylesheet" href="/assets/app.css" />
     <link
       phx-track-static
       rel="stylesheet"
-      href={Routes.static_path(@conn, "/assets/custom.css")}
+      href="/assets/custom.css"
     />
     <script
       defer
       phx-track-static
       type="text/javascript"
-      src={Routes.static_path(@conn, "/assets/app.js")}
+      src="/assets/app.js"
     >
     </script>
   </head>

@@ -1,4 +1,4 @@
-<div class="mx-3 max-w-7xl sm:mx-auto">
+<div class="mx-3 max-w-7xl md:mx-auto">
   <%= if @live_action in [:new, :edit] do %>
     <.live_component
       module={ClaperWeb.EventLive.EventFormComponent}
@@ -6,7 +6,7 @@
       event={@event}
       page_title={@page_title}
       action={@live_action}
-      return_to={Routes.event_index_path(@socket, :index)}
+      return_to={~p"/events"}
       current_user={@current_user}
     />
   <% else %>
@@ -20,7 +20,7 @@
         <a
           data-phx-link="patch"
           data-phx-link-state="push"
-          href={Routes.event_index_path(@socket, :new)}
+          href={~p"/events/new"}
           class="relative inline-flex items-center px-5 py-2 text-lg font-medium rounded-md text-white bg-gradient-to-tl from-primary-500 to-secondary-500 bg-size-200 bg-pos-0 hover:bg-pos-100 transition-all duration-500"
         >
           <svg
@@ -44,18 +44,17 @@
     </div>
 
     <div class="mt-10 relative">
-      <ul role="event-list" class="divide-y divide-gray-200" phx-update="append" id="events">
+      <ul role="event-list" class="divide-y divide-gray-200" phx-update="stream" id="events">
         <% current_time = NaiveDateTime.utc_now() %>
-        <%= for event <- @events do %>
-          <.live_component
+        <.live_component
+            :for={{id, event} <- @streams.events}
             module={ClaperWeb.EventLive.EventCardComponent}
-            id={"event-#{event.uuid}"}
+            id={id}
             event={event}
             current_time={current_time}
           />
-        <% end %>
       </ul>
-      <%= if Enum.count(@events) == 0 do %>
+      <%= if Enum.count(@streams.events) == 0 do %>
         <div class="w-full text-2xl text-black opacity-25 text-center">
           <img src="/images/icons/arrow.svg" class="h-20 float-right mr-16 -mt-5" />
           <p class="pt-12 clear-both"><%= gettext("Create your first presentation") %></p>

@@ -20,7 +20,7 @@
 
         <a
           class="flex items-center px-3 py-2 bg-gray-200 mb-15 rounded-lg mt-5"
-          href={Routes.event_join_path(@socket, :index, %{disconnected_from: @event.uuid})}
+          href={~p"/?#{[%{disconnected_from: @event.uuid}]}"}
         >
           <img src="/images/icons/exit-outline.svg" class="h-5 mr-3" />
           <span><%= gettext("Leave") %></span>
@@ -109,26 +109,26 @@
     <div
       class="flex flex-col space-y-4 px-5 pt-20 pb-32 lg:w-1/3 bg-black min-h-screen"
       id="post-list"
-      phx-update="append"
-      data-posts-nb={Enum.count(@posts)}
-      phx-hook="Scroll"
+      phx-update="stream"
+      data-posts-nb={Enum.count(@streams.posts)}
+      phx-hook="ScrollIntoDiv"
       data-target="body"
     >
-      <%= for post <- @posts do %>
-        <.live_component
-          module={ClaperWeb.EventLive.PostComponent}
-          id={"#{post.id}-post"}
-          post={post}
-          leaders={@leaders}
-          is_leader={@is_leader}
-          current_user={@current_user}
-          attendee_identifier={@attendee_identifier}
-          event={@event}
-          liked_posts={@liked_posts}
-          loved_posts={@loved_posts}
-          loled_posts={@loled_posts}
-        />
-      <% end %>
+      <.live_component
+        :for={{id, post} <- @streams.posts}
+        module={ClaperWeb.EventLive.PostComponent}
+        id={id}
+        post={post}
+        leaders={@leaders}
+        is_leader={@is_leader}
+        current_user={@current_user}
+        attendee_identifier={@attendee_identifier}
+        event={@event}
+        reaction_enabled={@state.message_reaction_enabled}
+        liked_posts={@liked_posts}
+        loved_posts={@loved_posts}
+        loled_posts={@loled_posts}
+      />
     </div>
 
     <%= if @empty_room && @state.chat_enabled do %>

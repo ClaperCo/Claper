@@ -52,11 +52,13 @@ export class Manager {
     var el = document.getElementById("slide-preview-" + this.currentPage)
 
     if (el) {
-      document.getElementById("slides").scrollTo({
-        top: el.offsetTop - el.scrollHeight,
-        left: 0,
-        behavior: 'smooth'
-      });
+      setTimeout(() => {
+        document.getElementById("slides").scrollTo({
+          top: el.offsetTop - el.scrollHeight,
+          left: 0,
+          behavior: 'smooth'
+        });
+      }, 50)
     }
   }
 

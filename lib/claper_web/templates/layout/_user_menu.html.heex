@@ -1,12 +1,11 @@
 <div class="py-1" role="none">
-  <%= live_patch(gettext("Settings"),
-    to: Routes.user_settings_show_path(@conn, :show),
-    class: "text-gray-700 block px-4 py-2 text-sm hover:bg-gray-100 hover:text-gray-900"
-  ) %>
+  <a href={~p"/users/settings"} class="text-gray-700 block px-4 py-2 text-sm hover:bg-gray-100 hover:text-gray-900">
+    <%= gettext("Settings") %>
+  </a>
 </div>
 <div class="py-1" role="none">
   <%= link(gettext("Logout"),
-    to: Routes.user_session_path(@conn, :delete),
+    to: ~p"/users/log_out",
     method: :delete,
     class: "text-gray-700 block px-4 py-2 text-sm hover:bg-gray-100 hover:text-gray-900"
   ) %>

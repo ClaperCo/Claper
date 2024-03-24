@@ -5,7 +5,6 @@
   phx-hook="Manager"
   data-max-page={@event.presentation_file.length}
   data-current-page={@state.position}
-  class="max-h-screen overflow-hidden"
 >
   <div
     id="add-modal"
@@ -44,7 +43,7 @@
               <a
                 data-phx-link="patch"
                 data-phx-link-state="push"
-                href={Routes.event_manage_path(@socket, :add_poll, @event.code)}
+                href={~p"/e/#{@event.code}/manage/add/poll"}
                 class="group flex select-none rounded-xl p-3 w-full hover:bg-gray-200 cursor-pointer"
               >
                 <div class="flex h-12 w-12 flex-none text-white items-center justify-center rounded-lg bg-gradient-to-br from-primary-500 to-secondary-500">
@@ -77,7 +76,7 @@
               <a
                 data-phx-link="patch"
                 data-phx-link-state="push"
-                href={Routes.event_manage_path(@socket, :add_form, @event.code)}
+                href={~p"/e/#{@event.code}/manage/add/form"}
                 class="group flex select-none rounded-xl p-3 w-full hover:bg-gray-200 cursor-pointer"
               >
                 <div class="flex h-12 w-12 flex-none text-white items-center justify-center rounded-lg bg-gradient-to-br from-primary-500 to-secondary-500">
@@ -116,7 +115,7 @@
               <a
                 data-phx-link="patch"
                 data-phx-link-state="push"
-                href={Routes.event_manage_path(@socket, :add_embed, @event.code)}
+                href={~p"/e/#{@event.code}/manage/add/embed"}
                 class="group flex select-none rounded-xl p-3 w-full hover:bg-gray-200 cursor-pointer"
               >
                 <div class="flex h-12 w-12 flex-none text-white items-center justify-center rounded-lg bg-gradient-to-br from-primary-500 to-secondary-500">
@@ -150,7 +149,7 @@
               <a
                 data-phx-link="patch"
                 data-phx-link-state="push"
-                href={Routes.event_manage_path(@socket, :import, @event.code)}
+                href={~p"/e/#{@event.code}/manage/import"}
                 class="group flex gap-x-2 select-none rounded-xl p-3 w-full hover:bg-gray-200 cursor-pointer"
               >
                 <svg
@@ -192,7 +191,7 @@
               poll={@poll}
               live_action={@create_action}
               position={@state.position}
-              return_to={Routes.event_manage_path(@socket, :show, @event.code)}
+              return_to={~p"/e/#{@event.code}/manage"}
             />
           </div>
         <% end %>
@@ -213,7 +212,7 @@
               form={@form}
               live_action={@create_action}
               position={@state.position}
-              return_to={Routes.event_manage_path(@socket, :show, @event.code)}
+              return_to={~p"/e/#{@event.code}/manage"}
             />
           </div>
         <% end %>
@@ -234,7 +233,7 @@
               embed={@embed}
               live_action={@create_action}
               position={@state.position}
-              return_to={Routes.event_manage_path(@socket, :show, @event.code)}
+              return_to={~p"/e/#{@event.code}/manage"}
             />
           </div>
         <% end %>
@@ -279,14 +278,14 @@
     </div>
   </div>
 
-  <div id="wrapper" class="grid grid-cols-1 grid-rows-[5rem_1fr] max-h-screen">
-    <div class="md:flex md:items-center md:justify-between px-6 py-2 border-b-2 border-gray-200 w-full bg-white">
+  <div id="wrapper" class="grid grid-rows-[5rem_1fr] h-screen max-h-screen overflow-hidden">
+    <div class="md:flex md:items-center md:justify-between px-3 py-2 border-b-2 border-gray-200 w-full bg-white">
         <div class="flex-1 flex gap-x-2">
           <a
             data-phx-link="patch"
             data-phx-link-state="push"
-            href={Routes.event_index_path(@socket, :index)}
-            class="md:px-3 pt-0.5 md:pt-1.5 rounded-md hover:bg-gray-200 flex items-center"
+            href={~p"/events"}
+            class="md:px-3 rounded-md hover:bg-gray-200 flex items-center"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -365,7 +364,7 @@
             <button
               phx-hook="OpenPresenter"
               id={"openPresenter-#{@event.uuid}"}
-              data-url={Routes.event_presenter_path(@socket, :show, @event.code)}
+              data-url={~p"/e/#{@event.code}/presenter"}
               type="button"
               class="inline-flex items-center px-5 py-3 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-gradient-to-tl from-primary-500 to-secondary-500 bg-size-200 bg-pos-0 hover:bg-pos-100 transition-all duration-500"
             >
@@ -378,9 +377,9 @@
         </div>
       </div>
 
-      <div phx-hook="Split" data-type="column" data-gutter=".gutter-1" id="layout" class="grid grid-cols-[1fr_10px_1fr] max-h-screen">
-        <div id="slides" class="bg-gray-100 overflow-y-auto max-h-full">
-          <div class="flex flex-col items-center text-center max-h-full">
+      <div phx-hook="Split" data-type="column" data-gutter=".gutter-1" id="layout" class="grid grid-cols-[1fr_10px_1fr] overflow-y-auto">
+        <div id="slides" class="bg-gray-100 overflow-y-auto">
+          <div class="flex flex-col items-center text-center">
             <%= for index <- 0..@event.presentation_file.length-1 do %>
               <%= if @state.position==index && @state.position> 0 do %>
                 <button
@@ -480,7 +479,7 @@
                           <a
                             data-phx-link="patch"
                             data-phx-link-state="push"
-                            href={Routes.event_manage_path(@socket, :edit_poll, @event.code, poll.id)}
+                            href={~p"/e/#{@event.code}/manage/edit/poll/#{poll.id}"}
                             class="text-xs text-primary-500"
                           >
                             <svg
@@ -562,7 +561,7 @@
                           <a
                             data-phx-link="patch"
                             data-phx-link-state="push"
-                            href={Routes.event_manage_path(@socket, :edit_form, @event.code, form.id)}
+                            href={~p"/e/#{@event.code}/manage/edit/form/#{form.id}"}
                             class="text-xs text-primary-500"
                           >
                             <svg
@@ -637,7 +636,7 @@
                             data-phx-link="patch"
                             data-phx-link-state="push"
                             href={
-                              Routes.event_manage_path(@socket, :edit_embed, @event.code, embed.id)
+                              ~p"/e/#{@event.code}/manage/edit/embed/#{embed.id}"
                             }
                             class="text-xs text-primary-500"
                           >
@@ -761,15 +760,185 @@
                 <div
                   id="post-list"
                   class="overflow-y-auto max-h-full pb-5 pt-8 px-5"
-                  phx-update="append"
+                  phx-update="stream"
                   phx-hook="ScrollIntoDiv"
                 >
-                  <%= for post <- @all_posts do %>
+                  <div
+                    :for={{id, post} <- @streams.posts}
+                    id={id}
+                  >
+                    <div class="flex flex-col md:block px-4 pb-2 pt-3 rounded-b-lg rounded-tr-lg bg-white relative shadow-md text-black break-all mt-4">
+                      <div class="float-right mr-1">
+                        <%= if post.attendee_identifier do %>
+                          <span class="text-yellow-500">
+                            <%= link(
+                              if post.pinned do
+                                gettext("Unpin")
+                              else
+                                gettext("Pin")
+                              end,
+                              to: "#",
+                              phx_click: "pin",
+                              phx_value_id: post.uuid,
+                              phx_value_event_id: @event.uuid
+                            ) %>
+                          </span>
+                          /
+                          <span class="text-red-500">
+                            <%= link(gettext("Ban"),
+                              to: "#",
+                              phx_click: "ban",
+                              phx_value_attendee_identifier: post.attendee_identifier,
+                              data: [
+                                confirm:
+                                  gettext(
+                                    "Blocking this user will delete all his messages and he will not be able to join again, confirm ?"
+                                  )
+                              ]
+                            ) %>
+                          </span>
+                          /
+                        <% else %>
+                          <span class="text-yellow-500">
+                            <%= link(
+                              if post.pinned do
+                                gettext("Unpin")
+                              else
+                                gettext("Pin")
+                              end,
+                              to: "#",
+                              phx_click: "pin",
+                              phx_value_id: post.uuid,
+                              phx_value_event_id: @event.uuid
+                            ) %>
+                          </span>
+                          /
+                          <span class="text-red-500">
+                            <%= link(gettext("Ban"),
+                              to: "#",
+                              phx_click: "ban",
+                              phx_value_user_id: post.user_id,
+                              data: [
+                                confirm:
+                                  gettext(
+                                    "Blocking this user will delete all his messages and he will not be able to join again, confirm ?"
+                                  )
+                              ]
+                            ) %>
+                          </span>
+                          /
+                        <% end %>
+                        <span class="text-red-500">
+                          <%= link(gettext("Delete"),
+                            to: "#",
+                            phx_click: "delete",
+                            phx_value_id: post.uuid,
+                            phx_value_event_id: @event.uuid
+                          ) %>
+                        </span>
+                      </div>
+
+                      <div class="flex space-x-3 items-center">
+                        <%= if post.attendee_identifier do %>
+                          <img
+                            class="h-8 w-8"
+                            src={"https://api.dicebear.com/7.x/personas/svg?seed=#{post.attendee_identifier}"}
+                          />
+                        <% else %>
+                          <img
+                            class="h-8 w-8"
+                            src={"https://api.dicebear.com/7.x/personas/svg?seed=#{post.user_id}"}
+                          />
+                        <% end %>
+
+                        <div class="flex flex-col">
+                          <%= if post.name do %>
+                            <p class="text-black text-sm font-semibold mr-2">
+                              <%= post.name %>
+                            </p>
+                          <% end %>
+
+                          <p class="text-xl">
+                            <%= post.body %>
+                          </p>
+                        </div>
+                      </div>
+
+                      <%= if post.like_count> 0 || post.love_count > 0 || post.lol_count > 0 do %>
+                        <div class="flex h-6 space-x-2 text-base text-gray-500 pb-3 items-center mt-5">
+                          <div class="flex items-center">
+                            <%= if post.like_count> 0 do %>
+                              <img src="/images/icons/thumb.svg" class="h-4" />
+                              <span class="ml-1">
+                                <%= post.like_count %>
+                              </span>
+                            <% end %>
+                          </div>
+                          <div class="flex items-center">
+                            <%= if post.love_count> 0 do %>
+                              <img src="/images/icons/heart.svg" class="h-4" />
+                              <span class="ml-1">
+                                <%= post.love_count %>
+                              </span>
+                            <% end %>
+                          </div>
+                          <div class="flex items-center">
+                            <%= if post.lol_count> 0 do %>
+                              <img src="/images/icons/laugh.svg" class="h-4" />
+                              <span class="ml-1">
+                                <%= post.lol_count %>
+                              </span>
+                            <% end %>
+                          </div>
+                        </div>
+                      <% end %>
+                    </div>
+                  </div>
+                </div>
+                <!-- The div below encompasses the 2 post lists -->
+              </div>
+            <% end %>
+            <%= if @list_tab == :pinned_posts do %>
+              <%= if @pinned_post_count == 0 do %>
+                <div
+                  class="text-center flex flex-col space-y-5 items-center justify-center text-gray-400"
+                  style="height: 100%;"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="h-36 w-36"
+                    viewBox="0 0 24 24"
+                    stroke-width="2"
+                    stroke="currentColor"
+                    fill="none"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M15 4.5l-4 4l-4 1.5l-1.5 1.5l7 7l1.5 -1.5l1.5 -4l4 -4" /><path d="M9 15l-4.5 4.5" /><path d="M14.5 4l5.5 5.5" />
+                  </svg>
+
+                  <p class="text-lg">
+                    <%= gettext("Pinned messages will appear here.") %>
+                  </p>
+                </div>
+              <% end %>
+
+              <div
+                id="x-pinned"
+                class="overflow-y-auto max-h-full"
+              >
+                <%= if @pinned_post_count > 0 do %>
+                  <div
+                    id="pinned-post-list"
+                    class="overflow-y-auto pb-5 pt-8 px-5"
+                    phx-update="stream"
+                    phx-hook="ScrollIntoDiv"
+                  >
                     <div
-                      class={if post.__meta__.state == :deleted, do: "hidden"}
-                      id={"#{post.id}-post"}
+                      :for={{id, post} <- @streams.pinned_posts}
+                      id={id}
                     >
-                      <div class="flex flex-col md:block px-4 pb-2 pt-3 rounded-b-lg rounded-tr-lg bg-white relative shadow-md text-black break-all mt-4">
+                      <div class="px-4 pb-2 pt-3 rounded-b-lg rounded-tr-lg bg-white relative shadow-md text-black break-all mt-4">
                         <div class="float-right mr-1">
                           <%= if post.attendee_identifier do %>
                             <span class="text-yellow-500">
@@ -896,180 +1065,6 @@
                         <% end %>
                       </div>
                     </div>
-                  <% end %>
-                </div>
-                <!-- The div below encompasses the 2 post lists -->
-              </div>
-            <% end %>
-            <%= if @list_tab == :pinned_posts do %>
-              <%= if @pinned_post_count == 0 do %>
-                <div
-                  class="text-center flex flex-col space-y-5 items-center justify-center text-gray-400"
-                  style="height: 100%;"
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    class="h-36 w-36"
-                    viewBox="0 0 24 24"
-                    stroke-width="2"
-                    stroke="currentColor"
-                    fill="none"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  >
-                    <path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M15 4.5l-4 4l-4 1.5l-1.5 1.5l7 7l1.5 -1.5l1.5 -4l4 -4" /><path d="M9 15l-4.5 4.5" /><path d="M14.5 4l5.5 5.5" />
-                  </svg>
-
-                  <p class="text-lg">
-                    <%= gettext("Pinned messages will appear here.") %>
-                  </p>
-                </div>
-              <% end %>
-
-              <div
-                id="x-pinned"
-                class="overflow-y-auto max-h-full"
-              >
-                <%= if @pinned_post_count > 0 do %>
-                  <div
-                    id="pinned-post-list"
-                    class="overflow-y-auto pb-5 pt-8 px-5"
-                    phx-update="append"
-                    phx-hook="ScrollIntoDiv"
-                  >
-                    <%= for post <- @pinned_posts do %>
-                      <div
-                        class={if post.__meta__.state == :deleted || !post.pinned, do: "hidden"}
-                        id={"#{post.id}-post"}
-                      >
-                        <div class="px-4 pb-2 pt-3 rounded-b-lg rounded-tr-lg bg-white relative shadow-md text-black break-all mt-4">
-                          <div class="float-right mr-1">
-                            <%= if post.attendee_identifier do %>
-                              <span class="text-yellow-500">
-                                <%= link(
-                                  if post.pinned do
-                                    gettext("Unpin")
-                                  else
-                                    gettext("Pin")
-                                  end,
-                                  to: "#",
-                                  phx_click: "pin",
-                                  phx_value_id: post.uuid,
-                                  phx_value_event_id: @event.uuid
-                                ) %>
-                              </span>
-                              /
-                              <span class="text-red-500">
-                                <%= link(gettext("Ban"),
-                                  to: "#",
-                                  phx_click: "ban",
-                                  phx_value_attendee_identifier: post.attendee_identifier,
-                                  data: [
-                                    confirm:
-                                      gettext(
-                                        "Blocking this user will delete all his messages and he will not be able to join again, confirm ?"
-                                      )
-                                  ]
-                                ) %>
-                              </span>
-                              /
-                            <% else %>
-                              <span class="text-yellow-500">
-                                <%= link(
-                                  if post.pinned do
-                                    gettext("Unpin")
-                                  else
-                                    gettext("Pin")
-                                  end,
-                                  to: "#",
-                                  phx_click: "pin",
-                                  phx_value_id: post.uuid,
-                                  phx_value_event_id: @event.uuid
-                                ) %>
-                              </span>
-                              /
-                              <span class="text-red-500">
-                                <%= link(gettext("Ban"),
-                                  to: "#",
-                                  phx_click: "ban",
-                                  phx_value_user_id: post.user_id,
-                                  data: [
-                                    confirm:
-                                      gettext(
-                                        "Blocking this user will delete all his messages and he will not be able to join again, confirm ?"
-                                      )
-                                  ]
-                                ) %>
-                              </span>
-                              /
-                            <% end %>
-                            <span class="text-red-500">
-                              <%= link(gettext("Delete"),
-                                to: "#",
-                                phx_click: "delete",
-                                phx_value_id: post.uuid,
-                                phx_value_event_id: @event.uuid
-                              ) %>
-                            </span>
-                          </div>
-
-                          <div class="flex space-x-3 items-center">
-                            <%= if post.attendee_identifier do %>
-                              <img
-                                class="h-8 w-8"
-                                src={"https://api.dicebear.com/7.x/personas/svg?seed=#{post.attendee_identifier}"}
-                              />
-                            <% else %>
-                              <img
-                                class="h-8 w-8"
-                                src={"https://api.dicebear.com/7.x/personas/svg?seed=#{post.user_id}"}
-                              />
-                            <% end %>
-
-                            <div class="flex flex-col">
-                              <%= if post.name do %>
-                                <p class="text-black text-sm font-semibold mr-2">
-                                  <%= post.name %>
-                                </p>
-                              <% end %>
-
-                              <p class="text-xl">
-                                <%= post.body %>
-                              </p>
-                            </div>
-                          </div>
-
-                          <%= if post.like_count> 0 || post.love_count > 0 || post.lol_count > 0 do %>
-                            <div class="flex h-6 space-x-2 text-base text-gray-500 pb-3 items-center mt-5">
-                              <div class="flex items-center">
-                                <%= if post.like_count> 0 do %>
-                                  <img src="/images/icons/thumb.svg" class="h-4" />
-                                  <span class="ml-1">
-                                    <%= post.like_count %>
-                                  </span>
-                                <% end %>
-                              </div>
-                              <div class="flex items-center">
-                                <%= if post.love_count> 0 do %>
-                                  <img src="/images/icons/heart.svg" class="h-4" />
-                                  <span class="ml-1">
-                                    <%= post.love_count %>
-                                  </span>
-                                <% end %>
-                              </div>
-                              <div class="flex items-center">
-                                <%= if post.lol_count> 0 do %>
-                                  <img src="/images/icons/laugh.svg" class="h-4" />
-                                  <span class="ml-1">
-                                    <%= post.lol_count %>
-                                  </span>
-                                <% end %>
-                              </div>
-                            </div>
-                          <% end %>
-                        </div>
-                      </div>
-                    <% end %>
                   </div>
                 <% end %>
               </div>
@@ -1105,55 +1100,59 @@
               <div
                 id="form-list"
                 class="overflow-y-auto max-h-full pb-5 pt-8 px-5"
-                phx-update="append"
+                phx-update="stream"
                 data-forms-nb={@form_submit_count}
                 phx-hook="ScrollIntoDiv"
               >
-                <%= for submission <- @form_submits do %>
-                  <div
-                    class={if submission.__meta__.state == :deleted, do: "hidden"}
-                    id={"#{submission.id}-form"}
-                  >
-                    <div class="px-4 pb-2 pt-3 rounded-b-lg rounded-tr-lg bg-white relative shadow-md text-black break-all mt-4">
-                      <div class="float-right mr-1">
-                        <span class="text-red-500">
-                          <%= link(gettext("Delete"),
-                            to: "#",
-                            phx_click: "delete-form-submit",
-                            phx_value_id: submission.id,
-                            phx_value_event_id: @event.uuid,
-                            data: [confirm: gettext("This cannot be undone, confirm ?")]
-                          ) %>
-                        </span>
-                      </div>
+                <div
+                  :for={{id, submission} <- @streams.form_submits}
+                  id={id}
+                >
+                  <div class="px-4 pb-2 pt-3 rounded-b-lg rounded-tr-lg bg-white relative shadow-md text-black break-all mt-4">
+                    <div class="float-right mr-1">
+                      <span class="text-red-500">
+                        <%= link(gettext("Delete"),
+                          to: "#",
+                          phx_click: "delete-form-submit",
+                          phx_value_id: submission.id,
+                          phx_value_event_id: @event.uuid,
+                          data: [confirm: gettext("This cannot be undone, confirm ?")]
+                        ) %>
+                      </span>
+                    </div>
 
-                      <div class="flex space-x-3 items-center">
-                        <%= if submission.attendee_identifier do %>
-                          <img
-                            class="h-8 w-8"
-                            src={"https://api.dicebear.com/7.x/personas/svg?seed=#{submission.attendee_identifier}"}
-                          />
-                        <% else %>
-                          <img
-                            class="h-8 w-8"
-                            src={"https://api.dicebear.com/7.x/personas/svg?seed=#{submission.user_id}"}
-                          />
+                    <p>
+                      <span class="font-semibold text-lg">
+                        <%= gettext("Form") %>
+                      </span>: <%= submission.form.title %>
+                    </p>
+
+                    <div class="flex space-x-3 items-center">
+                      <%= if submission.attendee_identifier do %>
+                        <img
+                          class="h-8 w-8"
+                          src={"https://api.dicebear.com/7.x/personas/svg?seed=#{submission.attendee_identifier}"}
+                        />
+                      <% else %>
+                        <img
+                          class="h-8 w-8"
+                          src={"https://api.dicebear.com/7.x/personas/svg?seed=#{submission.user_id}"}
+                        />
+                      <% end %>
+
+                      <div>
+                        <%= for res <- submission.response do %>
+                          <p>
+                            <strong>
+                              <%= elem(res, 0) %>:
+                            </strong>
+                            <%= elem(res, 1) %>
+                          </p>
                         <% end %>
-
-                        <div>
-                          <%= for res <- submission.response do %>
-                            <p>
-                              <strong>
-                                <%= elem(res, 0) %>:
-                              </strong>
-                              <%= elem(res, 1) %>
-                            </p>
-                          <% end %>
-                        </div>
                       </div>
                     </div>
                   </div>
-                <% end %>
+                </div>
               </div>
             <% end %>
           </div>
@@ -1174,7 +1173,7 @@
                     checked={@state.join_screen_visible}
                     shortcut={if @create == nil, do: "Q", else: nil}
                   />
-                  <span><%= gettext("Show instructions") %><code class="pl-1">(Q)</code></span>
+                  <span><%= gettext("Show instructions") %> <code class="px-2 py-1.5 text-xs font-semibold text-gray-800 bg-gray-100 border border-gray-200 rounded-lg">q</code></span>
                 </div>
 
                 <div class="flex space-x-2 items-center mt-3">
@@ -1183,7 +1182,7 @@
                     checked={@state.chat_visible}
                     shortcut={if @create == nil, do: "W", else: nil}
                   />
-                  <span><%= gettext("Show messages") %><code class="pl-1">(W)</code></span>
+                  <span><%= gettext("Show messages") %> <code class="px-2 py-1.5 text-xs font-semibold text-gray-800 bg-gray-100 border border-gray-200 rounded-lg">w</code></span>
                 </div>
 
                 <div class="flex space-x-2 items-center mt-3">
@@ -1193,7 +1192,7 @@
                     shortcut={if @create == nil, do: "E", else: nil}
                   />
                   <span>
-                    <%= gettext("Show only pinned messages") %><code class="pl-1">(E)</code>
+                    <%= gettext("Show only pinned messages") %> <code class="px-2 py-1.5 text-xs font-semibold text-gray-800 bg-gray-100 border border-gray-200 rounded-lg">e</code>
                   </span>
                 </div>
 
@@ -1204,7 +1203,7 @@
                     checked={@state.poll_visible}
                     shortcut={if @create == nil, do: "R", else: nil}
                   />
-                  <span><%= gettext("Show poll results") %><code class="pl-1">(R)</code></span>
+                  <span><%= gettext("Show poll results") %> <code class="px-2 py-1.5 text-xs font-semibold text-gray-800 bg-gray-100 border border-gray-200 rounded-lg">r</code></span>
                 </div>
               </div>
 
@@ -1219,7 +1218,7 @@
                     checked={@state.chat_enabled}
                     shortcut={if @create == nil, do: "A", else: nil}
                   />
-                  <span><%= gettext("Enable messages") %><code class="pl-1">(A)</code></span>
+                  <span><%= gettext("Enable messages") %> <code class="px-2 py-1.5 text-xs font-semibold text-gray-800 bg-gray-100 border border-gray-200 rounded-lg">a</code></span>
                 </div>
 
                 <div class="flex space-x-2 items-center mt-3">
@@ -1229,7 +1228,18 @@
                     shortcut={if @create == nil, do: "S", else: nil}
                   />
                   <span>
-                    <%= gettext("Enable anonymous messages") %><code class="pl-1">(S)</code>
+                    <%= gettext("Enable anonymous messages") %> <code class="px-2 py-1.5 text-xs font-semibold text-gray-800 bg-gray-100 border border-gray-200 rounded-lg">s</code>
+                  </span>
+                </div>
+
+                <div class="flex space-x-2 items-center mt-3">
+                  <ClaperWeb.Component.Input.check
+                    key={:message_reaction_enabled}
+                    checked={@state.message_reaction_enabled}
+                    shortcut={if @create == nil, do: "D", else: nil}
+                  />
+                  <span>
+                    <%= gettext("Enable message reactions") %> <code class="px-2 py-1.5 text-xs font-semibold text-gray-800 bg-gray-100 border border-gray-200 rounded-lg">d</code>
                   </span>
                 </div>
               </div>

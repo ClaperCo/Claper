@@ -23,17 +23,13 @@
         <%= gettext("About") %>
       </a>
       <%= if @current_user do %>
-        <%= live_patch(gettext("Dashboard"),
-          to: Routes.event_index_path(@socket, :index),
-          class:
-            "relative inline-flex items-center px-4 py-1 text-base font-sm rounded-md text-white bg-gradient-to-tl from-primary-500 to-secondary-500 bg-size-200 bg-pos-0 hover:bg-pos-100 transition-all duration-500"
-        ) %>
+        <.link href={~p"/events"}
+          class="relative inline-flex items-center px-4 py-1 text-base font-sm rounded-md text-white bg-gradient-to-tl from-primary-500 to-secondary-500 bg-size-200 bg-pos-0 hover:bg-pos-100 transition-all duration-500"
+        > <%= gettext("Dashboard") %> </.link>
       <% else %>
-        <%= live_patch(gettext("Login"),
-          to: Routes.user_session_path(@socket, :new),
-          class:
-            "relative inline-flex items-center px-4 py-1 text-base font-sm rounded-md text-white bg-gradient-to-tl from-primary-500 to-secondary-500 bg-size-200 bg-pos-0 hover:bg-pos-100 transition-all duration-500"
-        ) %>
+        <.link href={~p"/users/log_in"}
+          class="relative inline-flex items-center px-4 py-1 text-base font-sm rounded-md text-white bg-gradient-to-tl from-primary-500 to-secondary-500 bg-size-200 bg-pos-0 hover:bg-pos-100 transition-all duration-500"
+        ><%= gettext("Login") %></.link>
       <% end %>
     </div>
     <button @click="open = true" class="md:hidden">
@@ -44,17 +40,15 @@
         <%= gettext("About") %>
       </a>
       <%= if @current_user do %>
-        <%= live_patch(gettext("Dashboard"),
-          to: Routes.event_index_path(@socket, :index),
-          class:
-            "relative inline-flex items-center px-4 py-1 text-base font-sm rounded-md text-white bg-gradient-to-tl from-primary-500 to-secondary-500 bg-size-200 bg-pos-0 hover:bg-pos-100 transition-all duration-500"
-        ) %>
+        <.link
+          href={~p"/events"}
+          class="relative inline-flex items-center px-4 py-1 text-base font-sm rounded-md text-white bg-gradient-to-tl from-primary-500 to-secondary-500 bg-size-200 bg-pos-0 hover:bg-pos-100 transition-all duration-500"
+        ><%= gettext("Dashboard") %></.link>
       <% else %>
-        <%= live_patch(gettext("Login"),
-          to: Routes.user_session_path(@socket, :new),
-          class:
-            "relative inline-flex items-center px-4 py-1 text-base font-sm rounded-md text-white bg-gradient-to-tl from-primary-500 to-secondary-500 bg-size-200 bg-pos-0 hover:bg-pos-100 transition-all duration-500"
-        ) %>
+        <.link
+          href={~p"/users/log_in"}
+          class="relative inline-flex items-center px-4 py-1 text-base font-sm rounded-md text-white bg-gradient-to-tl from-primary-500 to-secondary-500 bg-size-200 bg-pos-0 hover:bg-pos-100 transition-all duration-500"
+        ><%= gettext("Login") %></.link>
       <% end %>
     </div>
   </div>
@@ -65,7 +59,7 @@
     </div>
 
     <%= if @last_event do %>
-      <%= live_patch to: Routes.event_show_path(@socket, :show, @last_event.code) do %>
+      <.link href={~p"/e/#{@last_event.code}"}>
         <div class="rounded-md bg-gray-600 p-4 mb-8">
           <div class="flex justify-center items-center">
             <p class="text-sm text-white">
@@ -78,10 +72,10 @@
             </p>
           </div>
         </div>
-      <% end %>
+      </.link>
     <% end %>
 
-    <%= form_for :event, Routes.event_join_path(@socket, :join), ["phx-submit": "join", "phx-hook": "JoinEvent", id: "form"], fn f -> %>
+    <%= form_for :event, ~p"/join", ["phx-submit": "join", "phx-hook": "JoinEvent", id: "form"], fn f -> %>
       <div class="relative">
         <%= text_input(f, :code,
           required: true,

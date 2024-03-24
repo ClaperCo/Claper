@@ -25,10 +25,10 @@
           </p>
 
           <div class="mt-10">
-            <%= live_patch(gettext("Return to home"),
-              to: Routes.event_join_path(@conn, :index),
-              class: "text-sm text-white underline"
-            ) %>
+            <.link
+              href={~p"/"}
+              class="text-sm text-white underline"
+            ><%= gettext("Return to home") %></.link>
           </div>
         </div>
       </div>

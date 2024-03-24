@@ -77,33 +77,68 @@ defmodule ClaperWeb.EventLive.EventCardComponent do
               <div class="mt-2 flex flex-col space-y-2 sm:space-y-0 justify-between sm:flex-row items-center">
                 <div
                   id={"event-infos-0-#{@event.uuid}"}
-                  class="text-sm w-full space-y-2 sm:w-auto font-medium text-gray-700 sm:flex sm:justify-center sm:space-x-1 sm:space-y-0 sm:items-center"
+                  class="text-sm w-full space-y-2 sm:w-auto font-medium text-gray-700 sm:flex sm:justify-center sm:space-x-1 sm:space-y-0 sm:items-center relative"
                   phx-update="ignore"
+                  phx-hook="Dropdown"
                 >
-                  <a
-                    data-phx-link="patch"
-                    data-phx-link-state="push"
-                    href={Routes.event_manage_path(@socket, :show, @event.code)}
-                    class="flex w-full lg:w-auto px-6 text-white py-2 justify-center rounded-md tracking-wide font-bold focus:outline-none focus:shadow-outline hover:bg-primary-600 bg-primary-500 space-x-2"
+                  <button
+                    phx-click-away={
+                      JS.hide(
+                        to: "#dropdown-#{@event.uuid}",
+                        transition: "animate__animated animate__fadeOut",
+                        time: 300
+                      )
+                    }
+
+                    phx-click={JS.toggle(
+                      to: "#dropdown-#{@event.uuid}",
+                      out: "animate__animated animate__fadeOut",
+                      in: "animate__animated animate__fadeIn",
+                      time: 800)}
+                    phx-target={@myself}
+                    class="flex w-full lg:w-auto pl-3 pr-4 text-white items-center justify-between py-2 rounded-md tracking-wide font-bold focus:outline-none focus:shadow-outline hover:bg-primary-600 bg-primary-500"
                   >
-                    <img src="/images/icons/easel.svg" class="h-5" />
-                    <span><%= gettext("Present/Customize") %></span>
-                  </a>
-                  <a
-                    target="_blank"
-                    href={Routes.event_show_path(@socket, :show, @event.code)}
-                    class="flex w-full lg:w-auto px-6 text-primary-500 py-2 justify-center rounded-md tracking-wide focus:outline-none focus:shadow-outline bg-white items-center space-x-2"
-                  >
-                    <img src="/images/icons/eye.svg" class="h-5" />
-                    <span><%= gettext("Join") %></span>
-                  </a>
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-4 h-4">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+                    </svg>
+                    <span class="ml-2"><%= gettext("Access") %></span>
+                  </button>
+                  <div id={"dropdown-#{@event.uuid}"} class="hidden rounded shadow-lg bg-white border px-2 py-1 absolute -left-1 top-9 w-max">
+                    <ul>
+                      <li>
+                        <a
+                          data-phx-link="patch"
+                          data-phx-link-state="push"
+                          class="py-2 px-2 rounded text-gray-600 hover:bg-gray-100 flex items-center gap-x-2"
+                          href={~p"/e/#{@event.code}/manage"}>
+                          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6">
+                            <path fill-rule="evenodd" d="M2.25 2.25a.75.75 0 0 0 0 1.5H3v10.5a3 3 0 0 0 3 3h1.21l-1.172 3.513a.75.75 0 0 0 1.424.474l.329-.987h8.418l.33.987a.75.75 0 0 0 1.422-.474l-1.17-3.513H18a3 3 0 0 0 3-3V3.75h.75a.75.75 0 0 0 0-1.5H2.25Zm6.04 16.5.5-1.5h6.42l.5 1.5H8.29Zm7.46-12a.75.75 0 0 0-1.5 0v6a.75.75 0 0 0 1.5 0v-6Zm-3 2.25a.75.75 0 0 0-1.5 0v3.75a.75.75 0 0 0 1.5 0V9Zm-3 2.25a.75.75 0 0 0-1.5 0v1.5a.75.75 0 0 0 1.5 0v-1.5Z" clip-rule="evenodd" />
+                          </svg>
+                          <span><%= gettext("Presentation manager") %></span>
+                        </a>
+                      </li>
+                      <li>
+                        <a
+                          data-phx-link="patch"
+                          data-phx-link-state="push"
+                          class="py-2 px-2 rounded text-gray-600 hover:bg-gray-100 flex items-center gap-x-2"
+                          href={~p"/e/#{@event.code}"}>
+                          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6">
+                            <path fill-rule="evenodd" d="M8.25 6.75a3.75 3.75 0 1 1 7.5 0 3.75 3.75 0 0 1-7.5 0ZM15.75 9.75a3 3 0 1 1 6 0 3 3 0 0 1-6 0ZM2.25 9.75a3 3 0 1 1 6 0 3 3 0 0 1-6 0ZM6.31 15.117A6.745 6.745 0 0 1 12 12a6.745 6.745 0 0 1 6.709 7.498.75.75 0 0 1-.372.568A12.696 12.696 0 0 1 12 21.75c-2.305 0-4.47-.612-6.337-1.684a.75.75 0 0 1-.372-.568 6.787 6.787 0 0 1 1.019-4.38Z" clip-rule="evenodd" />
+                            <path d="M5.082 14.254a8.287 8.287 0 0 0-1.308 5.135 9.687 9.687 0 0 1-1.764-.44l-.115-.04a.563.563 0 0 1-.373-.487l-.01-.121a3.75 3.75 0 0 1 3.57-4.047ZM20.226 19.389a8.287 8.287 0 0 0-1.308-5.135 3.75 3.75 0 0 1 3.57 4.047l-.01.121a.563.563 0 0 1-.373.486l-.115.04c-.567.2-1.156.349-1.764.441Z" />
+                          </svg>
+                          <span><%= gettext("Attendees room") %></span>
+                        </a>
+                      </li>
+                    </ul>
+                  </div>
                 </div>
                 <div>
                   <%= if not @is_leader do %>
                     <a
                       data-phx-link="patch"
                       data-phx-link-state="push"
-                      href={Routes.event_index_path(@socket, :edit, @event.uuid)}
+                      href={~p"/events/#{@event.uuid}/edit"}
                       class="flex w-full lg:w-auto rounded-md tracking-wide focus:outline-none focus:shadow-outline text-primary-500 text-sm items-center"
                     >
                       <span><%= gettext("Edit") %></span>
@@ -123,7 +158,7 @@ defmodule ClaperWeb.EventLive.EventCardComponent do
                     <a
                       data-phx-link="patch"
                       data-phx-link-state="push"
-                      href={Routes.event_index_path(@socket, :edit, @event.uuid)}
+                      href={~p"/events/#{@event.uuid}/edit"}
                       class="flex w-full lg:w-auto rounded-md tracking-wide focus:outline-none focus:shadow-outline text-primary-500 text-sm items-center"
                     >
                       <span><%= gettext("Edit") %></span>
@@ -149,7 +184,7 @@ defmodule ClaperWeb.EventLive.EventCardComponent do
                 phx-update="ignore"
               >
                 <a
-                  href={Routes.stat_index_path(@socket, :index, @event.uuid)}
+                  href={~p"/events/#{@event.uuid}/stats"}
                   class="flex w-full lg:w-auto px-6 text-white py-2 justify-center rounded-md tracking-wide font-bold focus:outline-none focus:shadow-outline hover:bg-primary-600 bg-primary-500 space-x-2"
                 >
                   <svg
@@ -161,7 +196,7 @@ defmodule ClaperWeb.EventLive.EventCardComponent do
                     <path d="M2 10a8 8 0 018-8v8h8a8 8 0 11-16 0z" />
                     <path d="M12 2.252A8.014 8.014 0 0117.748 8H12V2.252z" />
                   </svg>
-                  <span><%= gettext("Report") %></span>
+                  <span><%= gettext("View report") %></span>
                 </a>
               </div>
               <div>
@@ -188,4 +223,10 @@ defmodule ClaperWeb.EventLive.EventCardComponent do
     </li>
     """
   end
+
+  def handle_event("open", _params, socket) do
+    {:noreply, socket |> assign(:dropdown, true)}
+  end
+
+
 end

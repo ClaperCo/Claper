@@ -70,7 +70,7 @@
                   phx-target={@myself}
                 >
                   <span><%= gettext("Upload a file") %></span>
-                  <%= live_file_input(@uploads.presentation_file, class: "sr-only") %>
+                  <.live_file_input upload={@uploads.presentation_file} class="sr-only" />
                 </form>
               </label>
               <p class="pl-1"><%= gettext("or drag and drop") %></p>
@@ -157,7 +157,7 @@
                 phx-target={@myself}
               >
                 <span><%= gettext("Change file") %></span>
-                <%= live_file_input(@uploads.presentation_file, class: "sr-only") %>
+                <.live_file_input upload={@uploads.presentation_file} class="sr-only" />
               </form>
             </label>
             <p class="text-supporting-red-500 text-sm italic text-center hidden">

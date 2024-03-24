@@ -59,7 +59,7 @@ defmodule ClaperWeb.UserSettingsLive.Show do
         Accounts.deliver_update_email_instructions(
           applied_user,
           user.email,
-          &Routes.user_settings_url(socket, :confirm_email, &1)
+          &url(~p"/users/settings/confirm_email/#{&1}")
         )
 
         {:noreply,
@@ -68,7 +68,7 @@ defmodule ClaperWeb.UserSettingsLive.Show do
            :info,
            gettext("A link to confirm your email change has been sent to the new address.")
          )
-         |> push_redirect(to: Routes.user_settings_show_path(socket, :show))}
+         |> push_redirect(to: ~p"/users/settings")}
 
       {:error, changeset} ->
         {:noreply, assign(socket, :email_changeset, changeset)}
@@ -90,11 +90,21 @@ defmodule ClaperWeb.UserSettingsLive.Show do
            :info,
            gettext("Your password has been updated.")
          )
-         |> push_redirect(to: Routes.user_settings_show_path(socket, :show))}
+         |> push_redirect(to: ~p"/users/settings")}
 
       {:error, changeset} ->
         {:noreply, assign(socket, :password_changeset, changeset)}
     end
+  end
+
+  @impl true
+  def handle_event("delete_account", _params, %{assigns: %{current_user: user}} = socket) do
+    Accounts.delete(user)
+    {:noreply,
+    socket
+      |> put_flash(:info, gettext("Your account has been deleted."))
+      |> redirect(to: ~p"/users/log_in")
+  }
   end
 
   @impl true

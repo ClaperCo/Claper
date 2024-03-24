@@ -19,6 +19,9 @@ defmodule ClaperWeb.ConnCase do
 
   using do
     quote do
+
+      use ClaperWeb, :verified_routes
+
       # Import conveniences for testing with connections
       import Plug.Conn
       import Phoenix.ConnTest

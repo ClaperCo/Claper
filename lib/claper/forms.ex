@@ -238,13 +238,14 @@ defmodule Claper.Forms do
       [%FormSubmit{}, ...]
 
   """
-  def list_form_submits(presentation_file_id) do
+  def list_form_submits(presentation_file_id, preload \\ []) do
     from(fs in FormSubmit,
       join: f in Form,
       on: f.id == fs.form_id,
       where: f.presentation_file_id == ^presentation_file_id
     )
     |> Repo.all()
+    |> Repo.preload(preload)
   end
 
   @doc """

@@ -11,7 +11,7 @@ defmodule ClaperWeb.UserConfirmationController do
     if user = Accounts.get_user_by_email(email) do
       Accounts.deliver_user_confirmation_instructions(
         user,
-        &Routes.user_confirmation_url(conn, :update, &1)
+        &url(~p"/users/confirm/#{&1}")
       )
     end
 

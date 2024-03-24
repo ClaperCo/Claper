@@ -13,7 +13,7 @@ defmodule ClaperWeb.UserConfirmationControllerTest do
     @tag :capture_log
     test "sends a new confirmation token", %{conn: conn, user: user} do
       conn =
-        post(conn, Routes.user_confirmation_path(conn, :create), %{
+        post(conn, ~p"/users/confirm", %{
           "user" => %{"email" => user.email}
         })
 
@@ -26,7 +26,7 @@ defmodule ClaperWeb.UserConfirmationControllerTest do
       Repo.update!(Accounts.User.confirm_changeset(user))
 
       conn =
-        post(conn, Routes.user_confirmation_path(conn, :create), %{
+        post(conn, ~p"/users/confirm", %{
           "user" => %{"email" => user.email}
         })
 
@@ -37,7 +37,7 @@ defmodule ClaperWeb.UserConfirmationControllerTest do
 
     test "does not send confirmation token if email is invalid", %{conn: conn} do
       conn =
-        post(conn, Routes.user_confirmation_path(conn, :create), %{
+        post(conn, ~p"/users/confirm", %{
           "user" => %{"email" => "unknown@example.com"}
         })
 
@@ -54,7 +54,7 @@ defmodule ClaperWeb.UserConfirmationControllerTest do
           Accounts.deliver_user_confirmation_instructions(user, url)
         end)
 
-      conn = post(conn, Routes.user_confirmation_path(conn, :update, token))
+      conn = post(conn, ~p"/users/confirm/#{token}")
       assert redirected_to(conn) == "/"
       assert get_flash(conn, :info) =~ "User confirmed successfully"
       assert Accounts.get_user!(user.id).confirmed_at
@@ -62,7 +62,7 @@ defmodule ClaperWeb.UserConfirmationControllerTest do
       assert Repo.all(Accounts.UserToken) == []
 
       # When not logged in
-      conn = post(conn, Routes.user_confirmation_path(conn, :update, token))
+      conn = post(conn, ~p"/users/confirm/#{token}")
       assert redirected_to(conn) == "/"
       assert get_flash(conn, :error) =~ "User confirmation link is invalid or it has expired"
 
@@ -70,14 +70,14 @@ defmodule ClaperWeb.UserConfirmationControllerTest do
       conn =
         build_conn()
         |> log_in_user(user)
-        |> post(Routes.user_confirmation_path(conn, :update, token))
+        |> post(~p"/users/confirm/#{token}")
 
       assert redirected_to(conn) == "/"
       refute get_flash(conn, :error)
     end
 
     test "does not confirm email with invalid token", %{conn: conn, user: user} do
-      conn = post(conn, Routes.user_confirmation_path(conn, :update, "oops"))
+      conn = post(conn, ~p"/users/confirm/#{"oops"}")
       assert redirected_to(conn) == "/"
       assert get_flash(conn, :error) =~ "User confirmation link is invalid or it has expired"
       refute Accounts.get_user!(user.id).confirmed_at

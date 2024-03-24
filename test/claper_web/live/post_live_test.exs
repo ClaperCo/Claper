@@ -16,7 +16,7 @@ defmodule ClaperWeb.PostLiveTest do
 
     test "list posts", %{conn: conn, presentation_file: presentation_file} do
       {:ok, _index_live, html} =
-        live(conn, Routes.event_show_path(conn, :show, presentation_file.event.code))
+        live(conn, ~p"/e/#{presentation_file.event.code}")
 
       assert html =~ "some body"
     end

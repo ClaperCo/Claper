@@ -16,7 +16,7 @@
         <.form
           :let={f}
           for={@changeset}
-          action={Routes.user_registration_path(@conn, :create)}
+          action={~p"/users/register"}
           class="mt-8 space-y-6"
         >
           <%= if @changeset.action do %>

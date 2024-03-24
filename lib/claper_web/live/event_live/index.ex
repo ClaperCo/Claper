@@ -18,7 +18,7 @@ defmodule ClaperWeb.EventLive.Index do
 
     socket =
       socket
-      |> assign(:events, list_events(socket))
+      |> stream(:events, list_events(socket))
       |> assign(:managed_events, list_managed_events(socket))
 
     {:ok, socket, temporary_assigns: [events: []]}
@@ -34,7 +34,7 @@ defmodule ClaperWeb.EventLive.Index do
     event = Claper.Events.get_event!(presentation.event.uuid, [:presentation_file])
 
     {:noreply,
-     socket |> update(:events, fn events -> [event | events] end) |> put_flash(:info, nil)}
+     socket |> stream_insert(:events, event) |> put_flash(:info, nil)}
   end
 
   @impl true
@@ -46,7 +46,7 @@ defmodule ClaperWeb.EventLive.Index do
       Claper.Tasks.Converter.clear(event.presentation_file.hash)
     end)
 
-    {:noreply, redirect(socket, to: Routes.event_index_path(socket, :index))}
+    {:noreply, redirect(socket, to: ~p"/events")}
   end
 
   defp apply_action(socket, :edit, %{"id" => id}) do
