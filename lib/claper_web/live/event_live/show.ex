@@ -70,6 +70,8 @@ defmodule ClaperWeb.EventLive.Show do
 
     maybe_update_audience_peak(event, online)
 
+    posts = list_posts(socket, event.uuid)
+
     socket =
       socket
       |> assign(:attendees_nb, 1)
@@ -82,7 +84,8 @@ defmodule ClaperWeb.EventLive.Show do
       |> assign(:event, event)
       |> assign(:state, event.presentation_file.presentation_state)
       |> assign(:nickname, "")
-      |> stream(:posts, list_posts(socket, event.uuid))
+      |> stream(:posts, posts)
+      |> assign(:post_count, Enum.count(posts))
       |> starting_soon_assigns(event)
       |> get_current_poll(event)
       |> get_current_form(event)
@@ -90,7 +93,7 @@ defmodule ClaperWeb.EventLive.Show do
       |> check_leader(event)
       |> leader_list(event)
 
-    {:ok, socket |> assign(:empty_room, false)}
+    {:ok, socket}
   end
 
   defp leader_list(socket, event) do
@@ -144,9 +147,7 @@ defmodule ClaperWeb.EventLive.Show do
   def handle_info(:tick, %{assigns: %{diff: 0}} = socket) do
     {:noreply,
      socket
-     |> redirect(
-       to: ~p"/e/#{String.downcase(socket.assigns.event.code)}"
-     )}
+     |> redirect(to: ~p"/e/#{String.downcase(socket.assigns.event.code)}")}
   end
 
   @impl true
@@ -174,8 +175,8 @@ defmodule ClaperWeb.EventLive.Show do
     {:noreply,
      socket
      |> stream_insert(:posts, post)
-     |> push_event("scroll", %{})
-     |> maybe_disable_empty_room}
+     |> update(:post_count, fn count -> count + 1 end)
+     |> push_event("scroll", %{})}
   end
 
   @impl true
@@ -183,8 +184,7 @@ defmodule ClaperWeb.EventLive.Show do
     {:noreply,
      socket
      |> assign(:state, presentation_state)
-     |> stream(:posts, list_posts(socket, socket.assigns.event.uuid), reset: true)
-    }
+     |> stream(:posts, list_posts(socket, socket.assigns.event.uuid), reset: true)}
   end
 
   @impl true
@@ -282,7 +282,10 @@ defmodule ClaperWeb.EventLive.Show do
 
   @impl true
   def handle_info({:post_deleted, post}, socket) do
-    {:noreply, socket |> stream_delete(:posts, post)}
+    {:noreply,
+     socket
+     |> stream_delete(:posts, post)
+     |> update(:post_count, fn count -> count - 1 end)}
   end
 
   @impl true
@@ -754,9 +757,5 @@ defmodule ClaperWeb.EventLive.Show do
   defp apply_action(socket, :show, _params) do
     socket
     |> assign(:page_title, "##{socket.assigns.event.code} - #{socket.assigns.event.name}")
-  end
-
-  defp maybe_disable_empty_room(%{assigns: %{empty_room: empty_room}} = socket) do
-    if empty_room, do: assign(socket, :empty_room, false), else: socket
   end
 end

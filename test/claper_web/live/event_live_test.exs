@@ -69,7 +69,7 @@ defmodule ClaperWeb.EventLiveTest do
       {:ok, _show_live, html} =
         live(conn, ~p"/e/#{presentation_file.event.code}")
 
-      assert html =~ "Be the first to react"
+      assert html =~ "Be the first to react !"
       assert html =~ presentation_file.event.name
     end
   end
