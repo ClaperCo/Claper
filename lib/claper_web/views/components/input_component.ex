@@ -249,6 +249,7 @@ defmodule ClaperWeb.Component.Input do
           <%= text_input(@form, :local_date,
             autofocus: @autofocus,
             placeholder: @placeholder,
+            autocomplete: false,
             class:
               "outline-none shadow-base focus:ring-primary-500 focus:border-primary-500 block w-full text-lg border-gray-300 rounded-md py-4 px-3 read-only:opacity-50"
           ) %>
