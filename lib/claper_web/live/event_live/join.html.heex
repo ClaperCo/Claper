@@ -23,13 +23,19 @@
         <%= gettext("About") %>
       </a>
       <%= if @current_user do %>
-        <.link href={~p"/events"}
+        <.link
+          href={~p"/events"}
           class="relative inline-flex items-center px-4 py-1 text-base font-sm rounded-md text-white bg-gradient-to-tl from-primary-500 to-secondary-500 bg-size-200 bg-pos-0 hover:bg-pos-100 transition-all duration-500"
-        > <%= gettext("Dashboard") %> </.link>
+        >
+          <%= gettext("Dashboard") %>
+        </.link>
       <% else %>
-        <.link href={~p"/users/log_in"}
+        <.link
+          href={~p"/users/log_in"}
           class="relative inline-flex items-center px-4 py-1 text-base font-sm rounded-md text-white bg-gradient-to-tl from-primary-500 to-secondary-500 bg-size-200 bg-pos-0 hover:bg-pos-100 transition-all duration-500"
-        ><%= gettext("Login") %></.link>
+        >
+          <%= gettext("Login") %>
+        </.link>
       <% end %>
     </div>
     <button @click="open = true" class="md:hidden">
@@ -43,12 +49,16 @@
         <.link
           href={~p"/events"}
           class="relative inline-flex items-center px-4 py-1 text-base font-sm rounded-md text-white bg-gradient-to-tl from-primary-500 to-secondary-500 bg-size-200 bg-pos-0 hover:bg-pos-100 transition-all duration-500"
-        ><%= gettext("Dashboard") %></.link>
+        >
+          <%= gettext("Dashboard") %>
+        </.link>
       <% else %>
         <.link
           href={~p"/users/log_in"}
           class="relative inline-flex items-center px-4 py-1 text-base font-sm rounded-md text-white bg-gradient-to-tl from-primary-500 to-secondary-500 bg-size-200 bg-pos-0 hover:bg-pos-100 transition-all duration-500"
-        ><%= gettext("Login") %></.link>
+        >
+          <%= gettext("Login") %>
+        </.link>
       <% end %>
     </div>
   </div>
@@ -57,23 +67,6 @@
     <div class="mt-10 ">
       <img src="/images/logo.svg" class="h-12 mx-auto mb-16" />
     </div>
-
-    <%= if @last_event do %>
-      <.link href={~p"/e/#{@last_event.code}"}>
-        <div class="rounded-md bg-gray-600 p-4 mb-8">
-          <div class="flex justify-center items-center">
-            <p class="text-sm text-white">
-              <%= gettext("Return to your last presentation") %> (#<span class="uppercase"><%= @last_event.code %></span>)
-            </p>
-            <p class="text-base ml-3 mt-1">
-              <a href="#" class="whitespace-nowrap font-medium text-white">
-                <span aria-hidden="true">&rarr;</span>
-              </a>
-            </p>
-          </div>
-        </div>
-      </.link>
-    <% end %>
 
     <%= form_for :event, ~p"/join", ["phx-submit": "join", "phx-hook": "JoinEvent", id: "form"], fn f -> %>
       <div class="relative">
@@ -101,6 +94,23 @@
         </button>
         <img src="/images/loading.gif" id="loading" class="hidden h-12 mx-auto" />
       </div>
+
+      <%= if @last_event do %>
+        <.link href={~p"/e/#{@last_event.code}"}>
+          <div class="rounded-md bg-gray-600 bg-opacity-50 p-4 mt-8">
+            <div class="flex justify-center items-center">
+              <p class="text-sm text-white">
+                <%= gettext("Return to your last presentation") %> (#<span class="uppercase"><%= @last_event.code %></span>)
+              </p>
+              <p class="text-base ml-3 mt-1">
+                <a href="#" class="whitespace-nowrap font-medium text-white">
+                  <span aria-hidden="true">&rarr;</span>
+                </a>
+              </p>
+            </div>
+          </div>
+        </.link>
+      <% end %>
     <% end %>
   </div>
 </div>

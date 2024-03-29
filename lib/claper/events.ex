@@ -140,7 +140,7 @@ defmodule Claper.Events do
   def get_event_with_code!(code, preload \\ []) do
     now = NaiveDateTime.utc_now()
 
-    from(e in Event, where: e.code == ^code and e.expired_at > ^now)
+    from(e in Event, where: e.code == ^code and (is_nil(e.expired_at) or e.expired_at > ^now))
     |> Repo.one!()
     |> Repo.preload(preload)
   end
@@ -148,7 +148,7 @@ defmodule Claper.Events do
   def get_event_with_code(code, preload \\ []) do
     now = DateTime.utc_now()
 
-    from(e in Event, where: e.code == ^code and e.expired_at > ^now)
+    from(e in Event, where: e.code == ^code and (is_nil(e.expired_at) or e.expired_at > ^now))
     |> Repo.one()
     |> Repo.preload(preload)
   end
@@ -234,7 +234,7 @@ defmodule Claper.Events do
   end
 
   @doc """
-  Updates a event.
+  Updates an event.
 
   ## Examples
 
@@ -256,6 +256,21 @@ defmodule Claper.Events do
       {:error, changeset} ->
         {:error, %{changeset | action: :update}}
     end
+  end
+
+  @doc """
+  Terminates an event.
+
+  ## Examples
+
+      iex> terminate_event(event)
+      {:ok, %Event{}}
+
+  """
+  def terminate_event(%Event{} = event) do
+    event
+    |> Event.update_changeset(%{expired_at: NaiveDateTime.utc_now()})
+    |> Repo.update()
   end
 
   @doc """

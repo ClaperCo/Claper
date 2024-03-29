@@ -21,7 +21,7 @@ defmodule ClaperWeb.EventLive.Index do
       |> stream(:events, list_events(socket))
       |> assign(:managed_events, list_managed_events(socket))
 
-    {:ok, socket, temporary_assigns: [events: []]}
+    {:ok, socket}
   end
 
   @impl true
@@ -33,13 +33,12 @@ defmodule ClaperWeb.EventLive.Index do
   def handle_info({:presentation_file_process_done, presentation}, socket) do
     event = Claper.Events.get_event!(presentation.event.uuid, [:presentation_file])
 
-    {:noreply,
-     socket |> stream_insert(:events, event) |> put_flash(:info, nil)}
+    {:noreply, socket |> stream_insert(:events, event) |> put_flash(:info, nil)}
   end
 
   @impl true
-  def handle_event("delete", %{"id" => id}, socket) do
-    event = Events.get_event!(id, [:presentation_file])
+  def handle_event("delete", %{"id" => id}, %{assigns: %{current_user: current_user}} = socket) do
+    event = Events.get_user_event!(current_user.id, id, [:presentation_file])
     {:ok, _} = Events.delete_event(event)
 
     Task.Supervisor.async_nolink(Claper.TaskSupervisor, fn ->
@@ -49,21 +48,32 @@ defmodule ClaperWeb.EventLive.Index do
     {:noreply, redirect(socket, to: ~p"/events")}
   end
 
+  @impl true
+  def handle_event("terminate", %{"id" => id}, %{assigns: %{current_user: current_user}} = socket) do
+    event = Events.get_user_event!(current_user.id, id)
+    {:ok, _} = Events.terminate_event(event)
+    {:noreply, redirect(socket, to: ~p"/events")}
+  end
+
   defp apply_action(socket, :edit, %{"id" => id}) do
     event =
       Events.get_user_event!(socket.assigns.current_user.id, id, [:presentation_file, :leaders])
 
-    if event.presentation_file.status == "fail" && event.presentation_file.hash do
-      Claper.Presentations.update_presentation_file(event.presentation_file, %{
-        "status" => "done"
-      })
+    if event.expired_at && NaiveDateTime.compare(NaiveDateTime.utc_now(), event.expired_at) == :gt do
+      redirect(socket, to: ~p"/events")
+    else
+      if event.presentation_file.status == "fail" && event.presentation_file.hash do
+        Claper.Presentations.update_presentation_file(event.presentation_file, %{
+          "status" => "done"
+        })
+      end
+
+      {:ok, socket |> assign(:event, event)}
+
+      socket
+      |> assign(:page_title, gettext("Edit"))
+      |> assign(:event, event)
     end
-
-    {:ok, socket |> assign(:event, event)}
-
-    socket
-    |> assign(:page_title, gettext("Edit"))
-    |> assign(:event, event)
   end
 
   defp apply_action(socket, :new, _params) do
@@ -71,7 +81,6 @@ defmodule ClaperWeb.EventLive.Index do
     |> assign(:page_title, gettext("Create"))
     |> assign(:event, %Event{
       started_at: NaiveDateTime.utc_now(),
-      expired_at: NaiveDateTime.utc_now() |> NaiveDateTime.add(3600 * 2, :second),
       code: Enum.random(1000..9999),
       leaders: []
     })

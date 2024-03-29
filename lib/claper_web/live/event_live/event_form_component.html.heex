@@ -26,7 +26,7 @@
           end %>
         </div>
       <% end %>
-      <%= if @action == :edit && NaiveDateTime.compare(NaiveDateTime.utc_now(), @event.expired_at) == :lt do %>
+      <%= if @action == :edit && !@event.expired_at do %>
         <%= link(gettext("Delete"),
           to: "#",
           phx_click: "delete",
@@ -233,7 +233,6 @@
 
       <div class="my-3">
         <ClaperWeb.Component.Input.code
-          readonly={NaiveDateTime.compare(NaiveDateTime.utc_now(), @event.expired_at) == :gt}
           form={f}
           key={:code}
           name={gettext("Code")}
@@ -242,14 +241,11 @@
       </div>
 
       <div class="my-3">
-        <ClaperWeb.Component.Input.date_range
-          readonly={NaiveDateTime.compare(NaiveDateTime.utc_now(), @event.expired_at) == :gt}
+        <ClaperWeb.Component.Input.date
           form={f}
-          key={:date_range}
-          name={gettext("When your presentation will be available ?")}
+          key={:started_at}
+          name={gettext("When your presentation will start?")}
           required="true"
-          start_date_field={:started_at}
-          end_date_field={:expired_at}
           from={Date.add(Date.utc_today(), -1)}
           to={Date.add(Date.utc_today(), 365)}
         />
@@ -270,7 +266,7 @@
       <% end %>
     </div>
 
-    <div class="mt-20 mb-3">
+    <div class="mt-7 mb-3">
       <span class="text-lg block font-medium text-gray-700">
         <%= gettext("Facilitators can present and manage interactions") %>
       </span>
@@ -278,7 +274,7 @@
         type="button"
         phx-click="add-leader"
         phx-target={@myself}
-        class="rounded-md bg-primary-500 hover:bg-primary-600 transition flex items-center mt-3 md:w-max text-white py-7 px-3 text-sm max-h-0"
+        class="rounded-md bg-primary-500 hover:bg-primary-600 transition flex items-center mt-3 md:w-max text-white py-5 px-3 text-sm max-h-0"
       >
         <svg
           class="text-white h-6 transform"
@@ -292,8 +288,8 @@
             d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
             clip-rule="evenodd"
           />
-          <span><%= gettext("Add facilitator") %></span>
         </svg>
+        <span><%= gettext("Add facilitator") %></span>
       </button>
     </div>
 

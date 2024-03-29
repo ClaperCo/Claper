@@ -3,8 +3,8 @@ defmodule ClaperWeb.UserLiveAuth do
   import Phoenix.Component
 
   use Phoenix.VerifiedRoutes,
-        endpoint: ClaperWeb.Endpoint,
-        router: ClaperWeb.Router
+    endpoint: ClaperWeb.Endpoint,
+    router: ClaperWeb.Router
 
   def on_mount(:default, _params, %{"current_user" => current_user} = _session, socket) do
     socket =

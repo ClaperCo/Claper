@@ -237,108 +237,23 @@ defmodule ClaperWeb.Component.Input do
       assigns
       |> assign_new(:required, fn -> false end)
       |> assign_new(:autofocus, fn -> false end)
-      |> assign_new(:value, fn -> Map.get(assigns.form.data, assigns.key) end)
-
-    assigns =
-      if Map.has_key?(assigns, :dark),
-        do: assign(assigns, :containerTheme, "text-white"),
-        else: assign(assigns, :containerTheme, "text-black")
-
-    ~H"""
-    <div
-      class="relative flatpickr"
-      x-data={"{input: moment.utc(#{if assigns.value == nil, do: 'undefined', else: '\'#{assigns.value}\''}).local().format('Y-MM-DD HH:mm')}"}
-      data-default-date={"#{assigns.value}"}
-      x-on:click="$refs.input.focus()"
-      id="date"
-      phx-hook="Pickr"
-      data-enable={"[
-      {
-        \"from\": \"#{@from}\",
-        \"to\": \"#{@to}\"
-      }]"}
-    >
-      <%= hidden_input(@form, :utc_date,
-        required: @required,
-        "x-ref": "utc",
-        "phx-hook": "DefaultValue",
-        "data-default-value": "#{assigns.value}"
-      ) %>
-      <%= text_input(@form, @key,
-        required: @required,
-        autofocus: @autofocus,
-        autocomplete: @key,
-        class:
-          "transition-all bg-transparent w-full #{@containerTheme} rounded px-3 border border-gray-500 focus:border-2 focus:border-primary-500 pt-5 pb-2 focus:outline-none input active:outline-none text-left",
-        "x-model": "input",
-        "x-ref": "input",
-        "data-input": "true",
-        "x-on:change": "$refs.utc.value = moment($refs.input.value).utc().format()"
-      ) %>
-      <%= label(@form, @key, @name,
-        class:
-          "label absolute mb-0 -mt-2 pt-5 pl-3 leading-tighter text-gray-500 mt-2 cursor-text transition-all left-0",
-        "x-bind:class": "input.length > 0 ? 'text-sm -top-1.5' : 'top-1'",
-        "x-on:click": "$refs.input.focus()",
-        "x-on:click.away": "$refs.input.blur()"
-      ) %>
-      <%= if Keyword.has_key?(@form.errors, @key) do %>
-        <p class="text-supporting-red-500 text-sm"><%= error_tag(@form, @key) %></p>
-      <% end %>
-    </div>
-    """
-  end
-
-  def date_range(assigns) do
-    assigns =
-      assigns
-      |> assign_new(:required, fn -> false end)
-      |> assign_new(:autofocus, fn -> false end)
       |> assign_new(:placeholder, fn -> false end)
       |> assign_new(:readonly, fn -> false end)
 
     ~H"""
-    <div x-data="{getDate (start, end) {
-      s = start == undefined || start.length === 0 ? moment().format('Y-MM-DD HH:mm') : moment.utc(start).local().format('Y-MM-DD HH:mm')
-      e = end == undefined || end.length === 0 ? moment().add(2, 'hours').format('Y-MM-DD HH:mm') : moment.utc(end).local().format('Y-MM-DD HH:mm')
-      return s + ' - ' + e }
-    }">
-      <div
-        x-effect="date = getDate($refs.startDate.value, $refs.endDate.value)"
-        class="relative flatpickr"
-        x-data="{date: getDate($refs.startDate.value, $refs.endDate.value)}"
-        data-mode="range"
-        data-default-date-start={Map.get(assigns.form.data, assigns.start_date_field)}
-        data-default-date-end={Map.get(assigns.form.data, assigns.end_date_field)}
-        id="date-range"
-        phx-hook={"#{if not @readonly, do: 'Pickr'}"}
-        data-enable={"[
-        {
-          \"from\": \"#{@from}\",
-          \"to\": \"#{@to}\"
-        }]"}
-      >
-        <%= hidden_input(@form, @start_date_field, "x-ref": "startDate") %>
-        <%= hidden_input(@form, @end_date_field, "x-ref": "endDate") %>
+    <div>
+      <div class="relative" id="date" phx-hook="Pickr">
         <%= label(@form, @key, @name, class: "block text-sm font-medium text-gray-700") %>
         <div class="mt-1 relative">
+          <%= hidden_input(@form, @key) %>
           <%= text_input(@form, :local_date,
-            required: @required,
-            readonly: @readonly,
-            class:
-              "absolute z-0 outline-none shadow-base focus:ring-primary-500 focus:border-primary-500 block w-full text-lg border-gray-300 rounded-md py-4 px-3 read-only:opacity-50",
-            "x-model": "date"
-          ) %>
-
-          <%= text_input(@form, @key,
             autofocus: @autofocus,
             placeholder: @placeholder,
-            autocomplete: @key,
             class:
-              "absolute z-10 bg-transparent text-transparent outline-none block w-full py-4 px-3",
-            "data-input": "true"
+              "outline-none shadow-base focus:ring-primary-500 focus:border-primary-500 block w-full text-lg border-gray-300 rounded-md py-4 px-3 read-only:opacity-50"
           ) %>
         </div>
+
         <%= if Keyword.has_key?(@form.errors, @key) do %>
           <p class="text-supporting-red-500 text-sm"><%= error_tag(@form, @key) %></p>
         <% end %>

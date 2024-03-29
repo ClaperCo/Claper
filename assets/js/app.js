@@ -5,8 +5,11 @@ import {Socket, Presence} from "phoenix"
 import {LiveSocket} from "phoenix_live_view"
 import topbar from "../vendor/topbar"
 import Alpine from 'alpinejs'
-import flatpickr from "flatpickr"
 import moment from "moment-timezone"
+import AirDatepicker from 'air-datepicker'
+import airdatepickerLocaleEn from 'air-datepicker/locale/en'
+import airdatepickerLocaleFr from 'air-datepicker/locale/fr'
+import airdatepickerLocaleDe from 'air-datepicker/locale/de'
 import 'moment/locale/de'
 import 'moment/locale/fr'
 import QRCodeStyling from "qr-code-styling"
@@ -20,6 +23,11 @@ window.moment.locale(navigator.language.split('-')[0])
 window.Alpine = Alpine
 Alpine.start()
 
+let airdatepickerLocale = {
+  en: airdatepickerLocaleEn,
+  fr: airdatepickerLocaleFr,
+  de: airdatepickerLocaleDe
+}
 let csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute("content")
 let Hooks = {}
 
@@ -80,11 +88,13 @@ Hooks.Scroll = {
   mounted() {
     if (this.el.dataset.postsNb > 4) window.scrollTo({top: document.querySelector(this.el.dataset.target).scrollHeight, behavior: 'smooth'});
     this.handleEvent("scroll", () => {
-      let t = document.querySelector(this.el.dataset.target)
-      if (this.el.childElementCount > 4 && (window.scrollY + window.innerHeight >= t.offsetHeight - 100)) {
-       window.scrollTo({top: t.scrollHeight, behavior: 'smooth'});
-      }
     })
+  },
+  updated() {
+    let t = document.querySelector(this.el.dataset.target)
+    if (this.el.childElementCount > 4 && (window.scrollY + window.innerHeight >= t.offsetHeight - 300)) {
+      window.scrollTo({top: t.scrollHeight, behavior: 'smooth'});
+    }
   }
 }
 
@@ -206,33 +216,21 @@ Hooks.CalendarLocalDate = {
 }
 Hooks.Pickr = {
   mounted() {
-    const getDefaultDate = (dateStart, dateEnd, mode) => {
-      if (mode == "range") {
-        return moment.utc(dateStart).format('Y-MM-DD HH:mm') + " - " +  moment.utc(dateEnd).format('Y-MM-DD HH:mm')
-      } else {
-        return moment.utc(dateStart).format('Y-MM-DD HH:mm')
-      }
-    };
-    this.pickr = flatpickr(this.el, {
-      wrap: true,
-      inline: false,
-      enableTime: true,
-      enable: JSON.parse(this.el.dataset.enable),
-      time_24hr: true,
-      formatDate: (date, format, locale) => {
-        return moment(date).utc().format('Y-MM-DD HH:mm');
+    const localTime = this.el.querySelector("input[type=text]")
+    const utcTime = this.el.querySelector("input[type=hidden]")
+    localTime.value = moment.utc(utcTime.value).local().format("DD-MM-YYYY HH:mm")
+    this.pickr = new AirDatepicker(localTime, {
+      dateFormat: "dd-MM-yyyy",
+      timepicker: true,
+      minutesStep: 5,
+      minDate: moment(),
+      timeFormat: "HH:mm",
+      selectedDates: [moment(localTime.value, "DD-MM-YYYY HH:mm").toDate()],
+      onSelect: ({date}) => {
+        const utc = moment(date).utc().format("YYYY-MM-DDTHH:mm:ss")
+        utcTime.value = utc
       },
-      parseDate: (datestr, format) => {
-        return moment.utc(datestr).local().toDate();
-      },
-      locale: {
-        firstDayOfWeek: 1,
-        rangeSeparator: ' - '
-      },
-      mode: this.el.dataset.mode == "range" ? "range" : "single",
-      minuteIncrement: 1,
-      dateFormat: "Y-m-d H:i",
-      defaultDate: getDefaultDate(this.el.dataset.defaultDateStart, this.el.dataset.defaultDateEnd, this.el.dataset.mode)
+      locale: airdatepickerLocale[navigator.language.split('-')[0]]
     })
   },
   updated() {
@@ -332,11 +330,6 @@ Hooks.WelcomeEarly = {
       localStorage.setItem("welcome-early", "false")
       this.el.style.display = "none"
     })
-  }
-}
-Hooks.DefaultValue = {
-  mounted() {
-    this.el.value = moment(this.el.dataset.defaultValue ? this.el.dataset.defaultValue : undefined).utc().format();
   }
 }
 Hooks.ClickFeedback = {

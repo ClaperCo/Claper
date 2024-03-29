@@ -44,15 +44,15 @@
     </div>
 
     <div class="mt-10 relative">
-      <ul role="event-list" class="divide-y divide-gray-200" phx-update="stream" id="events">
+      <ul role="event-list" phx-update="stream" id="events">
         <% current_time = NaiveDateTime.utc_now() %>
         <.live_component
-            :for={{id, event} <- @streams.events}
-            module={ClaperWeb.EventLive.EventCardComponent}
-            id={id}
-            event={event}
-            current_time={current_time}
-          />
+          :for={{id, event} <- @streams.events}
+          module={ClaperWeb.EventLive.EventCardComponent}
+          id={id}
+          event={event}
+          current_time={current_time}
+        />
       </ul>
       <%= if Enum.count(@streams.events) == 0 do %>
         <div class="w-full text-2xl text-black opacity-25 text-center">
@@ -72,12 +72,7 @@
       </div>
 
       <div class="mt-10 relative">
-        <ul
-          role="managed-event-list"
-          class="divide-y divide-gray-200"
-          id="event-cards"
-          phx-update="replace"
-        >
+        <ul role="managed-event-list" id="event-cards" phx-update="replace">
           <% current_time = NaiveDateTime.utc_now() %>
           <%= for event <- @managed_events do %>
             <.live_component

@@ -43,8 +43,6 @@ defmodule Claper.Tasks.Converter do
   Remove the presentation files directory
   """
   def clear(hash) do
-    IO.puts("Clearing #{hash}...")
-
     if get_presentation_storage() == "local" do
       File.rm_rf(
         Path.join([

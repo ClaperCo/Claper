@@ -175,8 +175,7 @@ defmodule ClaperWeb.EventLive.Show do
     {:noreply,
      socket
      |> stream_insert(:posts, post)
-     |> update(:post_count, fn count -> count + 1 end)
-     |> push_event("scroll", %{})}
+     |> update(:post_count, fn count -> count + 1 end)}
   end
 
   @impl true
