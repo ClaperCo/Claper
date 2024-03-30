@@ -16,6 +16,7 @@ import QRCodeStyling from "qr-code-styling"
 import { Presenter } from "./presenter"
 import { Manager } from "./manager"
 import Split from "split-grid"
+import { TourGuideClient } from "@sjmc11/tourguidejs/src/Tour"
 window.moment = moment
 
 window.moment.locale("en")
@@ -30,6 +31,17 @@ let airdatepickerLocale = {
 }
 let csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute("content")
 let Hooks = {}
+
+
+Hooks.TourGuide = {
+  mounted() {
+    this.tour = new TourGuideClient({
+      rememberStep: true,
+      completeOnFinish: true,
+    })
+    this.tour.start()
+  }
+}
 
 Hooks.Split = {
   mounted() {
@@ -74,7 +86,7 @@ Hooks.Split = {
       this.el.style['grid-template-rows'] = value
     }
   },
-  destroy() {
+  destroyed() {
     if (this.columnSplit) {
       this.columnSplit.destroy()
     }
@@ -120,7 +132,7 @@ Hooks.NicknamePicker = {
 
     this.el.addEventListener("click", (e) => this.clicked(e))
   },
-  destroy() {
+  destroyed() {
     this.el.removeEventListener("click", (e) => this.clicked(e))
   },
   clicked(e) {
@@ -137,7 +149,7 @@ Hooks.EmptyNickname = {
   mounted() {
     this.el.addEventListener("click", (e) => this.clicked(e))
   },
-  destroy() {
+  destroyed() {
     this.el.removeEventListener("click", (e) => this.clicked(e))
   },
   clicked(e) {
@@ -342,7 +354,7 @@ Hooks.ClickFeedback = {
   mounted() {
     this.el.addEventListener("click", (e) => this.clicked(e))
   },
-  destroy() {
+  destroyed() {
     this.el.removeEventListener("click", (e) => this.clicked(e))
   }
 }

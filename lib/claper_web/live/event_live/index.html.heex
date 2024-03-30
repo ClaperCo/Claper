@@ -10,16 +10,25 @@
       current_user={@current_user}
     />
   <% else %>
-    <div class="border-b border-gray-200 py-4 flex items-center justify-between">
+    <div
+      class="border-b border-gray-200 py-4 flex items-center justify-between"
+      id="events-header"
+      phx-hook="TourGuide"
+    >
       <div class="flex-1 min-w-0">
         <h1 class="text-2xl font-medium leading-6 text-gray-900 sm:truncate">
           <%= gettext("My presentations") %>
         </h1>
       </div>
       <div class="flex mt-0">
-        <a
-          data-phx-link="patch"
-          data-phx-link-state="push"
+        <.link
+          data-tg-group="welcome"
+          data-tg-tour={
+            gettext(
+              "Welcome to Claper! Here you can create your first presentation. Click on the button below to get started."
+            )
+          }
+          data-tg-title={"#{gettext("Your first steps with Claper")} 👋"}
           href={~p"/events/new"}
           class="relative inline-flex items-center px-5 py-2 text-lg font-medium rounded-md text-white bg-gradient-to-tl from-primary-500 to-secondary-500 bg-size-200 bg-pos-0 hover:bg-pos-100 transition-all duration-500"
         >
@@ -39,7 +48,7 @@
           <span>
             <%= gettext("Create") %>
           </span>
-        </a>
+        </.link>
       </div>
     </div>
 
