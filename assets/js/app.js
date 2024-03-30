@@ -36,8 +36,9 @@ let Hooks = {}
 Hooks.TourGuide = {
   mounted() {
     this.tour = new TourGuideClient({
-      rememberStep: true,
-      completeOnFinish: true,
+      nextLabel: this.el.dataset.nextLabel,
+      prevLabel: this.el.dataset.prevLabel,
+      finishLabel: this.el.dataset.finishLabel,
     })
     this.tour.start()
   }

@@ -1,4 +1,11 @@
-<div id="wrapper" phx-hook="TourGuide" data-group="create-event">
+<div
+  id="wrapper"
+  phx-hook="TourGuide"
+  data-next-label={gettext("Next")}
+  data-prev-label={gettext("Back")}
+  data-finish-label={gettext("Finish")}
+  data-group="create-event"
+>
   <div class="border-b border-gray-200 py-4 flex flex-col sm:flex-row sm:items-center justify-between">
     <div class="flex-1 min-w-0">
       <h1 class="text-2xl font-medium leading-6 text-gray-900 sm:truncate">
