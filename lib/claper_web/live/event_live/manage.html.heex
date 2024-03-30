@@ -280,10 +280,10 @@
 
   <div
     id="wrapper"
-    class="grid grid-rows-[5rem_1fr] h-screen max-h-screen overflow-hidden"
+    class="grid grid-rows-[3.2em_1fr] h-screen max-h-screen overflow-hidden"
     phx-hook="TourGuide"
   >
-    <div class="md:flex md:items-center md:justify-between px-3 py-2 border-b-2 border-gray-200 w-full bg-white">
+    <div class="flex items-center justify-between px-3 py-2 border-b-2 border-gray-200 w-full bg-white">
       <div class="flex-1 flex gap-x-2">
         <a
           data-phx-link="patch"
@@ -302,12 +302,12 @@
             <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
           </svg>
         </a>
-        <div class="mt-1">
+        <div class="flex items-center justify-start gap-x-2">
           <h2 class="text-xl font-bold leading-7 text-gray-900 sm:text-2xl sm:truncate">
             <%= @event.name %>
           </h2>
-          <div class="md:flex flex-col sm:flex-row sm:flex-wrap sm:mt-0 sm:space-x-6">
-            <div class="mt-2 flex items-center text-sm text-gray-500">
+          <div class="flex gap-x-3 items-center">
+            <div class="flex items-center text-sm text-gray-500">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 class="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400"
@@ -324,7 +324,7 @@
               </svg>
               <%= @event.code %>
             </div>
-            <div class="hidden mt-2 md:flex items-center text-sm text-gray-500">
+            <div class="flex items-center text-sm text-gray-500">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 class="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400"
@@ -342,9 +342,9 @@
           </div>
         </div>
       </div>
-      <div class="hidden mt-5 md:flex lg:mt-0 lg:ml-4">
-        <span class="md:ml-3">
-          <span class="italic text-gray-400 text-sm mr-5">
+      <div>
+        <div class="flex items-center gap-x-3 justify-end">
+          <span class="hidden lg:block italic text-gray-400 text-sm">
             <%= raw(
               gettext("Press <strong>F</strong> in the presentation window to enable fullscreen")
             ) %>
@@ -354,7 +354,11 @@
             id={"openPresenter-#{@event.uuid}"}
             data-url={~p"/e/#{@event.code}/presenter"}
             type="button"
-            class="inline-flex items-center px-5 py-3 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-gradient-to-tl from-primary-500 to-secondary-500 bg-size-200 bg-pos-0 hover:bg-pos-100 transition-all duration-500"
+            data-tg-title={"🙌 #{gettext("Time to launch your presentation!")}"}
+            data-tg-order="4"
+            data-tg-tour={"<p>#{gettext("Click here to open the presentation window.")}</p>"}
+            data-tg-group="manage"
+            class="inline-flex items-center px-5 py-1 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-gradient-to-tl from-primary-500 to-secondary-500 bg-size-200 bg-pos-0 hover:bg-pos-100 transition-all duration-500"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -372,7 +376,7 @@
             </svg>
             <%= gettext("Open presentation") %>
           </button>
-        </span>
+        </div>
       </div>
     </div>
 
@@ -386,8 +390,9 @@
       <div
         id="slides"
         class="bg-gray-100 overflow-y-auto"
+        data-tg-order="1"
         data-tg-title={"#{gettext("Your slides and interactions")}"}
-        data-tg-tour={"<p class='mb-3'>#{gettext("Here are all your presentation slides, you can add interaction for each of them.")}</p><p class='opacity-50 text-xs'>#{gettext("Use your keyboard arrow keys to navigate more easily.")}</p>"}
+        data-tg-tour={"<p class='mb-3'>#{gettext("This section contains all your presentation slides. You have the option to add interactions to each slide.")}</p><p class='opacity-50 text-xs'>#{gettext("Navigate through the slides with ease using the arrow keys on your keyboard.")}</p>"}
         data-tg-group="manage"
       >
         <div class="flex flex-col items-center text-center">
@@ -728,7 +733,8 @@
         <div
           class="bg-gray-200 border-2 overflow-y-auto relative"
           data-tg-title={"#{gettext("Attendees interactions")}"}
-          data-tg-tour={"<p class='mb-3'>#{gettext("All your attendees interactions will stand here. You can manage messages, pinned message and form submitted.")}</p><p class='opacity-50 text-xs'>#{gettext("You can recognize the same user with their unique avatar.")}</p>"}
+          data-tg-order="2"
+          data-tg-tour={"<p class='mb-3'>#{gettext("Here you'll find all interactions from your attendees. You can manage messages, pinned messages, and submitted forms.")}</p><p class='opacity-50 text-xs'>#{gettext("Identify users by their unique avatars.")}</p>"}
           data-tg-group="manage"
         >
           <ul
@@ -1184,7 +1190,8 @@
         <div
           class="px-5 py-3 grid grid-cols-1 lg:grid-cols-2 z-20 bg-white"
           data-tg-title={"#{gettext("Settings")}"}
-          data-tg-tour={"<p class='mb-3'>#{gettext("You can control each settings for the presentation (showing on the big screen) and on the attendees room.")}</p><p class='opacity-50 text-xs'>#{gettext("You can use the associated keyboard shortcut to enable or disable settings more easily.")}</p>"}
+          data-tg-order="3"
+          data-tg-tour={"<p class='mb-3'>#{gettext("You can control each setting for the presentation (showing on the big screen) and on the attendee's room.")}</p><p class='opacity-50 text-xs'>#{gettext("Use the associated keyboard shortcuts for quick toggling of these settings.")}</p>"}
           data-tg-group="manage"
         >
           <div>

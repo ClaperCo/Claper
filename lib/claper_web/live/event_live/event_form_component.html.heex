@@ -43,7 +43,7 @@
     <div
       class="mt-12 mb-3"
       data-tg-group="create-event"
-      data-tg-tour={"<p class='mb-3'>#{gettext("Choose your presentation file, it can be a PDF, PPT or PPTX file. Be careful of the maximum file size authorized.")}</p><p class='opacity-50 text-xs'>#{gettext("Your animations in PPT/PPTX files will not work, it's why we recommend you to always export your presentation to PDF before to check that everything looks good.")}</p>"}
+      data-tg-tour={"<p class='mb-3'>#{gettext("Select your presentation file. Accepted formats are PDF, PPT, or PPTX. Ensure the file size does not exceed the maximum limit.")}</p><p class='opacity-50 text-xs'>#{gettext("Animations in PPT/PPTX files are not supported, which is why we recommend exporting your presentation to PDF to ensure it displays correctly.")}</p>"}
       data-tg-title={"📄 #{gettext("Presentation file")}"}
     >
       <label class="block text-sm font-medium text-gray-700 mb-2">
@@ -239,7 +239,7 @@
       <div
         class="my-3"
         data-tg-title={"🔑 #{gettext("Access code")}"}
-        data-tg-tour={"<p>#{gettext("This is the code that your attendees will use to access your presentation. You can set your own one.")}</p>"}
+        data-tg-tour={"<p>#{gettext("This code will be used by your attendees to access the presentation. You have the option to create a custom code.")}</p>"}
         data-tg-group="create-event"
       >
         <ClaperWeb.Component.Input.code
@@ -253,7 +253,7 @@
       <div
         class="my-3"
         data-tg-title={"🗓️ #{gettext("Presentation start date")}"}
-        data-tg-tour={"<p class='mb-3'>#{gettext("This is the date when your presentation will start. You can set it in the future.")}</p><p class='opacity-50 text-xs'>#{gettext("If attendees access your presentation before, they will be on the waiting room.")}</p>"}
+        data-tg-tour={"<p class='mb-3'>#{gettext("Select the start date for your presentation. Future dates are permissible.")}</p><p class='opacity-50 text-xs'>#{gettext("Attendees attempting to access the presentation prior to this date will be directed to a waiting room.")}</p>"}
         data-tg-group="create-event"
       >
         <ClaperWeb.Component.Input.date
@@ -284,7 +284,7 @@
     <div
       class="mt-7 mb-3"
       data-tg-title={"🧑‍💻 #{gettext("Facilitators")}"}
-      data-tg-tour={"<p class='mb-3'>#{gettext("Sometimes you need other people to access your presentation to manage it. Enter their email address and once they create an account with this email, they could access your presentation.")}</p><p class='opacity-50 text-xs'>#{gettext("Facilitators cannot remove your presentation.")}</p>"}
+      data-tg-tour={"<p class='mb-3'>#{gettext("If you require assistance in managing your presentation, you can grant access to others. Simply enter their email addresses; once they register an account with these emails, they will be able to manage the presentation.")}</p><p class='opacity-50 text-xs'>#{gettext("Note: Facilitators do not have the ability to delete your presentation.")}</p>"}
       data-tg-group="create-event"
     >
       <span class="text-lg block font-medium text-gray-700">
