@@ -50,6 +50,7 @@
     <div
       class="mt-12 mb-3"
       data-tg-group="create-event"
+      data-tg-order="1"
       data-tg-tour={"<p class='mb-3'>#{gettext("Select your presentation file. Accepted formats are PDF, PPT, or PPTX. Ensure the file size does not exceed the maximum limit.")}</p><p class='opacity-50 text-xs'>#{gettext("Animations in PPT/PPTX files are not supported, which is why we recommend exporting your presentation to PDF to ensure it displays correctly.")}</p>"}
       data-tg-title={"📄 #{gettext("Presentation file")}"}
     >
@@ -248,6 +249,7 @@
         data-tg-title={"🔑 #{gettext("Access code")}"}
         data-tg-tour={"<p>#{gettext("This code will be used by your attendees to access the presentation. You have the option to create a custom code.")}</p>"}
         data-tg-group="create-event"
+        data-tg-order="2"
       >
         <ClaperWeb.Component.Input.code
           form={f}
@@ -262,6 +264,7 @@
         data-tg-title={"🗓️ #{gettext("Presentation start date")}"}
         data-tg-tour={"<p class='mb-3'>#{gettext("Select the start date for your presentation. Future dates are permissible.")}</p><p class='opacity-50 text-xs'>#{gettext("Attendees attempting to access the presentation prior to this date will be directed to a waiting room.")}</p>"}
         data-tg-group="create-event"
+        data-tg-order="3"
       >
         <ClaperWeb.Component.Input.date
           form={f}
@@ -293,6 +296,7 @@
       data-tg-title={"🧑‍💻 #{gettext("Facilitators")}"}
       data-tg-tour={"<p class='mb-3'>#{gettext("If you require assistance in managing your presentation, you can grant access to others. Simply enter their email addresses; once they register an account with these emails, they will be able to manage the presentation.")}</p><p class='opacity-50 text-xs'>#{gettext("Note: Facilitators do not have the ability to delete your presentation.")}</p>"}
       data-tg-group="create-event"
+      data-tg-order="4"
     >
       <span class="text-lg block font-medium text-gray-700">
         <%= gettext("Facilitators can present and manage interactions") %>

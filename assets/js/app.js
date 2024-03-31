@@ -39,8 +39,17 @@ Hooks.TourGuide = {
       nextLabel: this.el.dataset.nextLabel,
       prevLabel: this.el.dataset.prevLabel,
       finishLabel: this.el.dataset.finishLabel,
+      completeOnFinish: true,
+      rememberStep: true,
     })
-    this.tour.start()
+
+    if (!this.tour.isFinished(this.el.dataset.group)) {
+      this.tour.start(this.el.dataset.group)
+    }
+
+    this.tour.onBeforeExit(() => {
+      this.tour.finishTour(true, this.el.dataset.group)
+    })
   }
 }
 
