@@ -20,7 +20,7 @@ defmodule Claper.Events do
 
   """
   def list_events(user_id, preload \\ []) do
-    from(e in Event, where: e.user_id == ^user_id, order_by: [desc: e.expired_at])
+    from(e in Event, where: e.user_id == ^user_id, order_by: [desc: e.inserted_at])
     |> Repo.all()
     |> Repo.preload(preload)
   end
@@ -271,6 +271,13 @@ defmodule Claper.Events do
     event
     |> Event.update_changeset(%{expired_at: NaiveDateTime.utc_now()})
     |> Repo.update()
+    |> case do
+      {:ok, event} ->
+        broadcast({:ok, event, event.uuid}, :event_terminated)
+
+      {:error, changeset} ->
+        {:error, %{changeset | action: :update}}
+    end
   end
 
   @doc """
@@ -435,5 +442,17 @@ defmodule Claper.Events do
   """
   def change_activity_leader(%ActivityLeader{} = activity_leader, attrs \\ %{}) do
     ActivityLeader.changeset(activity_leader, attrs)
+  end
+
+  defp broadcast({:error, _reason} = error, _event), do: error
+
+  defp broadcast({:ok, e, event_uuid}, event) do
+    Phoenix.PubSub.broadcast(
+      Claper.PubSub,
+      "event:#{event_uuid}",
+      {event, event_uuid}
+    )
+
+    {:ok, e}
   end
 end

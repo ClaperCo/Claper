@@ -157,18 +157,20 @@
     <h3 class="text-lg leading-6 font-medium text-gray-900 mb-4">
       <%= gettext("Interactions history") %>
     </h3>
-    <%= for position <- 0..@event.presentation_file.length-1 do %>
+    <%= for position <- 0..max(0, @event.presentation_file.length-1) do %>
       <div class="my-10">
-        <%= if Application.get_env(:claper, :presentations) |> Keyword.get(:storage) == "local" do %>
-          <img
-            class="w-1/3 mx-auto"
-            src={"/uploads/#{@event.presentation_file.hash}/#{position+1}.jpg"}
-          />
-        <% else %>
-          <img
-            class="w-1/2 md:w-1/3 mb-4"
-            src={"https://#{Application.get_env(:claper, :presentations) |> Keyword.get(:aws_bucket)}.s3.#{Application.get_env(:ex_aws, :region)}.amazonaws.com/presentations/#{@event.presentation_file.hash}/#{position+1}.jpg"}
-          />
+        <%= if @event.presentation_file.length > 0 do %>
+          <%= if Application.get_env(:claper, :presentations) |> Keyword.get(:storage) == "local" do %>
+            <img
+              class="w-1/3 mx-auto"
+              src={"/uploads/#{@event.presentation_file.hash}/#{position+1}.jpg"}
+            />
+          <% else %>
+            <img
+              class="w-1/2 md:w-1/3 mb-4"
+              src={"https://#{Application.get_env(:claper, :presentations) |> Keyword.get(:aws_bucket)}.s3.#{Application.get_env(:ex_aws, :region)}.amazonaws.com/presentations/#{@event.presentation_file.hash}/#{position+1}.jpg"}
+            />
+          <% end %>
         <% end %>
 
         <%= for poll <- Enum.filter(@event.presentation_file.polls, fn p -> p.position == position end) do %>

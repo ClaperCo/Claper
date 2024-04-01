@@ -151,8 +151,43 @@ defmodule ClaperWeb.EventLive.EventFormComponent do
     save_file(socket, event_params, &edit_event/4)
   end
 
-  defp save_event(socket, :new, event_params) do
+  defp save_event(%{assigns: %{event: %{:no_file => false}}} = socket, :new, event_params) do
     save_file(socket, event_params, &create_event/4)
+  end
+
+  defp save_event(%{assigns: %{event: %{:no_file => true}}} = socket, :new, event_params) do
+    create_event(socket, event_params)
+  end
+
+  defp create_event(socket, event_params) do
+    case Events.create_event(
+           event_params
+           |> Map.put("user_id", socket.assigns.current_user.id)
+           |> Map.put("presentation_file", %{
+             "status" => "done",
+             "length" => 0,
+             "presentation_state" => %{}
+           })
+         ) do
+      {:ok, event} ->
+        with e <- Events.get_event!(event.uuid, [:leaders]) do
+          Enum.each(e.leaders, fn leader ->
+            Claper.Accounts.LeaderNotifier.deliver_event_invitation(
+              e.name,
+              leader.email,
+              url(~p"/events")
+            )
+          end)
+        end
+
+        {:noreply,
+         socket
+         |> put_flash(:info, gettext("Created successfully"))
+         |> push_redirect(to: socket.assigns.return_to)}
+
+      {:error, %Ecto.Changeset{} = changeset} ->
+        {:noreply, assign(socket, changeset: changeset)}
+    end
   end
 
   defp create_event(socket, event_params, hash, ext) do

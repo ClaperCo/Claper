@@ -13,7 +13,7 @@
       </h1>
     </div>
     <div class="flex mt-4 space-x-5 sm:mt-0">
-      <%= if @uploads.presentation_file.entries |> Enum.at(0, %{}) |> Map.get(:progress, 0) >= 100 || Map.has_key?(@event.presentation_file, :id) do %>
+      <%= if (@uploads.presentation_file.entries |> Enum.at(0, %{}) |> Map.get(:progress, 0) >= 100 || Map.has_key?(@event.presentation_file, :id)) || @event.no_file do %>
         <button
           type="submit"
           form="event-form"
@@ -47,8 +47,15 @@
   </div>
 
   <%= if Map.get(@event, :presentation_file) == nil || Map.get(@event.presentation_file, :id) == nil do %>
+    <div class="flex space-x-2 items-center mt-12">
+      <ClaperWeb.Component.Input.check key={:no_file} checked={@event.no_file} />
+      <span>
+        <%= gettext("No presentation file") %>
+      </span>
+    </div>
     <div
-      class="mt-12 mb-3"
+      :if={!@event.no_file}
+      class="mb-3"
       data-tg-group="create-event"
       data-tg-order="1"
       data-tg-tour={"<p class='mb-3'>#{gettext("Select your presentation file. Accepted formats are PDF, PPT, or PPTX. Ensure the file size does not exceed the maximum limit.")}</p><p class='opacity-50 text-xs'>#{gettext("Animations in PPT/PPTX files are not supported, which is why we recommend exporting your presentation to PDF to ensure it displays correctly.")}</p>"}
@@ -265,6 +272,8 @@
         data-tg-tour={"<p class='mb-3'>#{gettext("Select the start date for your presentation. Future dates are permissible.")}</p><p class='opacity-50 text-xs'>#{gettext("Attendees attempting to access the presentation prior to this date will be directed to a waiting room.")}</p>"}
         data-tg-group="create-event"
         data-tg-order="3"
+        phx-update="ignore"
+        id="date-picker"
       >
         <ClaperWeb.Component.Input.date
           form={f}

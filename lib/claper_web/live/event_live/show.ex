@@ -187,6 +187,14 @@ defmodule ClaperWeb.EventLive.Show do
   end
 
   @impl true
+  def handle_info({:event_terminated, _event}, socket) do
+    {:noreply,
+     socket
+     |> put_flash(:error, gettext("This event has been terminated"))
+     |> push_redirect(to: ~p"/")}
+  end
+
+  @impl true
   def handle_info(
         {:banned, user_id},
         %{assigns: %{current_user: current_user} = _assigns} = socket

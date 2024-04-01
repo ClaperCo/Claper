@@ -49,6 +49,15 @@ defmodule ClaperWeb.EventLive.Index do
   end
 
   @impl true
+  def handle_event(
+        "checked",
+        %{"key" => "no_file", "value" => value},
+        %{assigns: %{event: event}} = socket
+      ) do
+    {:noreply, socket |> assign(:event, %{event | no_file: value})}
+  end
+
+  @impl true
   def handle_event("terminate", %{"id" => id}, %{assigns: %{current_user: current_user}} = socket) do
     event = Events.get_user_event!(current_user.id, id)
     {:ok, _} = Events.terminate_event(event)

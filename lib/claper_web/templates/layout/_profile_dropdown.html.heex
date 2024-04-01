@@ -11,21 +11,8 @@
         <div class="ml-3 relative">
           <div>
             <button
-              phx-click-away={
-                JS.hide(
-                  to: "#profile-dropdown",
-                  transition: "animate__animated animate__fadeOut",
-                  time: 300
-                )
-              }
-              phx-click={
-                JS.toggle(
-                  to: "#profile-dropdown",
-                  out: "animate__animated animate__fadeOut",
-                  in: "animate__animated animate__fadeIn",
-                  time: 800
-                )
-              }
+              phx-click-away={JS.hide(to: "#profile-dropdown")}
+              phx-click={JS.toggle(to: "#profile-dropdown")}
               type="button"
               class="max-w-xs bg-gray-800 text-white px-3 py-2 flex items-center text-sm rounded-md"
               id="user-menu-button"

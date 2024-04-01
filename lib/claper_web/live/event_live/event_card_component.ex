@@ -18,9 +18,11 @@ defmodule ClaperWeb.EventLive.EventCardComponent do
             </p>
             <div class="ml-2 flex-shrink-0 flex">
               <%= if Event.started?(@event) && !Event.finished?(@event) do %>
-                <p class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">
-                  <%= gettext("In progress") %>
-                </p>
+                <div class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-500 text-white items-center gap-x-1">
+                  <span class="h-2 w-2 bg-white rounded-full animate__animated animate__flash animate__infinite animate__slow_slow">
+                  </span>
+                  <%= gettext("Live") %>
+                </div>
               <% end %>
               <%= if !Event.started?(@event) && !Event.finished?(@event) do %>
                 <p class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
@@ -75,27 +77,12 @@ defmodule ClaperWeb.EventLive.EventCardComponent do
             <%= if @event.presentation_file.status == "done" || (@event.presentation_file.status == "fail" && @event.presentation_file.hash) do %>
               <div class="mt-2 flex flex-col space-y-2 sm:space-y-0 justify-between sm:flex-row items-center">
                 <div
-                  id={"event-infos-0-#{@event.uuid}"}
-                  class="text-sm w-full space-y-2 sm:w-auto font-medium text-gray-700 sm:flex sm:justify-center sm:space-x-1 sm:space-y-0 sm:items-center relative"
-                  phx-update="ignore"
-                  phx-hook="Dropdown"
+                  id={"event-infos-#{@event.uuid}"}
+                  class="text-sm w-full sm:w-auto font-medium text-gray-700 flex justify-center space-x-1 sm:space-y-0 items-center relative"
                 >
                   <button
-                    phx-click-away={
-                      JS.hide(
-                        to: "#dropdown-#{@event.uuid}",
-                        transition: "animate__animated animate__fadeOut",
-                        time: 300
-                      )
-                    }
-                    phx-click={
-                      JS.toggle(
-                        to: "#dropdown-#{@event.uuid}",
-                        out: "animate__animated animate__fadeOut",
-                        in: "animate__animated animate__fadeIn",
-                        time: 800
-                      )
-                    }
+                    phx-click-away={JS.hide(to: "#dropdown-#{@event.uuid}")}
+                    phx-click={JS.toggle(to: "#dropdown-#{@event.uuid}")}
                     phx-target={@myself}
                     class="flex w-full lg:w-auto pl-3 pr-4 text-white items-center justify-between py-2 rounded-md tracking-wide font-bold focus:outline-none focus:shadow-outline hover:bg-primary-600 bg-primary-500"
                   >
@@ -116,6 +103,7 @@ defmodule ClaperWeb.EventLive.EventCardComponent do
                     </svg>
                   </button>
                   <div
+                    phx-hook="Dropdown"
                     id={"dropdown-#{@event.uuid}"}
                     class="hidden rounded shadow-lg bg-white border px-2 py-1 absolute -left-1 top-9 w-max"
                   >
@@ -169,6 +157,7 @@ defmodule ClaperWeb.EventLive.EventCardComponent do
                   </div>
                   <.link
                     :if={Event.started?(@event)}
+                    href="#"
                     data-confirm={
                       gettext(
                         "Are you sure you want to terminate this event? This action cannot be undone."

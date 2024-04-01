@@ -441,3 +441,7 @@
 .air-datepicker-cell.-current- {
   @apply text-secondary-500;
 }
+
+.animate__slow_slow {
+  --animate-duration: 5s;
+}
