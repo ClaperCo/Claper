@@ -3,18 +3,20 @@
 ## Prerequisites
 
 To run Claper on your local environment you need to have:
-* Postgres >= 9
-* Elixir >= 1.13.2
-* Erlang >= 24
-* NPM >= 6.14.17
-* NodeJS >= 14.19.2
-* Ghostscript >= 9.5.0 (for PDF support)
-* Libreoffice >= 6.4 (for PPT/PPTX support)
+
+- Postgres >= 9
+- Elixir >= 1.13.2
+- Erlang >= 24
+- NPM >= 6.14.17
+- NodeJS >= 14.19.2
+- Ghostscript >= 9.5.0 (for PDF support)
+- Libreoffice >= 6.4 (for PPT/PPTX support)
 
 You can also use Docker to easily run a Postgres instance:
+
 ```sh
-  docker run -p 5432:5432 -e POSTGRES_PASSWORD=claper -e POSTGRES_USER=claper -e POSTGRES_DB=claper --name claper-db -d postgres:9
-  ```
+  docker run -p 5432:5432 -e POSTGRES_PASSWORD=claper -e POSTGRES_USER=claper -e POSTGRES_DB=claper --name claper-db -d postgres:15
+```
 
 1. Clone the repo
    ```sh
@@ -45,7 +47,6 @@ Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
 
 If you have configured `MAIL` to `local`, you can access to the mailbox at [`localhost:4000/dev/mailbox`](http://localhost:4000/dev/mailbox).
 
-
 ## Using Docker Compose
 
 A Docker Compose [reference file](https://github.com/ClaperCo/Claper/blob/main/docker-compose.yml) is provided in the repository. You can use it to run Claper with Docker Compose.
@@ -55,17 +56,6 @@ git clone https://github.com/ClaperCo/Claper.git
 cd Claper
 docker compose up
 ```
-
-## Using Docker Compose for Dev
-
-To easy check new features, it is possible to directly build the Docker image from the source code and run the container with the [docker-compose-dev.yml](https://github.com/ClaperCo/Claper/blob/main/docker-compose-dev.yml) file.
-
-```sh
-git clone https://github.com/ClaperCo/Claper.git
-cd Claper
-docker compose -f docker-compose-dev.yml up
-```
-
 
 ### ARM architecture
 

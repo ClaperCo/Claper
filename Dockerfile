@@ -84,7 +84,7 @@ RUN mix release
 # the compiled release and other runtime necessities
 FROM ${RUNNER_IMAGE}
 
-RUN apt-get update -y && apt-get install -y libstdc++6 openssl libncurses5 locales ghostscript \
+RUN apt-get update -y && apt-get install -y curl libstdc++6 openssl libncurses5 locales ghostscript \
   && apt-get install -y libreoffice --no-install-recommends && apt-get clean && rm -f /var/lib/apt/lists/*_*
 
 # Set the locale
