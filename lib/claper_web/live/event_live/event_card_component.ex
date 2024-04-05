@@ -157,7 +157,6 @@ defmodule ClaperWeb.EventLive.EventCardComponent do
                   </div>
                   <.link
                     :if={Event.started?(@event)}
-                    href="#"
                     data-confirm={
                       gettext(
                         "Are you sure you want to terminate this event? This action cannot be undone."

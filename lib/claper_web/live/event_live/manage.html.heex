@@ -1311,6 +1311,20 @@
                 </code>
               </span>
             </div>
+
+            <div class="flex space-x-2 items-center mt-3">
+              <ClaperWeb.Component.Input.check
+                key={:show_poll_results_enabled}
+                checked={@state.show_poll_results_enabled}
+                shortcut={if @create == nil, do: "F", else: nil}
+              />
+              <span>
+                <%= gettext("Show poll results") %>
+                <code class="px-2 py-1.5 text-xs font-semibold text-gray-800 bg-gray-100 border border-gray-200 rounded-lg">
+                  f
+                </code>
+              </span>
+            </div>
           </div>
         </div>
       </div>
