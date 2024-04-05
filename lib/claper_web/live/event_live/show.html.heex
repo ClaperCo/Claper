@@ -33,9 +33,10 @@
       class="w-full bg-black fixed z-10 lg:w-1/3"
       style="box-shadow: 0px 15px 14px 1px rgba(0,0,0,0.75); -webkit-box-shadow: 0px 15px 14px 1px rgba(0,0,0,0.75); -moz-box-shadow: 0px 15px 14px 1px rgba(0,0,0,0.75);"
     >
-      <div id="banner" class="hidden w-full bg-gray-800 text-center" phx-hook="EmbeddedBanner">
-        <a href="https://claper.co" target="_blank" class="text-xs text-white py-3 w-full ">
-          Create your next presentation with <span class="underline">Claper</span>
+      <div id="banner" class=" w-full bg-gray-800 text-center" phx-hook="EmbeddedBanner">
+        <a href="https://claper.co" target="_blank" class="text-xs text-white py-3 w-full">
+          <%= gettext("Create your next presentation with") %>
+          <span class="underline">Claper</span>
         </a>
       </div>
       <div class="flex justify-between items-center px-5 py-3">
