@@ -32,6 +32,19 @@ let airdatepickerLocale = {
 let csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute("content")
 let Hooks = {}
 
+Hooks.EmbeddedBanner = {
+  mounted() {
+    if (window !== window.parent) {
+      this.el.classList.remove("hidden")
+    }
+  },
+  updated() {
+    if (window !== window.parent) {
+      this.el.classList.remove("hidden")
+    }
+  }
+}
+
 
 Hooks.TourGuide = {
   mounted() {
