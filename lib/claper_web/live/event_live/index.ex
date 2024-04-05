@@ -12,6 +12,13 @@ defmodule ClaperWeb.EventLive.Index do
       Gettext.put_locale(ClaperWeb.Gettext, locale)
     end
 
+    changeset =
+      Events.change_event(%Event{}, %{
+        started_at: NaiveDateTime.utc_now(),
+        code: Enum.random(1000..9999),
+        leaders: []
+      })
+
     if connected?(socket) do
       Phoenix.PubSub.subscribe(Claper.PubSub, "events:#{socket.assigns.current_user.id}")
     end
@@ -20,6 +27,7 @@ defmodule ClaperWeb.EventLive.Index do
       socket
       |> stream(:events, list_events(socket))
       |> assign(:managed_events, list_managed_events(socket))
+      |> assign(:quick_event_changeset, changeset)
 
     {:ok, socket}
   end
@@ -34,6 +42,40 @@ defmodule ClaperWeb.EventLive.Index do
     event = Claper.Events.get_event!(presentation.event.uuid, [:presentation_file])
 
     {:noreply, socket |> stream_insert(:events, event) |> put_flash(:info, nil)}
+  end
+
+  @impl true
+  def handle_event("validate", %{"event" => event_params}, socket) do
+    changeset =
+      %Event{}
+      |> Claper.Events.change_event(event_params)
+      |> Map.put(:action, :validate)
+
+    {:noreply, socket |> assign(:quick_event_changeset, changeset)}
+  end
+
+  @impl true
+  def handle_event("save", %{"event" => event_params}, socket) do
+    case Claper.Events.create_event(
+           event_params
+           |> Map.put("user_id", socket.assigns.current_user.id)
+           |> Map.put("presentation_file", %{
+             "status" => "done",
+             "length" => 0,
+             "presentation_state" => %{}
+           })
+           |> Map.put("started_at", NaiveDateTime.utc_now())
+           |> Map.put("code", "#{Enum.random(1000..9999)}")
+         ) do
+      {:ok, _event} ->
+        {:noreply,
+         socket
+         |> put_flash(:info, gettext("Quick event created successfully"))
+         |> push_redirect(to: ~p"/events")}
+
+      {:error, %Ecto.Changeset{} = changeset} ->
+        {:noreply, assign(socket, quick_event_changeset: changeset)}
+    end
   end
 
   @impl true
@@ -62,6 +104,20 @@ defmodule ClaperWeb.EventLive.Index do
     event = Events.get_user_event!(current_user.id, id)
     {:ok, _} = Events.terminate_event(event)
     {:noreply, redirect(socket, to: ~p"/events")}
+  end
+
+  @impl true
+  def handle_event(
+        "toggle-quick-create",
+        _params,
+        %{assigns: %{:live_action => :quick_create}} = socket
+      ) do
+    {:noreply, assign(socket, :live_action, :index)}
+  end
+
+  @impl true
+  def handle_event("toggle-quick-create", _params, %{assigns: %{:live_action => :index}} = socket) do
+    {:noreply, assign(socket, :live_action, :quick_create)}
   end
 
   defp apply_action(socket, :edit, %{"id" => id}) do

@@ -10,8 +10,6 @@ defmodule Claper.Events.Event do
     field :started_at, :naive_datetime
     field :expired_at, :naive_datetime
 
-    field :no_file, :boolean, default: false, virtual: true
-
     has_many :posts, Claper.Posts.Post
 
     has_many :leaders, Claper.Events.ActivityLeader, on_replace: :delete
@@ -34,12 +32,12 @@ defmodule Claper.Events.Event do
     ])
     |> cast_assoc(:presentation_file)
     |> cast_assoc(:leaders)
-    |> validate_required([:code])
+    |> validate_required([:code, :name])
   end
 
   def create_changeset(event, attrs) do
     event
-    |> cast(attrs, [:name, :code, :user_id, :started_at, :no_file])
+    |> cast(attrs, [:name, :code, :user_id, :started_at])
     |> cast_assoc(:presentation_file)
     |> cast_assoc(:leaders)
     |> validate_required([:code, :started_at])

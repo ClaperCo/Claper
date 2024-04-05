@@ -1,4 +1,5 @@
 defmodule ClaperWeb.EventLive.EventFormComponent do
+  alias Claper.Presentations.PresentationFile
   use ClaperWeb, :live_component
 
   alias Claper.Events
@@ -151,11 +152,19 @@ defmodule ClaperWeb.EventLive.EventFormComponent do
     save_file(socket, event_params, &edit_event/4)
   end
 
-  defp save_event(%{assigns: %{event: %{:no_file => false}}} = socket, :new, event_params) do
+  defp save_event(
+         %{assigns: %{event: %{:presentation_file => %PresentationFile{}}}} = socket,
+         :new,
+         event_params
+       ) do
     save_file(socket, event_params, &create_event/4)
   end
 
-  defp save_event(%{assigns: %{event: %{:no_file => true}}} = socket, :new, event_params) do
+  defp save_event(
+         %{assigns: %{event: %{:presentation_file => %Ecto.Association.NotLoaded{}}}} = socket,
+         :new,
+         event_params
+       ) do
     create_event(socket, event_params)
   end
 

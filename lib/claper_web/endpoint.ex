@@ -4,13 +4,23 @@ defmodule ClaperWeb.Endpoint do
   # The session will be stored in the cookie and signed,
   # this means its contents can be read but not tampered with.
   # Set :encryption_salt if you would also like to encrypt it.
-  @session_options [
-    store: :cookie,
-    key: "_claper_key",
-    signing_salt: "Tg18Y2zU",
-    same_site: "None",
-    secure: true
-  ]
+  @session_options (case Mix.env() do
+                      :prod ->
+                        [
+                          store: :cookie,
+                          key: "_claper_key",
+                          signing_salt: "Tg18Y2zU",
+                          same_site: "None",
+                          secure: true
+                        ]
+
+                      _ ->
+                        [
+                          store: :cookie,
+                          key: "_claper_key",
+                          signing_salt: "Tg18Y2zU"
+                        ]
+                    end)
 
   socket "/live", Phoenix.LiveView.Socket, websocket: [connect_info: [session: @session_options]]
 

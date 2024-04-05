@@ -74,7 +74,7 @@ defmodule ClaperWeb.EventLive.EventCardComponent do
           <% end %>
 
           <%= if !Event.finished?(@event) do %>
-            <%= if @event.presentation_file.status == "done" || (@event.presentation_file.status == "fail" && @event.presentation_file.hash) do %>
+            <%= if @event.presentation_file.status != "progress" do %>
               <div class="mt-2 flex flex-col space-y-2 sm:space-y-0 justify-between sm:flex-row items-center">
                 <div
                   id={"event-infos-#{@event.uuid}"}

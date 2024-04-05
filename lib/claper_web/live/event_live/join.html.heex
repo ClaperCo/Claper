@@ -3,6 +3,7 @@
     background: linear-gradient(-45deg, #2C033A, #21033A, #053138,  #053138);
     background-size: 400% 400%;
     animation: gradient 15s ease infinite;
+    height: 100vh;
   }
 </style>
 
@@ -100,7 +101,7 @@
           <div class="rounded-md bg-gray-600 bg-opacity-50 p-4 mt-8">
             <div class="flex justify-center items-center">
               <p class="text-sm text-white">
-                <%= gettext("Return to your last presentation") %> (#<span class="uppercase"><%= @last_event.code %></span>)
+                <%= gettext("Return to your last event") %> (<%= @last_event.name %>)
               </p>
               <p class="text-base ml-3 mt-1">
                 <a href="#" class="whitespace-nowrap font-medium text-white">
