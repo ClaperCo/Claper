@@ -37,7 +37,7 @@ defmodule Claper.Events.Event do
 
   def create_changeset(event, attrs) do
     event
-    |> cast(attrs, [:name, :code, :user_id, :started_at])
+    |> cast(attrs, [:name, :code, :user_id, :started_at, :expired_at])
     |> cast_assoc(:presentation_file)
     |> cast_assoc(:leaders)
     |> validate_required([:code, :started_at])

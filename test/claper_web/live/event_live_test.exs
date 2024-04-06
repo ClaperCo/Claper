@@ -18,7 +18,7 @@ defmodule ClaperWeb.EventLiveTest do
     test "lists all events", %{conn: conn, presentation_file: presentation_file} do
       {:ok, _index_live, html} = live(conn, ~p"/events")
 
-      assert html =~ "presentations"
+      assert html =~ "events"
       assert html =~ presentation_file.event.name
     end
 
