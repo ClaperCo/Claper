@@ -1,121 +1,11 @@
 <div
   id="manager"
-  class="h-screen max-h-screen flex flex-col"
   x-data={"{date:
   moment.utc('#{@event.expired_at}').local().format('lll')}"}
   phx-hook="Manager"
   data-max-page={@event.presentation_file.length}
   data-current-page={@state.position}
 >
-  <div class="md:flex md:items-center md:justify-between px-6 pb-4 pt-2 h-12 md:h-20 shadow-base absolute top-0 left-0 w-full z-20 bg-white">
-    <div class="flex-1 min-w-0">
-      <div class="flex space-x-2">
-        <a
-          data-phx-link="patch"
-          data-phx-link-state="push"
-          href={Routes.event_index_path(@socket, :index)}
-          class="md:px-3 pt-0.5 md:pt-1.5 rounded-md hover:bg-gray-200"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            class="h-6 w-6"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-            stroke-width="2"
-          >
-            <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
-          </svg>
-        </a>
-        <h2 class="text-2xl font-bold leading-7 text-gray-900 sm:text-3xl sm:truncate">
-          <%= @event.name %>
-        </h2>
-      </div>
-      <div class="hidden mt-1 md:flex flex-col sm:flex-row sm:flex-wrap sm:mt-0 sm:space-x-6">
-        <div class="mt-2 flex items-center text-sm text-gray-500">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            class="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-            stroke-width="2"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              d="M7 20l4-16m2 16l4-16M6 9h14M4 15h14"
-            />
-          </svg>
-          <%= @event.code %>
-        </div>
-        <div class="hidden mt-2 md:flex items-center text-sm text-gray-500">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            class="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400"
-            viewBox="0 0 20 20"
-            fill="currentColor"
-          >
-            <path
-              fill-rule="evenodd"
-              d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
-              clip-rule="evenodd"
-            />
-          </svg>
-          <%= @attendees_nb %>
-        </div>
-        <div class="hidden mt-2 md:flex items-center text-sm text-gray-500">
-          <svg
-            class="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400"
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 20 20"
-            fill="currentColor"
-            aria-hidden="true"
-          >
-            <path
-              fill-rule="evenodd"
-              d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z"
-              clip-rule="evenodd"
-            />
-          </svg>
-          <%= gettext("Finish on") %> <span class="ml-1" x-text="date"></span>
-        </div>
-      </div>
-    </div>
-    <div class="hidden mt-5 md:flex lg:mt-0 lg:ml-4">
-      <span class="md:ml-3">
-        <span class="italic text-gray-400 text-sm mr-5">
-          <%= raw(
-            gettext("Press <strong>F</strong> in the presentation window to enable fullscreen")
-          ) %>
-        </span>
-        <button
-          phx-hook="OpenPresenter"
-          id={"openPresenter-#{@event.uuid}"}
-          data-url={Routes.event_presenter_path(@socket, :show, @event.code)}
-          type="button"
-          class="inline-flex items-center px-5 py-4 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-gradient-to-tl from-primary-500 to-secondary-500 bg-size-200 bg-pos-0 hover:bg-pos-100 transition-all duration-500"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            class="-ml-1 mr-2 h-5 w-5"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-            stroke-width="2"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"
-            />
-          </svg>
-          <%= gettext("Start") %>
-        </button>
-      </span>
-    </div>
-  </div>
-
   <div
     id="add-modal"
     class={"#{if !@create, do: 'hidden' } fixed z-30 inset-0 overflow-y-auto p-4 sm:p-6 md:p-24
@@ -153,17 +43,17 @@
               <a
                 data-phx-link="patch"
                 data-phx-link-state="push"
-                href={Routes.event_manage_path(@socket, :add_poll, @event.code)}
+                href={~p"/e/#{@event.code}/manage/add/poll"}
                 class="group flex select-none rounded-xl p-3 w-full hover:bg-gray-200 cursor-pointer"
               >
                 <div class="flex h-12 w-12 flex-none text-white items-center justify-center rounded-lg bg-gradient-to-br from-primary-500 to-secondary-500">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    class="h-9 w-9"
+                    class="h-6 w-6"
                     fill="none"
                     viewBox="0 0 24 24"
                     stroke="currentColor"
-                    stroke-width="2"
+                    stroke-width="1.5"
                   >
                     <path
                       stroke-linecap="round"
@@ -186,7 +76,7 @@
               <a
                 data-phx-link="patch"
                 data-phx-link-state="push"
-                href={Routes.event_manage_path(@socket, :add_form, @event.code)}
+                href={~p"/e/#{@event.code}/manage/add/form"}
                 class="group flex select-none rounded-xl p-3 w-full hover:bg-gray-200 cursor-pointer"
               >
                 <div class="flex h-12 w-12 flex-none text-white items-center justify-center rounded-lg bg-gradient-to-br from-primary-500 to-secondary-500">
@@ -225,7 +115,7 @@
               <a
                 data-phx-link="patch"
                 data-phx-link-state="push"
-                href={Routes.event_manage_path(@socket, :add_embed, @event.code)}
+                href={~p"/e/#{@event.code}/manage/add/embed"}
                 class="group flex select-none rounded-xl p-3 w-full hover:bg-gray-200 cursor-pointer"
               >
                 <div class="flex h-12 w-12 flex-none text-white items-center justify-center rounded-lg bg-gradient-to-br from-primary-500 to-secondary-500">
@@ -254,12 +144,12 @@
             </li>
           </ul>
 
-          <%= if (length @polls)==0 && (length @forms)==0 do %>
+          <%= if (length @polls)==0 && (length @forms)==0 && @event.presentation_file.length > 0 do %>
             <div class="mt-10">
               <a
                 data-phx-link="patch"
                 data-phx-link-state="push"
-                href={Routes.event_manage_path(@socket, :import, @event.code)}
+                href={~p"/e/#{@event.code}/manage/import"}
                 class="group flex gap-x-2 select-none rounded-xl p-3 w-full hover:bg-gray-200 cursor-pointer"
               >
                 <svg
@@ -301,7 +191,7 @@
               poll={@poll}
               live_action={@create_action}
               position={@state.position}
-              return_to={Routes.event_manage_path(@socket, :show, @event.code)}
+              return_to={~p"/e/#{@event.code}/manage"}
             />
           </div>
         <% end %>
@@ -322,7 +212,7 @@
               form={@form}
               live_action={@create_action}
               position={@state.position}
-              return_to={Routes.event_manage_path(@socket, :show, @event.code)}
+              return_to={~p"/e/#{@event.code}/manage"}
             />
           </div>
         <% end %>
@@ -343,7 +233,7 @@
               embed={@embed}
               live_action={@create_action}
               position={@state.position}
-              return_to={Routes.event_manage_path(@socket, :show, @event.code)}
+              return_to={~p"/e/#{@event.code}/manage"}
             />
           </div>
         <% end %>
@@ -388,358 +278,43 @@
     </div>
   </div>
 
-  <div class="grid grid-cols-1 md:grid-cols-3 grid-rows-2 md:grid-rows-1 w-full h-screen pt-12 md:pt-20">
-    <div class="bg-gray-100 pb-10 md:col-span-2 overflow-y-auto">
-      <div class="flex flex-col justify-center items-center text-center">
-        <%= for index <- 0..@event.presentation_file.length-1 do %>
-          <%= if @state.position==index && @state.position> 0 do %>
-            <button
-              phx-click="current-page"
-              phx-value-page={index - 1}
-              class="w-12 h-12 float-left ml-5 focus:outline-none"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                class="h-6 w-6"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                stroke-width="2"
-              >
-                <path stroke-linecap="round" stroke-linejoin="round" d="M5 15l7-7 7 7" />
-              </svg>
-            </button>
-          <% end %>
-
-          <div
-            class={"#{if @state.position==index, do: 'shadow-xl bg-white' , else: 'opacity-50 bg-gray-100' }
-                transition-all pb-5"}
-            id={"slide-preview-#{index}"}
-          >
-            <button
-              phx-click="current-page"
-              phx-value-page={index}
-              class="py-4 focus:outline-none"
-            >
-              <%= if Application.get_env(:claper, :presentations) |> Keyword.get(:storage) == "local" do %>
-                <img
-                  class="w-1/3 mx-auto"
-                  src={"/uploads/#{@event.presentation_file.hash}/#{index+1}.jpg"}
-                />
-              <% else %>
-                <img
-                  class="w-1/3 mx-auto"
-                  src={"https://#{Application.get_env(:claper, :presentations) |>
-                      Keyword.get(:aws_bucket)}.s3.#{Application.get_env(:ex_aws,
-                      :region)}.amazonaws.com/presentations/#{@event.presentation_file.hash}/#{index+1}.jpg"}
-                />
-              <% end %>
-            </button>
-
-            <div class="flex flex-col space-y-3 w-full lg:w-1/2 mx-auto justify-start items-center">
-              <%= for poll <- Enum.filter(@polls, fn poll -> poll.position == index end) do %>
-                <div class="flex space-x-2 items-center">
-                  <div class="flex h-10 w-10 flex-none text-white items-center justify-center rounded-lg bg-gradient-to-br from-primary-500 to-secondary-500">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      class="h-6 w-6"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                      stroke-width="2"
-                    >
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        d="M16 8v8m-4-5v5m-4-2v2m-2 4h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
-                      />
-                    </svg>
-                  </div>
-                  <div class="flex space-x-2">
-                    <span>
-                      <span class="font-semibold">
-                            <%= gettext "Poll" %>
-                          </span>: <%= poll.title %>
-                    </span>
-                    <%= if @state.position==index do %>
-                      <%= if poll.enabled do %>
-                        <button
-                          phx-click="poll-set-inactive"
-                          phx-value-id={poll.id}
-                          class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-supporting-green-100 text-supporting-green-800"
-                        >
-                          <svg
-                            style="--animate-duration: 10s;"
-                            class="mr-1.5 h-2 w-2 text-supporting-green-400 animate__animated animate__flash animate__infinite"
-                            fill="currentColor"
-                            viewBox="0 0 8 8"
-                          >
-                            <circle cx="4" cy="4" r="3" />
-                          </svg>
-                          <%= gettext("Active") %>
-                        </button>
-                      <% else %>
-                        <button
-                          phx-click="poll-set-active"
-                          phx-value-id={poll.id}
-                          class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-primary-100 text-primary-800"
-                        >
-                          <%= gettext("Set active") %>
-                        </button>
-                      <% end %>
-                      <a
-                        data-phx-link="patch"
-                        data-phx-link-state="push"
-                        href={Routes.event_manage_path(@socket, :edit_poll, @event.code, poll.id)}
-                        class="text-xs text-primary-500"
-                      >
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          class="h-5 w-5"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          stroke="currentColor"
-                          stroke-width="2"
-                        >
-                          <path
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
-                          />
-                        </svg>
-                      </a>
-                    <% end %>
-                  </div>
-                </div>
-                <div class="h-10 border border-gray-300"></div>
-              <% end %>
-              <%= for form <- Enum.filter(@forms, fn form -> form.position == index end) do %>
-                <div class="flex space-x-2 items-center">
-                  <div class="flex h-10 w-10 flex-none text-white items-center justify-center rounded-lg bg-gradient-to-br from-primary-500 to-secondary-500">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      class="icon icon-tabler icon-tabler-forms"
-                      width="24"
-                      height="24"
-                      viewBox="0 0 24 24"
-                      stroke-width="1.5"
-                      stroke="currentColor"
-                      fill="none"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                    >
-                      <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                      <path d="M12 3a3 3 0 0 0 -3 3v12a3 3 0 0 0 3 3"></path>
-                      <path d="M6 3a3 3 0 0 1 3 3v12a3 3 0 0 1 -3 3"></path>
-                      <path d="M13 7h7a1 1 0 0 1 1 1v8a1 1 0 0 1 -1 1h-7"></path>
-                      <path d="M5 7h-1a1 1 0 0 0 -1 1v8a1 1 0 0 0 1 1h1"></path>
-                      <path d="M17 12h.01"></path>
-                      <path d="M13 12h.01"></path>
-                    </svg>
-                  </div>
-                  <div class="flex space-x-2">
-                    <span>
-                      <span class="font-semibold">
-                                <%= gettext "Form" %>
-                              </span>: <%= form.title %>
-                    </span>
-                    <%= if @state.position==index do %>
-                      <%= if form.enabled do %>
-                        <button
-                          phx-click="form-set-inactive"
-                          phx-value-id={form.id}
-                          class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-supporting-green-100 text-supporting-green-800"
-                        >
-                          <svg
-                            style="--animate-duration: 10s;"
-                            class="mr-1.5 h-2 w-2 text-supporting-green-400 animate__animated animate__flash animate__infinite"
-                            fill="currentColor"
-                            viewBox="0 0 8 8"
-                          >
-                            <circle cx="4" cy="4" r="3" />
-                          </svg>
-                          <%= gettext("Active") %>
-                        </button>
-                      <% else %>
-                        <button
-                          phx-click="form-set-active"
-                          phx-value-id={form.id}
-                          class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-primary-100 text-primary-800"
-                        >
-                          <%= gettext("Set active") %>
-                        </button>
-                      <% end %>
-                      <a
-                        data-phx-link="patch"
-                        data-phx-link-state="push"
-                        href={Routes.event_manage_path(@socket, :edit_form, @event.code, form.id)}
-                        class="text-xs text-primary-500"
-                      >
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          class="h-5 w-5"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          stroke="currentColor"
-                          stroke-width="2"
-                        >
-                          <path
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
-                          />
-                        </svg>
-                      </a>
-                    <% end %>
-                  </div>
-                </div>
-                <div class="h-10 border border-gray-300"></div>
-              <% end %>
-              <%= for embed<- Enum.filter(@embeds, fn embed -> embed.position == index end) do %>
-                <div class="flex space-x-2 items-center">
-                  <div class="flex h-10 w-10 flex-none text-white items-center justify-center rounded-lg bg-gradient-to-br from-primary-500 to-secondary-500">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      class="h-6 w-6"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                      stroke-width="2"
-                    >
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        d="M14.25 9.75L16.5 12l-2.25 2.25m-4.5 0L7.5 12l2.25-2.25M6 20.25h12A2.25 2.25 0 0020.25 18V6A2.25 2.25 0 0018 3.75H6A2.25 2.25 0 003.75 6v12A2.25 2.25 0 006 20.25z"
-                      />
-                    </svg>
-                  </div>
-                  <div class="flex space-x-2">
-                    <span>
-                      <span class="font-semibold"><%= gettext "Web content" %></span>: <%= embed.title %>
-                    </span>
-                    <%= if @state.position == index do %>
-                      <%= if embed.enabled do %>
-                        <button
-                          phx-click="embed-set-inactive"
-                          phx-value-id={embed.id}
-                          class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-supporting-green-100 text-supporting-green-800"
-                        >
-                          <svg
-                            style="--animate-duration: 10s;"
-                            class="mr-1.5 h-2 w-2 text-supporting-green-400 animate__animated animate__flash animate__infinite"
-                            fill="currentColor"
-                            viewBox="0 0 8 8"
-                          >
-                            <circle cx="4" cy="4" r="3" />
-                          </svg>
-                          <%= gettext("Active") %>
-                        </button>
-                      <% else %>
-                        <button
-                          phx-click="embed-set-active"
-                          phx-value-id={embed.id}
-                          class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-primary-100 text-primary-800"
-                        >
-                          <%= gettext("Set active") %>
-                        </button>
-                      <% end %>
-                      <a
-                        data-phx-link="patch"
-                        data-phx-link-state="push"
-                        href={
-                          Routes.event_manage_path(@socket, :edit_embed, @event.code, embed.id)
-                        }
-                        class="text-xs text-primary-500"
-                      >
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          class="h-5 w-5"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          stroke="currentColor"
-                          stroke-width="2"
-                        >
-                          <path
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
-                          />
-                        </svg>
-                      </a>
-                    <% end %>
-                  </div>
-                </div>
-                <div class="h-10 border border-gray-300"></div>
-              <% end %>
-            </div>
-
-            <%= if @state.position==index do %>
-              <button class="underline" phx-click={toggle_add_modal()}>
-                <%= gettext("Add interaction") %>
-              </button>
-            <% end %>
-          </div>
-
-          <%= if @state.position==index && @state.position < @event.presentation_file.length - 1 do %>
-            <button
-              phx-click="current-page"
-              phx-value-page={index + 1}
-              class="w-12 h-12 float-left ml-5 focus:outline-none"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                class="h-6 w-6"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                stroke-width="2"
-              >
-                <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
-              </svg>
-            </button>
-          <% end %>
-        <% end %>
-      </div>
-    </div>
-
-    <div class="grid grid-cols-1 grid-rows-2 md:grid-rows-3" style="height: 100%;">
-      <div class="bg-gray-200 md:row-span-2 border-2">
-        <ul
-          id="menu"
-          phx-update="replace"
-          class="fixed z-20 flex items-center bg-gray-200 space-x-3 px-2 w-full py-2"
+  <div
+    id="wrapper"
+    class="grid grid-rows-[3.2em_1fr] h-screen max-h-screen overflow-hidden"
+    data-next-label={gettext("Next")}
+    data-prev-label={gettext("Back")}
+    data-finish-label={gettext("Finish")}
+    data-group="manage"
+    phx-hook="TourGuide"
+  >
+    <div class="flex items-center justify-between px-3 py-2 border-b-2 border-gray-200 w-full bg-white">
+      <div class="flex-1 flex gap-x-2">
+        <a
+          data-phx-link="patch"
+          data-phx-link-state="push"
+          href={~p"/events"}
+          class="md:px-3 rounded-md hover:bg-gray-200 flex items-center"
         >
-          <li class={"rounded-md #{if @list_tab==:posts, do: 'bg-secondary-600 text-white' ,
-            else: 'bg-white text-gray-600' } px-2 py-0.5 text-sm shadow-sm"}>
-            <%= link(gettext("Messages"), to: "#", phx_click: "list-tab", phx_value_tab: :posts) %>
-          </li>
-          <li class={"rounded-md #{if @list_tab==:pinned_posts, do: 'bg-secondary-600 text-white' ,
-            else: 'bg-white text-gray-600' } px-2 py-0.5 text-sm shadow-sm"}>
-            <%= link(gettext("Pinned messages") <> " (#{@pinned_post_count})",
-              to: "#",
-              phx_click: "list-tab",
-              phx_value_tab: :pinned_posts
-            ) %>
-          </li>
-          <li class={"rounded-md #{if @list_tab==:forms, do: 'bg-secondary-600 text-white' ,
-            else: 'bg-white text-gray-600' } px-2 py-0.5 text-sm shadow-sm"}>
-            <%= link(gettext("Form submissions"),
-              to: "#",
-              phx_click: "list-tab",
-              phx_value_tab: :forms
-            ) %>
-          </li>
-        </ul>
-
-        <%= if @list_tab==:posts do %>
-          <%= if Enum.count(@all_posts)==0 && Enum.count(@pinned_posts)==0 do %>
-            <div
-              class="text-center flex flex-col space-y-5 items-center justify-center text-gray-400"
-              style="height: 100%;"
-            >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-4 w-4"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+          </svg>
+        </a>
+        <div class="flex items-center justify-start gap-x-2">
+          <h2 class="text-xl font-bold leading-7 text-gray-900 sm:text-2xl sm:truncate">
+            <%= @event.name %>
+          </h2>
+          <div class="flex gap-x-3 items-center">
+            <div class="flex items-center text-sm text-gray-500">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                class="h-36 w-36"
+                class="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -748,33 +323,494 @@
                 <path
                   stroke-linecap="round"
                   stroke-linejoin="round"
-                  d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-1.414-.586m0 0L11 14h4a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2v4l.586-.586z"
+                  d="M7 20l4-16m2 16l4-16M6 9h14M4 15h14"
                 />
               </svg>
-
-              <p class="text-lg">
-                <%= gettext("Messages from attendees will appear here.") %>
-              </p>
+              <%= @event.code %>
             </div>
-          <% end %>
-          <div
-            id="x"
-            class={"overflow-y-auto #{if Enum.any?(@pinned_posts) or Enum.any?(@all_posts), do: 'h-full', else: 'h-1/2'}"}
+            <div class="flex items-center text-sm text-gray-500">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
+                  clip-rule="evenodd"
+                />
+              </svg>
+              <%= @attendees_nb %>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="flex items-center gap-x-3 justify-end">
+          <span class="hidden lg:block italic text-gray-400 text-sm">
+            <%= raw(
+              gettext("Press <strong>F</strong> in the presentation window to enable fullscreen")
+            ) %>
+          </span>
+          <button
+            phx-hook="OpenPresenter"
+            id={"openPresenter-#{@event.uuid}"}
+            data-url={~p"/e/#{@event.code}/presenter"}
+            type="button"
+            data-tg-title={"🙌 #{gettext("Time to launch your presentation!")}"}
+            data-tg-order="4"
+            data-tg-tour={"<p>#{gettext("Click here to open the presentation window.")}</p>"}
+            data-tg-group="manage"
+            class="inline-flex items-center px-5 py-1 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-gradient-to-tl from-primary-500 to-secondary-500 bg-size-200 bg-pos-0 hover:bg-pos-100 transition-all duration-500"
           >
-            <div
-              id="post-list"
-              class={"overflow-y-auto #{if Enum.count(@all_posts)> 0, do: ''} pb-5 pt-8 px-5"}
-              phx-update="append"
-              data-posts-nb={Enum.count(@all_posts)}
-              phx-hook="ScrollIntoDiv"
-              data-target="#post-list"
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="2"
+              stroke="currentColor"
+              class="-ml-1 mr-2 h-5 w-5"
             >
-              <%= for post <- @all_posts do %>
-                <div
-                  class={if post.__meta__.state == :deleted, do: "hidden"}
-                  id={"#{post.id}-post"}
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M13.5 6H5.25A2.25 2.25 0 0 0 3 8.25v10.5A2.25 2.25 0 0 0 5.25 21h10.5A2.25 2.25 0 0 0 18 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25"
+              />
+            </svg>
+            <%= gettext("Open presentation") %>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div
+      phx-hook="Split"
+      data-type="column"
+      data-gutter=".gutter-1"
+      id="layout"
+      class="grid grid-cols-[1fr_10px_1fr] overflow-y-auto"
+    >
+      <div
+        id="slides"
+        class="bg-gray-100 overflow-y-auto"
+        data-tg-order="1"
+        data-tg-title={"#{gettext("Your slides and/or interactions")}"}
+        data-tg-tour={"<p class='mb-3'>#{gettext("This section contains all your presentation slides (if you have upload one). You have the option to add interactions to each slide.")}</p><p class='opacity-50 text-xs'>#{gettext("If you have slides, you can navigate through the slides with ease using the arrow keys on your keyboard.")}</p>"}
+        data-tg-group="manage"
+      >
+        <div class="flex flex-col items-center text-center">
+          <%= for index <- 0..max(0, @event.presentation_file.length-1) do %>
+            <%= if @state.position==index && @state.position> 0 do %>
+              <button
+                phx-click="current-page"
+                phx-value-page={index - 1}
+                class="w-12 h-12 float-left ml-5 focus:outline-none"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="h-6 w-6"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  stroke-width="2"
                 >
-                  <div class="px-4 pb-2 pt-3 rounded-b-lg rounded-tr-lg bg-white relative shadow-md text-black break-all mt-4">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M5 15l7-7 7 7" />
+                </svg>
+              </button>
+            <% end %>
+
+            <div
+              class={"#{if @state.position==index, do: 'shadow-xl bg-white' , else: 'opacity-50 bg-gray-100' }
+                    transition-all pb-5"}
+              id={"slide-preview-#{index}"}
+            >
+              <button
+                phx-click="current-page"
+                phx-value-page={index}
+                class="py-4 focus:outline-none"
+              >
+                <%= if @event.presentation_file.length > 0 do %>
+                  <%= if Application.get_env(:claper, :presentations) |> Keyword.get(:storage) == "local" do %>
+                    <img
+                      class="w-1/3 mx-auto"
+                      src={"/uploads/#{@event.presentation_file.hash}/#{index+1}.jpg"}
+                    />
+                  <% else %>
+                    <img
+                      class="w-1/3 mx-auto"
+                      src={"https://#{Application.get_env(:claper, :presentations) |>
+                          Keyword.get(:aws_bucket)}.s3.#{Application.get_env(:ex_aws,
+                          :region)}.amazonaws.com/presentations/#{@event.presentation_file.hash}/#{index+1}.jpg"}
+                    />
+                  <% end %>
+                <% else %>
+                  <div class="w-screen bg-white h-4"></div>
+                <% end %>
+              </button>
+
+              <div class="flex flex-col space-y-3 w-full lg:w-1/2 mx-auto justify-start items-center">
+                <%= for poll <- Enum.filter(@polls, fn poll -> poll.position == index end) do %>
+                  <div class="flex space-x-2 items-center">
+                    <div class="flex h-8 w-8 flex-none text-white items-center justify-center rounded-lg bg-gradient-to-br from-primary-500 to-secondary-500">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        class="h-5 w-5"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                        stroke-width="2"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          d="M16 8v8m-4-5v5m-4-2v2m-2 4h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+                        />
+                      </svg>
+                    </div>
+                    <div class="flex space-x-2">
+                      <span>
+                        <span class="font-semibold">
+                                <%= gettext "Poll" %>
+                              </span>: <%= poll.title %>
+                      </span>
+                      <%= if @state.position==index do %>
+                        <%= if poll.enabled do %>
+                          <button
+                            phx-click="poll-set-inactive"
+                            phx-value-id={poll.id}
+                            class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-supporting-green-100 text-supporting-green-800"
+                          >
+                            <svg
+                              style="--animate-duration: 10s;"
+                              class="mr-1.5 h-2 w-2 text-supporting-green-400 animate__animated animate__flash animate__infinite"
+                              fill="currentColor"
+                              viewBox="0 0 8 8"
+                            >
+                              <circle cx="4" cy="4" r="3" />
+                            </svg>
+                            <%= gettext("Active") %>
+                          </button>
+                        <% else %>
+                          <button
+                            phx-click="poll-set-active"
+                            phx-value-id={poll.id}
+                            class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-primary-100 text-primary-800"
+                          >
+                            <%= gettext("Set active") %>
+                          </button>
+                        <% end %>
+                        <a
+                          data-phx-link="patch"
+                          data-phx-link-state="push"
+                          href={~p"/e/#{@event.code}/manage/edit/poll/#{poll.id}"}
+                          class="text-xs text-primary-500"
+                        >
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            class="h-5 w-5"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                            stroke-width="2"
+                          >
+                            <path
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                              d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+                            />
+                          </svg>
+                        </a>
+                      <% end %>
+                    </div>
+                  </div>
+                  <div class="h-4 border border-gray-300"></div>
+                <% end %>
+                <%= for form <- Enum.filter(@forms, fn form -> form.position == index end) do %>
+                  <div class="flex space-x-2 items-center">
+                    <div class="flex h-8 w-8 flex-none text-white items-center justify-center rounded-lg bg-gradient-to-br from-primary-500 to-secondary-500">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        class="icon icon-tabler icon-tabler-forms"
+                        width="20"
+                        height="20"
+                        viewBox="0 0 24 24"
+                        stroke-width="1.5"
+                        stroke="currentColor"
+                        fill="none"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      >
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                        <path d="M12 3a3 3 0 0 0 -3 3v12a3 3 0 0 0 3 3"></path>
+                        <path d="M6 3a3 3 0 0 1 3 3v12a3 3 0 0 1 -3 3"></path>
+                        <path d="M13 7h7a1 1 0 0 1 1 1v8a1 1 0 0 1 -1 1h-7"></path>
+                        <path d="M5 7h-1a1 1 0 0 0 -1 1v8a1 1 0 0 0 1 1h1"></path>
+                        <path d="M17 12h.01"></path>
+                        <path d="M13 12h.01"></path>
+                      </svg>
+                    </div>
+                    <div class="flex space-x-2 items-center">
+                      <span>
+                        <span class="font-semibold">
+                                    <%= gettext "Form" %>
+                                  </span>: <%= form.title %>
+                      </span>
+                      <%= if @state.position==index do %>
+                        <%= if form.enabled do %>
+                          <button
+                            phx-click="form-set-inactive"
+                            phx-value-id={form.id}
+                            class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-supporting-green-100 text-supporting-green-800"
+                          >
+                            <svg
+                              style="--animate-duration: 10s;"
+                              class="mr-1.5 h-2 w-2 text-supporting-green-400 animate__animated animate__flash animate__infinite"
+                              fill="currentColor"
+                              viewBox="0 0 8 8"
+                            >
+                              <circle cx="4" cy="4" r="3" />
+                            </svg>
+                            <%= gettext("Active") %>
+                          </button>
+                        <% else %>
+                          <button
+                            phx-click="form-set-active"
+                            phx-value-id={form.id}
+                            class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-primary-100 text-primary-800"
+                          >
+                            <%= gettext("Set active") %>
+                          </button>
+                        <% end %>
+                        <a
+                          data-phx-link="patch"
+                          data-phx-link-state="push"
+                          href={~p"/e/#{@event.code}/manage/edit/form/#{form.id}"}
+                          class="text-xs text-primary-500"
+                        >
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            class="h-5 w-5"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                            stroke-width="2"
+                          >
+                            <path
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                              d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+                            />
+                          </svg>
+                        </a>
+                      <% end %>
+                    </div>
+                  </div>
+                  <div class="h-4 border border-gray-300"></div>
+                <% end %>
+                <%= for embed<- Enum.filter(@embeds, fn embed -> embed.position == index end) do %>
+                  <div class="flex space-x-2 items-center">
+                    <div class="flex h-8 w-8 flex-none text-white items-center justify-center rounded-lg bg-gradient-to-br from-primary-500 to-secondary-500">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        class="h-5 w-5"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                        stroke-width="2"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          d="M14.25 9.75L16.5 12l-2.25 2.25m-4.5 0L7.5 12l2.25-2.25M6 20.25h12A2.25 2.25 0 0020.25 18V6A2.25 2.25 0 0018 3.75H6A2.25 2.25 0 003.75 6v12A2.25 2.25 0 006 20.25z"
+                        />
+                      </svg>
+                    </div>
+                    <div class="flex space-x-2">
+                      <span>
+                        <span class="font-semibold"><%= gettext "Web content" %></span>: <%= embed.title %>
+                      </span>
+                      <%= if @state.position == index do %>
+                        <%= if embed.enabled do %>
+                          <button
+                            phx-click="embed-set-inactive"
+                            phx-value-id={embed.id}
+                            class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-supporting-green-100 text-supporting-green-800"
+                          >
+                            <svg
+                              style="--animate-duration: 10s;"
+                              class="mr-1.5 h-2 w-2 text-supporting-green-400 animate__animated animate__flash animate__infinite"
+                              fill="currentColor"
+                              viewBox="0 0 8 8"
+                            >
+                              <circle cx="4" cy="4" r="3" />
+                            </svg>
+                            <%= gettext("Active") %>
+                          </button>
+                        <% else %>
+                          <button
+                            phx-click="embed-set-active"
+                            phx-value-id={embed.id}
+                            class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-primary-100 text-primary-800"
+                          >
+                            <%= gettext("Set active") %>
+                          </button>
+                        <% end %>
+                        <a
+                          data-phx-link="patch"
+                          data-phx-link-state="push"
+                          href={~p"/e/#{@event.code}/manage/edit/embed/#{embed.id}"}
+                          class="text-xs text-primary-500"
+                        >
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            class="h-5 w-5"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                            stroke-width="2"
+                          >
+                            <path
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                              d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+                            />
+                          </svg>
+                        </a>
+                      <% end %>
+                    </div>
+                  </div>
+                  <div class="h-4 border border-gray-300"></div>
+                <% end %>
+              </div>
+
+              <%= if @state.position==index do %>
+                <button
+                  class="flex items-center justify-center px-3 py-2 text-white bg-primary-500 hover:bg-primary-600 rounded-md my-5 mx-auto text-xs"
+                  phx-click={toggle_add_modal()}
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 16 16"
+                    fill="currentColor"
+                    class="w-4 h-4"
+                  >
+                    <path d="M8.75 3.75a.75.75 0 0 0-1.5 0v3.5h-3.5a.75.75 0 0 0 0 1.5h3.5v3.5a.75.75 0 0 0 1.5 0v-3.5h3.5a.75.75 0 0 0 0-1.5h-3.5v-3.5Z" />
+                  </svg>
+                  <span><%= gettext("Add interaction") %></span>
+                </button>
+              <% end %>
+            </div>
+
+            <%= if @state.position==index && @state.position < @event.presentation_file.length - 1 do %>
+              <button
+                phx-click="current-page"
+                phx-value-page={index + 1}
+                class="w-12 h-12 float-left ml-5 focus:outline-none"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="h-6 w-6"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+                </svg>
+              </button>
+            <% end %>
+          <% end %>
+        </div>
+      </div>
+
+      <div
+        class="gutter-1 row-span-full cursor-col-resize col-[2] bg-gray-50 text-center text-gray-300 text-sm leading-3"
+        style="writing-mode: vertical-rl"
+      >
+        •••
+      </div>
+
+      <div
+        id="ugc"
+        phx-hook="Split"
+        data-gutter=".gutter-2"
+        data-type="row"
+        class="grid grid-rows-[1fr_10px_1fr] overflow-y-auto"
+      >
+        <div
+          class="bg-gray-200 border-2 overflow-y-auto relative"
+          data-tg-title={"#{gettext("Attendees interactions")}"}
+          data-tg-order="2"
+          data-tg-tour={"<p class='mb-3'>#{gettext("Here you'll find all interactions from your attendees. You can manage messages, pinned messages, and submitted forms.")}</p><p class='opacity-50 text-xs'>#{gettext("Identify users by their unique avatars.")}</p>"}
+          data-tg-group="manage"
+        >
+          <ul
+            id="menu"
+            phx-update="replace"
+            class="fixed z-10 flex items-center bg-gray-200 space-x-3 px-2 w-full py-3"
+          >
+            <li class={"rounded-md #{if @list_tab==:posts, do: 'bg-secondary-600 text-white' ,
+                else: 'bg-white text-gray-600' } px-2 py-0.5 text-sm shadow-sm"}>
+              <%= link(gettext("Messages") <> " (#{@post_count})",
+                to: "#",
+                phx_click: "list-tab",
+                phx_value_tab: :posts
+              ) %>
+            </li>
+            <li class={"rounded-md #{if @list_tab==:pinned_posts, do: 'bg-secondary-600 text-white' ,
+                else: 'bg-white text-gray-600' } px-2 py-0.5 text-sm shadow-sm"}>
+              <%= link(gettext("Pinned messages") <> " (#{@pinned_post_count})",
+                to: "#",
+                phx_click: "list-tab",
+                phx_value_tab: :pinned_posts
+              ) %>
+            </li>
+            <li class={"rounded-md #{if @list_tab==:forms, do: 'bg-secondary-600 text-white' ,
+                else: 'bg-white text-gray-600' } px-2 py-0.5 text-sm shadow-sm"}>
+              <%= link(gettext("Form submissions") <> " (#{@form_submit_count})",
+                to: "#",
+                phx_click: "list-tab",
+                phx_value_tab: :forms
+              ) %>
+            </li>
+          </ul>
+
+          <%= if @list_tab == :posts do %>
+            <%= if @post_count == 0 && @pinned_post_count == 0 do %>
+              <div
+                class="text-center flex flex-col space-y-5 items-center justify-center text-gray-400"
+                style="height: 100%;"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="h-36 w-36"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-1.414-.586m0 0L11 14h4a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2v4l.586-.586z"
+                  />
+                </svg>
+
+                <p class="text-lg">
+                  <%= gettext("Messages from attendees will appear here.") %>
+                </p>
+              </div>
+            <% end %>
+            <div id="x" class="overflow-y-auto max-h-full">
+              <div
+                id="post-list"
+                class="overflow-y-auto max-h-full pb-5 pt-8 px-5"
+                phx-update="stream"
+                phx-hook="ScrollIntoDiv"
+              >
+                <div :for={{id, post} <- @streams.posts} id={id}>
+                  <div class="flex flex-col md:block px-4 pb-2 pt-3 rounded-b-lg rounded-tr-lg bg-white relative shadow-md text-black break-all mt-4">
                     <div class="float-right mr-1">
                       <%= if post.attendee_identifier do %>
                         <span class="text-yellow-500">
@@ -901,54 +937,44 @@
                     <% end %>
                   </div>
                 </div>
-              <% end %>
-            </div>
-            <!-- The div below encompasses the 2 post lists -->
-          </div>
-        <% end %>
-        <%= if @list_tab == :pinned_posts do %>
-          <%= if Enum.count(@pinned_posts) == 0 do %>
-            <div
-              class="text-center flex flex-col space-y-5 items-center justify-center text-gray-400"
-              style="height: 100%;"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                class="h-36 w-36"
-                viewBox="0 0 24 24"
-                stroke-width="2"
-                stroke="currentColor"
-                fill="none"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              >
-                <path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M15 4.5l-4 4l-4 1.5l-1.5 1.5l7 7l1.5 -1.5l1.5 -4l4 -4" /><path d="M9 15l-4.5 4.5" /><path d="M14.5 4l5.5 5.5" />
-              </svg>
-
-              <p class="text-lg">
-                <%= gettext("Pinned messages will appear here.") %>
-              </p>
+              </div>
+              <!-- The div below encompasses the 2 post lists -->
             </div>
           <% end %>
-
-          <div
-            id="x-pinned"
-            class={"overflow-y-auto #{if Enum.any?(@pinned_posts), do: 'h-full', else: 'h-1/2'}"}
-          >
-            <%= if Enum.any?(@pinned_posts) do %>
+          <%= if @list_tab == :pinned_posts do %>
+            <%= if @pinned_post_count == 0 do %>
               <div
-                id="pinned-post-list"
-                class="overflow-y-auto pb-5 pt-8 px-5"
-                phx-update="append"
-                data-posts-nb={Enum.count(@pinned_posts)}
-                phx-hook="ScrollIntoDiv"
-                data-target="#pinned-post-list"
+                class="text-center flex flex-col space-y-5 items-center justify-center text-gray-400"
+                style="height: 100%;"
               >
-                <%= for post <- @pinned_posts do %>
-                  <div
-                    class={if post.__meta__.state == :deleted || !post.pinned, do: "hidden"}
-                    id={"#{post.id}-post"}
-                  >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="h-36 w-36"
+                  viewBox="0 0 24 24"
+                  stroke-width="2"
+                  stroke="currentColor"
+                  fill="none"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M15 4.5l-4 4l-4 1.5l-1.5 1.5l7 7l1.5 -1.5l1.5 -4l4 -4" /><path d="M9 15l-4.5 4.5" /><path d="M14.5 4l5.5 5.5" />
+                </svg>
+
+                <p class="text-lg">
+                  <%= gettext("Pinned messages will appear here.") %>
+                </p>
+              </div>
+            <% end %>
+
+            <div id="x-pinned" class="overflow-y-auto max-h-full">
+              <%= if @pinned_post_count > 0 do %>
+                <div
+                  id="pinned-post-list"
+                  class="overflow-y-auto pb-5 pt-8 px-5"
+                  phx-update="stream"
+                  phx-hook="ScrollIntoDiv"
+                >
+                  <div :for={{id, post} <- @streams.pinned_posts} id={id}>
                     <div class="px-4 pb-2 pt-3 rounded-b-lg rounded-tr-lg bg-white relative shadow-md text-black break-all mt-4">
                       <div class="float-right mr-1">
                         <%= if post.attendee_identifier do %>
@@ -1076,53 +1102,46 @@
                       <% end %>
                     </div>
                   </div>
-                <% end %>
-              </div>
-            <% end %>
-          </div>
-        <% end %>
-
-        <%= if @list_tab==:forms do %>
-          <%= if Enum.count(@form_submits)==0 do %>
-            <div class="text-center h-full flex flex-col space-y-5 items-center justify-center text-gray-400">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                class="h-36 w-36"
-                viewBox="0 0 24 24"
-                stroke-width="1.5"
-                stroke="currentColor"
-                fill="none"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              >
-                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                <path d="M12 3a3 3 0 0 0 -3 3v12a3 3 0 0 0 3 3"></path>
-                <path d="M6 3a3 3 0 0 1 3 3v12a3 3 0 0 1 -3 3"></path>
-                <path d="M13 7h7a1 1 0 0 1 1 1v8a1 1 0 0 1 -1 1h-7"></path>
-                <path d="M5 7h-1a1 1 0 0 0 -1 1v8a1 1 0 0 0 1 1h1"></path>
-                <path d="M17 12h.01"></path>
-                <path d="M13 12h.01"></path>
-              </svg>
-
-              <p class="text-lg">
-                <%= gettext("Form submissions from attendees will appear here.") %>
-              </p>
+                </div>
+              <% end %>
             </div>
           <% end %>
-          <div
-            id="form-list"
-            class={"overflow-y-auto #{if Enum.count(@form_submits)> 0, do: 'max-h-full'}
-                          pb-5 pt-8 px-5"}
-            phx-update="append"
-            data-forms-nb={Enum.count(@form_submits)}
-            phx-hook="ScrollIntoDiv"
-            data-target="#form-list"
-          >
-            <%= for submission <- @form_submits do %>
-              <div
-                class={if submission.__meta__.state == :deleted, do: "hidden"}
-                id={"#{submission.id}-form"}
-              >
+
+          <%= if @list_tab == :forms do %>
+            <%= if @form_submit_count == 0 do %>
+              <div class="text-center h-full flex flex-col space-y-5 items-center justify-center text-gray-400">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="h-36 w-36"
+                  viewBox="0 0 24 24"
+                  stroke-width="1.5"
+                  stroke="currentColor"
+                  fill="none"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                  <path d="M12 3a3 3 0 0 0 -3 3v12a3 3 0 0 0 3 3"></path>
+                  <path d="M6 3a3 3 0 0 1 3 3v12a3 3 0 0 1 -3 3"></path>
+                  <path d="M13 7h7a1 1 0 0 1 1 1v8a1 1 0 0 1 -1 1h-7"></path>
+                  <path d="M5 7h-1a1 1 0 0 0 -1 1v8a1 1 0 0 0 1 1h1"></path>
+                  <path d="M17 12h.01"></path>
+                  <path d="M13 12h.01"></path>
+                </svg>
+
+                <p class="text-lg">
+                  <%= gettext("Form submissions from attendees will appear here.") %>
+                </p>
+              </div>
+            <% end %>
+            <div
+              id="form-list"
+              class="overflow-y-auto max-h-full pb-5 pt-8 px-5"
+              phx-update="stream"
+              data-forms-nb={@form_submit_count}
+              phx-hook="ScrollIntoDiv"
+            >
+              <div :for={{id, submission} <- @streams.form_submits} id={id}>
                 <div class="px-4 pb-2 pt-3 rounded-b-lg rounded-tr-lg bg-white relative shadow-md text-black break-all mt-4">
                   <div class="float-right mr-1">
                     <span class="text-red-500">
@@ -1135,6 +1154,12 @@
                       ) %>
                     </span>
                   </div>
+
+                  <p>
+                    <span class="font-semibold text-lg">
+                        <%= gettext("Form") %>
+                      </span>: <%= submission.form.title %>
+                  </p>
 
                   <div class="flex space-x-3 items-center">
                     <%= if submission.attendee_identifier do %>
@@ -1162,16 +1187,24 @@
                   </div>
                 </div>
               </div>
-            <% end %>
-          </div>
-        <% end %>
-      </div>
+            </div>
+          <% end %>
+        </div>
 
-      <div class="w-full shadow-lg">
-        <div class="px-5 py-3 grid grid-cols-1 lg:grid-cols-2">
+        <div class="gutter-2 col-span-full cursor-row-resize z-20 row-[2] bg-gray-50 text-center text-gray-300 text-sm leading-3">
+          •••
+        </div>
+
+        <div
+          class="px-5 py-3 grid grid-cols-1 lg:grid-cols-2 z-20 bg-white"
+          data-tg-title={"#{gettext("Settings")}"}
+          data-tg-order="3"
+          data-tg-tour={"<p class='mb-3'>#{gettext("You can control each setting for the presentation (showing on the big screen) and on the attendee's room.")}</p><p class='opacity-50 text-xs'>#{gettext("Use the associated keyboard shortcuts for quick toggling of these settings.")}</p>"}
+          data-tg-group="manage"
+        >
           <div>
             <span class="font-semibold text-lg">
-              <%= gettext("On screen settings") %>
+              <%= gettext("Presentation settings") %>
             </span>
 
             <div class="flex space-x-2 items-center mt-3">
@@ -1180,7 +1213,12 @@
                 checked={@state.join_screen_visible}
                 shortcut={if @create == nil, do: "Q", else: nil}
               />
-              <span><%= gettext("Show instructions") %><code class="pl-1">(Q)</code></span>
+              <span>
+                <%= gettext("Show instructions") %>
+                <code class="px-2 py-1.5 text-xs font-semibold text-gray-800 bg-gray-100 border border-gray-200 rounded-lg">
+                  q
+                </code>
+              </span>
             </div>
 
             <div class="flex space-x-2 items-center mt-3">
@@ -1189,7 +1227,12 @@
                 checked={@state.chat_visible}
                 shortcut={if @create == nil, do: "W", else: nil}
               />
-              <span><%= gettext("Show messages") %><code class="pl-1">(W)</code></span>
+              <span>
+                <%= gettext("Show messages") %>
+                <code class="px-2 py-1.5 text-xs font-semibold text-gray-800 bg-gray-100 border border-gray-200 rounded-lg">
+                  w
+                </code>
+              </span>
             </div>
 
             <div class="flex space-x-2 items-center mt-3">
@@ -1199,7 +1242,10 @@
                 shortcut={if @create == nil, do: "E", else: nil}
               />
               <span>
-                <%= gettext("Show only pinned messages") %><code class="pl-1">(E)</code>
+                <%= gettext("Show only pinned messages") %>
+                <code class="px-2 py-1.5 text-xs font-semibold text-gray-800 bg-gray-100 border border-gray-200 rounded-lg">
+                  e
+                </code>
               </span>
             </div>
 
@@ -1210,7 +1256,12 @@
                 checked={@state.poll_visible}
                 shortcut={if @create == nil, do: "R", else: nil}
               />
-              <span><%= gettext("Show poll results") %><code class="pl-1">(R)</code></span>
+              <span>
+                <%= gettext("Show poll results") %>
+                <code class="px-2 py-1.5 text-xs font-semibold text-gray-800 bg-gray-100 border border-gray-200 rounded-lg">
+                  r
+                </code>
+              </span>
             </div>
           </div>
 
@@ -1225,7 +1276,12 @@
                 checked={@state.chat_enabled}
                 shortcut={if @create == nil, do: "A", else: nil}
               />
-              <span><%= gettext("Enable messages") %><code class="pl-1">(A)</code></span>
+              <span>
+                <%= gettext("Enable messages") %>
+                <code class="px-2 py-1.5 text-xs font-semibold text-gray-800 bg-gray-100 border border-gray-200 rounded-lg">
+                  a
+                </code>
+              </span>
             </div>
 
             <div class="flex space-x-2 items-center mt-3">
@@ -1235,7 +1291,38 @@
                 shortcut={if @create == nil, do: "S", else: nil}
               />
               <span>
-                <%= gettext("Enable anonymous messages") %><code class="pl-1">(S)</code>
+                <%= gettext("Enable anonymous messages") %>
+                <code class="px-2 py-1.5 text-xs font-semibold text-gray-800 bg-gray-100 border border-gray-200 rounded-lg">
+                  s
+                </code>
+              </span>
+            </div>
+
+            <div class="flex space-x-2 items-center mt-3">
+              <ClaperWeb.Component.Input.check
+                key={:message_reaction_enabled}
+                checked={@state.message_reaction_enabled}
+                shortcut={if @create == nil, do: "D", else: nil}
+              />
+              <span>
+                <%= gettext("Enable message reactions") %>
+                <code class="px-2 py-1.5 text-xs font-semibold text-gray-800 bg-gray-100 border border-gray-200 rounded-lg">
+                  d
+                </code>
+              </span>
+            </div>
+
+            <div class="flex space-x-2 items-center mt-3">
+              <ClaperWeb.Component.Input.check
+                key={:show_poll_results_enabled}
+                checked={@state.show_poll_results_enabled}
+                shortcut={if @create == nil, do: "F", else: nil}
+              />
+              <span>
+                <%= gettext("Show poll results") %>
+                <code class="px-2 py-1.5 text-xs font-semibold text-gray-800 bg-gray-100 border border-gray-200 rounded-lg">
+                  f
+                </code>
               </span>
             </div>
           </div>

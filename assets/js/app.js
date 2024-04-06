@@ -1,20 +1,3 @@
-// If you want to use Phoenix channels, run `mix help phx.gen.channel`
-// to get started and then uncomment the line below.
-// import "./user_socket.js"
-
-// You can include dependencies in two ways.
-//
-// The simplest option is to put them in assets/vendor and
-// import them using relative paths:
-//
-//     import "./vendor/some-package.js"
-//
-// Alternatively, you can `npm install some-package` and import
-// them using a path starting with the package name:
-//
-//     import "some-package"
-//
-
 // Include phoenix_html to handle method=PUT/DELETE in forms and buttons.
 import "phoenix_html"
 // Establish Phoenix Socket and LiveView configuration.
@@ -22,13 +5,18 @@ import {Socket, Presence} from "phoenix"
 import {LiveSocket} from "phoenix_live_view"
 import topbar from "../vendor/topbar"
 import Alpine from 'alpinejs'
-import flatpickr from "flatpickr"
 import moment from "moment-timezone"
+import AirDatepicker from 'air-datepicker'
+import airdatepickerLocaleEn from 'air-datepicker/locale/en'
+import airdatepickerLocaleFr from 'air-datepicker/locale/fr'
+import airdatepickerLocaleDe from 'air-datepicker/locale/de'
 import 'moment/locale/de'
 import 'moment/locale/fr'
 import QRCodeStyling from "qr-code-styling"
 import { Presenter } from "./presenter"
 import { Manager } from "./manager"
+import Split from "split-grid"
+import { TourGuideClient } from "@sjmc11/tourguidejs/src/Tour"
 window.moment = moment
 
 window.moment.locale("en")
@@ -36,32 +24,125 @@ window.moment.locale(navigator.language.split('-')[0])
 window.Alpine = Alpine
 Alpine.start()
 
+let airdatepickerLocale = {
+  en: airdatepickerLocaleEn,
+  fr: airdatepickerLocaleFr,
+  de: airdatepickerLocaleDe
+}
 let csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute("content")
 let Hooks = {}
+
+Hooks.EmbeddedBanner = {
+  mounted() {
+    if (window !== window.parent) {
+      this.el.classList.remove("hidden")
+    }
+  },
+  updated() {
+    if (window !== window.parent) {
+      this.el.classList.remove("hidden")
+    }
+  }
+}
+
+
+Hooks.TourGuide = {
+  mounted() {
+    this.tour = new TourGuideClient({
+      nextLabel: this.el.dataset.nextLabel,
+      prevLabel: this.el.dataset.prevLabel,
+      finishLabel: this.el.dataset.finishLabel,
+      completeOnFinish: true,
+      rememberStep: true,
+    })
+
+    if (!this.tour.isFinished(this.el.dataset.group)) {
+      this.tour.start(this.el.dataset.group)
+    }
+
+    this.tour.onBeforeExit(() => {
+      this.tour.finishTour(true, this.el.dataset.group)
+    })
+  }
+}
+
+Hooks.Split = {
+  mounted() {
+    const type = this.el.dataset.type
+    const gutter = this.el.dataset.gutter
+    const columnSlitValue = localStorage.getItem('column-split') || '1fr 10px 1fr'
+    const rowSlitValue = localStorage.getItem('row-split') || '1fr 10px 1fr'
+
+    if (type === "column") {
+      this.columnSplit = Split({
+        columnGutters: [{
+          track: 1,
+          element: this.el.querySelector(gutter)
+        }],
+        onDragEnd: () => {
+          const currentPosition = this.el.style['grid-template-columns']
+          localStorage.setItem('column-split', currentPosition)
+        },
+      })
+      this.el.style['grid-template-columns'] = columnSlitValue
+    } else {
+      this.rowSplit = Split({
+        rowGutters: [{
+          track: 1,
+          element: this.el.querySelector(gutter)
+        }],
+        onDragEnd: () => {
+          const value = this.el.style['grid-template-rows']
+          localStorage.setItem('row-split', value)
+        },
+      })
+      this.el.style['grid-template-rows'] = rowSlitValue
+    }
+  },
+  updated() {
+    if (this.columnSplit) {
+      const value = localStorage.getItem('column-split') || '1fr 10px 1fr'
+      this.el.style['grid-template-columns'] = value
+    } 
+    if (this.rowSplit) {
+      const value = localStorage.getItem('row-split') || '1fr 10px 1fr'
+      this.el.style['grid-template-rows'] = value
+    }
+  },
+  destroyed() {
+    if (this.columnSplit) {
+      this.columnSplit.destroy()
+    }
+    if (this.rowSplit) {
+      this.rowSplit.destroy()
+    }
+  }
+}
 
 Hooks.Scroll = {
   mounted() {
     if (this.el.dataset.postsNb > 4) window.scrollTo({top: document.querySelector(this.el.dataset.target).scrollHeight, behavior: 'smooth'});
     this.handleEvent("scroll", () => {
-      let t = document.querySelector(this.el.dataset.target)
-      if (this.el.childElementCount > 4 && (window.scrollY + window.innerHeight >= t.offsetHeight - 100)) {
-       window.scrollTo({top: t.scrollHeight, behavior: 'smooth'});
-      }
     })
+  },
+  updated() {
+    let t = document.querySelector(this.el.dataset.target)
+    if (this.el.childElementCount > 4 && (window.scrollY + window.innerHeight >= t.offsetHeight - 300)) {
+      window.scrollTo({top: t.scrollHeight, behavior: 'smooth'});
+    }
   }
 }
 
 Hooks.ScrollIntoDiv = {
   mounted() {
-    let t = document.querySelector(this.el.dataset.target)
-    if (this.el.dataset.postsNb > 4) t.scrollTo({top: t.scrollHeight, behavior: 'smooth'});
-
-    this.handleEvent("scroll", () => {
-      let t = document.querySelector(this.el.dataset.target);
-      if (this.el.childElementCount > 4 && (t.scrollHeight - t.scrollTop < t.clientHeight + 100)) {
-        t.scrollTo({top: t.scrollHeight, behavior: 'smooth'});
-      }
-    })
+    this.scrollElement(true);
+    this.handleEvent("scroll", this.scrollElement.bind(this));
+  },
+  scrollElement(firstScroll) {
+    let t = this.el.parentElement;
+    if (firstScroll === true || (t.scrollHeight - t.scrollTop - t.clientHeight) <= 100) {
+      t.scrollTo({top: t.scrollHeight, behavior: 'smooth'})
+    }
   }
 }
 
@@ -74,7 +155,7 @@ Hooks.NicknamePicker = {
 
     this.el.addEventListener("click", (e) => this.clicked(e))
   },
-  destroy() {
+  destroyed() {
     this.el.removeEventListener("click", (e) => this.clicked(e))
   },
   clicked(e) {
@@ -91,7 +172,7 @@ Hooks.EmptyNickname = {
   mounted() {
     this.el.addEventListener("click", (e) => this.clicked(e))
   },
-  destroy() {
+  destroyed() {
     this.el.removeEventListener("click", (e) => this.clicked(e))
   },
   clicked(e) {
@@ -170,33 +251,21 @@ Hooks.CalendarLocalDate = {
 }
 Hooks.Pickr = {
   mounted() {
-    const getDefaultDate = (dateStart, dateEnd, mode) => {
-      if (mode == "range") {
-        return moment.utc(dateStart).format('Y-MM-DD HH:mm') + " - " +  moment.utc(dateEnd).format('Y-MM-DD HH:mm')
-      } else {
-        return moment.utc(dateStart).format('Y-MM-DD HH:mm')
-      }
-    };
-    this.pickr = flatpickr(this.el, {
-      wrap: true,
-      inline: false,
-      enableTime: true,
-      enable: JSON.parse(this.el.dataset.enable),
-      time_24hr: true,
-      formatDate: (date, format, locale) => {
-        return moment(date).utc().format('Y-MM-DD HH:mm');
+    const localTime = this.el.querySelector("input[type=text]")
+    const utcTime = this.el.querySelector("input[type=hidden]")
+    localTime.value = moment.utc(utcTime.value).local().format("DD-MM-YYYY HH:mm")
+    this.pickr = new AirDatepicker(localTime, {
+      dateFormat: "dd-MM-yyyy",
+      timepicker: true,
+      minutesStep: 5,
+      minDate: moment(),
+      timeFormat: "HH:mm",
+      selectedDates: [moment(localTime.value, "DD-MM-YYYY HH:mm").toDate()],
+      onSelect: ({date}) => {
+        const utc = moment(date).utc().format("YYYY-MM-DDTHH:mm:ss")
+        utcTime.value = utc
       },
-      parseDate: (datestr, format) => {
-        return moment.utc(datestr).local().toDate();
-      },
-      locale: {
-        firstDayOfWeek: 1,
-        rangeSeparator: ' - '
-      },
-      mode: this.el.dataset.mode == "range" ? "range" : "single",
-      minuteIncrement: 1,
-      dateFormat: "Y-m-d H:i",
-      defaultDate: getDefaultDate(this.el.dataset.defaultDateStart, this.el.dataset.defaultDateEnd, this.el.dataset.mode)
+      locale: airdatepickerLocale[navigator.language.split('-')[0]]
     })
   },
   updated() {
@@ -298,11 +367,6 @@ Hooks.WelcomeEarly = {
     })
   }
 }
-Hooks.DefaultValue = {
-  mounted() {
-    this.el.value = moment(this.el.dataset.defaultValue ? this.el.dataset.defaultValue : undefined).utc().format();
-  }
-}
 Hooks.ClickFeedback = {
   clicked(e) {
     this.el.className = "animate__animated animate__rubberBand animate__faster";
@@ -313,7 +377,7 @@ Hooks.ClickFeedback = {
   mounted() {
     this.el.addEventListener("click", (e) => this.clicked(e))
   },
-  destroy() {
+  destroyed() {
     this.el.removeEventListener("click", (e) => this.clicked(e))
   }
 }
@@ -367,6 +431,15 @@ Hooks.QRCode = {
   updated() {
   },
   destroyed() {
+  }
+}
+
+Hooks.Dropdown = {
+  mounted() {
+    this.el.addEventListener("click", (e) => {
+      e.preventDefault()
+      this.el.classList.toggle("hidden")
+    })
   }
 }
 

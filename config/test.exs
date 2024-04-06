@@ -11,7 +11,7 @@ config :claper, Claper.Repo,
   database: "claper_test#{System.get_env("MIX_TEST_PARTITION")}",
   hostname: "localhost",
   pool: Ecto.Adapters.SQL.Sandbox,
-  pool_size: 10
+  pool_size: 1
 
 # We don't run a server during test. If one is required,
 # you can enable the server option below.
@@ -24,7 +24,7 @@ config :claper, ClaperWeb.Endpoint,
 config :claper, Claper.Mailer, adapter: Swoosh.Adapters.Test
 
 # Print only warnings and errors during test
-config :logger, level: :warn
+config :logger, level: :warning
 
 # Initialize plugs at runtime for faster test compilation
 config :phoenix, :plug_init_mode, :runtime

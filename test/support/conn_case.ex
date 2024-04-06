@@ -19,10 +19,13 @@ defmodule ClaperWeb.ConnCase do
 
   using do
     quote do
+      use ClaperWeb, :verified_routes
+
       # Import conveniences for testing with connections
       import Plug.Conn
       import Phoenix.ConnTest
       import ClaperWeb.ConnCase
+      import Ecto.Query
 
       alias ClaperWeb.Router.Helpers, as: Routes
 

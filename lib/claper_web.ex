@@ -17,13 +17,16 @@ defmodule ClaperWeb do
   and import those modules here.
   """
 
+  def static_paths, do: ~w(assets fonts .well-known images favicon.ico robots.txt)
+
   def controller do
     quote do
       use Phoenix.Controller, namespace: ClaperWeb
 
       import Plug.Conn
       import ClaperWeb.Gettext
-      alias ClaperWeb.Router.Helpers, as: Routes
+
+      unquote(verified_routes())
     end
   end
 
@@ -71,7 +74,9 @@ defmodule ClaperWeb do
 
   def view_component do
     quote do
-      use Phoenix.HTML
+      import Phoenix.HTML
+      import Phoenix.HTML.Form
+      use PhoenixHTMLHelpers
       use Phoenix.Component
       import ClaperWeb.ErrorHelpers
       alias Phoenix.LiveView.JS
@@ -89,7 +94,9 @@ defmodule ClaperWeb do
   defp view_helpers do
     quote do
       # Use all HTML functionality (forms, tags, etc)
-      use Phoenix.HTML
+      import Phoenix.HTML
+      import Phoenix.HTML.Form
+      use PhoenixHTMLHelpers
 
       # Import LiveView and .heex helpers (live_render, live_patch, <.form>, etc)
       import Phoenix.LiveView.Helpers
@@ -101,7 +108,17 @@ defmodule ClaperWeb do
 
       import ClaperWeb.ErrorHelpers
       import ClaperWeb.Gettext
-      alias ClaperWeb.Router.Helpers, as: Routes
+
+      unquote(verified_routes())
+    end
+  end
+
+  def verified_routes do
+    quote do
+      use Phoenix.VerifiedRoutes,
+        endpoint: ClaperWeb.Endpoint,
+        router: ClaperWeb.Router,
+        statics: ClaperWeb.static_paths()
     end
   end
 

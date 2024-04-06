@@ -59,7 +59,7 @@ defmodule ClaperWeb.EventLive.PollComponent do
                 <%= if (length @current_poll_vote) > 0 do %>
                   <button class="bg-gray-500 px-3 py-2 rounded-full flex justify-between items-center relative text-white">
                     <div
-                      style={"width: #{opt.percentage}%;"}
+                      style={"width: #{if @show_results, do: opt.percentage, else: 0}%;"}
                       class={"bg-gradient-to-r from-primary-500 to-secondary-500 h-full absolute left-0 transition-all rounded-l-full #{if opt.percentage == "100", do: 'rounded-r-full'}"}
                     >
                     </div>
@@ -80,7 +80,9 @@ defmodule ClaperWeb.EventLive.PollComponent do
                       <% end %>
                       <span class="flex-1"><%= opt.content %></span>
                     </div>
-                    <span class="text-sm z-10"><%= opt.percentage %>% (<%= opt.vote_count %>)</span>
+                    <span :if={@show_results} class="text-sm z-10">
+                      <%= opt.percentage %>% (<%= opt.vote_count %>)
+                    </span>
                   </button>
                 <% else %>
                   <button
@@ -90,7 +92,7 @@ defmodule ClaperWeb.EventLive.PollComponent do
                     class="bg-gray-500 px-3 py-2 rounded-full flex justify-between items-center relative text-white"
                   >
                     <div
-                      style={"width: #{opt.percentage}%;"}
+                      style={"width: #{if @show_results, do: opt.percentage, else: 0}%;"}
                       class={"bg-gradient-to-r from-primary-500 to-secondary-500 h-full absolute left-0 transition-all rounded-l-full #{if opt.percentage == "100", do: 'rounded-r-full'}"}
                     >
                     </div>
@@ -111,7 +113,9 @@ defmodule ClaperWeb.EventLive.PollComponent do
                       <% end %>
                       <span class="flex-1"><%= opt.content %></span>
                     </div>
-                    <span class="text-sm z-10"><%= opt.percentage %>% (<%= opt.vote_count %>)</span>
+                    <span :if={@show_results} class="text-sm z-10">
+                      <%= opt.percentage %>% (<%= opt.vote_count %>)
+                    </span>
                   </button>
                 <% end %>
               <% end %>

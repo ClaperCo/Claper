@@ -1,7 +1,7 @@
 <div class="sticky top-0 z-20 h-16 bg-black">
-  <div class="max-w-7xl sm:mx-auto">
+  <div class="mx-3 md:max-w-3xl lg:max-w-5xl md:mx-auto">
     <!-- Sidebar toggle, controls the 'sidebarOpen' sidebar state. -->
-    <a href={Routes.event_index_path(@conn, :index)} class="mt-3 float-left">
+    <a href={~p"/events"} class="mt-3 float-left">
       <img src="/images/logo.svg" class="h-8" />
     </a>
 
@@ -11,21 +11,8 @@
         <div class="ml-3 relative">
           <div>
             <button
-              phx-click-away={
-                JS.hide(
-                  to: "#profile-dropdown",
-                  transition: "animate__animated animate__fadeOut",
-                  time: 300
-                )
-              }
-              phx-click={
-                JS.toggle(
-                  to: "#profile-dropdown",
-                  out: "animate__animated animate__fadeOut",
-                  in: "animate__animated animate__fadeIn",
-                  time: 800
-                )
-              }
+              phx-click-away={JS.hide(to: "#profile-dropdown")}
+              phx-click={JS.toggle(to: "#profile-dropdown")}
               type="button"
               class="max-w-xs bg-gray-800 text-white px-3 py-2 flex items-center text-sm rounded-md"
               id="user-menu-button"

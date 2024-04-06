@@ -13,12 +13,7 @@
           </h2>
         </div>
 
-        <.form
-          :let={f}
-          for={@changeset}
-          action={Routes.user_reset_password_path(@conn, :create)}
-          class="mt-8 space-y-6"
-        >
+        <.form :let={f} for={@changeset} action={~p"/users/reset_password"} class="mt-8 space-y-6">
           <%= if @changeset.action do %>
             <ClaperWeb.Component.Alert.error
               message={gettext("Oops, check that all fields are filled in correctly.")}

@@ -182,7 +182,7 @@ defmodule Claper.Accounts do
 
   ## Examples
 
-      iex> deliver_magic_link(user, &Routes.user_confirmation_url(conn, :confirm_magic, &1))
+      iex> deliver_magic_link(user, &url(~p"/users/magic/&1"))
       {:ok, %{to: ..., body: ...}}
 
   """
@@ -422,5 +422,9 @@ defmodule Claper.Accounts do
       :tokens,
       UserToken.user_magic_and_contexts_query(token.sent_to, ["magic"])
     )
+  end
+
+  def delete(user) do
+    Repo.delete(user)
   end
 end

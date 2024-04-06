@@ -20,7 +20,7 @@ defmodule Claper.Events do
 
   """
   def list_events(user_id, preload \\ []) do
-    from(e in Event, where: e.user_id == ^user_id, order_by: [desc: e.expired_at])
+    from(e in Event, where: e.user_id == ^user_id, order_by: [desc: e.inserted_at])
     |> Repo.all()
     |> Repo.preload(preload)
   end
@@ -140,7 +140,7 @@ defmodule Claper.Events do
   def get_event_with_code!(code, preload \\ []) do
     now = NaiveDateTime.utc_now()
 
-    from(e in Event, where: e.code == ^code and e.expired_at > ^now)
+    from(e in Event, where: e.code == ^code and (is_nil(e.expired_at) or e.expired_at > ^now))
     |> Repo.one!()
     |> Repo.preload(preload)
   end
@@ -148,7 +148,7 @@ defmodule Claper.Events do
   def get_event_with_code(code, preload \\ []) do
     now = DateTime.utc_now()
 
-    from(e in Event, where: e.code == ^code and e.expired_at > ^now)
+    from(e in Event, where: e.code == ^code and (is_nil(e.expired_at) or e.expired_at > ^now))
     |> Repo.one()
     |> Repo.preload(preload)
   end
@@ -234,7 +234,7 @@ defmodule Claper.Events do
   end
 
   @doc """
-  Updates a event.
+  Updates an event.
 
   ## Examples
 
@@ -252,6 +252,28 @@ defmodule Claper.Events do
     |> case do
       {:ok, event} ->
         Repo.update(event, returning: [:uuid])
+
+      {:error, changeset} ->
+        {:error, %{changeset | action: :update}}
+    end
+  end
+
+  @doc """
+  Terminates an event.
+
+  ## Examples
+
+      iex> terminate_event(event)
+      {:ok, %Event{}}
+
+  """
+  def terminate_event(%Event{} = event) do
+    event
+    |> Event.update_changeset(%{expired_at: NaiveDateTime.utc_now()})
+    |> Repo.update()
+    |> case do
+      {:ok, event} ->
+        broadcast({:ok, event, event.uuid}, :event_terminated)
 
       {:error, changeset} ->
         {:error, %{changeset | action: :update}}
@@ -420,5 +442,17 @@ defmodule Claper.Events do
   """
   def change_activity_leader(%ActivityLeader{} = activity_leader, attrs \\ %{}) do
     ActivityLeader.changeset(activity_leader, attrs)
+  end
+
+  defp broadcast({:error, _reason} = error, _event), do: error
+
+  defp broadcast({:ok, e, event_uuid}, event) do
+    Phoenix.PubSub.broadcast(
+      Claper.PubSub,
+      "event:#{event_uuid}",
+      {event, event_uuid}
+    )
+
+    {:ok, e}
   end
 end

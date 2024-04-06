@@ -30,15 +30,17 @@ port = get_int_from_path_or_env(config_dir, "PORT", "4000")
 
 secret_key_base = get_var_from_path_or_env(config_dir, "SECRET_KEY_BASE", nil)
 
-case secret_key_base do
-  nil ->
-    raise "SECRET_KEY_BASE configuration option is required. See https://docs.claper.co/configuration.html#production-docker"
+if Mix.env() == :prod do
+  case secret_key_base do
+    nil ->
+      raise "SECRET_KEY_BASE configuration option is required. See https://docs.claper.co/configuration.html#production-docker"
 
-  key when byte_size(key) < 32 ->
-    raise "SECRET_KEY_BASE must be at least 32 bytes long. See https://docs.claper.co/configuration.html#production-docker"
+    key when byte_size(key) < 32 ->
+      raise "SECRET_KEY_BASE must be at least 32 bytes long. See https://docs.claper.co/configuration.html#production-docker"
 
-  _ ->
-    nil
+    _ ->
+      nil
+  end
 end
 
 endpoint_host = get_var_from_path_or_env(config_dir, "ENDPOINT_HOST", "localhost")

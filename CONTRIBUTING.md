@@ -11,4 +11,9 @@ Don't forget to give the project a star! Thanks again!
 
 ## Translations
 
-You can contribute to the translations by editing or addind PO files in `/priv/gettext/`
+You can contribute to the translations by editing the files in `/priv/gettext/`
+Each language has its own directory with the `.po` files. The country code is used as the directory name and following the [ISO 639-1](https://en.wikipedia.org/wiki/ISO_639-1) nomenclature, for example, `en` for English, `fr` for French, `de` for German. You can find the list of country codes [here](https://en.wikipedia.org/wiki/List_of_ISO_639_language_codes).
+
+### Add new language
+
+To add a new language, you can copy the `en` directory and rename it with the country code of the new language. Then you can edit the `.po` files with the translations.

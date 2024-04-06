@@ -20,7 +20,7 @@
 
         <a
           class="flex items-center px-3 py-2 bg-gray-200 mb-15 rounded-lg mt-5"
-          href={Routes.event_join_path(@socket, :index, %{disconnected_from: @event.uuid})}
+          href={~p"/?disconnected_from=#{@event.uuid}"}
         >
           <img src="/images/icons/exit-outline.svg" class="h-5 mr-3" />
           <span><%= gettext("Leave") %></span>
@@ -33,6 +33,12 @@
       class="w-full bg-black fixed z-10 lg:w-1/3"
       style="box-shadow: 0px 15px 14px 1px rgba(0,0,0,0.75); -webkit-box-shadow: 0px 15px 14px 1px rgba(0,0,0,0.75); -moz-box-shadow: 0px 15px 14px 1px rgba(0,0,0,0.75);"
     >
+      <div id="banner" class="hidden w-full bg-gray-800 text-center" phx-hook="EmbeddedBanner">
+        <a href="https://claper.co" target="_blank" class="text-xs text-white py-3 w-full">
+          <%= gettext("Create your next presentation with") %>
+          <span class="underline">Claper</span>
+        </a>
+      </div>
       <div class="flex justify-between items-center px-5 py-3">
         <button
           phx-click={toggle_side_menu()}
@@ -64,6 +70,7 @@
             event={@event}
             selected_poll_opt={@selected_poll_opt}
             current_poll_vote={@current_poll_vote}
+            show_results={@state.show_poll_results_enabled}
           />
         </div>
       </div>
@@ -109,29 +116,29 @@
     <div
       class="flex flex-col space-y-4 px-5 pt-20 pb-32 lg:w-1/3 bg-black min-h-screen"
       id="post-list"
-      phx-update="append"
-      data-posts-nb={Enum.count(@posts)}
+      phx-update="stream"
+      data-posts-nb={Enum.count(@streams.posts)}
       phx-hook="Scroll"
       data-target="body"
     >
-      <%= for post <- @posts do %>
-        <.live_component
-          module={ClaperWeb.EventLive.PostComponent}
-          id={"#{post.id}-post"}
-          post={post}
-          leaders={@leaders}
-          is_leader={@is_leader}
-          current_user={@current_user}
-          attendee_identifier={@attendee_identifier}
-          event={@event}
-          liked_posts={@liked_posts}
-          loved_posts={@loved_posts}
-          loled_posts={@loled_posts}
-        />
-      <% end %>
+      <.live_component
+        :for={{id, post} <- @streams.posts}
+        module={ClaperWeb.EventLive.PostComponent}
+        id={id}
+        post={post}
+        leaders={@leaders}
+        is_leader={@is_leader}
+        current_user={@current_user}
+        attendee_identifier={@attendee_identifier}
+        event={@event}
+        reaction_enabled={@state.message_reaction_enabled}
+        liked_posts={@liked_posts}
+        loved_posts={@loved_posts}
+        loled_posts={@loled_posts}
+      />
     </div>
 
-    <%= if @empty_room && @state.chat_enabled do %>
+    <%= if @post_count == 0 && @state.chat_enabled do %>
       <div class="text-2xl text-white block fixed bottom-32 left-0 w-full lg:w-1/3 lg:left-1/2 lg:transform lg:-translate-x-1/2 text-center opacity-30">
         <span><%= gettext("Be the first to react !") %></span>
         <img src="/images/icons/arrow-white.svg" class="h-24 rotate-180 ml-12 mt-8" />

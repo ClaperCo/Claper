@@ -22,8 +22,7 @@ defmodule Claper.EventsFixtures do
         uuid: Ecto.UUID.generate(),
         user_id: assoc.user.id,
         started_at: NaiveDateTime.utc_now(),
-        # add 2 hours
-        expired_at: NaiveDateTime.add(NaiveDateTime.utc_now(), 7200, :second)
+        expired_at: nil
       })
       |> Claper.Events.create_event()
 

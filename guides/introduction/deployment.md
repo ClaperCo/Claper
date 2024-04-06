@@ -3,14 +3,14 @@
 ## Prerequisites
 
 To run Claper on your production environment you need to have:
-* Postgres >= 9
-* Elixir >= 1.13.2
-* Erlang >= 24
-* NPM >= 6.14.17
-* NodeJS >= 14.19.2
-* Ghostscript >= 9.5.0 (for PDF support)
-* Libreoffice >= 6.4 (for PPT/PPTX support)
 
+- Postgres >= 9
+- Elixir >= 1.13.2
+- Erlang >= 24
+- NPM >= 6.14.17
+- NodeJS >= 14.19.2
+- Ghostscript >= 9.5.0 (for PDF support)
+- Libreoffice >= 6.4 (for PPT/PPTX support)
 
 ## Steps (without docker)
 
@@ -71,43 +71,83 @@ server {
 Here is a docker-compose example to run Claper behind Traefik.
 
 ```yaml
-version: "3.0"
 services:
   db:
-    image: postgres:9
+    image: postgres:15
+    ports:
+      - 5432:5432
+    volumes:
+      - "claper-db:/var/lib/postgresql/data"
+    healthcheck:
+      test:
+        - CMD
+        - pg_isready
+        - "-q"
+        - "-d"
+        - "claper"
+        - "-U"
+        - "claper"
+      retries: 3
+      timeout: 5s
     environment:
       POSTGRES_PASSWORD: claper
       POSTGRES_USER: claper
       POSTGRES_DB: claper
+    networks:
+      - claper-net
+
   app:
     build: .
-    environment:
-      DATABASE_URL: postgres://claper:claper@db:5432/claper
-      SECRET_KEY_BASE: 0LZiQBLw4WvqPlz4cz8RsHJlxNiSqM9B48y4ChyJ5v1oA0L/TPIqRjQNdPZN3iEG
-      MAIL_TRANSPORT: local
-      ENDPOINT_HOST: claper.local
-      ENDPOINT_PORT: 4000
+    healthcheck:
+      test: curl --fail http://localhost:4000 || exit 1
+      retries: 3
+      start_period: 20s
+      timeout: 5s
+    volumes:
+      - "claper-uploads:/app/uploads"
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.claper.rule=Host(`claper.local`)"
-      - "traefik.http.routers.claper.entrypoints=web"
+      - "traefik.http.routers.app.rule=Host(`app.claper.co`)" # change to your domain
+      - "traefik.http.routers.app.tls.certresolver=myresolver"
+      - "traefik.http.routers.app.entrypoints=web"
+      - "traefik.http.services.app.loadbalancer.server.port=4000"
+    env_file: .env
     depends_on:
       - db
       - traefik
+    networks:
+      - claper-net
 
   traefik:
     image: traefik
     command:
       #- "--log.level=DEBUG"
+      #- "--api.dashboard=true"
+      - "--accesslog.filepath=/var/log/traefik/access.log"
       - "--api.insecure=true"
       - "--providers.docker=true"
       - "--providers.docker.exposedbydefault=false"
-      - "--entrypoints.web.address=:80"
+      - "--entrypoints.web.address=:443"
+      - "--certificatesresolvers.myresolver.acme.tlschallenge=true"
+      - "--certificatesresolvers.myresolver.acme.email=yourmail@example.com"
+      - "--certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json"
     volumes:
+      - "../letsencrypt:/letsencrypt"
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
+      - "/var/log/traefik:/var/log/traefik/"
     ports:
-      - "80:80"
-      - "8080:8080"
+      - "443:443"
+    networks:
+      - claper-net
+
+  volumes:
+    claper-db:
+      driver: local
+    claper-uploads:
+      driver: local
+  networks:
+    claper-net:
+      driver: bridge
 ```
 
 ## Behind Kubernetes
