@@ -33,7 +33,6 @@ jobs:
       ImageOS: ubuntu20
       MIX_ENV: test
       DATABASE_URL: postgresql://claper:claper@localhost:5432/claper
-      SECRET_KEY_BASE: QMQE4ypfy0IC1LZI/fygZNvXHPjLslnr49EE7ftcL1wgAC0MwMLdKCVJyrvXPu8z
 
     steps:
     - uses: actions/checkout@v3
@@ -42,8 +41,8 @@ jobs:
     - name: Set up Elixir
       uses: erlef/setup-beam@988e02bfe678367a02564f65ca2e37726dc0268f
       with:
-        elixir-version: '1.13.2'
-        otp-version: '24.1'
+        elixir-version: '1.15.4'
+        otp-version: '26'
     - name: Restore dependencies cache
       uses: actions/cache@v3
       with:
