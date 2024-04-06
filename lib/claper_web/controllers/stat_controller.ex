@@ -16,10 +16,11 @@ defmodule ClaperWeb.StatController do
   end
 
   defp csv_content(headers, records) do
-    data = records
-    |> Enum.map(& &1 |> Map.values)
+    data =
+      records
+      |> Enum.map(&(&1 |> Map.values()))
 
-    [headers] ++ data
+    ([headers] ++ data)
     |> CSV.encode()
     |> Enum.to_list()
     |> to_string()

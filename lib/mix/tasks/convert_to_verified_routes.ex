@@ -27,6 +27,7 @@ defmodule Mix.Tasks.ConvertToVerifiedRoutes do
       {:ok, content, learnings} ->
         File.write!(filename, content)
         learnings
+
       _ ->
         learnings
     end
@@ -34,7 +35,7 @@ defmodule Mix.Tasks.ConvertToVerifiedRoutes do
 
   def replace_content(content, learnings) do
     case Regex.run(@regex, content) do
-      [route|_] -> ask_about_replacement(content, route, learnings)
+      [route | _] -> ask_about_replacement(content, route, learnings)
       _ -> {:ok, content, learnings}
     end
   end
@@ -43,9 +44,12 @@ defmodule Mix.Tasks.ConvertToVerifiedRoutes do
     route = String.trim(route)
 
     if verified_route = find_verified_route_from_string(route) do
-      replacement = Map.get(learnings, route) || ask_for_direct_match(route, verified_route) || ask_for_fallback(route, verified_route)
+      replacement =
+        Map.get(learnings, route) || ask_for_direct_match(route, verified_route) ||
+          ask_for_fallback(route, verified_route)
 
-      if replacement && (String.starts_with?(replacement, "~p\"/") || String.starts_with?(replacement, "url")) do
+      if replacement &&
+           (String.starts_with?(replacement, "~p\"/") || String.starts_with?(replacement, "url")) do
         replace_content(
           String.replace(content, route, replacement),
           Map.put(learnings, route, replacement)
@@ -57,25 +61,25 @@ defmodule Mix.Tasks.ConvertToVerifiedRoutes do
   end
 
   def ask_for_fallback(route, _verified_route) do
-    response = Mix.shell().prompt(
-      """
+    response =
+      Mix.shell().prompt("""
       What is the verified route for (type "skip" for skipping):
-        #{IO.ANSI.red}#{route}#{IO.ANSI.reset}
+        #{IO.ANSI.red()}#{route}#{IO.ANSI.reset()}
       Start with:
         ~p"/..
       """)
+
     response = String.trim("#{response}")
     response != "" && response
   end
 
   def ask_for_direct_match(route, verified_route) do
-    if Mix.shell().yes?(
-      """
-      Should we replace
-        #{IO.ANSI.red}#{route}#{IO.ANSI.reset}
-      with
-        #{IO.ANSI.green}#{verified_route}#{IO.ANSI.reset}
-      """) do
+    if Mix.shell().yes?("""
+       Should we replace
+         #{IO.ANSI.red()}#{route}#{IO.ANSI.reset()}
+       with
+         #{IO.ANSI.green()}#{verified_route}#{IO.ANSI.reset()}
+       """) do
       verified_route
     end
   end
@@ -86,7 +90,7 @@ defmodule Mix.Tasks.ConvertToVerifiedRoutes do
       |> String.replace("Routes.", "")
       |> String.split("(")
 
-    with [route_helper, arguments|_] <- parts do
+    with [route_helper, arguments | _] <- parts do
       arguments =
         arguments
         |> String.replace_trailing(")", "")
@@ -109,6 +113,7 @@ defmodule Mix.Tasks.ConvertToVerifiedRoutes do
           else
             ~s(~p"#{path}")
           end
+
         _ ->
           nil
       end
@@ -138,8 +143,9 @@ defmodule Mix.Tasks.ConvertToVerifiedRoutes do
         else
           path
         end
+
       query_params ->
-        query_params = "{#{inspect(query_params) |> String.replace("\"", "") }}"
+        query_params = "{#{inspect(query_params) |> String.replace("\"", "")}}"
         "#{path}?##{query_params}"
     end
   end
