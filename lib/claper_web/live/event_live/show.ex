@@ -21,7 +21,7 @@ defmodule ClaperWeb.EventLive.Show do
     if is_nil(event) do
       {:ok,
        socket
-       |> put_flash(:error, gettext("Presentation doesn't exist"))
+       |> put_flash(:error, gettext("Event doesn't exist"))
        |> redirect(to: "/")}
     else
       init(

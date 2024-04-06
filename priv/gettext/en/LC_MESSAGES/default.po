@@ -11,7 +11,7 @@ msgstr ""
 #: lib/claper_web/live/event_live/manage.html.heex:1200
 #: lib/claper_web/live/user_settings_live/show.ex:48
 #: lib/claper_web/live/user_settings_live/show.html.heex:5
-#: lib/claper_web/templates/layout/_user_menu.html.heex:3
+#: lib/claper_web/templates/layout/_user_menu.html.heex:6
 #, elixir-autogen, elixir-format
 msgid "Settings"
 msgstr ""
@@ -19,9 +19,9 @@ msgstr ""
 #: lib/claper_web/live/event_live/manage.ex:703
 #: lib/claper_web/live/form_live/form_component.html.heex:37
 #: lib/claper_web/live/user_settings_live/show.html.heex:34
-#: lib/claper_web/templates/user_registration/new.html.heex:34
-#: lib/claper_web/templates/user_reset_password/new.html.heex:33
-#: lib/claper_web/templates/user_session/new.html.heex:47
+#: lib/claper_web/templates/user_registration/new.html.heex:29
+#: lib/claper_web/templates/user_reset_password/new.html.heex:28
+#: lib/claper_web/templates/user_session/new.html.heex:41
 #, elixir-autogen, elixir-format
 msgid "Email"
 msgstr ""
@@ -31,9 +31,9 @@ msgstr ""
 msgid "Join the Claper experience"
 msgstr ""
 
-#: lib/claper_web/templates/user_registration/new.html.heex:24
+#: lib/claper_web/templates/user_registration/new.html.heex:19
 #: lib/claper_web/templates/user_reset_password/edit.html.heex:25
-#: lib/claper_web/templates/user_reset_password/new.html.heex:24
+#: lib/claper_web/templates/user_reset_password/new.html.heex:19
 #, elixir-autogen, elixir-format
 msgid "Oops, check that all fields are filled in correctly."
 msgstr ""
@@ -54,7 +54,7 @@ msgstr ""
 msgid "Email address"
 msgstr ""
 
-#: lib/claper_web/templates/layout/_user_menu.html.heex:7
+#: lib/claper_web/templates/layout/_user_menu.html.heex:10
 #, elixir-autogen, elixir-format
 msgid "Logout"
 msgstr ""
@@ -99,7 +99,7 @@ msgstr ""
 msgid "Be the first to react !"
 msgstr ""
 
-#: lib/claper_web/live/event_live/join.ex:42
+#: lib/claper_web/live/event_live/join.ex:41
 #: lib/claper_web/live/event_live/join.html.heex:94
 #: lib/claper_web/live/event_live/show.html.heex:264
 #, elixir-autogen, elixir-format
@@ -165,9 +165,9 @@ msgstr ""
 msgid "It's time to empower your presentations."
 msgstr ""
 
-#: lib/claper_web/templates/error/404.html.heex:47
-#: lib/claper_web/templates/error/500.html.heex:48
-#: lib/claper_web/templates/user_registration/confirm.html.heex:31
+#: lib/claper_web/templates/error/404.html.heex:36
+#: lib/claper_web/templates/error/500.html.heex:37
+#: lib/claper_web/templates/user_registration/confirm.html.heex:29
 #, elixir-autogen, elixir-format
 msgid "Return to home"
 msgstr ""
@@ -176,13 +176,6 @@ msgstr ""
 #: lib/claper_web/live/event_live/event_form_component.ex:230
 #, elixir-autogen, elixir-format
 msgid "Created successfully"
-msgstr ""
-
-#: lib/claper_web/live/event_live/manage.ex:24
-#: lib/claper_web/live/event_live/presenter.ex:21
-#: lib/claper_web/live/event_live/show.ex:24
-#, elixir-autogen, elixir-format
-msgid "Presentation doesn't exist"
 msgstr ""
 
 #: lib/claper_web/live/event_live/event_card_component.ex:190
@@ -456,12 +449,12 @@ msgstr ""
 msgid "Add facilitator"
 msgstr ""
 
-#: lib/claper_web/templates/error/404.html.heex:40
+#: lib/claper_web/templates/error/404.html.heex:31
 #, elixir-autogen, elixir-format
 msgid "Oops, page doesn't exist."
 msgstr ""
 
-#: lib/claper_web/templates/error/500.html.heex:40
+#: lib/claper_web/templates/error/500.html.heex:31
 #, elixir-autogen, elixir-format
 msgid "The site is under maintenance, we'll be back very soon!"
 msgstr ""
@@ -645,7 +638,7 @@ msgstr ""
 
 #: lib/claper_web/live/event_live/join.html.heex:38
 #: lib/claper_web/live/event_live/join.html.heex:61
-#: lib/claper_web/templates/user_session/new.html.heex:66
+#: lib/claper_web/templates/user_session/new.html.heex:60
 #, elixir-autogen, elixir-format
 msgid "Login"
 msgstr ""
@@ -660,26 +653,26 @@ msgstr ""
 msgid "Or use the code:"
 msgstr ""
 
-#: lib/claper_web/templates/user_registration/new.html.heex:51
-#: lib/claper_web/templates/user_session/new.html.heex:77
+#: lib/claper_web/templates/user_registration/new.html.heex:46
+#: lib/claper_web/templates/user_session/new.html.heex:71
 #, elixir-autogen, elixir-format
 msgid "Create account"
 msgstr ""
 
 #: lib/claper_web/live/user_settings_live/show.html.heex:118
-#: lib/claper_web/templates/user_registration/new.html.heex:42
+#: lib/claper_web/templates/user_registration/new.html.heex:37
 #: lib/claper_web/templates/user_reset_password/edit.html.heex:34
-#: lib/claper_web/templates/user_session/new.html.heex:57
+#: lib/claper_web/templates/user_session/new.html.heex:51
 #, elixir-autogen, elixir-format
 msgid "Password"
 msgstr ""
 
-#: lib/claper_web/templates/user_session/new.html.heex:45
+#: lib/claper_web/templates/user_session/new.html.heex:39
 #, elixir-autogen, elixir-format
 msgid "Your email address"
 msgstr ""
 
-#: lib/claper_web/templates/user_session/new.html.heex:55
+#: lib/claper_web/templates/user_session/new.html.heex:49
 #, elixir-autogen, elixir-format
 msgid "Your password"
 msgstr ""
@@ -865,7 +858,7 @@ msgid "Show messages"
 msgstr ""
 
 #: lib/claper_web/live/event_live/manage.html.heex:1260
-#: lib/claper_web/live/event_live/manage.html.heex:1322
+#: lib/claper_web/live/event_live/manage.html.heex:1323
 #, elixir-autogen, elixir-format
 msgid "Show poll results"
 msgstr ""
@@ -928,7 +921,7 @@ msgstr ""
 msgid "Confirm new password"
 msgstr ""
 
-#: lib/claper_web/templates/user_session/new.html.heex:72
+#: lib/claper_web/templates/user_session/new.html.heex:66
 #, elixir-autogen, elixir-format
 msgid "Forgot your password?"
 msgstr ""
@@ -959,7 +952,7 @@ msgstr ""
 msgid "Reset your password"
 msgstr ""
 
-#: lib/claper_web/templates/user_reset_password/new.html.heex:41
+#: lib/claper_web/templates/user_reset_password/new.html.heex:36
 #, elixir-autogen, elixir-format
 msgid "Send link to reset password"
 msgstr ""
@@ -1143,7 +1136,7 @@ msgstr ""
 msgid "View report"
 msgstr ""
 
-#: lib/claper_web/live/user_settings_live/show.ex:105
+#: lib/claper_web/live/user_settings_live/show.ex:106
 #, elixir-autogen, elixir-format
 msgid "Your account has been deleted."
 msgstr ""
@@ -1363,4 +1356,11 @@ msgstr ""
 #: lib/claper_web/live/event_live/show.html.heex:38
 #, elixir-autogen, elixir-format
 msgid "Create your next presentation with"
+msgstr ""
+
+#: lib/claper_web/live/event_live/manage.ex:24
+#: lib/claper_web/live/event_live/presenter.ex:21
+#: lib/claper_web/live/event_live/show.ex:24
+#, elixir-autogen, elixir-format
+msgid "Event doesn't exist"
 msgstr ""
