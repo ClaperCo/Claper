@@ -32,14 +32,14 @@ defmodule ClaperWeb.EventLiveTest do
 
       assert_patch(index_live, ~p"/events/#{presentation_file.event.uuid}/edit")
 
-      {:ok, _, html} =
+      {:ok, conn} =
         index_live
         |> form("#event-form", event: @update_attrs)
         |> render_submit()
         |> follow_redirect(conn, ~p"/events")
 
-      assert html =~ "Updated successfully"
-      assert html =~ "some updated name"
+      assert html_response(conn, 200) =~ "Updated successfully"
+      assert html_response(conn, 200) =~ "some updated name"
     end
 
     test "deletes event in listing", %{conn: conn, presentation_file: presentation_file} do
