@@ -642,7 +642,7 @@ defmodule ClaperWeb.EventLive.Manage do
     if socket.assigns.create != nil do
       {:noreply,
        socket
-       |> push_redirect(to: ~p"/e/#{socket.assigns.event.code}/manage")}
+       |> push_navigate(to: ~p"/e/#{socket.assigns.event.code}/manage")}
     else
       {:noreply, socket}
     end

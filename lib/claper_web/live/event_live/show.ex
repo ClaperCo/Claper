@@ -191,7 +191,7 @@ defmodule ClaperWeb.EventLive.Show do
     {:noreply,
      socket
      |> put_flash(:error, gettext("This event has been terminated"))
-     |> push_redirect(to: ~p"/")}
+     |> push_navigate(to: ~p"/")}
   end
 
   @impl true
@@ -204,7 +204,7 @@ defmodule ClaperWeb.EventLive.Show do
       {:noreply,
        socket
        |> put_flash(:error, gettext("You have been banned from this event"))
-       |> push_redirect(to: ~p"/")}
+       |> push_navigate(to: ~p"/")}
     else
       {:noreply, socket}
     end
@@ -219,7 +219,7 @@ defmodule ClaperWeb.EventLive.Show do
       {:noreply,
        socket
        |> put_flash(:error, gettext("You have been banned from this event"))
-       |> push_redirect(to: ~p"/")}
+       |> push_navigate(to: ~p"/")}
     else
       {:noreply, socket}
     end

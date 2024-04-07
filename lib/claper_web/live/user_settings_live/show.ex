@@ -68,7 +68,7 @@ defmodule ClaperWeb.UserSettingsLive.Show do
            :info,
            gettext("A link to confirm your email change has been sent to the new address.")
          )
-         |> push_redirect(to: ~p"/users/settings")}
+         |> push_navigate(to: ~p"/users/settings")}
 
       {:error, changeset} ->
         {:noreply, assign(socket, :email_changeset, changeset)}
@@ -90,7 +90,7 @@ defmodule ClaperWeb.UserSettingsLive.Show do
            :info,
            gettext("Your password has been updated.")
          )
-         |> push_redirect(to: ~p"/users/settings")}
+         |> push_navigate(to: ~p"/users/settings")}
 
       {:error, changeset} ->
         {:noreply, assign(socket, :password_changeset, changeset)}

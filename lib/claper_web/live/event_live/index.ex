@@ -71,7 +71,7 @@ defmodule ClaperWeb.EventLive.Index do
         {:noreply,
          socket
          |> put_flash(:info, gettext("Quick event created successfully"))
-         |> push_redirect(to: ~p"/events")}
+         |> push_navigate(to: ~p"/events")}
 
       {:error, %Ecto.Changeset{} = changeset} ->
         {:noreply, assign(socket, quick_event_changeset: changeset)}
