@@ -109,6 +109,19 @@ defmodule Claper.Accounts do
   end
 
   @doc """
+  Returns an `%Ecto.Changeset{}` for changing the user preferences.
+
+  ## Examples
+
+      iex> change_user_preferences(user)
+      %Ecto.Changeset{data: %User{}}
+
+  """
+  def change_user_preferences(user, attrs \\ %{}) do
+    User.preferences_changeset(user, attrs)
+  end
+
+  @doc """
   Emulates that the email will change without actually changing
   it in the database.
 
@@ -175,6 +188,20 @@ defmodule Claper.Accounts do
       {:ok, %{user: user}} -> {:ok, user}
       {:error, :user, changeset, _} -> {:error, changeset}
     end
+  end
+
+    @doc """
+  Updates the user preferences.
+  ## Examples
+      iex> update_user_preferences(user, %{locale: "en})
+      {:ok, %User{}}
+      iex> update_user_preferences(user, %{locale: "invalid})
+      {:error, %Ecto.Changeset{}}
+  """
+  def update_user_preferences(user, attrs \\ %{}) do
+    user
+    |> User.preferences_changeset(attrs)
+    |> Repo.update()
   end
 
   @doc """

@@ -195,7 +195,7 @@ defmodule ClaperWeb.EventLive.EventFormComponent do
         {:noreply,
          socket
          |> put_flash(:info, gettext("Created successfully"))
-         |> push_navigate(to: socket.assigns.return_to)}
+         |> redirect(to: socket.assigns.return_to)}
 
       {:error, %Ecto.Changeset{} = changeset} ->
         {:noreply, assign(socket, changeset: changeset)}
@@ -231,7 +231,7 @@ defmodule ClaperWeb.EventLive.EventFormComponent do
         {:noreply,
          socket
          |> put_flash(:info, gettext("Created successfully"))
-         |> push_navigate(to: socket.assigns.return_to)}
+         |> redirect(to: socket.assigns.return_to)}
 
       {:error, %Ecto.Changeset{} = changeset} ->
         {:noreply, assign(socket, changeset: changeset)}
@@ -251,7 +251,7 @@ defmodule ClaperWeb.EventLive.EventFormComponent do
         {:noreply,
          socket
          |> put_flash(:info, gettext("Updated successfully"))
-         |> push_navigate(to: socket.assigns.return_to)}
+         |> redirect(to: socket.assigns.return_to)}
 
       {:error, %Ecto.Changeset{} = changeset} ->
         {:noreply, assign(socket, :changeset, changeset)}

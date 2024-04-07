@@ -10,8 +10,10 @@ import AirDatepicker from 'air-datepicker'
 import airdatepickerLocaleEn from 'air-datepicker/locale/en'
 import airdatepickerLocaleFr from 'air-datepicker/locale/fr'
 import airdatepickerLocaleDe from 'air-datepicker/locale/de'
+import airdatepickerLocaleEs from 'air-datepicker/locale/es'
 import 'moment/locale/de'
 import 'moment/locale/fr'
+import 'moment/locale/es'
 import QRCodeStyling from "qr-code-styling"
 import { Presenter } from "./presenter"
 import { Manager } from "./manager"
@@ -19,15 +21,17 @@ import Split from "split-grid"
 import { TourGuideClient } from "@sjmc11/tourguidejs/src/Tour"
 window.moment = moment
 
+const locale = document.querySelector("html").getAttribute("lang") || navigator.language.split('-')[0]
 window.moment.locale("en")
-window.moment.locale(navigator.language.split('-')[0])
+window.moment.locale(locale)
 window.Alpine = Alpine
 Alpine.start()
 
 let airdatepickerLocale = {
   en: airdatepickerLocaleEn,
   fr: airdatepickerLocaleFr,
-  de: airdatepickerLocaleDe
+  de: airdatepickerLocaleDe,
+  es: airdatepickerLocaleEs
 }
 let csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute("content")
 let Hooks = {}
@@ -265,7 +269,7 @@ Hooks.Pickr = {
         const utc = moment(date).utc().format("YYYY-MM-DDTHH:mm:ss")
         utcTime.value = utc
       },
-      locale: airdatepickerLocale[navigator.language.split('-')[0]]
+      locale: airdatepickerLocale[locale]
     })
   },
   updated() {

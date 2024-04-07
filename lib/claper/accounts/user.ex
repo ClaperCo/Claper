@@ -10,6 +10,7 @@ defmodule Claper.Accounts.User do
     field :hashed_password, :string, redact: true
     field :is_admin, :boolean
     field :confirmed_at, :naive_datetime
+    field :locale, :string
 
     has_many :events, Claper.Events.Event
 
@@ -21,6 +22,11 @@ defmodule Claper.Accounts.User do
     |> cast(attrs, [:email, :confirmed_at, :password])
     |> validate_email()
     |> validate_password(opts)
+  end
+
+  def preferences_changeset(user, attrs) do
+    user
+    |> cast(attrs, [:locale])
   end
 
   defp validate_email(changeset) do

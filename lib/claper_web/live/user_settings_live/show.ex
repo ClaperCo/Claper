@@ -13,17 +13,22 @@ defmodule ClaperWeb.UserSettingsLive.Show do
 
     email_changeset = Accounts.User.email_changeset(%Accounts.User{}, %{})
     password_changeset = Accounts.User.password_changeset(%Accounts.User{}, %{})
+    preferences_changeset = Accounts.User.preferences_changeset(socket.assigns.current_user, %{})
+
 
     {:ok,
      socket
      |> assign(:email_changeset, email_changeset)
-     |> assign(:password_changeset, password_changeset)}
+     |> assign(:password_changeset, password_changeset)
+     |> assign(:preferences_changeset, preferences_changeset)
+    }
   end
 
   @impl true
   def handle_params(params, _url, socket) do
     {:noreply, apply_action(socket, socket.assigns.live_action, params)}
   end
+
 
   defp apply_action(socket, :edit_email, _params) do
     socket
@@ -95,6 +100,30 @@ defmodule ClaperWeb.UserSettingsLive.Show do
       {:error, changeset} ->
         {:noreply, assign(socket, :password_changeset, changeset)}
     end
+  end
+
+  @impl true
+  def handle_event("save", %{"action" => "update_preferences"} = params, socket) do
+    locale = params["user"]["locale"]
+    available_locales = Gettext.known_locales(ClaperWeb.Gettext)
+    if Enum.member?(available_locales, locale) do
+      case Accounts.update_user_preferences(socket.assigns.current_user, params["user"]) do
+        {:ok, _applied_user} ->
+          {:noreply,
+           socket
+           |> put_flash(
+             :info,
+             gettext("Your preferences have been updated.")
+           )
+           |> redirect(to: ~p"/users/settings")}
+
+        {:error, changeset} ->
+          {:noreply, assign(socket, :preferences_changeset, changeset)}
+      end
+    else
+      {:noreply, socket}
+    end
+
   end
 
   @impl true
