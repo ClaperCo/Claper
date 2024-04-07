@@ -165,10 +165,10 @@ defmodule ClaperWeb.EventLive.EventFormComponent do
          :new,
          event_params
        ) do
-        case uploaded_entries(socket, :presentation_file) do
-          {[_ | _], []} -> save_file(socket, event_params, &create_event/4)
-          _ -> create_event(socket, event_params)
-        end
+    case uploaded_entries(socket, :presentation_file) do
+      {[_ | _], []} -> save_file(socket, event_params, &create_event/4)
+      _ -> create_event(socket, event_params)
+    end
   end
 
   defp create_event(socket, event_params) do

@@ -190,7 +190,7 @@ defmodule Claper.Accounts do
     end
   end
 
-    @doc """
+  @doc """
   Updates the user preferences.
   ## Examples
       iex> update_user_preferences(user, %{locale: "en})

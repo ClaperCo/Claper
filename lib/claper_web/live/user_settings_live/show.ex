@@ -15,20 +15,17 @@ defmodule ClaperWeb.UserSettingsLive.Show do
     password_changeset = Accounts.User.password_changeset(%Accounts.User{}, %{})
     preferences_changeset = Accounts.User.preferences_changeset(socket.assigns.current_user, %{})
 
-
     {:ok,
      socket
      |> assign(:email_changeset, email_changeset)
      |> assign(:password_changeset, password_changeset)
-     |> assign(:preferences_changeset, preferences_changeset)
-    }
+     |> assign(:preferences_changeset, preferences_changeset)}
   end
 
   @impl true
   def handle_params(params, _url, socket) do
     {:noreply, apply_action(socket, socket.assigns.live_action, params)}
   end
-
 
   defp apply_action(socket, :edit_email, _params) do
     socket
@@ -106,6 +103,7 @@ defmodule ClaperWeb.UserSettingsLive.Show do
   def handle_event("save", %{"action" => "update_preferences"} = params, socket) do
     locale = params["user"]["locale"]
     available_locales = Gettext.known_locales(ClaperWeb.Gettext)
+
     if Enum.member?(available_locales, locale) do
       case Accounts.update_user_preferences(socket.assigns.current_user, params["user"]) do
         {:ok, _applied_user} ->
@@ -123,7 +121,6 @@ defmodule ClaperWeb.UserSettingsLive.Show do
     else
       {:noreply, socket}
     end
-
   end
 
   @impl true
