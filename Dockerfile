@@ -12,30 +12,31 @@
 #   - https://pkgs.org/ - resource for finding needed packages
 #   - Ex: hexpm/elixir:1.13.2-erlang-24.2.1-debian-bullseye-20210902-slim
 #
-ARG BUILDER_IMAGE="hexpm/elixir:1.16.0-erlang-26.2.1-debian-bullseye-20231009-slim"
-ARG RUNNER_IMAGE="debian:bullseye-20231009-slim"
+ARG BUILDER_IMAGE="hexpm/elixir:1.16.0-erlang-26.2.1-alpine-3.18.4"
+ARG RUNNER_IMAGE="alpine:3.18.4"
 
 FROM ${BUILDER_IMAGE} as builder
 
 # install build dependencies
-RUN apt-get update -y && apt-get install -y curl build-essential git \
-    && apt-get clean && rm -f /var/lib/apt/lists/*_*
+# RUN apt-get update -y && apt-get install -y curl build-essential git \
+#     && apt-get clean && rm -f /var/lib/apt/lists/*_*
+RUN apk add --no-cache -U build-base git curl bash ca-certificates nodejs npm openssl ncurses
 
 ENV NODE_VERSION 16.20.0
 ENV PRESENTATION_STORAGE_DIR /app/uploads
 
 # Install nvm with node and npm
-RUN curl https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.4/install.sh | bash \
-    && . $HOME/.nvm/nvm.sh \
-    && nvm install $NODE_VERSION \
-    && nvm alias default $NODE_VERSION \
-    && nvm use default
+# RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash \
+#     && . $HOME/.nvm/nvm.sh \
+#     && nvm install $NODE_VERSION \
+#     && nvm alias default $NODE_VERSION \
+#     && nvm use default
 
-ENV NODE_PATH $HOME/.nvm/versions/node/v$NODE_VERSION/lib/node_modules 
-ENV PATH      $HOME/.nvm/versions/node/v$NODE_VERSION/bin:$PATH
+# ENV NODE_PATH $HOME/.nvm/versions/node/v$NODE_VERSION/lib/node_modules 
+# ENV PATH      $HOME/.nvm/versions/node/v$NODE_VERSION/bin:$PATH
 
-RUN ln -sf $HOME/.nvm/versions/node/v$NODE_VERSION/bin/npm /usr/bin/npm
-RUN ln -sf $HOME/.nvm/versions/node/v$NODE_VERSION/bin/node /usr/bin/node
+# RUN ln -sf $HOME/.nvm/versions/node/v$NODE_VERSION/bin/npm /usr/bin/npm
+# RUN ln -sf $HOME/.nvm/versions/node/v$NODE_VERSION/bin/node /usr/bin/node
 
 # prepare build dir
 WORKDIR /app
@@ -71,8 +72,12 @@ COPY lib lib
 
 RUN mix compile
 
+RUN npm install -g sass
+RUN cd assets && npm i && \
+    sass --no-source-map --style=compressed css/custom.scss ../priv/static/assets/custom.css
+
 # compile assets
-RUN mix assets.deploy
+RUN mix assets.deploy.nosass
 
 # Changes to config/runtime.exs don't require recompiling the code
 COPY config/runtime.exs config/
@@ -84,34 +89,32 @@ RUN mix release
 # the compiled release and other runtime necessities
 FROM ${RUNNER_IMAGE}
 
-RUN apt-get update -y && apt-get install -y curl libstdc++6 openssl libncurses5 locales ghostscript default-jre libreoffice-java-common \
-  && apt-get install -y libreoffice --no-install-recommends && apt-get clean && rm -f /var/lib/apt/lists/*_*
+# RUN apt-get update -y && apt-get install -y curl libstdc++6 openssl libncurses5 locales ghostscript default-jre libreoffice-java-common \
+#   && apt-get install -y libreoffice --no-install-recommends && apt-get clean && rm -f /var/lib/apt/lists/*_*
+RUN apk add --no-cache curl libstdc++6 openssl ncurses ghostscript openjdk11-jre
 
-# Set the locale
-RUN sed -i '/en_US.UTF-8/s/^# //g' /etc/locale.gen && locale-gen
+# Install LibreOffice & Common Fonts
+RUN apk --no-cache add bash libreoffice util-linux libreoffice-common \
+  font-droid-nonlatin font-droid ttf-dejavu ttf-freefont ttf-liberation && \
+  rm -rf /var/cache/apk/*
+
+# Install Microsoft Core Fonts
+RUN apk --no-cache add msttcorefonts-installer fontconfig && \
+  update-ms-fonts && \
+  fc-cache -f && \
+  rm -rf /var/cache/apk/*
 
 ENV LANG en_US.UTF-8
 ENV LANGUAGE en_US:en
 ENV LC_ALL en_US.UTF-8
-ENV HOME "/home/nobody"
+ENV MIX_ENV="prod"
 
-RUN mkdir /home/nobody && chown nobody /home/nobody
-
-WORKDIR "/app"
-RUN mkdir /app/uploads
-RUN chown -R nobody /app
 
 # Only copy the final release from the build stage
-COPY --from=builder --chown=nobody:root /app/_build/prod/rel/claper ./
-
-RUN chmod +x /app/bin/*
-
-USER nobody
+COPY --from=builder --chmod=a+rX /app/_build/prod/rel/claper /app
+RUN mkdir /app/uploads && chmod -R 777 /app/uploads
 
 EXPOSE 4000
-
+WORKDIR "/app"
+USER root
 CMD ["sh", "-c", "/app/bin/claper eval Claper.Release.migrate && /app/bin/claper start"]
-
-# Appended by flyctl
-#ENV ECTO_IPV6 true
-#ENV ERL_AFLAGS "-proto_dist inet6_tcp"

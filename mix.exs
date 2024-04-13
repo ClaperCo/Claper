@@ -102,7 +102,7 @@ defmodule Claper.MixProject do
       {:floki, ">= 0.36.1", only: :test},
       {:phoenix_live_dashboard, "~> 0.8"},
       {:esbuild, "~> 0.2", runtime: Mix.env() == :dev},
-      {:dart_sass, "~> 0.5", runtime: Mix.env() == :dev},
+      {:dart_sass, "~> 0.7", runtime: Mix.env() == :dev},
       {:swoosh, "~> 1.12"},
       {:finch, "~> 0.16"},
       {:telemetry_metrics, "~> 0.6"},
@@ -138,6 +138,11 @@ defmodule Claper.MixProject do
         "cmd --cd assets npm install && npm run deploy",
         "esbuild default --minify",
         "sass default --no-source-map --style=compressed",
+        "phx.digest"
+      ],
+      "assets.deploy.nosass": [
+        "cmd --cd assets npm install && npm run deploy",
+        "esbuild default --minify",
         "phx.digest"
       ]
     ]

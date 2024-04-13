@@ -21,7 +21,7 @@ config :claper, ClaperWeb.Gettext,
   locales: ~w(fr en de)
 
 config :dart_sass,
-  version: "1.58.0",
+  version: "1.61.0",
   default: [
     args: ~w(css/custom.scss ../priv/static/assets/custom.css),
     cd: Path.expand("../assets", __DIR__)

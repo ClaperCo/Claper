@@ -24,7 +24,6 @@ services:
       - claper-net
   app:
     image: ghcr.io/claperco/claper:latest # or build: .
-    user: 0:0
     ports:
       - 4000:4000
     volumes:
@@ -32,7 +31,7 @@ services:
     healthcheck:
       test: curl --fail http://localhost:4000 || exit 1
       retries: 3
-      start_period: 10s
+      start_period: 20s
       timeout: 5s
     env_file: .env
     depends_on:
