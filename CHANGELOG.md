@@ -2,6 +2,7 @@
 
 - Add dynamic layout in the manager view
 - Add quick event feature
+- Add question feature
 - Add toggle for message reactions in attendees room
 - Add toggle for polls results in attendees room
 - Add delete account button in user settings
