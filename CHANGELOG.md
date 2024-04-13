@@ -2,12 +2,15 @@
 
 - Add dynamic layout in the manager view
 - Add quick event feature
+- Add question feature
 - Add toggle for message reactions in attendees room
 - Add toggle for polls results in attendees room
 - Add delete account button in user settings
+- Add language switcher in user settings
 - Add tour guide for new users
 - Add headers to exported CSV in reports
 - Add the ability to embed attendees room in an iframe
+- Add spanish locale (#84) (@eduproinf)
 - Change date picker for a more user-friendly one
 - Upgrade Ecto, Phoenix and LiveView
 - Fix user avatars in reports

@@ -20,7 +20,7 @@ defmodule ClaperWeb.PollLive.FormComponent do
     poll = Polls.get_poll!(id)
     {:ok, _} = Polls.delete_poll(socket.assigns.event_uuid, poll)
 
-    {:noreply, socket |> push_redirect(to: socket.assigns.return_to)}
+    {:noreply, socket |> push_navigate(to: socket.assigns.return_to)}
   end
 
   @impl true
@@ -65,7 +65,7 @@ defmodule ClaperWeb.PollLive.FormComponent do
       {:ok, _poll} ->
         {:noreply,
          socket
-         |> push_redirect(to: socket.assigns.return_to)}
+         |> push_navigate(to: socket.assigns.return_to)}
 
       {:error, %Ecto.Changeset{} = changeset} ->
         {:noreply, assign(socket, :changeset, changeset)}
@@ -83,7 +83,7 @@ defmodule ClaperWeb.PollLive.FormComponent do
         {:noreply,
          socket
          |> maybe_change_current_poll(poll)
-         |> push_redirect(to: socket.assigns.return_to)}
+         |> push_navigate(to: socket.assigns.return_to)}
 
       {:error, %Ecto.Changeset{} = changeset} ->
         {:noreply, assign(socket, changeset: changeset)}

@@ -748,7 +748,7 @@
           <ul
             id="menu"
             phx-update="replace"
-            class="fixed z-10 flex items-center bg-gray-200 space-x-3 px-2 w-full py-3"
+            class="fixed z-10 flex items-center bg-gray-200 space-x-3 px-2 w-full py-3 overflow-x-auto"
           >
             <li class={"rounded-md #{if @list_tab==:posts, do: 'bg-secondary-600 text-white' ,
                 else: 'bg-white text-gray-600' } px-2 py-0.5 text-sm shadow-sm"}>
@@ -756,6 +756,14 @@
                 to: "#",
                 phx_click: "list-tab",
                 phx_value_tab: :posts
+              ) %>
+            </li>
+            <li class={"rounded-md #{if @list_tab==:questions, do: 'bg-secondary-600 text-white' ,
+                else: 'bg-white text-gray-600' } px-2 py-0.5 text-sm shadow-sm"}>
+              <%= link(gettext("Questions") <> " (#{@question_count})",
+                to: "#",
+                phx_click: "list-tab",
+                phx_value_tab: :questions
               ) %>
             </li>
             <li class={"rounded-md #{if @list_tab==:pinned_posts, do: 'bg-secondary-600 text-white' ,
@@ -777,333 +785,171 @@
           </ul>
 
           <%= if @list_tab == :posts do %>
-            <%= if @post_count == 0 && @pinned_post_count == 0 do %>
-              <div
-                class="text-center flex flex-col space-y-5 items-center justify-center text-gray-400"
-                style="height: 100%;"
+            <div
+              :if={@post_count == 0}
+              class="text-center flex flex-col space-y-5 items-center justify-center text-gray-400"
+              style="height: 100%;"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-36 w-36"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                stroke-width="2"
               >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  class="h-36 w-36"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  stroke-width="2"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-1.414-.586m0 0L11 14h4a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2v4l.586-.586z"
-                  />
-                </svg>
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-1.414-.586m0 0L11 14h4a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2v4l.586-.586z"
+                />
+              </svg>
 
-                <p class="text-lg">
-                  <%= gettext("Messages from attendees will appear here.") %>
-                </p>
+              <p class="text-lg">
+                <%= gettext("Messages from attendees will appear here.") %>
+              </p>
+            </div>
+            <div
+              :if={@post_count > 0}
+              id="post-list"
+              class="overflow-y-auto pb-5 pt-8 px-5"
+              phx-update="stream"
+              phx-hook="ScrollIntoDiv"
+            >
+              <.live_component
+                :for={{id, post} <- @streams.posts}
+                module={ClaperWeb.EventLive.ManageablePostComponent}
+                id={id}
+                event={@event}
+                post={post}
+              />
+            </div>
+          <% end %>
+
+          <%= if @list_tab == :questions do %>
+            <div
+              :if={@question_count == 0}
+              class="text-center flex flex-col space-y-5 items-center justify-center text-gray-400"
+              style="height: 100%;"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="1.5"
+                stroke="currentColor"
+                class="w-36 h-36"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 5.25h.008v.008H12v-.008Z"
+                />
+              </svg>
+
+              <p class="text-lg">
+                <%= gettext("Questions will appear here.") %>
+              </p>
+            </div>
+
+            <div :if={@question_count > 0} class="overflow-y-auto max-h-full">
+              <div class="mt-12 px-5 w-full flex items-center gap-x-2">
+                <button
+                  class="bg-gray-300 text-gray-700 rounded-md px-3 py-1 flex items-center gap-x-1"
+                  phx-click="sort-questions"
+                  phx-value-sort="likes"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 16 16"
+                    fill="currentColor"
+                    class="w-4 h-4"
+                  >
+                    <path d="M2.09 15a1 1 0 0 0 1-1V8a1 1 0 1 0-2 0v6a1 1 0 0 0 1 1ZM5.765 13H4.09V8c.663 0 1.218-.466 1.556-1.037a4.02 4.02 0 0 1 1.358-1.377c.478-.292.907-.706.989-1.26V4.32a9.03 9.03 0 0 0 0-2.642c-.028-.194.048-.394.224-.479A2 2 0 0 1 11.09 3c0 .812-.08 1.605-.235 2.371a.521.521 0 0 0 .502.629h1.733c1.104 0 2.01.898 1.901 1.997a19.831 19.831 0 0 1-1.081 4.788c-.27.747-.998 1.215-1.793 1.215H9.414c-.215 0-.428-.035-.632-.103l-2.384-.794A2.002 2.002 0 0 0 5.765 13Z" />
+                  </svg>
+
+                  <p class="flex items-center gap-x-1">
+                    <%= gettext("Sort by popularity") %>
+                  </p>
+                </button>
+                <button
+                  class="bg-gray-300 text-gray-700 rounded-md px-3 py-1 flex items-center gap-x-1"
+                  phx-click="sort-questions"
+                  phx-value-sort="date"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 16 16"
+                    fill="currentColor"
+                    class="w-4 h-4"
+                  >
+                    <path
+                      fill-rule="evenodd"
+                      d="M1 8a7 7 0 1 1 14 0A7 7 0 0 1 1 8Zm7.75-4.25a.75.75 0 0 0-1.5 0V8c0 .414.336.75.75.75h3.25a.75.75 0 0 0 0-1.5h-2.5v-3.5Z"
+                      clip-rule="evenodd"
+                    />
+                  </svg>
+
+                  <span><%= gettext("Sort by date") %></span>
+                </button>
               </div>
-            <% end %>
-            <div id="x" class="overflow-y-auto max-h-full">
               <div
-                id="post-list"
-                class="overflow-y-auto max-h-full pb-5 pt-8 px-5"
+                id="question-list"
+                class="overflow-y-auto pb-5 pt-1 px-5"
                 phx-update="stream"
                 phx-hook="ScrollIntoDiv"
               >
-                <div :for={{id, post} <- @streams.posts} id={id}>
-                  <div class="flex flex-col md:block px-4 pb-2 pt-3 rounded-b-lg rounded-tr-lg bg-white relative shadow-md text-black break-all mt-4">
-                    <div class="float-right mr-1">
-                      <%= if post.attendee_identifier do %>
-                        <span class="text-yellow-500">
-                          <%= link(
-                            if post.pinned do
-                              gettext("Unpin")
-                            else
-                              gettext("Pin")
-                            end,
-                            to: "#",
-                            phx_click: "pin",
-                            phx_value_id: post.uuid,
-                            phx_value_event_id: @event.uuid
-                          ) %>
-                        </span>
-                        /
-                        <span class="text-red-500">
-                          <%= link(gettext("Ban"),
-                            to: "#",
-                            phx_click: "ban",
-                            phx_value_attendee_identifier: post.attendee_identifier,
-                            data: [
-                              confirm:
-                                gettext(
-                                  "Blocking this user will delete all his messages and he will not be able to join again, confirm ?"
-                                )
-                            ]
-                          ) %>
-                        </span>
-                        /
-                      <% else %>
-                        <span class="text-yellow-500">
-                          <%= link(
-                            if post.pinned do
-                              gettext("Unpin")
-                            else
-                              gettext("Pin")
-                            end,
-                            to: "#",
-                            phx_click: "pin",
-                            phx_value_id: post.uuid,
-                            phx_value_event_id: @event.uuid
-                          ) %>
-                        </span>
-                        /
-                        <span class="text-red-500">
-                          <%= link(gettext("Ban"),
-                            to: "#",
-                            phx_click: "ban",
-                            phx_value_user_id: post.user_id,
-                            data: [
-                              confirm:
-                                gettext(
-                                  "Blocking this user will delete all his messages and he will not be able to join again, confirm ?"
-                                )
-                            ]
-                          ) %>
-                        </span>
-                        /
-                      <% end %>
-                      <span class="text-red-500">
-                        <%= link(gettext("Delete"),
-                          to: "#",
-                          phx_click: "delete",
-                          phx_value_id: post.uuid,
-                          phx_value_event_id: @event.uuid
-                        ) %>
-                      </span>
-                    </div>
-
-                    <div class="flex space-x-3 items-center">
-                      <%= if post.attendee_identifier do %>
-                        <img
-                          class="h-8 w-8"
-                          src={"https://api.dicebear.com/7.x/personas/svg?seed=#{post.attendee_identifier}"}
-                        />
-                      <% else %>
-                        <img
-                          class="h-8 w-8"
-                          src={"https://api.dicebear.com/7.x/personas/svg?seed=#{post.user_id}"}
-                        />
-                      <% end %>
-
-                      <div class="flex flex-col">
-                        <%= if post.name do %>
-                          <p class="text-black text-sm font-semibold mr-2">
-                            <%= post.name %>
-                          </p>
-                        <% end %>
-
-                        <p class="text-xl">
-                          <%= post.body %>
-                        </p>
-                      </div>
-                    </div>
-
-                    <%= if post.like_count> 0 || post.love_count > 0 || post.lol_count > 0 do %>
-                      <div class="flex h-6 space-x-2 text-base text-gray-500 pb-3 items-center mt-5">
-                        <div class="flex items-center">
-                          <%= if post.like_count> 0 do %>
-                            <img src="/images/icons/thumb.svg" class="h-4" />
-                            <span class="ml-1">
-                              <%= post.like_count %>
-                            </span>
-                          <% end %>
-                        </div>
-                        <div class="flex items-center">
-                          <%= if post.love_count> 0 do %>
-                            <img src="/images/icons/heart.svg" class="h-4" />
-                            <span class="ml-1">
-                              <%= post.love_count %>
-                            </span>
-                          <% end %>
-                        </div>
-                        <div class="flex items-center">
-                          <%= if post.lol_count> 0 do %>
-                            <img src="/images/icons/laugh.svg" class="h-4" />
-                            <span class="ml-1">
-                              <%= post.lol_count %>
-                            </span>
-                          <% end %>
-                        </div>
-                      </div>
-                    <% end %>
-                  </div>
-                </div>
+                <.live_component
+                  :for={{id, post} <- @streams.questions}
+                  module={ClaperWeb.EventLive.ManageablePostComponent}
+                  id={id}
+                  event={@event}
+                  post={post}
+                />
               </div>
-              <!-- The div below encompasses the 2 post lists -->
             </div>
           <% end %>
+
           <%= if @list_tab == :pinned_posts do %>
-            <%= if @pinned_post_count == 0 do %>
-              <div
-                class="text-center flex flex-col space-y-5 items-center justify-center text-gray-400"
-                style="height: 100%;"
+            <div
+              :if={@pinned_post_count == 0}
+              class="text-center flex flex-col space-y-5 items-center justify-center text-gray-400"
+              style="height: 100%;"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-36 w-36"
+                viewBox="0 0 24 24"
+                stroke-width="2"
+                stroke="currentColor"
+                fill="none"
+                stroke-linecap="round"
+                stroke-linejoin="round"
               >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  class="h-36 w-36"
-                  viewBox="0 0 24 24"
-                  stroke-width="2"
-                  stroke="currentColor"
-                  fill="none"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                >
-                  <path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M15 4.5l-4 4l-4 1.5l-1.5 1.5l7 7l1.5 -1.5l1.5 -4l4 -4" /><path d="M9 15l-4.5 4.5" /><path d="M14.5 4l5.5 5.5" />
-                </svg>
+                <path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M15 4.5l-4 4l-4 1.5l-1.5 1.5l7 7l1.5 -1.5l1.5 -4l4 -4" /><path d="M9 15l-4.5 4.5" /><path d="M14.5 4l5.5 5.5" />
+              </svg>
 
-                <p class="text-lg">
-                  <%= gettext("Pinned messages will appear here.") %>
-                </p>
+              <p class="text-lg">
+                <%= gettext("Pinned messages will appear here.") %>
+              </p>
+            </div>
+
+            <div class="overflow-y-auto max-h-full">
+              <div
+                :if={@pinned_post_count > 0}
+                id="pinned-post-list"
+                class="overflow-y-auto pb-5 pt-8 px-5"
+                phx-update="stream"
+                phx-hook="ScrollIntoDiv"
+              >
+                <.live_component
+                  :for={{id, post} <- @streams.pinned_posts}
+                  module={ClaperWeb.EventLive.ManageablePostComponent}
+                  id={id}
+                  event={@event}
+                  post={post}
+                />
               </div>
-            <% end %>
-
-            <div id="x-pinned" class="overflow-y-auto max-h-full">
-              <%= if @pinned_post_count > 0 do %>
-                <div
-                  id="pinned-post-list"
-                  class="overflow-y-auto pb-5 pt-8 px-5"
-                  phx-update="stream"
-                  phx-hook="ScrollIntoDiv"
-                >
-                  <div :for={{id, post} <- @streams.pinned_posts} id={id}>
-                    <div class="px-4 pb-2 pt-3 rounded-b-lg rounded-tr-lg bg-white relative shadow-md text-black break-all mt-4">
-                      <div class="float-right mr-1">
-                        <%= if post.attendee_identifier do %>
-                          <span class="text-yellow-500">
-                            <%= link(
-                              if post.pinned do
-                                gettext("Unpin")
-                              else
-                                gettext("Pin")
-                              end,
-                              to: "#",
-                              phx_click: "pin",
-                              phx_value_id: post.uuid,
-                              phx_value_event_id: @event.uuid
-                            ) %>
-                          </span>
-                          /
-                          <span class="text-red-500">
-                            <%= link(gettext("Ban"),
-                              to: "#",
-                              phx_click: "ban",
-                              phx_value_attendee_identifier: post.attendee_identifier,
-                              data: [
-                                confirm:
-                                  gettext(
-                                    "Blocking this user will delete all his messages and he will not be able to join again, confirm ?"
-                                  )
-                              ]
-                            ) %>
-                          </span>
-                          /
-                        <% else %>
-                          <span class="text-yellow-500">
-                            <%= link(
-                              if post.pinned do
-                                gettext("Unpin")
-                              else
-                                gettext("Pin")
-                              end,
-                              to: "#",
-                              phx_click: "pin",
-                              phx_value_id: post.uuid,
-                              phx_value_event_id: @event.uuid
-                            ) %>
-                          </span>
-                          /
-                          <span class="text-red-500">
-                            <%= link(gettext("Ban"),
-                              to: "#",
-                              phx_click: "ban",
-                              phx_value_user_id: post.user_id,
-                              data: [
-                                confirm:
-                                  gettext(
-                                    "Blocking this user will delete all his messages and he will not be able to join again, confirm ?"
-                                  )
-                              ]
-                            ) %>
-                          </span>
-                          /
-                        <% end %>
-                        <span class="text-red-500">
-                          <%= link(gettext("Delete"),
-                            to: "#",
-                            phx_click: "delete",
-                            phx_value_id: post.uuid,
-                            phx_value_event_id: @event.uuid
-                          ) %>
-                        </span>
-                      </div>
-
-                      <div class="flex space-x-3 items-center">
-                        <%= if post.attendee_identifier do %>
-                          <img
-                            class="h-8 w-8"
-                            src={"https://api.dicebear.com/7.x/personas/svg?seed=#{post.attendee_identifier}"}
-                          />
-                        <% else %>
-                          <img
-                            class="h-8 w-8"
-                            src={"https://api.dicebear.com/7.x/personas/svg?seed=#{post.user_id}"}
-                          />
-                        <% end %>
-
-                        <div class="flex flex-col">
-                          <%= if post.name do %>
-                            <p class="text-black text-sm font-semibold mr-2">
-                              <%= post.name %>
-                            </p>
-                          <% end %>
-
-                          <p class="text-xl">
-                            <%= post.body %>
-                          </p>
-                        </div>
-                      </div>
-
-                      <%= if post.like_count> 0 || post.love_count > 0 || post.lol_count > 0 do %>
-                        <div class="flex h-6 space-x-2 text-base text-gray-500 pb-3 items-center mt-5">
-                          <div class="flex items-center">
-                            <%= if post.like_count> 0 do %>
-                              <img src="/images/icons/thumb.svg" class="h-4" />
-                              <span class="ml-1">
-                                <%= post.like_count %>
-                              </span>
-                            <% end %>
-                          </div>
-                          <div class="flex items-center">
-                            <%= if post.love_count> 0 do %>
-                              <img src="/images/icons/heart.svg" class="h-4" />
-                              <span class="ml-1">
-                                <%= post.love_count %>
-                              </span>
-                            <% end %>
-                          </div>
-                          <div class="flex items-center">
-                            <%= if post.lol_count> 0 do %>
-                              <img src="/images/icons/laugh.svg" class="h-4" />
-                              <span class="ml-1">
-                                <%= post.lol_count %>
-                              </span>
-                            <% end %>
-                          </div>
-                        </div>
-                      <% end %>
-                    </div>
-                  </div>
-                </div>
-              <% end %>
             </div>
           <% end %>
 

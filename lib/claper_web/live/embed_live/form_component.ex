@@ -20,7 +20,7 @@ defmodule ClaperWeb.EmbedLive.FormComponent do
     embed = Embeds.get_embed!(id)
     {:ok, _} = Embeds.delete_embed(socket.assigns.event_uuid, embed)
 
-    {:noreply, socket |> push_redirect(to: socket.assigns.return_to)}
+    {:noreply, socket |> push_navigate(to: socket.assigns.return_to)}
   end
 
   @impl true
@@ -47,7 +47,7 @@ defmodule ClaperWeb.EmbedLive.FormComponent do
       {:ok, _embed} ->
         {:noreply,
          socket
-         |> push_redirect(to: socket.assigns.return_to)}
+         |> push_navigate(to: socket.assigns.return_to)}
 
       {:error, %Ecto.Changeset{} = changeset} ->
         {:noreply, assign(socket, :changeset, changeset)}
@@ -65,7 +65,7 @@ defmodule ClaperWeb.EmbedLive.FormComponent do
         {:noreply,
          socket
          |> maybe_change_current_embed(embed)
-         |> push_redirect(to: socket.assigns.return_to)}
+         |> push_navigate(to: socket.assigns.return_to)}
 
       {:error, %Ecto.Changeset{} = changeset} ->
         {:noreply, assign(socket, changeset: changeset)}

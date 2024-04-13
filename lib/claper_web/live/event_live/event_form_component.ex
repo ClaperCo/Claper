@@ -165,7 +165,10 @@ defmodule ClaperWeb.EventLive.EventFormComponent do
          :new,
          event_params
        ) do
-    create_event(socket, event_params)
+    case uploaded_entries(socket, :presentation_file) do
+      {[_ | _], []} -> save_file(socket, event_params, &create_event/4)
+      _ -> create_event(socket, event_params)
+    end
   end
 
   defp create_event(socket, event_params) do
@@ -192,7 +195,7 @@ defmodule ClaperWeb.EventLive.EventFormComponent do
         {:noreply,
          socket
          |> put_flash(:info, gettext("Created successfully"))
-         |> push_redirect(to: socket.assigns.return_to)}
+         |> redirect(to: socket.assigns.return_to)}
 
       {:error, %Ecto.Changeset{} = changeset} ->
         {:noreply, assign(socket, changeset: changeset)}
@@ -228,7 +231,7 @@ defmodule ClaperWeb.EventLive.EventFormComponent do
         {:noreply,
          socket
          |> put_flash(:info, gettext("Created successfully"))
-         |> push_redirect(to: socket.assigns.return_to)}
+         |> redirect(to: socket.assigns.return_to)}
 
       {:error, %Ecto.Changeset{} = changeset} ->
         {:noreply, assign(socket, changeset: changeset)}
@@ -248,7 +251,7 @@ defmodule ClaperWeb.EventLive.EventFormComponent do
         {:noreply,
          socket
          |> put_flash(:info, gettext("Updated successfully"))
-         |> push_redirect(to: socket.assigns.return_to)}
+         |> redirect(to: socket.assigns.return_to)}
 
       {:error, %Ecto.Changeset{} = changeset} ->
         {:noreply, assign(socket, :changeset, changeset)}

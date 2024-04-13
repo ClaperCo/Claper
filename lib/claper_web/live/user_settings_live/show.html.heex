@@ -134,6 +134,37 @@
       <div>
         <div class="py-5">
           <h3 class="text-lg leading-6 font-medium text-gray-900">
+            <%= gettext("Preferences") %>
+          </h3>
+          <p class="mt-1 max-w-2xl text-sm text-gray-500">
+            <%= gettext("Customize your account") %>
+          </p>
+        </div>
+        <div class="border-t border-gray-200 py-5 sm:p-0">
+          <dl class="sm:divide-y sm:divide-gray-200">
+            <div class="mt-5">
+              <.form :let={f} for={@preferences_changeset} phx-change="save">
+                <%= hidden_input(f, :action, name: "action", value: "update_preferences") %>
+                <ClaperWeb.Component.Input.select
+                  form={f}
+                  fieldClass="!w-auto"
+                  array={[
+                    {"English", "en"},
+                    {"Español", "es"},
+                    {"Français", "fr"},
+                    {"German", "de"}
+                  ]}
+                  key={:locale}
+                  name={gettext("Language")}
+                />
+              </.form>
+            </div>
+          </dl>
+        </div>
+      </div>
+      <div>
+        <div class="py-5">
+          <h3 class="text-lg leading-6 font-medium text-gray-900">
             <%= gettext("Danger zone") %>
           </h3>
           <p class="mt-1 max-w-2xl text-sm text-gray-500">
