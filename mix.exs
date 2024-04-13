@@ -87,7 +87,7 @@ defmodule Claper.MixProject do
     [
       {:ex_aws, "~> 2.2"},
       {:ex_aws_s3, "~> 2.3"},
-      {:ex_doc, "~> 0.27", only: :dev, runtime: false},
+      {:ex_doc, "~> 0.32", only: :dev, runtime: false},
       {:bcrypt_elixir, "~> 2.0"},
       {:phoenix, "~> 1.7"},
       {:phoenix_ecto, "~> 4.5"},

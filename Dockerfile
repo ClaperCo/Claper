@@ -12,8 +12,8 @@
 #   - https://pkgs.org/ - resource for finding needed packages
 #   - Ex: hexpm/elixir:1.13.2-erlang-24.2.1-debian-bullseye-20210902-slim
 #
-ARG BUILDER_IMAGE="hexpm/elixir:1.13.2-erlang-24.2.1-debian-bullseye-20210902-slim"
-ARG RUNNER_IMAGE="debian:bullseye-20210902-slim"
+ARG BUILDER_IMAGE="hexpm/elixir:1.16.0-erlang-26.2.1-debian-bullseye-20231009-slim"
+ARG RUNNER_IMAGE="debian:bullseye-20231009-slim"
 
 FROM ${BUILDER_IMAGE} as builder
 
@@ -84,7 +84,7 @@ RUN mix release
 # the compiled release and other runtime necessities
 FROM ${RUNNER_IMAGE}
 
-RUN apt-get update -y && apt-get install -y curl libstdc++6 openssl libncurses5 locales ghostscript \
+RUN apt-get update -y && apt-get install -y curl libstdc++6 openssl libncurses5 locales ghostscript default-jre libreoffice-java-common \
   && apt-get install -y libreoffice --no-install-recommends && apt-get clean && rm -f /var/lib/apt/lists/*_*
 
 # Set the locale

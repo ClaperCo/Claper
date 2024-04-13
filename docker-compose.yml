@@ -32,12 +32,14 @@ services:
     healthcheck:
       test: curl --fail http://localhost:4000 || exit 1
       retries: 3
-      start_period: 20s
+      start_period: 10s
       timeout: 5s
     env_file: .env
     depends_on:
       db:
         condition: service_healthy
+    networks:
+      - claper-net
 
 volumes:
   claper-db:
