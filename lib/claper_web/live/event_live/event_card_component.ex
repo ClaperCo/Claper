@@ -67,12 +67,6 @@ defmodule ClaperWeb.EventLive.EventCardComponent do
             </div>
           </div>
 
-          <%= if @event.presentation_file.status == "fail" && @event.presentation_file.hash do %>
-            <p class="text-sm font-normal text-supporting-red-500 text-left pt-2">
-              <%= gettext("Error when processing the new file") %>
-            </p>
-          <% end %>
-
           <%= if !Event.finished?(@event) do %>
             <div
               :if={@event.presentation_file.status == "done"}
@@ -196,7 +190,7 @@ defmodule ClaperWeb.EventLive.EventCardComponent do
             </div>
 
             <div
-              :if={@event.presentation_file.status == "fail" && is_nil(@event.presentation_file.hash)}
+              :if={@event.presentation_file.status == "fail"}
               class="mt-2 flex flex-col space-y-2 sm:space-y-0 justify-between sm:flex-row items-center"
             >
               <span class="text-sm text-supporting-red-500">
