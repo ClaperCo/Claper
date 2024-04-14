@@ -25,6 +25,11 @@ RUN apk add --no-cache -U build-base git curl bash ca-certificates nodejs npm op
 ENV NODE_VERSION 16.20.0
 ENV PRESENTATION_STORAGE_DIR /app/uploads
 
+# custom ERL_FLAGS are passed for (public) multi-platform builds
+# to fix qemu segfault, more info: https://github.com/erlang/otp/pull/6340
+ARG ERL_FLAGS
+ENV ERL_FLAGS=$ERL_FLAGS
+
 # Install nvm with node and npm
 # RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash \
 #     && . $HOME/.nvm/nvm.sh \
