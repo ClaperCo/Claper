@@ -11,6 +11,7 @@
 - Add headers to exported CSV in reports
 - Add the ability to embed attendees room in an iframe
 - Add spanish locale (#84) (@eduproinf)
+- Improve Docker image to support both ARM and AMD64 architecture
 - Change date picker for a more user-friendly one
 - Upgrade Ecto, Phoenix and LiveView
 - Fix user avatars in reports

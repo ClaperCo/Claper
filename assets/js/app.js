@@ -1,54 +1,57 @@
 // Include phoenix_html to handle method=PUT/DELETE in forms and buttons.
-import "phoenix_html"
+import "phoenix_html";
 // Establish Phoenix Socket and LiveView configuration.
-import {Socket, Presence} from "phoenix"
-import {LiveSocket} from "phoenix_live_view"
-import topbar from "../vendor/topbar"
-import Alpine from 'alpinejs'
-import moment from "moment-timezone"
-import AirDatepicker from 'air-datepicker'
-import airdatepickerLocaleEn from 'air-datepicker/locale/en'
-import airdatepickerLocaleFr from 'air-datepicker/locale/fr'
-import airdatepickerLocaleDe from 'air-datepicker/locale/de'
-import airdatepickerLocaleEs from 'air-datepicker/locale/es'
-import 'moment/locale/de'
-import 'moment/locale/fr'
-import 'moment/locale/es'
-import QRCodeStyling from "qr-code-styling"
-import { Presenter } from "./presenter"
-import { Manager } from "./manager"
-import Split from "split-grid"
-import { TourGuideClient } from "@sjmc11/tourguidejs/src/Tour"
-window.moment = moment
+import { Socket, Presence } from "phoenix";
+import { LiveSocket } from "phoenix_live_view";
+import topbar from "../vendor/topbar";
+import Alpine from "alpinejs";
+import moment from "moment-timezone";
+import AirDatepicker from "air-datepicker";
+import airdatepickerLocaleEn from "air-datepicker/locale/en";
+import airdatepickerLocaleFr from "air-datepicker/locale/fr";
+import airdatepickerLocaleDe from "air-datepicker/locale/de";
+import airdatepickerLocaleEs from "air-datepicker/locale/es";
+import "moment/locale/de";
+import "moment/locale/fr";
+import "moment/locale/es";
+import QRCodeStyling from "qr-code-styling";
+import { Presenter } from "./presenter";
+import { Manager } from "./manager";
+import Split from "split-grid";
+import { TourGuideClient } from "@sjmc11/tourguidejs/src/Tour";
+window.moment = moment;
 
-const locale = document.querySelector("html").getAttribute("lang") || navigator.language.split('-')[0]
-window.moment.locale("en")
-window.moment.locale(locale)
-window.Alpine = Alpine
-Alpine.start()
+const locale =
+  document.querySelector("html").getAttribute("lang") ||
+  navigator.language.split("-")[0];
+window.moment.locale("en");
+window.moment.locale(locale);
+window.Alpine = Alpine;
+Alpine.start();
 
 let airdatepickerLocale = {
   en: airdatepickerLocaleEn,
   fr: airdatepickerLocaleFr,
   de: airdatepickerLocaleDe,
-  es: airdatepickerLocaleEs
-}
-let csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute("content")
-let Hooks = {}
+  es: airdatepickerLocaleEs,
+};
+let csrfToken = document
+  .querySelector("meta[name='csrf-token']")
+  .getAttribute("content");
+let Hooks = {};
 
 Hooks.EmbeddedBanner = {
   mounted() {
     if (window !== window.parent) {
-      this.el.classList.remove("hidden")
+      this.el.classList.remove("hidden");
     }
   },
   updated() {
     if (window !== window.parent) {
-      this.el.classList.remove("hidden")
+      this.el.classList.remove("hidden");
     }
-  }
-}
-
+  },
+};
 
 Hooks.TourGuide = {
   mounted() {
@@ -58,84 +61,95 @@ Hooks.TourGuide = {
       finishLabel: this.el.dataset.finishLabel,
       completeOnFinish: true,
       rememberStep: true,
-    })
+    });
 
     if (!this.tour.isFinished(this.el.dataset.group)) {
-      this.tour.start(this.el.dataset.group)
+      this.tour.start(this.el.dataset.group);
     }
 
     this.tour.onBeforeExit(() => {
-      this.tour.finishTour(true, this.el.dataset.group)
-    })
-  }
-}
+      this.tour.finishTour(true, this.el.dataset.group);
+    });
+  },
+};
 
 Hooks.Split = {
   mounted() {
-    const type = this.el.dataset.type
-    const gutter = this.el.dataset.gutter
-    const columnSlitValue = localStorage.getItem('column-split') || '1fr 10px 1fr'
-    const rowSlitValue = localStorage.getItem('row-split') || '1fr 10px 1fr'
+    const type = this.el.dataset.type;
+    const gutter = this.el.dataset.gutter;
+    const columnSlitValue =
+      localStorage.getItem("column-split") || "1fr 10px 1fr";
+    const rowSlitValue = localStorage.getItem("row-split") || "1fr 10px 1fr";
 
     if (type === "column") {
       this.columnSplit = Split({
-        columnGutters: [{
-          track: 1,
-          element: this.el.querySelector(gutter)
-        }],
+        columnGutters: [
+          {
+            track: 1,
+            element: this.el.querySelector(gutter),
+          },
+        ],
         onDragEnd: () => {
-          const currentPosition = this.el.style['grid-template-columns']
-          localStorage.setItem('column-split', currentPosition)
+          const currentPosition = this.el.style["grid-template-columns"];
+          localStorage.setItem("column-split", currentPosition);
         },
-      })
-      this.el.style['grid-template-columns'] = columnSlitValue
+      });
+      this.el.style["grid-template-columns"] = columnSlitValue;
     } else {
       this.rowSplit = Split({
-        rowGutters: [{
-          track: 1,
-          element: this.el.querySelector(gutter)
-        }],
+        rowGutters: [
+          {
+            track: 1,
+            element: this.el.querySelector(gutter),
+          },
+        ],
         onDragEnd: () => {
-          const value = this.el.style['grid-template-rows']
-          localStorage.setItem('row-split', value)
+          const value = this.el.style["grid-template-rows"];
+          localStorage.setItem("row-split", value);
         },
-      })
-      this.el.style['grid-template-rows'] = rowSlitValue
+      });
+      this.el.style["grid-template-rows"] = rowSlitValue;
     }
   },
   updated() {
     if (this.columnSplit) {
-      const value = localStorage.getItem('column-split') || '1fr 10px 1fr'
-      this.el.style['grid-template-columns'] = value
-    } 
+      const value = localStorage.getItem("column-split") || "1fr 10px 1fr";
+      this.el.style["grid-template-columns"] = value;
+    }
     if (this.rowSplit) {
-      const value = localStorage.getItem('row-split') || '1fr 10px 1fr'
-      this.el.style['grid-template-rows'] = value
+      const value = localStorage.getItem("row-split") || "1fr 10px 1fr";
+      this.el.style["grid-template-rows"] = value;
     }
   },
   destroyed() {
     if (this.columnSplit) {
-      this.columnSplit.destroy()
+      this.columnSplit.destroy();
     }
     if (this.rowSplit) {
-      this.rowSplit.destroy()
+      this.rowSplit.destroy();
     }
-  }
-}
+  },
+};
 
 Hooks.Scroll = {
   mounted() {
-    if (this.el.dataset.postsNb > 4) window.scrollTo({top: document.querySelector(this.el.dataset.target).scrollHeight, behavior: 'smooth'});
-    this.handleEvent("scroll", () => {
-    })
+    if (this.el.dataset.postsNb > 4)
+      window.scrollTo({
+        top: document.querySelector(this.el.dataset.target).scrollHeight,
+        behavior: "smooth",
+      });
+    this.handleEvent("scroll", () => {});
   },
   updated() {
-    let t = document.querySelector(this.el.dataset.target)
-    if (this.el.childElementCount > 4 && (window.scrollY + window.innerHeight >= t.offsetHeight - 300)) {
-      window.scrollTo({top: t.scrollHeight, behavior: 'smooth'});
+    let t = document.querySelector(this.el.dataset.target);
+    if (
+      this.el.childElementCount > 4 &&
+      window.scrollY + window.innerHeight >= t.offsetHeight - 300
+    ) {
+      window.scrollTo({ top: t.scrollHeight, behavior: "smooth" });
     }
-  }
-}
+  },
+};
 
 Hooks.ScrollIntoDiv = {
   mounted() {
@@ -144,120 +158,129 @@ Hooks.ScrollIntoDiv = {
   },
   scrollElement(firstScroll) {
     let t = this.el.parentElement;
-    if (firstScroll === true || (t.scrollHeight - t.scrollTop - t.clientHeight) <= 100) {
-      t.scrollTo({top: t.scrollHeight, behavior: 'smooth'})
+    if (
+      firstScroll === true ||
+      t.scrollHeight - t.scrollTop - t.clientHeight <= 100
+    ) {
+      t.scrollTo({ top: t.scrollHeight, behavior: "smooth" });
     }
-  }
-}
+  },
+};
 
 Hooks.NicknamePicker = {
   mounted() {
-    let currentNickname = localStorage.getItem("nickname") || ""
+    let currentNickname = localStorage.getItem("nickname") || "";
     if (currentNickname.length > 0) {
-      this.pushEvent("set-nickname", {nickname: currentNickname})
+      this.pushEvent("set-nickname", { nickname: currentNickname });
     }
 
-    this.el.addEventListener("click", (e) => this.clicked(e))
+    this.el.addEventListener("click", (e) => this.clicked(e));
   },
   destroyed() {
-    this.el.removeEventListener("click", (e) => this.clicked(e))
+    this.el.removeEventListener("click", (e) => this.clicked(e));
   },
   clicked(e) {
-    let nickname = prompt(this.el.dataset.prompt, localStorage.getItem("nickname") || "")
+    let nickname = prompt(
+      this.el.dataset.prompt,
+      localStorage.getItem("nickname") || ""
+    );
 
     if (nickname) {
-      localStorage.setItem("nickname", nickname)
-      this.pushEvent("set-nickname", {nickname: nickname})
+      localStorage.setItem("nickname", nickname);
+      this.pushEvent("set-nickname", { nickname: nickname });
     }
   },
-}
+};
 
 Hooks.EmptyNickname = {
   mounted() {
-    this.el.addEventListener("click", (e) => this.clicked(e))
+    this.el.addEventListener("click", (e) => this.clicked(e));
   },
   destroyed() {
-    this.el.removeEventListener("click", (e) => this.clicked(e))
+    this.el.removeEventListener("click", (e) => this.clicked(e));
   },
   clicked(e) {
-    localStorage.removeItem("nickname")
+    localStorage.removeItem("nickname");
   },
-}
+};
 
 Hooks.PostForm = {
   onPress(e, submitBtn, TA) {
     if (e.key == "Enter" && !e.shiftKey) {
-      e.preventDefault()
-      submitBtn.click()
+      e.preventDefault();
+      submitBtn.click();
     } else {
       if (TA.value.length > 1 && TA.value.length < 256) {
-        submitBtn.classList.remove("opacity-50")
-        submitBtn.classList.add("opacity-100")
-        submitBtn.disabled = false
+        submitBtn.classList.remove("opacity-50");
+        submitBtn.classList.add("opacity-100");
+        submitBtn.disabled = false;
       } else {
-        submitBtn.classList.add("opacity-50")
-        submitBtn.classList.remove("opacity-100")
-        submitBtn.disabled = true
+        submitBtn.classList.add("opacity-50");
+        submitBtn.classList.remove("opacity-100");
+        submitBtn.disabled = true;
       }
     }
   },
   onSubmit(e, TA) {
-    e.preventDefault()
-    document.getElementById("hiddenSubmit").click()
-    TA.value = ""
+    e.preventDefault();
+    document.getElementById("hiddenSubmit").click();
+    TA.value = "";
   },
   mounted() {
     setTimeout(() => {
-      const submitBtn = document.getElementById("submitBtn")
-      const TA = document.getElementById("postFormTA")
+      const submitBtn = document.getElementById("submitBtn");
+      const TA = document.getElementById("postFormTA");
       if (submitBtn && TA) {
-        submitBtn.addEventListener("click", (e) => this.onSubmit(e, TA))
-        TA.addEventListener("keydown",  (e) => this.onPress(e, submitBtn, TA))  
+        submitBtn.addEventListener("click", (e) => this.onSubmit(e, TA));
+        TA.addEventListener("keydown", (e) => this.onPress(e, submitBtn, TA));
       }
-    }, 500)
-    
+    }, 500);
+
     // set nickname if present
-    let nickname = this.el.dataset.nickname
+    let nickname = this.el.dataset.nickname;
     if (nickname) {
-      localStorage.setItem("nickname", nickname)
+      localStorage.setItem("nickname", nickname);
     }
   },
   updated() {
-    const submitBtn = document.getElementById("submitBtn")
-    const TA = document.getElementById("postFormTA")
+    const submitBtn = document.getElementById("submitBtn");
+    const TA = document.getElementById("postFormTA");
     if (TA.value.length > 1 && TA.value.length < 256) {
-      submitBtn.classList.remove("opacity-50")
-      submitBtn.classList.add("opacity-100")
-      submitBtn.disabled = false
+      submitBtn.classList.remove("opacity-50");
+      submitBtn.classList.add("opacity-100");
+      submitBtn.disabled = false;
     } else {
-      submitBtn.classList.add("opacity-50")
-      submitBtn.classList.remove("opacity-100")
-      submitBtn.disabled = true
+      submitBtn.classList.add("opacity-50");
+      submitBtn.classList.remove("opacity-100");
+      submitBtn.disabled = true;
     }
   },
   destroyed() {
-    const submitBtn = document.getElementById("submitBtn")
-    const TA = document.getElementById("postFormTA")
+    const submitBtn = document.getElementById("submitBtn");
+    const TA = document.getElementById("postFormTA");
     if (submitBtn && TA) {
-      TA.removeEventListener("keydown",  (e) => this.onPress(e, submitBtn, TA))
-      submitBtn.removeEventListener("click",  (e) => this.onSubmit(e, TA))  
+      TA.removeEventListener("keydown", (e) => this.onPress(e, submitBtn, TA));
+      submitBtn.removeEventListener("click", (e) => this.onSubmit(e, TA));
     }
-  }
-}
+  },
+};
 
 Hooks.CalendarLocalDate = {
   mounted() {
-    this.el.innerHTML = moment.utc(this.el.dataset.date).local().calendar()
+    this.el.innerHTML = moment.utc(this.el.dataset.date).local().calendar();
   },
   updated() {
-    this.el.innerHTML = moment.utc(this.el.dataset.date).local().calendar()
-  }
-}
+    this.el.innerHTML = moment.utc(this.el.dataset.date).local().calendar();
+  },
+};
 Hooks.Pickr = {
   mounted() {
-    const localTime = this.el.querySelector("input[type=text]")
-    const utcTime = this.el.querySelector("input[type=hidden]")
-    localTime.value = moment.utc(utcTime.value).local().format("DD-MM-YYYY HH:mm")
+    const localTime = this.el.querySelector("input[type=text]");
+    const utcTime = this.el.querySelector("input[type=hidden]");
+    localTime.value = moment
+      .utc(utcTime.value)
+      .local()
+      .format("DD-MM-YYYY HH:mm");
     this.pickr = new AirDatepicker(localTime, {
       dateFormat: "dd-MM-yyyy",
       timepicker: true,
@@ -265,140 +288,150 @@ Hooks.Pickr = {
       minDate: moment(),
       timeFormat: "HH:mm",
       selectedDates: [moment(localTime.value, "DD-MM-YYYY HH:mm").toDate()],
-      onSelect: ({date}) => {
-        const utc = moment(date).utc().format("YYYY-MM-DDTHH:mm:ss")
-        utcTime.value = utc
+      onSelect: ({ date }) => {
+        const utc = moment(date).utc().format("YYYY-MM-DDTHH:mm:ss");
+        utcTime.value = utc;
       },
-      locale: airdatepickerLocale[locale]
-    })
+      locale: airdatepickerLocale[locale],
+    });
   },
-  updated() {
-  },
+  updated() {},
   destroyed() {
-    this.pickr.destroy()
-  }
-}
+    this.pickr.destroy();
+  },
+};
 Hooks.Presenter = {
   mounted() {
-    this.presenter = new Presenter(this)
-    this.presenter.init()
-  }
-}
+    this.presenter = new Presenter(this);
+    this.presenter.init();
+  },
+};
 Hooks.Manager = {
   mounted() {
-    this.manager = new Manager(this)
-    this.manager.init()
+    this.manager = new Manager(this);
+    this.manager.init();
   },
   updated() {
-    this.manager.update()
-  }
-}
+    this.manager.update();
+  },
+};
 Hooks.OpenPresenter = {
   open(e) {
-    e.preventDefault()
-      window.open(this.el.dataset.url, 'newwindow',
-                'width=' + window.screen.width + ',height=' + window.screen.height)
+    e.preventDefault();
+    window.open(
+      this.el.dataset.url,
+      "newwindow",
+      "width=" + window.screen.width + ",height=" + window.screen.height
+    );
   },
   mounted() {
-    this.el.addEventListener("click", e => this.open(e))
+    this.el.addEventListener("click", (e) => this.open(e));
   },
   updated() {
-    this.el.removeEventListener("click", e => this.open(e))
-    this.el.addEventListener("click", e => this.open(e))
+    this.el.removeEventListener("click", (e) => this.open(e));
+    this.el.addEventListener("click", (e) => this.open(e));
   },
   destroyed() {
-    this.el.removeEventListener("click", e => this.open(e))
-  }
-}
+    this.el.removeEventListener("click", (e) => this.open(e));
+  },
+};
 Hooks.GlobalReacts = {
   mounted() {
-
-    this.handleEvent('global-react', data => {
+    this.handleEvent("global-react", (data) => {
       var img = document.createElement("img");
-      img.src = "/images/icons/" + data.type + ".svg"
-      img.className = "react-animation absolute transform opacity-0" + this.el.className
-      this.el.appendChild(img)
-    })
-    this.handleEvent('reset-global-react', data => {
-      this.el.innerHTML = ""
-    })
-  }
-}
+      img.src = "/images/icons/" + data.type + ".svg";
+      img.className =
+        "react-animation absolute transform opacity-0" + this.el.className;
+      this.el.appendChild(img);
+    });
+    this.handleEvent("reset-global-react", (data) => {
+      this.el.innerHTML = "";
+    });
+  },
+};
 Hooks.JoinEvent = {
   mounted() {
-    const loading = document.getElementById("loading")
-    const submit = document.getElementById("submit")
-    const input = document.getElementById("input")
+    const loading = document.getElementById("loading");
+    const submit = document.getElementById("submit");
+    const input = document.getElementById("input");
 
     submit.addEventListener("click", (e) => {
       if (input.value.length > 0) {
-        submit.style.display = "none"
-        loading.style.display = "block"
+        submit.style.display = "none";
+        loading.style.display = "block";
       }
-    })
+    });
   },
   destroyed() {
-    const loading = document.getElementById("loading")
-    const submit = document.getElementById("submit")
-    const input = document.getElementById("input")
+    const loading = document.getElementById("loading");
+    const submit = document.getElementById("submit");
+    const input = document.getElementById("input");
 
     submit.removeEventListener("click", (e) => {
       if (input.value.length > 0) {
-        submit.style.display = "none"
-        loading.style.display = "block"
+        submit.style.display = "none";
+        loading.style.display = "block";
       }
-    })
-  }
-}
+    });
+  },
+};
 Hooks.WelcomeEarly = {
   mounted() {
-
     if (localStorage.getItem("welcome-early") !== "false") {
-      this.el.style.display = "block"
+      this.el.style.display = "block";
       this.el.children[0].addEventListener("click", (e) => {
-        e.preventDefault()
-        localStorage.setItem("welcome-early", "false")
-        this.el.style.display = "none"
-      })
+        e.preventDefault();
+        localStorage.setItem("welcome-early", "false");
+        this.el.style.display = "none";
+      });
     }
-    
   },
   destroyed() {
     this.el.children[0].removeEventListener("click", (e) => {
-      e.preventDefault()
-      localStorage.setItem("welcome-early", "false")
-      this.el.style.display = "none"
-    })
-  }
-}
+      e.preventDefault();
+      localStorage.setItem("welcome-early", "false");
+      this.el.style.display = "none";
+    });
+  },
+};
 Hooks.ClickFeedback = {
   clicked(e) {
     this.el.className = "animate__animated animate__rubberBand animate__faster";
     setTimeout(() => {
       this.el.className = "";
-    } , 500);
+    }, 500);
   },
   mounted() {
-    this.el.addEventListener("click", (e) => this.clicked(e))
+    this.el.addEventListener("click", (e) => this.clicked(e));
   },
   destroyed() {
-    this.el.removeEventListener("click", (e) => this.clicked(e))
-  }
-}
+    this.el.removeEventListener("click", (e) => this.clicked(e));
+  },
+};
 Hooks.QRCode = {
   draw() {
-    var url = this.el.dataset.code ? window.location.protocol + "//" + window.location.host + "/e/" +  this.el.dataset.code : window.location.href;
-    this.el.style.width = document.documentElement.clientWidth * .27 + "px"
-    this.el.style.height = document.documentElement.clientWidth * .27 + "px"
+    var url = this.el.dataset.code
+      ? window.location.protocol +
+        "//" +
+        window.location.host +
+        "/e/" +
+        this.el.dataset.code
+      : window.location.href;
+    this.el.style.width = document.documentElement.clientWidth * 0.27 + "px";
+    this.el.style.height = document.documentElement.clientWidth * 0.27 + "px";
 
     if (this.qrCode == null) {
       this.qrCode = new QRCodeStyling({
-        width: this.el.dataset.dynamic ? document.documentElement.clientWidth * .25 : 240,
-        height: this.el.dataset.dynamic ? document.documentElement.clientWidth * .25 : 240,
+        width: this.el.dataset.dynamic
+          ? document.documentElement.clientWidth * 0.25
+          : 240,
+        height: this.el.dataset.dynamic
+          ? document.documentElement.clientWidth * 0.25
+          : 240,
         margin: 0,
         data: url,
         cornersSquareOptions: {
-          type: "square"
+          type: "square",
         },
         dotsOptions: {
           type: "square",
@@ -410,122 +443,133 @@ Hooks.QRCode = {
         imageOptions: {
           crossOrigin: "anonymous",
           imageSize: 0.6,
-          margin: 10
-        }
-      })
-      this.qrCode.append(this.el)
+          margin: 10,
+        },
+      });
+      this.qrCode.append(this.el);
     } else {
       this.qrCode.update({
-        width: this.el.dataset.dynamic ? document.documentElement.clientWidth * .25 : 240,
-        height: this.el.dataset.dynamic ? document.documentElement.clientWidth * .25 : 240
-      })
+        width: this.el.dataset.dynamic
+          ? document.documentElement.clientWidth * 0.25
+          : 240,
+        height: this.el.dataset.dynamic
+          ? document.documentElement.clientWidth * 0.25
+          : 240,
+      });
     }
-
   },
   mounted() {
     window.addEventListener("resize", this.draw.bind(this));
-    this.draw()
+    this.draw();
     if (this.el.dataset.getUrl) {
       setTimeout(() => {
-        var dataURL = this.qrCode._canvas.toDataURL()
-        document.getElementById("qr-url").value = dataURL
-      }, 500);  
+        var dataURL = this.qrCode._canvas.toDataURL();
+        document.getElementById("qr-url").value = dataURL;
+      }, 500);
     }
   },
-  updated() {
-  },
-  destroyed() {
-  }
-}
+  updated() {},
+  destroyed() {},
+};
 
 Hooks.Dropdown = {
   mounted() {
     this.el.addEventListener("click", (e) => {
-      e.preventDefault()
-      this.el.classList.toggle("hidden")
-    })
-  }
-}
+      e.preventDefault();
+      this.el.classList.toggle("hidden");
+    });
+  },
+};
 
-let Uploaders = {}
+let Uploaders = {};
 
-Uploaders.S3 = function(entries, onViewError){
-  entries.forEach(entry => {
-    let formData = new FormData()
-    let {url, fields} = entry.meta
-    Object.entries(fields).forEach(([key, val]) => formData.append(key, val))
-    formData.append("file", entry.file)
-    let xhr = new XMLHttpRequest()
-    onViewError(() => xhr.abort())
-    xhr.onload = () => xhr.status === 204 ? entry.progress(100) : entry.error()
-    xhr.onerror = () => entry.error()
+Uploaders.S3 = function (entries, onViewError) {
+  entries.forEach((entry) => {
+    let formData = new FormData();
+    let { url, fields } = entry.meta;
+    Object.entries(fields).forEach(([key, val]) => formData.append(key, val));
+    formData.append("file", entry.file);
+    let xhr = new XMLHttpRequest();
+    onViewError(() => xhr.abort());
+    xhr.onload = () =>
+      xhr.status === 204 ? entry.progress(100) : entry.error();
+    xhr.onerror = () => entry.error();
     xhr.upload.addEventListener("progress", (event) => {
-      if(event.lengthComputable){
-        let percent = Math.round((event.loaded / event.total) * 100)
-        if(percent < 100){ entry.progress(percent) }
+      if (event.lengthComputable) {
+        let percent = Math.round((event.loaded / event.total) * 100);
+        if (percent < 100) {
+          entry.progress(percent);
+        }
       }
-    })
+    });
 
-    xhr.open("POST", url, true)
-    xhr.send(formData)
-  })
-}
-
+    xhr.open("POST", url, true);
+    xhr.send(formData);
+  });
+};
 
 let liveSocket = new LiveSocket("/live", Socket, {
   uploaders: Uploaders,
-  params: {_csrf_token: csrfToken, tz: Intl.DateTimeFormat().resolvedOptions().timeZone, host: window.location.host},
+  params: {
+    _csrf_token: csrfToken,
+    tz: Intl.DateTimeFormat().resolvedOptions().timeZone,
+    host: window.location.host,
+  },
   hooks: Hooks,
   dom: {
-    onBeforeElUpdated(from, to){
-      if(from._x_dataStack){ 
-        window.Alpine.clone(from, to)
-        window.Alpine.initTree(to)
+    onBeforeElUpdated(from, to) {
+      if (from._x_dataStack) {
+        window.Alpine.clone(from, to);
+        window.Alpine.initTree(to);
       }
-    }
-  },})
+    },
+  },
+});
 
 // Show progress bar on live navigation and form submits
-let topBarScheduled = undefined
-topbar.config({barColors: {0: "#fff"}, shadowColor: "rgba(0, 0, 0, .3)"})
-window.addEventListener("phx:page-loading-start", info => {
-  if(!topBarScheduled) {
-    topBarScheduled = setTimeout(() => topbar.show(), 500)
+let topBarScheduled = undefined;
+topbar.config({ barColors: { 0: "#fff" }, shadowColor: "rgba(0, 0, 0, .3)" });
+window.addEventListener("phx:page-loading-start", (info) => {
+  if (!topBarScheduled) {
+    topBarScheduled = setTimeout(() => topbar.show(), 500);
   }
-})
-window.addEventListener("phx:page-loading-stop", info => {
-  clearTimeout(topBarScheduled)
-  topBarScheduled = undefined
-  topbar.hide()
-})
+});
+window.addEventListener("phx:page-loading-stop", (info) => {
+  clearTimeout(topBarScheduled);
+  topBarScheduled = undefined;
+  topbar.hide();
+});
 
-const renderOnlineUsers = function(presences) {
-  let onlineUsers = Presence.list(presences, (_id, {metas: [user, ...rest]}) => {
-    return onlineUserTemplate(user);
-  }).join("")
+const renderOnlineUsers = function (presences) {
+  let onlineUsers = Presence.list(
+    presences,
+    (_id, { metas: [user, ...rest] }) => {
+      return onlineUserTemplate(user);
+    }
+  ).join("");
 
   document.querySelector("body").innerHTML = onlineUsers;
-}
+};
 
-const onlineUserTemplate = function(user) {
+const onlineUserTemplate = function (user) {
   return `
     <div id="online-user">
       <strong class="text-secondary">aaa</strong>
     </div>
-  `
-}
+  `;
+};
 
 let presences = {};
-liveSocket.on("presence_state", state => {
-  presences = Presence.syncState(presences, state)
-  renderOnlineUsers(presences)
-})
+liveSocket.on("presence_state", (state) => {
+  presences = Presence.syncState(presences, state);
+  renderOnlineUsers(presences);
+});
 
 // connect if there are any LiveViews on the page
-liveSocket.connect()
+liveSocket.connect();
 
 // expose liveSocket on window for web console debug logs and latency simulation:
 // >> liveSocket.enableDebug()
 // >> liveSocket.enableLatencySim(1000)  // enabled for duration of browser session
 // >> liveSocket.disableLatencySim()
-window.liveSocket = liveSocket
+window.liveSocket = liveSocket;
