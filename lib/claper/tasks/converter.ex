@@ -63,7 +63,7 @@ defmodule Claper.Tasks.Converter do
 
   defp file_to_pdf(:ppt, path, file) do
     Porcelain.exec(
-      "libreoffice",
+      get_libreoffice_binary(),
       [
         "--headless",
         "--invisible",
@@ -78,7 +78,7 @@ defmodule Claper.Tasks.Converter do
 
   defp file_to_pdf(:pptx, path, file) do
     Porcelain.exec(
-      "libreoffice",
+      get_libreoffice_binary(),
       [
         "--headless",
         "--invisible",
@@ -204,5 +204,12 @@ defmodule Claper.Tasks.Converter do
 
   defp get_resolution do
     Application.get_env(:claper, :presentations) |> Keyword.get(:resolution)
+  end
+
+  defp get_libreoffice_binary do
+    case :os.type() do
+      {:unix, :darwin} -> "soffice"
+      _ -> "libreoffice"
+    end
   end
 end
