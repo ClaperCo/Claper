@@ -1,5 +1,7 @@
 ## v2.0.0
 
+### Features
+
 - Add dynamic layout in the manager view
 - Add quick event feature
 - Add question feature
@@ -9,8 +11,10 @@
 - Add language switcher in user settings
 - Add tour guide for new users
 - Add headers to exported CSV in reports
-- Add the ability to embed attendees room in an iframe
 - Add spanish locale (#84) (@eduproinf)
+
+### Fixes and improvements
+
 - Improve Docker image to support both ARM and AMD64 architecture
 - Change date picker for a more user-friendly one
 - Upgrade Ecto, Phoenix and LiveView
@@ -18,6 +22,8 @@
 - Fix average voters stats
 - Fix some UI/UX issues
 - Remove end date for events
+- Replace `ENDPOINT_PORT` and `ENDPOINT_HOST` with `BASE_URL` environment variable
+- Add `SAME_SITE_COOKIE` and `SECURE_COOKIE` environment variables
 
 ## v1.7.0
 

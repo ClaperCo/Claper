@@ -41,8 +41,18 @@ case secret_key_base do
     nil
 end
 
-endpoint_host = get_var_from_path_or_env(config_dir, "ENDPOINT_HOST", "localhost")
-endpoint_port = get_int_from_path_or_env(config_dir, "ENDPOINT_PORT", 4000)
+site_url = get_var_from_path_or_env(config_dir, "SITE_URL", "http://localhost:4000")
+base_url = get_var_from_path_or_env(config_dir, "BASE_URL")
+
+if !base_url do
+  raise "BASE_URL configuration option is required. See https://docs.claper.co/configuration.html#production-docker"
+end
+
+base_url = URI.parse(base_url)
+
+if base_url.scheme not in ["http", "https"] do
+  raise "BASE_URL must start with `http` or `https`. Currently configured as `#{System.get_env("BASE_URL")}`"
+end
 
 max_file_size = get_int_from_path_or_env(config_dir, "MAX_FILE_SIZE_MB", 15)
 
@@ -67,6 +77,11 @@ aws_access_key_id = get_var_from_path_or_env(config_dir, "AWS_ACCESS_KEY_ID", ni
 aws_secret_access_key = get_var_from_path_or_env(config_dir, "AWS_SECRET_ACCESS_KEY", nil)
 aws_region = get_var_from_path_or_env(config_dir, "AWS_REGION", nil)
 
+same_site_cookie = get_var_from_path_or_env(config_dir, "SAME_SITE_COOKIE", "Lax")
+
+secure_cookie =
+  get_var_from_path_or_env(config_dir, "SECURE_COOKIE", "false") |> String.to_existing_atom()
+
 config :claper, Claper.Repo,
   url: database_url,
   ssl: db_ssl,
@@ -78,17 +93,16 @@ config :claper, Claper.Repo,
   queue_target: queue_target
 
 config :claper, ClaperWeb.Endpoint,
-  url: [
-    host: endpoint_host,
-    port: endpoint_port
-  ],
+  url: [scheme: base_url.scheme, host: base_url.host, path: base_url.path, port: base_url.port],
   http: [
     ip: listen_ip,
     port: port,
     transport_options: [max_connections: :infinity],
     protocol_options: [max_request_line_length: 8192, max_header_value_length: 8192]
   ],
-  secret_key_base: secret_key_base
+  secret_key_base: secret_key_base,
+  same_site_cookie: same_site_cookie,
+  secure_cookie: secure_cookie
 
 config :claper,
   enable_account_creation: enable_account_creation
