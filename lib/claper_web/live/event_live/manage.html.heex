@@ -7,6 +7,49 @@
   data-current-page={@state.position}
 >
   <div
+    id="settings-modal"
+    class={"#{if !@settings_modal, do: 'hidden' } fixed z-30 inset-0 overflow-y-auto p-4 sm:p-6 md:p-24
+    transform transition-all duration-150"}
+    role="dialog"
+    aria-modal="true"
+  >
+    <div
+      phx-click={toggle_settings_modal()}
+      class="fixed inset-0 bg-gray-800 bg-opacity-75 transition-opacity w-full h-full"
+      aria-hidden="true"
+    >
+    </div>
+    <div class="mx-auto max-w-xl transform divide-y divide-gray-100 overflow-hidden rounded-xl bg-white shadow-2xl ring-1 ring-black ring-opacity-5 transition-all">
+      <button phx-click={toggle_settings_modal()} class="absolute right-0 top-0">
+        <svg
+          class="text-gray-500 h-9 transform rotate-45"
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 20 20"
+          fill="currentColor"
+          aria-hidden="true"
+        >
+          <path
+            fill-rule="evenodd"
+            d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
+            clip-rule="evenodd"
+          />
+        </svg>
+      </button>
+      <div id="settings-modal-content" class="bg-gray-100 p-4">
+        <.live_component
+          module={ClaperWeb.EventLive.ManagerSettingsComponent}
+          id="settings-modal-pane"
+          module={ClaperWeb.EventLive.ManagerSettingsComponent}
+          create={@create}
+          current_poll={@current_poll}
+          state={@state}
+          show_shortcut={false}
+        />
+      </div>
+    </div>
+  </div>
+
+  <div
     id="add-modal"
     class={"#{if !@create, do: 'hidden' } fixed z-30 inset-0 overflow-y-auto p-4 sm:p-6 md:p-24
     transform transition-all duration-150"}
@@ -362,7 +405,7 @@
             data-tg-order="4"
             data-tg-tour={"<p>#{gettext("Click here to open the presentation window.")}</p>"}
             data-tg-group="manage"
-            class="inline-flex items-center px-5 py-1 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-gradient-to-tl from-primary-500 to-secondary-500 bg-size-200 bg-pos-0 hover:bg-pos-100 transition-all duration-500"
+            class="hidden md:inline-flex items-center px-5 py-1 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-gradient-to-tl from-primary-500 to-secondary-500 bg-size-200 bg-pos-0 hover:bg-pos-100 transition-all duration-500"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -380,6 +423,94 @@
             </svg>
             <%= gettext("Open presentation") %>
           </button>
+          <div class="flex items-center gap-x-2 md:hidden">
+            <button phx-click={toggle_settings_modal()} class="mx-2">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+                class="w-6 h-6"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M11.828 2.25c-.916 0-1.699.663-1.85 1.567l-.091.549a.798.798 0 0 1-.517.608 7.45 7.45 0 0 0-.478.198.798.798 0 0 1-.796-.064l-.453-.324a1.875 1.875 0 0 0-2.416.2l-.243.243a1.875 1.875 0 0 0-.2 2.416l.324.453a.798.798 0 0 1 .064.796 7.448 7.448 0 0 0-.198.478.798.798 0 0 1-.608.517l-.55.092a1.875 1.875 0 0 0-1.566 1.849v.344c0 .916.663 1.699 1.567 1.85l.549.091c.281.047.508.25.608.517.06.162.127.321.198.478a.798.798 0 0 1-.064.796l-.324.453a1.875 1.875 0 0 0 .2 2.416l.243.243c.648.648 1.67.733 2.416.2l.453-.324a.798.798 0 0 1 .796-.064c.157.071.316.137.478.198.267.1.47.327.517.608l.092.55c.15.903.932 1.566 1.849 1.566h.344c.916 0 1.699-.663 1.85-1.567l.091-.549a.798.798 0 0 1 .517-.608 7.52 7.52 0 0 0 .478-.198.798.798 0 0 1 .796.064l.453.324a1.875 1.875 0 0 0 2.416-.2l.243-.243c.648-.648.733-1.67.2-2.416l-.324-.453a.798.798 0 0 1-.064-.796c.071-.157.137-.316.198-.478.1-.267.327-.47.608-.517l.55-.091a1.875 1.875 0 0 0 1.566-1.85v-.344c0-.916-.663-1.699-1.567-1.85l-.549-.091a.798.798 0 0 1-.608-.517 7.507 7.507 0 0 0-.198-.478.798.798 0 0 1 .064-.796l.324-.453a1.875 1.875 0 0 0-.2-2.416l-.243-.243a1.875 1.875 0 0 0-2.416-.2l-.453.324a.798.798 0 0 1-.796.064 7.462 7.462 0 0 0-.478-.198.798.798 0 0 1-.517-.608l-.091-.55a1.875 1.875 0 0 0-1.85-1.566h-.344ZM12 15.75a3.75 3.75 0 1 0 0-7.5 3.75 3.75 0 0 0 0 7.5Z"
+                  clip-rule="evenodd"
+                />
+              </svg>
+            </button>
+            <button
+              :if={@state.position <= 0}
+              class="flex opacity-50 items-center justify-center px-2 py-1 text-white bg-primary-500 hover:bg-primary-600 rounded-md my-5 mx-auto text-xs"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+                class="w-6 h-6"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M7.72 12.53a.75.75 0 0 1 0-1.06l7.5-7.5a.75.75 0 1 1 1.06 1.06L9.31 12l6.97 6.97a.75.75 0 1 1-1.06 1.06l-7.5-7.5Z"
+                  clip-rule="evenodd"
+                />
+              </svg>
+            </button>
+            <button
+              :if={@state.position > 0}
+              phx-click="current-page"
+              phx-value-page={@state.position - 1}
+              class="flex items-center justify-center px-2 py-1 text-white bg-primary-500 hover:bg-primary-600 rounded-md my-5 mx-auto text-xs"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+                class="w-6 h-6"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M7.72 12.53a.75.75 0 0 1 0-1.06l7.5-7.5a.75.75 0 1 1 1.06 1.06L9.31 12l6.97 6.97a.75.75 0 1 1-1.06 1.06l-7.5-7.5Z"
+                  clip-rule="evenodd"
+                />
+              </svg>
+            </button>
+            <button
+              :if={@state.position < @event.presentation_file.length - 1}
+              phx-click="current-page"
+              phx-value-page={@state.position + 1}
+              class="flex items-center justify-center px-2 py-1 text-white bg-primary-500 hover:bg-primary-600 rounded-md my-5 mx-auto text-xs"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+                class="w-6 h-6"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M16.28 11.47a.75.75 0 0 1 0 1.06l-7.5 7.5a.75.75 0 0 1-1.06-1.06L14.69 12 7.72 5.03a.75.75 0 0 1 1.06-1.06l7.5 7.5Z"
+                  clip-rule="evenodd"
+                />
+              </svg>
+            </button>
+            <button
+              :if={@state.position >= @event.presentation_file.length - 1}
+              class="flex opacity-50 items-center justify-center px-2 py-1 text-white bg-primary-500 hover:bg-primary-600 rounded-md my-5 mx-auto text-xs"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+                class="w-6 h-6"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M16.28 11.47a.75.75 0 0 1 0 1.06l-7.5 7.5a.75.75 0 0 1-1.06-1.06L14.69 12 7.72 5.03a.75.75 0 0 1 1.06-1.06l7.5 7.5Z"
+                  clip-rule="evenodd"
+                />
+              </svg>
+            </button>
+          </div>
         </div>
       </div>
     </div>
@@ -736,10 +867,10 @@
         phx-hook="Split"
         data-gutter=".gutter-2"
         data-type="row"
-        class="grid grid-rows-[1fr_10px_1fr] overflow-y-auto"
+        class="md:grid grid-rows-[1fr_10px_1fr] overflow-y-auto"
       >
         <div
-          class="bg-gray-200 border-2 overflow-y-auto relative"
+          class="bg-gray-200 border-2 overflow-auto relative grid grid-rows-[auto_1fr] h-full w-full"
           data-tg-title={"#{gettext("Attendees interactions")}"}
           data-tg-order="2"
           data-tg-tour={"<p class='mb-3'>#{gettext("Here you'll find all interactions from your attendees. You can manage messages, pinned messages, and submitted forms.")}</p><p class='opacity-50 text-xs'>#{gettext("Identify users by their unique avatars.")}</p>"}
@@ -748,7 +879,7 @@
           <ul
             id="menu"
             phx-update="replace"
-            class="fixed z-10 flex items-center bg-gray-200 space-x-3 px-2 w-full py-3 overflow-x-auto"
+            class="flex flex-col md:flex-row md:flex items-center bg-gray-200 space-y-2 md:space-y-0 space-x-0 md:space-x-3 px-2 w-full py-3"
           >
             <li class={"rounded-md #{if @list_tab==:posts, do: 'bg-secondary-600 text-white' ,
                 else: 'bg-white text-gray-600' } px-2 py-0.5 text-sm shadow-sm"}>
@@ -812,7 +943,7 @@
             <div
               :if={@post_count > 0}
               id="post-list"
-              class="overflow-y-auto pb-5 pt-8 px-5"
+              class="overflow-y-auto pb-5 px-5"
               phx-update="stream"
               phx-hook="ScrollIntoDiv"
             >
@@ -829,8 +960,7 @@
           <%= if @list_tab == :questions do %>
             <div
               :if={@question_count == 0}
-              class="text-center flex flex-col space-y-5 items-center justify-center text-gray-400"
-              style="height: 100%;"
+              class="text-center flex flex-col space-y-5 items-center justify-center text-gray-400 h-full"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -853,7 +983,7 @@
             </div>
 
             <div :if={@question_count > 0} class="overflow-y-auto max-h-full">
-              <div class="mt-12 px-5 w-full flex items-center gap-x-2">
+              <div class="px-5 w-full flex items-center gap-x-2">
                 <button
                   class="bg-gray-300 text-gray-700 rounded-md px-3 py-1 flex items-center gap-x-1"
                   phx-click="sort-questions"
@@ -895,7 +1025,7 @@
               </div>
               <div
                 id="question-list"
-                class="overflow-y-auto pb-5 pt-1 px-5"
+                class="overflow-y-auto pb-5 px-5"
                 phx-update="stream"
                 phx-hook="ScrollIntoDiv"
               >
@@ -913,8 +1043,7 @@
           <%= if @list_tab == :pinned_posts do %>
             <div
               :if={@pinned_post_count == 0}
-              class="text-center flex flex-col space-y-5 items-center justify-center text-gray-400"
-              style="height: 100%;"
+              class="text-center flex flex-col space-y-5 items-center justify-center text-gray-400 h-full"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -938,7 +1067,7 @@
               <div
                 :if={@pinned_post_count > 0}
                 id="pinned-post-list"
-                class="overflow-y-auto pb-5 pt-8 px-5"
+                class="overflow-y-auto pb-5 px-5"
                 phx-update="stream"
                 phx-hook="ScrollIntoDiv"
               >
@@ -982,7 +1111,7 @@
             <% end %>
             <div
               id="form-list"
-              class="overflow-y-auto max-h-full pb-5 pt-8 px-5"
+              class="overflow-y-auto max-h-full pb-5 px-5"
               phx-update="stream"
               data-forms-nb={@form_submit_count}
               phx-hook="ScrollIntoDiv"
@@ -1037,142 +1166,24 @@
           <% end %>
         </div>
 
-        <div class="gutter-2 col-span-full cursor-row-resize z-20 row-[2] bg-gray-50 text-center text-gray-300 text-sm leading-3">
+        <div class="hidden md:block gutter-2 col-span-full cursor-row-resize z-20 row-[2] bg-gray-50 text-center text-gray-300 text-sm leading-3">
           •••
         </div>
 
         <div
-          class="px-5 py-3 grid grid-cols-1 lg:grid-cols-2 z-20 bg-white"
+          class="hidden md:grid px-5 py-3 grid-cols-1 lg:grid-cols-2 z-20 bg-white"
           data-tg-title={"#{gettext("Settings")}"}
           data-tg-order="3"
           data-tg-tour={"<p class='mb-3'>#{gettext("You can control each setting for the presentation (showing on the big screen) and on the attendee's room.")}</p><p class='opacity-50 text-xs'>#{gettext("Use the associated keyboard shortcuts for quick toggling of these settings.")}</p>"}
           data-tg-group="manage"
         >
-          <div>
-            <span class="font-semibold text-lg">
-              <%= gettext("Presentation settings") %>
-            </span>
-
-            <div class="flex space-x-2 items-center mt-3">
-              <ClaperWeb.Component.Input.check
-                key={:join_screen_visible}
-                checked={@state.join_screen_visible}
-                shortcut={if @create == nil, do: "Q", else: nil}
-              />
-              <span>
-                <%= gettext("Show instructions") %>
-                <code class="px-2 py-1.5 text-xs font-semibold text-gray-800 bg-gray-100 border border-gray-200 rounded-lg">
-                  q
-                </code>
-              </span>
-            </div>
-
-            <div class="flex space-x-2 items-center mt-3">
-              <ClaperWeb.Component.Input.check
-                key={:chat_visible}
-                checked={@state.chat_visible}
-                shortcut={if @create == nil, do: "W", else: nil}
-              />
-              <span>
-                <%= gettext("Show messages") %>
-                <code class="px-2 py-1.5 text-xs font-semibold text-gray-800 bg-gray-100 border border-gray-200 rounded-lg">
-                  w
-                </code>
-              </span>
-            </div>
-
-            <div class="flex space-x-2 items-center mt-3">
-              <ClaperWeb.Component.Input.check
-                key={:show_only_pinned}
-                checked={@state.show_only_pinned}
-                shortcut={if @create == nil, do: "E", else: nil}
-              />
-              <span>
-                <%= gettext("Show only pinned messages") %>
-                <code class="px-2 py-1.5 text-xs font-semibold text-gray-800 bg-gray-100 border border-gray-200 rounded-lg">
-                  e
-                </code>
-              </span>
-            </div>
-
-            <div class={"#{if !@current_poll, do: 'opacity-50' } flex space-x-2 items-center mt-3"}>
-              <ClaperWeb.Component.Input.check
-                key={:poll_visible}
-                disabled={!@current_poll}
-                checked={@state.poll_visible}
-                shortcut={if @create == nil, do: "R", else: nil}
-              />
-              <span>
-                <%= gettext("Show poll results") %>
-                <code class="px-2 py-1.5 text-xs font-semibold text-gray-800 bg-gray-100 border border-gray-200 rounded-lg">
-                  r
-                </code>
-              </span>
-            </div>
-          </div>
-
-          <div>
-            <span class="font-semibold text-lg">
-              <%= gettext("Attendees settings") %>
-            </span>
-
-            <div class="flex space-x-2 items-center mt-3">
-              <ClaperWeb.Component.Input.check
-                key={:chat_enabled}
-                checked={@state.chat_enabled}
-                shortcut={if @create == nil, do: "A", else: nil}
-              />
-              <span>
-                <%= gettext("Enable messages") %>
-                <code class="px-2 py-1.5 text-xs font-semibold text-gray-800 bg-gray-100 border border-gray-200 rounded-lg">
-                  a
-                </code>
-              </span>
-            </div>
-
-            <div class="flex space-x-2 items-center mt-3">
-              <ClaperWeb.Component.Input.check
-                key={:anonymous_chat_enabled}
-                checked={@state.anonymous_chat_enabled}
-                shortcut={if @create == nil, do: "S", else: nil}
-              />
-              <span>
-                <%= gettext("Enable anonymous messages") %>
-                <code class="px-2 py-1.5 text-xs font-semibold text-gray-800 bg-gray-100 border border-gray-200 rounded-lg">
-                  s
-                </code>
-              </span>
-            </div>
-
-            <div class="flex space-x-2 items-center mt-3">
-              <ClaperWeb.Component.Input.check
-                key={:message_reaction_enabled}
-                checked={@state.message_reaction_enabled}
-                shortcut={if @create == nil, do: "D", else: nil}
-              />
-              <span>
-                <%= gettext("Enable message reactions") %>
-                <code class="px-2 py-1.5 text-xs font-semibold text-gray-800 bg-gray-100 border border-gray-200 rounded-lg">
-                  d
-                </code>
-              </span>
-            </div>
-
-            <div class={"#{if !@current_poll, do: 'opacity-50' } flex space-x-2 items-center mt-3"}>
-              <ClaperWeb.Component.Input.check
-                key={:show_poll_results_enabled}
-                disabled={!@current_poll}
-                checked={@state.show_poll_results_enabled}
-                shortcut={if @create == nil, do: "F", else: nil}
-              />
-              <span>
-                <%= gettext("Show poll results") %>
-                <code class="px-2 py-1.5 text-xs font-semibold text-gray-800 bg-gray-100 border border-gray-200 rounded-lg">
-                  f
-                </code>
-              </span>
-            </div>
-          </div>
+          <.live_component
+            id="settings-pane"
+            module={ClaperWeb.EventLive.ManagerSettingsComponent}
+            create={@create}
+            current_poll={@current_poll}
+            state={@state}
+          />
         </div>
       </div>
     </div>

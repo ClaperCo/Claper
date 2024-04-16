@@ -41,6 +41,7 @@ defmodule ClaperWeb.EventLive.Manage do
 
       socket =
         socket
+        |> assign(:settings_modal, false)
         |> assign(:attendees_nb, 1)
         |> assign(:event, event)
         |> assign(:sort_questions_by, "date")
@@ -719,6 +720,15 @@ defmodule ClaperWeb.EventLive.Manage do
       in: "animate__animated animate__fadeIn"
     )
     |> JS.push("maybe-redirect", target: "#add-modal")
+  end
+
+  def toggle_settings_modal(js \\ %JS{}) do
+    js
+    |> JS.toggle(
+      to: "#settings-modal",
+      out: "animate__animated animate__fadeOut",
+      in: "animate__animated animate__fadeIn"
+    )
   end
 
   defp apply_action(socket, :show, _params) do
