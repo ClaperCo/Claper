@@ -33,16 +33,24 @@ defmodule ClaperWeb.EventLive.Presenter do
         )
       end
 
-      host =
-        case get_connect_params(socket) do
-          nil -> ""
-          %{"host" => host} -> host
-        end
+      endpoint_config = Application.get_env(:claper, ClaperWeb.Endpoint)[:url]
+      port = endpoint_config[:port]
+      scheme = endpoint_config[:scheme]
+      host = endpoint_config[:host]
+      path = endpoint_config[:path]
+
+      default_ports = [80, 443]
+      port_suffix = if port in default_ports, do: "", else: ":" <> Integer.to_string(port)
+
+      host = "#{scheme}://#{host}#{port_suffix}/#{path}"
 
       socket =
         socket
         |> assign(:attendees_nb, 1)
-        |> assign(:host, host)
+        |> assign(
+          :host,
+          host
+        )
         |> assign(:event, event)
         |> assign(:state, event.presentation_file.presentation_state)
         |> assign(:posts, list_posts(socket, event.uuid))
