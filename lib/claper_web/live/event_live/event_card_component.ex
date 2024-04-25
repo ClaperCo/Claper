@@ -123,7 +123,7 @@ defmodule ClaperWeb.EventLive.EventCardComponent do
                             clip-rule="evenodd"
                           />
                         </svg>
-                        <span><%= gettext("Presentation manager") %></span>
+                        <span><%= gettext("Event manager") %></span>
                       </a>
                     </li>
                     <li>

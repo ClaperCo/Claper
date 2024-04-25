@@ -8,7 +8,7 @@ msgstr ""
 "Language: en\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: lib/claper_web/live/event_live/manage.html.heex:1046
+#: lib/claper_web/live/event_live/manage.html.heex:1175
 #: lib/claper_web/live/user_settings_live/show.ex:50
 #: lib/claper_web/live/user_settings_live/show.html.heex:5
 #: lib/claper_web/templates/layout/_user_menu.html.heex:6
@@ -16,7 +16,7 @@ msgstr ""
 msgid "Settings"
 msgstr ""
 
-#: lib/claper_web/live/event_live/manage.ex:751
+#: lib/claper_web/live/event_live/manage.ex:761
 #: lib/claper_web/live/form_live/form_component.html.heex:37
 #: lib/claper_web/live/user_settings_live/show.html.heex:34
 #: lib/claper_web/templates/user_registration/new.html.heex:29
@@ -178,8 +178,8 @@ msgstr ""
 msgid "Created successfully"
 msgstr ""
 
-#: lib/claper_web/live/event_live/event_card_component.ex:192
-#: lib/claper_web/live/event_live/event_card_component.ex:213
+#: lib/claper_web/live/event_live/event_card_component.ex:186
+#: lib/claper_web/live/event_live/event_card_component.ex:207
 #: lib/claper_web/live/event_live/form_component.ex:97
 #: lib/claper_web/live/event_live/index.ex:139
 #, elixir-autogen, elixir-format
@@ -198,9 +198,9 @@ msgid "Create"
 msgstr ""
 
 #: lib/claper_web/live/embed_live/form_component.html.heex:56
-#: lib/claper_web/live/event_live/event_card_component.ex:255
+#: lib/claper_web/live/event_live/event_card_component.ex:249
 #: lib/claper_web/live/event_live/event_form_component.html.heex:37
-#: lib/claper_web/live/event_live/manage.html.heex:994
+#: lib/claper_web/live/event_live/manage.html.heex:1123
 #: lib/claper_web/live/event_live/manageable_post_component.ex:90
 #: lib/claper_web/live/event_live/post_component.ex:70
 #: lib/claper_web/live/event_live/post_component.ex:142
@@ -333,12 +333,12 @@ msgstr ""
 msgid "Presentation replaced"
 msgstr ""
 
-#: lib/claper_web/live/event_live/manage.html.heex:183
+#: lib/claper_web/live/event_live/manage.html.heex:226
 #, elixir-autogen, elixir-format
 msgid "Edit poll"
 msgstr ""
 
-#: lib/claper_web/live/event_live/manage.html.heex:182
+#: lib/claper_web/live/event_live/manage.html.heex:225
 #, elixir-autogen, elixir-format
 msgid "New poll"
 msgstr ""
@@ -353,13 +353,13 @@ msgstr ""
 msgid "Upload failed"
 msgstr ""
 
-#: lib/claper_web/live/event_live/manage.html.heex:70
+#: lib/claper_web/live/event_live/manage.html.heex:113
 #, elixir-autogen, elixir-format
 msgid "Add poll to know opinion of your public."
 msgstr ""
 
-#: lib/claper_web/live/event_live/manage.html.heex:67
-#: lib/claper_web/live/event_live/manage.html.heex:474
+#: lib/claper_web/live/event_live/manage.html.heex:110
+#: lib/claper_web/live/event_live/manage.html.heex:605
 #, elixir-autogen, elixir-format
 msgid "Poll"
 msgstr ""
@@ -393,9 +393,9 @@ msgstr ""
 msgid "User email address"
 msgstr ""
 
-#: lib/claper_web/live/event_live/manage.html.heex:492
-#: lib/claper_web/live/event_live/manage.html.heex:574
-#: lib/claper_web/live/event_live/manage.html.heex:648
+#: lib/claper_web/live/event_live/manage.html.heex:623
+#: lib/claper_web/live/event_live/manage.html.heex:705
+#: lib/claper_web/live/event_live/manage.html.heex:779
 #, elixir-autogen, elixir-format
 msgid "Active"
 msgstr ""
@@ -405,12 +405,12 @@ msgstr ""
 msgid "Changing your file will remove all interaction elements like polls associated."
 msgstr ""
 
-#: lib/claper_web/live/event_live/manage.html.heex:809
+#: lib/claper_web/live/event_live/manage.html.heex:940
 #, elixir-autogen, elixir-format
 msgid "Messages from attendees will appear here."
 msgstr ""
 
-#: lib/claper_web/live/event_live/event_card_component.ex:224
+#: lib/claper_web/live/event_live/event_card_component.ex:218
 #, elixir-autogen, elixir-format
 msgid "Processing your file..."
 msgstr ""
@@ -420,7 +420,7 @@ msgstr ""
 msgid "This will delete all responses associated and the poll itself, are you sure?"
 msgstr ""
 
-#: lib/claper_web/live/event_live/manage.html.heex:353
+#: lib/claper_web/live/event_live/manage.html.heex:396
 #, elixir-autogen, elixir-format
 msgid "Press <strong>F</strong> in the presentation window to enable fullscreen"
 msgstr ""
@@ -430,15 +430,15 @@ msgstr ""
 msgid "Ask, comment..."
 msgstr ""
 
-#: lib/claper_web/live/event_live/manage.html.heex:755
+#: lib/claper_web/live/event_live/manage.html.heex:886
 #: lib/claper_web/live/stat_live/index.html.heex:71
 #, elixir-autogen, elixir-format
 msgid "Messages"
 msgstr ""
 
-#: lib/claper_web/live/event_live/manage.html.heex:500
-#: lib/claper_web/live/event_live/manage.html.heex:582
-#: lib/claper_web/live/event_live/manage.html.heex:656
+#: lib/claper_web/live/event_live/manage.html.heex:631
+#: lib/claper_web/live/event_live/manage.html.heex:713
+#: lib/claper_web/live/event_live/manage.html.heex:787
 #, elixir-autogen, elixir-format
 msgid "Set active"
 msgstr ""
@@ -475,7 +475,7 @@ msgstr ""
 msgid "You can change your email by visiting the URL below"
 msgstr ""
 
-#: lib/claper_web/live/event_live/manage.html.heex:700
+#: lib/claper_web/live/event_live/manage.html.heex:831
 #, elixir-autogen, elixir-format
 msgid "Add interaction"
 msgstr ""
@@ -593,7 +593,7 @@ msgstr ""
 msgid "No messages has been sent"
 msgstr ""
 
-#: lib/claper_web/live/event_live/event_card_component.ex:261
+#: lib/claper_web/live/event_live/event_card_component.ex:255
 #, elixir-autogen, elixir-format
 msgid "This will delete all data related to your event, this cannot be undone. Confirm ?"
 msgstr ""
@@ -615,14 +615,9 @@ msgstr ""
 msgid "Engagement rate"
 msgstr ""
 
-#: lib/claper_web/live/event_live/event_card_component.ex:203
+#: lib/claper_web/live/event_live/event_card_component.ex:197
 #, elixir-autogen, elixir-format
 msgid "Error when processing the file"
-msgstr ""
-
-#: lib/claper_web/live/event_live/event_card_component.ex:72
-#, elixir-autogen, elixir-format
-msgid "Error when processing the new file"
 msgstr ""
 
 #: lib/claper_web/live/event_live/join.html.heex:24
@@ -704,7 +699,7 @@ msgid_plural "Field %{count}"
 msgstr[0] ""
 msgstr[1] ""
 
-#: lib/claper_web/live/event_live/manage.html.heex:109
+#: lib/claper_web/live/event_live/manage.html.heex:152
 #, elixir-autogen, elixir-format
 msgid "Add form to collect data from your public."
 msgstr ""
@@ -714,35 +709,35 @@ msgstr ""
 msgid "Current form"
 msgstr ""
 
-#: lib/claper_web/live/event_live/manage.html.heex:204
+#: lib/claper_web/live/event_live/manage.html.heex:247
 #, elixir-autogen, elixir-format
 msgid "Edit form"
 msgstr ""
 
-#: lib/claper_web/live/event_live/manage.html.heex:106
-#: lib/claper_web/live/event_live/manage.html.heex:556
-#: lib/claper_web/live/event_live/manage.html.heex:1006
+#: lib/claper_web/live/event_live/manage.html.heex:149
+#: lib/claper_web/live/event_live/manage.html.heex:687
+#: lib/claper_web/live/event_live/manage.html.heex:1135
 #: lib/claper_web/live/stat_live/index.html.heex:217
 #, elixir-autogen, elixir-format
 msgid "Form"
 msgstr ""
 
-#: lib/claper_web/live/event_live/manage.html.heex:779
+#: lib/claper_web/live/event_live/manage.html.heex:910
 #, elixir-autogen, elixir-format
 msgid "Form submissions"
 msgstr ""
 
-#: lib/claper_web/live/event_live/manage.html.heex:979
+#: lib/claper_web/live/event_live/manage.html.heex:1108
 #, elixir-autogen, elixir-format
 msgid "Form submissions from attendees will appear here."
 msgstr ""
 
-#: lib/claper_web/live/event_live/manage.ex:750
+#: lib/claper_web/live/event_live/manage.ex:760
 #, elixir-autogen, elixir-format
 msgid "Name"
 msgstr ""
 
-#: lib/claper_web/live/event_live/manage.html.heex:203
+#: lib/claper_web/live/event_live/manage.html.heex:246
 #, elixir-autogen, elixir-format
 msgid "New form"
 msgstr ""
@@ -767,7 +762,7 @@ msgstr ""
 msgid "Text"
 msgstr ""
 
-#: lib/claper_web/live/event_live/manage.html.heex:999
+#: lib/claper_web/live/event_live/manage.html.heex:1128
 #, elixir-autogen, elixir-format
 msgid "This cannot be undone, confirm ?"
 msgstr ""
@@ -807,22 +802,22 @@ msgstr ""
 msgid "Multiple answers"
 msgstr ""
 
-#: lib/claper_web/live/event_live/manage.html.heex:171
+#: lib/claper_web/live/event_live/manage.html.heex:214
 #, elixir-autogen, elixir-format
 msgid "Import all interactions from another presentation"
 msgstr ""
 
-#: lib/claper_web/live/event_live/manage.ex:272
+#: lib/claper_web/live/event_live/manage.ex:273
 #, elixir-autogen, elixir-format
 msgid "Interactions import failed"
 msgstr ""
 
-#: lib/claper_web/live/event_live/manage.ex:265
+#: lib/claper_web/live/event_live/manage.ex:266
 #, elixir-autogen, elixir-format
 msgid "Interactions imported successfully"
 msgstr ""
 
-#: lib/claper_web/live/event_live/manage.html.heex:244
+#: lib/claper_web/live/event_live/manage.html.heex:287
 #, elixir-autogen, elixir-format
 msgid "Select presentation"
 msgstr ""
@@ -832,28 +827,28 @@ msgstr ""
 msgid "PDF, PPT, PPTX up to %{size} MB"
 msgstr ""
 
-#: lib/claper_web/live/event_live/manage.html.heex:1116
+#: lib/claper_web/live/event_live/manager_settings_component.ex:86
 #, elixir-autogen, elixir-format
 msgid "Attendees settings"
 msgstr ""
 
-#: lib/claper_web/live/event_live/manage.html.heex:1126
+#: lib/claper_web/live/event_live/manager_settings_component.ex:96
 #, elixir-autogen, elixir-format
 msgid "Enable messages"
 msgstr ""
 
-#: lib/claper_web/live/event_live/manage.html.heex:1063
+#: lib/claper_web/live/event_live/manager_settings_component.ex:21
 #, elixir-autogen, elixir-format
 msgid "Show instructions"
 msgstr ""
 
-#: lib/claper_web/live/event_live/manage.html.heex:1077
+#: lib/claper_web/live/event_live/manager_settings_component.ex:38
 #, elixir-autogen, elixir-format
 msgid "Show messages"
 msgstr ""
 
-#: lib/claper_web/live/event_live/manage.html.heex:1106
-#: lib/claper_web/live/event_live/manage.html.heex:1169
+#: lib/claper_web/live/event_live/manager_settings_component.ex:73
+#: lib/claper_web/live/event_live/manager_settings_component.ex:148
 #, elixir-autogen, elixir-format
 msgid "Show poll results"
 msgstr ""
@@ -875,7 +870,7 @@ msgstr ""
 msgid "Close"
 msgstr ""
 
-#: lib/claper_web/live/event_live/manage.html.heex:1140
+#: lib/claper_web/live/event_live/manager_settings_component.ex:113
 #, elixir-autogen, elixir-format
 msgid "Enable anonymous messages"
 msgstr ""
@@ -906,7 +901,7 @@ msgstr ""
 msgid "Account creation is disabled"
 msgstr ""
 
-#: lib/claper_web/live/event_live/manage.html.heex:140
+#: lib/claper_web/live/event_live/manage.html.heex:183
 #, elixir-autogen, elixir-format
 msgid "Add a Youtube video or any web content."
 msgstr ""
@@ -962,12 +957,12 @@ msgstr ""
 msgid "Current web content"
 msgstr ""
 
-#: lib/claper_web/live/event_live/manage.html.heex:225
+#: lib/claper_web/live/event_live/manage.html.heex:268
 #, elixir-autogen, elixir-format
 msgid "Edit web content"
 msgstr ""
 
-#: lib/claper_web/live/event_live/manage.html.heex:224
+#: lib/claper_web/live/event_live/manage.html.heex:267
 #, elixir-autogen, elixir-format
 msgid "New web content"
 msgstr ""
@@ -992,8 +987,8 @@ msgstr ""
 msgid "Title"
 msgstr ""
 
-#: lib/claper_web/live/event_live/manage.html.heex:138
-#: lib/claper_web/live/event_live/manage.html.heex:631
+#: lib/claper_web/live/event_live/manage.html.heex:181
+#: lib/claper_web/live/event_live/manage.html.heex:762
 #: lib/claper_web/live/stat_live/index.html.heex:259
 #, elixir-autogen, elixir-format
 msgid "Web content"
@@ -1016,17 +1011,17 @@ msgstr ""
 msgid "Pinned"
 msgstr ""
 
-#: lib/claper_web/live/event_live/manage.html.heex:771
+#: lib/claper_web/live/event_live/manage.html.heex:902
 #, elixir-autogen, elixir-format
 msgid "Pinned messages"
 msgstr ""
 
-#: lib/claper_web/live/event_live/manage.html.heex:933
+#: lib/claper_web/live/event_live/manage.html.heex:1062
 #, elixir-autogen, elixir-format
 msgid "Pinned messages will appear here."
 msgstr ""
 
-#: lib/claper_web/live/event_live/manage.html.heex:1091
+#: lib/claper_web/live/event_live/manager_settings_component.ex:55
 #, elixir-autogen, elixir-format
 msgid "Show only pinned messages"
 msgstr ""
@@ -1067,7 +1062,7 @@ msgstr ""
 msgid "Saved"
 msgstr ""
 
-#: lib/claper_web/live/event_live/event_card_component.ex:91
+#: lib/claper_web/live/event_live/event_card_component.ex:85
 #, elixir-autogen, elixir-format
 msgid "Access"
 msgstr ""
@@ -1077,12 +1072,12 @@ msgstr ""
 msgid "All your events and files will be permanently deleted, are you sure?"
 msgstr ""
 
-#: lib/claper_web/live/event_live/event_card_component.ex:163
+#: lib/claper_web/live/event_live/event_card_component.ex:157
 #, elixir-autogen, elixir-format
 msgid "Are you sure you want to terminate this event? This action cannot be undone."
 msgstr ""
 
-#: lib/claper_web/live/event_live/event_card_component.ex:155
+#: lib/claper_web/live/event_live/event_card_component.ex:149
 #, elixir-autogen, elixir-format
 msgid "Attendees room"
 msgstr ""
@@ -1102,27 +1097,22 @@ msgstr ""
 msgid "Delete account"
 msgstr ""
 
-#: lib/claper_web/live/event_live/manage.html.heex:1154
+#: lib/claper_web/live/event_live/manager_settings_component.ex:130
 #, elixir-autogen, elixir-format, fuzzy
 msgid "Enable message reactions"
 msgstr ""
 
-#: lib/claper_web/live/event_live/manage.html.heex:381
+#: lib/claper_web/live/event_live/manage.html.heex:424
 #, elixir-autogen, elixir-format
 msgid "Open presentation"
 msgstr ""
 
-#: lib/claper_web/live/event_live/event_card_component.ex:132
-#, elixir-autogen, elixir-format, fuzzy
-msgid "Presentation manager"
-msgstr ""
-
-#: lib/claper_web/live/event_live/event_card_component.ex:181
+#: lib/claper_web/live/event_live/event_card_component.ex:175
 #, elixir-autogen, elixir-format
 msgid "Terminate"
 msgstr ""
 
-#: lib/claper_web/live/event_live/event_card_component.ex:250
+#: lib/claper_web/live/event_live/event_card_component.ex:244
 #, elixir-autogen, elixir-format
 msgid "View report"
 msgstr ""
@@ -1142,19 +1132,19 @@ msgstr ""
 msgid "Animations in PPT/PPTX files are not supported, which is why we recommend exporting your presentation to PDF to ensure it displays correctly."
 msgstr ""
 
-#: lib/claper_web/live/event_live/manage.html.heex:743
+#: lib/claper_web/live/event_live/manage.html.heex:874
 #, elixir-autogen, elixir-format, fuzzy
 msgid "Attendees interactions"
 msgstr ""
 
 #: lib/claper_web/live/event_live/event_form_component.html.heex:5
 #: lib/claper_web/live/event_live/index.html.heex:76
-#: lib/claper_web/live/event_live/manage.html.heex:285
+#: lib/claper_web/live/event_live/manage.html.heex:328
 #, elixir-autogen, elixir-format
 msgid "Back"
 msgstr ""
 
-#: lib/claper_web/live/event_live/manage.html.heex:363
+#: lib/claper_web/live/event_live/manage.html.heex:406
 #, elixir-autogen, elixir-format
 msgid "Click here to open the presentation window."
 msgstr ""
@@ -1166,24 +1156,24 @@ msgstr ""
 
 #: lib/claper_web/live/event_live/event_form_component.html.heex:6
 #: lib/claper_web/live/event_live/index.html.heex:77
-#: lib/claper_web/live/event_live/manage.html.heex:286
+#: lib/claper_web/live/event_live/manage.html.heex:329
 #, elixir-autogen, elixir-format, fuzzy
 msgid "Finish"
 msgstr ""
 
-#: lib/claper_web/live/event_live/manage.html.heex:745
+#: lib/claper_web/live/event_live/manage.html.heex:876
 #, elixir-autogen, elixir-format
 msgid "Here you'll find all interactions from your attendees. You can manage messages, pinned messages, and submitted forms."
 msgstr ""
 
-#: lib/claper_web/live/event_live/manage.html.heex:745
+#: lib/claper_web/live/event_live/manage.html.heex:876
 #, elixir-autogen, elixir-format
 msgid "Identify users by their unique avatars."
 msgstr ""
 
 #: lib/claper_web/live/event_live/event_form_component.html.heex:4
 #: lib/claper_web/live/event_live/index.html.heex:75
-#: lib/claper_web/live/event_live/manage.html.heex:284
+#: lib/claper_web/live/event_live/manage.html.heex:327
 #, elixir-autogen, elixir-format, fuzzy
 msgid "Next"
 msgstr ""
@@ -1193,17 +1183,17 @@ msgstr ""
 msgid "Select your presentation file. Accepted formats are PDF, PPT, or PPTX. Ensure the file size does not exceed the maximum limit."
 msgstr ""
 
-#: lib/claper_web/live/event_live/manage.html.heex:361
+#: lib/claper_web/live/event_live/manage.html.heex:404
 #, elixir-autogen, elixir-format, fuzzy
 msgid "Time to launch your presentation!"
 msgstr ""
 
-#: lib/claper_web/live/event_live/manage.html.heex:1048
+#: lib/claper_web/live/event_live/manage.html.heex:1177
 #, elixir-autogen, elixir-format
 msgid "Use the associated keyboard shortcuts for quick toggling of these settings."
 msgstr ""
 
-#: lib/claper_web/live/event_live/manage.html.heex:1048
+#: lib/claper_web/live/event_live/manage.html.heex:1177
 #, elixir-autogen, elixir-format
 msgid "You can control each setting for the presentation (showing on the big screen) and on the attendee's room."
 msgstr ""
@@ -1238,7 +1228,7 @@ msgstr ""
 msgid "If you don't have time and just want interactions without a presentation file, you can create a new event here."
 msgstr ""
 
-#: lib/claper_web/live/event_live/manage.html.heex:399
+#: lib/claper_web/live/event_live/manage.html.heex:530
 #, elixir-autogen, elixir-format
 msgid "If you have slides, you can navigate through the slides with ease using the arrow keys on your keyboard."
 msgstr ""
@@ -1284,7 +1274,7 @@ msgstr ""
 msgid "Presentation file (optional)"
 msgstr ""
 
-#: lib/claper_web/live/event_live/manage.html.heex:1053
+#: lib/claper_web/live/event_live/manager_settings_component.ex:11
 #, elixir-autogen, elixir-format, fuzzy
 msgid "Presentation settings"
 msgstr ""
@@ -1324,7 +1314,7 @@ msgstr ""
 msgid "This event has been terminated"
 msgstr ""
 
-#: lib/claper_web/live/event_live/manage.html.heex:399
+#: lib/claper_web/live/event_live/manage.html.heex:530
 #, elixir-autogen, elixir-format, fuzzy
 msgid "This section contains all your presentation slides (if you have upload one). You have the option to add interactions to each slide."
 msgstr ""
@@ -1339,7 +1329,7 @@ msgstr ""
 msgid "When your event will start?"
 msgstr ""
 
-#: lib/claper_web/live/event_live/manage.html.heex:398
+#: lib/claper_web/live/event_live/manage.html.heex:529
 #, elixir-autogen, elixir-format, fuzzy
 msgid "Your slides and/or interactions"
 msgstr ""
@@ -1381,22 +1371,27 @@ msgstr ""
 msgid "Question"
 msgstr ""
 
-#: lib/claper_web/live/event_live/manage.html.heex:763
+#: lib/claper_web/live/event_live/manage.html.heex:894
 #, elixir-autogen, elixir-format
 msgid "Questions"
 msgstr ""
 
-#: lib/claper_web/live/event_live/manage.html.heex:851
+#: lib/claper_web/live/event_live/manage.html.heex:981
 #, elixir-autogen, elixir-format
 msgid "Questions will appear here."
 msgstr ""
 
-#: lib/claper_web/live/event_live/manage.html.heex:893
+#: lib/claper_web/live/event_live/manage.html.heex:1023
 #, elixir-autogen, elixir-format
 msgid "Sort by date"
 msgstr ""
 
-#: lib/claper_web/live/event_live/manage.html.heex:872
+#: lib/claper_web/live/event_live/manage.html.heex:1002
 #, elixir-autogen, elixir-format
 msgid "Sort by popularity"
+msgstr ""
+
+#: lib/claper_web/live/event_live/event_card_component.ex:126
+#, elixir-autogen, elixir-format
+msgid "Event manager"
 msgstr ""
