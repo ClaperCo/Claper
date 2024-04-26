@@ -47,6 +47,6 @@ defmodule ClaperWeb.LayoutView do
       opts
       |> Keyword.put(:class, class)
 
-    live_patch(text, opts)
+    link(text, opts)
   end
 end

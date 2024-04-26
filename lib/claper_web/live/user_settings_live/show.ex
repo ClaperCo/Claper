@@ -13,11 +13,13 @@ defmodule ClaperWeb.UserSettingsLive.Show do
 
     email_changeset = Accounts.User.email_changeset(%Accounts.User{}, %{})
     password_changeset = Accounts.User.password_changeset(%Accounts.User{}, %{})
+    preferences_changeset = Accounts.User.preferences_changeset(socket.assigns.current_user, %{})
 
     {:ok,
      socket
      |> assign(:email_changeset, email_changeset)
-     |> assign(:password_changeset, password_changeset)}
+     |> assign(:password_changeset, password_changeset)
+     |> assign(:preferences_changeset, preferences_changeset)}
   end
 
   @impl true
@@ -59,7 +61,7 @@ defmodule ClaperWeb.UserSettingsLive.Show do
         Accounts.deliver_update_email_instructions(
           applied_user,
           user.email,
-          &Routes.user_settings_url(socket, :confirm_email, &1)
+          &url(~p"/users/settings/confirm_email/#{&1}")
         )
 
         {:noreply,
@@ -68,7 +70,7 @@ defmodule ClaperWeb.UserSettingsLive.Show do
            :info,
            gettext("A link to confirm your email change has been sent to the new address.")
          )
-         |> push_redirect(to: Routes.user_settings_show_path(socket, :show))}
+         |> push_navigate(to: ~p"/users/settings")}
 
       {:error, changeset} ->
         {:noreply, assign(socket, :email_changeset, changeset)}
@@ -90,11 +92,45 @@ defmodule ClaperWeb.UserSettingsLive.Show do
            :info,
            gettext("Your password has been updated.")
          )
-         |> push_redirect(to: Routes.user_settings_show_path(socket, :show))}
+         |> push_navigate(to: ~p"/users/settings")}
 
       {:error, changeset} ->
         {:noreply, assign(socket, :password_changeset, changeset)}
     end
+  end
+
+  @impl true
+  def handle_event("save", %{"action" => "update_preferences"} = params, socket) do
+    locale = params["user"]["locale"]
+    available_locales = Gettext.known_locales(ClaperWeb.Gettext)
+
+    if Enum.member?(available_locales, locale) do
+      case Accounts.update_user_preferences(socket.assigns.current_user, params["user"]) do
+        {:ok, _applied_user} ->
+          {:noreply,
+           socket
+           |> put_flash(
+             :info,
+             gettext("Your preferences have been updated.")
+           )
+           |> redirect(to: ~p"/users/settings")}
+
+        {:error, changeset} ->
+          {:noreply, assign(socket, :preferences_changeset, changeset)}
+      end
+    else
+      {:noreply, socket}
+    end
+  end
+
+  @impl true
+  def handle_event("delete_account", _params, %{assigns: %{current_user: user}} = socket) do
+    Accounts.delete(user)
+
+    {:noreply,
+     socket
+     |> put_flash(:info, gettext("Your account has been deleted."))
+     |> redirect(to: ~p"/users/log_in")}
   end
 
   @impl true

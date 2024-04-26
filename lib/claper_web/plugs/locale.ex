@@ -66,6 +66,7 @@ defmodule ClaperWeb.Plugs.Locale do
 
   def call(conn, _opts) do
     known_locales = Gettext.known_locales(ClaperWeb.Gettext)
+    user_locale = Map.get(conn.assigns.current_user || %{}, :locale)
 
     accepted_languages =
       extract_accept_language(conn)
@@ -73,10 +74,10 @@ defmodule ClaperWeb.Plugs.Locale do
 
     case accepted_languages do
       [locale | _] ->
-        Gettext.put_locale(ClaperWeb.Gettext, locale)
+        Gettext.put_locale(ClaperWeb.Gettext, user_locale || locale)
 
         conn
-        |> put_session(:locale, locale)
+        |> put_session(:locale, user_locale || locale)
 
       _ ->
         conn

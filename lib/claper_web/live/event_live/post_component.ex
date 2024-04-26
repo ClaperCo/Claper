@@ -3,7 +3,7 @@ defmodule ClaperWeb.EventLive.PostComponent do
 
   def render(assigns) do
     ~H"""
-    <div id={"post-#{@post.uuid}"} class={if @post.__meta__.state == :deleted, do: "hidden"}>
+    <div id={@id}>
       <%= if @post.attendee_identifier == @attendee_identifier || (not is_nil(@current_user) && @post.user_id == @current_user.id) do %>
         <div class="px-4 pt-3 pb-8 rounded-b-lg rounded-tl-lg bg-gray-700 text-white relative z-0 break-word">
           <button
@@ -179,82 +179,84 @@ defmodule ClaperWeb.EventLive.PostComponent do
           <p><%= @post.body %></p>
 
           <div class="flex h-6 text-xs float-right space-x-2">
-            <%= if not Enum.member?(@liked_posts, @post.id) do %>
-              <button
-                phx-click="react"
-                phx-value-type="👍"
-                phx-value-post-id={@post.uuid}
-                class="flex rounded-full px-3 py-1 border border-gray-300 bg-white items-center"
-              >
-                <img src="/images/icons/thumb.svg" class="h-4" />
-                <%= if @post.like_count > 0 do %>
-                  <span class="ml-1"><%= @post.like_count %></span>
-                <% end %>
-              </button>
-            <% else %>
-              <button
-                phx-click="unreact"
-                phx-value-type="👍"
-                phx-value-post-id={@post.uuid}
-                class="flex rounded-full px-3 py-1 border border-gray-300 bg-gray-100 items-center"
-              >
-                <span class="">
+            <%= if @reaction_enabled do %>
+              <%= if not Enum.member?(@liked_posts, @post.id) do %>
+                <button
+                  phx-click="react"
+                  phx-value-type="👍"
+                  phx-value-post-id={@post.uuid}
+                  class="flex rounded-full px-3 py-1 border border-gray-300 bg-white items-center"
+                >
                   <img src="/images/icons/thumb.svg" class="h-4" />
-                </span>
-                <%= if @post.like_count > 0 do %>
-                  <span class="ml-1"><%= @post.like_count %></span>
-                <% end %>
-              </button>
-            <% end %>
-            <%= if not Enum.member?(@loved_posts, @post.id) do %>
-              <button
-                phx-click="react"
-                phx-value-type="❤️"
-                phx-value-post-id={@post.uuid}
-                class="flex rounded-full px-3 py-1 border border-gray-300 bg-white items-center"
-              >
-                <img src="/images/icons/heart.svg" class="h-4" />
-                <%= if @post.love_count > 0 do %>
-                  <span class="ml-1"><%= @post.love_count %></span>
-                <% end %>
-              </button>
-            <% else %>
-              <button
-                phx-click="unreact"
-                phx-value-type="❤️"
-                phx-value-post-id={@post.uuid}
-                class="flex rounded-full px-3 py-1 border border-gray-300 bg-gray-100 items-center"
-              >
-                <img src="/images/icons/heart.svg" class="h-4" />
-                <%= if @post.love_count > 0 do %>
-                  <span class="ml-1"><%= @post.love_count %></span>
-                <% end %>
-              </button>
-            <% end %>
-            <%= if not Enum.member?(@loled_posts, @post.id) do %>
-              <button
-                phx-click="react"
-                phx-value-type="😂"
-                phx-value-post-id={@post.uuid}
-                class="flex rounded-full px-3 py-1 border border-gray-300 bg-white items-center"
-              >
-                <img src="/images/icons/laugh.svg" class="h-4" />
-                <%= if @post.lol_count > 0 do %>
-                  <span class="ml-1"><%= @post.lol_count %></span>
-                <% end %>
-              </button>
-            <% else %>
-              <button
-                phx-click="unreact"
-                phx-value-type="😂"
-                phx-value-post-id={@post.uuid}
-                class="flex rounded-full px-3 py-1 border border-gray-300 bg-gray-100 items-center"
-              >
-                <img src="/images/icons/laugh.svg" class="h-4" />
-                <%= if @post.lol_count > 0 do %>
-                  <span class="ml-1"><%= @post.lol_count %></span>
-                <% end %>
-              </button>
+                  <%= if @post.like_count > 0 do %>
+                    <span class="ml-1"><%= @post.like_count %></span>
+                  <% end %>
+                </button>
+              <% else %>
+                <button
+                  phx-click="unreact"
+                  phx-value-type="👍"
+                  phx-value-post-id={@post.uuid}
+                  class="flex rounded-full px-3 py-1 border border-gray-300 bg-gray-100 items-center"
+                >
+                  <span class="">
+                    <img src="/images/icons/thumb.svg" class="h-4" />
+                  </span>
+                  <%= if @post.like_count > 0 do %>
+                    <span class="ml-1"><%= @post.like_count %></span>
+                  <% end %>
+                </button>
+              <% end %>
+              <%= if not Enum.member?(@loved_posts, @post.id) do %>
+                <button
+                  phx-click="react"
+                  phx-value-type="❤️"
+                  phx-value-post-id={@post.uuid}
+                  class="flex rounded-full px-3 py-1 border border-gray-300 bg-white items-center"
+                >
+                  <img src="/images/icons/heart.svg" class="h-4" />
+                  <%= if @post.love_count > 0 do %>
+                    <span class="ml-1"><%= @post.love_count %></span>
+                  <% end %>
+                </button>
+              <% else %>
+                <button
+                  phx-click="unreact"
+                  phx-value-type="❤️"
+                  phx-value-post-id={@post.uuid}
+                  class="flex rounded-full px-3 py-1 border border-gray-300 bg-gray-100 items-center"
+                >
+                  <img src="/images/icons/heart.svg" class="h-4" />
+                  <%= if @post.love_count > 0 do %>
+                    <span class="ml-1"><%= @post.love_count %></span>
+                  <% end %>
+                </button>
+              <% end %>
+              <%= if not Enum.member?(@loled_posts, @post.id) do %>
+                <button
+                  phx-click="react"
+                  phx-value-type="😂"
+                  phx-value-post-id={@post.uuid}
+                  class="flex rounded-full px-3 py-1 border border-gray-300 bg-white items-center"
+                >
+                  <img src="/images/icons/laugh.svg" class="h-4" />
+                  <%= if @post.lol_count > 0 do %>
+                    <span class="ml-1"><%= @post.lol_count %></span>
+                  <% end %>
+                </button>
+              <% else %>
+                <button
+                  phx-click="unreact"
+                  phx-value-type="😂"
+                  phx-value-post-id={@post.uuid}
+                  class="flex rounded-full px-3 py-1 border border-gray-300 bg-gray-100 items-center"
+                >
+                  <img src="/images/icons/laugh.svg" class="h-4" />
+                  <%= if @post.lol_count > 0 do %>
+                    <span class="ml-1"><%= @post.lol_count %></span>
+                  <% end %>
+                </button>
+              <% end %>
             <% end %>
           </div>
         </div>

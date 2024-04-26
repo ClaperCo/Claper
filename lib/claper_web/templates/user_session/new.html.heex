@@ -27,13 +27,7 @@
           </div>
           <div class="flex flex-row justify-center items-center space-x-3"></div>
 
-          <.form
-            :let={f}
-            for={@conn}
-            action={Routes.user_session_path(@conn, :create)}
-            as={:user}
-            class="mt-12 mb-4"
-          >
+          <.form :let={f} for={@conn} action={~p"/users/log_in"} as={:user} class="mt-12 mb-4">
             <%= if @error_message do %>
               <ClaperWeb.Component.Alert.error message={@error_message} stick={true} />
             <% end %>
@@ -70,12 +64,12 @@
 
           <div class="mt-4 text-center flex gap-x-2 justify-center">
             <%= link(gettext("Forgot your password?"),
-              to: Routes.user_reset_password_path(@conn, :new),
+              to: ~p"/users/reset_password",
               class: "text-white text-sm text-center"
             ) %>
             <%= if Application.get_env(:claper, :enable_account_creation) do %>
               <%= link(gettext("Create account"),
-                to: Routes.user_registration_path(@conn, :new),
+                to: ~p"/users/register",
                 class: "text-white text-sm text-center"
               ) %>
             <% end %>

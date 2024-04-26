@@ -1,7 +1,7 @@
 defmodule Claper.MixProject do
   use Mix.Project
 
-  @version "1.7.0"
+  @version "2.0.0"
 
   def project do
     [
@@ -18,24 +18,7 @@ defmodule Claper.MixProject do
       source_url: "https://github.com/ClaperCo/Claper",
       homepage_url: "https://claper.co",
       docs: [
-        main: "overview",
-        assets: "guides/assets",
         logo: "priv/static/images/logo.png",
-        extra_section: "GUIDES",
-        extras: [
-          "guides/introduction/overview.md",
-          "guides/introduction/configuration.md",
-          "guides/introduction/installation.md",
-          "guides/introduction/deployment.md",
-          "guides/introduction/storage.md",
-          "guides/usage/features.md",
-          "guides/usage/howto.md"
-        ],
-        groups_for_extras: [
-          Introduction: ~r/guides\/introduction\/.?/,
-          Guides: ~r/guides\/[^\/]+\.md/,
-          Usage: ~r/guides\/usage\/.?/
-        ],
         groups_for_modules: [
           "User management": [
             ~r/Claper\.Account\.?/,
@@ -52,6 +35,14 @@ defmodule Claper.MixProject do
           Events: [
             ~r/Claper\.Event\.?/,
             ~r/ClaperWeb\.Event\.?/
+          ],
+          Forms: [
+            ~r/Claper\.Forms\.?/,
+            ~r/ClaperWeb\.Form\.?/
+          ],
+          WebContent: [
+            ~r/Claper\.Embed\.?/,
+            ~r/ClaperWeb\.Embed\.?/
           ],
           Polls: [
             ~r/Claper\.Polls\.?/,
@@ -87,21 +78,22 @@ defmodule Claper.MixProject do
     [
       {:ex_aws, "~> 2.2"},
       {:ex_aws_s3, "~> 2.3"},
-      {:ex_doc, "~> 0.27", only: :dev, runtime: false},
+      {:ex_doc, "~> 0.32", only: :dev, runtime: false},
       {:bcrypt_elixir, "~> 2.0"},
       {:phoenix, "~> 1.7"},
-      {:phoenix_ecto, "~> 4.4"},
-      {:ecto_sql, "~> 3.10"},
+      {:phoenix_ecto, "~> 4.5"},
+      {:ecto_sql, "~> 3.11"},
       {:postgrex, ">= 0.0.0"},
-      {:phoenix_html, "~> 3.0"},
-      {:phoenix_live_reload, "~> 1.2", only: :dev},
-      {:phoenix_live_view, "~> 0.18.3"},
-      {:phoenix_swoosh, "~> 1.0"},
+      {:phoenix_html, "~> 4.1"},
+      {:phoenix_html_helpers, "~> 1.0"},
+      {:phoenix_live_reload, "~> 1.5.2", only: :dev},
+      {:phoenix_live_view, "~> 0.20.14"},
+      {:phoenix_swoosh, "~> 1.2.1"},
       {:phoenix_view, "~> 2.0"},
-      {:floki, ">= 0.30.0", only: :test},
-      {:phoenix_live_dashboard, "~> 0.7"},
+      {:floki, ">= 0.36.1", only: :test},
+      {:phoenix_live_dashboard, "~> 0.8"},
       {:esbuild, "~> 0.2", runtime: Mix.env() == :dev},
-      {:dart_sass, "~> 0.5", runtime: Mix.env() == :dev},
+      {:dart_sass, "~> 0.7", runtime: Mix.env() == :dev},
       {:swoosh, "~> 1.12"},
       {:finch, "~> 0.16"},
       {:telemetry_metrics, "~> 0.6"},
@@ -137,6 +129,11 @@ defmodule Claper.MixProject do
         "cmd --cd assets npm install && npm run deploy",
         "esbuild default --minify",
         "sass default --no-source-map --style=compressed",
+        "phx.digest"
+      ],
+      "assets.deploy.nosass": [
+        "cmd --cd assets npm install && npm run deploy",
+        "esbuild default --minify",
         "phx.digest"
       ]
     ]

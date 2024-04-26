@@ -109,6 +109,19 @@ defmodule Claper.Accounts do
   end
 
   @doc """
+  Returns an `%Ecto.Changeset{}` for changing the user preferences.
+
+  ## Examples
+
+      iex> change_user_preferences(user)
+      %Ecto.Changeset{data: %User{}}
+
+  """
+  def change_user_preferences(user, attrs \\ %{}) do
+    User.preferences_changeset(user, attrs)
+  end
+
+  @doc """
   Emulates that the email will change without actually changing
   it in the database.
 
@@ -178,11 +191,25 @@ defmodule Claper.Accounts do
   end
 
   @doc """
+  Updates the user preferences.
+  ## Examples
+      iex> update_user_preferences(user, %{locale: "en})
+      {:ok, %User{}}
+      iex> update_user_preferences(user, %{locale: "invalid})
+      {:error, %Ecto.Changeset{}}
+  """
+  def update_user_preferences(user, attrs \\ %{}) do
+    user
+    |> User.preferences_changeset(attrs)
+    |> Repo.update()
+  end
+
+  @doc """
   Delivers the magic link email to the given user.
 
   ## Examples
 
-      iex> deliver_magic_link(user, &Routes.user_confirmation_url(conn, :confirm_magic, &1))
+      iex> deliver_magic_link(user, &url(~p"/users/magic/&1"))
       {:ok, %{to: ..., body: ...}}
 
   """
@@ -422,5 +449,9 @@ defmodule Claper.Accounts do
       :tokens,
       UserToken.user_magic_and_contexts_query(token.sent_to, ["magic"])
     )
+  end
+
+  def delete(user) do
+    Repo.delete(user)
   end
 end

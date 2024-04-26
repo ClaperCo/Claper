@@ -10,8 +10,6 @@ defmodule Claper.Events.Event do
     field :started_at, :naive_datetime
     field :expired_at, :naive_datetime
 
-    field :date_range, :string, virtual: true
-
     has_many :posts, Claper.Posts.Post
 
     has_many :leaders, Claper.Events.ActivityLeader, on_replace: :delete
@@ -30,21 +28,19 @@ defmodule Claper.Events.Event do
       :code,
       :started_at,
       :expired_at,
-      :date_range,
       :audience_peak
     ])
     |> cast_assoc(:presentation_file)
     |> cast_assoc(:leaders)
-    |> validate_required([:code])
-    |> validate_date_range
+    |> validate_required([:code, :name])
   end
 
   def create_changeset(event, attrs) do
     event
-    |> cast(attrs, [:name, :code, :user_id, :started_at, :expired_at, :date_range])
+    |> cast(attrs, [:name, :code, :user_id, :started_at, :expired_at])
     |> cast_assoc(:presentation_file)
     |> cast_assoc(:leaders)
-    |> validate_required([:code, :started_at, :expired_at])
+    |> validate_required([:code, :started_at])
     |> downcase_code
   end
 
@@ -56,38 +52,12 @@ defmodule Claper.Events.Event do
     )
   end
 
-  defp validate_date_range(changeset) do
-    date_range = get_change(changeset, :date_range)
-
-    if date_range != nil do
-      splited = date_range |> String.split(" - ")
-
-      if splited |> Enum.count() == 2 do
-        changeset
-        |> put_change(:started_at, Enum.at(splited, 0))
-        |> put_change(:expired_at, Enum.at(splited, 1))
-      else
-        add_error(changeset, :date_range, "invalid date range")
-      end
-    else
-      start_date = get_change(changeset, :started_at)
-      end_date = get_change(changeset, :expired_at)
-
-      if start_date != nil && end_date != nil do
-        changeset
-        |> put_change(:date_range, "#{start_date} - #{end_date}")
-      else
-        changeset
-      end
-    end
-  end
-
   def update_changeset(event, attrs) do
     event
-    |> cast(attrs, [:name, :code, :started_at, :expired_at, :date_range, :audience_peak])
+    |> cast(attrs, [:name, :code, :started_at, :expired_at, :audience_peak])
     |> cast_assoc(:presentation_file)
     |> cast_assoc(:leaders)
-    |> validate_required([:code, :started_at, :expired_at])
+    |> validate_required([:code, :started_at])
     |> downcase_code
   end
 
@@ -104,5 +74,9 @@ defmodule Claper.Events.Event do
 
   def started?(event) do
     NaiveDateTime.compare(NaiveDateTime.utc_now(), event.started_at) == :gt
+  end
+
+  def finished?(event) do
+    event.expired_at && NaiveDateTime.compare(NaiveDateTime.utc_now(), event.expired_at) == :gt
   end
 end

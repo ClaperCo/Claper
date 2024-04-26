@@ -20,7 +20,7 @@ defmodule ClaperWeb.FormLive.FormComponent do
     form = Forms.get_form!(id)
     {:ok, _} = Forms.delete_form(socket.assigns.event_uuid, form)
 
-    {:noreply, socket |> push_redirect(to: socket.assigns.return_to)}
+    {:noreply, socket |> push_navigate(to: socket.assigns.return_to)}
   end
 
   @impl true
@@ -65,7 +65,7 @@ defmodule ClaperWeb.FormLive.FormComponent do
       {:ok, _form} ->
         {:noreply,
          socket
-         |> push_redirect(to: socket.assigns.return_to)}
+         |> push_navigate(to: socket.assigns.return_to)}
 
       {:error, %Ecto.Changeset{} = changeset} ->
         {:noreply, assign(socket, :changeset, changeset)}
@@ -83,7 +83,7 @@ defmodule ClaperWeb.FormLive.FormComponent do
         {:noreply,
          socket
          |> maybe_change_current_form(form)
-         |> push_redirect(to: socket.assigns.return_to)}
+         |> push_navigate(to: socket.assigns.return_to)}
 
       {:error, %Ecto.Changeset{} = changeset} ->
         {:noreply, assign(socket, changeset: changeset)}

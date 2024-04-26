@@ -25,6 +25,28 @@ defmodule Claper.Posts do
   end
 
   @doc """
+  Get event posts which are questions
+
+  """
+  def list_questions(event_id, preload \\ [], sort \\ :date) do
+    query =
+      from(p in Post,
+        join: e in assoc(p, :event),
+        where: e.uuid == ^event_id and like(p.body, "%?%")
+      )
+
+    query =
+      case sort do
+        :likes -> from(p in query, order_by: [desc: p.like_count])
+        _ -> from(p in query, order_by: [asc: p.id])
+      end
+
+    query
+    |> Repo.all()
+    |> Repo.preload(preload)
+  end
+
+  @doc """
   Get only the pinned event posts.
   """
   def list_pinned_posts(event_id, preload \\ []) do

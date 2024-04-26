@@ -26,7 +26,7 @@ defmodule ClaperWeb.UserRegistrationController do
         # {:ok, _} =
         #  Accounts.deliver_user_confirmation_instructions(
         #    user,
-        #    &Routes.user_confirmation_url(conn, :update, &1)
+        #    &url(~p"/users/confirm/#{&1}")
         #  )
 
         conn

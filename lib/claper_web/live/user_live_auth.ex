@@ -1,7 +1,10 @@
 defmodule ClaperWeb.UserLiveAuth do
   import Phoenix.LiveView
   import Phoenix.Component
-  alias ClaperWeb.Router.Helpers, as: Routes
+
+  use Phoenix.VerifiedRoutes,
+    endpoint: ClaperWeb.Endpoint,
+    router: ClaperWeb.Router
 
   def on_mount(:default, _params, %{"current_user" => current_user} = _session, socket) do
     socket =
@@ -19,11 +22,11 @@ defmodule ClaperWeb.UserLiveAuth do
     # else
     #   {:halt,
     #    redirect(socket,
-    #      to: Routes.user_registration_path(socket, :confirm, %{email: current_user.email})
+    #      to: ~p"/users/register/confirm?#{[%{email: current_user.email}]}"
     #    )}
     # end
   end
 
   def on_mount(:default, _params, _session, socket),
-    do: {:halt, redirect(socket, to: Routes.user_registration_path(socket, :confirm))}
+    do: {:halt, redirect(socket, to: ~p"/users/register/confirm")}
 end

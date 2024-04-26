@@ -5,20 +5,11 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <%= csrf_meta_tag() %>
-    <%= live_title_tag(assigns[:page_title] || "Claper", suffix: " · Claper") %>
-    <link rel="icon" type="image/png" href={Routes.static_path(@conn, "/images/favicon.png")} />
-    <link phx-track-static rel="stylesheet" href={Routes.static_path(@conn, "/assets/app.css")} />
-    <link
-      phx-track-static
-      rel="stylesheet"
-      href={Routes.static_path(@conn, "/assets/custom.css")}
-    />
-    <script
-      defer
-      phx-track-static
-      type="text/javascript"
-      src={Routes.static_path(@conn, "/assets/app.js")}
-    >
+    <title>Not found - Claper</title>
+    <link rel="icon" type="image/png" href="/images/favicon.png" />
+    <link phx-track-static rel="stylesheet" href="/assets/app.css" />
+    <link phx-track-static rel="stylesheet" href="/assets/custom.css" />
+    <script defer phx-track-static type="text/javascript" src="/assets/app.js">
     </script>
   </head>
   <body class="">
@@ -41,10 +32,9 @@
                     </p>
 
                     <div class="mt-10">
-                      <%= live_patch(gettext("Return to home"),
-                        to: Routes.event_join_path(@conn, :index),
-                        class: "text-sm text-white underline"
-                      ) %>
+                      <a href="/" class="text-sm text-white underline">
+                        <%= gettext("Return to home") %>
+                      </a>
                     </div>
                   </div>
                 </div>

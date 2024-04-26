@@ -1,3 +1,30 @@
+## v2.0.0
+
+### Features
+
+- Add dynamic layout in the manager view
+- Add quick event feature
+- Add question feature
+- Add toggle for message reactions in attendees room
+- Add toggle for polls results in attendees room
+- Add delete account button in user settings
+- Add language switcher in user settings
+- Add tour guide for new users
+- Add headers to exported CSV in reports
+- Add spanish locale (#84) (@eduproinf)
+
+### Fixes and improvements
+
+- Improve Docker image to support both ARM and AMD64 architecture
+- Change date picker for a more user-friendly one
+- Upgrade Ecto, Phoenix and LiveView
+- Fix user avatars in reports
+- Fix average voters stats
+- Fix some UI/UX issues
+- Remove end date for events
+- Replace `ENDPOINT_PORT` and `ENDPOINT_HOST` with `BASE_URL` environment variable
+- Add `SAME_SITE_COOKIE` and `SECURE_COOKIE` environment variables
+
 ## v1.7.0
 
 - Add keyboard shortcuts to control settings (#64) (@Dhanus3133)
@@ -12,6 +39,7 @@
 - Security updates
 
 ## v1.6.0
+
 - Improve QR code readability
 - Add ARM Docker image
 - Refactor all runtime configuration
@@ -46,24 +74,20 @@
 - Add MAX_FILE_SIZE_MB environment variable to limit file upload size
 - Add feature to deactivate messages during a presentation
 
-
 ## v1.3.0
 
 - Add Form feature to collect data from your public
 - Improve docs for Docker Compose
 - Improve Docker Compose file reference
 
-
 ## v1.2.1
 
 - Fix presenter url (400 error in production)
-
 
 ## v1.2.0
 
 - Added password change form in settings
 - Added more documentation on deployment in production
-
 
 ## v1.1.1
 
@@ -72,7 +96,6 @@ _Security updates_
 - Added `ENABLE_MAILBOX_ROUTE`, `MAILBOX_USER` and `MAILBOX_PASSWORD` environment variables to enable/disable route to local mailbox (`/dev/mailbox`) and basic auth (optional)
 - Restricted `/users/register` route if `ENABLE_ACCOUNT_CREATION` is false
 
-
 ## v1.1.0
 
 - Added password authentication
@@ -80,7 +103,6 @@ _Security updates_
 - Disabled email verification
 - Added new `ENABLE_ACCOUNT_CREATION` environment variable to enable or disable user registration
 - Improved french localization
-
 
 ## v1.0.0
 

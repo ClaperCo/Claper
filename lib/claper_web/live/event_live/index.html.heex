@@ -1,4 +1,4 @@
-<div class="mx-3 max-w-7xl sm:mx-auto">
+<div class="mx-3 md:max-w-3xl lg:max-w-5xl md:mx-auto">
   <%= if @live_action in [:new, :edit] do %>
     <.live_component
       module={ClaperWeb.EventLive.EventFormComponent}
@@ -6,21 +6,117 @@
       event={@event}
       page_title={@page_title}
       action={@live_action}
-      return_to={Routes.event_index_path(@socket, :index)}
+      return_to={~p"/events"}
       current_user={@current_user}
     />
   <% else %>
-    <div class="border-b border-gray-200 py-4 flex items-center justify-between">
+    <div
+      id="quick-create-modal"
+      class={"#{if @live_action != :quick_create, do: 'hidden' } fixed z-30 inset-0 overflow-y-auto p-4 sm:p-6 md:p-24
+      transform transition-all duration-150"}
+      role="dialog"
+      aria-modal="true"
+    >
+      <div
+        phx-click="toggle-quick-create"
+        class="fixed inset-0 bg-gray-800 bg-opacity-75 transition-opacity w-full h-full"
+        aria-hidden="true"
+      >
+      </div>
+      <div class="mx-auto max-w-xl transform divide-y divide-gray-100 overflow-hidden rounded-xl bg-white shadow-2xl ring-1 ring-black ring-opacity-5 transition-all">
+        <button phx-click="toggle-quick-create" class="absolute right-0 top-0">
+          <svg
+            class="text-gray-500 h-9 transform rotate-45"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 20 20"
+            fill="currentColor"
+            aria-hidden="true"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
+              clip-rule="evenodd"
+            />
+          </svg>
+        </button>
+
+        <div id="modal-content" class="bg-gray-100 pt-7 pb-5 px-3">
+          <.form
+            :let={f}
+            :if={@live_action == :quick_create}
+            for={@quick_event_changeset}
+            phx-change="validate"
+            phx-submit="save"
+          >
+            <ClaperWeb.Component.Input.text
+              form={f}
+              key={:name}
+              name=""
+              readonly={false}
+              class="h-12"
+              placeholder={gettext("Name of your event")}
+            />
+            <button
+              type="submit"
+              phx_disable_with="Loading..."
+              class="mt-5 w-full lg:w-auto px-6 text-white py-2 rounded-md tracking-wide font-bold focus:outline-none focus:shadow-outline bg-gradient-to-tl from-primary-500 to-secondary-500 bg-size-200 bg-pos-0 hover:bg-pos-100 transition-all duration-500"
+            >
+              <%= gettext("Create") %>
+            </button>
+          </.form>
+        </div>
+      </div>
+    </div>
+    <div
+      class="border-b border-gray-200 py-4 flex items-center justify-between relative"
+      id="events-header"
+      phx-hook="TourGuide"
+      data-group="welcome"
+      data-next-label={gettext("Next")}
+      data-prev-label={gettext("Back")}
+      data-finish-label={gettext("Finish")}
+    >
       <div class="flex-1 min-w-0">
         <h1 class="text-2xl font-medium leading-6 text-gray-900 sm:truncate">
-          <%= gettext("My presentations") %>
+          <%= gettext("My events") %>
         </h1>
       </div>
       <div class="flex mt-0">
-        <a
-          data-phx-link="patch"
-          data-phx-link-state="push"
-          href={Routes.event_index_path(@socket, :new)}
+        <.link
+          data-tg-group="welcome"
+          data-tg-tour={
+            gettext(
+              "If you don't have time and just want interactions without a presentation file, you can create a new event here."
+            )
+          }
+          data-tg-order="2"
+          data-tg-title={"#{gettext("In a hurry ?")} 🏃‍♂️"}
+          phx-click="toggle-quick-create"
+          class="relative inline-flex items-center px-5 py-2 text-sm rounded-md text-gray-500"
+        >
+          <svg
+            class="-ml-1 mr-1 h-5 w-5"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 20 20"
+            fill="currentColor"
+            aria-hidden="true"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
+              clip-rule="evenodd"
+            />
+          </svg>
+          <span>
+            <%= gettext("Quick event") %>
+          </span>
+        </.link>
+        <.link
+          data-tg-group="welcome"
+          data-tg-order="1"
+          data-tg-tour={gettext("Welcome to Claper! You can create a new event here.")}
+          data-tg-title={"#{gettext("Your first steps with Claper")} 👋"}
+          href={~p"/events/new"}
           class="relative inline-flex items-center px-5 py-2 text-lg font-medium rounded-md text-white bg-gradient-to-tl from-primary-500 to-secondary-500 bg-size-200 bg-pos-0 hover:bg-pos-100 transition-all duration-500"
         >
           <svg
@@ -37,28 +133,27 @@
             />
           </svg>
           <span>
-            <%= gettext("Create") %>
+            <%= gettext("Create event") %>
           </span>
-        </a>
+        </.link>
       </div>
     </div>
 
-    <div class="mt-10 relative">
-      <ul role="event-list" class="divide-y divide-gray-200" phx-update="append" id="events">
+    <div class="mt-2 relative">
+      <ul role="event-list" phx-update="stream" id="events">
         <% current_time = NaiveDateTime.utc_now() %>
-        <%= for event <- @events do %>
-          <.live_component
-            module={ClaperWeb.EventLive.EventCardComponent}
-            id={"event-#{event.uuid}"}
-            event={event}
-            current_time={current_time}
-          />
-        <% end %>
+        <.live_component
+          :for={{id, event} <- @streams.events}
+          module={ClaperWeb.EventLive.EventCardComponent}
+          id={id}
+          event={event}
+          current_time={current_time}
+        />
       </ul>
-      <%= if Enum.count(@events) == 0 do %>
+      <%= if Enum.count(@streams.events) == 0 do %>
         <div class="w-full text-2xl text-black opacity-25 text-center">
           <img src="/images/icons/arrow.svg" class="h-20 float-right mr-16 -mt-5" />
-          <p class="pt-12 clear-both"><%= gettext("Create your first presentation") %></p>
+          <p class="pt-12 clear-both"><%= gettext("Create your first event") %></p>
         </div>
       <% end %>
     </div>
@@ -67,18 +162,13 @@
       <div class="border-b border-gray-200 py-4 flex items-center justify-between mt-12">
         <div class="flex-1 min-w-0">
           <h1 class="text-2xl font-medium leading-6 text-gray-900 sm:truncate">
-            <%= gettext("Invited presentations") %>
+            <%= gettext("Invited events") %>
           </h1>
         </div>
       </div>
 
-      <div class="mt-10 relative">
-        <ul
-          role="managed-event-list"
-          class="divide-y divide-gray-200"
-          id="event-cards"
-          phx-update="replace"
-        >
+      <div class="mt-2 relative">
+        <ul role="managed-event-list" id="event-cards" phx-update="replace">
           <% current_time = NaiveDateTime.utc_now() %>
           <%= for event <- @managed_events do %>
             <.live_component

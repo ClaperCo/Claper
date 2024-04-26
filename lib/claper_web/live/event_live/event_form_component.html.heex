@@ -1,4 +1,11 @@
-<div>
+<div
+  id="wrapper"
+  phx-hook="TourGuide"
+  data-next-label={gettext("Next")}
+  data-prev-label={gettext("Back")}
+  data-finish-label={gettext("Finish")}
+  data-group="create-event"
+>
   <div class="border-b border-gray-200 py-4 flex flex-col sm:flex-row sm:items-center justify-between">
     <div class="flex-1 min-w-0">
       <h1 class="text-2xl font-medium leading-6 text-gray-900 sm:truncate">
@@ -6,7 +13,7 @@
       </h1>
     </div>
     <div class="flex mt-4 space-x-5 sm:mt-0">
-      <%= if @uploads.presentation_file.entries |> Enum.at(0, %{}) |> Map.get(:progress, 0) >= 100 || Map.has_key?(@event.presentation_file, :id) do %>
+      <%= if (@uploads.presentation_file.entries |> Enum.at(0, %{}) |> Map.get(:progress, 0) == 0 || @uploads.presentation_file.entries |> Enum.at(0, %{}) |> Map.get(:progress, 0) == 100) && @changeset.valid? do %>
         <button
           type="submit"
           form="event-form"
@@ -26,7 +33,7 @@
           end %>
         </div>
       <% end %>
-      <%= if @action == :edit && NaiveDateTime.compare(NaiveDateTime.utc_now(), @event.expired_at) == :lt do %>
+      <%= if @action == :edit && !@event.expired_at do %>
         <%= link(gettext("Delete"),
           to: "#",
           phx_click: "delete",
@@ -39,10 +46,16 @@
     </div>
   </div>
 
-  <%= if Map.get(@event, :presentation_file) == nil || Map.get(@event.presentation_file, :id) == nil do %>
-    <div class="mt-12 mb-3">
+  <%= if Map.get(@event, :presentation_file) == nil || Map.get(@event.presentation_file, :length) == 0 || Map.get(@event.presentation_file, :id) == nil do %>
+    <div
+      class="mb-3 mt-12"
+      data-tg-group="create-event"
+      data-tg-order="1"
+      data-tg-tour={"<p class='mb-3'>#{gettext("Select your presentation file. Accepted formats are PDF, PPT, or PPTX. Ensure the file size does not exceed the maximum limit.")}</p><p class='opacity-50 text-xs'>#{gettext("Animations in PPT/PPTX files are not supported, which is why we recommend exporting your presentation to PDF to ensure it displays correctly.")}</p>"}
+      data-tg-title={"📄 #{gettext("Presentation file (optional)")}"}
+    >
       <label class="block text-sm font-medium text-gray-700 mb-2">
-        <%= gettext("Select your presentation") %>
+        <%= gettext("Select your presentation (optional)") %>
       </label>
       <div class="max-w-lg flex flex-col justify-center items-center px-6 pt-5 pb-6 border-2 bg-white shadow-base border-gray-300 border-dashed rounded-md">
         <%= if @uploads.presentation_file.entries |> Enum.at(0, %{}) |> Map.get(:progress, 0) < 100 do %>
@@ -70,7 +83,7 @@
                   phx-target={@myself}
                 >
                   <span><%= gettext("Upload a file") %></span>
-                  <%= live_file_input(@uploads.presentation_file, class: "sr-only") %>
+                  <.live_file_input upload={@uploads.presentation_file} class="sr-only" />
                 </form>
               </label>
               <p class="pl-1"><%= gettext("or drag and drop") %></p>
@@ -157,7 +170,7 @@
                 phx-target={@myself}
               >
                 <span><%= gettext("Change file") %></span>
-                <%= live_file_input(@uploads.presentation_file, class: "sr-only") %>
+                <.live_file_input upload={@uploads.presentation_file} class="sr-only" />
               </form>
             </label>
             <p class="text-supporting-red-500 text-sm italic text-center hidden">
@@ -225,15 +238,20 @@
         <ClaperWeb.Component.Input.text
           form={f}
           key={:name}
-          name={gettext("Name of your presentation")}
+          name={gettext("Name of your event")}
           autofocus="true"
           required="true"
         />
       </div>
 
-      <div class="my-3">
+      <div
+        class="my-3"
+        data-tg-title={"🔑 #{gettext("Access code")}"}
+        data-tg-tour={"<p>#{gettext("This code will be used by your attendees to access the event. You have the option to create a custom code.")}</p>"}
+        data-tg-group="create-event"
+        data-tg-order="2"
+      >
         <ClaperWeb.Component.Input.code
-          readonly={NaiveDateTime.compare(NaiveDateTime.utc_now(), @event.expired_at) == :gt}
           form={f}
           key={:code}
           name={gettext("Code")}
@@ -241,15 +259,20 @@
         />
       </div>
 
-      <div class="my-3">
-        <ClaperWeb.Component.Input.date_range
-          readonly={NaiveDateTime.compare(NaiveDateTime.utc_now(), @event.expired_at) == :gt}
+      <div
+        class="my-3"
+        data-tg-title={"🗓️ #{gettext("Event start date")}"}
+        data-tg-tour={"<p class='mb-3'>#{gettext("Select the start date for your event. Future dates are permissible.")}</p><p class='opacity-50 text-xs'>#{gettext("Attendees attempting to access the event prior to this date will be directed to a waiting room.")}</p>"}
+        data-tg-group="create-event"
+        data-tg-order="3"
+        phx-update="ignore"
+        id="date-picker"
+      >
+        <ClaperWeb.Component.Input.date
           form={f}
-          key={:date_range}
-          name={gettext("When your presentation will be available ?")}
+          key={:started_at}
+          name={gettext("When your event will start?")}
           required="true"
-          start_date_field={:started_at}
-          end_date_field={:expired_at}
           from={Date.add(Date.utc_today(), -1)}
           to={Date.add(Date.utc_today(), 365)}
         />
@@ -270,7 +293,13 @@
       <% end %>
     </div>
 
-    <div class="mt-20 mb-3">
+    <div
+      class="mt-7 mb-3"
+      data-tg-title={"🧑‍💻 #{gettext("Facilitators")}"}
+      data-tg-tour={"<p class='mb-3'>#{gettext("If you require assistance in managing your event, you can grant access to others. Simply enter their email addresses; once they register an account with these emails, they will be able to manage the event.")}</p><p class='opacity-50 text-xs'>#{gettext("Note: Facilitators do not have the ability to delete your event.")}</p>"}
+      data-tg-group="create-event"
+      data-tg-order="4"
+    >
       <span class="text-lg block font-medium text-gray-700">
         <%= gettext("Facilitators can present and manage interactions") %>
       </span>
@@ -278,7 +307,7 @@
         type="button"
         phx-click="add-leader"
         phx-target={@myself}
-        class="rounded-md bg-primary-500 hover:bg-primary-600 transition flex items-center mt-3 md:w-max text-white py-7 px-3 text-sm max-h-0"
+        class="rounded-md bg-primary-500 hover:bg-primary-600 transition flex items-center mt-3 md:w-max text-white py-5 px-3 text-sm max-h-0"
       >
         <svg
           class="text-white h-6 transform"
@@ -292,8 +321,8 @@
             d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
             clip-rule="evenodd"
           />
-          <span><%= gettext("Add facilitator") %></span>
         </svg>
+        <span><%= gettext("Add facilitator") %></span>
       </button>
     </div>
 

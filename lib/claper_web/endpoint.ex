@@ -10,7 +10,12 @@ defmodule ClaperWeb.Endpoint do
     signing_salt: "Tg18Y2zU"
   ]
 
-  socket "/live", Phoenix.LiveView.Socket, websocket: [connect_info: [session: @session_options]]
+  socket "/live", Phoenix.LiveView.Socket,
+    websocket: [
+      connect_info: [
+        session: {__MODULE__, :runtime_opts, []}
+      ]
+    ]
 
   # Serve at "/" the static files from "priv/static" directory.
   #
@@ -20,8 +25,7 @@ defmodule ClaperWeb.Endpoint do
     at: "/",
     from: :claper,
     gzip: false,
-    only:
-      ~w(assets fonts .well-known images favicon.ico robots.txt loaderio-eb3b956a176cdd4f54eb8570ce8bbb06.txt)
+    only: ClaperWeb.static_paths()
 
   plug Plug.Static,
     at: "/uploads",
@@ -51,6 +55,18 @@ defmodule ClaperWeb.Endpoint do
 
   plug Plug.MethodOverride
   plug Plug.Head
-  plug Plug.Session, @session_options
+
+  plug(:runtime_session)
+
   plug ClaperWeb.Router
+
+  def runtime_session(conn, _opts) do
+    Plug.run(conn, [{Plug.Session, runtime_opts()}])
+  end
+
+  def runtime_opts() do
+    @session_options
+    |> Keyword.put(:same_site, Application.get_env(:claper, __MODULE__)[:same_site_cookie])
+    |> Keyword.put(:secure, Application.get_env(:claper, __MODULE__)[:secure_cookie])
+  end
 end

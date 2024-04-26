@@ -1,37 +1,51 @@
-version: "3.0"
 services:
   db:
-    image: postgres:9
-    ports: 
+    image: postgres:15
+    ports:
       - 5432:5432
     volumes:
-      - ./postgres-data:/var/lib/postgresql/data
+      - "claper-db:/var/lib/postgresql/data"
+    healthcheck:
+      test:
+        - CMD
+        - pg_isready
+        - "-q"
+        - "-d"
+        - "claper"
+        - "-U"
+        - "claper"
+      retries: 3
+      timeout: 5s
     environment:
       POSTGRES_PASSWORD: claper
       POSTGRES_USER: claper
       POSTGRES_DB: claper
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U claper"]
-      interval: 5s
-      timeout: 5s
-      retries: 10 
+    networks:
+      - claper-net
   app:
-    image: ghcr.io/claperco/claper:latest
-    user: 0:0
-    ports: 
+    image: ghcr.io/claperco/claper:latest # or build: .
+    ports:
       - 4000:4000
     volumes:
-      - uploads:/app/uploads
-    environment:
-      DATABASE_URL: postgres://claper:claper@db:5432/claper
-      SECRET_KEY_BASE: 0LZiQBLw4WvqPlz4cz8RsHJlxNiSqM9B48y4ChyJ5v1oA0L/TPIqRjQNdPZN3iEG
-      MAIL_TRANSPORT: local
-      ENDPOINT_PORT: 4000
-      PRESENTATION_STORAGE: local
-      MAX_FILE_SIZE_MB: 15
-      ENABLE_ACCOUNT_CREATION: true
+      - "claper-uploads:/app/uploads"
+    healthcheck:
+      test: curl --fail http://localhost:4000 || exit 1
+      retries: 3
+      start_period: 20s
+      timeout: 5s
+    env_file: .env
     depends_on:
       db:
         condition: service_healthy
+    networks:
+      - claper-net
+
 volumes:
-  uploads:
+  claper-db:
+    driver: local
+  claper-uploads:
+    driver: local
+
+networks:
+  claper-net:
+    driver: bridge

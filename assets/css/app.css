@@ -1,4 +1,4 @@
-@import url("flatpickr/dist/flatpickr.min.css");
+@import url('air-datepicker/air-datepicker.css');
 @import url("animate.css/animate.min.css");
 
 @tailwind base;
@@ -427,4 +427,21 @@
   -ms-transform:rotate(-20deg);
   -o-transform:rotate(-20deg);
   transform:rotate(-20deg);
+}
+
+/* Air datepicker */
+.air-datepicker-body--day-name {
+  @apply text-primary-600;
+}
+
+.air-datepicker-cell.-selected-, .air-datepicker-cell.-selected-.-current- {
+  @apply bg-primary-500 text-white hover:bg-primary-600;
+}
+
+.air-datepicker-cell.-current- {
+  @apply text-secondary-500;
+}
+
+.animate__slow_slow {
+  --animate-duration: 5s;
 }

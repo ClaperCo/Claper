@@ -18,7 +18,7 @@ defmodule ClaperWeb.UserSettingsController do
         Accounts.deliver_update_email_instructions(
           applied_user,
           user.email,
-          &Routes.user_settings_url(conn, :confirm_email, &1)
+          &url(~p"/users/settings/confirm_email/#{&1}")
         )
 
         conn
@@ -26,7 +26,7 @@ defmodule ClaperWeb.UserSettingsController do
           :info,
           "A link to confirm your email change has been sent to the new address."
         )
-        |> redirect(to: Routes.user_settings_show_path(conn, :show))
+        |> redirect(to: ~p"/users/settings")
 
       {:error, changeset} ->
         render(conn, "edit.html", email_changeset: changeset)
@@ -38,12 +38,12 @@ defmodule ClaperWeb.UserSettingsController do
       :ok ->
         conn
         |> put_flash(:info, "Email changed successfully.")
-        |> redirect(to: Routes.user_settings_show_path(conn, :show))
+        |> redirect(to: ~p"/users/settings")
 
       :error ->
         conn
         |> put_flash(:error, "Email change link is invalid or it has expired.")
-        |> redirect(to: Routes.user_settings_show_path(conn, :show))
+        |> redirect(to: ~p"/users/settings")
     end
   end
 

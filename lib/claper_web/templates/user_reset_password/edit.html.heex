@@ -16,7 +16,7 @@
         <.form
           :let={f}
           for={@changeset}
-          action={Routes.user_reset_password_path(@conn, :update, @token)}
+          action={~p"/users/reset_password/#{@token}"}
           method="post"
           class="mt-8 space-y-6"
         >

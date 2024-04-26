@@ -1,4 +1,4 @@
-<div class="mx-3 max-w-7xl sm:mx-auto">
+<div class="mx-3 md:max-w-3xl lg:max-w-5xl md:mx-auto">
   <div class="border-b border-gray-200 py-4 flex flex-col sm:flex-row sm:items-center justify-between">
     <div class="flex-1 min-w-0">
       <h1 class="text-2xl font-medium leading-6 text-gray-900 sm:truncate">
@@ -157,18 +157,20 @@
     <h3 class="text-lg leading-6 font-medium text-gray-900 mb-4">
       <%= gettext("Interactions history") %>
     </h3>
-    <%= for position <- 0..@event.presentation_file.length-1 do %>
+    <%= for position <- 0..max(0, @event.presentation_file.length-1) do %>
       <div class="my-10">
-        <%= if Application.get_env(:claper, :presentations) |> Keyword.get(:storage) == "local" do %>
-          <img
-            class="w-1/3 mx-auto"
-            src={"/uploads/#{@event.presentation_file.hash}/#{position+1}.jpg"}
-          />
-        <% else %>
-          <img
-            class="w-1/2 md:w-1/3 mb-4"
-            src={"https://#{Application.get_env(:claper, :presentations) |> Keyword.get(:aws_bucket)}.s3.#{Application.get_env(:ex_aws, :region)}.amazonaws.com/presentations/#{@event.presentation_file.hash}/#{position+1}.jpg"}
-          />
+        <%= if @event.presentation_file.length > 0 do %>
+          <%= if Application.get_env(:claper, :presentations) |> Keyword.get(:storage) == "local" do %>
+            <img
+              class="w-1/3 mx-auto"
+              src={"/uploads/#{@event.presentation_file.hash}/#{position+1}.jpg"}
+            />
+          <% else %>
+            <img
+              class="w-1/2 md:w-1/3 mb-4"
+              src={"https://#{Application.get_env(:claper, :presentations) |> Keyword.get(:aws_bucket)}.s3.#{Application.get_env(:ex_aws, :region)}.amazonaws.com/presentations/#{@event.presentation_file.hash}/#{position+1}.jpg"}
+            />
+          <% end %>
         <% end %>
 
         <%= for poll <- Enum.filter(@event.presentation_file.polls, fn p -> p.position == position end) do %>
@@ -211,12 +213,12 @@
         <% forms = Enum.filter(@event.presentation_file.forms, fn f -> f.position == position end) %>
 
         <%= for form <- forms do %>
-          <span class="text-2xl font-semibold text-gray-900 mb-4">
+          <span class="text-xl font-semibold text-gray-900 mb-4">
             <%= gettext("Form") %>: <%= form.title %>
           </span>
 
           <%= if length(form.form_submits) > 0 do %>
-            <%= link to: Routes.stat_path(@socket, :export, form.id), class: "text-xs text-white bg-primary-500 rounded-md px-2 py-0.5", method: :post do %>
+            <%= link to: ~p"/export/#{form.id}", class: "text-xs text-white bg-primary-500 rounded-md px-2 py-0.5", method: :post do %>
               <%= gettext("Export all submissions") %>
             <% end %>
           <% end %>
@@ -232,12 +234,12 @@
                   <%= if fs.attendee_identifier do %>
                     <img
                       class="h-8 w-8"
-                      src={"https://avatars.dicebear.com/api/identicon/#{fs.attendee_identifier}.svg"}
+                      src={"https://api.dicebear.com/7.x/personas/svg?seed=#{fs.attendee_identifier}.svg"}
                     />
                   <% else %>
                     <img
                       class="h-8 w-8"
-                      src={"https://avatars.dicebear.com/api/identicon/#{fs.user_id}.svg"}
+                      src={"https://api.dicebear.com/7.x/personas/svg?seed=#{fs.user_id}.svg"}
                     />
                   <% end %>
 
@@ -253,7 +255,7 @@
         <% end %>
 
         <%= for embed <- Enum.filter(@event.presentation_file.embeds , fn e -> e.position == position end) do %>
-          <span class="text-2xl font-semibold text-gray-900 mb-4">
+          <span class="text-xl font-semibold text-gray-900 mb-4">
             <%= gettext("Web content") %>: <%= embed.title %>
           </span>
           <div class="px-4 pb-2 pt-3 rounded-b-lg rounded-tr-lg bg-white relative shadow-md text-black break-all mt-4">
@@ -265,63 +267,23 @@
 
         <% posts = Enum.filter(@posts, fn p -> p.position == position end) %>
 
-        <span class="text-2xl font-semibold text-gray-900 mb-4">Messages</span>
+        <span class="text-xl font-semibold text-gray-900 mb-4">
+          <%= gettext("Messages") %>
+        </span>
 
         <%= if length(posts) == 0 do %>
           <p class="italic text-gray-500"><%= gettext("No messages has been sent") %></p>
         <% end %>
 
         <div class="h-64 pb-5 px-2 overflow-y-auto">
-          <%= for post <- posts do %>
-            <div id={"#{post.id}-post"}>
-              <div class="px-4 pb-2 pt-3 rounded-b-lg rounded-tr-lg bg-white relative shadow-md text-black break-all mt-4">
-                <div class="flex space-x-3 items-center">
-                  <%= if post.attendee_identifier do %>
-                    <img
-                      class="h-8 w-8"
-                      src={"https://avatars.dicebear.com/api/identicon/#{post.attendee_identifier}.svg"}
-                    />
-                  <% else %>
-                    <img
-                      class="h-8 w-8"
-                      src={"https://avatars.dicebear.com/api/identicon/#{post.user_id}.svg"}
-                    />
-                  <% end %>
-
-                  <div class="flex flex-col">
-                    <%= if post.name do %>
-                      <p class="text-black text-sm font-semibold mr-2"><%= post.name %></p>
-                    <% end %>
-
-                    <p class="text-xl"><%= post.body %></p>
-                  </div>
-                </div>
-
-                <%= if post.like_count > 0 || post.love_count > 0 || post.lol_count > 0 do %>
-                  <div class="flex h-6 space-x-2 text-base text-gray-500 pb-3 items-center mt-5">
-                    <div class="flex items-center">
-                      <%= if post.like_count > 0 do %>
-                        <img src="/images/icons/thumb.svg" class="h-4" />
-                        <span class="ml-1"><%= post.like_count %></span>
-                      <% end %>
-                    </div>
-                    <div class="flex items-center">
-                      <%= if post.love_count > 0 do %>
-                        <img src="/images/icons/heart.svg" class="h-4" />
-                        <span class="ml-1"><%= post.love_count %></span>
-                      <% end %>
-                    </div>
-                    <div class="flex items-center">
-                      <%= if post.lol_count > 0 do %>
-                        <img src="/images/icons/laugh.svg" class="h-4" />
-                        <span class="ml-1"><%= post.lol_count %></span>
-                      <% end %>
-                    </div>
-                  </div>
-                <% end %>
-              </div>
-            </div>
-          <% end %>
+          <.live_component
+            :for={post <- posts}
+            module={ClaperWeb.EventLive.ManageablePostComponent}
+            readonly={true}
+            id={post.uuid}
+            event={@event}
+            post={post}
+          />
         </div>
       </div>
     <% end %>

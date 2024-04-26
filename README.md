@@ -1,4 +1,3 @@
-
 [![Contributors][contributors-shield]][contributors-url]
 [![Forks][forks-shield]][forks-url]
 [![Stargazers][stars-shield]][stars-url]
@@ -26,53 +25,40 @@
   </p>
 </div>
 
-
-
-
 [![Product Name Screen Shot][product-screenshot]](https://claper.co)
 
 Claper turns your presentations into an interactive, engaging and exciting experience.
 
 Claper has a two-sided mission:
+
 - The first one is to help these people presenting an idea or a message by giving them the opportunity to make their presentation unique and to have real-time feedback from their audience.
 - The second one is to help each participant to take their place, to be an actor in the presentation, in the meeting and to feel important and useful.
 
-Supported languages: 🇬🇧 English, 🇫🇷 French, 🇩🇪 German.
+Supported languages: 🇬🇧 English, 🇫🇷 French, 🇩🇪 German, 🇪🇸 Spanish
 
 ### Built With
 
 Claper is proudly powered by Phoenix and Elixir.
 
-* [![Phoenix][Phoenix]][Phoenix-url]
-* [![Elixir][Elixir]][Elixir-url]
-* [![Tailwind][Tailwind]][Tailwind-url]
+[![Phoenix][Phoenix]][Phoenix-url] [![Elixir][Elixir]][Elixir-url] [![Tailwind][Tailwind]][Tailwind-url]
 
+## Documentation
 
-<!-- GETTING STARTED -->
-## Getting Started
+You can find all the instructions and configuration in [the documentation](https://docs.claper.co/configuration.html).
 
-This is an example of how you may give instructions on setting up your project locally.
-To get a local copy up and running follow these simple example steps.
+## Development environment
 
 ### Prerequisites
 
 To run Claper on your local environment you need to have:
-* Postgres >= 9
-* Elixir >= 1.13.2
-* Erlang >= 24
-* NPM >= 6.14.17
-* NodeJS >= 14.19.2
-* Ghostscript >= 9.5.0 (for PDF support)
-* Libreoffice >= 6.4 (for PPT/PPTX support)
 
-You can also use Docker to easily run a Postgres instance:
-```sh
-  docker run -p 5432:5432 -e POSTGRES_PASSWORD=claper -e POSTGRES_USER=claper -e POSTGRES_DB=claper --name claper-db -d postgres:9
-  ```
-
-### Configuration
-
-You can find all configuration options in [the docs](https://docs.claper.co/configuration.html).
+- Postgres >= 15
+- Elixir >= 1.16
+- Erlang >= 26
+- NPM >= 10
+- NodeJS >= 20
+- Ghostscript >= 9 (for PDF support)
+- Libreoffice >= 24 (for PPT/PPTX support)
 
 ### Installation
 
@@ -105,30 +91,6 @@ Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
 
 If you have configured `MAIL` to `local`, you can access to the mailbox at [`localhost:4000/dev/mailbox`](http://localhost:4000/dev/mailbox).
 
-
-### Using Docker Compose
-
-A Docker Compose [reference file](https://github.com/ClaperCo/Claper/blob/main/docker-compose.yml) is provided in the repository. You can use it to run Claper with Docker Compose.
-
-```sh
-git clone https://github.com/ClaperCo/Claper.git
-cd Claper
-docker compose up
-```
-
-
-### Using Docker Compose for Dev
-
-To easy check new features, it is possible to directly build the Docker image from the source code and run the container with the [docker-compose-dev.yml](https://github.com/ClaperCo/Claper/blob/main/docker-compose-dev.yml) file.
-
-```sh
-git clone https://github.com/ClaperCo/Claper.git
-cd Claper
-docker compose -f docker-compose-dev.yml up
-```
-
-
-<!-- CONTRIBUTING -->
 ## Contributing
 
 Contributions are what make the open source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
@@ -142,23 +104,23 @@ Don't forget to give the project a star! Thanks again!
 4. Push to the Branch (`git push origin feature/amazing_feature`)
 5. Open a Pull Request
 
-
 <!-- LICENSE -->
+
 ## License
 
 Distributed under the GPLv3 License. See `LICENSE.txt` for more information.
 
 <!-- CONTACT -->
+
 ## Contact
 
 [![](https://img.shields.io/badge/@alxlion__-000000?style=for-the-badge&logo=x&logoColor=white)](https://x.com/alxlion_)
 
 Project Link: [https://github.com/ClaperCo/Claper](https://github.com/ClaperCo/Claper)
 
-
-
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
+
 [contributors-shield]: https://img.shields.io/github/contributors/ClaperCo/Claper.svg?style=for-the-badge
 [contributors-url]: https://github.com/ClaperCo/Claper/graphs/contributors
 [forks-shield]: https://img.shields.io/github/forks/ClaperCo/Claper.svg?style=for-the-badge

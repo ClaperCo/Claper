@@ -2,12 +2,12 @@ defmodule ClaperWeb.UserAuth do
   @moduledoc """
     Plug for user authentication.
   """
+  use ClaperWeb, :controller
 
   import Plug.Conn
   import Phoenix.Controller
 
   alias Claper.Accounts
-  alias ClaperWeb.Router.Helpers, as: Routes
 
   # Make the remember me cookie valid for 60 days.
   # If you want bump or reduce this value, also change
@@ -137,13 +137,13 @@ defmodule ClaperWeb.UserAuth do
         conn
       else
         conn
-        # |> redirect(to: Routes.user_registration_path(conn, :confirm))
+        # |> redirect(to: ~p"/users/register/confirm")
       end
     else
       conn
       |> put_flash(:error, "You must log in to access this page.")
       |> maybe_store_return_to()
-      |> redirect(to: Routes.user_session_path(conn, :new))
+      |> redirect(to: ~p"/users/log_in")
       |> halt()
     end
   end

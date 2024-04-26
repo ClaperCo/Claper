@@ -28,8 +28,7 @@ defmodule ClaperWeb.EventLive.Join do
 
   @impl true
   def handle_event("join", %{"event" => %{"code" => code}}, socket) do
-    {:noreply,
-     socket |> push_redirect(to: Routes.event_show_path(socket, :show, String.downcase(code)))}
+    {:noreply, socket |> push_navigate(to: ~p"/e/#{String.downcase(code)}")}
   end
 
   defp apply_action(socket, :join, _params) do
