@@ -28,7 +28,7 @@ defmodule ClaperWeb.EventLive.ManageablePostComponent do
 
         <span><%= gettext("Question") %></span>
       </div>
-      <div :if={@readonly} class="float-right mr-1">
+      <div :if={!@readonly} class="float-right mr-1">
         <%= if @post.attendee_identifier do %>
           <span class="text-yellow-500">
             <%= link(
