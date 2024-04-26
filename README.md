@@ -40,9 +40,7 @@ Supported languages: 🇬🇧 English, 🇫🇷 French, 🇩🇪 German, 🇪�
 
 Claper is proudly powered by Phoenix and Elixir.
 
-- [![Phoenix][Phoenix]][Phoenix-url]
-- [![Elixir][Elixir]][Elixir-url]
-- [![Tailwind][Tailwind]][Tailwind-url]
+[![Phoenix][Phoenix]][Phoenix-url] [![Elixir][Elixir]][Elixir-url] [![Tailwind][Tailwind]][Tailwind-url]
 
 ## Documentation
 
