@@ -34,6 +34,7 @@ jobs:
       MIX_ENV: test
       DATABASE_URL: postgresql://claper:claper@localhost:5432/claper
       SECRET_KEY_BASE: QMQE4ypfy0IC1LZI/fygZNvXHPjLslnr49EE7ftcL1wgAC0MwMLdKCVJyrvXPu8z
+      BASE_URL: http://localhost:4000
 
     steps:
     - uses: actions/checkout@v3
