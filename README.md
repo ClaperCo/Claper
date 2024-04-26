@@ -44,34 +44,23 @@ Claper is proudly powered by Phoenix and Elixir.
 - [![Elixir][Elixir]][Elixir-url]
 - [![Tailwind][Tailwind]][Tailwind-url]
 
-<!-- GETTING STARTED -->
+## Documentation
 
-## Getting Started
+You can find all the instructions and configuration in [the documentation](https://docs.claper.co/configuration.html).
 
-This is an example of how you may give instructions on setting up your project locally.
-To get a local copy up and running follow these simple example steps.
+## Development environment
 
 ### Prerequisites
 
 To run Claper on your local environment you need to have:
 
-- Postgres >= 9
-- Elixir >= 1.13.2
-- Erlang >= 24
-- NPM >= 6.14.17
-- NodeJS >= 14.19.2
-- Ghostscript >= 9.5.0 (for PDF support)
-- Libreoffice >= 6.4 (for PPT/PPTX support)
-
-You can also use Docker to easily run a Postgres instance:
-
-```sh
-  docker run -p 5432:5432 -e POSTGRES_PASSWORD=claper -e POSTGRES_USER=claper -e POSTGRES_DB=claper --name claper-db -d postgres:15
-```
-
-### Configuration
-
-You can find all configuration options in [the docs](https://docs.claper.co/configuration.html).
+- Postgres >= 15
+- Elixir >= 1.16
+- Erlang >= 26
+- NPM >= 10
+- NodeJS >= 20
+- Ghostscript >= 9 (for PDF support)
+- Libreoffice >= 24 (for PPT/PPTX support)
 
 ### Installation
 
@@ -103,18 +92,6 @@ You can find all configuration options in [the docs](https://docs.claper.co/conf
 Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
 
 If you have configured `MAIL` to `local`, you can access to the mailbox at [`localhost:4000/dev/mailbox`](http://localhost:4000/dev/mailbox).
-
-### Using Docker Compose
-
-A Docker Compose [reference file](https://github.com/ClaperCo/Claper/blob/main/docker-compose.yml) is provided in the repository. You can use it to run Claper with Docker Compose.
-
-```sh
-git clone https://github.com/ClaperCo/Claper.git
-cd Claper
-docker compose up
-```
-
-<!-- CONTRIBUTING -->
 
 ## Contributing
 
