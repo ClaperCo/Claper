@@ -18,24 +18,7 @@ defmodule Claper.MixProject do
       source_url: "https://github.com/ClaperCo/Claper",
       homepage_url: "https://claper.co",
       docs: [
-        main: "overview",
-        assets: "guides/assets",
         logo: "priv/static/images/logo.png",
-        extra_section: "GUIDES",
-        extras: [
-          "guides/introduction/overview.md",
-          "guides/introduction/configuration.md",
-          "guides/introduction/installation.md",
-          "guides/introduction/deployment.md",
-          "guides/introduction/storage.md",
-          "guides/usage/features.md",
-          "guides/usage/howto.md"
-        ],
-        groups_for_extras: [
-          Introduction: ~r/guides\/introduction\/.?/,
-          Guides: ~r/guides\/[^\/]+\.md/,
-          Usage: ~r/guides\/usage\/.?/
-        ],
         groups_for_modules: [
           "User management": [
             ~r/Claper\.Account\.?/,
@@ -52,6 +35,14 @@ defmodule Claper.MixProject do
           Events: [
             ~r/Claper\.Event\.?/,
             ~r/ClaperWeb\.Event\.?/
+          ],
+          Forms: [
+            ~r/Claper\.Forms\.?/,
+            ~r/ClaperWeb\.Form\.?/
+          ],
+          WebContent: [
+            ~r/Claper\.Embed\.?/,
+            ~r/ClaperWeb\.Embed\.?/
           ],
           Polls: [
             ~r/Claper\.Polls\.?/,

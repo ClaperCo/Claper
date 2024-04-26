@@ -2,13 +2,13 @@
   <div class="border-b border-gray-200 py-4 sm:flex sm:items-center sm:justify-between">
     <div class="flex-1 min-w-0">
       <h1 class="text-2xl font-medium leading-6 text-gray-900 sm:truncate">
-        <%= gettext("Settings") %>
+        <%= gettext("My account") %>
       </h1>
     </div>
     <div class="mt-4 flex sm:mt-0 sm:ml-4"></div>
   </div>
 
-  <div class="mt-8">
+  <div class="mt-4">
     <%= if @live_action in [:edit_email] do %>
       <.live_component
         module={ClaperWeb.ModalComponent}
@@ -93,7 +93,7 @@
           <%= gettext("Personal informations") %>
         </h3>
         <p class="mt-1 max-w-2xl text-sm text-gray-500">
-          <%= gettext("Your personal informations only visible by you") %>
+          <%= gettext("Your personal informations to access your account") %>
         </p>
       </div>
       <div class="border-t border-gray-200 py-5 sm:p-0">

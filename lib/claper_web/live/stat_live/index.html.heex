@@ -267,63 +267,23 @@
 
         <% posts = Enum.filter(@posts, fn p -> p.position == position end) %>
 
-        <span class="text-2xl font-semibold text-gray-900 mb-4">Messages</span>
+        <span class="text-2xl font-semibold text-gray-900 mb-4">
+          <%= gettext("Messages") %>
+        </span>
 
         <%= if length(posts) == 0 do %>
           <p class="italic text-gray-500"><%= gettext("No messages has been sent") %></p>
         <% end %>
 
         <div class="h-64 pb-5 px-2 overflow-y-auto">
-          <%= for post <- posts do %>
-            <div id={"#{post.id}-post"}>
-              <div class="px-4 pb-2 pt-3 rounded-b-lg rounded-tr-lg bg-white relative shadow-md text-black break-all mt-4">
-                <div class="flex space-x-3 items-center">
-                  <%= if post.attendee_identifier do %>
-                    <img
-                      class="h-8 w-8"
-                      src={"https://api.dicebear.com/7.x/personas/svg?seed=#{post.attendee_identifier}.svg"}
-                    />
-                  <% else %>
-                    <img
-                      class="h-8 w-8"
-                      src={"https://api.dicebear.com/7.x/personas/svg?seed=#{post.user_id}.svg"}
-                    />
-                  <% end %>
-
-                  <div class="flex flex-col">
-                    <%= if post.name do %>
-                      <p class="text-black text-sm font-semibold mr-2"><%= post.name %></p>
-                    <% end %>
-
-                    <p class="text-xl"><%= post.body %></p>
-                  </div>
-                </div>
-
-                <%= if post.like_count > 0 || post.love_count > 0 || post.lol_count > 0 do %>
-                  <div class="flex h-6 space-x-2 text-base text-gray-500 pb-3 items-center mt-5">
-                    <div class="flex items-center">
-                      <%= if post.like_count > 0 do %>
-                        <img src="/images/icons/thumb.svg" class="h-4" />
-                        <span class="ml-1"><%= post.like_count %></span>
-                      <% end %>
-                    </div>
-                    <div class="flex items-center">
-                      <%= if post.love_count > 0 do %>
-                        <img src="/images/icons/heart.svg" class="h-4" />
-                        <span class="ml-1"><%= post.love_count %></span>
-                      <% end %>
-                    </div>
-                    <div class="flex items-center">
-                      <%= if post.lol_count > 0 do %>
-                        <img src="/images/icons/laugh.svg" class="h-4" />
-                        <span class="ml-1"><%= post.lol_count %></span>
-                      <% end %>
-                    </div>
-                  </div>
-                <% end %>
-              </div>
-            </div>
-          <% end %>
+          <.live_component
+            :for={{id, post} <- posts}
+            module={ClaperWeb.EventLive.ManageablePostComponent}
+            readonly={true}
+            id={id}
+            event={@event}
+            post={post}
+          />
         </div>
       </div>
     <% end %>
