@@ -317,6 +317,7 @@ defmodule Claper.Forms do
     |> Repo.insert_or_update()
     |> case do
       {:ok, r} ->
+        r = Repo.preload(r, :form)  # Preloading form in FormSubmit
         case fs do
           nil -> broadcast({:ok, r, event_uuid}, :form_submit_created)
           _form_submit -> broadcast({:ok, r, event_uuid}, :form_submit_updated)

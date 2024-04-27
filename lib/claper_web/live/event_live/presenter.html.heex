@@ -85,10 +85,10 @@
   <!-- MESSAGES -->
   <div
     id="slider-wrapper"
-    class="w-full min-h-screen flex items-center justify-center relative bg-black"
+    class={"w-full min-h-screen flex items-center #{if @event.presentation_file.length > 0 || @current_embed, do: 'justify-start', else: 'justify-center'} relative bg-black"}
   >
     <div
-      class={"#{if @state.chat_visible, do: (if @event.presentation_file.length > 0, do: 'opacity-100 w-3/12 px-4 showed', else: 'opacity-100 w-2/3 px-4 showed'), else: 'opacity-0 w-0 p-0'} transition-all duration-150 flex flex-col h-screen py-5 justify-end max-h-screen bg-black"}
+      class={"#{if @state.chat_visible, do: (if @event.presentation_file.length > 0 || @current_embed, do: 'opacity-100 w-3/12 px-4 showed', else: 'opacity-100 w-2/3 px-4 showed'), else: 'opacity-0 w-0 p-0'} transition-all duration-150 flex flex-col h-screen py-5 justify-end max-h-screen bg-black"}
       id="post-list-wrapper"
       phx-update="replace"
     >
