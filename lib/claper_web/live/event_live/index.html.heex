@@ -68,7 +68,7 @@
       </div>
     </div>
     <div
-      class="border-b border-gray-200 py-4 flex items-center justify-between relative"
+      class="border-b border-gray-200 py-4 flex items-start flex-col space-y-5 sm:space-y-0 sm:flex-row sm:items-center justify-between relative"
       id="events-header"
       phx-hook="TourGuide"
       data-group="welcome"
@@ -81,7 +81,7 @@
           <%= gettext("My events") %>
         </h1>
       </div>
-      <div class="flex mt-0">
+      <div class="flex flex-col w-full items-center sm:w-auto sm:flex-row mt-0">
         <.link
           data-tg-group="welcome"
           data-tg-tour={

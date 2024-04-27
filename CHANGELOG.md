@@ -1,3 +1,9 @@
+## v2.0.1
+
+### Fixes and improvements
+
+- Fix responsive layout
+
 ## v2.0.0
 
 ### Features
