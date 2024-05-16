@@ -1,3 +1,11 @@
+## v2.0.1
+
+### Fixes and improvements
+
+- Fix responsive layout on dashboard
+- Fix presenter layout with embeds when messages are hidden
+- Fix missing stream for form submits
+
 ## v2.0.0
 
 ### Features

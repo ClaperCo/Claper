@@ -68,7 +68,7 @@
       </div>
     </div>
     <div
-      class="border-b border-gray-200 py-4 flex items-center justify-between relative"
+      class="border-b border-gray-200 py-4 flex items-start flex-col space-y-5 sm:space-y-0 sm:flex-row sm:items-center justify-between relative"
       id="events-header"
       phx-hook="TourGuide"
       data-group="welcome"
@@ -81,7 +81,7 @@
           <%= gettext("My events") %>
         </h1>
       </div>
-      <div class="flex mt-0">
+      <div class="flex flex-col w-full items-center sm:w-auto sm:flex-row mt-0">
         <.link
           data-tg-group="welcome"
           data-tg-tour={
@@ -92,7 +92,7 @@
           data-tg-order="2"
           data-tg-title={"#{gettext("In a hurry ?")} 🏃‍♂️"}
           phx-click="toggle-quick-create"
-          class="relative inline-flex items-center px-5 py-2 text-sm rounded-md text-gray-500"
+          class="relative w-full justify-center sm:w-auto inline-flex items-center px-5 py-2 text-sm rounded-md text-gray-500"
         >
           <svg
             class="-ml-1 mr-1 h-5 w-5"
@@ -117,7 +117,7 @@
           data-tg-tour={gettext("Welcome to Claper! You can create a new event here.")}
           data-tg-title={"#{gettext("Your first steps with Claper")} 👋"}
           href={~p"/events/new"}
-          class="relative inline-flex items-center px-5 py-2 text-lg font-medium rounded-md text-white bg-gradient-to-tl from-primary-500 to-secondary-500 bg-size-200 bg-pos-0 hover:bg-pos-100 transition-all duration-500"
+          class="relative w-full sm:w-auto inline-flex justify-center items-center px-5 py-2 text-lg font-medium rounded-md text-white bg-gradient-to-tl from-primary-500 to-secondary-500 bg-size-200 bg-pos-0 hover:bg-pos-100 transition-all duration-500"
         >
           <svg
             class="-ml-1 mr-1 h-5 w-5"

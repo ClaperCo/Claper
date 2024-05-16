@@ -38,6 +38,7 @@ defmodule ClaperWeb.EventLive.Manage do
       posts = list_all_posts(socket, event.uuid)
       pinned_posts = list_pinned_posts(socket, event.uuid)
       questions = list_all_questions(socket, event.uuid)
+      form_submits = list_form_submits(socket, event.presentation_file.id)
 
       socket =
         socket
@@ -49,12 +50,13 @@ defmodule ClaperWeb.EventLive.Manage do
         |> stream(:posts, posts)
         |> stream(:questions, questions)
         |> stream(:pinned_posts, pinned_posts)
+        |> stream(:form_submits, form_submits)
         |> assign(:pinned_post_count, length(pinned_posts))
         |> assign(:question_count, length(questions))
         |> assign(:post_count, length(posts))
         |> assign(
           :form_submit_count,
-          length(list_form_submits(socket, event.presentation_file.id))
+          length(form_submits)
         )
         |> assign(:polls, list_polls(socket, event.presentation_file.id))
         |> assign(:forms, list_forms(socket, event.presentation_file.id))
