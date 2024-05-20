@@ -5,6 +5,7 @@
 - Fix responsive layout on dashboard
 - Fix presenter layout with embeds when messages are hidden
 - Fix missing stream for form submits
+- Fix unknown locales
 
 ## v2.0.0
 

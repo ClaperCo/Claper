@@ -21,9 +21,16 @@ import Split from "split-grid";
 import { TourGuideClient } from "@sjmc11/tourguidejs/src/Tour";
 window.moment = moment;
 
-const locale =
+const supportedLocales = ["en", "fr", "de", "es"];
+
+var locale =
   document.querySelector("html").getAttribute("lang") ||
   navigator.language.split("-")[0];
+
+if (!supportedLocales.includes(locale)) {
+  locale = "en";
+}
+
 window.moment.locale("en");
 window.moment.locale(locale);
 window.Alpine = Alpine;
