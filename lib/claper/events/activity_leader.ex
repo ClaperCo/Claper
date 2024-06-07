@@ -7,6 +7,7 @@ defmodule Claper.Events.ActivityLeader do
     field :delete, :boolean, virtual: true
 
     field :user_id, :integer, virtual: true
+    field :user_email, :string, virtual: true
 
     field :email, :string
     belongs_to :event, Claper.Events.Event
@@ -21,12 +22,14 @@ defmodule Claper.Events.ActivityLeader do
     |> cast(attrs, [
       :email,
       :event_id,
-      :delete
+      :delete,
+      :user_email
     ])
     |> validate_required([:email])
     |> validate_format(:email, ~r/^[^\s]+@[^\s]+$/, message: "must have the @ sign and no spaces")
     |> validate_length(:email, min: 6, max: 160)
     |> unique_constraint(:email)
+    |> validate_not_current_user_email
     |> unsafe_validate_unique([:event_id, :email], Claper.Repo)
     |> maybe_mark_for_deletion
   end
@@ -36,6 +39,18 @@ defmodule Claper.Events.ActivityLeader do
   defp maybe_mark_for_deletion(changeset) do
     if get_change(changeset, :delete) do
       %{changeset | action: :delete}
+    else
+      changeset
+    end
+  end
+
+  defp validate_not_current_user_email(changeset) do
+    email = get_field(changeset, :email)
+    user_email = get_change(changeset, :user_email)
+    IO.inspect(user_email)
+
+    if email == user_email do
+      add_error(changeset, :email, "cannot be the same as the current user's email")
     else
       changeset
     end

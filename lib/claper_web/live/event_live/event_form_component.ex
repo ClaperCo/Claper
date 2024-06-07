@@ -61,7 +61,9 @@ defmodule ClaperWeb.EventLive.EventFormComponent do
     leaders =
       existing_leaders
       |> Enum.concat([
-        Events.change_activity_leader(%Events.ActivityLeader{temp_id: get_temp_id()})
+        Events.change_activity_leader(%Events.ActivityLeader{
+          temp_id: get_temp_id()
+        })
       ])
 
     changeset =

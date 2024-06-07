@@ -343,6 +343,7 @@
               key={:email}
               name=""
             />
+            <%= hidden_input(l, :user_email, value: @current_user.email) %>
           </div>
 
           <label
@@ -364,6 +365,7 @@
 
           <%= hidden_input(l, :temp_id) %>
           <%= hidden_input(l, :event_id, value: @event.id) %>
+          <%= hidden_input(l, :user_email, value: @current_user.email) %>
 
           <button
             type="button"
