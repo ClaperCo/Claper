@@ -1,6 +1,6 @@
 ## v2.0.1
 
-# Features
+### Features
 
 - Add Dutch translation #91 (@robinaartsma)
 
@@ -10,6 +10,7 @@
 - Fix presenter layout with embeds when messages are hidden
 - Fix missing stream for form submits
 - Fix unknown locales
+- Add validation to avoid user to self assign as a facilitator
 
 ## v2.0.0
 
