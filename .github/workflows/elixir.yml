@@ -37,13 +37,13 @@ jobs:
       BASE_URL: http://localhost:4000
 
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
       with:
         fetch-depth: 0
     - name: Set up Elixir
-      uses: erlef/setup-beam@988e02bfe678367a02564f65ca2e37726dc0268f
+      uses: erlef/setup-beam@v1
       with:
-        elixir-version: '1.15.4'
+        elixir-version: '1.16.2'
         otp-version: '26'
     - name: Restore dependencies cache
       uses: actions/cache@v3

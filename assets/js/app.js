@@ -11,9 +11,11 @@ import airdatepickerLocaleEn from "air-datepicker/locale/en";
 import airdatepickerLocaleFr from "air-datepicker/locale/fr";
 import airdatepickerLocaleDe from "air-datepicker/locale/de";
 import airdatepickerLocaleEs from "air-datepicker/locale/es";
+import airdatepickerLocaleNl from "air-datepicker/locale/nl";
 import "moment/locale/de";
 import "moment/locale/fr";
 import "moment/locale/es";
+import "moment/locale/nl";
 import QRCodeStyling from "qr-code-styling";
 import { Presenter } from "./presenter";
 import { Manager } from "./manager";
@@ -21,7 +23,7 @@ import Split from "split-grid";
 import { TourGuideClient } from "@sjmc11/tourguidejs/src/Tour";
 window.moment = moment;
 
-const supportedLocales = ["en", "fr", "de", "es"];
+const supportedLocales = ["en", "fr", "de", "es", "nl"];
 
 var locale =
   document.querySelector("html").getAttribute("lang") ||
@@ -41,6 +43,7 @@ let airdatepickerLocale = {
   fr: airdatepickerLocaleFr,
   de: airdatepickerLocaleDe,
   es: airdatepickerLocaleEs,
+  nl: airdatepickerLocaleNl,
 };
 let csrfToken = document
   .querySelector("meta[name='csrf-token']")

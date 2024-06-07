@@ -1,5 +1,9 @@
 ## v2.0.1
 
+# Features
+
+- Add Dutch translation #91 (@robinaartsma)
+
 ### Fixes and improvements
 
 - Fix responsive layout on dashboard
