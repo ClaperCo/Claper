@@ -234,7 +234,7 @@
       </button>
     </div>
 
-    <div class="fixed bottom-12 w-full">
+    <div class={"fixed w-full " <> if @state.message_reaction_enabled, do: "bottom-12", else: "bottom-3"}>
       <%= if @state.chat_enabled do %>
         <%= if !@state.anonymous_chat_enabled && (@nickname && @nickname == "") do %>
           <.form
@@ -348,7 +348,10 @@
       <% end %>
     </div>
 
-    <div class="flex space-x-6 fixed justify-center bottom-3 w-full lg:w-1/3 lg:mx-auto">
+    <div
+      :if={@state.message_reaction_enabled}
+      class="flex space-x-6 fixed justify-center bottom-3 w-full lg:w-1/3 lg:mx-auto"
+    >
       <a
         phx-click="global-react"
         phx-hook="ClickFeedback"

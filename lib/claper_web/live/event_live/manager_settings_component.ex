@@ -127,7 +127,7 @@ defmodule ClaperWeb.EventLive.ManagerSettingsComponent do
             shortcut={if @create == nil, do: "D", else: nil}
           />
           <span>
-            <%= gettext("Enable message reactions") %>
+            <%= gettext("Enable reactions") %>
             <code
               :if={@show_shortcut}
               class="px-2 py-1.5 text-xs font-semibold text-gray-800 bg-gray-100 border border-gray-200 rounded-lg"

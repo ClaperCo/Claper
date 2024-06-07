@@ -11,6 +11,7 @@
 - Fix missing stream for form submits
 - Fix unknown locales
 - Add validation to avoid user to self assign as a facilitator
+- Toggle for message reactions is replaced with toggle for message and global reactions
 
 ## v2.0.0
 
