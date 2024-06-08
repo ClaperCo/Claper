@@ -18,7 +18,7 @@ defmodule Claper.EventsFixtures do
       attrs
       |> Enum.into(%{
         name: "some name",
-        code: "#{Enum.random(1000..2000)}",
+        code: :crypto.strong_rand_bytes(4) |> Base.url_encode64() |> binary_part(0, 8),
         uuid: Ecto.UUID.generate(),
         user_id: assoc.user.id,
         started_at: NaiveDateTime.utc_now(),
