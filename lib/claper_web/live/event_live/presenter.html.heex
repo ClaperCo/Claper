@@ -73,22 +73,17 @@
       </div>
     </div>
   <% end %>
-  <%= if @current_embed do %>
-    <!-- EMBED -->
-    <div
-      id="embed"
-      class={"#{if @state.chat_visible, do: 'h-5/6 w-9/12 right-0', else: 'h-screen w-full'} transition-all duration-150 inline-block transform -translate-y-1/2 top-1/2 z-30 absolute transition-opacity"}
-    >
-      <%= raw(@current_embed.content) %>
-    </div>
-  <% end %>
   <!-- MESSAGES -->
   <div
     id="slider-wrapper"
-    class={"w-full min-h-screen flex items-center #{if @event.presentation_file.length > 0 || @current_embed, do: 'justify-start', else: 'justify-center'} relative bg-black"}
+    class={"w-full min-h-screen grid #{if (@state.chat_visible && @event.presentation_file.length > 0) || (@current_embed && @event.presentation_file.length == 0), do: 'grid-cols-[1fr_10px_1fr]', else: 'grid-cols-[1fr]'} items-center justify-center relative bg-black"}
+    phx-hook="Split"
+    data-type="column"
+    data-gutter=".gutter-1"
   >
     <div
-      class={"#{if @state.chat_visible, do: (if @event.presentation_file.length > 0 || @current_embed, do: 'opacity-100 w-3/12 px-4 showed', else: 'opacity-100 w-2/3 px-4 showed'), else: 'opacity-0 w-0 p-0'} transition-all duration-150 flex flex-col h-screen py-5 justify-end max-h-screen bg-black"}
+      :if={@state.chat_visible}
+      class="px-5 transition-all duration-150 flex flex-col h-screen py-5 justify-end max-h-screen bg-black"
       id="post-list-wrapper"
       phx-update="replace"
     >
@@ -166,23 +161,37 @@
         </div>
       <% end %>
     </div>
+    <div
+      class={"gutter-1 row-span-full cursor-col-resize col-[2] text-center text-sm leading-3 text-white #{if (!@state.chat_visible && @event.presentation_file.length > 0) || (!@current_embed && @event.presentation_file.length == 0), do: 'hidden'}"}
+      style="writing-mode: vertical-rl"
+    >
+      •••
+    </div>
     <!-- SLIDES -->
-    <div id="slider" phx-update="ignore">
-      <%= for index <- 1..max(1, @event.presentation_file.length) do %>
-        <%= if @event.presentation_file.length > 0 do %>
-          <%= if Application.get_env(:claper, :presentations) |> Keyword.get(:storage) == "local" do %>
-            <img
-              class="w-1/3 max-h-screen mx-auto"
-              src={"/uploads/#{@event.presentation_file.hash}/#{index}.jpg"}
-            />
-          <% else %>
-            <img
-              class="w-full max-h-screen mx-auto inline-block"
-              src={"https://#{Application.get_env(:claper, :presentations) |> Keyword.get(:aws_bucket)}.s3.#{Application.get_env(:ex_aws, :region)}.amazonaws.com/presentations/#{@event.presentation_file.hash}/#{index}.jpg"}
-            />
+    <div id="slides">
+      <%= if @current_embed do %>
+        <!-- EMBED -->
+        <div id="embed" class="max-h-screen w-full h-screen">
+          <%= raw(@current_embed.content) %>
+        </div>
+      <% end %>
+      <div class={"#{if @current_embed, do: 'hidden', else: ''} text-center"} id="slider">
+        <%= for index <- 1..max(1, @event.presentation_file.length) do %>
+          <%= if @event.presentation_file.length > 0 do %>
+            <%= if Application.get_env(:claper, :presentations) |> Keyword.get(:storage) == "local" do %>
+              <img
+                class="max-h-screen !w-auto"
+                src={"/uploads/#{@event.presentation_file.hash}/#{index}.jpg"}
+              />
+            <% else %>
+              <img
+                class="w-full max-h-screen mx-auto inline-block"
+                src={"https://#{Application.get_env(:claper, :presentations) |> Keyword.get(:aws_bucket)}.s3.#{Application.get_env(:ex_aws, :region)}.amazonaws.com/presentations/#{@event.presentation_file.hash}/#{index}.jpg"}
+              />
+            <% end %>
           <% end %>
         <% end %>
-      <% end %>
+      </div>
     </div>
   </div>
   <!-- ONLINE BADGE -->

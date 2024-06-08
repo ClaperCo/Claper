@@ -86,10 +86,13 @@ Hooks.TourGuide = {
 Hooks.Split = {
   mounted() {
     const type = this.el.dataset.type;
+    const id = this.el.id;
     const gutter = this.el.dataset.gutter;
+    const forceLayout = this.el.classList.contains("grid-cols-[1fr]");
     const columnSlitValue =
-      localStorage.getItem("column-split") || "1fr 10px 1fr";
-    const rowSlitValue = localStorage.getItem("row-split") || "1fr 10px 1fr";
+      localStorage.getItem(`column-split-${id}`) || "1fr 10px 1fr";
+    const rowSlitValue =
+      localStorage.getItem(`row-split-${id}`) || "1fr 10px 1fr";
 
     if (type === "column") {
       this.columnSplit = Split({
@@ -101,10 +104,12 @@ Hooks.Split = {
         ],
         onDragEnd: () => {
           const currentPosition = this.el.style["grid-template-columns"];
-          localStorage.setItem("column-split", currentPosition);
+          localStorage.setItem(`column-split-${id}`, currentPosition);
         },
       });
-      this.el.style["grid-template-columns"] = columnSlitValue;
+      if (!forceLayout) {
+        this.el.style["grid-template-columns"] = columnSlitValue;
+      }
     } else {
       this.rowSplit = Split({
         rowGutters: [
@@ -115,21 +120,22 @@ Hooks.Split = {
         ],
         onDragEnd: () => {
           const value = this.el.style["grid-template-rows"];
-          localStorage.setItem("row-split", value);
+          localStorage.setItem(`row-split-${id}`, value);
         },
       });
-      this.el.style["grid-template-rows"] = rowSlitValue;
+      if (!forceLayout) {
+        this.el.style["grid-template-rows"] = rowSlitValue;
+      }
     }
   },
   updated() {
-    if (this.columnSplit) {
-      const value = localStorage.getItem("column-split") || "1fr 10px 1fr";
-      this.el.style["grid-template-columns"] = value;
+    const id = this.el.id;
+    const forceLayout = this.el.classList.contains("grid-cols-[1fr]");
+    if (forceLayout) {
+      return;
     }
-    if (this.rowSplit) {
-      const value = localStorage.getItem("row-split") || "1fr 10px 1fr";
-      this.el.style["grid-template-rows"] = value;
-    }
+
+    this.mounted();
   },
   destroyed() {
     if (this.columnSplit) {
@@ -314,6 +320,9 @@ Hooks.Presenter = {
   mounted() {
     this.presenter = new Presenter(this);
     this.presenter.init();
+  },
+  updated() {
+    this.presenter.update();
   },
 };
 Hooks.Manager = {

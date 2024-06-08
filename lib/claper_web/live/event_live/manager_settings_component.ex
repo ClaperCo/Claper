@@ -62,10 +62,9 @@ defmodule ClaperWeb.EventLive.ManagerSettingsComponent do
           </span>
         </div>
 
-        <div class={"#{if !@current_poll, do: 'opacity-50' } flex space-x-2 items-center mt-3"}>
+        <div class="flex space-x-2 items-center mt-3">
           <ClaperWeb.Component.Input.check
             key={:poll_visible}
-            disabled={!@current_poll}
             checked={@state.poll_visible}
             shortcut={if @create == nil, do: "R", else: nil}
           />
@@ -137,10 +136,9 @@ defmodule ClaperWeb.EventLive.ManagerSettingsComponent do
           </span>
         </div>
 
-        <div class={"#{if !@current_poll, do: 'opacity-50' } flex space-x-2 items-center mt-3"}>
+        <div class="flex space-x-2 items-center mt-3">
           <ClaperWeb.Component.Input.check
             key={:show_poll_results_enabled}
-            disabled={!@current_poll}
             checked={@state.show_poll_results_enabled}
             shortcut={if @create == nil, do: "F", else: nil}
           />
