@@ -47,7 +47,6 @@ defmodule Claper.Events.ActivityLeader do
   defp validate_not_current_user_email(changeset) do
     email = get_field(changeset, :email)
     user_email = get_change(changeset, :user_email)
-    IO.inspect(user_email)
 
     if email == user_email do
       add_error(changeset, :email, "cannot be the same as the current user's email")

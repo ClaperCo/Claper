@@ -53,6 +53,7 @@ defmodule Claper.Events.Event do
   end
 
   def update_changeset(event, attrs) do
+
     event
     |> cast(attrs, [:name, :code, :started_at, :expired_at, :audience_peak])
     |> cast_assoc(:presentation_file)

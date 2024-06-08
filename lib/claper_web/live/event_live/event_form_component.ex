@@ -86,8 +86,10 @@ defmodule ClaperWeb.EventLive.EventFormComponent do
       end)
 
     changeset =
-      socket.assigns.changeset
-      |> Ecto.Changeset.put_assoc(:leaders, leaders)
+      case leaders do
+        [] -> Events.change_event(socket.assigns.event, %{leaders: leaders})
+        _ -> socket.assigns.changeset |> Ecto.Changeset.put_assoc(:leaders, leaders)
+      end
 
     {:noreply, assign(socket, changeset: changeset)}
   end
