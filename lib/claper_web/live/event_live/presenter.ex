@@ -179,7 +179,7 @@ defmodule ClaperWeb.EventLive.Presenter do
 
   @impl true
   def handle_info({:embed_updated, embed}, socket) do
-    if embed.active do
+    if embed.enabled do
       {:noreply,
        socket
        |> update(:current_embed, fn _current_embed -> embed end)}

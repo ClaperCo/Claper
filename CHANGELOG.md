@@ -11,6 +11,7 @@
 - Fix presenter layout with embeds when messages are hidden
 - Fix missing stream for form submits
 - Fix unknown locales
+- Fix embeds when updated
 - Add validation to avoid user to self assign as a facilitator
 - Toggle for message reactions is replaced with toggle for message and global reactions
 - Improve embed integration in presenter view
