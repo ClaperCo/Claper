@@ -13,7 +13,12 @@ defmodule ClaperWeb.UserSettingsLive.Show do
 
     email_changeset = Accounts.User.email_changeset(%Accounts.User{}, %{})
     password_changeset = Accounts.User.password_changeset(%Accounts.User{}, %{})
-    preferences_changeset = Accounts.User.preferences_changeset(socket.assigns.current_user, %{})
+
+    preferences_changeset =
+      Accounts.User.preferences_changeset(
+        socket.assigns.current_user,
+        set_locale(socket.assigns.current_user)
+      )
 
     {:ok,
      socket
@@ -136,5 +141,13 @@ defmodule ClaperWeb.UserSettingsLive.Show do
   @impl true
   def handle_event("validate", _params, socket) do
     {:noreply, socket}
+  end
+
+  defp set_locale(user) when is_nil(user.locale) do
+    %{"locale" => "en"}
+  end
+
+  defp set_locale(user) do
+    %{"locale" => user.locale}
   end
 end
