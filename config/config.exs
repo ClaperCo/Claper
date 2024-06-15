@@ -18,7 +18,7 @@ config :claper, ClaperWeb.Endpoint,
 
 config :claper, ClaperWeb.Gettext,
   default_locale: "en",
-  locales: ~w(fr en de)
+  locales: ~w(fr en de es nl)
 
 config :dart_sass,
   version: "1.61.0",
