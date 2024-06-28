@@ -9,7 +9,7 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n == 0 || n == 1) ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;\n"
 
 #: lib/claper_web/live/event_live/manage.html.heex:1174
-#: lib/claper_web/live/user_settings_live/show.ex:50
+#: lib/claper_web/live/user_settings_live/show.ex:55
 #, elixir-autogen, elixir-format
 msgid "Settings"
 msgstr "Paramètres"
@@ -148,7 +148,7 @@ msgstr "Scannez pour interagir en temps réel"
 msgid "Starting on"
 msgstr "Commence le"
 
-#: lib/claper_web/live/event_live/event_form_component.ex:255
+#: lib/claper_web/live/event_live/event_form_component.ex:257
 #, elixir-autogen, elixir-format
 msgid "Updated successfully"
 msgstr "Mis à jour avec succès"
@@ -165,8 +165,8 @@ msgstr "C'est le moment de propulser vos présentations."
 msgid "Return to home"
 msgstr "Retourner à l'accueil"
 
-#: lib/claper_web/live/event_live/event_form_component.ex:199
-#: lib/claper_web/live/event_live/event_form_component.ex:235
+#: lib/claper_web/live/event_live/event_form_component.ex:201
+#: lib/claper_web/live/event_live/event_form_component.ex:237
 #, elixir-autogen, elixir-format
 msgid "Created successfully"
 msgstr "Mis à jour avec succès"
@@ -214,17 +214,17 @@ msgstr "Supprimer"
 msgid "Save"
 msgstr "Sauvegarder"
 
-#: lib/claper_web/live/user_settings_live/show.ex:71
+#: lib/claper_web/live/user_settings_live/show.ex:76
 #, elixir-autogen, elixir-format
 msgid "A link to confirm your email change has been sent to the new address."
 msgstr "Un lien pour confirmer votre changement d'email a été envoyé à la nouvelle adresse."
 
-#: lib/claper_web/live/user_settings_live/show.ex:35
+#: lib/claper_web/live/user_settings_live/show.ex:40
 #, elixir-autogen, elixir-format
 msgid "Change the email address you want associated with your account."
 msgstr "Modifiez l'email que vous souhaitez associer à votre compte."
 
-#: lib/claper_web/live/user_settings_live/show.ex:32
+#: lib/claper_web/live/user_settings_live/show.ex:37
 #, elixir-autogen, elixir-format
 msgid "Update your email"
 msgstr "Changer votre email"
@@ -306,12 +306,12 @@ msgstr "Chargez un fichier"
 msgid "or drag and drop"
 msgstr "ou glisser-déposer"
 
-#: lib/claper_web/live/event_live/event_form_component.ex:306
+#: lib/claper_web/live/event_live/event_form_component.ex:308
 #, elixir-autogen, elixir-format
 msgid "You have selected an incorrect file type"
 msgstr "Vous avez sélectionné un type de fichier incorrect"
 
-#: lib/claper_web/live/event_live/event_form_component.ex:305
+#: lib/claper_web/live/event_live/event_form_component.ex:307
 #, elixir-autogen, elixir-format
 msgid "Your file is too large"
 msgstr "Votre fichier est trop volumineux"
@@ -341,7 +341,7 @@ msgstr "Nouveau sondage"
 msgid "Title of your poll"
 msgstr "Titre de votre sondage"
 
-#: lib/claper_web/live/event_live/event_form_component.ex:307
+#: lib/claper_web/live/event_live/event_form_component.ex:309
 #, elixir-autogen, elixir-format
 msgid "Upload failed"
 msgstr "Échec du chargement"
@@ -665,7 +665,7 @@ msgstr "Adresse email"
 msgid "Your password"
 msgstr "Votre mot de passe"
 
-#: lib/claper_web/live/user_settings_live/show.ex:44
+#: lib/claper_web/live/user_settings_live/show.ex:49
 #, elixir-autogen, elixir-format
 msgid "Change the password used to access your account."
 msgstr "Changez le mot de passe utilisé pour accéder à votre compte."
@@ -680,12 +680,12 @@ msgstr "Mot de passe actuel"
 msgid "New password"
 msgstr "Nouveau mot de passe"
 
-#: lib/claper_web/live/user_settings_live/show.ex:41
+#: lib/claper_web/live/user_settings_live/show.ex:46
 #, elixir-autogen, elixir-format, fuzzy
 msgid "Update your password"
 msgstr "Changer votre email"
 
-#: lib/claper_web/live/user_settings_live/show.ex:93
+#: lib/claper_web/live/user_settings_live/show.ex:98
 #, elixir-autogen, elixir-format, fuzzy
 msgid "Your password has been updated."
 msgstr "Votre mot de passe a été mis à jour."
@@ -826,12 +826,12 @@ msgstr "Sélectionnez la présentation"
 msgid "PDF, PPT, PPTX up to %{size} MB"
 msgstr "PDF, PPT, PPTX jusqu'à %{size} MB"
 
-#: lib/claper_web/live/event_live/manager_settings_component.ex:86
+#: lib/claper_web/live/event_live/manager_settings_component.ex:85
 #, elixir-autogen, elixir-format
 msgid "Attendees settings"
 msgstr "Paramètres participants"
 
-#: lib/claper_web/live/event_live/manager_settings_component.ex:96
+#: lib/claper_web/live/event_live/manager_settings_component.ex:95
 #, elixir-autogen, elixir-format
 msgid "Enable messages"
 msgstr "Activer messages"
@@ -846,8 +846,8 @@ msgstr "Afficher instructions"
 msgid "Show messages"
 msgstr "Afficher messages"
 
-#: lib/claper_web/live/event_live/manager_settings_component.ex:73
-#: lib/claper_web/live/event_live/manager_settings_component.ex:148
+#: lib/claper_web/live/event_live/manager_settings_component.ex:72
+#: lib/claper_web/live/event_live/manager_settings_component.ex:146
 #, elixir-autogen, elixir-format
 msgid "Show poll results"
 msgstr "Afficher résultats sondage"
@@ -869,7 +869,7 @@ msgstr "Anonyme"
 msgid "Close"
 msgstr "Fermer"
 
-#: lib/claper_web/live/event_live/manager_settings_component.ex:113
+#: lib/claper_web/live/event_live/manager_settings_component.ex:112
 #, elixir-autogen, elixir-format, fuzzy
 msgid "Enable anonymous messages"
 msgstr "Activer messages anonymes"
@@ -1111,7 +1111,7 @@ msgstr "Terminer"
 msgid "View report"
 msgstr "Voir le rapport"
 
-#: lib/claper_web/live/user_settings_live/show.ex:132
+#: lib/claper_web/live/user_settings_live/show.ex:137
 #, elixir-autogen, elixir-format
 msgid "Your account has been deleted."
 msgstr "Votre compte a été supprimé."
@@ -1355,7 +1355,7 @@ msgstr "Langue"
 msgid "Preferences"
 msgstr "Préférences"
 
-#: lib/claper_web/live/user_settings_live/show.ex:114
+#: lib/claper_web/live/user_settings_live/show.ex:119
 #, elixir-autogen, elixir-format
 msgid "Your preferences have been updated."
 msgstr "Vos préférences ont été mises à jour."
@@ -1406,7 +1406,7 @@ msgstr "Mon compte"
 msgid "Your personal informations to access your account"
 msgstr "Vos informations personnelles pour accéder à votre compte"
 
-#: lib/claper_web/live/event_live/manager_settings_component.ex:130
+#: lib/claper_web/live/event_live/manager_settings_component.ex:129
 #, elixir-autogen, elixir-format, fuzzy
 msgid "Enable reactions"
 msgstr "Activer les réactions"
