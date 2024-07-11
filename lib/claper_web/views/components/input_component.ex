@@ -110,7 +110,6 @@ defmodule ClaperWeb.Component.Input do
       phx-click={checked(@checked, @key)}
       disabled={@disabled}
       phx-value-key={@key}
-      id={"check-#{@key}"}
       type="button"
       class="group relative inline-flex h-5 w-10 flex-shrink-0 cursor-pointer items-center justify-center rounded-full"
       role="switch"

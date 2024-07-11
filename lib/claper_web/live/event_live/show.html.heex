@@ -55,62 +55,62 @@
       </div>
     </div>
 
-    <%= if @current_poll do %>
-      <div
-        id="poll-wrapper-parent"
-        class="animate__animated animate__zoomInDown w-full lg:w-1/3 lg:mx-auto fixed top-16 z-10 px-2 lg:px-7 pb-6 max-h-screen overflow-y-auto"
-      >
-        <div class="transition-all" id="poll-wrapper">
-          <.live_component
-            module={ClaperWeb.EventLive.PollComponent}
-            id={"#{@current_poll.id}-poll"}
-            poll={@current_poll}
-            current_user={@current_user}
-            attendee_identifier={@attendee_identifier}
-            event={@event}
-            selected_poll_opt={@selected_poll_opt}
-            current_poll_vote={@current_poll_vote}
-            show_results={@state.show_poll_results_enabled}
-          />
+    <%= case @current_interaction do %>
+      <% %Claper.Polls.Poll{} -> %>
+        <div
+          id="poll-wrapper-parent"
+          class="animate__animated animate__zoomInDown w-full lg:w-1/3 lg:mx-auto fixed top-16 z-10 px-2 lg:px-7 pb-6 max-h-screen overflow-y-auto"
+        >
+          <div class="transition-all" id="poll-wrapper">
+            <.live_component
+              module={ClaperWeb.EventLive.PollComponent}
+              id={"#{@current_interaction.id}-poll"}
+              poll={@current_interaction}
+              current_user={@current_user}
+              attendee_identifier={@attendee_identifier}
+              event={@event}
+              selected_poll_opt={@selected_poll_opt}
+              current_poll_vote={@current_poll_vote}
+              show_results={@state.show_poll_results_enabled}
+            />
+          </div>
         </div>
-      </div>
-    <% end %>
-
-    <%= if @current_form do %>
-      <div
-        id="form-wrapper-parent"
-        class="animate__animated animate__zoomInDown w-full lg:w-1/3 lg:mx-auto fixed top-16 z-10 px-2 pb-6 lg:px-7 max-h-screen overflow-y-auto"
-      >
-        <div class="transition-all" id="form-wrapper">
-          <.live_component
-            module={ClaperWeb.EventLive.FormComponent}
-            id={"#{@current_form.id}-form"}
-            form={@current_form}
-            current_user={@current_user}
-            attendee_identifier={@attendee_identifier}
-            event={@event}
-            current_form_submit={@current_form_submit}
-          />
+      <% %Claper.Forms.Form{} -> %>
+        <div
+          id="form-wrapper-parent"
+          class="animate__animated animate__zoomInDown w-full lg:w-1/3 lg:mx-auto fixed top-16 z-10 px-2 pb-6 lg:px-7 max-h-screen overflow-y-auto"
+        >
+          <div class="transition-all" id="form-wrapper">
+            <.live_component
+              module={ClaperWeb.EventLive.FormComponent}
+              id={"#{@current_interaction.id}-form"}
+              form={@current_interaction}
+              current_user={@current_user}
+              attendee_identifier={@attendee_identifier}
+              event={@event}
+              current_form_submit={@current_form_submit}
+            />
+          </div>
         </div>
-      </div>
-    <% end %>
-
-    <%= if @current_embed != nil and @current_embed.attendee_visibility == true do %>
-      <div
-        id="embed-wrapper-parent"
-        class="animate__animated animate__zoomInDown w-full lg:w-1/3 lg:mx-auto fixed top-16 z-10 px-2 pb-6 lg:px-7 max-h-screen overflow-y-auto"
-      >
-        <div class="transition-all" id="embed-wrapper">
-          <.live_component
-            module={ClaperWeb.EventLive.EmbedComponent}
-            id={"#{@current_embed.id}-embed"}
-            embed={@current_embed}
-            current_user={@current_user}
-            attendee_identifier={@attendee_identifier}
-            event={@event}
-          />
+      <% %Claper.Embeds.Embed{} -> %>
+        <div
+          :if={@current_interaction.attendee_visibility == true}
+          id="embed-wrapper-parent"
+          class="animate__animated animate__zoomInDown w-full lg:w-1/3 lg:mx-auto fixed top-16 z-10 px-2 pb-6 lg:px-7 max-h-screen overflow-y-auto"
+        >
+          <div class="transition-all" id="embed-wrapper">
+            <.live_component
+              module={ClaperWeb.EventLive.EmbedComponent}
+              id={"#{@current_interaction.id}-embed"}
+              embed={@current_interaction}
+              current_user={@current_user}
+              attendee_identifier={@attendee_identifier}
+              event={@event}
+            />
+          </div>
         </div>
-      </div>
+      <% _ -> %>
+        <!-- Handle any other types of interactions here if needed -->
     <% end %>
 
     <div

@@ -1,7 +1,8 @@
 defmodule ClaperWeb.EventLive.Show do
+  alias Claper.Interactions
   use ClaperWeb, :live_view
 
-  alias Claper.{Posts, Polls, Forms, Embeds}
+  alias Claper.{Posts, Polls, Forms}
   alias ClaperWeb.Presence
 
   on_mount(ClaperWeb.AttendeeLiveAuth)
@@ -87,9 +88,7 @@ defmodule ClaperWeb.EventLive.Show do
       |> stream(:posts, posts)
       |> assign(:post_count, Enum.count(posts))
       |> starting_soon_assigns(event)
-      |> get_current_poll(event)
-      |> get_current_form(event)
-      |> get_current_embed(event)
+      |> get_current_interaction(event, event.presentation_file.presentation_state.position)
       |> check_leader(event)
       |> leader_list(event)
 
@@ -227,39 +226,19 @@ defmodule ClaperWeb.EventLive.Show do
 
   @impl true
   def handle_info({:page_changed, page}, socket) do
-    {:noreply, socket |> assign(:current_page, page) |> push_event("reset-global-react", %{})}
+    {:noreply,
+     socket
+     |> assign(:current_page, page)
+     |> get_current_interaction(socket.assigns.event, page)
+     |> push_event("reset-global-react", %{})}
   end
 
   @impl true
   def handle_info(
-        {:current_poll, poll},
+        {:current_interaction, interaction},
         socket
       ) do
-    if is_nil(poll) do
-      {:noreply, socket |> assign(:current_poll, poll)}
-    else
-      {:noreply, socket |> assign(:current_poll, poll) |> get_current_vote(poll.id)}
-    end
-  end
-
-  @impl true
-  def handle_info(
-        {:current_form, form},
-        socket
-      ) do
-    if is_nil(form) do
-      {:noreply, socket |> assign(:current_form, form)}
-    else
-      {:noreply, socket |> assign(:current_form, form) |> get_current_form_submit(form.id)}
-    end
-  end
-
-  @impl true
-  def handle_info(
-        {:current_embed, embed},
-        socket
-      ) do
-    {:noreply, socket |> assign(:current_embed, embed)}
+    {:noreply, socket |> load_current_interaction(interaction)}
   end
 
   @impl true
@@ -681,44 +660,6 @@ defmodule ClaperWeb.EventLive.Show do
     Posts.list_posts(event_id, [:event, :reactions, :user])
   end
 
-  defp get_current_poll(socket, event) do
-    with poll <-
-           Polls.get_poll_current_position(
-             event.presentation_file.id,
-             event.presentation_file.presentation_state.position
-           ) do
-      if is_nil(poll) do
-        socket |> assign(:current_poll, poll)
-      else
-        socket |> assign(:current_poll, poll) |> get_current_vote(poll.id)
-      end
-    end
-  end
-
-  defp get_current_form(socket, event) do
-    with form <-
-           Forms.get_form_current_position(
-             event.presentation_file.id,
-             event.presentation_file.presentation_state.position
-           ) do
-      if is_nil(form) do
-        socket |> assign(:current_form, form)
-      else
-        socket |> assign(:current_form, form) |> get_current_form_submit(form.id)
-      end
-    end
-  end
-
-  defp get_current_embed(socket, event) do
-    with embed <-
-           Embeds.get_embed_current_position(
-             event.presentation_file.id,
-             event.presentation_file.presentation_state.position
-           ) do
-      socket |> assign(:current_embed, embed)
-    end
-  end
-
   defp get_current_vote(%{assigns: %{current_user: current_user}} = socket, poll_id)
        when is_map(current_user) do
     vote = Polls.get_poll_vote(current_user.id, poll_id)
@@ -764,5 +705,23 @@ defmodule ClaperWeb.EventLive.Show do
   defp apply_action(socket, :show, _params) do
     socket
     |> assign(:page_title, "##{socket.assigns.event.code} - #{socket.assigns.event.name}")
+  end
+
+  defp get_current_interaction(socket, event, position) do
+    with interaction <- Interactions.get_active_interaction(event, position) do
+      socket |> assign(:current_interaction, interaction) |> load_current_interaction(interaction)
+    end
+  end
+
+  defp load_current_interaction(socket, %Polls.Poll{} = interaction) do
+    socket |> assign(:current_interaction, interaction) |> get_current_vote(interaction.id)
+  end
+
+  defp load_current_interaction(socket, %Forms.Form{} = interaction) do
+    socket |> assign(:current_interaction, interaction) |> get_current_form_submit(interaction.id)
+  end
+
+  defp load_current_interaction(socket, interaction) do
+    socket |> assign(:current_interaction, interaction)
   end
 end

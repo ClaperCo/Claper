@@ -95,6 +95,14 @@ defmodule Claper.Forms do
     %Form{}
     |> Form.changeset(attrs)
     |> Repo.insert()
+    |> case do
+      {:ok, form} ->
+        form = Repo.preload(form, presentation_file: :event)
+        broadcast({:ok, form, form.presentation_file.event.uuid}, :form_created)
+
+      {:error, changeset} ->
+        {:error, %{changeset | action: :insert}}
+    end
   end
 
   @doc """
@@ -181,22 +189,16 @@ defmodule Claper.Forms do
     |> Repo.update_all(set: [enabled: false])
   end
 
-  def set_status(id, presentation_file_id, position, status) do
-    if status do
-      from(f in Form,
-        where:
-          f.presentation_file_id == ^presentation_file_id and f.position == ^position and
-            f.id != ^id
-      )
-      |> Repo.update_all(set: [enabled: false])
-    end
+  def set_enabled(id) do
+    get_form!(id)
+    |> Ecto.Changeset.change(enabled: true)
+    |> Repo.update()
+  end
 
-    from(f in Form,
-      where:
-        f.presentation_file_id == ^presentation_file_id and f.position == ^position and
-          f.id == ^id
-    )
-    |> Repo.update_all(set: [enabled: status])
+  def set_disabled(id) do
+    get_form!(id)
+    |> Ecto.Changeset.change(enabled: false)
+    |> Repo.update()
   end
 
   defp broadcast({:error, _reason} = error, _form), do: error

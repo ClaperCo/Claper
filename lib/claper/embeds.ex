@@ -93,6 +93,14 @@ defmodule Claper.Embeds do
     %Embed{}
     |> Embed.changeset(attrs)
     |> Repo.insert()
+    |> case do
+      {:ok, embed} ->
+        embed = Repo.preload(embed, presentation_file: :event)
+        broadcast({:ok, embed, embed.presentation_file.event.uuid}, :embed_created)
+
+      {:error, changeset} ->
+        {:error, %{changeset | action: :insert}}
+    end
   end
 
   @doc """
@@ -157,22 +165,16 @@ defmodule Claper.Embeds do
     |> Repo.update_all(set: [enabled: false])
   end
 
-  def set_status(id, presentation_file_id, position, status) do
-    if status do
-      from(e in Embed,
-        where:
-          e.presentation_file_id == ^presentation_file_id and e.position == ^position and
-            e.id != ^id
-      )
-      |> Repo.update_all(set: [enabled: false])
-    end
+  def set_enabled(id) do
+    get_embed!(id)
+    |> Ecto.Changeset.change(enabled: true)
+    |> Repo.update()
+  end
 
-    from(e in Embed,
-      where:
-        e.presentation_file_id == ^presentation_file_id and e.position == ^position and
-          e.id == ^id
-    )
-    |> Repo.update_all(set: [enabled: status])
+  def set_disabled(id) do
+    get_embed!(id)
+    |> Ecto.Changeset.change(enabled: false)
+    |> Repo.update()
   end
 
   defp broadcast({:error, _reason} = error, _embed), do: error
