@@ -69,8 +69,11 @@ defmodule Lti13.ResourcesTest do
     test "create_resource_with_event/1 with valid attributes and lti_user", %{
       registration: registration
     } do
+      {:ok, user} =
+        Claper.Accounts.create_user(%{email: "test@example.com", password: "password123"})
+
       lti_user = %Lti13.Users.User{
-        user_id: 1,
+        user_id: user.id,
         registration_id: registration.id
       }
 
@@ -90,8 +93,11 @@ defmodule Lti13.ResourcesTest do
     end
 
     test "create_resource_with_event/1 with invalid attributes", %{registration: registration} do
+      {:ok, user} =
+        Claper.Accounts.create_user(%{email: "test@example.com", password: "password123"})
+
       lti_user = %Lti13.Users.User{
-        user_id: 1,
+        user_id: user.id,
         registration_id: registration.id
       }
 

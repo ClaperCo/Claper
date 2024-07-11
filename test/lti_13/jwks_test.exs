@@ -23,6 +23,15 @@ defmodule Lti13.JwksTest do
     end
 
     test "create and get all jwks" do
+      {:ok, _} =
+        Lti13.Jwks.create_jwk(%{
+          pem: Lti13.Jwks.Utils.KeyGenerator.generate_key_pair().private_key,
+          typ: "JWT",
+          alg: "RS256",
+          kid: UUID.uuid4(),
+          active: true
+        })
+
       active_jwk = Lti13.Jwks.get_active_jwk()
       %{private_key: private_key} = Lti13.Jwks.Utils.KeyGenerator.generate_key_pair()
 
