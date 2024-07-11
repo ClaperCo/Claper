@@ -1,3 +1,10 @@
+## v2.1.0
+
+### Features
+
+- LTI 1.3 support
+- New layout for presentation manager
+
 ## v2.0.1
 
 ### Features
