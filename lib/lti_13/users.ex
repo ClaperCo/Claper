@@ -10,37 +10,31 @@ defmodule Lti13.Users do
     |> Repo.insert()
   end
 
-  def get_user_by_sub(sub) do
-    Repo.get_by(User, sub: sub)
+  def get_user_by_sub_and_registration_id(sub, registration_id) do
+    Repo.get_by(User, sub: sub, registration_id: registration_id)
   end
 
-  def get_or_create_user(%{sub: sub, email: email, issuer: issuer, client_id: client_id} = attrs) do
-    case get_user_by_sub(sub) do
-      nil ->
-        case Claper.Accounts.get_user_by_email_or_create(email) do
-          {:ok, claper_user} ->
-            %{id: registration_id} =
-              Lti13.Registrations.get_registration_by_issuer_client_id(issuer, client_id)
+  def get_or_create_user(
+        %{
+          sub: sub,
+          email: email,
+          registration_id: registration_id
+        } = attrs
+      ) do
+    case get_user_by_sub_and_registration_id(sub, registration_id) do
+      nil -> create_new_user(attrs, email, registration_id)
+      %User{} = user -> {:ok, user |> Repo.preload(:user)}
+    end
+  end
 
-            updated_attrs =
-              attrs
-              |> Map.put(:user_id, claper_user.id)
-              |> Map.put(:registration_id, registration_id)
-
-            case create_user(updated_attrs) do
-              {:ok, user} ->
-                {:ok, user |> Repo.preload(:user)}
-
-              {:error, _} ->
-                {:error, %{reason: :invalid_user, msg: "Invalid user"}}
-            end
-
-          {:error, _} ->
-            {:error, %{reason: :invalid_user, msg: "Invalid Claper user"}}
-        end
-
-      %User{} = user ->
-        {:ok, user |> Repo.preload(:user)}
+  defp create_new_user(attrs, email, registration_id) do
+    with {:ok, claper_user} <- Claper.Accounts.get_user_by_email_or_create(email),
+         updated_attrs <-
+           Map.merge(attrs, %{user_id: claper_user.id, registration_id: registration_id}),
+         {:ok, user} <- create_user(updated_attrs) do
+      {:ok, user |> Repo.preload(:user)}
+    else
+      _ -> {:error, %{reason: :invalid_user, msg: "Invalid user"}}
     end
   end
 end

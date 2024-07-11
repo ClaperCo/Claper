@@ -108,7 +108,7 @@ defmodule ClaperWeb.EventLive.Show do
   defp check_leader(%{assigns: %{current_user: current_user} = _assigns} = socket, event)
        when is_map(current_user) do
     is_leader =
-      current_user.id == event.user_id || Claper.Events.is_leaded_by(current_user.email, event)
+      current_user.id == event.user_id || Claper.Events.leaded_by?(current_user.email, event)
 
     socket |> assign(:is_leader, is_leader)
   end

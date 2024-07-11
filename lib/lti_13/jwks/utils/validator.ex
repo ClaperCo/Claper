@@ -93,21 +93,21 @@ defmodule Lti13.Jwks.Validator do
     end
   end
 
-  def validate_user(%{
-        "sub" => sub,
-        "name" => name,
-        "email" => email,
-        "iss" => issuer,
-        "aud" => client_id,
-        "https://purl.imsglobal.org/spec/lti/claim/roles" => roles
-      }) do
+  def validate_user(
+        %{
+          "sub" => sub,
+          "name" => name,
+          "email" => email,
+          "https://purl.imsglobal.org/spec/lti/claim/roles" => roles
+        },
+        registration
+      ) do
     case Lti13.Users.get_or_create_user(%{
            sub: sub,
            name: name,
            email: email,
            roles: roles,
-           issuer: issuer,
-           client_id: client_id
+           registration_id: registration.id
          }) do
       {:error, _} ->
         {:error, %{reason: :invalid_user, msg: "Invalid user"}}
@@ -146,29 +146,35 @@ defmodule Lti13.Jwks.Validator do
   def fetch_public_key(key_set_url, kid) do
     public_key_set =
       case Req.get(key_set_url) do
-        {:ok, %Req.Response{status: 200, body: body}} ->
-          body
-
-        error ->
-          error
+        {:ok, %Req.Response{status: 200, body: body}} -> body
+        error -> error
       end
 
+    find_and_process_key(public_key_set, kid)
+  end
+
+  defp find_and_process_key(public_key_set, kid) do
     if container?(public_key_set) do
-      case Enum.find(public_key_set["keys"], fn key -> container?(key) && key["kid"] == kid end) do
-        nil ->
-          return_key_not_found(kid)
-
-        public_key_json ->
-          public_key =
-            public_key_json
-            |> convert_map_to_base64url()
-            |> JOSE.JWK.from()
-
-          {:ok, public_key}
-      end
+      find_key_in_set(public_key_set, kid)
     else
       return_key_not_found(kid)
     end
+  end
+
+  defp find_key_in_set(public_key_set, kid) do
+    case Enum.find(public_key_set["keys"], fn key -> container?(key) && key["kid"] == kid end) do
+      nil -> return_key_not_found(kid)
+      public_key_json -> process_public_key(public_key_json)
+    end
+  end
+
+  defp process_public_key(public_key_json) do
+    public_key =
+      public_key_json
+      |> convert_map_to_base64url()
+      |> JOSE.JWK.from()
+
+    {:ok, public_key}
   end
 
   defp container?(container) do

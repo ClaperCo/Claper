@@ -6,8 +6,7 @@ defmodule Lti13.Jwks.Utils.KeyGenerator do
   Create a random passphrase of size given (defaults to 256)
   """
   def passphrase(len \\ 256) do
-    Enum.map(1..len, fn _i -> Enum.random(@chars) end)
-    |> Enum.join("")
+    Enum.map_join(1..len, "", fn _i -> Enum.random(@chars) end)
   end
 
   @doc """
@@ -21,7 +20,7 @@ defmodule Lti13.Jwks.Utils.KeyGenerator do
   def generate_key_pair do
     key_id = passphrase()
 
-    {:ok, rsa_priv_key} = generate_key(:rsa, 4096, 65537)
+    {:ok, rsa_priv_key} = generate_key(:rsa, 4096, 65_537)
     {:ok, public_key} = public_key_from_private_key(rsa_priv_key)
     {:ok, private_key_pem} = pem_entry_encode(rsa_priv_key, :RSAPrivateKey)
     {:ok, public_key_pem} = pem_entry_encode(public_key, :RSAPublicKey)

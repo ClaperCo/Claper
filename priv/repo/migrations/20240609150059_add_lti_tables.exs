@@ -39,7 +39,7 @@ defmodule Claper.Repo.Migrations.AddLtiTables do
       timestamps()
     end
 
-    create unique_index(:lti_13_users, :sub)
+    create unique_index(:lti_13_users, [:sub, :registration_id])
 
     create table(:lti_13_nonces) do
       add :value, :string

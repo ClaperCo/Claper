@@ -14,7 +14,10 @@ defmodule Lti13.Resources do
       where: r.resource_id == ^resource_id and r.registration_id == ^registration_id
     )
     |> Repo.one()
-    |> Repo.preload(:event)
+    |> case do
+      nil -> nil
+      resource -> resource |> Repo.preload(:event)
+    end
   end
 
   @doc """

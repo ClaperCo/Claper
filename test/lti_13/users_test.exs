@@ -53,7 +53,9 @@ defmodule Lti13.UsersTest do
 
       {:ok, %User{} = user} = Users.create_user(attrs)
 
-      assert %User{id: id} = Users.get_user_by_sub(attrs.sub)
+      assert %User{id: id} =
+               Users.get_user_by_sub_and_registration_id(attrs.sub, attrs.registration_id)
+
       assert id == user.id
     end
 
@@ -66,8 +68,7 @@ defmodule Lti13.UsersTest do
         name: "John Doe",
         roles: ["role1", "role2"],
         email: claper_user.email,
-        client_id: registration.client_id,
-        issuer: registration.issuer
+        registration_id: registration.id
       }
 
       assert {:ok, %User{} = user} = Users.get_or_create_user(attrs)
@@ -89,8 +90,6 @@ defmodule Lti13.UsersTest do
         name: "John Doe",
         roles: ["role1", "role2"],
         email: claper_user.email,
-        client_id: registration.client_id,
-        issuer: registration.issuer,
         registration_id: registration.id,
         user_id: claper_user.id
       }

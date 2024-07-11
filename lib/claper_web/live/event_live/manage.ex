@@ -18,7 +18,7 @@ defmodule ClaperWeb.EventLive.Manage do
         presentation_file: [:polls, :presentation_state]
       ])
 
-    if is_nil(event) || not is_leader(socket, event) do
+    if is_nil(event) || not leader?(socket, event) do
       {:ok,
        socket
        |> put_flash(:error, gettext("Event doesn't exist"))
@@ -77,11 +77,11 @@ defmodule ClaperWeb.EventLive.Manage do
     end
   end
 
-  defp is_leader(%{assigns: %{current_user: current_user}} = _socket, event) do
-    Claper.Events.is_leaded_by(current_user.email, event) || event.user.id == current_user.id
+  defp leader?(%{assigns: %{current_user: current_user}} = _socket, event) do
+    Claper.Events.leaded_by?(current_user.email, event) || event.user.id == current_user.id
   end
 
-  defp is_leader(_socket, _event), do: false
+  defp leader?(_socket, _event), do: false
 
   @impl true
   def handle_info(%{event: "presence_diff"}, %{assigns: %{event: event}} = socket) do

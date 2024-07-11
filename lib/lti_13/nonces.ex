@@ -20,7 +20,7 @@ defmodule Lti13.Nonces do
   end
 
   # 86400 seconds = 24 hours
-  def delete_expired_nonces(nonce_ttl_sec \\ 86_4000) do
+  def delete_expired_nonces(nonce_ttl_sec \\ 86_400) do
     nonce_expiry = DateTime.utc_now() |> DateTime.add(-nonce_ttl_sec, :second)
     Repo.delete_all(from(n in Nonce, where: n.inserted_at < ^nonce_expiry))
   end

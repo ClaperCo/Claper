@@ -178,8 +178,6 @@ defmodule ClaperWeb.EventLive.EventCardComponent do
               <div>
                 <%= if not @is_leader do %>
                   <a
-                    data-phx-link="patch"
-                    data-phx-link-state="push"
                     href={~p"/events/#{@event.uuid}/edit"}
                     class="flex w-full lg:w-auto rounded-md tracking-wide focus:outline-none focus:shadow-outline text-primary-500 text-sm items-center"
                   >
@@ -199,8 +197,6 @@ defmodule ClaperWeb.EventLive.EventCardComponent do
               <div>
                 <%= if not @is_leader do %>
                   <a
-                    data-phx-link="patch"
-                    data-phx-link-state="push"
                     href={~p"/events/#{@event.uuid}/edit"}
                     class="flex w-full lg:w-auto rounded-md tracking-wide focus:outline-none focus:shadow-outline text-primary-500 text-sm items-center"
                   >
