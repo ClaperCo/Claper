@@ -656,12 +656,12 @@
           id="interactions"
           class="bg-gray-100 overflow-y-auto"
           data-tg-order="1"
-          data-tg-title={"#{gettext("Your slides and/or interactions")}"}
-          data-tg-tour={"<p class='mb-3'>#{gettext("This section contains all your presentation slides (if you have upload one). You have the option to add interactions to each slide.")}</p><p class='opacity-50 text-xs'>#{gettext("If you have slides, you can navigate through the slides with ease using the arrow keys on your keyboard.")}</p>"}
+          data-tg-title={"#{gettext("Your interactions")}"}
+          data-tg-tour={"<p class='mb-3'>#{gettext("This section contains all your interactions.")}</p><p class='opacity-50 text-xs'>#{gettext("You can add interactions to your presentation slides.")}</p>"}
           data-tg-group="manage"
         >
           <!-- Interactions -->
-          <div class="h-full @container">
+          <div class="h- overflow-y-auto @container">
             <div
               :if={length(@interactions) == 0}
               class="text-center flex flex-col space-y-5 items-center justify-center text-gray-400 h-full"
@@ -703,9 +703,103 @@
                 <span><%= gettext("Add interaction") %></span>
               </button>
             </div>
-            <div class="grid grid-cols-1 @sm:grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 @lg:grid-cols-3 gap-4 p-4">
+            <div class="grid grid-cols-1 @sm:grid-cols-2 @lg:grid-cols-3 gap-4 p-4 overflow-y-auto">
               <%= for interaction <- @interactions do %>
-                <div class="bg-white rounded-lg p-3 shadow-base transition-all flex flex-col justify-between">
+                <div class="bg-white rounded-lg p-3 shadow-base transition-all flex flex-col justify-between relative">
+                  <div
+                    phx-hook="Dropdown"
+                    id={"poll-settings-#{interaction.id}"}
+                    class="hidden bg-white z-20 absolute text-sm w-full h-full top-0 left-0 p-3 rounded-lg overflow-y-auto"
+                  >
+                    <ul class="flex flex-col gap-y-2">
+                      <li>
+                        <button
+                          phx-click="checked"
+                          phx-value-key="poll_visible"
+                          value={"#{!@state.poll_visible}"}
+                          class="py-2 px-2 rounded text-gray-600 bg-gray-100 hover:bg-gray-200 flex justify-center items-center w-full gap-x-3"
+                        >
+                          <svg
+                            :if={@state.poll_visible}
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            class="h-6 w-6"
+                          >
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M3 4h1m4 0h13" /><path d="M4 4v10a2 2 0 0 0 2 2h10m3.42 -.592c.359 -.362 .58 -.859 .58 -1.408v-10" /><path d="M12 16v4" /><path d="M9 20h6" /><path d="M8 12l2 -2m4 0l2 -2" /><path d="M3 3l18 18" />
+                          </svg>
+
+                          <svg
+                            :if={!@state.poll_visible}
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            class="h-6 w-6"
+                          >
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M3 4l18 0" /><path d="M4 4v10a2 2 0 0 0 2 2h12a2 2 0 0 0 2 -2v-10" /><path d="M12 16l0 4" /><path d="M9 20l6 0" /><path d="M8 12l3 -3l2 2l3 -3" />
+                          </svg>
+
+                          <span :if={@state.poll_visible}>
+                            <%= gettext("Hide on presentation") %>
+                          </span>
+                          <span :if={!@state.poll_visible}>
+                            <%= gettext("Show on presentation") %>
+                          </span>
+                        </button>
+                      </li>
+                      <li>
+                        <button
+                          phx-click="checked"
+                          phx-value-key="show_poll_results_enabled"
+                          value={"#{!@state.show_poll_results_enabled}"}
+                          class="py-2 px-2 rounded text-gray-600 bg-gray-100 hover:bg-gray-200 flex justify-center items-center w-full gap-x-3"
+                        >
+                          <svg
+                            :if={@state.show_poll_results_enabled}
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            class="h-6 w-6"
+                          >
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M8 4h10a2 2 0 0 1 2 2v10m-.586 3.414a2 2 0 0 1 -1.414 .586h-12a2 2 0 0 1 -2 -2v-12c0 -.547 .22 -1.043 .576 -1.405" /><path d="M7 14l3 -3l2 2l.5 -.5m2 -2l.5 -.5l2 2" /><path d="M3 3l18 18" />
+                          </svg>
+
+                          <svg
+                            :if={!@state.show_poll_results_enabled}
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            class="h-6 w-6"
+                          >
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M4 18v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2z" /><path d="M7 14l3 -3l2 2l3 -3l2 2" />
+                          </svg>
+
+                          <span :if={@state.show_poll_results_enabled}>
+                            <%= gettext("Hide results for attendees") %>
+                          </span>
+                          <span :if={!@state.show_poll_results_enabled}>
+                            <%= gettext("Show results for attendees") %>
+                          </span>
+                        </button>
+                      </li>
+                    </ul>
+                  </div>
                   <div>
                     <%= case interaction do %>
                       <% %Claper.Polls.Poll{} -> %>
@@ -901,44 +995,6 @@
                               />
                             </svg>
                           </button>
-                          <div
-                            phx-hook="Dropdown"
-                            id={"poll-settings-#{interaction.id}"}
-                            class="hidden rounded shadow-lg bg-white border px-1 py-1 z-20 right-0 absolute text-sm top-10 w-max"
-                          >
-                            <ul>
-                              <li>
-                                <button
-                                  phx-click="checked"
-                                  phx-value-key="poll_visible"
-                                  value={"#{!@state.poll_visible}"}
-                                  class="py-2 px-2 rounded text-gray-600 hover:bg-gray-100 flex items-center w-full gap-x-2"
-                                >
-                                  <span :if={@state.poll_visible}>
-                                    <%= gettext("Hide on presentation") %>
-                                  </span>
-                                  <span :if={!@state.poll_visible}>
-                                    <%= gettext("Show on presentation") %>
-                                  </span>
-                                </button>
-                              </li>
-                              <li>
-                                <button
-                                  phx-click="checked"
-                                  phx-value-key="show_poll_results_enabled"
-                                  value={"#{!@state.show_poll_results_enabled}"}
-                                  class="py-2 px-2 rounded text-gray-600 hover:bg-gray-100 flex items-center w-full gap-x-2"
-                                >
-                                  <span :if={@state.show_poll_results_enabled}>
-                                    <%= gettext("Hide results for attendees") %>
-                                  </span>
-                                  <span :if={!@state.show_poll_results_enabled}>
-                                    <%= gettext("Show results for attendees") %>
-                                  </span>
-                                </button>
-                              </li>
-                            </ul>
-                          </div>
                         </div>
                       </div>
                     <% else %>
@@ -964,9 +1020,9 @@
                 :if={length(@interactions) > 0}
                 phx-click={toggle_add_modal()}
                 class="
-                bg-white rounded-lg p-3 shadow-base transition-all flex flex-col justify-center items-center transform hover:scale-105"
+                bg-white @container rounded-lg p-3 shadow-base transition-all flex flex-col justify-center items-center transform hover:scale-105"
               >
-                <img src="/images/interaction-icons.png" class="w-2/3" />
+                <img src="/images/interaction-icons.png" class="w-2/3 @sm:w-1/3" />
                 <span class="font-semibold text-secondary-800">Add interaction</span>
               </button>
             </div>
