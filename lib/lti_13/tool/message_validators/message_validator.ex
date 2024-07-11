@@ -1,5 +1,4 @@
 defprotocol Lti_1p3.Tool.MessageValidator do
-
   @spec can_validate(any) :: boolean
   def can_validate(jwt_body)
 

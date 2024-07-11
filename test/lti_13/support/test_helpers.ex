@@ -21,8 +21,9 @@ defmodule Lti_1p3.DataProviders.EctoProvider.TestHelpers do
         picture: "https://platform.example.edu/jane.jpg",
         email: "jane#{System.unique_integer([:positive])}@platform.example.edu",
         locale: "en-US",
-        platform_roles: "http://purl.imsglobal.org/vocab/lis/v2/system/person#User,http://purl.imsglobal.org/vocab/lis/v2/institution/person#Student",
-        context_roles: "http://purl.imsglobal.org/vocab/lis/v2/membership#Learner",
+        platform_roles:
+          "http://purl.imsglobal.org/vocab/lis/v2/system/person#User,http://purl.imsglobal.org/vocab/lis/v2/institution/person#Student",
+        context_roles: "http://purl.imsglobal.org/vocab/lis/v2/membership#Learner"
       })
 
     struct!(Lti_1p3_User, params)
@@ -38,7 +39,7 @@ defmodule Lti_1p3.DataProviders.EctoProvider.TestHelpers do
         typ: "JWT",
         alg: "RS256",
         kid: UUID.uuid4(),
-        active: true,
+        active: true
       })
 
     {:ok, jwk} = provider!().create_jwk(struct!(Jwk, params))
@@ -56,32 +57,35 @@ defmodule Lti_1p3.DataProviders.EctoProvider.TestHelpers do
         auth_token_url: "some auth_token_url",
         auth_login_url: "some auth_login_url",
         auth_server: "some auth_server",
-        tool_jwk_id: tool_jwk_id,
+        tool_jwk_id: tool_jwk_id
       })
 
-     {:ok, registration} = provider!().create_registration(struct(Registration, params))
+    {:ok, registration} = provider!().create_registration(struct(Registration, params))
 
-     registration
+    registration
   end
 
-  def deployment_fixture(%{deployment_id: deployment_id, registration_id: registration_id} = attrs) do
+  def deployment_fixture(
+        %{deployment_id: deployment_id, registration_id: registration_id} = attrs
+      ) do
     params =
       attrs
       |> Enum.into(%{
         deployment_id: deployment_id,
-        registration_id: registration_id,
+        registration_id: registration_id
       })
 
-     {:ok, deployment} = provider!().create_deployment(struct(Deployment, params))
+    {:ok, deployment} = provider!().create_deployment(struct(Deployment, params))
 
-     deployment
+    deployment
   end
 
   def generate_id_token(jwk, kid, claims) do
     # create a signer
-    signer = Joken.Signer.create("RS256", %{"pem" => jwk.pem}, %{
-      "kid" => kid,
-    })
+    signer =
+      Joken.Signer.create("RS256", %{"pem" => jwk.pem}, %{
+        "kid" => kid
+      })
 
     {:ok, claims} = Joken.generate_claims(%{}, claims)
 
@@ -101,9 +105,9 @@ defmodule Lti_1p3.DataProviders.EctoProvider.TestHelpers do
       "iss" => "https://lti-ri.imsglobal.org",
       "sub" => "a73d59affc5b2c4cd493",
       "aud" => "12345",
-      "exp" => Timex.now |> Timex.add(Timex.Duration.from_minutes(5)) |> Timex.to_unix,
-      "iat" => Timex.now |> Timex.to_unix,
-      "nonce" => UUID.uuid4(),
+      "exp" => Timex.now() |> Timex.add(Timex.Duration.from_minutes(5)) |> Timex.to_unix(),
+      "iat" => Timex.now() |> Timex.to_unix(),
+      "nonce" => UUID.uuid4()
     }
   end
 
@@ -115,7 +119,7 @@ defmodule Lti_1p3.DataProviders.EctoProvider.TestHelpers do
       "picture" => "http://example.org/Chelsea.jpg",
       "email" => "Chelsea.Conroy@example.org",
       "name" => "Chelsea Reichel Conroy",
-      "locale" => "en-US",
+      "locale" => "en-US"
     }
   end
 
@@ -123,8 +127,10 @@ defmodule Lti_1p3.DataProviders.EctoProvider.TestHelpers do
     %{
       "https://purl.imsglobal.org/spec/lti-ags/claim/endpoint" => %{
         "lineitems" => "https://lti-ri.imsglobal.org/platforms/1237/contexts/10337/line_items",
-        "scope" => ["https://purl.imsglobal.org/spec/lti-ags/scope/lineitem",
-        "https://purl.imsglobal.org/spec/lti-ags/scope/result.readonly"]
+        "scope" => [
+          "https://purl.imsglobal.org/spec/lti-ags/scope/lineitem",
+          "https://purl.imsglobal.org/spec/lti-ags/scope/result.readonly"
+        ]
       },
       "https://purl.imsglobal.org/spec/lti-ces/claim/caliper-endpoint-service" => %{
         "caliper_endpoint_url" => "https://lti-ri.imsglobal.org/platforms/1237/sensors",
@@ -132,7 +138,8 @@ defmodule Lti_1p3.DataProviders.EctoProvider.TestHelpers do
         "scopes" => ["https://purl.imsglobal.org/spec/lti-ces/v1p0/scope/send"]
       },
       "https://purl.imsglobal.org/spec/lti-nrps/claim/namesroleservice" => %{
-        "context_memberships_url" => "https://lti-ri.imsglobal.org/platforms/1237/contexts/10337/memberships",
+        "context_memberships_url" =>
+          "https://lti-ri.imsglobal.org/platforms/1237/contexts/10337/memberships",
         "service_versions" => ["2.0"]
       },
       "https://purl.imsglobal.org/spec/lti/claim/context" => %{
@@ -158,10 +165,13 @@ defmodule Lti_1p3.DataProviders.EctoProvider.TestHelpers do
         "title" => "My Course"
       },
       "https://purl.imsglobal.org/spec/lti/claim/role_scope_mentor" => ["a62c52c02ba262003f5e"],
-      "https://purl.imsglobal.org/spec/lti/claim/roles" => ["http://purl.imsglobal.org/vocab/lis/v2/membership#Learner",
-      "http://purl.imsglobal.org/vocab/lis/v2/institution/person#Student",
-      "http://purl.imsglobal.org/vocab/lis/v2/membership#Mentor"],
-      "https://purl.imsglobal.org/spec/lti/claim/target_link_uri" => "https://lti-ri.imsglobal.org/lti/tools/1193/launches",
+      "https://purl.imsglobal.org/spec/lti/claim/roles" => [
+        "http://purl.imsglobal.org/vocab/lis/v2/membership#Learner",
+        "http://purl.imsglobal.org/vocab/lis/v2/institution/person#Student",
+        "http://purl.imsglobal.org/vocab/lis/v2/membership#Mentor"
+      ],
+      "https://purl.imsglobal.org/spec/lti/claim/target_link_uri" =>
+        "https://lti-ri.imsglobal.org/lti/tools/1193/launches",
       "https://purl.imsglobal.org/spec/lti/claim/tool_platform" => %{
         "contact_email" => "",
         "description" => "",
@@ -171,30 +181,31 @@ defmodule Lti_1p3.DataProviders.EctoProvider.TestHelpers do
         "url" => "",
         "version" => "1.0"
       },
-      "https://purl.imsglobal.org/spec/lti/claim/version" => "1.3.0",
+      "https://purl.imsglobal.org/spec/lti/claim/version" => "1.3.0"
     }
   end
 
   def example_extension_data() do
     %{
-      "https://www.example.com/extension" => %{"color" => "violet"},
+      "https://www.example.com/extension" => %{"color" => "violet"}
     }
   end
 
   def mock_get_jwk_keys(jwk) do
-    body = Jason.encode!(%{
-      keys: [
-        jwk.pem
-        |> JOSE.JWK.from_pem()
-        |> JOSE.JWK.to_public()
-        |> JOSE.JWK.to_map()
-        |> (fn {_kty, public_jwk} -> public_jwk end).()
-        |> Map.put("typ", jwk.typ)
-        |> Map.put("alg", jwk.alg)
-        |> Map.put("kid", jwk.kid)
-        |> Map.put("use", "sig")
-      ]
-    })
+    body =
+      Jason.encode!(%{
+        keys: [
+          jwk.pem
+          |> JOSE.JWK.from_pem()
+          |> JOSE.JWK.to_public()
+          |> JOSE.JWK.to_map()
+          |> (fn {_kty, public_jwk} -> public_jwk end).()
+          |> Map.put("typ", jwk.typ)
+          |> Map.put("alg", jwk.alg)
+          |> Map.put("kid", jwk.kid)
+          |> Map.put("use", "sig")
+        ]
+      })
 
     {:ok, %HTTPoison.Response{status_code: 200, body: body}}
   end

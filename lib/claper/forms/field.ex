@@ -4,7 +4,7 @@ defmodule Claper.Forms.Field do
 
   @type t :: %__MODULE__{
           name: String.t(),
-          type: String.t(),
+          type: String.t()
         }
 
   @primary_key false

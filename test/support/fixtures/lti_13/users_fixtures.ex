@@ -4,7 +4,6 @@ defmodule Lti13.UsersFixtures do
   entities via the `Lti13.Users` context.
   """
 
-
   @doc """
   Generate a user.
   """

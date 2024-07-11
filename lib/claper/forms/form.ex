@@ -4,7 +4,7 @@ defmodule Claper.Forms.Form do
 
   @type t :: %__MODULE__{
           id: integer(),
-          enabled: boolean()  | nil,
+          enabled: boolean() | nil,
           position: integer() | nil,
           title: String.t(),
           fields: [Claper.Forms.Field.t()] | nil,
