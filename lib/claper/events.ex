@@ -397,6 +397,24 @@ defmodule Claper.Events do
   alias Claper.Events.ActivityLeader
 
   @doc """
+  Creates a activity leader.
+
+  ## Examples
+
+      iex> create_activity_leader(%{field: value})
+      {:ok, %ActivityLeader{}}
+
+      iex> create_activity_leader(%{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def create_activity_leader(attrs) do
+    %ActivityLeader{}
+    |> ActivityLeader.changeset(attrs)
+    |> Repo.insert()
+  end
+
+  @doc """
   Gets a single facilitator.
 
   Raises `Ecto.NoResultsError` if the Activity leader does not exist.

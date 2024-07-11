@@ -3,6 +3,18 @@ defmodule Claper.Embeds.Embed do
   import Ecto.Changeset
   import ClaperWeb.Gettext
 
+  @type t :: %__MODULE__{
+          id: integer(),
+          title: String.t(),
+          content: String.t(),
+          enabled: boolean(),
+          position: integer() | nil,
+          attendee_visibility: boolean() | nil,
+          presentation_file_id: integer() | nil,
+          inserted_at: NaiveDateTime.t(),
+          updated_at: NaiveDateTime.t()
+        }
+
   @derive {Jason.Encoder, only: [:title, :content, :position, :attendee_visibility]}
   schema "embeds" do
     field :title, :string

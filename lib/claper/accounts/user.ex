@@ -3,6 +3,20 @@ defmodule Claper.Accounts.User do
 
   import Ecto.Changeset
 
+  @type t :: %__MODULE__{
+          id: integer(),
+          uuid: Ecto.UUID.t(),
+          email: String.t(),
+          password: String.t() | nil,
+          hashed_password: String.t(),
+          is_admin: boolean(),
+          confirmed_at: NaiveDateTime.t() | nil,
+          locale: String.t() | nil,
+          events: [Claper.Events.Event.t()] | nil,
+          inserted_at: NaiveDateTime.t(),
+          updated_at: NaiveDateTime.t()
+        }
+
   schema "users" do
     field :uuid, :binary_id
     field :email, :string

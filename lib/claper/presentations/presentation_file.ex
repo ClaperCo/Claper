@@ -2,6 +2,20 @@ defmodule Claper.Presentations.PresentationFile do
   use Ecto.Schema
   import Ecto.Changeset
 
+  @type t :: %__MODULE__{
+          id: integer(),
+          hash: String.t() | nil,
+          length: integer() | nil,
+          status: String.t() | nil,
+          event_id: integer() | nil,
+          polls: [Claper.Polls.Poll.t()] | nil,
+          forms: [Claper.Forms.Form.t()] | nil,
+          embeds: [Claper.Embeds.Embed.t()] | nil,
+          presentation_state: Claper.Presentations.PresentationState.t(),
+          inserted_at: NaiveDateTime.t(),
+          updated_at: NaiveDateTime.t()
+        }
+
   schema "presentation_files" do
     field :hash, :string
     field :length, :integer

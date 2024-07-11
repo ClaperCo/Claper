@@ -2,6 +2,24 @@ defmodule Claper.Posts.Post do
   use Ecto.Schema
   import Ecto.Changeset
 
+  @type t :: %__MODULE__{
+          id: integer(),
+          body: String.t(),
+          uuid: Ecto.UUID.t(),
+          like_count: integer() | nil,
+          love_count: integer() | nil,
+          lol_count: integer() | nil,
+          name: String.t() | nil,
+          attendee_identifier: String.t() | nil,
+          position: integer() | nil,
+          pinned: boolean() | nil,
+          event_id: integer() | nil,
+          user_id: integer() | nil,
+          reactions: [Claper.Posts.Reaction.t()] | nil,
+          inserted_at: NaiveDateTime.t(),
+          updated_at: NaiveDateTime.t()
+        }
+
   schema "posts" do
     field :body, :string
     field :uuid, :binary_id

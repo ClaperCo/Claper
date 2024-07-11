@@ -2,6 +2,23 @@ defmodule Claper.Presentations.PresentationState do
   use Ecto.Schema
   import Ecto.Changeset
 
+  @type t :: %__MODULE__{
+          id: integer(),
+          position: integer() | nil,
+          chat_visible: boolean() | nil,
+          poll_visible: boolean() | nil,
+          join_screen_visible: boolean() | nil,
+          chat_enabled: boolean() | nil,
+          anonymous_chat_enabled: boolean() | nil,
+          message_reaction_enabled: boolean() | nil,
+          show_poll_results_enabled: boolean() | nil,
+          banned: [String.t()] | nil,
+          show_only_pinned: boolean() | nil,
+          presentation_file_id: integer() | nil,
+          inserted_at: NaiveDateTime.t(),
+          updated_at: NaiveDateTime.t()
+        }
+
   schema "presentation_states" do
     field :position, :integer
     field :chat_visible, :boolean

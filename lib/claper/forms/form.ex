@@ -2,6 +2,18 @@ defmodule Claper.Forms.Form do
   use Ecto.Schema
   import Ecto.Changeset
 
+  @type t :: %__MODULE__{
+          id: integer(),
+          enabled: boolean()  | nil,
+          position: integer() | nil,
+          title: String.t(),
+          fields: [Claper.Forms.Field.t()] | nil,
+          presentation_file_id: integer() | nil,
+          form_submits: [Claper.Forms.FormSubmit.t()] | nil,
+          inserted_at: NaiveDateTime.t(),
+          updated_at: NaiveDateTime.t()
+        }
+
   @derive {Jason.Encoder, only: [:title, :position]}
   schema "forms" do
     field :enabled, :boolean, default: true

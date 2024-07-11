@@ -8,7 +8,21 @@ defmodule Claper.Accounts do
 
   alias Claper.Accounts.{User, UserToken, UserNotifier}
 
-  ## Database getters
+  @doc """
+  Creates a user.
+
+  ## Examples
+      iex> create_user(%{field: value})
+      {:ok, %User{}}
+
+      iex> create_user(%{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+  """
+  def create_user(attrs) do
+    %User{}
+    |> User.registration_changeset(attrs)
+    |> Repo.insert(returning: [:uuid])
+  end
 
   @doc """
   Gets a user by email.
@@ -24,6 +38,29 @@ defmodule Claper.Accounts do
   """
   def get_user_by_email(email) when is_binary(email) do
     Repo.get_by(User, email: email)
+  end
+
+  @doc """
+  Gets a user by email and creates a new user if the user does not exist.
+
+  ## Examples
+      iex> get_user_by_email_or_create("foo@example.com")
+      %User{}
+      iex> get_user_by_email_or_create("unknown@example.com")
+      %User{}
+  """
+  def get_user_by_email_or_create(email) when is_binary(email) do
+    case get_user_by_email(email) do
+      nil ->
+        create_user(%{
+          email: email,
+          confirmed_at: DateTime.utc_now(),
+          password: :crypto.strong_rand_bytes(32)
+        })
+
+      user ->
+        {:ok, user}
+    end
   end
 
   @doc """

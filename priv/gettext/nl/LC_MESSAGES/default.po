@@ -358,7 +358,7 @@ msgid "Poll"
 msgstr "Peiling"
 
 #: lib/claper_web/live/poll_live/form_component.html.heex:35
-#, elixir-format, ex-autogen
+#, elixir-format, ex-autogen, elixir-autogen
 msgid "Choice %{count}"
 msgid_plural "Choice %{count}"
 msgstr[0] "Keuze %{count}"
@@ -860,6 +860,7 @@ msgid "Anonymous"
 msgstr "Anoniem"
 
 #: lib/claper_web/live/event_live/show.html.heex:233
+#: lib/claper_web/templates/lti/launch/error.html.heex:17
 #, elixir-autogen, elixir-format
 msgid "Close"
 msgstr "Sluiten"
@@ -988,7 +989,7 @@ msgstr "Titel"
 msgid "Web content"
 msgstr "Webinhoud"
 
-#: lib/claper/embeds/embed.ex:38
+#: lib/claper/embeds/embed.ex:50
 #, elixir-autogen, elixir-format
 msgid "Invalid embed format (should start with <iframe> and end with </iframe>)"
 msgstr "Ongeldig insluitformaat (moet beginnen met <iframe> en eindigen met </iframe>)"
@@ -1146,6 +1147,7 @@ msgstr "Facilitators"
 #: lib/claper_web/live/event_live/event_form_component.html.heex:6
 #: lib/claper_web/live/event_live/index.html.heex:77
 #: lib/claper_web/live/event_live/manage.html.heex:328
+#: lib/claper_web/templates/lti/registration/success.html.heex:26
 #, elixir-autogen, elixir-format, fuzzy
 msgid "Finish"
 msgstr "Finish"
@@ -1405,3 +1407,53 @@ msgstr "Je persoonlijke gegevens om toegang te krijgen tot je account"
 #, elixir-autogen, elixir-format, fuzzy
 msgid "Enable reactions"
 msgstr "Schakel reacties in"
+
+#: lib/claper_web/templates/lti/registration/success.html.heex:14
+#, elixir-autogen, elixir-format
+msgid "Activate the tool in your LMS"
+msgstr "Activeer de tool in uw LMS"
+
+#: lib/claper_web/templates/lti/registration/new.html.heex:24
+#, elixir-autogen, elixir-format
+msgid "Bring Claper to your LMS"
+msgstr "Breng Claper naar uw LMS"
+
+#: lib/claper_web/templates/lti/registration/success.html.heex:17
+#, elixir-autogen, elixir-format
+msgid "Check the permissions to share name and email of users"
+msgstr "Controleer de machtigingen om naam en e-mail van gebruikers te delen"
+
+#: lib/claper_web/templates/lti/registration/success.html.heex:15
+#, elixir-autogen, elixir-format
+msgid "Configure it to be opened in a new window"
+msgstr "Configureer het om in een nieuw venster te openen"
+
+#: lib/claper_web/templates/lti/launch/error.html.heex:5
+#, elixir-autogen, elixir-format
+msgid "Oops"
+msgstr "Oeps"
+
+#: lib/claper_web/templates/lti/registration/new.html.heex:27
+#, elixir-autogen, elixir-format
+msgid "Register your platform"
+msgstr "Registreer uw platform"
+
+#: lib/claper_web/templates/lti/registration/success.html.heex:5
+#, elixir-autogen, elixir-format
+msgid "Registration completed"
+msgstr "Registratie voltooid"
+
+#: lib/claper_web/templates/lti/launch/error.html.heex:9
+#, elixir-autogen, elixir-format
+msgid "You cannot perform this action"
+msgstr "U kunt deze actie niet uitvoeren"
+
+#: lib/claper_web/templates/lti/registration/success.html.heex:10
+#, elixir-autogen, elixir-format
+msgid "Your next steps"
+msgstr "Uw volgende stappen"
+
+#: lib/claper_web/templates/lti/registration/new.html.heex:39
+#, elixir-autogen, elixir-format
+msgid "Add Claper"
+msgstr "Voeg Claper toe"

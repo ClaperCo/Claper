@@ -2,6 +2,20 @@ defmodule Claper.Polls.Poll do
   use Ecto.Schema
   import Ecto.Changeset
 
+  @type t :: %__MODULE__{
+          id: integer(),
+          title: String.t(),
+          position: integer() | nil,
+          total: integer() | nil,
+          enabled: boolean() | nil,
+          multiple: boolean() | nil,
+          presentation_file_id: integer() | nil,
+          poll_opts: [Claper.Polls.PollOpt.t()],
+          poll_votes: [Claper.Polls.PollVote.t()] | nil,
+          inserted_at: NaiveDateTime.t(),
+          updated_at: NaiveDateTime.t()
+        }
+
   @derive {Jason.Encoder, only: [:title, :position]}
   schema "polls" do
     field :title, :string
