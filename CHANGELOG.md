@@ -5,6 +5,10 @@
 - LTI 1.3 support
 - New layout for presentation manager
 
+### Fixes and improvements
+
+- Fix input length validation for polls
+
 ## v2.0.1
 
 ### Features

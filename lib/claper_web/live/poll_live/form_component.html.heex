@@ -26,7 +26,7 @@
 
     <%= inputs_for f, :poll_opts, fn i -> %>
       <div class="flex space-x-3 mt-3 items-center justify-start">
-        <div>
+        <div class="flex-1">
           <ClaperWeb.Component.Input.text
             form={i}
             labelClass={if @dark, do: "text-white"}

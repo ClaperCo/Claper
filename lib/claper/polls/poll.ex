@@ -37,5 +37,6 @@ defmodule Claper.Polls.Poll do
     |> cast(attrs, [:title, :presentation_file_id, :position, :enabled, :total, :multiple])
     |> cast_assoc(:poll_opts, required: true)
     |> validate_required([:title, :presentation_file_id, :position])
+    |> validate_length(:title, max: 255)
   end
 end

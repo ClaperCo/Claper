@@ -31,5 +31,6 @@ defmodule Claper.Polls.PollOpt do
     poll_opt
     |> cast(attrs, [:content, :vote_count, :poll_id])
     |> validate_required([:content])
+    |> validate_length(:content, max: 255)
   end
 end
