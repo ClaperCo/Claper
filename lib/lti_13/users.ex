@@ -14,6 +14,17 @@ defmodule Lti13.Users do
     Repo.get_by(User, sub: sub, registration_id: registration_id)
   end
 
+  def get_all_users_by_email(email) do
+    Repo.all(from u in User, where: u.email == ^email)
+  end
+
+  def remove_user(claper_user, registration_id) do
+    Repo.delete_all(
+      from u in User,
+        where: u.registration_id == ^registration_id and u.user_id == ^claper_user.id
+    )
+  end
+
   def get_or_create_user(
         %{
           sub: sub,

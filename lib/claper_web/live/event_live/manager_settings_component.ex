@@ -46,7 +46,7 @@ defmodule ClaperWeb.EventLive.ManagerSettingsComponent do
         </div>
 
         <div
-          class={"#{if !@state.chat_visible, do: 'opacity-50'} flex space-x-2 items-center mt-3"}
+          class={"#{if !@state.chat_visible, do: "opacity-50"} flex space-x-2 items-center mt-3"}
           title={
             if !@state.chat_visible,
               do: gettext("Show messages to change this option"),
@@ -94,7 +94,7 @@ defmodule ClaperWeb.EventLive.ManagerSettingsComponent do
         </div>
 
         <div
-          class={"#{if !@state.chat_enabled, do: 'opacity-50'} flex space-x-2 items-center mt-3"}
+          class={"#{if !@state.chat_enabled, do: "opacity-50"} flex space-x-2 items-center mt-3"}
           title={
             if !@state.chat_enabled,
               do: gettext("Enable messages to change this option"),

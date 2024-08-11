@@ -12,6 +12,7 @@ defmodule Claper.Polls.Poll do
           presentation_file_id: integer() | nil,
           poll_opts: [Claper.Polls.PollOpt.t()],
           poll_votes: [Claper.Polls.PollVote.t()] | nil,
+          show_results: boolean() | nil,
           inserted_at: NaiveDateTime.t(),
           updated_at: NaiveDateTime.t()
         }
@@ -23,6 +24,7 @@ defmodule Claper.Polls.Poll do
     field :total, :integer, virtual: true
     field :enabled, :boolean
     field :multiple, :boolean
+    field :show_results, :boolean
 
     belongs_to :presentation_file, Claper.Presentations.PresentationFile
     has_many :poll_opts, Claper.Polls.PollOpt, on_replace: :delete
@@ -34,7 +36,15 @@ defmodule Claper.Polls.Poll do
   @doc false
   def changeset(poll, attrs) do
     poll
-    |> cast(attrs, [:title, :presentation_file_id, :position, :enabled, :total, :multiple])
+    |> cast(attrs, [
+      :title,
+      :presentation_file_id,
+      :position,
+      :enabled,
+      :total,
+      :multiple,
+      :show_results
+    ])
     |> cast_assoc(:poll_opts, required: true)
     |> validate_required([:title, :presentation_file_id, :position])
     |> validate_length(:title, max: 255)

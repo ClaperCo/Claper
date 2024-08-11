@@ -60,7 +60,12 @@ defmodule ClaperWeb.EventLive.EmbedComponent do
           <p class="text-white text-lg font-semibold mb-4"><%= @embed.title %></p>
         </div>
         <div class="flex flex-col space-y-3">
-          <%= raw(@embed.content) %>
+          <.live_component
+            id="embed-component"
+            module={ClaperWeb.EventLive.EmbedIframeComponent}
+            provider={@embed.provider}
+            content={@embed.content}
+          />
         </div>
       </div>
     </div>

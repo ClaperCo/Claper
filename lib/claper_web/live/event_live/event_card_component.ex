@@ -101,7 +101,7 @@ defmodule ClaperWeb.EventLive.EventCardComponent do
                 <div
                   phx-hook="Dropdown"
                   id={"dropdown-#{@event.uuid}"}
-                  class="hidden rounded shadow-lg bg-white border px-2 py-1 absolute -left-1 top-9 w-max"
+                  class="hidden rounded shadow-lg bg-white border px-1 py-1 absolute -left-1 top-9 w-max"
                 >
                   <ul>
                     <li>
@@ -175,14 +175,75 @@ defmodule ClaperWeb.EventLive.EventCardComponent do
                   <span><%= gettext("Terminate") %></span>
                 </.link>
               </div>
-              <div>
+              <div class="flex items-start gap-x-2 relative text-sm ">
                 <%= if not @is_leader do %>
-                  <a
-                    href={~p"/events/#{@event.uuid}/edit"}
-                    class="flex w-full lg:w-auto rounded-md tracking-wide focus:outline-none focus:shadow-outline text-primary-500 text-sm items-center"
+                  <button
+                    phx-click-away={JS.hide(to: "#dropdown-action-#{@event.uuid}")}
+                    phx-click={JS.toggle(to: "#dropdown-action-#{@event.uuid}")}
+                    phx-target={@myself}
+                    class="flex w-full lg:w-auto pl-3 pr-4 text-gray-700 items-center justify-between py-2 rounded-md tracking-wide font-bold focus:outline-none focus:shadow-outline hover:bg-gray-300 bg-gray-200"
                   >
-                    <span><%= gettext("Edit") %></span>
-                  </a>
+                    <span class="mr-2"><%= gettext("Action") %></span>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke-width="2.5"
+                      stroke="currentColor"
+                      class="w-4 h-4"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="m19.5 8.25-7.5 7.5-7.5-7.5"
+                      />
+                    </svg>
+                  </button>
+                  <div
+                    phx-hook="Dropdown"
+                    id={"dropdown-action-#{@event.uuid}"}
+                    class="hidden rounded shadow-lg bg-white border px-1 py-1 absolute -left-1 top-9 w-max font-medium text-sm"
+                  >
+                    <ul>
+                      <li>
+                        <a
+                          class="py-2 px-2 rounded text-gray-600 hover:bg-gray-100 flex items-center gap-x-2"
+                          href={~p"/events/#{@event.uuid}/edit"}
+                          data-phx-link="patch"
+                          data-phx-link-state="push"
+                        >
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 20 20"
+                            fill="currentColor"
+                            class="h-5 w-5"
+                          >
+                            <path d="m5.433 13.917 1.262-3.155A4 4 0 0 1 7.58 9.42l6.92-6.918a2.121 2.121 0 0 1 3 3l-6.92 6.918c-.383.383-.84.685-1.343.886l-3.154 1.262a.5.5 0 0 1-.65-.65Z" />
+                            <path d="M3.5 5.75c0-.69.56-1.25 1.25-1.25H10A.75.75 0 0 0 10 3H4.75A2.75 2.75 0 0 0 2 5.75v9.5A2.75 2.75 0 0 0 4.75 18h9.5A2.75 2.75 0 0 0 17 15.25V10a.75.75 0 0 0-1.5 0v5.25c0 .69-.56 1.25-1.25 1.25h-9.5c-.69 0-1.25-.56-1.25-1.25v-9.5Z" />
+                          </svg>
+                          <span><%= gettext("Edit") %></span>
+                        </a>
+                      </li>
+                      <li>
+                        <button
+                          phx-value-id={@event.uuid}
+                          phx-click="duplicate"
+                          class="py-2 px-2 rounded text-gray-600 hover:bg-gray-100 flex items-center gap-x-2"
+                        >
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 20 20"
+                            fill="currentColor"
+                            class="w-5 h-5"
+                          >
+                            <path d="M7 3.5A1.5 1.5 0 0 1 8.5 2h3.879a1.5 1.5 0 0 1 1.06.44l3.122 3.12A1.5 1.5 0 0 1 17 6.622V12.5a1.5 1.5 0 0 1-1.5 1.5h-1v-3.379a3 3 0 0 0-.879-2.121L10.5 5.379A3 3 0 0 0 8.379 4.5H7v-1Z" />
+                            <path d="M4.5 6A1.5 1.5 0 0 0 3 7.5v9A1.5 1.5 0 0 0 4.5 18h7a1.5 1.5 0 0 0 1.5-1.5v-5.879a1.5 1.5 0 0 0-.44-1.06L9.44 6.439A1.5 1.5 0 0 0 8.378 6H4.5Z" />
+                          </svg>
+                          <span><%= gettext("Duplicate") %></span>
+                        </button>
+                      </li>
+                    </ul>
+                  </div>
                 <% end %>
               </div>
             </div>
@@ -194,14 +255,57 @@ defmodule ClaperWeb.EventLive.EventCardComponent do
               <span class="text-sm text-supporting-red-500">
                 <%= gettext("Error when processing the file") %>
               </span>
-              <div>
+              <div class="relative text-sm">
                 <%= if not @is_leader do %>
-                  <a
-                    href={~p"/events/#{@event.uuid}/edit"}
-                    class="flex w-full lg:w-auto rounded-md tracking-wide focus:outline-none focus:shadow-outline text-primary-500 text-sm items-center"
+                  <button
+                    phx-click-away={JS.hide(to: "#dropdown-action-#{@event.uuid}")}
+                    phx-click={JS.toggle(to: "#dropdown-action-#{@event.uuid}")}
+                    phx-target={@myself}
+                    class="flex w-full lg:w-auto pl-3 pr-4 text-gray-700 items-center justify-between py-2 rounded-md tracking-wide font-bold focus:outline-none focus:shadow-outline hover:bg-gray-300 bg-gray-200"
                   >
-                    <span><%= gettext("Edit") %></span>
-                  </a>
+                    <span class="mr-2"><%= gettext("Action") %></span>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke-width="2.5"
+                      stroke="currentColor"
+                      class="w-4 h-4"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="m19.5 8.25-7.5 7.5-7.5-7.5"
+                      />
+                    </svg>
+                  </button>
+                  <div
+                    phx-hook="Dropdown"
+                    id={"dropdown-action-#{@event.uuid}"}
+                    class="hidden rounded shadow-lg bg-white border px-1 py-1 absolute -left-1 top-9 w-max font-medium text-sm"
+                  >
+                    <ul>
+                      <li>
+                        <a
+                          class="py-2 px-2 rounded text-gray-600 hover:bg-gray-100 flex items-center gap-x-2"
+                          href={~p"/events/#{@event.uuid}/edit"}
+                          data-phx-link="patch"
+                          data-phx-link-state="push"
+                        >
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 20 20"
+                            fill="currentColor"
+                            class="h-5 w-5"
+                          >
+                            <path d="m5.433 13.917 1.262-3.155A4 4 0 0 1 7.58 9.42l6.92-6.918a2.121 2.121 0 0 1 3 3l-6.92 6.918c-.383.383-.84.685-1.343.886l-3.154 1.262a.5.5 0 0 1-.65-.65Z" />
+                            <path d="M3.5 5.75c0-.69.56-1.25 1.25-1.25H10A.75.75 0 0 0 10 3H4.75A2.75 2.75 0 0 0 2 5.75v9.5A2.75 2.75 0 0 0 4.75 18h9.5A2.75 2.75 0 0 0 17 15.25V10a.75.75 0 0 0-1.5 0v5.25c0 .69-.56 1.25-1.25 1.25h-9.5c-.69 0-1.25-.56-1.25-1.25v-9.5Z" />
+                          </svg>
+                          <span><%= gettext("Edit") %></span>
+                        </a>
+                      </li>
+                    </ul>
+                  </div>
                 <% end %>
               </div>
             </div>
@@ -240,21 +344,64 @@ defmodule ClaperWeb.EventLive.EventCardComponent do
                 <span><%= gettext("View report") %></span>
               </a>
             </div>
-            <div>
+            <div class="relative text-sm">
               <%= if not @is_leader do %>
-                <%= link(gettext("Delete"),
-                  to: "#",
-                  phx_click: "delete",
-                  phx_value_id: @event.uuid,
-                  data: [
-                    confirm:
-                      gettext(
-                        "This will delete all data related to your event, this cannot be undone. Confirm ?"
-                      )
-                  ],
-                  class:
-                    "flex w-full lg:w-auto rounded-md tracking-wide focus:outline-none focus:shadow-outline text-red-500 text-sm items-center"
-                ) %>
+                <button
+                  phx-click-away={JS.hide(to: "#dropdown-action-#{@event.uuid}")}
+                  phx-click={JS.toggle(to: "#dropdown-action-#{@event.uuid}")}
+                  phx-target={@myself}
+                  class="flex w-full lg:w-auto pl-3 pr-4 text-gray-700 items-center justify-between py-2 rounded-md tracking-wide font-bold focus:outline-none focus:shadow-outline hover:bg-gray-300 bg-gray-200"
+                >
+                  <span class="mr-2"><%= gettext("Action") %></span>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke-width="2.5"
+                    stroke="currentColor"
+                    class="w-4 h-4"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="m19.5 8.25-7.5 7.5-7.5-7.5"
+                    />
+                  </svg>
+                </button>
+                <div
+                  phx-hook="Dropdown"
+                  id={"dropdown-action-#{@event.uuid}"}
+                  class="hidden rounded shadow-lg bg-white border px-1 py-1 absolute -left-1 top-9 w-max font-medium text-sm"
+                >
+                  <ul>
+                    <li>
+                      <.link
+                        phx-click="delete"
+                        phx-value-id={@event.uuid}
+                        data-confirm={
+                          gettext(
+                            "This will delete all data related to your event, this cannot be undone. Confirm ?"
+                          )
+                        }
+                        class="py-2 px-2 rounded text-red-500 hover:bg-gray-100 flex items-center gap-x-2 flex items-center gap-x-2 cursor-pointer"
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          viewBox="0 0 16 16"
+                          fill="currentColor"
+                          class="h-5 w-5"
+                        >
+                          <path
+                            fill-rule="evenodd"
+                            d="M5 3.25V4H2.75a.75.75 0 0 0 0 1.5h.3l.815 8.15A1.5 1.5 0 0 0 5.357 15h5.285a1.5 1.5 0 0 0 1.493-1.35l.815-8.15h.3a.75.75 0 0 0 0-1.5H11v-.75A2.25 2.25 0 0 0 8.75 1h-1.5A2.25 2.25 0 0 0 5 3.25Zm2.25-.75a.75.75 0 0 0-.75.75V4h3v-.75a.75.75 0 0 0-.75-.75h-1.5ZM6.05 6a.75.75 0 0 1 .787.713l.275 5.5a.75.75 0 0 1-1.498.075l-.275-5.5A.75.75 0 0 1 6.05 6Zm3.9 0a.75.75 0 0 1 .712.787l-.275 5.5a.75.75 0 0 1-1.498-.075l.275-5.5a.75.75 0 0 1 .786-.711Z"
+                            clip-rule="evenodd"
+                          />
+                        </svg>
+                        <span><%= gettext("Delete") %></span>
+                      </.link>
+                    </li>
+                  </ul>
+                </div>
               <% end %>
             </div>
           </div>

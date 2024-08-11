@@ -245,7 +245,11 @@ defmodule ClaperWeb.EventLive.Presenter do
         {:current_interaction, %Poll{} = interaction},
         socket
       ) do
-    {:noreply, socket |> assign(:current_poll, interaction)}
+    {:noreply,
+     socket
+     |> assign(:current_poll, interaction)
+     |> assign(:current_embed, nil)
+     |> assign(:current_form, nil)}
   end
 
   @impl true
@@ -253,7 +257,11 @@ defmodule ClaperWeb.EventLive.Presenter do
         {:current_interaction, %Embed{} = interaction},
         socket
       ) do
-    {:noreply, socket |> assign(:current_embed, interaction)}
+    {:noreply,
+     socket
+     |> assign(:current_embed, interaction)
+     |> assign(:current_poll, nil)
+     |> assign(:current_form, nil)}
   end
 
   @impl true
@@ -261,7 +269,11 @@ defmodule ClaperWeb.EventLive.Presenter do
         {:current_interaction, %Form{} = interaction},
         socket
       ) do
-    {:noreply, socket |> assign(:current_form, interaction)}
+    {:noreply,
+     socket
+     |> assign(:current_form, interaction)
+     |> assign(:current_poll, nil)
+     |> assign(:current_embed, nil)}
   end
 
   @impl true

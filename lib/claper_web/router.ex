@@ -61,8 +61,7 @@ defmodule ClaperWeb.Router do
       live("/users/settings", UserSettingsLive.Show, :show)
       live("/users/settings/edit/password", UserSettingsLive.Show, :edit_password)
       live("/users/settings/edit/email", UserSettingsLive.Show, :edit_email)
-      live("/users/settings/edit/avatar", UserSettingsLive.Show, :edit_avatar)
-      live("/users/settings/edit/fullname", UserSettingsLive.Show, :edit_full_name)
+      live("/users/settings/set/password", UserSettingsLive.Show, :set_password)
     end
   end
 
@@ -124,6 +123,9 @@ defmodule ClaperWeb.Router do
     post("/users/reset_password", UserResetPasswordController, :create)
     get("/users/reset_password/:token", UserResetPasswordController, :edit)
     post("/users/reset_password/:token", UserResetPasswordController, :update)
+
+    get("/users/oidc", UserOidcAuth, :new)
+    get("/users/oidc/callback", UserOidcAuth, :callback)
   end
 
   scope "/", ClaperWeb do

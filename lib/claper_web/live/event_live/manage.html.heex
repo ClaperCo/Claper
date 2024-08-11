@@ -31,7 +31,7 @@
   </div>
   <div
     id="settings-modal"
-    class={"#{if !@settings_modal, do: 'hidden' } fixed z-30 inset-0 overflow-y-auto p-4 sm:p-6 md:p-24
+    class={"#{if !@settings_modal, do: "hidden" } fixed z-30 inset-0 overflow-y-auto p-4 sm:p-6 md:p-24
     transform transition-all duration-150"}
     role="dialog"
     aria-modal="true"
@@ -107,7 +107,7 @@
 
   <div
     id="add-modal"
-    class={"#{if !@create, do: 'hidden' } fixed z-30 inset-0 overflow-y-auto p-4 sm:p-6 md:p-24
+    class={"#{if !@create, do: "hidden" } fixed z-30 inset-0 overflow-y-auto p-4 sm:p-6 md:p-24
     transform transition-all duration-150"}
     role="dialog"
     aria-modal="true"
@@ -147,7 +147,7 @@
                 <div class="flex h-12 w-12 flex-none text-white items-center justify-center rounded-lg bg-gradient-to-br from-primary-500 to-secondary-500">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    class="h-6 w-6"
+                    class="h-7 w-7"
                     fill="none"
                     viewBox="0 0 24 24"
                     stroke="currentColor"
@@ -180,23 +180,17 @@
                 <div class="flex h-12 w-12 flex-none text-white items-center justify-center rounded-lg bg-gradient-to-br from-primary-500 to-secondary-500">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    class="icon icon-tabler icon-tabler-forms"
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                    stroke-width="1.5"
-                    stroke="currentColor"
+                    class="h-7 w-7"
                     fill="none"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    stroke-width="1.5"
                   >
-                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                    <path d="M12 3a3 3 0 0 0 -3 3v12a3 3 0 0 0 3 3"></path>
-                    <path d="M6 3a3 3 0 0 1 3 3v12a3 3 0 0 1 -3 3"></path>
-                    <path d="M13 7h7a1 1 0 0 1 1 1v8a1 1 0 0 1 -1 1h-7"></path>
-                    <path d="M5 7h-1a1 1 0 0 0 -1 1v8a1 1 0 0 0 1 1h1"></path>
-                    <path d="M17 12h.01"></path>
-                    <path d="M13 12h.01"></path>
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"
+                    />
                   </svg>
                 </div>
                 <div class="ml-4 flex-auto text-left">
@@ -223,7 +217,7 @@
                     viewBox="0 0 24 24"
                     stroke-width="1.5"
                     stroke="currentColor"
-                    class="w-6 h-6"
+                    class="w-7 h-7"
                   >
                     <path
                       stroke-linecap="round"
@@ -241,36 +235,6 @@
               </a>
             </li>
           </ul>
-
-          <%= if @total_interactions == 0 && @event.presentation_file.length > 0 do %>
-            <div class="mt-10">
-              <a
-                data-phx-link="patch"
-                data-phx-link-state="push"
-                href={~p"/e/#{@event.code}/manage/import"}
-                class="group flex gap-x-2 select-none rounded-xl p-3 w-full hover:bg-gray-200 cursor-pointer"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke-width="1.5"
-                  stroke="currentColor"
-                  width="24"
-                  height="24"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3"
-                  />
-                </svg>
-                <p class="text-gray-700">
-                  <%= gettext("Import all interactions from another presentation") %>
-                </p>
-              </a>
-            </div>
-          <% end %>
         <% end %>
         <%= if @create=="poll" do %>
           <div class="scroll-py-3 overflow-y-auto bg-gray-100 p-3">
@@ -607,11 +571,11 @@
     </div>
 
     <div
-      phx-hook={"#{if @event.presentation_file.length > 0, do: 'Split', else: ''}"}
+      phx-hook={"#{if @event.presentation_file.length > 0, do: "Split", else: ""}"}
       data-type="row"
       data-gutter=".gutter"
       id="base-layout"
-      class={"#{if @event.presentation_file.length > 0, do: 'md:grid grid-rows-[1fr_10px_1fr] overflow-y-auto', else: ''}"}
+      class={"#{if @event.presentation_file.length > 0, do: "md:grid grid-rows-[1fr_10px_1fr] overflow-y-auto", else: ""}"}
     >
       <div
         :if={@event.presentation_file.length > 0}
@@ -627,14 +591,18 @@
           >
             <%= if Application.get_env(:claper, :presentations) |> Keyword.get(:storage) == "local" do %>
               <img
-                class={"#{if @state.position==index, do: 'border-4 border-primary-500' , else: 'opacity-20' }
+                class={"#{if @state.position==index, do: "border-4 border-primary-500" , else: "opacity-20" }
                     transition-all object-contain"}
                 src={"/uploads/#{@event.presentation_file.hash}/#{index+1}.jpg"}
               />
             <% else %>
-              <img src={"https://#{Application.get_env(:claper, :presentations) |>
+              <img
+                class={"#{if @state.position==index, do: "border-4 border-primary-500" , else: "opacity-20" }
+                    transition-all object-contain"}
+                src={"https://#{Application.get_env(:claper, :presentations) |>
                           Keyword.get(:aws_bucket)}.s3.#{Application.get_env(:ex_aws,
-                          :region)}.amazonaws.com/presentations/#{@event.presentation_file.hash}/#{index+1}.jpg"} />
+                          :region)}.amazonaws.com/presentations/#{@event.presentation_file.hash}/#{index+1}.jpg"}
+              />
             <% end %>
           </button>
         <% end %>
@@ -755,49 +723,6 @@
                           </span>
                         </button>
                       </li>
-                      <li>
-                        <button
-                          phx-click="checked"
-                          phx-value-key="show_poll_results_enabled"
-                          value={"#{!@state.show_poll_results_enabled}"}
-                          class="py-2 px-2 rounded text-gray-600 bg-gray-100 hover:bg-gray-200 flex justify-center items-center w-full gap-x-3"
-                        >
-                          <svg
-                            :if={@state.show_poll_results_enabled}
-                            xmlns="http://www.w3.org/2000/svg"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            stroke-width="2"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            class="h-6 w-6"
-                          >
-                            <path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M8 4h10a2 2 0 0 1 2 2v10m-.586 3.414a2 2 0 0 1 -1.414 .586h-12a2 2 0 0 1 -2 -2v-12c0 -.547 .22 -1.043 .576 -1.405" /><path d="M7 14l3 -3l2 2l.5 -.5m2 -2l.5 -.5l2 2" /><path d="M3 3l18 18" />
-                          </svg>
-
-                          <svg
-                            :if={!@state.show_poll_results_enabled}
-                            xmlns="http://www.w3.org/2000/svg"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            stroke-width="2"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            class="h-6 w-6"
-                          >
-                            <path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M4 18v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2z" /><path d="M7 14l3 -3l2 2l3 -3l2 2" />
-                          </svg>
-
-                          <span :if={@state.show_poll_results_enabled}>
-                            <%= gettext("Hide results for attendees") %>
-                          </span>
-                          <span :if={!@state.show_poll_results_enabled}>
-                            <%= gettext("Show results for attendees") %>
-                          </span>
-                        </button>
-                      </li>
                     </ul>
                   </div>
                   <div>
@@ -908,7 +833,9 @@
                                 />
                               </svg>
                             </div>
-                            <span class="font-semibold"><%= gettext("Web content") %></span>
+                            <span class="font-semibold">
+                              <%= gettext("Web content") %>
+                            </span>
                           </div>
                           <a
                             class="p-2 rounded text-xs font-medium text-center text-primary-500"
@@ -949,7 +876,123 @@
                       <% _ -> %>
                         <!-- Handle any other types of interactions here if needed -->
                     <% end %>
-                    <p class="text-sm mb-4"><%= interaction.title %></p>
+                    <div class="text-sm mb-4 flex gap-x-2 items-center">
+                      <%= case interaction do %>
+                        <% %Claper.Embeds.Embed{} -> %>
+                          <%= case(interaction.provider) do %>
+                            <% "youtube" -> %>
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                class="h-5"
+                                viewBox="0 0 28.57 20"
+                              >
+                                <svg viewBox="0 0 28.57 20" xmlns="http://www.w3.org/2000/svg">
+                                  <path
+                                    d="M27.973 3.123A3.578 3.578 0 0 0 25.447.597C23.22 0 14.285 0 14.285 0S5.35 0 3.123.597A3.578 3.578 0 0 0 .597 3.123C0 5.35 0 10 0 10s0 4.65.597 6.877a3.578 3.578 0 0 0 2.526 2.526C5.35 20 14.285 20 14.285 20s8.935 0 11.162-.597a3.578 3.578 0 0 0 2.526-2.526C28.57 14.65 28.57 10 28.57 10s-.002-4.65-.597-6.877Z"
+                                    fill="red"
+                                  />
+                                  <path
+                                    d="M11.425 14.285 18.848 10l-7.423-4.285v8.57Z"
+                                    fill="#fff"
+                                  />
+                                </svg>
+                              </svg>
+                            <% "vimeo" -> %>
+                              <svg
+                                class="h-5"
+                                style="fill:#1ab7ea"
+                                viewBox="0 0 32 32"
+                                xmlns="http://www.w3.org/2000/svg"
+                              >
+                                <path d="M31.969 8.552c-.141 3.12-2.319 7.396-6.527 12.812-4.355 5.667-8.031 8.496-11.052 8.496-1.88 0-3.437-1.724-4.74-5.172l-2.557-9.491c-.957-3.443-1.979-5.167-3.077-5.167-.24 0-1.079.5-2.511 1.505L0 9.592a408.153 408.153 0 0 0 4.667-4.167c2.104-1.828 3.688-2.781 4.74-2.88 2.489-.24 4.02 1.469 4.599 5.115.62 3.937 1.047 6.385 1.292 7.344.719 3.265 1.509 4.901 2.369 4.901.667 0 1.672-1.063 3.021-3.183 1.339-2.12 2.052-3.729 2.145-4.839.193-1.823-.527-2.745-2.151-2.745-.765 0-1.557.163-2.371.521 1.584-5.156 4.579-7.677 9.016-7.516 3.297.079 4.839 2.219 4.656 6.396z" />
+                              </svg>
+                            <% "canva" -> %>
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="none"
+                                viewBox="0 0 1900 1900"
+                                class="h-5"
+                              >
+                                <circle cx="950" cy="950" r="950" fill="#7D2AE7" />
+                                <circle cx="950" cy="950" r="950" fill="url(#a)" />
+                                <circle cx="950" cy="950" r="950" fill="url(#b)" />
+                                <circle cx="950" cy="950" r="950" fill="url(#c)" />
+                                <circle cx="950" cy="950" r="950" fill="url(#d)" />
+                                <path
+                                  fill="#fff"
+                                  d="M1360.14 1144.88c-7.84 0-14.74 6.62-21.92 21.08-81.08 164.41-221.12 280.74-383.174 280.74-187.38 0-303.419-169.15-303.419-402.83 0-395.834 220.548-624.697 414.263-624.697 90.52 0 145.8 56.885 145.8 147.41 0 107.439-61.04 164.324-61.04 202.216 0 17.009 10.58 27.308 31.56 27.308 84.29 0 183.22-96.855 183.22-233.682 0-132.669-115.47-230.186-309.18-230.186-320.145 0-604.665 296.804-604.665 707.471 0 317.88 181.522 527.94 461.601 527.94 297.274 0 469.164-295.77 469.164-391.77 0-21.26-10.87-31-22.21-31Z"
+                                />
+                                <defs>
+                                  <radialGradient
+                                    id="a"
+                                    cx="0"
+                                    cy="0"
+                                    r="1"
+                                    gradientTransform="rotate(-49.416 2013.483 443.185) scale(1469.49)"
+                                    gradientUnits="userSpaceOnUse"
+                                  >
+                                    <stop stop-color="#6420FF" />
+                                    <stop offset="1" stop-color="#6420FF" stop-opacity="0" />
+                                  </radialGradient>
+                                  <radialGradient
+                                    id="b"
+                                    cx="0"
+                                    cy="0"
+                                    r="1"
+                                    gradientTransform="rotate(54.703 42.717 594.194) scale(1657.12)"
+                                    gradientUnits="userSpaceOnUse"
+                                  >
+                                    <stop stop-color="#00C4CC" />
+                                    <stop offset="1" stop-color="#00C4CC" stop-opacity="0" />
+                                  </radialGradient>
+                                  <radialGradient
+                                    id="c"
+                                    cx="0"
+                                    cy="0"
+                                    r="1"
+                                    gradientTransform="matrix(1023.00018 -1030.00171 473.71139 470.4913 367 1684)"
+                                    gradientUnits="userSpaceOnUse"
+                                  >
+                                    <stop stop-color="#6420FF" />
+                                    <stop offset="1" stop-color="#6420FF" stop-opacity="0" />
+                                  </radialGradient>
+                                  <radialGradient
+                                    id="d"
+                                    cx="0"
+                                    cy="0"
+                                    r="1"
+                                    gradientTransform="matrix(595.99869 1371.99953 -2298.40601 998.43108 777 256)"
+                                    gradientUnits="userSpaceOnUse"
+                                  >
+                                    <stop stop-color="#00C4CC" stop-opacity=".726" />
+                                    <stop offset="0" stop-color="#00C4CC" />
+                                    <stop offset="1" stop-color="#00C4CC" stop-opacity="0" />
+                                  </radialGradient>
+                                </defs>
+                              </svg>
+                            <% "googleslides" -> %>
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                viewBox="0 0 64 88"
+                                xml:space="preserve"
+                                class="h-5"
+                              >
+                                <path
+                                  d="M58 88H6c-3.3 0-6-2.7-6-6V6c0-3.3 2.7-6 6-6h36l22 22v60c0 3.3-2.7 6-6 6z"
+                                  fill="#f8bf08"
+                                />
+                                <path d="m42 0 22 22H42V0z" fill="#f59307" />
+                                <path
+                                  d="M12 34.5v28h40v-28H12zm35 23H17v-18h30v18z"
+                                  fill="#fdffff"
+                                />
+                              </svg>
+                            <% _ -> %>
+                          <% end %>
+                        <% _ -> %>
+                      <% end %>
+                      <span><%= interaction.title %></span>
+                    </div>
                   </div>
                   <div class="w-full">
                     <%= if interaction.enabled do %>
@@ -1055,32 +1098,32 @@
               phx-update="replace"
               class="flex flex-col md:flex-row md:flex items-center bg-gray-200 space-y-2 md:space-y-0 space-x-0 md:space-x-3 px-2 w-full py-3"
             >
-              <li class={"rounded-md #{if @list_tab==:posts, do: 'bg-secondary-600 text-white' ,
-                else: 'bg-white text-gray-600' } px-2 py-0.5 text-sm shadow-sm"}>
+              <li class={"rounded-md #{if @list_tab==:posts, do: "bg-secondary-600 text-white" ,
+                else: "bg-white text-gray-600" } px-2 py-0.5 text-sm shadow-sm"}>
                 <%= link(gettext("Messages") <> " (#{@post_count})",
                   to: "#",
                   phx_click: "list-tab",
                   phx_value_tab: :posts
                 ) %>
               </li>
-              <li class={"rounded-md #{if @list_tab==:questions, do: 'bg-secondary-600 text-white' ,
-                else: 'bg-white text-gray-600' } px-2 py-0.5 text-sm shadow-sm"}>
+              <li class={"rounded-md #{if @list_tab==:questions, do: "bg-secondary-600 text-white" ,
+                else: "bg-white text-gray-600" } px-2 py-0.5 text-sm shadow-sm"}>
                 <%= link(gettext("Questions") <> " (#{@question_count})",
                   to: "#",
                   phx_click: "list-tab",
                   phx_value_tab: :questions
                 ) %>
               </li>
-              <li class={"rounded-md #{if @list_tab==:pinned_posts, do: 'bg-secondary-600 text-white' ,
-                else: 'bg-white text-gray-600' } px-2 py-0.5 text-sm shadow-sm"}>
+              <li class={"rounded-md #{if @list_tab==:pinned_posts, do: "bg-secondary-600 text-white" ,
+                else: "bg-white text-gray-600" } px-2 py-0.5 text-sm shadow-sm"}>
                 <%= link(gettext("Pinned messages") <> " (#{@pinned_post_count})",
                   to: "#",
                   phx_click: "list-tab",
                   phx_value_tab: :pinned_posts
                 ) %>
               </li>
-              <li class={"rounded-md #{if @list_tab==:forms, do: 'bg-secondary-600 text-white' ,
-                else: 'bg-white text-gray-600' } px-2 py-0.5 text-sm shadow-sm"}>
+              <li class={"rounded-md #{if @list_tab==:forms, do: "bg-secondary-600 text-white" ,
+                else: "bg-white text-gray-600" } px-2 py-0.5 text-sm shadow-sm"}>
                 <%= link(gettext("Form submissions") <> " (#{@form_submit_count})",
                   to: "#",
                   phx_click: "list-tab",

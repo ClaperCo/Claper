@@ -494,7 +494,6 @@ Hooks.QRCode = {
 Hooks.Dropdown = {
   mounted() {
     this.el.addEventListener("click", (e) => {
-      e.preventDefault();
       this.el.classList.toggle("hidden");
     });
   },

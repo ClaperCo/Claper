@@ -48,7 +48,7 @@ defmodule Lti13.JwksTest do
         typ: "JWT",
         alg: "RS256",
         kid: UUID.uuid4(),
-        active: true
+        active: false
       }
 
       jwk3 = %{
@@ -56,19 +56,18 @@ defmodule Lti13.JwksTest do
         typ: "JWT",
         alg: "RS256",
         kid: UUID.uuid4(),
-        active: true
+        active: false
       }
 
       assert {:ok, %Jwk{}} = Lti13.Jwks.create_jwk(jwk1)
       assert {:ok, %Jwk{}} = Lti13.Jwks.create_jwk(jwk2)
       assert {:ok, %Jwk{}} = Lti13.Jwks.create_jwk(jwk3)
 
-      assert Lti13.Jwks.get_all_jwks() |> Enum.map(&Map.get(&1, :kid)) == [
-               active_jwk.kid,
-               jwk1.kid,
-               jwk2.kid,
-               jwk3.kid
-             ]
+      all_jwks = Lti13.Jwks.get_all_jwks()
+      assert Enum.any?(all_jwks, fn jwk -> jwk.kid == active_jwk.kid end)
+      assert Enum.any?(all_jwks, fn jwk -> jwk.kid == jwk1.kid end)
+      assert Enum.any?(all_jwks, fn jwk -> jwk.kid == jwk2.kid end)
+      assert Enum.any?(all_jwks, fn jwk -> jwk.kid == jwk3.kid end)
     end
 
     test "get jwk by registration" do

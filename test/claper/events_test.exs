@@ -2,7 +2,15 @@ defmodule Claper.EventsTest do
   use Claper.DataCase
 
   alias Claper.Events
-  import Claper.{EventsFixtures, AccountsFixtures, PresentationsFixtures, PollsFixtures}
+
+  import Claper.{
+    EventsFixtures,
+    AccountsFixtures,
+    PresentationsFixtures,
+    PollsFixtures,
+    FormsFixtures,
+    EmbedsFixtures
+  }
 
   describe "events" do
     alias Claper.Events.Event
@@ -98,6 +106,36 @@ defmodule Claper.EventsTest do
       assert_raise Ecto.NoResultsError, fn ->
         Events.import(user.id, from_event.uuid, to_event.uuid)
       end
+    end
+
+    test "duplicate_event/2 duplicates an event" do
+      user = user_fixture()
+      original_event = event_fixture(%{user: user, name: "Original Event"})
+      presentation_file = presentation_file_fixture(%{event: original_event})
+      poll_fixture(%{presentation_file_id: presentation_file.id})
+      form_fixture(%{presentation_file_id: presentation_file.id})
+      embed_fixture(%{presentation_file_id: presentation_file.id})
+
+      assert {:ok, duplicated_event} = Events.duplicate_event(user.id, original_event.uuid)
+
+      assert duplicated_event.id != original_event.id
+      assert duplicated_event.user_id == original_event.user_id
+      assert duplicated_event.name == "Original Event (Copy)"
+      assert duplicated_event.code != original_event.code
+      assert duplicated_event.uuid != original_event.uuid
+
+      # Check if the presentation file was duplicated
+      duplicated_presentation_file =
+        Claper.Presentations.get_presentation_file!(duplicated_event.id)
+
+      assert duplicated_presentation_file.id != presentation_file.id
+      assert duplicated_presentation_file.hash == presentation_file.hash
+      assert duplicated_presentation_file.length == presentation_file.length
+
+      # Check if polls, forms, and embeds were duplicated
+      assert length(Claper.Polls.list_polls(duplicated_presentation_file.id)) == 1
+      assert length(Claper.Forms.list_forms(duplicated_presentation_file.id)) == 1
+      assert length(Claper.Embeds.list_embeds(duplicated_presentation_file.id)) == 1
     end
 
     test "delete_event/1 deletes the event" do

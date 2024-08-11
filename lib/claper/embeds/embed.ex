@@ -7,6 +7,7 @@ defmodule Claper.Embeds.Embed do
           id: integer(),
           title: String.t(),
           content: String.t(),
+          provider: String.t(),
           enabled: boolean(),
           position: integer() | nil,
           attendee_visibility: boolean() | nil,
@@ -19,6 +20,7 @@ defmodule Claper.Embeds.Embed do
   schema "embeds" do
     field :title, :string
     field :content, :string
+    field :provider, :string
     field :enabled, :boolean, default: true
     field :position, :integer, default: 0
     field :attendee_visibility, :boolean, default: false
@@ -35,6 +37,7 @@ defmodule Claper.Embeds.Embed do
       :enabled,
       :title,
       :content,
+      :provider,
       :presentation_file_id,
       :position,
       :attendee_visibility
@@ -42,12 +45,61 @@ defmodule Claper.Embeds.Embed do
     |> validate_required([
       :title,
       :content,
+      :provider,
       :presentation_file_id,
       :position,
       :attendee_visibility
     ])
-    |> validate_format(:content, ~r/<iframe.*<\/iframe>/,
-      message: gettext("Invalid embed format (should start with <iframe> and end with </iframe>)")
-    )
+    |> validate_inclusion(:provider, ["youtube", "vimeo", "canva", "googleslides", "custom"])
+    |> validate_provider_url()
+  end
+
+  defp validate_provider_url(changeset) do
+    case get_field(changeset, :provider) do
+      "youtube" ->
+        changeset
+        |> validate_format(:content, ~r/^https?:\/\/.+$/,
+          message: gettext("Please enter a valid link starting with http:// or https://")
+        )
+        |> validate_format(:content, ~r/youtu\.be/,
+          message: gettext("Please enter a valid %{provider} link", provider: "YouTube")
+        )
+
+      "canva" ->
+        changeset
+        |> validate_format(:content, ~r/^https?:\/\/.+$/,
+          message: gettext("Please enter a valid link starting with http:// or https://")
+        )
+        |> validate_format(:content, ~r/canva\.com/,
+          message: gettext("Please enter a valid %{provider} link", provider: "Canva")
+        )
+
+      "googleslides" ->
+        changeset
+        |> validate_format(:content, ~r/^https?:\/\/.+$/,
+          message: gettext("Please enter a valid link starting with http:// or https://")
+        )
+        |> validate_format(:content, ~r/google\.com/,
+          message: gettext("Please enter a valid %{provider} link", provider: "Google Slides")
+        )
+
+      "vimeo" ->
+        changeset
+        |> validate_format(:content, ~r/^https?:\/\/.+$/,
+          message: gettext("Please enter a valid link starting with http:// or https://")
+        )
+        |> validate_format(:content, ~r/vimeo\.com/,
+          message: gettext("Please enter a valid %{provider} link", provider: "Vimeo")
+        )
+
+      "custom" ->
+        changeset
+        |> validate_format(:content, ~r/<iframe.*?<\/iframe>/s,
+          message: gettext("Please enter valid HTML content with an iframe tag")
+        )
+
+      _ ->
+        changeset
+    end
   end
 end

@@ -113,7 +113,8 @@ defmodule Claper.MixProject do
       {:joken, "~> 2.6.1"},
       {:jose, "~> 1.11"},
       {:req, "~> 0.5.0"},
-      {:uuid, "~> 1.1"}
+      {:uuid, "~> 1.1"},
+      {:oidcc, "~> 3.2"}
     ]
   end
 

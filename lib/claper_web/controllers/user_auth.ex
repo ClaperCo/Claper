@@ -75,6 +75,7 @@ defmodule ClaperWeb.UserAuth do
   It clears all session data for safety. See renew_session.
   """
   def log_out_user(conn) do
+    logout_redirect_url = Application.get_env(:claper, :logout_redirect_url)
     user_token = get_session(conn, :user_token)
     user_token && Accounts.delete_session_token(user_token)
 
@@ -85,8 +86,13 @@ defmodule ClaperWeb.UserAuth do
     conn
     |> renew_session()
     |> delete_resp_cookie(@remember_me_cookie)
-    |> redirect(to: "/")
+    |> custom_logout_redirect(logout_redirect_url)
   end
+
+  defp custom_logout_redirect(conn, nil), do: conn |> redirect(to: "/")
+
+  defp custom_logout_redirect(conn, logout_redirect_url),
+    do: conn |> redirect(external: logout_redirect_url)
 
   @doc """
   Authenticates the user by looking into the session

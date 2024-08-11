@@ -41,7 +41,6 @@ case secret_key_base do
     nil
 end
 
-site_url = get_var_from_path_or_env(config_dir, "SITE_URL", "http://localhost:4000")
 base_url = get_var_from_path_or_env(config_dir, "BASE_URL")
 
 if !base_url do
@@ -82,6 +81,50 @@ same_site_cookie = get_var_from_path_or_env(config_dir, "SAME_SITE_COOKIE", "Lax
 secure_cookie =
   get_var_from_path_or_env(config_dir, "SECURE_COOKIE", "false") |> String.to_existing_atom()
 
+oidc_issuer = get_var_from_path_or_env(config_dir, "OIDC_ISSUER", "https://accounts.google.com")
+
+oidc_client_id = get_var_from_path_or_env(config_dir, "OIDC_CLIENT_ID", nil)
+oidc_client_secret = get_var_from_path_or_env(config_dir, "OIDC_CLIENT_SECRET", nil)
+oidc_scopes = get_var_from_path_or_env(config_dir, "OIDC_SCOPES", "openid email profile")
+oidc_provider_name = get_var_from_path_or_env(config_dir, "OIDC_PROVIDER_NAME", "OpenID Connect")
+oidc_logo_url = get_var_from_path_or_env(config_dir, "OIDC_LOGO_URL", "/images/icons/openid.png")
+
+oidc_auto_redirect_login =
+  get_var_from_path_or_env(config_dir, "OIDC_AUTO_REDIRECT_LOGIN", "false")
+  |> String.to_existing_atom()
+
+oidc_property_mappings =
+  get_var_from_path_or_env(config_dir, "OIDC_PROPERTY_MAPPINGS", nil)
+  |> case do
+    nil ->
+      nil
+
+    mappings ->
+      String.split(mappings, ",")
+      |> Enum.map(&String.split(&1, ":"))
+      |> Enum.into(%{}, fn [key, value] -> {key, value} end)
+  end
+
+oidc_enabled =
+  !is_nil(oidc_client_id) and !is_nil(oidc_client_secret)
+
+allow_unlink_external_provider =
+  get_var_from_path_or_env(config_dir, "ALLOW_UNLINK_EXTERNAL_PROVIDER", "true")
+  |> String.to_existing_atom()
+
+logout_redirect_url = get_var_from_path_or_env(config_dir, "LOGOUT_REDIRECT_URL", nil)
+
+config :claper, :oidc,
+  enabled: oidc_enabled,
+  issuer: oidc_issuer,
+  client_id: oidc_client_id,
+  client_secret: oidc_client_secret,
+  scopes: String.split(oidc_scopes, " "),
+  provider_name: oidc_provider_name,
+  logo_url: oidc_logo_url,
+  property_mappings: oidc_property_mappings,
+  auto_redirect_login: oidc_auto_redirect_login
+
 config :claper, Claper.Repo,
   url: database_url,
   ssl: db_ssl,
@@ -94,6 +137,7 @@ config :claper, Claper.Repo,
 
 config :claper, ClaperWeb.Endpoint,
   url: [scheme: base_url.scheme, host: base_url.host, path: base_url.path, port: base_url.port],
+  base_url: base_url,
   http: [
     ip: listen_ip,
     port: port,
@@ -105,7 +149,9 @@ config :claper, ClaperWeb.Endpoint,
   secure_cookie: secure_cookie
 
 config :claper,
-  enable_account_creation: enable_account_creation
+  enable_account_creation: enable_account_creation,
+  allow_unlink_external_provider: allow_unlink_external_provider,
+  logout_redirect_url: logout_redirect_url
 
 config :claper, :presentations,
   max_file_size: max_file_size,

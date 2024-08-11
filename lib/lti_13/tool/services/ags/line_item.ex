@@ -16,7 +16,6 @@ defmodule Lti13.Tool.Services.AGS.LineItem do
   def parse_resource_id(%__MODULE__{} = line_item) do
     case line_item.resourceId do
       resource_id -> resource_id
-      _ -> nil
     end
   end
 

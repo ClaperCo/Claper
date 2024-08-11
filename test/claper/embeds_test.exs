@@ -45,6 +45,7 @@ defmodule Claper.EmbedsTest do
         title: "some title",
         content:
           "<iframe src=\"https://www.youtube.com/embed/9bZkp7q19f0\" frameborder=\"0\" allowfullscreen></iframe>",
+        provider: "custom",
         presentation_file_id: presentation_file.id,
         position: 0
       }
@@ -54,6 +55,38 @@ defmodule Claper.EmbedsTest do
 
       assert embed.content ==
                "<iframe src=\"https://www.youtube.com/embed/9bZkp7q19f0\" frameborder=\"0\" allowfullscreen></iframe>"
+    end
+
+    test "create_embed/1 with valid data creates a youtube embed" do
+      presentation_file = presentation_file_fixture()
+
+      valid_attrs = %{
+        title: "some title",
+        content: "https://youtu.be/dQw4w9WgXcQ?si=g1A6ZegIXzcrisSw",
+        provider: "youtube",
+        presentation_file_id: presentation_file.id,
+        position: 0
+      }
+
+      assert {:ok, %Embed{} = embed} = Embeds.create_embed(valid_attrs)
+      assert embed.title == "some title"
+
+      assert embed.content ==
+               "https://youtu.be/dQw4w9WgXcQ?si=g1A6ZegIXzcrisSw"
+    end
+
+    test "create_embed/1 with invalid data creates a youtube embed" do
+      presentation_file = presentation_file_fixture()
+
+      attrs = %{
+        title: "some title",
+        content: "https://youtube.com/dQw4w9WgXcQ?si=g1A6ZegIXzcrisSw",
+        provider: "youtube",
+        presentation_file_id: presentation_file.id,
+        position: 0
+      }
+
+      assert {:error, %Ecto.Changeset{}} = Embeds.create_embed(attrs)
     end
 
     test "create_embed/1 with invalid data returns error changeset" do
@@ -66,6 +99,7 @@ defmodule Claper.EmbedsTest do
 
       update_attrs = %{
         title: "some updated title",
+        provider: "custom",
         content:
           "<iframe src=\"https://www.youtube.com/embed/9bZkp7q19f0\" frameborder=\"0\"></iframe>"
       }

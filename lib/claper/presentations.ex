@@ -25,8 +25,11 @@ defmodule Claper.Presentations do
   def get_presentation_file!(id, preload \\ []),
     do: Repo.get!(PresentationFile, id) |> Repo.preload(preload)
 
-  def get_presentation_file_by_hash!(hash) when is_binary(hash),
-    do: Repo.get_by(PresentationFile, hash: hash) |> Repo.preload([:event])
+  def get_presentation_files_by_hash(hash) when is_binary(hash),
+    do: Repo.all(from p in PresentationFile, where: p.hash == ^hash)
+
+  def get_presentation_files_by_hash(hash) when is_nil(hash),
+    do: []
 
   @doc """
   Creates a presentation_files.
