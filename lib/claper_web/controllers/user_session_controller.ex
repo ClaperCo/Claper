@@ -38,10 +38,19 @@ defmodule ClaperWeb.UserSessionController do
   def create(conn, %{"user" => user_params}) do
     %{"email" => email, "password" => password} = user_params
 
+    oidc_provider_name = Application.get_env(:claper, :oidc)[:provider_name]
+    oidc_logo_url = Application.get_env(:claper, :oidc)[:logo_url]
+    oidc_enabled = Application.get_env(:claper, :oidc)[:enabled]
+
     if user = Accounts.get_user_by_email_and_password(email, password) do
       UserAuth.log_in_user(conn, user, user_params)
     else
-      render(conn, "new.html", error_message: "Invalid email or password")
+      render(conn, "new.html",
+        error_message: "Invalid email or password",
+        oidc_provider_name: oidc_provider_name,
+        oidc_logo_url: oidc_logo_url,
+        oidc_enabled: oidc_enabled
+      )
     end
   end
 

@@ -277,20 +277,6 @@
           to={Date.add(Date.utc_today(), 365)}
         />
       </div>
-
-      <%= if @action == :edit do %>
-        <div
-          phx-hook="QRCode"
-          id="qr"
-          data-code={@event.code}
-          data-get-url="true"
-          data-height="340"
-          data-width="340"
-          phx-update="ignore"
-          class="rounded-lg mx-auto bg-white w-64 h-64 p-12 items-center justify-center mb-14 hidden"
-        >
-        </div>
-      <% end %>
     </div>
 
     <div

@@ -73,7 +73,7 @@ defmodule ClaperWeb.EventLive.EventCardComponent do
               class="mt-2 flex flex-col space-y-2 sm:space-y-0 justify-between sm:flex-row items-center"
             >
               <div
-                id={"event-infos-#{@event.uuid}"}
+                id={"event-infos-2-#{@event.uuid}"}
                 class="text-sm w-full sm:w-auto font-medium text-gray-700 flex justify-center space-x-1 sm:space-y-0 items-center relative"
               >
                 <button
