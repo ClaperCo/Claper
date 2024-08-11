@@ -112,6 +112,7 @@ defmodule Claper.EventsTest do
       user = user_fixture()
       original_event = event_fixture(%{user: user, name: "Original Event"})
       presentation_file = presentation_file_fixture(%{event: original_event})
+      presentation_state_fixture(%{presentation_file: presentation_file})
       poll_fixture(%{presentation_file_id: presentation_file.id})
       form_fixture(%{presentation_file_id: presentation_file.id})
       embed_fixture(%{presentation_file_id: presentation_file.id})
@@ -126,7 +127,7 @@ defmodule Claper.EventsTest do
 
       # Check if the presentation file was duplicated
       duplicated_presentation_file =
-        Claper.Presentations.get_presentation_file!(duplicated_event.id)
+        Claper.Events.get_event!(duplicated_event.uuid, [:presentation_file]).presentation_file
 
       assert duplicated_presentation_file.id != presentation_file.id
       assert duplicated_presentation_file.hash == presentation_file.hash
