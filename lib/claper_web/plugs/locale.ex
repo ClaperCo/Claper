@@ -117,10 +117,9 @@ defmodule ClaperWeb.Plugs.Locale do
   end
 
   defp fallback_tags(tag, tags) do
-    case String.split(tag, "-") do
+    case String.split(tag, "-", parts: 2) do
       [language, _country_variant] ->
         if Enum.member?(tags, language), do: [tag], else: [tag, language]
-
       [_language] ->
         [tag]
     end
