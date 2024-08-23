@@ -50,7 +50,7 @@ Claper is proudly powered by Phoenix and Elixir.
 
 ## Documentation
 
-You can find all the instructions and configuration in [the documentation](https://docs.claper.co/configuration.html).
+You can find all the instructions and configuration in [the documentation](https://docs.claper.co/).
 
 ## Development environment
 
