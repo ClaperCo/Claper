@@ -7,7 +7,9 @@ defmodule ClaperWeb.Endpoint do
   @session_options [
     store: :cookie,
     key: "_claper_key",
-    signing_salt: "Tg18Y2zU"
+    signing_salt: "Tg18Y2zU",
+    # 30 days
+    max_age: 24 * 60 * 60 * 30
   ]
 
   socket "/live", Phoenix.LiveView.Socket,

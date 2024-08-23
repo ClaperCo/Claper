@@ -14,21 +14,28 @@ defmodule Claper.EmbedsTest do
       presentation_file = presentation_file_fixture()
       embed = embed_fixture(%{presentation_file_id: presentation_file.id})
 
-      assert Embeds.list_embeds(presentation_file.id) == [embed]
+      embeds = Embeds.list_embeds(presentation_file.id)
+      assert [%Embed{} | _] = embeds
+      assert length(embeds) == 1
+      assert hd(embeds).id == embed.id
     end
 
     test "list_embeds_at_position/2 returns all embeds from a presentation at a given position" do
       presentation_file = presentation_file_fixture()
       embed = embed_fixture(%{presentation_file_id: presentation_file.id, position: 5})
 
-      assert Embeds.list_embeds_at_position(presentation_file.id, 5) == [embed]
+      embeds = Embeds.list_embeds_at_position(presentation_file.id, 5)
+      assert [%Embed{} | _] = embeds
+      assert length(embeds) == 1
+      assert hd(embeds).id == embed.id
+      assert hd(embeds).position == 5
     end
 
     test "get_embed!/1 returns the embed with given id" do
       presentation_file = presentation_file_fixture()
 
       embed = embed_fixture(%{presentation_file_id: presentation_file.id})
-      assert Embeds.get_embed!(embed.id) == embed
+      assert Embeds.get_embed!(embed.id, presentation_file: [:event]) == embed
     end
 
     test "create_embed/1 with valid data creates a embed" do
@@ -38,6 +45,7 @@ defmodule Claper.EmbedsTest do
         title: "some title",
         content:
           "<iframe src=\"https://www.youtube.com/embed/9bZkp7q19f0\" frameborder=\"0\" allowfullscreen></iframe>",
+        provider: "custom",
         presentation_file_id: presentation_file.id,
         position: 0
       }
@@ -47,6 +55,38 @@ defmodule Claper.EmbedsTest do
 
       assert embed.content ==
                "<iframe src=\"https://www.youtube.com/embed/9bZkp7q19f0\" frameborder=\"0\" allowfullscreen></iframe>"
+    end
+
+    test "create_embed/1 with valid data creates a youtube embed" do
+      presentation_file = presentation_file_fixture()
+
+      valid_attrs = %{
+        title: "some title",
+        content: "https://youtu.be/dQw4w9WgXcQ?si=g1A6ZegIXzcrisSw",
+        provider: "youtube",
+        presentation_file_id: presentation_file.id,
+        position: 0
+      }
+
+      assert {:ok, %Embed{} = embed} = Embeds.create_embed(valid_attrs)
+      assert embed.title == "some title"
+
+      assert embed.content ==
+               "https://youtu.be/dQw4w9WgXcQ?si=g1A6ZegIXzcrisSw"
+    end
+
+    test "create_embed/1 with invalid data creates a youtube embed" do
+      presentation_file = presentation_file_fixture()
+
+      attrs = %{
+        title: "some title",
+        content: "https://youtube.com/dQw4w9WgXcQ?si=g1A6ZegIXzcrisSw",
+        provider: "youtube",
+        presentation_file_id: presentation_file.id,
+        position: 0
+      }
+
+      assert {:error, %Ecto.Changeset{}} = Embeds.create_embed(attrs)
     end
 
     test "create_embed/1 with invalid data returns error changeset" do
@@ -59,6 +99,7 @@ defmodule Claper.EmbedsTest do
 
       update_attrs = %{
         title: "some updated title",
+        provider: "custom",
         content:
           "<iframe src=\"https://www.youtube.com/embed/9bZkp7q19f0\" frameborder=\"0\"></iframe>"
       }
@@ -79,7 +120,7 @@ defmodule Claper.EmbedsTest do
       assert {:error, %Ecto.Changeset{}} =
                Embeds.update_embed(presentation_file.event_id, embed, @invalid_attrs)
 
-      assert embed == Embeds.get_embed!(embed.id)
+      assert embed == Embeds.get_embed!(embed.id, presentation_file: [:event])
     end
 
     test "delete_embed/2 deletes the embed" do

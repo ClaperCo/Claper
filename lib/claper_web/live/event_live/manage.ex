@@ -18,7 +18,7 @@ defmodule ClaperWeb.EventLive.Manage do
         presentation_file: [:polls, :presentation_state]
       ])
 
-    if is_nil(event) || not is_leader(socket, event) do
+    if is_nil(event) || not leader?(socket, event) do
       {:ok,
        socket
        |> put_flash(:error, gettext("Event doesn't exist"))
@@ -26,6 +26,7 @@ defmodule ClaperWeb.EventLive.Manage do
     else
       if connected?(socket) do
         Claper.Events.Event.subscribe(event.uuid)
+        Claper.Presentations.subscribe(event.presentation_file.id)
 
         Presence.track(
           self(),
@@ -55,32 +56,32 @@ defmodule ClaperWeb.EventLive.Manage do
         |> assign(:question_count, length(questions))
         |> assign(:post_count, length(posts))
         |> assign(
+          :total_interactions,
+          Claper.Interactions.get_number_total_interactions(event.presentation_file.id)
+        )
+        |> assign(
           :form_submit_count,
           length(form_submits)
         )
-        |> assign(:polls, list_polls(socket, event.presentation_file.id))
-        |> assign(:forms, list_forms(socket, event.presentation_file.id))
-        |> assign(:embeds, list_embeds(socket, event.presentation_file.id))
         |> assign(:create, nil)
         |> assign(:list_tab, :posts)
         |> assign(:create_action, :new)
+        |> assign(:preview, false)
         |> push_event("page-manage", %{
           current_page: event.presentation_file.presentation_state.position,
           timeout: 500
         })
-        |> poll_at_position(false)
-        |> form_at_position(false)
-        |> embed_at_position(false)
+        |> interactions_at_position(event.presentation_file.presentation_state.position)
 
       {:ok, socket}
     end
   end
 
-  defp is_leader(%{assigns: %{current_user: current_user}} = _socket, event) do
-    Claper.Events.is_leaded_by(current_user.email, event) || event.user.id == current_user.id
+  defp leader?(%{assigns: %{current_user: current_user}} = _socket, event) do
+    Claper.Events.leaded_by?(current_user.email, event) || event.user.id == current_user.id
   end
 
-  defp is_leader(_socket, _event), do: false
+  defp leader?(_socket, _event), do: false
 
   @impl true
   def handle_info(%{event: "presence_diff"}, %{assigns: %{event: event}} = socket) do
@@ -190,33 +191,92 @@ defmodule ClaperWeb.EventLive.Manage do
   end
 
   @impl true
-  def handle_info({:poll_updated, poll}, socket) do
+  def handle_info({:poll_created, poll}, socket) do
     {:noreply,
      socket
-     |> update(:current_poll, fn _current_poll -> poll end)}
+     |> interactions_at_position(poll.position)}
   end
 
   @impl true
-  def handle_info(
-        {:current_poll, poll},
-        socket
-      ) do
-    {:noreply, socket |> assign(:current_poll, poll)}
+  def handle_info({:form_created, form}, socket) do
+    {:noreply,
+     socket
+     |> interactions_at_position(form.position)}
+  end
+
+  @impl true
+  def handle_info({:embed_created, embed}, socket) do
+    {:noreply,
+     socket
+     |> interactions_at_position(embed.position)}
+  end
+
+  @impl true
+  def handle_info({:poll_updated, poll}, socket) do
+    {:noreply,
+     socket
+     |> interactions_at_position(poll.position)}
   end
 
   @impl true
   def handle_info({:embed_updated, embed}, socket) do
     {:noreply,
      socket
-     |> update(:current_embed, fn _current_embed -> embed end)}
+     |> interactions_at_position(embed.position)}
+  end
+
+  @impl true
+  def handle_info({:form_updated, form}, socket) do
+    {:noreply,
+     socket
+     |> interactions_at_position(form.position)}
+  end
+
+  @impl true
+  def handle_info({:poll_deleted, poll}, socket) do
+    {:noreply,
+     socket
+     |> interactions_at_position(poll.position)}
+  end
+
+  @impl true
+  def handle_info({:embed_deleted, embed}, socket) do
+    {:noreply,
+     socket
+     |> interactions_at_position(embed.position)}
+  end
+
+  @impl true
+  def handle_info({:form_deleted, form}, socket) do
+    {:noreply,
+     socket
+     |> interactions_at_position(form.position)}
   end
 
   @impl true
   def handle_info(
-        {:current_embed, embed},
+        {:current_interaction, interaction},
         socket
       ) do
-    {:noreply, socket |> assign(:current_embed, embed)}
+    if socket.assigns.current_interaction != interaction do
+      position = if interaction, do: interaction.position, else: socket.assigns.state.position
+
+      {:noreply,
+       socket
+       |> assign(:current_interaction, interaction)
+       |> interactions_at_position(position)}
+    else
+      {:noreply, socket}
+    end
+  end
+
+  @impl true
+  def handle_info({:state_updated, state}, socket) do
+    if state.position != socket.assigns.state.position do
+      {:noreply, socket |> assign(:state, state) |> interactions_at_position(state.position)}
+    else
+      {:noreply, socket |> assign(:state, state)}
+    end
   end
 
   @impl true
@@ -249,203 +309,98 @@ defmodule ClaperWeb.EventLive.Manage do
     {:noreply,
      socket
      |> assign(:state, new_state)
-     |> poll_at_position
-     |> form_at_position
-     |> embed_at_position}
-  end
-
-  @impl true
-  def handle_event(
-        "import",
-        %{"event" => event_uuid},
-        %{assigns: %{current_user: current_user, event: current_event}} = socket
-      ) do
-    try do
-      case Claper.Events.import(current_user.id, event_uuid, current_event.uuid) do
-        {:ok, _event} ->
-          {:noreply,
-           socket
-           |> put_flash(:info, gettext("Interactions imported successfully"))
-           |> redirect(to: ~p"/e/#{current_event.code}/manage")}
-      end
-    rescue
-      Ecto.NoResultsError ->
-        {:noreply,
-         socket
-         |> put_flash(:error, gettext("Interactions import failed"))
-         |> redirect(to: ~p"/e/#{current_event.code}/manage")}
-    end
+     |> interactions_at_position(page)}
   end
 
   def handle_event("poll-set-active", %{"id" => id}, socket) do
-    Forms.disable_all(socket.assigns.event.presentation_file.id, socket.assigns.state.position)
-    Embeds.disable_all(socket.assigns.event.presentation_file.id, socket.assigns.state.position)
+    with poll <- Polls.get_poll!(id), :ok <- Claper.Interactions.enable_interaction(poll) do
+      Phoenix.PubSub.broadcast(
+        Claper.PubSub,
+        "event:#{socket.assigns.event.uuid}",
+        {:current_interaction, poll}
+      )
 
-    Polls.set_status(
-      id,
-      socket.assigns.event.presentation_file.id,
-      socket.assigns.state.position,
-      true
-    )
-
-    poll = Polls.get_poll!(id)
-
-    Phoenix.PubSub.broadcast(
-      Claper.PubSub,
-      "event:#{socket.assigns.event.uuid}",
-      {:current_poll, poll}
-    )
-
-    Phoenix.PubSub.broadcast(
-      Claper.PubSub,
-      "event:#{socket.assigns.event.uuid}",
-      {:current_form, nil}
-    )
-
-    Phoenix.PubSub.broadcast(
-      Claper.PubSub,
-      "event:#{socket.assigns.event.uuid}",
-      {:current_embed, nil}
-    )
-
-    {:noreply,
-     socket
-     |> assign(:polls, list_polls(socket, socket.assigns.event.presentation_file.id))
-     |> assign(:forms, list_forms(socket, socket.assigns.event.presentation_file.id))
-     |> assign(:embeds, list_embeds(socket, socket.assigns.event.presentation_file.id))}
+      {:noreply,
+       socket
+       |> assign(:current_interaction, poll)
+       |> interactions_at_position(socket.assigns.state.position)}
+    end
   end
 
   def handle_event("form-set-active", %{"id" => id}, socket) do
-    Polls.disable_all(socket.assigns.event.presentation_file.id, socket.assigns.state.position)
-    Embeds.disable_all(socket.assigns.event.presentation_file.id, socket.assigns.state.position)
+    with form <- Forms.get_form!(id), :ok <- Claper.Interactions.enable_interaction(form) do
+      Phoenix.PubSub.broadcast(
+        Claper.PubSub,
+        "event:#{socket.assigns.event.uuid}",
+        {:current_interaction, form}
+      )
 
-    Forms.set_status(
-      id,
-      socket.assigns.event.presentation_file.id,
-      socket.assigns.state.position,
-      true
-    )
-
-    form = Forms.get_form!(id)
-
-    Phoenix.PubSub.broadcast(
-      Claper.PubSub,
-      "event:#{socket.assigns.event.uuid}",
-      {:current_form, form}
-    )
-
-    Phoenix.PubSub.broadcast(
-      Claper.PubSub,
-      "event:#{socket.assigns.event.uuid}",
-      {:current_poll, nil}
-    )
-
-    Phoenix.PubSub.broadcast(
-      Claper.PubSub,
-      "event:#{socket.assigns.event.uuid}",
-      {:current_embed, nil}
-    )
-
-    {:noreply,
-     socket
-     |> assign(:polls, list_polls(socket, socket.assigns.event.presentation_file.id))
-     |> assign(:forms, list_forms(socket, socket.assigns.event.presentation_file.id))
-     |> assign(:embeds, list_embeds(socket, socket.assigns.event.presentation_file.id))}
+      {:noreply,
+       socket
+       |> assign(:current_interaction, form)
+       |> interactions_at_position(socket.assigns.state.position)}
+    end
   end
 
   def handle_event("embed-set-active", %{"id" => id}, socket) do
-    Polls.disable_all(socket.assigns.event.presentation_file.id, socket.assigns.state.position)
-    Forms.disable_all(socket.assigns.event.presentation_file.id, socket.assigns.state.position)
+    with embed <- Embeds.get_embed!(id), :ok <- Claper.Interactions.enable_interaction(embed) do
+      Phoenix.PubSub.broadcast(
+        Claper.PubSub,
+        "event:#{socket.assigns.event.uuid}",
+        {:current_interaction, embed}
+      )
 
-    Embeds.set_status(
-      id,
-      socket.assigns.event.presentation_file.id,
-      socket.assigns.state.position,
-      true
-    )
-
-    embed = Embeds.get_embed!(id)
-
-    Phoenix.PubSub.broadcast(
-      Claper.PubSub,
-      "event:#{socket.assigns.event.uuid}",
-      {:current_embed, embed}
-    )
-
-    Phoenix.PubSub.broadcast(
-      Claper.PubSub,
-      "event:#{socket.assigns.event.uuid}",
-      {:current_poll, nil}
-    )
-
-    Phoenix.PubSub.broadcast(
-      Claper.PubSub,
-      "event:#{socket.assigns.event.uuid}",
-      {:current_form, nil}
-    )
-
-    {:noreply,
-     socket
-     |> assign(:polls, list_polls(socket, socket.assigns.event.presentation_file.id))
-     |> assign(:forms, list_forms(socket, socket.assigns.event.presentation_file.id))
-     |> assign(:embeds, list_embeds(socket, socket.assigns.event.presentation_file.id))}
+      {:noreply,
+       socket
+       |> assign(:current_interaction, embed)
+       |> interactions_at_position(socket.assigns.state.position)}
+    end
   end
 
   def handle_event("poll-set-inactive", %{"id" => id}, socket) do
-    Polls.set_status(
-      id,
-      socket.assigns.event.presentation_file.id,
-      socket.assigns.state.position,
-      false
-    )
-
-    Phoenix.PubSub.broadcast(
-      Claper.PubSub,
-      "event:#{socket.assigns.event.uuid}",
-      {:current_poll, nil}
-    )
+    with poll <- Polls.get_poll!(id), {:ok, _} <- Claper.Interactions.disable_interaction(poll) do
+      Phoenix.PubSub.broadcast(
+        Claper.PubSub,
+        "event:#{socket.assigns.event.uuid}",
+        {:current_interaction, nil}
+      )
+    end
 
     {:noreply,
      socket
-     |> assign(:polls, list_polls(socket, socket.assigns.event.presentation_file.id))}
+     |> assign(:current_interaction, nil)
+     |> interactions_at_position(socket.assigns.state.position)}
   end
 
   def handle_event("form-set-inactive", %{"id" => id}, socket) do
-    Forms.set_status(
-      id,
-      socket.assigns.event.presentation_file.id,
-      socket.assigns.state.position,
-      false
-    )
-
-    Phoenix.PubSub.broadcast(
-      Claper.PubSub,
-      "event:#{socket.assigns.event.uuid}",
-      {:current_form, nil}
-    )
+    with form <- Forms.get_form!(id), {:ok, _} <- Claper.Interactions.disable_interaction(form) do
+      Phoenix.PubSub.broadcast(
+        Claper.PubSub,
+        "event:#{socket.assigns.event.uuid}",
+        {:current_interaction, nil}
+      )
+    end
 
     {:noreply,
      socket
-     |> assign(:forms, list_forms(socket, socket.assigns.event.presentation_file.id))}
+     |> assign(:current_interaction, nil)
+     |> interactions_at_position(socket.assigns.state.position)}
   end
 
   def handle_event("embed-set-inactive", %{"id" => id}, socket) do
-    Embeds.set_status(
-      id,
-      socket.assigns.event.presentation_file.id,
-      socket.assigns.state.position,
-      false
-    )
-
-    Phoenix.PubSub.broadcast(
-      Claper.PubSub,
-      "event:#{socket.assigns.event.uuid}",
-      {:current_embed, nil}
-    )
+    with embed <- Embeds.get_embed!(id),
+         {:ok, _} <- Claper.Interactions.disable_interaction(embed) do
+      Phoenix.PubSub.broadcast(
+        Claper.PubSub,
+        "event:#{socket.assigns.event.uuid}",
+        {:current_interaction, nil}
+      )
+    end
 
     {:noreply,
      socket
-     |> assign(:embeds, list_embeds(socket, socket.assigns.event.presentation_file.id))}
+     |> assign(:current_interaction, nil)
+     |> interactions_at_position(socket.assigns.state.position)}
   end
 
   @impl true
@@ -555,23 +510,6 @@ defmodule ClaperWeb.EventLive.Manage do
         state,
         %{
           :message_reaction_enabled => value
-        }
-      )
-
-    {:noreply, socket |> assign(:state, new_state)}
-  end
-
-  @impl true
-  def handle_event(
-        "checked",
-        %{"key" => "show_poll_results_enabled", "value" => value},
-        %{assigns: %{state: state}} = socket
-      ) do
-    {:ok, new_state} =
-      Claper.Presentations.update_presentation_state(
-        state,
-        %{
-          :show_poll_results_enabled => value
         }
       )
 
@@ -704,9 +642,12 @@ defmodule ClaperWeb.EventLive.Manage do
     poll = Polls.get_poll!(id)
     {:ok, _} = Polls.delete_poll(socket.assigns.event.uuid, poll)
 
-    {:noreply,
-     socket
-     |> assign(:polls, list_polls(socket, socket.assigns.event.presentation_file.id))}
+    {:noreply, socket}
+  end
+
+  @impl true
+  def handle_event("toggle-preview", _params, %{assigns: %{preview: preview}} = socket) do
+    {:noreply, socket |> assign(:preview, !preview)}
   end
 
   @impl true
@@ -795,73 +736,10 @@ defmodule ClaperWeb.EventLive.Manage do
     |> assign(:embed, embed)
   end
 
-  defp poll_at_position(
-         %{assigns: %{event: event, state: state}} = socket,
-         broadcast \\ true
-       ) do
-    with poll <-
-           Claper.Polls.get_poll_current_position(
-             event.presentation_file.id,
-             state.position
-           ) do
-      if broadcast do
-        Phoenix.PubSub.broadcast(
-          Claper.PubSub,
-          "event:#{event.uuid}",
-          {:current_poll, poll}
-        )
-      end
-
-      socket |> assign(:current_poll, poll)
-    end
-  end
-
-  defp form_at_position(
-         %{assigns: %{event: event, state: state}} = socket,
-         broadcast \\ true
-       ) do
-    with form <-
-           Claper.Forms.get_form_current_position(
-             event.presentation_file.id,
-             state.position
-           ) do
-      if broadcast do
-        Phoenix.PubSub.broadcast(
-          Claper.PubSub,
-          "event:#{event.uuid}",
-          {:current_form, form}
-        )
-      end
-
-      socket |> assign(:current_form, form)
-    end
-  end
-
   defp pin(post, socket) do
     {:ok, _updated_post} = Claper.Posts.toggle_pin_post(post)
 
     {:noreply, socket}
-  end
-
-  defp embed_at_position(
-         %{assigns: %{event: event, state: state}} = socket,
-         broadcast \\ true
-       ) do
-    with embed <-
-           Claper.Embeds.get_embed_current_position(
-             event.presentation_file.id,
-             state.position
-           ) do
-      if broadcast do
-        Phoenix.PubSub.broadcast(
-          Claper.PubSub,
-          "event:#{event.uuid}",
-          {:current_embed, embed}
-        )
-      end
-
-      socket |> assign(:current_embed, embed)
-    end
   end
 
   defp ban(user, %{assigns: %{event: event, state: state}} = socket) do
@@ -879,6 +757,18 @@ defmodule ClaperWeb.EventLive.Manage do
     {:noreply, socket |> assign(:state, new_state)}
   end
 
+  defp interactions_at_position(
+         %{assigns: %{event: event}} = socket,
+         position,
+         broadcast \\ false
+       ) do
+    with {:ok, interactions} <-
+           Claper.Interactions.get_interactions_at_position(event, position, broadcast) do
+      active = interactions |> Enum.find(& &1.enabled)
+      socket |> assign(:interactions, interactions) |> assign(:current_interaction, active)
+    end
+  end
+
   defp list_pinned_posts(_socket, event_id) do
     Claper.Posts.list_pinned_posts(event_id, [:event, :reactions])
   end
@@ -889,18 +779,6 @@ defmodule ClaperWeb.EventLive.Manage do
 
   defp list_all_questions(_socket, event_id, sort \\ "date") do
     Claper.Posts.list_questions(event_id, [:event, :reactions], String.to_atom(sort))
-  end
-
-  defp list_polls(_socket, presentation_file_id) do
-    Claper.Polls.list_polls(presentation_file_id)
-  end
-
-  defp list_forms(_socket, presentation_file_id) do
-    Claper.Forms.list_forms(presentation_file_id)
-  end
-
-  defp list_embeds(_socket, presentation_file_id) do
-    Claper.Embeds.list_embeds(presentation_file_id)
   end
 
   defp list_form_submits(_socket, presentation_file_id) do

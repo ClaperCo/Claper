@@ -8,6 +8,7 @@ defmodule Claper.Application do
   @impl true
   def start(_type, _args) do
     topologies = Application.get_env(:libcluster, :topologies) || []
+    oidc_config = Application.get_env(:claper, :oidc) || []
 
     children = [
       {Cluster.Supervisor, [topologies, [name: Claper.ClusterSupervisor]]},
@@ -23,7 +24,9 @@ defmodule Claper.Application do
       # Start a worker by calling: Claper.Worker.start_link(arg)
       # {Claper.Worker, arg}
       {Finch, name: Swoosh.Finch},
-      {Task.Supervisor, name: Claper.TaskSupervisor}
+      {Task.Supervisor, name: Claper.TaskSupervisor},
+      {Oidcc.ProviderConfiguration.Worker,
+       %{issuer: oidc_config[:issuer], name: Claper.OidcProviderConfig}}
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

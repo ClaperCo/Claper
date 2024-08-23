@@ -1,0 +1,21 @@
+<div>
+  <div class="relative h-screen bg-black flex justify-center items-center">
+    <div class="max-w-xl text-center">
+      <p class="text-4xl font-bold text-gray-100 flex items-center justify-center gap-x-2">
+        <span><%= gettext("Oops") %></span>
+      </p>
+      <div class="my-8">
+        <p class="text-gray-200 font-bold">
+          <%= gettext("You cannot perform this action") %>
+        </p>
+        <pre class="text-gray-200 my-4 text-sm bg-gray-800 p-2 rounded-lg"><%= @msg %></pre>
+      </div>
+      <button
+        class="mx-auto mt-8 flex justify-center text-white p-4 rounded-md tracking-wide font-bold focus:outline-none focus:shadow-outline shadow-lg bg-gradient-to-tl from-primary-500 to-secondary-500 bg-size-200 bg-pos-0 hover:bg-pos-100 transition-all duration-500"
+        onclick="window.close()"
+      >
+        <%= gettext("Close") %>
+      </button>
+    </div>
+  </div>
+</div>

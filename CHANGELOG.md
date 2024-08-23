@@ -1,3 +1,21 @@
+## v2.1.0
+
+### Features
+
+- LTI 1.3 integration (Beta)
+- OpenID Connect integration
+- New layout for presentation manager
+- Duplicate event feature
+
+### Fixes and improvements
+
+- Improve embeds integration for better compatibility with different providers
+- Add an option to polls to show results to attendees
+
+### Fixes and improvements
+
+- Fix input length validation for polls
+
 ## v2.0.1
 
 ### Features

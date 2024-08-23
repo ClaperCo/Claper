@@ -2,6 +2,16 @@ defmodule Claper.Polls.PollVote do
   use Ecto.Schema
   import Ecto.Changeset
 
+  @type t :: %__MODULE__{
+          id: integer(),
+          attendee_identifier: String.t() | nil,
+          poll_id: integer() | nil,
+          poll_opt_id: integer() | nil,
+          user_id: integer() | nil,
+          inserted_at: NaiveDateTime.t(),
+          updated_at: NaiveDateTime.t()
+        }
+
   schema "poll_votes" do
     field :attendee_identifier, :string
 

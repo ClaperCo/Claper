@@ -2,9 +2,12 @@ defmodule ClaperWeb.EventLive.Presenter do
   use ClaperWeb, :live_view
 
   alias ClaperWeb.Presence
+  alias Claper.Embeds.Embed
+  alias Claper.Polls.Poll
+  alias Claper.Forms.Form
 
   @impl true
-  def mount(%{"code" => code}, session, socket) do
+  def mount(%{"code" => code} = params, session, socket) do
     with %{"locale" => locale} <- session do
       Gettext.put_locale(ClaperWeb.Gettext, locale)
     end
@@ -15,7 +18,7 @@ defmodule ClaperWeb.EventLive.Presenter do
         presentation_file: [:polls, :presentation_state]
       ])
 
-    if is_nil(event) || not is_leader(socket, event) do
+    if is_nil(event) || not leader?(socket, event) do
       {:ok,
        socket
        |> put_flash(:error, gettext("Event doesn't exist"))
@@ -52,6 +55,7 @@ defmodule ClaperWeb.EventLive.Presenter do
           host
         )
         |> assign(:event, event)
+        |> assign(:iframe, !is_nil(params["iframe"]))
         |> assign(:state, event.presentation_file.presentation_state)
         |> assign(:posts, list_posts(socket, event.uuid))
         |> assign(:pinned_posts, list_pinned_posts(socket, event.uuid))
@@ -71,11 +75,11 @@ defmodule ClaperWeb.EventLive.Presenter do
     end)
   end
 
-  defp is_leader(%{assigns: %{current_user: current_user}} = _socket, event) do
-    Claper.Events.is_leaded_by(current_user.email, event) || event.user.id == current_user.id
+  defp leader?(%{assigns: %{current_user: current_user}} = _socket, event) do
+    Claper.Events.leaded_by?(current_user.email, event) || event.user.id == current_user.id
   end
 
-  defp is_leader(_socket, _event), do: false
+  defp leader?(_socket, _event), do: false
 
   @impl true
   def handle_info(%{event: "presence_diff"}, %{assigns: %{event: event}} = socket) do
@@ -238,26 +242,50 @@ defmodule ClaperWeb.EventLive.Presenter do
 
   @impl true
   def handle_info(
-        {:current_poll, poll},
+        {:current_interaction, %Poll{} = interaction},
         socket
       ) do
-    {:noreply, socket |> assign(:current_poll, poll)}
+    {:noreply,
+     socket
+     |> assign(:current_poll, interaction)
+     |> assign(:current_embed, nil)
+     |> assign(:current_form, nil)}
   end
 
   @impl true
   def handle_info(
-        {:current_form, form},
+        {:current_interaction, %Embed{} = interaction},
         socket
       ) do
-    {:noreply, socket |> assign(:current_form, form)}
+    {:noreply,
+     socket
+     |> assign(:current_embed, interaction)
+     |> assign(:current_poll, nil)
+     |> assign(:current_form, nil)}
   end
 
   @impl true
   def handle_info(
-        {:current_embed, embed},
+        {:current_interaction, %Form{} = interaction},
         socket
       ) do
-    {:noreply, socket |> assign(:current_embed, embed)}
+    {:noreply,
+     socket
+     |> assign(:current_form, interaction)
+     |> assign(:current_poll, nil)
+     |> assign(:current_embed, nil)}
+  end
+
+  @impl true
+  def handle_info(
+        {:current_interaction, nil},
+        socket
+      ) do
+    {:noreply,
+     socket
+     |> assign(:current_poll, nil)
+     |> assign(:current_embed, nil)
+     |> assign(:current_form, nil)}
   end
 
   @impl true

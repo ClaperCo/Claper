@@ -2,6 +2,18 @@ defmodule Claper.Events.ActivityLeader do
   use Ecto.Schema
   import Ecto.Changeset
 
+  @type t :: %__MODULE__{
+          id: integer(),
+          temp_id: String.t() | nil,
+          delete: boolean() | nil,
+          user_id: integer() | nil,
+          user_email: String.t() | nil,
+          email: String.t(),
+          event_id: integer(),
+          inserted_at: NaiveDateTime.t(),
+          updated_at: NaiveDateTime.t()
+        }
+
   schema "activity_leaders" do
     field :temp_id, :string, virtual: true
     field :delete, :boolean, virtual: true

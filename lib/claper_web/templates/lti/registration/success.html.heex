@@ -1,0 +1,30 @@
+<div>
+  <div class="relative h-screen bg-black flex justify-center items-center">
+    <div class="max-w-xl text-center">
+      <p class="text-4xl font-bold text-gray-100 flex items-center justify-center gap-x-2">
+        <span><%= gettext("Registration completed") %></span>
+        <img src="/images/icons/thumb.svg" class="h-12 -mt-3" />
+      </p>
+      <div class="my-8">
+        <p class="text-gray-200">
+          <%= gettext("Your next steps") %>:
+        </p>
+        <div class="mt-4 bg-gray-800 p-6 rounded-lg shadow-lg border border-white">
+          <ol class="list-decimal list-inside text-gray-200">
+            <li class="mb-2"><%= gettext("Activate the tool in your LMS") %></li>
+            <li class="mb-2"><%= gettext("Configure it to be opened in a new window") %></li>
+            <li class="mb-2">
+              <%= gettext("Check the permissions to share name and email of users") %>
+            </li>
+          </ol>
+        </div>
+      </div>
+      <button
+        class="mx-auto mt-8 flex justify-center text-white p-4 rounded-md tracking-wide font-bold focus:outline-none focus:shadow-outline shadow-lg bg-gradient-to-tl from-primary-500 to-secondary-500 bg-size-200 bg-pos-0 hover:bg-pos-100 transition-all duration-500"
+        onclick="(window.opener || window.parent).postMessage({subject:'org.imsglobal.lti.close'}, '*');"
+      >
+        <%= gettext("Finish") %>
+      </button>
+    </div>
+  </div>
+</div>

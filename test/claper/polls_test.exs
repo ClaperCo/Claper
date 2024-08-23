@@ -14,14 +14,21 @@ defmodule Claper.PollsTest do
       presentation_file = presentation_file_fixture()
       poll = poll_fixture(%{presentation_file_id: presentation_file.id})
 
-      assert Polls.list_polls(presentation_file.id) == [poll]
+      polls = Polls.list_polls(presentation_file.id)
+      assert [%Poll{} | _] = polls
+      assert length(polls) == 1
+      assert hd(polls).id == poll.id
     end
 
     test "list_polls_at_position/2 returns all polls from a presentation at a given position" do
       presentation_file = presentation_file_fixture()
       poll = poll_fixture(%{presentation_file_id: presentation_file.id, position: 5})
 
-      assert Polls.list_polls_at_position(presentation_file.id, 5) == [poll]
+      polls = Polls.list_polls_at_position(presentation_file.id, 5)
+      assert [%Poll{} | _] = polls
+      assert length(polls) == 1
+      assert hd(polls).id == poll.id
+      assert hd(polls).position == 5
     end
 
     test "get_poll!/1 returns the poll with given id" do
@@ -31,7 +38,12 @@ defmodule Claper.PollsTest do
         poll_fixture(%{presentation_file_id: presentation_file.id})
         |> Claper.Polls.set_percentages()
 
-      assert Polls.get_poll!(poll.id) == poll
+      fetched_poll = Polls.get_poll!(poll.id)
+
+      assert fetched_poll.id == poll.id
+      assert fetched_poll.position == poll.position
+      assert fetched_poll.poll_opts == poll.poll_opts
+      assert fetched_poll.title == poll.title
     end
 
     test "create_poll/1 with valid data creates a poll" do
@@ -73,7 +85,12 @@ defmodule Claper.PollsTest do
       assert {:error, %Ecto.Changeset{}} =
                Polls.update_poll(presentation_file.event_id, poll, @invalid_attrs)
 
-      assert poll |> Claper.Polls.set_percentages() == Polls.get_poll!(poll.id)
+      fetched_poll = Polls.get_poll!(poll.id)
+      poll = poll |> Claper.Polls.set_percentages()
+
+      assert fetched_poll.poll_opts == poll.poll_opts
+      assert fetched_poll.poll_votes == poll.poll_votes
+      assert fetched_poll.title == poll.title
     end
 
     test "delete_poll/2 deletes the poll" do

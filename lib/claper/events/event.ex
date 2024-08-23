@@ -2,6 +2,22 @@ defmodule Claper.Events.Event do
   use Ecto.Schema
   import Ecto.Changeset
 
+  @type t :: %__MODULE__{
+          id: integer(),
+          uuid: Ecto.UUID.t(),
+          name: String.t() | nil,
+          code: String.t(),
+          audience_peak: integer() | nil,
+          started_at: NaiveDateTime.t(),
+          expired_at: NaiveDateTime.t() | nil,
+          posts: [Claper.Posts.Post.t()] | nil,
+          leaders: [Claper.Events.ActivityLeader.t()] | nil,
+          presentation_file: Claper.Presentations.PresentationFile.t() | nil,
+          user: Claper.Accounts.User.t() | nil,
+          inserted_at: NaiveDateTime.t(),
+          updated_at: NaiveDateTime.t()
+        }
+
   schema "events" do
     field :uuid, :binary_id
     field :name, :string

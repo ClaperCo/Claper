@@ -4,11 +4,26 @@ defmodule Claper.Accounts do
   """
 
   import Ecto.Query, warn: false
+  alias Claper.Accounts
   alias Claper.Repo
 
   alias Claper.Accounts.{User, UserToken, UserNotifier}
 
-  ## Database getters
+  @doc """
+  Creates a user.
+
+  ## Examples
+      iex> create_user(%{field: value})
+      {:ok, %User{}}
+
+      iex> create_user(%{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+  """
+  def create_user(attrs) do
+    %User{}
+    |> User.registration_changeset(attrs)
+    |> Repo.insert(returning: [:uuid])
+  end
 
   @doc """
   Gets a user by email.
@@ -24,6 +39,30 @@ defmodule Claper.Accounts do
   """
   def get_user_by_email(email) when is_binary(email) do
     Repo.get_by(User, email: email)
+  end
+
+  @doc """
+  Gets a user by email and creates a new user if the user does not exist.
+
+  ## Examples
+      iex> get_user_by_email_or_create("foo@example.com")
+      %User{}
+      iex> get_user_by_email_or_create("unknown@example.com")
+      %User{}
+  """
+  def get_user_by_email_or_create(email) when is_binary(email) do
+    case get_user_by_email(email) do
+      nil ->
+        create_user(%{
+          email: email,
+          confirmed_at: DateTime.utc_now(),
+          is_randomized_password: true,
+          password: :crypto.strong_rand_bytes(32)
+        })
+
+      user ->
+        {:ok, user}
+    end
   end
 
   @doc """
@@ -191,6 +230,24 @@ defmodule Claper.Accounts do
   end
 
   @doc """
+  Sets the user password.
+  ## Examples
+      iex> set_user_password(user, %{password: ...})
+      {:ok, %User{}}
+      iex> set_user_password(user, %{password: ...})
+      {:error, %Ecto.Changeset{}}
+  """
+  def set_user_password(user, attrs) do
+    user
+    |> User.password_changeset(attrs |> Map.put("is_randomized_password", false))
+    |> Repo.update()
+    |> case do
+      {:ok, user} -> {:ok, user}
+      {:error, changeset} -> {:error, changeset}
+    end
+  end
+
+  @doc """
   Updates the user preferences.
   ## Examples
       iex> update_user_preferences(user, %{locale: "en})
@@ -354,7 +411,11 @@ defmodule Claper.Accounts do
       when is_function(reset_password_url_fun, 1) do
     {encoded_token, user_token} = UserToken.build_email_token(user, "reset_password")
     Repo.insert!(user_token)
-    UserNotifier.deliver_reset_password_instructions(user, reset_password_url_fun.(encoded_token))
+
+    UserNotifier.deliver_reset_password_instructions(
+      user,
+      reset_password_url_fun.(encoded_token)
+    )
   end
 
   @doc """
@@ -453,5 +514,60 @@ defmodule Claper.Accounts do
 
   def delete(user) do
     Repo.delete(user)
+  end
+
+  ## OIDC
+
+  def create_oidc_user(attrs) do
+    %Accounts.Oidc.User{}
+    |> Accounts.Oidc.User.changeset(attrs)
+    |> Repo.insert()
+  end
+
+  def remove_oidc_user(claper_user, issuer) do
+    Repo.delete_all(
+      from u in Accounts.Oidc.User,
+        where: u.issuer == ^issuer and u.user_id == ^claper_user.id
+    )
+  end
+
+  def get_all_oidc_users_by_email(email) do
+    Repo.all(from u in Accounts.Oidc.User, where: u.email == ^email)
+  end
+
+  def get_oidc_user_by_sub(sub) do
+    Repo.get_by(Accounts.Oidc.User, sub: sub)
+  end
+
+  def get_or_create_user_with_oidc(
+        %{
+          sub: sub
+        } = attrs
+      ) do
+    case get_oidc_user_by_sub(sub) do
+      nil -> create_new_user(attrs)
+      %Accounts.Oidc.User{} = user -> update_oidc_user(user, attrs)
+    end
+  end
+
+  defp create_new_user(attrs) do
+    with {:ok, claper_user} <- get_user_by_email_or_create(attrs.email),
+         updated_attrs <-
+           Map.merge(attrs, %{user_id: claper_user.id}),
+         {:ok, user} <- create_oidc_user(updated_attrs) do
+      {:ok, user |> Repo.preload(:user)}
+    else
+      _ -> {:error, %{reason: :invalid_user, msg: "Invalid Claper user"}}
+    end
+  end
+
+  defp update_oidc_user(user, attrs) do
+    user
+    |> Accounts.Oidc.User.changeset(attrs)
+    |> Repo.update()
+    |> case do
+      {:ok, user} -> {:ok, user |> Repo.preload(:user)}
+      {:error, changeset} -> {:error, changeset}
+    end
   end
 end

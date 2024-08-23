@@ -22,19 +22,19 @@ defmodule ClaperWeb.EventLive.PostComponent do
             <img src="/images/icons/ellipsis-horizontal-white.svg" class="h-5" />
           </button>
 
-          <%= if @post.name || is_a_leader(@post, @event, @leaders) || is_pinned(@post) do %>
+          <%= if @post.name || leader?(@post, @event, @leaders) || pinned?(@post) do %>
             <div class="inline-flex items-center">
               <%= if @post.name do %>
                 <p class="text-white text-xs font-semibold mb-2 mr-2"><%= @post.name %></p>
               <% end %>
-              <%= if is_a_leader(@post, @event, @leaders) do %>
+              <%= if leader?(@post, @event, @leaders) do %>
                 <div class="inline-flex items-center space-x-1 justify-center px-3 py-0.5 rounded-full text-xs font-medium bg-supporting-yellow-100 text-supporting-yellow-800 mb-2">
                   <img src="/images/icons/star.svg" class="h-3" />
                   <span><%= gettext("Host") %></span>
                 </div>
               <% end %>
 
-              <%= if is_pinned(@post) do %>
+              <%= if pinned?(@post) do %>
                 <div class="inline-flex items-center space-x-1 justify-center px-3 py-0.5 rounded-full text-xs font-medium bg-supporting-yellow-100 text-supporting-yellow-800 mb-2 ml-1">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -101,12 +101,12 @@ defmodule ClaperWeb.EventLive.PostComponent do
         </div>
       <% else %>
         <div class="px-4 pt-3 pb-8 rounded-b-lg rounded-tr-lg bg-white text-black relative z-0 break-all">
-          <%= if @post.name || is_a_leader(@post, @event, @leaders) do %>
+          <%= if @post.name || leader?(@post, @event, @leaders) do %>
             <div class="inline-flex items-center">
               <%= if @post.name do %>
                 <p class="text-black text-xs font-semibold mb-2 mr-2"><%= @post.name %></p>
               <% end %>
-              <%= if is_a_leader(@post, @event, @leaders) do %>
+              <%= if leader?(@post, @event, @leaders) do %>
                 <div class="inline-flex items-center space-x-1 justify-center px-3 py-0.5 rounded-full text-xs font-medium bg-supporting-yellow-100 text-supporting-yellow-800 mb-2">
                   <img src="/images/icons/star.svg" class="h-3" />
                   <span><%= gettext("Host") %></span>
@@ -150,7 +150,7 @@ defmodule ClaperWeb.EventLive.PostComponent do
             </div>
           <% end %>
 
-          <%= if is_pinned(@post) do %>
+          <%= if pinned?(@post) do %>
             <div class="inline-flex items-center space-x-1 justify-center px-3 py-0.5 rounded-full text-xs font-medium bg-supporting-yellow-100 text-supporting-yellow-800 mb-2 ml-1">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -265,7 +265,7 @@ defmodule ClaperWeb.EventLive.PostComponent do
     """
   end
 
-  defp is_a_leader(post, event, leaders) do
+  defp leader?(post, event, leaders) do
     !is_nil(post.user_id) &&
       (post.user_id == event.user_id ||
          Enum.any?(leaders, fn leader ->
@@ -273,7 +273,7 @@ defmodule ClaperWeb.EventLive.PostComponent do
          end))
   end
 
-  defp is_pinned(post) do
+  defp pinned?(post) do
     post.pinned == true
   end
 end

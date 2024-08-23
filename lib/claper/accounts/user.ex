@@ -3,12 +3,26 @@ defmodule Claper.Accounts.User do
 
   import Ecto.Changeset
 
+  @type t :: %__MODULE__{
+          id: integer(),
+          uuid: Ecto.UUID.t(),
+          email: String.t(),
+          password: String.t() | nil,
+          hashed_password: String.t(),
+          is_randomized_password: boolean(),
+          confirmed_at: NaiveDateTime.t() | nil,
+          locale: String.t() | nil,
+          events: [Claper.Events.Event.t()] | nil,
+          inserted_at: NaiveDateTime.t(),
+          updated_at: NaiveDateTime.t()
+        }
+
   schema "users" do
     field :uuid, :binary_id
     field :email, :string
     field :password, :string, virtual: true, redact: true
     field :hashed_password, :string, redact: true
-    field :is_admin, :boolean
+    field :is_randomized_password, :boolean
     field :confirmed_at, :naive_datetime
     field :locale, :string
 
@@ -19,7 +33,7 @@ defmodule Claper.Accounts.User do
 
   def registration_changeset(user, attrs, opts \\ []) do
     user
-    |> cast(attrs, [:email, :confirmed_at, :password])
+    |> cast(attrs, [:email, :confirmed_at, :password, :is_randomized_password])
     |> validate_email()
     |> validate_password(opts)
   end
@@ -78,7 +92,7 @@ defmodule Claper.Accounts.User do
   """
   def password_changeset(user, attrs, opts \\ []) do
     user
-    |> cast(attrs, [:password])
+    |> cast(attrs, [:password, :is_randomized_password])
     |> validate_confirmation(:password)
     |> validate_password(opts)
   end

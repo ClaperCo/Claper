@@ -23,14 +23,7 @@ defmodule ClaperWeb.EventLiveTest do
     end
 
     test "updates event in listing", %{conn: conn, presentation_file: presentation_file} do
-      {:ok, index_live, _html} = live(conn, ~p"/events")
-
-      assert index_live
-             |> element("#event-#{presentation_file.event.uuid} a", "Edit")
-             |> render_click() =~
-               "Edit"
-
-      assert_patch(index_live, ~p"/events/#{presentation_file.event.uuid}/edit")
+      {:ok, index_live, _html} = live(conn, ~p"/events/#{presentation_file.event.uuid}/edit")
 
       {:ok, conn} =
         index_live
@@ -43,12 +36,7 @@ defmodule ClaperWeb.EventLiveTest do
     end
 
     test "deletes event in listing", %{conn: conn, presentation_file: presentation_file} do
-      {:ok, index_live, _html} = live(conn, ~p"/events")
-
-      assert index_live
-             |> element("#event-#{presentation_file.event.uuid} a", "Edit")
-             |> render_click() =~
-               "Edit"
+      {:ok, index_live, _html} = live(conn, ~p"/events/#{presentation_file.event.uuid}/edit")
 
       {:ok, conn} =
         index_live

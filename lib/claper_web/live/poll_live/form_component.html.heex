@@ -19,14 +19,9 @@
       />
     </div>
 
-    <div class="flex gap-x-2 mb-5">
-      <%= checkbox(f, :multiple, class: "h-5 w-5") %>
-      <%= label(f, :multiple, gettext("Multiple answers"), class: "text-sm font-medium") %>
-    </div>
-
     <%= inputs_for f, :poll_opts, fn i -> %>
       <div class="flex space-x-3 mt-3 items-center justify-start">
-        <div>
+        <div class="flex-1">
           <ClaperWeb.Component.Input.text
             form={i}
             labelClass={if @dark, do: "text-white"}
@@ -83,6 +78,23 @@
         />
       </svg>
     </button>
+
+    <p class="text-gray-700 text-xl font-semibold"><%= gettext("Options") %></p>
+
+    <div class="flex gap-x-2 mb-5 mt-3">
+      <%= checkbox(f, :show_results, class: "h-4 w-4") %>
+      <%= label(
+        f,
+        :show_results,
+        gettext("Attendees can see the results on their device"),
+        class: "text-sm font-medium"
+      ) %>
+    </div>
+
+    <div class="flex gap-x-2 mb-5">
+      <%= checkbox(f, :multiple, class: "h-4 w-4") %>
+      <%= label(f, :multiple, gettext("Multiple answers"), class: "text-sm font-medium") %>
+    </div>
 
     <div class="flex space-x-3">
       <button

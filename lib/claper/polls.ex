@@ -142,6 +142,14 @@ defmodule Claper.Polls do
     %Poll{}
     |> Poll.changeset(attrs)
     |> Repo.insert()
+    |> case do
+      {:ok, poll} ->
+        poll = Repo.preload(poll, presentation_file: :event)
+        broadcast({:ok, poll, poll.presentation_file.event.uuid}, :poll_created)
+
+      {:error, changeset} ->
+        {:error, %{changeset | action: :insert}}
+    end
   end
 
   @doc """
@@ -275,22 +283,16 @@ defmodule Claper.Polls do
     |> Repo.update_all(set: [enabled: false])
   end
 
-  def set_status(id, presentation_file_id, position, status) do
-    if status do
-      from(p in Poll,
-        where:
-          p.presentation_file_id == ^presentation_file_id and p.position == ^position and
-            p.id != ^id
-      )
-      |> Repo.update_all(set: [enabled: false])
-    end
+  def set_enabled(id) do
+    get_poll!(id)
+    |> Ecto.Changeset.change(enabled: true)
+    |> Repo.update()
+  end
 
-    from(p in Poll,
-      where:
-        p.presentation_file_id == ^presentation_file_id and p.position == ^position and
-          p.id == ^id
-    )
-    |> Repo.update_all(set: [enabled: status])
+  def set_disabled(id) do
+    get_poll!(id)
+    |> Ecto.Changeset.change(enabled: false)
+    |> Repo.update()
   end
 
   defp broadcast({:error, _reason} = error, _poll), do: error

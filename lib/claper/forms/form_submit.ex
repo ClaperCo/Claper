@@ -2,6 +2,16 @@ defmodule Claper.Forms.FormSubmit do
   use Ecto.Schema
   import Ecto.Changeset
 
+  @type t :: %__MODULE__{
+          id: integer(),
+          attendee_identifier: String.t() | nil,
+          response: map(),
+          form_id: integer() | nil,
+          user_id: integer() | nil,
+          inserted_at: NaiveDateTime.t(),
+          updated_at: NaiveDateTime.t()
+        }
+
   schema "form_submits" do
     field :attendee_identifier, :string
     field :response, :map, on_replace: :delete

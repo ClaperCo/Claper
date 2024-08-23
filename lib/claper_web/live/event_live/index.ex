@@ -12,10 +12,12 @@ defmodule ClaperWeb.EventLive.Index do
       Gettext.put_locale(ClaperWeb.Gettext, locale)
     end
 
+    code = for _ <- 1..5, into: "", do: <<Enum.random(~c"0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ")>>
+
     changeset =
       Events.change_event(%Event{}, %{
         started_at: NaiveDateTime.utc_now(),
-        code: Enum.random(1000..9999),
+        code: code,
         leaders: []
       })
 
@@ -56,6 +58,8 @@ defmodule ClaperWeb.EventLive.Index do
 
   @impl true
   def handle_event("save", %{"event" => event_params}, socket) do
+    code = for _ <- 1..5, into: "", do: <<Enum.random(~c"0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ")>>
+
     case Claper.Events.create_event(
            event_params
            |> Map.put("user_id", socket.assigns.current_user.id)
@@ -65,7 +69,10 @@ defmodule ClaperWeb.EventLive.Index do
              "presentation_state" => %{}
            })
            |> Map.put("started_at", NaiveDateTime.utc_now())
-           |> Map.put("code", "#{Enum.random(1000..9999)}")
+           |> Map.put(
+             "code",
+             "#{code}"
+           )
          ) do
       {:ok, _event} ->
         {:noreply,
@@ -81,11 +88,19 @@ defmodule ClaperWeb.EventLive.Index do
   @impl true
   def handle_event("delete", %{"id" => id}, %{assigns: %{current_user: current_user}} = socket) do
     event = Events.get_user_event!(current_user.id, id, [:presentation_file])
+
+    hash = event.presentation_file.hash
+
+    files =
+      Claper.Presentations.get_presentation_files_by_hash(hash)
+
     {:ok, _} = Events.delete_event(event)
 
-    Task.Supervisor.async_nolink(Claper.TaskSupervisor, fn ->
-      Claper.Tasks.Converter.clear(event.presentation_file.hash)
-    end)
+    if files |> Enum.empty?() && !is_nil(hash) do
+      Task.Supervisor.async_nolink(Claper.TaskSupervisor, fn ->
+        Claper.Tasks.Converter.clear(event.presentation_file.hash)
+      end)
+    end
 
     {:noreply, redirect(socket, to: ~p"/events")}
   end
@@ -103,6 +118,13 @@ defmodule ClaperWeb.EventLive.Index do
   def handle_event("terminate", %{"id" => id}, %{assigns: %{current_user: current_user}} = socket) do
     event = Events.get_user_event!(current_user.id, id)
     {:ok, _} = Events.terminate_event(event)
+    {:noreply, redirect(socket, to: ~p"/events")}
+  end
+
+  @impl true
+  def handle_event("duplicate", %{"id" => id}, %{assigns: %{current_user: current_user}} = socket) do
+    event = Events.get_user_event!(current_user.id, id)
+    {:ok, _} = Events.duplicate_event(current_user.id, event.uuid)
     {:noreply, redirect(socket, to: ~p"/events")}
   end
 
@@ -142,11 +164,13 @@ defmodule ClaperWeb.EventLive.Index do
   end
 
   defp apply_action(socket, :new, _params) do
+    code = for _ <- 1..5, into: "", do: <<Enum.random(~c"0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ")>>
+
     socket
     |> assign(:page_title, gettext("Create"))
     |> assign(:event, %Event{
       started_at: NaiveDateTime.utc_now(),
-      code: Enum.random(1000..9999),
+      code: code,
       leaders: []
     })
   end

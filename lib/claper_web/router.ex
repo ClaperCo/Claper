@@ -14,6 +14,15 @@ defmodule ClaperWeb.Router do
     plug(ClaperWeb.Plugs.Locale)
   end
 
+  pipeline :lti do
+    plug(:accepts, ["html", "json"])
+    plug(:put_root_layout, html: {ClaperWeb.LayoutView, :root})
+    plug(:fetch_session)
+    plug(:fetch_live_flash)
+    plug(:fetch_current_user)
+    plug(ClaperWeb.Plugs.Locale)
+  end
+
   pipeline :protect_mailbox do
     plug ClaperWeb.MailboxGuard
   end
@@ -52,8 +61,7 @@ defmodule ClaperWeb.Router do
       live("/users/settings", UserSettingsLive.Show, :show)
       live("/users/settings/edit/password", UserSettingsLive.Show, :edit_password)
       live("/users/settings/edit/email", UserSettingsLive.Show, :edit_email)
-      live("/users/settings/edit/avatar", UserSettingsLive.Show, :edit_avatar)
-      live("/users/settings/edit/fullname", UserSettingsLive.Show, :edit_full_name)
+      live("/users/settings/set/password", UserSettingsLive.Show, :set_password)
     end
   end
 
@@ -115,6 +123,21 @@ defmodule ClaperWeb.Router do
     post("/users/reset_password", UserResetPasswordController, :create)
     get("/users/reset_password/:token", UserResetPasswordController, :edit)
     post("/users/reset_password/:token", UserResetPasswordController, :update)
+
+    get("/users/oidc", UserOidcAuth, :new)
+    get("/users/oidc/callback", UserOidcAuth, :callback)
+  end
+
+  scope "/", ClaperWeb do
+    pipe_through([:lti])
+
+    get("/.well-known/jwks.json", Lti.RegistrationController, :jwks)
+    get("/lti/register", Lti.RegistrationController, :new)
+    post("/lti/register", Lti.RegistrationController, :create)
+    post("/lti/login", Lti.LaunchController, :login)
+    get("/lti/login", Lti.LaunchController, :login)
+    post("/lti/launch", Lti.LaunchController, :launch)
+    get("/lti/grades", Lti.GradeController, :create)
   end
 
   scope "/", ClaperWeb do

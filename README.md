@@ -42,9 +42,15 @@ Claper is proudly powered by Phoenix and Elixir.
 
 [![Phoenix][Phoenix]][Phoenix-url] [![Elixir][Elixir]][Elixir-url] [![Tailwind][Tailwind]][Tailwind-url]
 
+### Our partners and sponsors
+
+<a href="https://www.lmddc.lu/"><img src="priv/static/images/partners/lmddc.png" alt="LMDDC" height="50"></a>
+<a href="https://www.pixilearn.fr/en/"><img src="priv/static/images/partners/pixilearn.png" alt="Pixilearn" height="50"></a>
+<a href="https://www.uccs.edu/"><img src="priv/static/images/partners/uccs.png" alt="UCCS" height="50"></a>
+
 ## Documentation
 
-You can find all the instructions and configuration in [the documentation](https://docs.claper.co/configuration.html).
+You can find all the instructions and configuration in [the documentation](https://docs.claper.co/).
 
 ## Development environment
 
@@ -112,11 +118,15 @@ Distributed under the GPLv3 License. See `LICENSE.txt` for more information.
 
 <!-- CONTACT -->
 
-## Contact
+## Links
 
-[![](https://img.shields.io/badge/@alxlion__-000000?style=for-the-badge&logo=x&logoColor=white)](https://x.com/alxlion_)
+[![](https://img.shields.io/badge/ClaperCo/Claper-000000?style=for-the-badge&logo=Github&logoColor=white)](https://github.com/ClaperCo/Claper)
 
-Project Link: [https://github.com/ClaperCo/Claper](https://github.com/ClaperCo/Claper)
+[![](https://img.shields.io/badge/Discord-5052db?style=for-the-badge&logo=Discord&logoColor=white)](https://discord.gg/M7ejVaC9gA)
+
+[![](https://img.shields.io/badge//r/claper-ed491a?style=for-the-badge&logo=Reddit&logoColor=white)](https://reddit.com/r/claper)
+
+[![](<https://img.shields.io/badge/Alex_Lion_(Founder)-000000?style=for-the-badge&logo=x&logoColor=white>)](https://x.com/alxlion_)
 
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
@@ -138,3 +148,6 @@ Project Link: [https://github.com/ClaperCo/Claper](https://github.com/ClaperCo/C
 [Tailwind-url]: https://tailwindcss.com/
 [Phoenix]: https://img.shields.io/badge/phoenix-f35424?style=for-the-badge&logo=&logoColor=white
 [Phoenix-url]: https://www.phoenixframework.org/
+[lmddc-logo]: /priv/static/images/partners/lmddc.png
+[pixilearn-logo]: /priv/static/images/partners/pixilearn.png
+[uccs-logo]: /priv/static/images/partners/uccs.png

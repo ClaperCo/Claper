@@ -11,7 +11,7 @@ defmodule Claper.Tasks.Converter do
   Convert the presentation file to images.
   We use original hash :erlang.phash2(code-name) where the files are uploaded to send it to another folder with a new hash. This last stored in db.
   """
-  def convert(user_id, file, hash, ext, presentation_file_id) do
+  def convert(user_id, file, hash, ext, presentation_file_id, is_copy \\ false) do
     presentation = Claper.Presentations.get_presentation_file!(presentation_file_id, [:event])
 
     {:ok, presentation} =
@@ -32,11 +32,11 @@ defmodule Claper.Tasks.Converter do
         "#{hash}"
       ])
 
-    IO.puts("Starting conversion for #{hash}...")
+    IO.puts("Starting conversion for #{hash}... (copy: #{is_copy})")
 
     file_to_pdf(String.to_atom(ext), path, file)
     |> pdf_to_jpg(path, presentation, user_id)
-    |> jpg_upload(hash, path, presentation, user_id)
+    |> jpg_upload(hash, path, presentation, user_id, is_copy)
   end
 
   @doc """
@@ -113,7 +113,7 @@ defmodule Claper.Tasks.Converter do
     failure(presentation, path, user_id)
   end
 
-  defp jpg_upload(%Result{status: 0}, hash, path, presentation, user_id) do
+  defp jpg_upload(%Result{status: 0}, hash, path, presentation, user_id, is_copy) do
     files = Path.wildcard("#{path}/*.jpg")
 
     # assign new hash to avoid cache issues
@@ -147,14 +147,14 @@ defmodule Claper.Tasks.Converter do
       end
     end
 
-    if !is_nil(presentation.hash) do
+    if !is_nil(presentation.hash) && !is_copy do
       clear(presentation.hash)
     end
 
     success(presentation, path, new_hash, length(files), user_id)
   end
 
-  defp jpg_upload(_result, _hash, path, presentation, user_id) do
+  defp jpg_upload(_result, _hash, path, presentation, user_id, _is_copy) do
     failure(presentation, path, user_id)
   end
 

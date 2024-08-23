@@ -13,11 +13,11 @@ defmodule Claper.PresentationsTest do
       assert Presentations.get_presentation_file!(presentation_file.id) == presentation_file
     end
 
-    test "get_presentation_file_by_hash!/2 returns the presentation_file with given hash" do
-      presentation_file = presentation_file_fixture(%{}, [:event])
+    test "get_presentation_files_by_hash!/2 returns the presentation_file with given hash" do
+      presentation_file = presentation_file_fixture(%{})
 
-      assert Presentations.get_presentation_file_by_hash!(presentation_file.hash) ==
-               presentation_file
+      assert Presentations.get_presentation_files_by_hash(presentation_file.hash) ==
+               [presentation_file]
     end
 
     test "create_presentation_file/1 with valid data creates a presentation_file" do

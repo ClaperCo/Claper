@@ -5,7 +5,7 @@ defmodule ClaperWeb.EventLive.ManagerSettingsComponent do
     assigns = assigns |> assign_new(:show_shortcut, fn -> true end)
 
     ~H"""
-    <div>
+    <div class="grid grid-cols-1 @md:grid-cols-2 space-x-2">
       <div>
         <span class="font-semibold text-lg">
           <%= gettext("Presentation settings") %>
@@ -18,7 +18,7 @@ defmodule ClaperWeb.EventLive.ManagerSettingsComponent do
             shortcut={if @create == nil, do: "Q", else: nil}
           />
           <span>
-            <%= gettext("Show instructions") %>
+            <%= gettext("Show instructions (QR Code)") %>
             <code
               :if={@show_shortcut}
               class="px-2 py-1.5 text-xs font-semibold text-gray-800 bg-gray-100 border border-gray-200 rounded-lg"
@@ -45,10 +45,18 @@ defmodule ClaperWeb.EventLive.ManagerSettingsComponent do
           </span>
         </div>
 
-        <div class="flex space-x-2 items-center mt-3">
+        <div
+          class={"#{if !@state.chat_visible, do: "opacity-50"} flex space-x-2 items-center mt-3"}
+          title={
+            if !@state.chat_visible,
+              do: gettext("Show messages to change this option"),
+              else: nil
+          }
+        >
           <ClaperWeb.Component.Input.check
             key={:show_only_pinned}
             checked={@state.show_only_pinned}
+            disabled={!@state.chat_visible}
             shortcut={if @create == nil, do: "E", else: nil}
           />
           <span>
@@ -58,23 +66,6 @@ defmodule ClaperWeb.EventLive.ManagerSettingsComponent do
               class="px-2 py-1.5 text-xs font-semibold text-gray-800 bg-gray-100 border border-gray-200 rounded-lg"
             >
               e
-            </code>
-          </span>
-        </div>
-
-        <div class="flex space-x-2 items-center mt-3">
-          <ClaperWeb.Component.Input.check
-            key={:poll_visible}
-            checked={@state.poll_visible}
-            shortcut={if @create == nil, do: "R", else: nil}
-          />
-          <span>
-            <%= gettext("Show poll results") %>
-            <code
-              :if={@show_shortcut}
-              class="px-2 py-1.5 text-xs font-semibold text-gray-800 bg-gray-100 border border-gray-200 rounded-lg"
-            >
-              r
             </code>
           </span>
         </div>
@@ -102,10 +93,18 @@ defmodule ClaperWeb.EventLive.ManagerSettingsComponent do
           </span>
         </div>
 
-        <div class="flex space-x-2 items-center mt-3">
+        <div
+          class={"#{if !@state.chat_enabled, do: "opacity-50"} flex space-x-2 items-center mt-3"}
+          title={
+            if !@state.chat_enabled,
+              do: gettext("Enable messages to change this option"),
+              else: nil
+          }
+        >
           <ClaperWeb.Component.Input.check
             key={:anonymous_chat_enabled}
             checked={@state.anonymous_chat_enabled}
+            disabled={!@state.chat_enabled}
             shortcut={if @create == nil, do: "S", else: nil}
           />
           <span>
@@ -132,23 +131,6 @@ defmodule ClaperWeb.EventLive.ManagerSettingsComponent do
               class="px-2 py-1.5 text-xs font-semibold text-gray-800 bg-gray-100 border border-gray-200 rounded-lg"
             >
               d
-            </code>
-          </span>
-        </div>
-
-        <div class="flex space-x-2 items-center mt-3">
-          <ClaperWeb.Component.Input.check
-            key={:show_poll_results_enabled}
-            checked={@state.show_poll_results_enabled}
-            shortcut={if @create == nil, do: "F", else: nil}
-          />
-          <span>
-            <%= gettext("Show poll results") %>
-            <code
-              :if={@show_shortcut}
-              class="px-2 py-1.5 text-xs font-semibold text-gray-800 bg-gray-100 border border-gray-200 rounded-lg"
-            >
-              f
             </code>
           </span>
         </div>

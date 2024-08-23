@@ -14,21 +14,33 @@ defmodule Claper.FormsTest do
       presentation_file = presentation_file_fixture()
       form = form_fixture(%{presentation_file_id: presentation_file.id})
 
-      assert Forms.list_forms(presentation_file.id) == [form]
+      forms = Forms.list_forms(presentation_file.id)
+      assert [%Form{} | _] = forms
+      assert length(forms) == 1
+      assert hd(forms).id == form.id
     end
 
     test "list_forms_at_position/2 returns all forms from a presentation at a given position" do
       presentation_file = presentation_file_fixture()
       form = form_fixture(%{presentation_file_id: presentation_file.id, position: 5})
 
-      assert Forms.list_forms_at_position(presentation_file.id, 5) == [form]
+      forms = Forms.list_forms_at_position(presentation_file.id, 5)
+      assert [%Form{} | _] = forms
+      assert length(forms) == 1
+      assert hd(forms).id == form.id
+      assert hd(forms).position == 5
     end
 
     test "get_form!/1 returns the form with given id" do
       presentation_file = presentation_file_fixture()
 
       form = form_fixture(%{presentation_file_id: presentation_file.id})
-      assert Forms.get_form!(form.id) == form
+      fetched_form = Forms.get_form!(form.id)
+
+      assert fetched_form.id == form.id
+      assert fetched_form.position == form.position
+      assert fetched_form.title == form.title
+      assert fetched_form.fields == form.fields
     end
 
     test "create_form/1 with valid data creates a form" do
@@ -70,7 +82,9 @@ defmodule Claper.FormsTest do
       assert {:error, %Ecto.Changeset{}} =
                Forms.update_form(presentation_file.event_id, form, @invalid_attrs)
 
-      assert form == Forms.get_form!(form.id)
+      fetched_form = Forms.get_form!(form.id)
+
+      assert fetched_form.title == form.title
     end
 
     test "delete_form/2 deletes the form" do

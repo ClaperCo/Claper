@@ -248,7 +248,7 @@ defmodule ClaperWeb.EventLive.EventFormComponent do
            event_params
          ) do
       {:ok, event} ->
-        handle_file_conversion(socket, hash, ext)
+        handle_file_conversion(socket, hash, ext, event)
 
         send_email_to_leaders(socket, event)
 
@@ -262,17 +262,20 @@ defmodule ClaperWeb.EventLive.EventFormComponent do
     end
   end
 
-  defp handle_file_conversion(socket, hash, ext) do
+  defp handle_file_conversion(socket, hash, ext, event) do
     if is_nil(hash) || is_nil(ext) do
       :ok
     else
+      files = Claper.Presentations.get_presentation_files_by_hash(event.presentation_file.hash)
+
       Task.Supervisor.async_nolink(Claper.TaskSupervisor, fn ->
         Claper.Tasks.Converter.convert(
           socket.assigns.current_user.id,
           "original.#{ext}",
           hash,
           ext,
-          socket.assigns.event.presentation_file.id
+          socket.assigns.event.presentation_file.id,
+          files |> Enum.count() > 1
         )
       end)
     end

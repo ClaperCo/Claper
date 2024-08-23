@@ -117,9 +117,10 @@ ENV MIX_ENV="prod"
 
 # Only copy the final release from the build stage
 COPY --from=builder --chmod=a+rX /app/_build/prod/rel/claper /app
+COPY --from=builder /app/priv/repo/seeds.exs /app/priv/repo/
 RUN mkdir /app/uploads && chmod -R 777 /app/uploads
 
 EXPOSE 4000
 WORKDIR "/app"
 USER root
-CMD ["sh", "-c", "/app/bin/claper eval Claper.Release.migrate && /app/bin/claper start"]
+CMD ["sh", "-c", "/app/bin/claper eval Claper.Release.migrate && /app/bin/claper eval Claper.Release.seeds && /app/bin/claper start"]

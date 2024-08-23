@@ -27,7 +27,7 @@ defmodule ClaperWeb.Component.Input do
           autocomplete: @key,
           value: @value,
           class:
-            "#{@fieldClass} read-only:opacity-50 outline-none shadow-base focus:ring-primary-500 focus:border-primary-500 focus:ring-2 block w-full text-lg border-gray-300 rounded-md py-4 px-3"
+            "#{@fieldClass} read-only:opacity-50 outline-none shadow-base focus:ring-primary-500 focus:border-primary-500 focus:ring-2 block w-full text-lg border-gray-300 rounded-md py-2 px-3"
         ) %>
       </div>
       <%= if Keyword.has_key?(@form.errors, @key) do %>
@@ -60,7 +60,7 @@ defmodule ClaperWeb.Component.Input do
           autocomplete: @key,
           value: @value,
           class:
-            "#{@fieldClass} read-only:opacity-50 outline-none shadow-base focus:ring-primary-500 focus:border-primary-500 focus:ring-2 block w-full text-lg border-gray-300 rounded-md py-4 px-3"
+            "#{@fieldClass} read-only:opacity-50 outline-none shadow-base focus:ring-primary-500 focus:border-primary-500 focus:ring-2 block w-full text-lg border-gray-300 rounded-md py-2 px-3"
         ) %>
       </div>
       <%= if Keyword.has_key?(@form.errors, @key) do %>
@@ -89,7 +89,7 @@ defmodule ClaperWeb.Component.Input do
           placeholder: @placeholder,
           autocomplete: @key,
           class:
-            "#{@fieldClass} outline-none shadow-base focus:ring-primary-500 focus:border-primary-500 block w-full text-lg border-gray-300 rounded-md py-4 px-3"
+            "#{@fieldClass} outline-none shadow-base focus:ring-primary-500 focus:border-primary-500 block w-full text-lg border-gray-300 rounded-md py-2 px-3"
         ) %>
       </div>
       <%= if Keyword.has_key?(@form.errors, @key) do %>
@@ -110,7 +110,6 @@ defmodule ClaperWeb.Component.Input do
       phx-click={checked(@checked, @key)}
       disabled={@disabled}
       phx-value-key={@key}
-      id={"check-#{@key}"}
       type="button"
       class="group relative inline-flex h-5 w-10 flex-shrink-0 cursor-pointer items-center justify-center rounded-full"
       role="switch"
@@ -122,11 +121,11 @@ defmodule ClaperWeb.Component.Input do
       </span>
       <span
         aria-hidden="true"
-        class={"#{if @checked, do: 'bg-primary-500', else: 'bg-gray-200'} pointer-events-none absolute mx-auto h-4 w-9 rounded-full transition-colors duration-200 ease-in-out"}
+        class={"#{if @checked, do: "bg-primary-500", else: "bg-gray-200"} pointer-events-none absolute mx-auto h-4 w-9 rounded-full transition-colors duration-200 ease-in-out"}
       >
       </span>
       <span
-        class={"#{if @checked, do: 'translate-x-5', else: 'translate-x-0'} pointer-events-none absolute left-0 inline-block h-5 w-5 transform rounded-full border border-gray-200 bg-white shadow ring-0 transition-transform duration-200 ease-in-out"}
+        class={"#{if @checked, do: "translate-x-5", else: "translate-x-0"} pointer-events-none absolute left-0 inline-block h-5 w-5 transform rounded-full border border-gray-200 bg-white shadow ring-0 transition-transform duration-200 ease-in-out"}
         aria-hidden="true"
       >
       </span>
@@ -177,7 +176,7 @@ defmodule ClaperWeb.Component.Input do
       <%= label(@form, @key, @name, class: "block text-sm font-medium text-gray-700") %>
       <div class="mt-1 relative">
         <img
-          class="icon absolute transition-all top-3 left-2 duration-100"
+          class="icon absolute transition-all top-2.5 left-2 duration-100 h-6"
           src="/images/icons/hashtag.svg"
           alt="code"
         />
@@ -188,7 +187,7 @@ defmodule ClaperWeb.Component.Input do
           autofocus: @autofocus,
           autocomplete: @key,
           class:
-            "read-only:opacity-50 outline-none shadow-base focus:ring-primary-500 focus:border-primary-500 block w-full text-lg border-gray-300 rounded-md py-4 pr-3 pl-12 uppercase"
+            "read-only:opacity-50 outline-none shadow-base focus:ring-primary-500 focus:border-primary-500 block w-full text-lg border-gray-300 rounded-md py-2 pr-3 pl-9 uppercase"
         ) %>
       </div>
       <%= if Keyword.has_key?(@form.errors, @key) do %>
@@ -217,7 +216,7 @@ defmodule ClaperWeb.Component.Input do
             placeholder: @placeholder,
             autocomplete: false,
             class:
-              "outline-none shadow-base focus:ring-primary-500 focus:border-primary-500 block w-full text-lg border-gray-300 rounded-md py-4 px-3 read-only:opacity-50"
+              "outline-none shadow-base focus:ring-primary-500 focus:border-primary-500 block w-full text-lg border-gray-300 rounded-md py-2 px-3 read-only:opacity-50"
           ) %>
         </div>
 
@@ -252,7 +251,7 @@ defmodule ClaperWeb.Component.Input do
           autocomplete: @key,
           value: @value,
           class:
-            "#{@fieldClass} read-only:opacity-50 shadow-base block w-full text-lg focus:ring-primary-500 focus:ring-2 outline-none rounded-md py-4 px-3",
+            "#{@fieldClass} read-only:opacity-50 shadow-base block w-full text-lg focus:ring-primary-500 focus:ring-2 outline-none rounded-md py-2 px-3",
           "x-model": "input",
           "x-ref": "input"
         ) %>
@@ -283,7 +282,7 @@ defmodule ClaperWeb.Component.Input do
           autofocus: @autofocus,
           placeholder: @placeholder,
           class:
-            "#{@fieldClass} shadow-base block w-full text-lg focus:ring-primary-500 focus:ring-2 outline-none rounded-md py-4 px-3",
+            "#{@fieldClass} shadow-base block w-full text-lg focus:ring-primary-500 focus:ring-2 outline-none rounded-md py-2 px-3",
           "x-model": "input",
           "x-ref": "input"
         ) %>

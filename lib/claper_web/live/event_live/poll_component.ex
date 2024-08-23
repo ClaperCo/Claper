@@ -60,7 +60,7 @@ defmodule ClaperWeb.EventLive.PollComponent do
                   <button class="bg-gray-500 px-3 py-2 rounded-full flex justify-between items-center relative text-white">
                     <div
                       style={"width: #{if @show_results, do: opt.percentage, else: 0}%;"}
-                      class={"bg-gradient-to-r from-primary-500 to-secondary-500 h-full absolute left-0 transition-all rounded-l-full #{if opt.percentage == "100", do: 'rounded-r-full'}"}
+                      class={"bg-gradient-to-r from-primary-500 to-secondary-500 h-full absolute left-0 transition-all rounded-l-full #{if opt.percentage == "100", do: "rounded-r-full"}"}
                     >
                     </div>
                     <div class="flex space-x-3 z-10 text-left">
@@ -93,7 +93,7 @@ defmodule ClaperWeb.EventLive.PollComponent do
                   >
                     <div
                       style={"width: #{if @show_results, do: opt.percentage, else: 0}%;"}
-                      class={"bg-gradient-to-r from-primary-500 to-secondary-500 h-full absolute left-0 transition-all rounded-l-full #{if opt.percentage == "100", do: 'rounded-r-full'}"}
+                      class={"bg-gradient-to-r from-primary-500 to-secondary-500 h-full absolute left-0 transition-all rounded-l-full #{if opt.percentage == "100", do: "rounded-r-full"}"}
                     >
                     </div>
                     <div class="flex space-x-3 z-10 text-left">

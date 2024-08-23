@@ -87,6 +87,49 @@
       </.live_component>
     <% end %>
 
+    <%= if @live_action in [:set_password] do %>
+      <.live_component
+        module={ClaperWeb.ModalComponent}
+        class="hidden"
+        id="modal-wrapper"
+        title={@page_title}
+        description={@page_description}
+        return_to={~p"/users/settings"}
+      >
+        <div>
+          <.form
+            :let={f}
+            for={@password_changeset}
+            phx-submit="save"
+            id="set_password"
+            class="mt-5 md:flex md:items-end gap-x-2"
+          >
+            <%= hidden_input(f, :action, name: "action", value: "set_password") %>
+
+            <ClaperWeb.Component.Input.password
+              form={f}
+              key={:password}
+              name={gettext("New password")}
+              required="true"
+            />
+
+            <ClaperWeb.Component.Input.password
+              form={f}
+              key={:password_confirmation}
+              name={gettext("Confirm password")}
+              required="true"
+            />
+
+            <%= submit(gettext("Save"),
+              phx_disable_with: "Saving...",
+              class:
+                "mt-2 w-full h-14 inline-flex transition-all items-center justify-center px-4 py-2 shadow-sm font-medium rounded-md text-white bg-black hover:bg-primary-500 md:mt-0 md:ml-3 md:w-auto md:text-sm"
+            ) %>
+          </.form>
+        </div>
+      </.live_component>
+    <% end %>
+
     <div class="shadow overflow-hidden sm:rounded-lg">
       <div class="py-5">
         <h3 class="text-lg leading-6 font-medium text-gray-900">
@@ -104,7 +147,7 @@
             </dt>
             <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
               <span class="flex-grow"><%= @current_user.email %></span>
-              <span class="ml-4 flex-shrink-0">
+              <span :if={!@is_external_user} class="ml-4 flex-shrink-0">
                 <.link
                   patch={~p"/users/settings/edit/email"}
                   class="rounded-md font-medium text-purple-600 hover:text-purple-500"
@@ -114,10 +157,10 @@
               </span>
             </dd>
 
-            <dt class="text-sm font-medium text-gray-500">
+            <dt :if={!@is_external_user} class="text-sm font-medium text-gray-500">
               <%= gettext("Password") %>
             </dt>
-            <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+            <dd :if={!@is_external_user} class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
               <span class="flex-grow">********</span>
               <span class="ml-4 flex-shrink-0">
                 <.link
@@ -127,6 +170,67 @@
                   <%= gettext("Change") %>
                 </.link>
               </span>
+            </dd>
+
+            <dt :if={@is_external_user} class="text-sm font-medium text-gray-500">
+              <%= gettext("Accounts linked") %>
+            </dt>
+            <dd class="text-sm text-gray-900 sm:col-span-2">
+              <%= for account <- @oidc_accounts do %>
+                <div class="text-sm text-gray-900 bg-white rounded-md py-2 px-4 shadow-base flex gap-x-2 items-center justify-start mt-2 sm:mt-0 mb-2">
+                  <img src="/images/icons/openid.png" class="w-5" />
+                  <span class="flex-grow flex items-center gap-x-2">
+                    <span><%= account.provider %></span>
+                    <div
+                      :if={account.organization}
+                      class="text-gray-500 text-xs flex items-center gap-x-1"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 16 16"
+                        fill="currentColor"
+                        class="h-3"
+                      >
+                        <path
+                          fill-rule="evenodd"
+                          d="M1.75 2a.75.75 0 0 0 0 1.5H2v9h-.25a.75.75 0 0 0 0 1.5h1.5a.75.75 0 0 0 .75-.75v-1.5a.75.75 0 0 1 .75-.75h1.5a.75.75 0 0 1 .75.75v1.5c0 .414.336.75.75.75h.5a.75.75 0 0 0 .75-.75V3.5h.25a.75.75 0 0 0 0-1.5h-7.5ZM3.5 5.5A.5.5 0 0 1 4 5h.5a.5.5 0 0 1 .5.5V6a.5.5 0 0 1-.5.5H4a.5.5 0 0 1-.5-.5v-.5Zm.5 2a.5.5 0 0 0-.5.5v.5A.5.5 0 0 0 4 9h.5a.5.5 0 0 0 .5-.5V8a.5.5 0 0 0-.5-.5H4Zm2-2a.5.5 0 0 1 .5-.5H7a.5.5 0 0 1 .5.5V6a.5.5 0 0 1-.5.5h-.5A.5.5 0 0 1 6 6v-.5Zm.5 2A.5.5 0 0 0 6 8v.5a.5.5 0 0 0 .5.5H7a.5.5 0 0 0 .5-.5V8a.5.5 0 0 0-.5-.5h-.5ZM11.5 6a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h2.75a.75.75 0 0 0 0-1.5H14v-5h.25a.75.75 0 0 0 0-1.5H11.5Zm.5 1.5h.5a.5.5 0 0 1 .5.5v.5a.5.5 0 0 1-.5.5H12a.5.5 0 0 1-.5-.5V8a.5.5 0 0 1 .5-.5Zm0 2.5a.5.5 0 0 0-.5.5v.5a.5.5 0 0 0 .5.5h.5a.5.5 0 0 0 .5-.5v-.5a.5.5 0 0 0-.5-.5H12Z"
+                          clip-rule="evenodd"
+                        />
+                      </svg>
+
+                      <span><%= account.organization %></span>
+                    </div>
+                  </span>
+                  <span :if={@allow_unlink_external_provider}>
+                    <button
+                      phx-click="unlink"
+                      phx-value-issuer={account.issuer}
+                      data-confirm={gettext("Are you sure you want to unlink this account?")}
+                      class="font-medium text-red-600 hover:text-red-500"
+                    >
+                      <%= gettext("Unlink") %>
+                    </button>
+                  </span>
+                </div>
+              <% end %>
+              <%= for account <- @lti_accounts do %>
+                <div class="text-sm text-gray-900 bg-white rounded-md py-2 px-4 shadow-base flex gap-x-2 items-center justify-start mb-2">
+                  <img src="/images/icons/lms.png" class="w-8" />
+                  <span class="flex-grow">
+                    LMS <span class="text-gray-500 text-xs">#<%= account.registration_id %></span>
+                  </span>
+                  <span :if={@allow_unlink_external_provider} class="ml-4 flex-shrink-0">
+                    <button
+                      phx-click="unlink"
+                      phx-value-registration_id={account.registration_id}
+                      data-confirm={gettext("Are you sure you want to unlink this account?")}
+                      class="font-medium text-red-600 hover:text-red-500"
+                    >
+                      <%= gettext("Unlink") %>
+                    </button>
+                  </span>
+                </div>
+              <% end %>
             </dd>
           </div>
         </dl>
@@ -148,6 +252,7 @@
                 <ClaperWeb.Component.Input.select
                   form={f}
                   fieldClass="!w-auto"
+                  labelClass="text-sm font-medium text-gray-500"
                   array={[
                     {"Deutsch", "de"},
                     {"English", "en"},
@@ -163,7 +268,7 @@
           </dl>
         </div>
       </div>
-      <div>
+      <div :if={!@is_external_user}>
         <div class="py-5">
           <h3 class="text-lg leading-6 font-medium text-gray-900">
             <%= gettext("Danger zone") %>

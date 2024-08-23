@@ -18,24 +18,42 @@
         required="true"
       />
 
-      <div class="mt-3">
-        <ClaperWeb.Component.Input.textarea
+      <div class="mt-3 flex gap-x-2 items-center">
+        <ClaperWeb.Component.Input.select
           form={f}
-          key={:content}
-          name={gettext("The iframe component")}
+          key={:provider}
+          name={gettext("Provider")}
+          array={@providers}
           labelClass={if @dark, do: "text-white"}
-          fieldClass={if @dark, do: "bg-gray-700 text-white"}
-          autofocus="true"
+          fieldClass={if @dark, do: "bg-gray-700 text-white h-full"}
           required="true"
         />
+        <div class="flex-1">
+          <p></p>
+          <ClaperWeb.Component.Input.text
+            form={f}
+            key={:content}
+            name={
+              if Ecto.Changeset.get_field(@changeset, :provider) == "custom",
+                do: gettext("Iframe code"),
+                else: gettext("Link to the content")
+            }
+            labelClass={if @dark, do: "text-white"}
+            fieldClass={if @dark, do: "bg-gray-700 text-white"}
+            autofocus="true"
+            required="true"
+          />
+        </div>
       </div>
+
+      <p class="text-gray-700 text-xl font-semibold mt-5"><%= gettext("Options") %></p>
 
       <div class="flex gap-x-2 mb-5 mt-3">
         <%= checkbox(f, :attendee_visibility, class: "h-4 w-5") %>
         <%= label(
           f,
           :attendee_visibility,
-          gettext("Attendee can view the web content on their device"),
+          gettext("Attendees can view the web content on their device"),
           class: "text-sm font-medium"
         ) %>
       </div>
