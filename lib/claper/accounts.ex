@@ -411,7 +411,11 @@ defmodule Claper.Accounts do
       when is_function(reset_password_url_fun, 1) do
     {encoded_token, user_token} = UserToken.build_email_token(user, "reset_password")
     Repo.insert!(user_token)
-    UserNotifier.deliver_reset_password_instructions(user, reset_password_url_fun.(encoded_token))
+
+    UserNotifier.deliver_reset_password_instructions(
+      user,
+      reset_password_url_fun.(encoded_token)
+    )
   end
 
   @doc """

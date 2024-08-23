@@ -120,6 +120,7 @@ defmodule ClaperWeb.Plugs.Locale do
     case String.split(tag, "-", parts: 2) do
       [language, _country_variant] ->
         if Enum.member?(tags, language), do: [tag], else: [tag, language]
+
       [_language] ->
         [tag]
     end

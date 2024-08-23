@@ -372,10 +372,10 @@
             <%= @event.name %>
           </h2>
           <div class="flex gap-x-3 items-center">
-            <div class="flex items-center text-sm text-gray-500">
+            <div class="flex items-center text-sm text-gray-500 gap-x-1">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                class="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400"
+                class="flex-shrink-0 h-5 w-5 text-gray-400"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -387,12 +387,12 @@
                   d="M7 20l4-16m2 16l4-16M6 9h14M4 15h14"
                 />
               </svg>
-              <%= @event.code %>
+              <span><%= @event.code %></span>
             </div>
-            <div class="flex items-center text-sm text-gray-500">
+            <div class="flex items-center text-sm text-gray-500 gap-x-1">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                class="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400"
+                class="flex-shrink-0 h-5 w-5 text-gray-400"
                 viewBox="0 0 20 20"
                 fill="currentColor"
               >
@@ -402,7 +402,7 @@
                   clip-rule="evenodd"
                 />
               </svg>
-              <%= @attendees_nb %>
+              <span><%= @attendees_nb %></span>
             </div>
           </div>
         </div>
