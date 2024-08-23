@@ -118,11 +118,15 @@ Distributed under the GPLv3 License. See `LICENSE.txt` for more information.
 
 <!-- CONTACT -->
 
-## Contact
+## Links
 
-[![](https://img.shields.io/badge/@alxlion__-000000?style=for-the-badge&logo=x&logoColor=white)](https://x.com/alxlion_)
+[![](https://img.shields.io/badge/ClaperCo/Claper-000000?style=for-the-badge&logo=Github&logoColor=white)](https://github.com/ClaperCo/Claper)
 
-Project Link: [https://github.com/ClaperCo/Claper](https://github.com/ClaperCo/Claper)
+[![](https://img.shields.io/badge/Discord-5052db?style=for-the-badge&logo=Discord&logoColor=white)](https://discord.gg/M7ejVaC9gA)
+
+[![](https://img.shields.io/badge//r/claper-ed491a?style=for-the-badge&logo=Reddit&logoColor=white)](https://reddit.com/r/claper)
+
+[![](<https://img.shields.io/badge/Alex_Lion_(Founder)-000000?style=for-the-badge&logo=x&logoColor=white>)](https://x.com/alxlion_)
 
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
