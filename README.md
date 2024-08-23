@@ -42,6 +42,12 @@ Claper is proudly powered by Phoenix and Elixir.
 
 [![Phoenix][Phoenix]][Phoenix-url] [![Elixir][Elixir]][Elixir-url] [![Tailwind][Tailwind]][Tailwind-url]
 
+### Our partners and sponsors
+
+<a href="https://www.lmddc.lu/"><img src="priv/static/images/partners/lmddc.png" alt="LMDDC" height="50"></a>
+<a href="https://www.pixilearn.fr/en/"><img src="priv/static/images/partners/pixilearn.png" alt="Pixilearn" height="50"></a>
+<a href="https://www.uccs.edu/"><img src="priv/static/images/partners/uccs.png" alt="UCCS" height="50"></a>
+
 ## Documentation
 
 You can find all the instructions and configuration in [the documentation](https://docs.claper.co/configuration.html).
@@ -138,3 +144,6 @@ Project Link: [https://github.com/ClaperCo/Claper](https://github.com/ClaperCo/C
 [Tailwind-url]: https://tailwindcss.com/
 [Phoenix]: https://img.shields.io/badge/phoenix-f35424?style=for-the-badge&logo=&logoColor=white
 [Phoenix-url]: https://www.phoenixframework.org/
+[lmddc-logo]: /priv/static/images/partners/lmddc.png
+[pixilearn-logo]: /priv/static/images/partners/pixilearn.png
+[uccs-logo]: /priv/static/images/partners/uccs.png
