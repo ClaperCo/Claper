@@ -163,7 +163,7 @@ defmodule ClaperWeb.EventLive.Presenter do
 
   @impl true
   def handle_info({:form_updated, form}, socket) do
-    if form.active do
+    if form.enabled do
       {:noreply,
        socket
        |> update(:current_form, fn _current_form -> form end)}
