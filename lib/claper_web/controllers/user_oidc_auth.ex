@@ -94,8 +94,6 @@ defmodule ClaperWeb.UserOidcAuth do
   defp validate_user(id_token, access_token, refresh_token, claims) do
     mappings = config()[:property_mappings]
 
-    IO.inspect(claims)
-
     case Claper.Accounts.get_or_create_user_with_oidc(%{
            sub: claims["sub"],
            issuer: claims["iss"],
