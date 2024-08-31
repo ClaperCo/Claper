@@ -226,7 +226,7 @@ Hooks.PostForm = {
       e.preventDefault();
       submitBtn.click();
     } else {
-      if (TA.value.length > 1 && TA.value.length < 256) {
+      if (TA.value.length > 0 && TA.value.length < 256) {
         submitBtn.classList.remove("opacity-50");
         submitBtn.classList.add("opacity-100");
         submitBtn.disabled = false;
@@ -261,7 +261,7 @@ Hooks.PostForm = {
   updated() {
     const submitBtn = document.getElementById("submitBtn");
     const TA = document.getElementById("postFormTA");
-    if (TA.value.length > 1 && TA.value.length < 256) {
+    if (TA.value.length > 0 && TA.value.length < 256) {
       submitBtn.classList.remove("opacity-50");
       submitBtn.classList.add("opacity-100");
       submitBtn.disabled = false;
