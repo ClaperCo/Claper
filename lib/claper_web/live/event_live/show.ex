@@ -238,7 +238,7 @@ defmodule ClaperWeb.EventLive.Show do
         {:current_interaction, interaction},
         socket
       ) do
-    {:noreply, socket |> load_current_interaction(interaction)}
+    {:noreply, socket |> load_current_interaction(interaction, false)}
   end
 
   @impl true
@@ -278,7 +278,7 @@ defmodule ClaperWeb.EventLive.Show do
   def handle_info({:poll_updated, %Claper.Polls.Poll{enabled: true} = poll}, socket) do
     {:noreply,
      socket
-     |> load_current_interaction(poll)}
+     |> load_current_interaction(poll, true)}
   end
 
   @impl true
@@ -292,7 +292,7 @@ defmodule ClaperWeb.EventLive.Show do
   def handle_info({:form_updated, %Claper.Forms.Form{enabled: true} = form}, socket) do
     {:noreply,
      socket
-     |> load_current_interaction(form)}
+     |> load_current_interaction(form, true)}
   end
 
   @impl true
@@ -306,7 +306,7 @@ defmodule ClaperWeb.EventLive.Show do
   def handle_info({:embed_updated, %Claper.Embeds.Embed{enabled: true} = embed}, socket) do
     {:noreply,
      socket
-     |> load_current_interaction(embed)}
+     |> load_current_interaction(embed, true)}
   end
 
   @impl true
@@ -695,20 +695,37 @@ defmodule ClaperWeb.EventLive.Show do
 
   defp get_current_interaction(socket, event, position) do
     with interaction <- Interactions.get_active_interaction(event, position) do
-      socket |> assign(:current_interaction, interaction) |> load_current_interaction(interaction)
+      socket
+      |> assign(:current_interaction, interaction)
+      |> load_current_interaction(interaction, false)
     end
   end
 
-  defp load_current_interaction(socket, %Polls.Poll{} = interaction) do
+  defp load_current_interaction(socket, %Polls.Poll{} = interaction, same_interaction) do
     poll = Polls.set_percentages(interaction)
-    socket |> assign(:current_interaction, poll) |> get_current_vote(poll.id)
+
+    socket
+    |> assign(
+      :current_interaction,
+      %{poll | poll_opts: Enum.sort_by(poll.poll_opts, & &1.id, :asc)}
+    )
+    |> maybe_reset_selected_poll_opt(same_interaction)
+    |> get_current_vote(poll.id)
   end
 
-  defp load_current_interaction(socket, %Forms.Form{} = interaction) do
+  defp load_current_interaction(socket, %Forms.Form{} = interaction, _same_interaction) do
     socket |> assign(:current_interaction, interaction) |> get_current_form_submit(interaction.id)
   end
 
-  defp load_current_interaction(socket, interaction) do
+  defp load_current_interaction(socket, interaction, _same_interaction) do
     socket |> assign(:current_interaction, interaction)
+  end
+
+  defp maybe_reset_selected_poll_opt(socket, true) do
+    socket
+  end
+
+  defp maybe_reset_selected_poll_opt(socket, _same_interaction) do
+    socket |> assign(:selected_poll_opt, [])
   end
 end

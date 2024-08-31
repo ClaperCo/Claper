@@ -5,6 +5,7 @@
 - Fix OIDC to allow only client_secret_basic and client_secret_post auth methods
 - Improve poll results UI
 - Fix minimum length for 2 characters messages
+- Fix poll option order
 
 ## v2.1.0
 
