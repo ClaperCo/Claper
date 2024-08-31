@@ -1,3 +1,9 @@
+## v2.1.1
+
+### Fixes and improvements
+
+- Fix OIDC to allow only client_secret_basic and client_secret_post auth methods
+
 ## v2.1.0
 
 ### Features
