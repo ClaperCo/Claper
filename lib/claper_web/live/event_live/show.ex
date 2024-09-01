@@ -166,7 +166,7 @@ defmodule ClaperWeb.EventLive.Show do
   def handle_info(%{event: "presence_diff"}, %{assigns: %{event: event}} = socket) do
     attendees = Presence.list("event:#{event.uuid}")
 
-    {:noreply, assign(socket, :attendees_nb, Enum.count(attendees))}
+    {:noreply, push_event(socket, "update-attendees", %{count: Enum.count(attendees)})}
   end
 
   @impl true

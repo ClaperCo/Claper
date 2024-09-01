@@ -234,7 +234,9 @@
 
     <div class="inline-flex justify-between items-center text-white text-2xl">
       <img src="/images/icons/online-users.svg" class="h-12 mr-2" />
-      <span id="counter"><%= @attendees_nb %></span>
+      <span id="counter" phx-hook="UpdateAttendees" phx-update="ignore">
+        <%= @attendees_nb %>
+      </span>
     </div>
   </div>
 </div>

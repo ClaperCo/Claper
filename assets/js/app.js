@@ -316,6 +316,13 @@ Hooks.Pickr = {
     this.pickr.destroy();
   },
 };
+Hooks.UpdateAttendees = {
+  mounted() {
+    this.handleEvent("update-attendees", ({ count }) => {
+      this.el.textContent = count;
+    });
+  },
+};
 Hooks.Presenter = {
   mounted() {
     this.presenter = new Presenter(this);

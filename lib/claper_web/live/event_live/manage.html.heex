@@ -402,7 +402,9 @@
                   clip-rule="evenodd"
                 />
               </svg>
-              <span><%= @attendees_nb %></span>
+              <span id="attendees-count" phx-update="ignore" phx-hook="UpdateAttendees">
+                <%= @attendees_nb %>
+              </span>
             </div>
           </div>
         </div>
