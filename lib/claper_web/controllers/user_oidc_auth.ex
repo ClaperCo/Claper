@@ -78,7 +78,8 @@ defmodule ClaperWeb.UserOidcAuth do
 
     %{
       redirect_uri: "#{url}/users/oidc/callback",
-      scopes: scopes()
+      scopes: scopes(),
+      preferred_auth_methods: [:client_secret_basic, :client_secret_post]
     }
   end
 

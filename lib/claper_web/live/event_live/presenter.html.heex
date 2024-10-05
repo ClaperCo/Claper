@@ -56,14 +56,14 @@
         <div class={"#{if @iframe, do: "space-y-5", else: "space-y-8"} flex flex-col"}>
           <%= if (length @current_poll.poll_opts) > 0 do %>
             <%= for opt <- @current_poll.poll_opts do %>
-              <div class={"#{if @iframe, do: "py-1", else: "py-4"} bg-gray-500 px-6 rounded-full flex justify-between items-center relative text-white"}>
+              <div class={"#{if @iframe, do: "py-1", else: "py-4"} bg-gray-500 px-6 rounded-3xl flex justify-between items-center relative text-white"}>
                 <div
                   style={"width: #{opt.percentage}%;"}
-                  class="bg-gradient-to-r from-primary-500 to-secondary-500 rounded-full h-full absolute left-0 transition-all"
+                  class="bg-gradient-to-r from-primary-500 to-secondary-500 rounded-3xl h-full absolute left-0 transition-all"
                 >
                 </div>
                 <div class="flex space-x-3 z-10 text-left">
-                  <span class={"#{if @iframe, do: "text-base", else: "text-2xl"} flex-1 font-bold"}>
+                  <span class={"#{if @iframe, do: "text-base", else: "text-2xl"} flex-1 font-bold pr-2"}>
                     <%= opt.content %>
                   </span>
                 </div>
@@ -234,7 +234,9 @@
 
     <div class="inline-flex justify-between items-center text-white text-2xl">
       <img src="/images/icons/online-users.svg" class="h-12 mr-2" />
-      <span id="counter"><%= @attendees_nb %></span>
+      <span id="counter" phx-hook="UpdateAttendees" phx-update="ignore">
+        <%= @attendees_nb %>
+      </span>
     </div>
   </div>
 </div>

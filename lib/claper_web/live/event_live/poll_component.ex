@@ -53,17 +53,17 @@ defmodule ClaperWeb.EventLive.PollComponent do
           <% end %>
         </div>
         <div>
-          <div class="flex flex-col space-y-3">
+          <div class="flex flex-col space-y-3 overflow-y-auto max-h-[500px]">
             <%= if (length @poll.poll_opts) > 0 do %>
               <%= for {opt, idx} <- Enum.with_index(@poll.poll_opts) do %>
                 <%= if (length @current_poll_vote) > 0 do %>
-                  <button class="bg-gray-500 px-3 py-2 rounded-full flex justify-between items-center relative text-white">
+                  <button class="bg-gray-500 px-3 py-2 rounded-3xl flex justify-between items-center relative text-white">
                     <div
                       style={"width: #{if @show_results, do: opt.percentage, else: 0}%;"}
-                      class={"bg-gradient-to-r from-primary-500 to-secondary-500 h-full absolute left-0 transition-all rounded-l-full #{if opt.percentage == "100", do: "rounded-r-full"}"}
+                      class={"bg-gradient-to-r from-primary-500 to-secondary-500 h-full absolute left-0 transition-all rounded-l-3xl #{if opt.percentage == "100", do: "rounded-r-3xl"}"}
                     >
                     </div>
-                    <div class="flex space-x-3 z-10 text-left">
+                    <div class="flex space-x-3 items-center z-10 text-left">
                       <%= if (length Enum.filter(@current_poll_vote, fn(vote) -> vote.poll_opt_id == opt.id end)) > 0 do %>
                         <%= if @poll.multiple do %>
                           <span class="h-5 w-5 mt-0.5 point-select bg-white"></span>
@@ -78,7 +78,7 @@ defmodule ClaperWeb.EventLive.PollComponent do
                           </span>
                         <% end %>
                       <% end %>
-                      <span class="flex-1"><%= opt.content %></span>
+                      <span class="flex-1 pr-2"><%= opt.content %></span>
                     </div>
                     <span :if={@show_results} class="text-sm z-10">
                       <%= opt.percentage %>% (<%= opt.vote_count %>)
@@ -89,14 +89,14 @@ defmodule ClaperWeb.EventLive.PollComponent do
                     id={"poll-opt-#{idx}"}
                     phx-click="select-poll-opt"
                     phx-value-opt={idx}
-                    class="bg-gray-500 px-3 py-2 rounded-full flex justify-between items-center relative text-white"
+                    class="bg-gray-500 px-3 py-2 flex justify-between items-center rounded-3xl relative text-white"
                   >
                     <div
                       style={"width: #{if @show_results, do: opt.percentage, else: 0}%;"}
-                      class={"bg-gradient-to-r from-primary-500 to-secondary-500 h-full absolute left-0 transition-all rounded-l-full #{if opt.percentage == "100", do: "rounded-r-full"}"}
+                      class={"bg-gradient-to-r from-primary-500 to-secondary-500 h-full absolute left-0 transition-all rounded-l-3xl #{if opt.percentage == "100", do: "rounded-r-3xl"}"}
                     >
                     </div>
-                    <div class="flex space-x-3 z-10 text-left">
+                    <div class="flex space-x-3 items-center z-10 text-left">
                       <%= if Enum.member?(@selected_poll_opt, "#{idx}") do %>
                         <%= if @poll.multiple do %>
                           <span class="h-5 w-5 mt-0.5 point-select bg-white"></span>
@@ -111,7 +111,7 @@ defmodule ClaperWeb.EventLive.PollComponent do
                           </span>
                         <% end %>
                       <% end %>
-                      <span class="flex-1"><%= opt.content %></span>
+                      <span class="flex-1 pr-2"><%= opt.content %></span>
                     </div>
                     <span :if={@show_results} class="text-sm z-10">
                       <%= opt.percentage %>% (<%= opt.vote_count %>)
@@ -123,14 +123,14 @@ defmodule ClaperWeb.EventLive.PollComponent do
           </div>
 
           <%= if (length @selected_poll_opt) == 0 || (length @current_poll_vote) > 0 do %>
-            <button class="px-3 py-2 text-white font-semibold bg-gray-500 rounded-md my-5 cursor-default">
+            <button class="px-3 py-2 text-white font-semibold bg-gray-500 rounded-md mt-3 mb-4 cursor-default">
               <%= gettext("Vote") %>
             </button>
           <% else %>
             <button
               phx-click="vote"
               phx-disable-with="..."
-              class="px-3 py-2 text-white font-semibold bg-primary-500 hover:bg-primary-600 rounded-md my-5"
+              class="px-3 py-2 text-white font-semibold bg-primary-500 hover:bg-primary-600 rounded-md mt-3 mb-4"
             >
               <%= gettext("Vote") %>
             </button>

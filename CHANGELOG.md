@@ -1,3 +1,15 @@
+## v2.1.1
+
+### Fixes and improvements
+
+- Fix OIDC to allow only client_secret_basic and client_secret_post auth methods
+- Fix minimum length for 2 characters messages
+- Fix poll option order
+- Fix translations for current interactions
+- Improve poll results UI
+- Optimize resource usage of the manager when attendees join the event
+- Fix duplicate event being inaccesible
+
 ## v2.1.0
 
 ### Features

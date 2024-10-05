@@ -191,15 +191,15 @@
                         else: 0 %>
                     <button
                       id={"poll-opt-#{idx}"}
-                      class="bg-gray-500 px-3 py-2 rounded-full flex justify-between items-center relative text-white"
+                      class="bg-gray-500 px-3 py-2 rounded-3xl flex justify-between items-center relative text-white"
                     >
                       <div
                         style={"width: #{percentage}%;"}
-                        class={"bg-gradient-to-r from-primary-500 to-secondary-500 h-full absolute left-0 transition-all rounded-l-full #{if percentage == "100", do: "rounded-r-full"}"}
+                        class={"bg-gradient-to-r from-primary-500 to-secondary-500 h-full absolute left-0 transition-all rounded-l-3xl #{if percentage == "100", do: "rounded-r-3xl"}"}
                       >
                       </div>
-                      <div class="flex space-x-3 z-10 text-left">
-                        <span class="flex-1"><%= opt.content %></span>
+                      <div class="flex space-x-3 items-center z-10 text-left">
+                        <span class="flex-1 pr-2"><%= opt.content %></span>
                       </div>
                       <span class="text-sm z-10"><%= percentage %>% (<%= opt.vote_count %>)</span>
                     </button>
