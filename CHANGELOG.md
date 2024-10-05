@@ -1,9 +1,3 @@
-## v2.1.2
-
-### Fixes and improvements
-
-- Fix duplicate event being inaccesible
-
 ## v2.1.1
 
 ### Fixes and improvements
@@ -14,6 +8,7 @@
 - Fix translations for current interactions
 - Improve poll results UI
 - Optimize resource usage of the manager when attendees join the event
+- Fix duplicate event being inaccesible
 
 ## v2.1.0
 
