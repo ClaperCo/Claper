@@ -1,3 +1,9 @@
+## v2.1.2
+
+### Fixes and improvements
+
+- Fix duplicate event being inaccesible
+
 ## v2.1.1
 
 ### Fixes and improvements
