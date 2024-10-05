@@ -428,7 +428,7 @@ defmodule Claper.Events do
              |> Map.drop([:id, :inserted_at, :updated_at])
              |> Map.put(:presentation_file_id, new_presentation_file.id)
              |> Map.put(:position, 0)
-             |> Map.put(:banned, {})
+             |> Map.put(:banned, [])
 
            Claper.Presentations.create_presentation_state(attrs)
          end)
