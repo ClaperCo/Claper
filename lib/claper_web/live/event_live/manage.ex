@@ -5,6 +5,8 @@ defmodule ClaperWeb.EventLive.Manage do
   alias Claper.Polls
   alias Claper.Forms
   alias Claper.Embeds
+  # Add this line
+  alias Claper.Quizzes
 
   @impl true
   def mount(%{"code" => code}, session, socket) do
@@ -404,6 +406,38 @@ defmodule ClaperWeb.EventLive.Manage do
   end
 
   @impl true
+  def handle_event("quiz-set-active", %{"id" => id}, socket) do
+    with quiz <- Quizzes.get_quiz!(id), :ok <- Claper.Interactions.enable_interaction(quiz) do
+      Phoenix.PubSub.broadcast(
+        Claper.PubSub,
+        "event:#{socket.assigns.event.uuid}",
+        {:current_interaction, quiz}
+      )
+
+      {:noreply,
+       socket
+       |> assign(:current_interaction, quiz)
+       |> interactions_at_position(socket.assigns.state.position)}
+    end
+  end
+
+  def handle_event("quiz-set-inactive", %{"id" => id}, socket) do
+    with quiz <- Quizzes.get_quiz!(id),
+         {:ok, _} <- Claper.Interactions.disable_interaction(quiz) do
+      Phoenix.PubSub.broadcast(
+        Claper.PubSub,
+        "event:#{socket.assigns.event.uuid}",
+        {:current_interaction, nil}
+      )
+    end
+
+    {:noreply,
+     socket
+     |> assign(:current_interaction, nil)
+     |> interactions_at_position(socket.assigns.state.position)}
+  end
+
+  @impl true
   def handle_event(
         "ban",
         %{"attendee-identifier" => attendee_identifier},
@@ -646,6 +680,14 @@ defmodule ClaperWeb.EventLive.Manage do
   end
 
   @impl true
+  def handle_event("delete-quiz", %{"id" => id}, socket) do
+    quiz = Quizzes.get_quiz!(id)
+    {:ok, _} = Quizzes.delete_quiz(socket.assigns.event.uuid, quiz)
+
+    {:noreply, socket}
+  end
+
+  @impl true
   def handle_event("toggle-preview", _params, %{assigns: %{preview: preview}} = socket) do
     {:noreply, socket |> assign(:preview, !preview)}
   end
@@ -734,6 +776,35 @@ defmodule ClaperWeb.EventLive.Manage do
     |> assign(:create, "embed")
     |> assign(:create_action, :edit)
     |> assign(:embed, embed)
+  end
+
+  defp apply_action(socket, :add_quiz, _params) do
+    socket
+    |> assign(:create, "quiz")
+    |> assign(:quiz, %Quizzes.Quiz{
+      quiz_questions: [
+        %Quizzes.QuizQuestion{
+          id: 0,
+          quiz_question_opts: [
+            %Quizzes.QuizQuestionOpt{
+              id: 0
+            },
+            %Quizzes.QuizQuestionOpt{
+              id: 1
+            }
+          ]
+        }
+      ]
+    })
+  end
+
+  defp apply_action(socket, :edit_quiz, %{"id" => id}) do
+    quiz = Quizzes.get_quiz!(id)
+
+    socket
+    |> assign(:create, "quiz")
+    |> assign(:create_action, :edit)
+    |> assign(:quiz, quiz)
   end
 
   defp pin(post, socket) do

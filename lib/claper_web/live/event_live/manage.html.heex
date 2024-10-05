@@ -234,6 +234,38 @@
                 </div>
               </a>
             </li>
+            <li id="option-4" role="option" tabindex="-1">
+              <a
+                data-phx-link="patch"
+                data-phx-link-state="push"
+                href={~p"/e/#{@event.code}/manage/add/quiz"}
+                class="group flex select-none rounded-xl p-3 w-full hover:bg-gray-200 cursor-pointer"
+              >
+                <div class="flex h-12 w-12 flex-none text-white items-center justify-center rounded-lg bg-gradient-to-br from-primary-500 to-secondary-500">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke-width="1.5"
+                    stroke="currentColor"
+                    class="w-7 h-7"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-
+                      linejoin="round"
+                      d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+                    />
+                  </svg>
+                </div>
+                <div class="ml-4 flex-auto text-left">
+                  <p class="font-medium text-gray-700"><%= gettext("Quiz") %></p>
+                  <p class="text-gray-500">
+                    <%= gettext("Add a quiz to test your public.") %>
+                  </p>
+                </div>
+              </a>
+            </li>
           </ul>
         <% end %>
         <%= if @create=="poll" do %>
@@ -292,6 +324,27 @@
               event_uuid={@event.uuid}
               presentation_file={@event.presentation_file}
               embed={@embed}
+              live_action={@create_action}
+              position={@state.position}
+              return_to={~p"/e/#{@event.code}/manage"}
+            />
+          </div>
+        <% end %>
+
+        <%= if @create=="quiz" do %>
+          <div class="scroll-py-3 overflow-y-auto bg-gray-100 p-3">
+            <p class="text-xl font-bold">
+              <%= case @create_action do
+                :new -> gettext("New quiz")
+                :edit -> gettext("Edit quiz")
+              end %>
+            </p>
+            <.live_component
+              module={ClaperWeb.QuizLive.QuizComponent}
+              id="quiz-create"
+              event_uuid={@event.uuid}
+              presentation_file={@event.presentation_file}
+              quiz={@quiz}
               live_action={@create_action}
               position={@state.position}
               return_to={~p"/e/#{@event.code}/manage"}
