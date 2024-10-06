@@ -40,13 +40,19 @@ defmodule ClaperWeb.UserOidcAuth do
       conn
       |> UserAuth.log_in_user(oidc_user.user)
     else
-      {:error, _} ->
+      {:error, reason} ->
         conn
-        |> put_flash(:error, "Cannot authenticate user.")
-        |> redirect(to: ~p"/users/log_in")
+        |> put_status(:unauthorized)
+        |> put_view(ClaperWeb.ErrorView)
+        |> render("csrf_error.html", %{error: "Authentication failed: #{inspect(reason)}"})
     end
+  end
 
+  def callback(conn, %{"error" => error} = _params) do
     conn
+    |> put_status(:unauthorized)
+    |> put_view(ClaperWeb.ErrorView)
+    |> render("csrf_error.html", %{error: "Authentication failed: #{error}"})
   end
 
   defp config do

@@ -1,3 +1,5 @@
+## v2.1.2
+
 ## v2.1.1
 
 ### Fixes and improvements
