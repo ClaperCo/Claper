@@ -152,6 +152,7 @@ defmodule ClaperWeb.EventLive.Manage do
       socket
       |> stream_insert(:posts, post)
       |> stream_insert(:pinned_posts, post)
+      |> stream_insert(:questions, post)
       |> assign(:pinned_post_count, socket.assigns.pinned_post_count + 1)
 
     {:noreply, updated_socket}
@@ -163,6 +164,7 @@ defmodule ClaperWeb.EventLive.Manage do
       socket
       |> stream_insert(:posts, post)
       |> stream_delete(:pinned_posts, post)
+      |> stream_insert(:questions, post)
       |> assign(:pinned_post_count, socket.assigns.pinned_post_count - 1)
 
     {:noreply, updated_socket}

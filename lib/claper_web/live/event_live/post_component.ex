@@ -64,7 +64,7 @@ defmodule ClaperWeb.EventLive.PostComponent do
 
           <div
             id={"post-menu-#{@post.id}"}
-            class="hidden absolute right-4 top-7 bg-white rounded-lg px-5 py-2"
+            class="hidden absolute right-4 top-7 bg-white rounded-lg px-5 py-2 animate__faster"
           >
             <span class="text-red-500">
               <%= link(gettext("Delete"),

@@ -1,5 +1,19 @@
 ## v2.1.2
 
+### Features
+
+- Add duplicate feature on finished events
+
+### Fixes and improvements
+
+- Improve performance of global reactions
+- Change QR Code background color to white
+- Improve auto scroll of messages on the manager
+- Fix pinning of questions
+- Fix name picker being empty during a reconnect
+- Change wording for more options dropdown and access
+- Fix dropdown position to be on the front of other elements
+
 ## v2.1.1
 
 ### Fixes and improvements

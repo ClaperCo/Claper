@@ -21,7 +21,7 @@
     id="joinScreen"
     class={"#{if @state.join_screen_visible, do: "opacity-100 z-40", else: "opacity-0"} h-full w-full flex flex-col justify-center bg-black absolute transition-opacity"}
   >
-    <div class="h-full bg-black text-white bg-opacity-50 text-center flex flex-col items-center justify-center">
+    <div class="h-full bg-white text-black text-center flex flex-col items-center justify-center">
       <span class="font-semibold mb-10 sm:text-3xl md:text-4xl lg:text-6xl">
         <%= gettext("Scan to interact in real-time") %>
       </span>
@@ -216,7 +216,7 @@
               />
             <% else %>
               <img
-                class="w-full max-h-screen mx-auto inline-block"
+                class=" max-h-screen !w-auto"
                 src={"https://#{Application.get_env(:claper, :presentations) |> Keyword.get(:aws_bucket)}.s3.#{Application.get_env(:ex_aws, :region)}.amazonaws.com/presentations/#{@event.presentation_file.hash}/#{index}.jpg"}
               />
             <% end %>
