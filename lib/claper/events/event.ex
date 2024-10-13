@@ -18,6 +18,7 @@ defmodule Claper.Events.Event do
           updated_at: NaiveDateTime.t()
         }
 
+  @derive {Jason.Encoder, only: [:uuid, :name, :code, :audience_peak, :started_at, :expired_at]}
   schema "events" do
     field :uuid, :binary_id
     field :name, :string

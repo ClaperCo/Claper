@@ -14,6 +14,17 @@ defmodule ClaperWeb.Router do
     plug(ClaperWeb.Plugs.Locale)
   end
 
+  pipeline :vuejs do
+    plug(:accepts, ["html"])
+    plug(:fetch_session)
+    plug(:fetch_live_flash)
+    plug :put_root_layout, html: {ClaperWeb.Layouts, :vue}
+    plug(:protect_from_forgery)
+    plug(:put_secure_browser_headers)
+    plug(:fetch_current_user)
+    plug(ClaperWeb.Plugs.Locale)
+  end
+
   pipeline :lti do
     plug(:accepts, ["html", "json"])
     plug(:put_root_layout, html: {ClaperWeb.LayoutView, :root})
@@ -160,5 +171,11 @@ defmodule ClaperWeb.Router do
     post("/users/confirm", UserConfirmationController, :create)
     get("/users/confirm/:token", UserConfirmationController, :edit)
     post("/users/confirm/:token", UserConfirmationController, :update)
+  end
+
+  scope "/", ClaperWeb do
+    pipe_through([:vuejs, :attendee_registration])
+
+    get("/e/:code/vue", EventController, :vue)
   end
 end

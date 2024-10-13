@@ -1,0 +1,8 @@
+<script>
+  const eventUuid = "<%= @event.uuid %>";
+  const event = <%= raw(Jason.encode!(@event)) %>;
+  window.eventUuid = eventUuid;
+  window.mEvent = event;
+</script>
+<div id="app">
+</div>

@@ -19,6 +19,14 @@ defmodule ClaperWeb.Endpoint do
       ]
     ]
 
+  # Add this new socket endpoint
+  socket "/socket", ClaperWeb.AttendeeSocket,
+    websocket: [
+      connect_info: [
+        session: {__MODULE__, :runtime_opts, []}
+      ]
+    ]
+
   # Serve at "/" the static files from "priv/static" directory.
   #
   # You should set gzip to true if you are running phx.digest

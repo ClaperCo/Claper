@@ -20,6 +20,7 @@ defmodule Claper.Posts.Post do
           updated_at: NaiveDateTime.t()
         }
 
+  @derive {Jason.Encoder, only: [:body, :uuid, :attendee_identifier, :name, :position, :pinned, :user_id]}
   schema "posts" do
     field :body, :string
     field :uuid, :binary_id

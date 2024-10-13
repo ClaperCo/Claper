@@ -80,7 +80,7 @@ const colors = {
 
 module.exports = {
   mode: "jit",
-  content: ["./js/**/*.js", "../lib/*_web/**/*.*ex"],
+  content: ["./js/**/*.js", "../lib/*_web/**/*.*ex", "./views/**/*.vue"],
   safelist: [
     "-top-1.5",
     "top-1",

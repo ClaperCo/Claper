@@ -30,6 +30,17 @@ defmodule ClaperWeb do
     end
   end
 
+  def new_controller do
+    quote do
+      use Phoenix.Controller, formats: [:html, :json], layouts: [html: ClaperWeb.Layouts]
+
+      import Plug.Conn
+      import ClaperWeb.Gettext
+
+      unquote(verified_routes())
+    end
+  end
+
   def view do
     quote do
       use Phoenix.View,
@@ -41,6 +52,20 @@ defmodule ClaperWeb do
         only: [get_flash: 1, get_flash: 2, view_module: 1, view_template: 1]
 
       # Include shared imports and aliases for views
+      unquote(view_helpers())
+    end
+  end
+
+
+  def html do
+    quote do
+      use Phoenix.Component
+
+      # Import convenience functions from controllers
+      import Phoenix.Controller,
+        only: [get_csrf_token: 0, view_module: 1, view_template: 1]
+
+      # Include general helpers for rendering HTML
       unquote(view_helpers())
     end
   end

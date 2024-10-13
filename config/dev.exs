@@ -11,8 +11,7 @@ config :claper, ClaperWeb.Endpoint,
   code_reloader: true,
   debug_errors: true,
   watchers: [
-    # Start the esbuild watcher by calling Esbuild.install_and_run(:default, args)
-    esbuild: {Esbuild, :install_and_run, [:default, ~w(--sourcemap=inline --watch)]},
+    node: ["build.js", "--watch", cd: Path.expand("../assets", __DIR__)],
     sass: {
       DartSass,
       :install_and_run,
@@ -35,7 +34,8 @@ config :claper, ClaperWeb.Endpoint,
       ~r"priv/static/[^uploads].*(js|css|png|jpeg|jpg|gif|svg)$",
       ~r"priv/gettext/.*(po)$",
       ~r"lib/claper_web/(live|views)/.*(ex)$",
-      ~r"lib/claper_web/templates/.*(eex)$"
+      ~r"lib/claper_web/templates/.*(eex)$",
+      ~r"assets/.*\.(js|css|vue)$"
     ]
   ]
 

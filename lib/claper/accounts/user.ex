@@ -17,6 +17,7 @@ defmodule Claper.Accounts.User do
           updated_at: NaiveDateTime.t()
         }
 
+  @derive {Jason.Encoder, only: [:uuid, :email]}
   schema "users" do
     field :uuid, :binary_id
     field :email, :string
