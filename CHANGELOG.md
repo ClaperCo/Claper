@@ -1,8 +1,9 @@
-## v2.1.2
+## v2.2.0
 
 ### Features
 
 - Add duplicate feature on finished events
+- Add italian translation (thanks to @loviuz and @albanobattistella)
 
 ### Fixes and improvements
 
