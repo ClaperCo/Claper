@@ -684,7 +684,7 @@ defmodule ClaperWeb.EventLive.Manage do
     socket
     |> assign(:create, "poll")
     |> assign(:poll, %Polls.Poll{
-      poll_opts: [%Polls.PollOpt{id: 0}, %Polls.PollOpt{id: 1}]
+      poll_opts: [%Polls.PollOpt{content: gettext("Yes")}, %Polls.PollOpt{content: gettext("No")}]
     })
   end
 

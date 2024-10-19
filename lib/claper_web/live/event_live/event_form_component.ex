@@ -86,12 +86,19 @@ defmodule ClaperWeb.EventLive.EventFormComponent do
       end)
 
     changeset =
+      socket.assigns.changeset
+      |> Ecto.Changeset.put_assoc(:leaders, leaders)
+
+    # Preserve other event fields and changes
+    updated_changeset =
       case leaders do
-        [] -> Events.change_event(socket.assigns.event, %{leaders: leaders})
-        _ -> socket.assigns.changeset |> Ecto.Changeset.put_assoc(:leaders, leaders)
+        [] ->
+          Events.change_event(socket.assigns.event, Map.put(socket.assigns.changeset.changes, :leaders, []))
+        _ ->
+          changeset
       end
 
-    {:noreply, assign(socket, changeset: changeset)}
+    {:noreply, assign(socket, changeset: updated_changeset)}
   end
 
   defp get_temp_id, do: :crypto.strong_rand_bytes(5) |> Base.url_encode64() |> binary_part(0, 5)
