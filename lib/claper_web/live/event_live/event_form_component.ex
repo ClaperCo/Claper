@@ -93,7 +93,11 @@ defmodule ClaperWeb.EventLive.EventFormComponent do
     updated_changeset =
       case leaders do
         [] ->
-          Events.change_event(socket.assigns.event, Map.put(socket.assigns.changeset.changes, :leaders, []))
+          Events.change_event(
+            socket.assigns.event,
+            Map.put(socket.assigns.changeset.changes, :leaders, [])
+          )
+
         _ ->
           changeset
       end

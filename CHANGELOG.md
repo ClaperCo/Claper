@@ -4,6 +4,7 @@
 
 - Add duplicate feature on finished events
 - Add italian translation (thanks to @loviuz and @albanobattistella)
+- Add EMAIL_CONFIRMATION environment variable to disable or enable email confirmation after registration
 
 ### Fixes and improvements
 
@@ -15,6 +16,7 @@
 - Change wording for more options dropdown and access
 - Fix dropdown position to be on the front of other elements
 - Owner and facilitators of the event can now join the attendee room before the event starts
+- Fix email templates
 
 ## v2.1.1
 

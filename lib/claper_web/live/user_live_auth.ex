@@ -7,24 +7,18 @@ defmodule ClaperWeb.UserLiveAuth do
     router: ClaperWeb.Router
 
   def on_mount(:default, _params, %{"current_user" => current_user} = _session, socket) do
-    socket =
-      socket
-      |> assign_new(:current_user, fn -> current_user end)
+    socket = assign_new(socket, :current_user, fn -> current_user end)
 
-    {:cont, socket}
+    cond do
+      not Application.get_env(:claper, :email_confirmation) ->
+        {:cont, socket}
 
-    # if current_user.confirmed_at do
-    #   socket =
-    #     socket
-    #     |> assign_new(:current_user, fn -> current_user end)
+      current_user.confirmed_at ->
+        {:cont, socket}
 
-    #   {:cont, socket}
-    # else
-    #   {:halt,
-    #    redirect(socket,
-    #      to: ~p"/users/register/confirm?#{[%{email: current_user.email}]}"
-    #    )}
-    # end
+      true ->
+        {:halt, redirect(socket, to: ~p"/users/register/confirm")}
+    end
   end
 
   def on_mount(:default, _params, _session, socket),

@@ -40,10 +40,14 @@
             </tr>
             <tr>
               <td style="text-align:center;">
-                <a href="https://claper.co" title="logo" target="_blank">
+                <a
+                  href={Application.get_env(:claper, ClaperWeb.Endpoint)[:base_url]}
+                  title="logo"
+                  target="_blank"
+                >
                   <img
                     width="60"
-                    src="https://docs.claper.co/assets/logo.png"
+                    src={"#{Application.get_env(:claper, ClaperWeb.Endpoint)[:base_url]}/images/logo.png"}
                     title="logo"
                     alt="logo"
                   />

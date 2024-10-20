@@ -124,6 +124,10 @@ defmodule ClaperWeb.Router do
     get("/users/reset_password/:token", UserResetPasswordController, :edit)
     post("/users/reset_password/:token", UserResetPasswordController, :update)
 
+    get("/users/confirm", UserConfirmationController, :new)
+    post("/users/confirm", UserConfirmationController, :create)
+    get("/users/confirm/:token", UserConfirmationController, :update)
+
     get("/users/oidc", UserOidcAuth, :new)
     get("/users/oidc/callback", UserOidcAuth, :callback)
   end
@@ -154,9 +158,5 @@ defmodule ClaperWeb.Router do
     get("/privacy", PageController, :privacy)
 
     delete("/users/log_out", UserSessionController, :delete)
-    get("/users/confirm", UserConfirmationController, :new)
-    post("/users/confirm", UserConfirmationController, :create)
-    get("/users/confirm/:token", UserConfirmationController, :edit)
-    post("/users/confirm/:token", UserConfirmationController, :update)
   end
 end
