@@ -59,6 +59,10 @@ enable_account_creation =
   get_var_from_path_or_env(config_dir, "ENABLE_ACCOUNT_CREATION", "true")
   |> String.to_existing_atom()
 
+email_confirmation =
+  get_var_from_path_or_env(config_dir, "EMAIL_CONFIRMATION", "false")
+  |> String.to_existing_atom()
+
 pool_size = get_int_from_path_or_env(config_dir, "POOL_SIZE", 10)
 queue_target = get_int_from_path_or_env(config_dir, "QUEUE_TARGET", 5_000)
 
@@ -150,6 +154,7 @@ config :claper, ClaperWeb.Endpoint,
 
 config :claper,
   enable_account_creation: enable_account_creation,
+  email_confirmation: email_confirmation,
   allow_unlink_external_provider: allow_unlink_external_provider,
   logout_redirect_url: logout_redirect_url
 

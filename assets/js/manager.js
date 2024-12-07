@@ -63,8 +63,16 @@ export class Manager {
       let originalSnap = localStorage.getItem("preview-position");
       if (originalSnap) {
         let snaps = originalSnap.split(":");
-        preview.style.left = `${snaps[0]}px`;
-        preview.style.top = `${snaps[1]}px`;
+        const windowWidth = window.innerWidth;
+        const windowHeight = window.innerHeight;
+        const previewWidth = preview.offsetWidth;
+        const previewHeight = preview.offsetHeight;
+
+        const left = Math.min(Math.max(parseInt(snaps[0]), 0), windowWidth - previewWidth);
+        const top = Math.min(Math.max(parseInt(snaps[1]), 0), windowHeight - previewHeight);
+
+        preview.style.left = `${left}px`;
+        preview.style.top = `${top}px`;
       }
 
       const startDrag = (e) => {

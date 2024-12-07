@@ -152,6 +152,7 @@ defmodule ClaperWeb.EventLive.Manage do
       socket
       |> stream_insert(:posts, post)
       |> stream_insert(:pinned_posts, post)
+      |> stream_insert(:questions, post)
       |> assign(:pinned_post_count, socket.assigns.pinned_post_count + 1)
 
     {:noreply, updated_socket}
@@ -163,6 +164,7 @@ defmodule ClaperWeb.EventLive.Manage do
       socket
       |> stream_insert(:posts, post)
       |> stream_delete(:pinned_posts, post)
+      |> stream_insert(:questions, post)
       |> assign(:pinned_post_count, socket.assigns.pinned_post_count - 1)
 
     {:noreply, updated_socket}
@@ -682,7 +684,7 @@ defmodule ClaperWeb.EventLive.Manage do
     socket
     |> assign(:create, "poll")
     |> assign(:poll, %Polls.Poll{
-      poll_opts: [%Polls.PollOpt{id: 0}, %Polls.PollOpt{id: 1}]
+      poll_opts: [%Polls.PollOpt{content: gettext("Yes")}, %Polls.PollOpt{content: gettext("No")}]
     })
   end
 

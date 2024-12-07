@@ -45,7 +45,7 @@ defmodule ClaperWeb.UserConfirmationControllerTest do
       assert Phoenix.Flash.get(conn.assigns.flash, :info) =~ "If your email is in our system"
 
       assert from(ut in Accounts.UserToken,
-               where: ut.context == "confirm"
+               where: ut.context == "confirm" and ut.sent_to == "unknown@example.com"
              )
              |> Repo.all() == []
     end
@@ -58,19 +58,19 @@ defmodule ClaperWeb.UserConfirmationControllerTest do
           Accounts.deliver_user_confirmation_instructions(user, url)
         end)
 
-      conn = post(conn, ~p"/users/confirm/#{token}")
-      assert redirected_to(conn) == "/"
+      conn = get(conn, ~p"/users/confirm/#{token}")
+      assert redirected_to(conn) == ~p"/users/log_in"
       assert Phoenix.Flash.get(conn.assigns.flash, :info) =~ "User confirmed successfully"
       assert Accounts.get_user!(user.id).confirmed_at
       refute get_session(conn, :user_token)
 
       assert from(ut in Accounts.UserToken,
-               where: ut.context == "confirm"
+               where: ut.context == "confirm" and ut.user_id == ^user.id
              )
              |> Repo.all() == []
 
       # When not logged in
-      conn = post(conn, ~p"/users/confirm/#{token}")
+      conn = get(conn, ~p"/users/confirm/#{token}")
       assert redirected_to(conn) == "/"
 
       assert Phoenix.Flash.get(conn.assigns.flash, :error) =~
@@ -80,14 +80,14 @@ defmodule ClaperWeb.UserConfirmationControllerTest do
       conn =
         build_conn()
         |> log_in_user(user)
-        |> post(~p"/users/confirm/#{token}")
+        |> get(~p"/users/confirm/#{token}")
 
-      assert redirected_to(conn) == "/"
+      assert redirected_to(conn) == "/events"
       refute Phoenix.Flash.get(conn.assigns.flash, :error)
     end
 
     test "does not confirm email with invalid token", %{conn: conn, user: user} do
-      conn = post(conn, ~p"/users/confirm/#{"oops"}")
+      conn = get(conn, ~p"/users/confirm/#{"oops"}")
       assert redirected_to(conn) == "/"
 
       assert Phoenix.Flash.get(conn.assigns.flash, :error) =~

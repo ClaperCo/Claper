@@ -34,4 +34,26 @@ defmodule ClaperWeb.Notifiers.UserNotifier do
     |> subject(gettext("Update email instructions"))
     |> render_body("change.html", %{user: user, url: url})
   end
+
+  def confirm(user, url) do
+    new()
+    |> to(user.email)
+    |> from(
+      {Application.get_env(:claper, :mail) |> Keyword.get(:from_name),
+       Application.get_env(:claper, :mail) |> Keyword.get(:from)}
+    )
+    |> subject(gettext("Confirmation instructions"))
+    |> render_body("confirm.html", %{user: user, url: url})
+  end
+
+  def reset(user, url) do
+    new()
+    |> to(user.email)
+    |> from(
+      {Application.get_env(:claper, :mail) |> Keyword.get(:from_name),
+       Application.get_env(:claper, :mail) |> Keyword.get(:from)}
+    )
+    |> subject(gettext("Reset password instructions"))
+    |> render_body("reset.html", %{user: user, url: url})
+  end
 end

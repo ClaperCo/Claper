@@ -12,10 +12,12 @@ import airdatepickerLocaleFr from "air-datepicker/locale/fr";
 import airdatepickerLocaleDe from "air-datepicker/locale/de";
 import airdatepickerLocaleEs from "air-datepicker/locale/es";
 import airdatepickerLocaleNl from "air-datepicker/locale/nl";
+import airdatepickerLocaleIt from "air-datepicker/locale/it";
 import "moment/locale/de";
 import "moment/locale/fr";
 import "moment/locale/es";
 import "moment/locale/nl";
+import "moment/locale/it";
 import QRCodeStyling from "qr-code-styling";
 import { Presenter } from "./presenter";
 import { Manager } from "./manager";
@@ -23,7 +25,7 @@ import Split from "split-grid";
 import { TourGuideClient } from "@sjmc11/tourguidejs/src/Tour";
 window.moment = moment;
 
-const supportedLocales = ["en", "fr", "de", "es", "nl"];
+const supportedLocales = ["en", "fr", "de", "es", "nl", "it"];
 
 var locale =
   document.querySelector("html").getAttribute("lang") ||
@@ -44,6 +46,7 @@ let airdatepickerLocale = {
   de: airdatepickerLocaleDe,
   es: airdatepickerLocaleEs,
   nl: airdatepickerLocaleNl,
+  it: airdatepickerLocaleIt,
 };
 let csrfToken = document
   .querySelector("meta[name='csrf-token']")
@@ -169,18 +172,27 @@ Hooks.Scroll = {
 
 Hooks.ScrollIntoDiv = {
   mounted() {
-    this.scrollElement(true);
-    this.handleEvent("scroll", this.scrollElement.bind(this));
+    let useParent = this.el.dataset.useParent === "true";
+    this.scrollElement = this.el.dataset.useParent === "true" ? this.el.parentElement : this.el;
+    this.checkIfAtBottom();
+    this.scrollToBottom(true);
+    this.handleEvent("scroll", () => this.scrollToBottom());
+    this.scrollElement.addEventListener("scroll", () => this.checkIfAtBottom());
   },
-  scrollElement(firstScroll) {
-    let t = this.el.parentElement;
-    if (
-      firstScroll === true ||
-      t.scrollHeight - t.scrollTop - t.clientHeight <= 100
-    ) {
-      t.scrollTo({ top: t.scrollHeight, behavior: "smooth" });
+  checkIfAtBottom() {
+    this.isAtBottom = this.scrollElement.scrollHeight - this.scrollElement.scrollTop - this.scrollElement.clientHeight <= 30;
+  },
+  scrollToBottom(force = false) {
+    if (force || this.isAtBottom) {
+      this.scrollElement.scrollTo({ top: this.scrollElement.scrollHeight, behavior: "smooth" });
     }
   },
+  updated() {
+    this.scrollToBottom();
+  },
+  destroyed() {
+    this.scrollElement.removeEventListener("scroll", () => this.checkIfAtBottom());
+  }
 };
 
 Hooks.NicknamePicker = {
@@ -191,6 +203,12 @@ Hooks.NicknamePicker = {
     }
 
     this.el.addEventListener("click", (e) => this.clicked(e));
+  },
+  reconnected() {
+    let currentNickname = localStorage.getItem("nickname") || "";
+    if (currentNickname.length > 0) {
+      this.pushEvent("set-nickname", { nickname: currentNickname });
+    }
   },
   destroyed() {
     this.el.removeEventListener("click", (e) => this.clicked(e));
@@ -362,18 +380,37 @@ Hooks.OpenPresenter = {
   },
 };
 Hooks.GlobalReacts = {
+  svgCache: {},
+
   mounted() {
+    this.preloadSVGs();
     this.handleEvent("global-react", (data) => {
-      var img = document.createElement("img");
-      img.src = "/images/icons/" + data.type + ".svg";
-      img.className =
-        "react-animation absolute transform opacity-0" + this.el.className;
-      this.el.appendChild(img);
+      const svgContent = this.svgCache[data.type];
+      if (svgContent) {
+        const container = document.createElement("div");
+        container.innerHTML = svgContent;
+        const svgElement = container.firstChild;
+        svgElement.classList.add("react-animation", "absolute", "transform", "opacity-0");
+        svgElement.classList.add(...this.el.className.split(" "));
+        this.el.appendChild(svgElement);
+      }
     });
     this.handleEvent("reset-global-react", (data) => {
       this.el.innerHTML = "";
     });
   },
+
+  preloadSVGs() {
+    const svgTypes = ["heart", "hundred", "clap", "raisehand"];
+    svgTypes.forEach(type => {
+      fetch(`/images/icons/${type}.svg`)
+        .then(response => response.text())
+        .then(svgContent => {
+          this.svgCache[type] = svgContent;
+        })
+        .catch(error => console.error(`Error loading SVG for ${type}:`, error));
+    });
+  }
 };
 Hooks.JoinEvent = {
   mounted() {
@@ -461,10 +498,10 @@ Hooks.QRCode = {
         },
         dotsOptions: {
           type: "square",
-          color: "#ffffff",
+          color: "#000000",
         },
         backgroundOptions: {
-          color: "#000000",
+          color: "#ffffff",
         },
         imageOptions: {
           crossOrigin: "anonymous",
@@ -565,16 +602,6 @@ window.addEventListener("phx:page-loading-stop", (info) => {
   topbar.hide();
 });
 
-const renderOnlineUsers = function (presences) {
-  let onlineUsers = Presence.list(
-    presences,
-    (_id, { metas: [user, ...rest] }) => {
-      return onlineUserTemplate(user);
-    }
-  ).join("");
-
-  document.querySelector("body").innerHTML = onlineUsers;
-};
 
 const onlineUserTemplate = function (user) {
   return `
@@ -587,7 +614,6 @@ const onlineUserTemplate = function (user) {
 let presences = {};
 liveSocket.on("presence_state", (state) => {
   presences = Presence.syncState(presences, state);
-  renderOnlineUsers(presences);
 });
 
 // connect if there are any LiveViews on the page

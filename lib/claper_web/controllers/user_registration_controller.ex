@@ -23,15 +23,20 @@ defmodule ClaperWeb.UserRegistrationController do
   def create(conn, %{"user" => user_params}) do
     case Accounts.register_user(user_params) do
       {:ok, user} ->
-        # {:ok, _} =
-        #  Accounts.deliver_user_confirmation_instructions(
-        #    user,
-        #    &url(~p"/users/confirm/#{&1}")
-        #  )
+        if Application.get_env(:claper, :email_confirmation) do
+          {:ok, _} =
+            Accounts.deliver_user_confirmation_instructions(
+              user,
+              &url(~p"/users/confirm/#{&1}")
+            )
 
-        conn
-        |> put_flash(:info, "User created successfully.")
-        |> UserAuth.log_in_user(user)
+          conn
+          |> redirect(to: ~p"/users/register/confirm")
+        else
+          conn
+          |> put_flash(:info, "User created successfully.")
+          |> UserAuth.log_in_user(user)
+        end
 
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "new.html", changeset: changeset)

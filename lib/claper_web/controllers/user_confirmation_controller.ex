@@ -32,7 +32,7 @@ defmodule ClaperWeb.UserConfirmationController do
       {:ok, _} ->
         conn
         |> put_flash(:info, "User confirmed successfully.")
-        |> redirect(to: "/")
+        |> redirect(to: ~p"/users/log_in")
 
       :error ->
         # If there is a current user and the account was already confirmed,
@@ -41,12 +41,12 @@ defmodule ClaperWeb.UserConfirmationController do
         # a warning message.
         case conn.assigns do
           %{current_user: %{confirmed_at: confirmed_at}} when not is_nil(confirmed_at) ->
-            redirect(conn, to: "/")
+            redirect(conn, to: ~p"/users/log_in")
 
           %{} ->
             conn
             |> put_flash(:error, "User confirmation link is invalid or it has expired.")
-            |> redirect(to: "/")
+            |> redirect(to: ~p"/")
         end
     end
   end

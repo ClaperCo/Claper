@@ -1,3 +1,23 @@
+## v2.2.0
+
+### Features
+
+- Add duplicate feature on finished events
+- Add italian translation (thanks to @loviuz and @albanobattistella)
+- Add EMAIL_CONFIRMATION environment variable to disable or enable email confirmation after registration
+
+### Fixes and improvements
+
+- Improve performance of global reactions
+- Change QR Code background color to white
+- Improve auto scroll of messages on the manager
+- Fix pinning of questions
+- Fix name picker being empty during a reconnect
+- Change wording for more options dropdown and access
+- Fix dropdown position to be on the front of other elements
+- Owner and facilitators of the event can now join the attendee room before the event starts
+- Fix email templates
+
 ## v2.1.1
 
 ### Fixes and improvements

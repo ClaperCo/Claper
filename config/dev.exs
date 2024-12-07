@@ -35,7 +35,8 @@ config :claper, ClaperWeb.Endpoint,
       ~r"priv/static/[^uploads].*(js|css|png|jpeg|jpg|gif|svg)$",
       ~r"priv/gettext/.*(po)$",
       ~r"lib/claper_web/(live|views)/.*(ex)$",
-      ~r"lib/claper_web/templates/.*(eex)$"
+      ~r"lib/claper_web/templates/.*(eex)$",
+      ~r"assets/.*\.(js|css)$"
     ]
   ]
 
