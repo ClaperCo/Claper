@@ -2,7 +2,7 @@ defmodule ClaperWeb.EventLive.Show do
   alias Claper.Interactions
   use ClaperWeb, :live_view
 
-  alias Claper.{Posts, Polls, Forms}
+  alias Claper.{Posts, Polls, Forms, Quizzes, Stats}
   alias ClaperWeb.Presence
 
   on_mount(ClaperWeb.AttendeeLiveAuth)
@@ -63,13 +63,13 @@ defmodule ClaperWeb.EventLive.Show do
         socket.assigns.attendee_identifier,
         %{}
       )
+
+      online = Presence.list("event:#{event.uuid}") |> Enum.count()
+      update_stats(socket, event)
+      maybe_update_audience_peak(event, online)
     end
 
     post_changeset = Posts.Post.changeset(%Posts.Post{}, %{})
-
-    online = Presence.list("event:#{event.uuid}") |> Enum.count()
-
-    maybe_update_audience_peak(event, online)
 
     posts = list_posts(socket, event.uuid)
 
@@ -77,11 +77,12 @@ defmodule ClaperWeb.EventLive.Show do
       socket
       |> assign(:attendees_nb, 1)
       |> assign(:post_changeset, post_changeset)
-      |> assign(:liked_posts, reacted_posts(socket, event.id, "👍"))
-      |> assign(:loved_posts, reacted_posts(socket, event.id, "❤️"))
-      |> assign(:loled_posts, reacted_posts(socket, event.id, "😂"))
+      |> assign(:like_posts, reacted_posts(socket, event.id, "👍"))
+      |> assign(:love_posts, reacted_posts(socket, event.id, "❤️"))
+      |> assign(:lol_posts, reacted_posts(socket, event.id, "😂"))
       |> assign(:selected_poll_opt, [])
-      |> assign(:poll_opt_saved, false)
+      |> assign(:selected_quiz_question_opts, [])
+      |> assign(:current_quiz_question_idx, 0)
       |> assign(:event, event)
       |> assign(:state, event.presentation_file.presentation_state)
       |> assign(:nickname, "")
@@ -317,6 +318,20 @@ defmodule ClaperWeb.EventLive.Show do
   end
 
   @impl true
+  def handle_info({:quiz_updated, %Claper.Quizzes.Quiz{enabled: true} = quiz}, socket) do
+    {:noreply,
+     socket
+     |> load_current_interaction(quiz, true)}
+  end
+
+  @impl true
+  def handle_info({:quiz_deleted, %Claper.Quizzes.Quiz{enabled: true}}, socket) do
+    {:noreply,
+     socket
+     |> update(:current_interaction, fn _current_interaction -> nil end)}
+  end
+
+  @impl true
   def handle_info({:react, type}, socket) do
     {:noreply,
      socket
@@ -431,9 +446,14 @@ defmodule ClaperWeb.EventLive.Show do
       )
       when is_map(current_user) do
     case type do
-      "👍" -> {:noreply, add_post_like(socket, post_id, %{icon: type, user_id: current_user.id})}
-      "❤️" -> {:noreply, add_post_love(socket, post_id, %{icon: type, user_id: current_user.id})}
-      "😂" -> {:noreply, add_post_lol(socket, post_id, %{icon: type, user_id: current_user.id})}
+      "👍" ->
+        {:noreply, add_reaction(socket, post_id, %{icon: type, user_id: current_user.id}, :like)}
+
+      "❤️" ->
+        {:noreply, add_reaction(socket, post_id, %{icon: type, user_id: current_user.id}, :love)}
+
+      "😂" ->
+        {:noreply, add_reaction(socket, post_id, %{icon: type, user_id: current_user.id}, :lol)}
     end
   end
 
@@ -446,15 +466,30 @@ defmodule ClaperWeb.EventLive.Show do
     case type do
       "👍" ->
         {:noreply,
-         add_post_like(socket, post_id, %{icon: type, attendee_identifier: attendee_identifier})}
+         add_reaction(
+           socket,
+           post_id,
+           %{icon: type, attendee_identifier: attendee_identifier},
+           :like
+         )}
 
       "❤️" ->
         {:noreply,
-         add_post_love(socket, post_id, %{icon: type, attendee_identifier: attendee_identifier})}
+         add_reaction(
+           socket,
+           post_id,
+           %{icon: type, attendee_identifier: attendee_identifier},
+           :love
+         )}
 
       "😂" ->
         {:noreply,
-         add_post_lol(socket, post_id, %{icon: type, attendee_identifier: attendee_identifier})}
+         add_reaction(
+           socket,
+           post_id,
+           %{icon: type, attendee_identifier: attendee_identifier},
+           :lol
+         )}
     end
   end
 
@@ -467,13 +502,16 @@ defmodule ClaperWeb.EventLive.Show do
       when is_map(current_user) do
     case type do
       "👍" ->
-        {:noreply, remove_post_like(socket, post_id, %{icon: type, user_id: current_user.id})}
+        {:noreply,
+         remove_reaction(socket, post_id, %{icon: type, user_id: current_user.id}, :like)}
 
       "❤️" ->
-        {:noreply, remove_post_love(socket, post_id, %{icon: type, user_id: current_user.id})}
+        {:noreply,
+         remove_reaction(socket, post_id, %{icon: type, user_id: current_user.id}, :love)}
 
       "😂" ->
-        {:noreply, remove_post_lol(socket, post_id, %{icon: type, user_id: current_user.id})}
+        {:noreply,
+         remove_reaction(socket, post_id, %{icon: type, user_id: current_user.id}, :lol)}
     end
   end
 
@@ -486,15 +524,30 @@ defmodule ClaperWeb.EventLive.Show do
     case type do
       "👍" ->
         {:noreply,
-         remove_post_like(socket, post_id, %{icon: type, attendee_identifier: attendee_identifier})}
+         remove_reaction(
+           socket,
+           post_id,
+           %{icon: type, attendee_identifier: attendee_identifier},
+           :like
+         )}
 
       "❤️" ->
         {:noreply,
-         remove_post_love(socket, post_id, %{icon: type, attendee_identifier: attendee_identifier})}
+         remove_reaction(
+           socket,
+           post_id,
+           %{icon: type, attendee_identifier: attendee_identifier},
+           :love
+         )}
 
       "😂" ->
         {:noreply,
-         remove_post_lol(socket, post_id, %{icon: type, attendee_identifier: attendee_identifier})}
+         remove_reaction(
+           socket,
+           post_id,
+           %{icon: type, attendee_identifier: attendee_identifier},
+           :lol
+         )}
     end
   end
 
@@ -570,6 +623,108 @@ defmodule ClaperWeb.EventLive.Show do
     end
   end
 
+  @impl true
+  def handle_event(
+        "next-question",
+        _params,
+        %{assigns: %{current_quiz_question_idx: current_quiz_question_idx}} = socket
+      ) do
+    {:noreply, socket |> assign(:current_quiz_question_idx, current_quiz_question_idx + 1)}
+  end
+
+  @impl true
+  def handle_event(
+        "prev-question",
+        _params,
+        %{assigns: %{current_quiz_question_idx: current_quiz_question_idx}} = socket
+      ) do
+    {:noreply, socket |> assign(:current_quiz_question_idx, current_quiz_question_idx - 1)}
+  end
+
+  @impl true
+  def handle_event(
+        "show-quiz-results",
+        _params,
+        socket
+      ) do
+    {:noreply, socket |> assign(:current_quiz_question_idx, 0)}
+  end
+
+  @impl true
+  def handle_event(
+        "select-quiz-question-opt",
+        %{"opt" => opt},
+        socket
+      ) do
+    opt = Integer.parse(opt) |> elem(0)
+
+    current_quiz_question =
+      Enum.at(
+        socket.assigns.current_interaction.quiz_questions,
+        socket.assigns.current_quiz_question_idx
+      )
+
+    quiz_question_opt =
+      Enum.find(current_quiz_question.quiz_question_opts, fn x -> x.id == opt end)
+
+    if Enum.member?(socket.assigns.selected_quiz_question_opts, quiz_question_opt) do
+      {:noreply,
+       socket
+       |> assign(
+         :selected_quiz_question_opts,
+         Enum.filter(socket.assigns.selected_quiz_question_opts, fn x ->
+           x.id != quiz_question_opt.id
+         end)
+       )}
+    else
+      {:noreply,
+       socket
+       |> assign(:selected_quiz_question_opts, [
+         quiz_question_opt | socket.assigns.selected_quiz_question_opts
+       ])}
+    end
+  end
+
+  @impl true
+  def handle_event(
+        "submit-quiz",
+        _params,
+        %{assigns: %{current_user: current_user, selected_quiz_question_opts: opts}} = socket
+      )
+      when is_map(current_user) do
+    case Claper.Quizzes.submit_quiz(
+           current_user.id,
+           opts,
+           socket.assigns.current_interaction.id
+         ) do
+      {:ok, quiz} ->
+        {:noreply,
+         socket
+         |> load_current_interaction(quiz, true)
+         |> assign(:current_quiz_question_idx, socket.assigns.current_quiz_question_idx + 1)}
+    end
+  end
+
+  @impl true
+  def handle_event(
+        "submit-quiz",
+        _params,
+        %{assigns: %{attendee_identifier: attendee_identifier, selected_quiz_question_opts: opts}} =
+          socket
+      ) do
+    case Claper.Quizzes.submit_quiz(
+           attendee_identifier,
+           opts,
+           socket.assigns.current_interaction.id
+         ) do
+      {:ok, quiz} ->
+        {:noreply,
+         socket
+         |> load_current_interaction(quiz, true)
+         |> assign(:current_quiz_question_idx, socket.assigns.current_quiz_question_idx + 1)}
+    end
+  end
+
   def toggle_side_menu(js \\ %JS{}) do
     js
     |> JS.toggle(
@@ -594,51 +749,25 @@ defmodule ClaperWeb.EventLive.Show do
     )
   end
 
-  defp add_post_like(socket, post_id, params) do
+  defp add_reaction(socket, post_id, params, type) do
     with post <- Posts.get_post!(post_id, [:event]),
          {:ok, _} <- Posts.create_reaction(Map.merge(params, %{post: post})) do
-      {:ok, _} = Posts.update_post(post, %{like_count: post.like_count + 1})
-      update(socket, :liked_posts, fn liked_posts -> [post.id | liked_posts] end)
+      count_field = String.to_atom("#{type}_count")
+      posts_field = String.to_atom("#{type}_posts")
+
+      {:ok, _} = Posts.update_post(post, %{count_field => Map.get(post, count_field) + 1})
+      update(socket, posts_field, fn posts -> [post.id | posts] end)
     end
   end
 
-  defp remove_post_like(socket, post_id, params) do
+  defp remove_reaction(socket, post_id, params, type) do
     with post <- Posts.get_post!(post_id, [:event]),
          {:ok, _} <- Posts.delete_reaction(Map.merge(params, %{post: post})) do
-      {:ok, _} = Posts.update_post(post, %{like_count: post.like_count - 1})
-      update(socket, :liked_posts, fn liked_posts -> List.delete(liked_posts, post.id) end)
-    end
-  end
+      count_field = String.to_atom("#{type}_count")
+      posts_field = String.to_atom("#{type}_posts")
 
-  defp add_post_love(socket, post_id, params) do
-    with post <- Posts.get_post!(post_id, [:event]),
-         {:ok, _} <- Posts.create_reaction(Map.merge(params, %{post: post})) do
-      {:ok, _} = Posts.update_post(post, %{love_count: post.love_count + 1})
-      update(socket, :loved_posts, fn loved_posts -> [post.id | loved_posts] end)
-    end
-  end
-
-  defp remove_post_love(socket, post_id, params) do
-    with post <- Posts.get_post!(post_id, [:event]),
-         {:ok, _} <- Posts.delete_reaction(Map.merge(params, %{post: post})) do
-      {:ok, _} = Posts.update_post(post, %{love_count: post.love_count - 1})
-      update(socket, :loved_posts, fn loved_posts -> List.delete(loved_posts, post.id) end)
-    end
-  end
-
-  defp add_post_lol(socket, post_id, params) do
-    with post <- Posts.get_post!(post_id, [:event]),
-         {:ok, _} <- Posts.create_reaction(Map.merge(params, %{post: post})) do
-      {:ok, _} = Posts.update_post(post, %{lol_count: post.lol_count + 1})
-      update(socket, :loled_posts, fn loled_posts -> [post.id | loled_posts] end)
-    end
-  end
-
-  defp remove_post_lol(socket, post_id, params) do
-    with post <- Posts.get_post!(post_id, [:event]),
-         {:ok, _} <- Posts.delete_reaction(Map.merge(params, %{post: post})) do
-      {:ok, _} = Posts.update_post(post, %{lol_count: post.lol_count - 1})
-      update(socket, :loled_posts, fn loled_posts -> List.delete(loled_posts, post.id) end)
+      {:ok, _} = Posts.update_post(post, %{count_field => Map.get(post, count_field) - 1})
+      update(socket, posts_field, fn posts -> List.delete(posts, post.id) end)
     end
   end
 
@@ -669,6 +798,26 @@ defmodule ClaperWeb.EventLive.Show do
        ) do
     fs = Forms.get_form_submit(attendee_identifier, form_id)
     socket |> assign(:current_form_submit, fs)
+  end
+
+  defp get_current_quiz_reponses(%{assigns: %{current_user: current_user}} = socket, quiz_id)
+       when is_map(current_user) do
+    responses = Quizzes.get_quiz_responses(current_user.id, quiz_id)
+
+    socket
+    |> assign(:current_quiz_responses, responses)
+    |> assign(:quiz_score, Quizzes.calculate_user_score(current_user.id, quiz_id))
+  end
+
+  defp get_current_quiz_reponses(
+         %{assigns: %{attendee_identifier: attendee_identifier}} = socket,
+         quiz_id
+       ) do
+    responses = Quizzes.get_quiz_responses(attendee_identifier, quiz_id)
+
+    socket
+    |> assign(:current_quiz_responses, responses)
+    |> assign(:quiz_score, Quizzes.calculate_user_score(attendee_identifier, quiz_id))
   end
 
   defp reacted_posts(
@@ -717,6 +866,22 @@ defmodule ClaperWeb.EventLive.Show do
     socket |> assign(:current_interaction, interaction) |> get_current_form_submit(interaction.id)
   end
 
+  defp load_current_interaction(socket, %Quizzes.Quiz{} = interaction, _same_interaction) do
+    quiz = Quizzes.set_percentages(interaction)
+
+    socket =
+      socket
+      |> assign(:current_interaction, quiz)
+      |> get_current_quiz_reponses(interaction.id)
+
+    if length(socket.assigns.current_quiz_responses) > 0 do
+      socket
+      |> assign(:current_quiz_question_idx, length(interaction.quiz_questions))
+    else
+      socket
+    end
+  end
+
   defp load_current_interaction(socket, interaction, _same_interaction) do
     socket |> assign(:current_interaction, interaction)
   end
@@ -727,5 +892,17 @@ defmodule ClaperWeb.EventLive.Show do
 
   defp maybe_reset_selected_poll_opt(socket, _same_interaction) do
     socket |> assign(:selected_poll_opt, [])
+  end
+
+  defp update_stats(%{assigns: %{current_user: current_user}}, event) when is_map(current_user) do
+    Stats.create_stat(event, %{
+      user_id: current_user.id
+    })
+  end
+
+  defp update_stats(%{assigns: %{attendee_identifier: attendee_identifier}}, event) do
+    Stats.create_stat(event, %{
+      attendee_identifier: attendee_identifier
+    })
   end
 end

@@ -7,7 +7,7 @@ defmodule ClaperWeb.EventLive.PollComponent do
     <div>
       <div
         id="collapsed-poll"
-        class="bg-black py-3 px-6 text-black shadow-lg mx-auto rounded-full w-max hidden"
+        class="bg-gray-900 py-3 px-6 text-black shadow-lg mx-auto rounded-full w-max hidden"
       >
         <div class="block w-full h-full cursor-pointer" phx-click={toggle_poll()} phx-target={@myself}>
           <div class="text-white flex space-x-2 items-center">
@@ -29,7 +29,7 @@ defmodule ClaperWeb.EventLive.PollComponent do
           </div>
         </div>
       </div>
-      <div id="extended-poll" class="bg-black w-full py-3 px-6 text-black shadow-lg rounded-md">
+      <div id="extended-poll" class="bg-gray-900 w-full py-3 px-6 text-black shadow-lg rounded-md">
         <div class="block w-full h-full cursor-pointer" phx-click={toggle_poll()} phx-target={@myself}>
           <div id="poll-pane" class="float-right mt-2">
             <svg
@@ -44,12 +44,12 @@ defmodule ClaperWeb.EventLive.PollComponent do
             </svg>
           </div>
 
-          <p class="text-xs text-gray-500 my-1"><%= gettext("Current poll") %></p>
-          <p class="text-white text-lg font-semibold mb-2"><%= @poll.title %></p>
+          <p class="text-sm text-gray-400 my-1"><%= gettext("Current poll") %></p>
+          <p class="text-white text-xl font-semibold mb-2"><%= @poll.title %></p>
           <%= if @poll.multiple do %>
-            <p class="text-gray-600 text-sm mb-4"><%= gettext("Select one or multiple options") %></p>
+            <p class="text-gray-400 text-sm mb-4"><%= gettext("Select one or multiple options") %></p>
           <% else %>
-            <p class="text-gray-600 text-sm mb-4"><%= gettext("Select one option") %></p>
+            <p class="text-gray-400 text-sm mb-4"><%= gettext("Select one option") %></p>
           <% end %>
         </div>
         <div>
@@ -57,10 +57,10 @@ defmodule ClaperWeb.EventLive.PollComponent do
             <%= if (length @poll.poll_opts) > 0 do %>
               <%= for {opt, idx} <- Enum.with_index(@poll.poll_opts) do %>
                 <%= if (length @current_poll_vote) > 0 do %>
-                  <button class="bg-gray-500 px-3 py-2 rounded-3xl flex justify-between items-center relative text-white">
+                  <button class="bg-gray-500 px-3 py-2 rounded-lg flex justify-between items-center relative text-white">
                     <div
                       style={"width: #{if @show_results, do: opt.percentage, else: 0}%;"}
-                      class={"bg-gradient-to-r from-primary-500 to-secondary-500 h-full absolute left-0 transition-all rounded-l-3xl #{if opt.percentage == "100", do: "rounded-r-3xl"}"}
+                      class={"bg-gradient-to-r from-primary-500 to-secondary-500 h-full absolute left-0 transition-all rounded-l-lg #{if opt.percentage == "100", do: "rounded-r-lg"}"}
                     >
                     </div>
                     <div class="flex space-x-3 items-center z-10 text-left">
@@ -89,11 +89,11 @@ defmodule ClaperWeb.EventLive.PollComponent do
                     id={"poll-opt-#{idx}"}
                     phx-click="select-poll-opt"
                     phx-value-opt={idx}
-                    class="bg-gray-500 px-3 py-2 flex justify-between items-center rounded-3xl relative text-white"
+                    class="bg-gray-500 px-3 py-2 flex justify-between items-center rounded-lg relative text-white"
                   >
                     <div
                       style={"width: #{if @show_results, do: opt.percentage, else: 0}%;"}
-                      class={"bg-gradient-to-r from-primary-500 to-secondary-500 h-full absolute left-0 transition-all rounded-l-3xl #{if opt.percentage == "100", do: "rounded-r-3xl"}"}
+                      class={"bg-gradient-to-r from-primary-500 to-secondary-500 h-full absolute left-0 transition-all rounded-l-lg #{if opt.percentage == "100", do: "rounded-r-lg"}"}
                     >
                     </div>
                     <div class="flex space-x-3 items-center z-10 text-left">
@@ -123,14 +123,14 @@ defmodule ClaperWeb.EventLive.PollComponent do
           </div>
 
           <%= if (length @selected_poll_opt) == 0 || (length @current_poll_vote) > 0 do %>
-            <button class="px-3 py-2 text-white font-semibold bg-gray-500 rounded-md mt-3 mb-4 cursor-default">
+            <button class="px-3 py-2 text-white font-medium bg-gray-500 rounded-md mt-3 mb-4 cursor-default">
               <%= gettext("Vote") %>
             </button>
           <% else %>
             <button
               phx-click="vote"
               phx-disable-with="..."
-              class="px-3 py-2 text-white font-semibold bg-primary-500 hover:bg-primary-600 rounded-md mt-3 mb-4"
+              class="px-3 py-2 text-white font-medium bg-primary-400 hover:bg-primary-500 rounded-md mt-3 mb-4"
             >
               <%= gettext("Vote") %>
             </button>

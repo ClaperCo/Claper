@@ -14,14 +14,10 @@ defmodule Lti13.Tool.Services.AGS do
   alias Lti13.Tool.Services.AGS.LineItem
   alias Lti13.Tool.Services.AccessToken
 
-  require Logger
-
   @doc """
   Post a score to an existing line item, using an already acquired access token.
   """
   def post_score(%Score{} = score, %LineItem{} = line_item, %AccessToken{} = access_token) do
-    Logger.info("Posting score for user #{score.userId} for line item '#{line_item.label}'")
-
     body = score |> Jason.encode!()
 
     case Req.post(
@@ -32,11 +28,7 @@ defmodule Lti13.Tool.Services.AGS do
       {:ok, %Req.Response{status: code, body: body}} when code in [200, 201] ->
         {:ok, body}
 
-      e ->
-        Logger.error(
-          "Error encountered posting score for user #{score.userId} for line item '#{line_item.label}' #{inspect(e)}"
-        )
-
+      _e ->
         {:error, "Error posting score"}
     end
   end
@@ -53,58 +45,53 @@ defmodule Lti13.Tool.Services.AGS do
         label,
         %AccessToken{} = access_token
       ) do
-    Logger.info("fetch_or_create_line_item #{resource_id} #{label}")
-
-    # Grade pass back 2.0 line items endpoint allows a GET request with a query
-    # param filter.  We use that to request only the line item that corresponds
-    # to this particular resource_id.  "resource_id", from grade pass back 2.0
-    # perspective is simply an identifier that the tool uses for a line item and its use
-    # here as a Torus "resource_id" is strictly coincidence.
-
-    prefixed_resource_id = LineItem.to_resource_id(resource_id)
-
-    request_url =
-      build_url_with_params(line_items_service_url, "resource_id=#{prefixed_resource_id}&limit=1")
-
-    Logger.info("fetch_or_create_line_item: URL #{request_url}")
-
     with {:ok, %Req.Response{status: code, body: body}} when code in [200, 201] <-
-           Req.get(request_url, headers: headers(access_token)),
-         {:ok, result} <- Jason.decode(body) do
-      case result do
-        [] ->
-          Logger.info("fetch_or_create_line_item #{resource_id} #{label}")
-
-          create_line_item(
-            line_items_service_url,
-            resource_id,
-            maximum_score_provider.(),
-            label,
-            access_token
-          )
-
-        # it is important to match against a possible array of items, in case an LMS does
-        # not properly support the limit parameter
-        [raw_line_item | _] ->
-          Logger.info(
-            "fetch_or_create_line_item: Retrieved raw line item #{inspect(raw_line_item)} for #{resource_id} #{label}"
-          )
-
-          line_item = to_line_item(raw_line_item)
-
-          if line_item.label != label do
-            update_line_item(line_item, %{label: label}, access_token)
-          else
-            {:ok, line_item}
-          end
-      end
+           Req.get(line_items_service_url, headers: headers(access_token)),
+         result <- if(is_binary(body), do: Jason.decode!(body), else: body) do
+      process_line_items(
+        result,
+        line_items_service_url,
+        resource_id,
+        maximum_score_provider,
+        label,
+        access_token
+      )
     else
-      e ->
-        Logger.error(
-          "Error encountered fetching line item for #{resource_id} #{label}: #{inspect(e)}"
-        )
+      _error -> {:error, "Error retrieving existing line items"}
+    end
+  end
 
-        {:error, "Error retrieving existing line items"}
+  defp process_line_items(
+         [],
+         line_items_service_url,
+         resource_id,
+         maximum_score_provider,
+         label,
+         access_token
+       ) do
+    create_line_item(
+      line_items_service_url,
+      resource_id,
+      maximum_score_provider.(),
+      label,
+      access_token
+    )
+  end
+
+  defp process_line_items(
+         [raw_line_item | _],
+         _url,
+         _resource_id,
+         _score_provider,
+         label,
+         access_token
+       ) do
+    line_item = to_line_item(raw_line_item)
+
+    if line_item.label != label do
+      update_line_item(line_item, %{label: label}, access_token)
+    else
+      {:ok, line_item}
     end
   end
 
@@ -118,21 +105,18 @@ defmodule Lti13.Tool.Services.AGS do
   end
 
   def fetch_line_items(line_items_service_url, %AccessToken{} = access_token) do
-    Logger.info("Fetch line items from #{line_items_service_url}")
-
     # Unfortunately, at least Canvas implements a default limit of 10 line items
     # when one makes a request without a 'limit' parameter specified. Setting it explicitly to 1000
     # bypasses this default limit, of course, and works in all cases until a course more than
     # a thousand grade book entries.
     url = build_url_with_params(line_items_service_url, "limit=1000")
 
-    with {:ok, %Req.Response{status: 200, body: body}} <-
-           Req.get(url, headers: headers(access_token)),
-         {:ok, results} <- Jason.decode(body) do
-      {:ok, Enum.map(results, fn r -> to_line_item(r) end)}
-    else
-      e ->
-        Logger.error("Error encountered fetching line items from #{url} #{inspect(e)}")
+    case Req.get(url, headers: headers(access_token)) do
+      {:ok, %Req.Response{status: 200, body: body}} ->
+        results = if is_binary(body), do: Jason.decode!(body), else: body
+        {:ok, Enum.map(results, fn r -> to_line_item(r) end)}
+
+      _e ->
         {:error, "Error retrieving all line items"}
     end
   end
@@ -148,8 +132,6 @@ defmodule Lti13.Tool.Services.AGS do
         label,
         %AccessToken{} = access_token
       ) do
-    Logger.info("Create line item for #{resource_id} #{label}")
-
     line_item = %LineItem{
       scoreMaximum: score_maximum,
       resourceId: LineItem.to_resource_id(resource_id),
@@ -158,16 +140,12 @@ defmodule Lti13.Tool.Services.AGS do
 
     body = line_item |> Jason.encode!()
 
-    with {:ok, %Req.Response{status: code, body: body}} when code in [200, 201] <-
-           Req.post(line_items_service_url, body: body, headers: headers(access_token)),
-         {:ok, result} <- Jason.decode(body) do
-      {:ok, to_line_item(result)}
-    else
-      e ->
-        Logger.error(
-          "Error encountered creating line item for #{resource_id} #{label}: #{inspect(e)}"
-        )
+    case Req.post(line_items_service_url, body: body, headers: headers(access_token)) do
+      {:ok, %Req.Response{status: code, body: body}} when code in [200, 201] ->
+        result = if is_binary(body), do: Jason.decode!(body), else: body
+        {:ok, to_line_item(result)}
 
+      _ ->
         {:error, "Error creating new line item"}
     end
   end
@@ -177,8 +155,6 @@ defmodule Lti13.Tool.Services.AGS do
   a {:ok, line_item} tuple.  On error, returns a {:error, error} tuple.
   """
   def update_line_item(%LineItem{} = line_item, changes, %AccessToken{} = access_token) do
-    Logger.info("Updating line item #{line_item.id} for changes #{inspect(changes)}")
-
     updated_line_item = %LineItem{
       id: line_item.id,
       scoreMaximum: Map.get(changes, :scoreMaximum, line_item.scoreMaximum),
@@ -192,16 +168,12 @@ defmodule Lti13.Tool.Services.AGS do
     # url to use is the id of the line item
     url = line_item.id
 
-    with {:ok, %Req.Response{status: 200, body: body}} <-
-           Req.put(url, body: body, headers: headers(access_token)),
-         {:ok, result} <- body do
-      {:ok, to_line_item(result)}
-    else
-      e ->
-        Logger.error(
-          "Error encountered updating line item #{line_item.id} for changes #{inspect(changes)}: #{inspect(e)}"
-        )
+    case Req.put(url, body: body, headers: headers(access_token)) do
+      {:ok, %Req.Response{status: 200, body: body}} ->
+        result = if is_binary(body), do: Jason.decode!(body), else: body
+        {:ok, to_line_item(result)}
 
+      _e ->
         {:error, "Error updating existing line item"}
     end
   end

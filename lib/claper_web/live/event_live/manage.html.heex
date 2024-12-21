@@ -6,6 +6,35 @@
   data-max-page={@event.presentation_file.length}
   data-current-page={@state.position}
 >
+  <div id="product-tour-btn" class="hidden absolute bottom-5 right-5 z-30">
+    <button class="close absolute -top-1.5 -right-1.5 bg-red-500 text-white rounded-full">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 20 20"
+        fill="currentColor"
+        class="h-4 w-4"
+      >
+        <path d="M6.28 5.22a.75.75 0 0 0-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 1 0 1.06 1.06L10 11.06l3.72 3.72a.75.75 0 1 0 1.06-1.06L11.06 10l3.72-3.72a.75.75 0 0 0-1.06-1.06L10 8.94 6.28 5.22Z" />
+      </svg>
+    </button>
+
+    <button class="open text-sm text-primary-500 bg-white shadow-md border border-primary-500 rounded-md pl-2 pr-4 py-2 flex items-center justify-center space-x-2">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 20 20"
+        fill="currentColor"
+        class="h-5 w-5"
+      >
+        <path
+          fill-rule="evenodd"
+          d="M18 10a8 8 0 1 1-16 0 8 8 0 0 1 16 0ZM8.94 6.94a.75.75 0 1 1-1.061-1.061 3 3 0 1 1 2.871 5.026v.345a.75.75 0 0 1-1.5 0v-.5c0-.72.57-1.172 1.081-1.287A1.5 1.5 0 1 0 8.94 6.94ZM10 15a1 1 0 1 0 0-2 1 1 0 0 0 0 2Z"
+          clip-rule="evenodd"
+        />
+      </svg>
+
+      <span><%= gettext("How it works ?") %></span>
+    </button>
+  </div>
   <div
     :if={@preview}
     id="preview"
@@ -100,6 +129,7 @@
           create={@create}
           state={@state}
           show_shortcut={false}
+          current_interaction={@current_interaction}
         />
       </div>
     </div>
@@ -234,6 +264,38 @@
                 </div>
               </a>
             </li>
+            <li id="option-4" role="option" tabindex="-1">
+              <a
+                data-phx-link="patch"
+                data-phx-link-state="push"
+                href={~p"/e/#{@event.code}/manage/add/quiz"}
+                class="group flex select-none rounded-xl p-3 w-full hover:bg-gray-200 cursor-pointer"
+              >
+                <div class="flex h-12 w-12 flex-none text-white items-center justify-center rounded-lg bg-gradient-to-br from-primary-500 to-secondary-500">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke-width="1.5"
+                    stroke="currentColor"
+                    class="w-7 h-7"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-
+                      linejoin="round"
+                      d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+                    />
+                  </svg>
+                </div>
+                <div class="ml-4 flex-auto text-left">
+                  <p class="font-medium text-gray-700"><%= gettext("Quiz") %></p>
+                  <p class="text-gray-500">
+                    <%= gettext("Add a quiz to test knowledge.") %>
+                  </p>
+                </div>
+              </a>
+            </li>
           </ul>
         <% end %>
         <%= if @create=="poll" do %>
@@ -298,6 +360,64 @@
             />
           </div>
         <% end %>
+
+        <%= if @create=="quiz" do %>
+          <div class="scroll-py-3 overflow-y-auto bg-gray-100 p-3">
+            <p class="text-xl font-bold">
+              <%= case @create_action do
+                :new -> gettext("New quiz")
+                :edit -> gettext("Edit quiz")
+              end %>
+            </p>
+            <.live_component
+              module={ClaperWeb.QuizLive.QuizComponent}
+              id="quiz-create"
+              event={@event}
+              presentation_file={@event.presentation_file}
+              quiz={@quiz}
+              live_action={@create_action}
+              position={@state.position}
+              return_to={~p"/e/#{@event.code}/manage"}
+            />
+          </div>
+        <% end %>
+
+        <%= if @create == "import" do %>
+          <div class="scroll-py-3 overflow-y-auto bg-gray-100 p-3">
+            <p class="text-xl font-bold">
+              <%= gettext("Select presentation") %>
+            </p>
+            <ul>
+              <%= for event <- @events do %>
+                <li class="my-3">
+                  <button
+                    phx-click="import"
+                    phx-value-event={event.uuid}
+                    class="bg-blue-500 text-white flex gap-x-2 items-center px-2 py-1 rounded-md"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke-width="1.5"
+                      stroke="currentColor"
+                      class="w-5 h-5"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3"
+                      />
+                    </svg>
+                    <span>
+                      <%= event.name %>
+                    </span>
+                  </button>
+                </li>
+              <% end %>
+            </ul>
+          </div>
+        <% end %>
       </div>
     </div>
   </div>
@@ -309,6 +429,7 @@
     data-prev-label={gettext("Back")}
     data-finish-label={gettext("Finish")}
     data-group="manage"
+    data-btn-trigger="#product-tour-btn"
     phx-hook="TourGuide"
   >
     <div class="flex items-center justify-between px-3 py-2 border-b-2 border-gray-200 w-full bg-white">
@@ -350,7 +471,7 @@
                   d="M7 20l4-16m2 16l4-16M6 9h14M4 15h14"
                 />
               </svg>
-              <span><%= @event.code %></span>
+              <span class="uppercase"><%= @event.code %></span>
             </div>
             <div class="flex items-center text-sm text-gray-500 gap-x-1">
               <svg
@@ -367,6 +488,13 @@
               </svg>
               <span id="attendees-count" phx-update="ignore" phx-hook="UpdateAttendees">
                 <%= @attendees_nb %>
+              </span>
+              <span>
+                <%= link(gettext("Join"),
+                  to: ~p"/e/#{@event.code}",
+                  class: "text-xs text-primary-600 font-semibold text-sm ",
+                  target: "_blank"
+                ) %>
               </span>
             </div>
           </div>
@@ -540,7 +668,7 @@
       data-type="row"
       data-gutter=".gutter"
       id="base-layout"
-      class={"#{if @event.presentation_file.length > 0, do: "md:grid grid-rows-[1fr_10px_1fr] overflow-y-auto", else: ""}"}
+      class={"#{if @event.presentation_file.length > 0, do: "md:grid grid-rows-[0.3fr_10px_1fr] overflow-y-auto", else: ""}"}
     >
       <div
         :if={@event.presentation_file.length > 0}
@@ -597,7 +725,7 @@
           <div class="h- overflow-y-auto @container">
             <div
               :if={length(@interactions) == 0}
-              class="text-center flex flex-col space-y-5 items-center justify-center text-gray-400 h-full"
+              class="text-center flex flex-col space-y-5 items-center justify-center text-gray-400 h-full md:pt-8"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -639,57 +767,6 @@
             <div class="grid grid-cols-1 @sm:grid-cols-2 @lg:grid-cols-3 gap-4 p-4 overflow-y-auto">
               <%= for interaction <- @interactions do %>
                 <div class="bg-white rounded-lg p-3 shadow-base transition-all flex flex-col justify-between relative">
-                  <div
-                    phx-hook="Dropdown"
-                    id={"poll-settings-#{interaction.id}"}
-                    class="hidden bg-white z-20 absolute text-sm w-full h-full top-0 left-0 p-3 rounded-lg overflow-y-auto"
-                  >
-                    <ul class="flex flex-col gap-y-2">
-                      <li>
-                        <button
-                          phx-click="checked"
-                          phx-value-key="poll_visible"
-                          value={"#{!@state.poll_visible}"}
-                          class="py-2 px-2 rounded text-gray-600 bg-gray-100 hover:bg-gray-200 flex justify-center items-center w-full gap-x-3"
-                        >
-                          <svg
-                            :if={@state.poll_visible}
-                            xmlns="http://www.w3.org/2000/svg"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            stroke-width="2"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            class="h-6 w-6"
-                          >
-                            <path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M3 4h1m4 0h13" /><path d="M4 4v10a2 2 0 0 0 2 2h10m3.42 -.592c.359 -.362 .58 -.859 .58 -1.408v-10" /><path d="M12 16v4" /><path d="M9 20h6" /><path d="M8 12l2 -2m4 0l2 -2" /><path d="M3 3l18 18" />
-                          </svg>
-
-                          <svg
-                            :if={!@state.poll_visible}
-                            xmlns="http://www.w3.org/2000/svg"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            stroke-width="2"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            class="h-6 w-6"
-                          >
-                            <path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M3 4l18 0" /><path d="M4 4v10a2 2 0 0 0 2 2h12a2 2 0 0 0 2 -2v-10" /><path d="M12 16l0 4" /><path d="M9 20l6 0" /><path d="M8 12l3 -3l2 2l3 -3" />
-                          </svg>
-
-                          <span :if={@state.poll_visible}>
-                            <%= gettext("Hide on presentation") %>
-                          </span>
-                          <span :if={!@state.poll_visible}>
-                            <%= gettext("Show on presentation") %>
-                          </span>
-                        </button>
-                      </li>
-                    </ul>
-                  </div>
                   <div>
                     <%= case interaction do %>
                       <% %Claper.Polls.Poll{} -> %>
@@ -806,21 +883,72 @@
                             class="p-2 rounded text-xs font-medium text-center text-primary-500"
                             data-phx-link="patch"
                             data-phx-link-state="push"
-                            href={
-                              case interaction do
-                                %Claper.Polls.Poll{} ->
-                                  ~p"/e/#{@event.code}/manage/edit/poll/#{interaction.id}"
+                            href={~p"/e/#{@event.code}/manage/edit/embed/#{interaction.id}"}
+                          >
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              class="h-5 w-5"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              stroke="currentColor"
+                              stroke-width="2"
+                            >
+                              <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+                              />
+                            </svg>
+                          </a>
+                        </div>
+                      <% %Claper.Quizzes.Quiz{} -> %>
+                        <div class="flex items-center justify-between mb-2">
+                          <div class="flex items-center w-full">
+                            <div class="flex h-8 w-8 flex-none text-white items-center justify-center rounded-lg bg-gradient-to-br from-primary-500 to-secondary-500 mr-2">
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke-width="2"
+                                stroke="currentColor"
+                                class="w-5 h-5"
+                              >
+                                <path
+                                  stroke-linecap="round"
+                                  stroke-
+                                  linejoin="round"
+                                  d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+                                />
+                              </svg>
+                            </div>
+                            <span class="font-semibold">
+                              <%= gettext("Quiz") %>
+                            </span>
+                            <p
+                              :if={interaction.lti_resource_id}
+                              class="text-xs text-white rounded-md px-1 py-0.5 bg-gray-500 mx-2 flex items-center space-x-1"
+                            >
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                viewBox="0 0 20 20"
+                                fill="currentColor"
+                                class="h-3 w-3"
+                              >
+                                <path
+                                  fill-rule="evenodd"
+                                  d="M9.664 1.319a.75.75 0 0 1 .672 0 41.059 41.059 0 0 1 8.198 5.424.75.75 0 0 1-.254 1.285 31.372 31.372 0 0 0-7.86 3.83.75.75 0 0 1-.84 0 31.508 31.508 0 0 0-2.08-1.287V9.394c0-.244.116-.463.302-.592a35.504 35.504 0 0 1 3.305-2.033.75.75 0 0 0-.714-1.319 37 37 0 0 0-3.446 2.12A2.216 2.216 0 0 0 6 9.393v.38a31.293 31.293 0 0 0-4.28-1.746.75.75 0 0 1-.254-1.285 41.059 41.059 0 0 1 8.198-5.424ZM6 11.459a29.848 29.848 0 0 0-2.455-1.158 41.029 41.029 0 0 0-.39 3.114.75.75 0 0 0 .419.74c.528.256 1.046.53 1.554.82-.21.324-.455.63-.739.914a.75.75 0 1 0 1.06 1.06c.37-.369.69-.77.96-1.193a26.61 26.61 0 0 1 3.095 2.348.75.75 0 0 0 .992 0 26.547 26.547 0 0 1 5.93-3.95.75.75 0 0 0 .42-.739 41.053 41.053 0 0 0-.39-3.114 29.925 29.925 0 0 0-5.199 2.801 2.25 2.25 0 0 1-2.514 0c-.41-.275-.826-.541-1.25-.797a6.985 6.985 0 0 1-1.084 3.45 26.503 26.503 0 0 0-1.281-.78A5.487 5.487 0 0 0 6 12v-.54Z"
+                                  clip-rule="evenodd"
+                                />
+                              </svg>
 
-                                %Claper.Forms.Form{} ->
-                                  ~p"/e/#{@event.code}/manage/edit/form/#{interaction.id}"
-
-                                %Claper.Embeds.Embed{} ->
-                                  ~p"/e/#{@event.code}/manage/edit/embed/#{interaction.id}"
-
-                                _ ->
-                                  "#"
-                              end
-                            }
+                              <span>LTI AGS</span>
+                            </p>
+                          </div>
+                          <a
+                            class="p-2 rounded text-xs font-medium text-center text-primary-500"
+                            data-phx-link="patch"
+                            data-phx-link-state="push"
+                            href={~p"/e/#{@event.code}/manage/edit/quiz/#{interaction.id}"}
                           >
                             <svg
                               xmlns="http://www.w3.org/2000/svg"
@@ -968,6 +1096,7 @@
                               %Claper.Polls.Poll{} -> "poll-set-inactive"
                               %Claper.Forms.Form{} -> "form-set-inactive"
                               %Claper.Embeds.Embed{} -> "embed-set-inactive"
+                              %Claper.Quizzes.Quiz{} -> "quiz-set-inactive"
                               _ -> ""
                             end
                           }
@@ -976,34 +1105,6 @@
                         >
                           <%= gettext("Disable") %>
                         </button>
-                        <div
-                          :if={
-                            case interaction do
-                              %Claper.Polls.Poll{} -> true
-                              _ -> false
-                            end
-                          }
-                          class="w-full flex-1 relative"
-                        >
-                          <button
-                            phx-click-away={JS.hide(to: "#poll-settings-#{interaction.id}")}
-                            phx-click={JS.toggle(to: "#poll-settings-#{interaction.id}")}
-                            class="bg-gray-100 text-gray-800 px-2 py-2 rounded text-sm font-medium relative"
-                          >
-                            <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              viewBox="0 0 24 24"
-                              fill="currentColor"
-                              class="h-5 w-5"
-                            >
-                              <path
-                                fill-rule="evenodd"
-                                d="M11.078 2.25c-.917 0-1.699.663-1.85 1.567L9.05 4.889c-.02.12-.115.26-.297.348a7.493 7.493 0 0 0-.986.57c-.166.115-.334.126-.45.083L6.3 5.508a1.875 1.875 0 0 0-2.282.819l-.922 1.597a1.875 1.875 0 0 0 .432 2.385l.84.692c.095.078.17.229.154.43a7.598 7.598 0 0 0 0 1.139c.015.2-.059.352-.153.43l-.841.692a1.875 1.875 0 0 0-.432 2.385l.922 1.597a1.875 1.875 0 0 0 2.282.818l1.019-.382c.115-.043.283-.031.45.082.312.214.641.405.985.57.182.088.277.228.297.35l.178 1.071c.151.904.933 1.567 1.85 1.567h1.844c.916 0 1.699-.663 1.85-1.567l.178-1.072c.02-.12.114-.26.297-.349.344-.165.673-.356.985-.57.167-.114.335-.125.45-.082l1.02.382a1.875 1.875 0 0 0 2.28-.819l.923-1.597a1.875 1.875 0 0 0-.432-2.385l-.84-.692c-.095-.078-.17-.229-.154-.43a7.614 7.614 0 0 0 0-1.139c-.016-.2.059-.352.153-.43l.84-.692c.708-.582.891-1.59.433-2.385l-.922-1.597a1.875 1.875 0 0 0-2.282-.818l-1.02.382c-.114.043-.282.031-.449-.083a7.49 7.49 0 0 0-.985-.57c-.183-.087-.277-.227-.297-.348l-.179-1.072a1.875 1.875 0 0 0-1.85-1.567h-1.843ZM12 15.75a3.75 3.75 0 1 0 0-7.5 3.75 3.75 0 0 0 0 7.5Z"
-                                clip-rule="evenodd"
-                              />
-                            </svg>
-                          </button>
-                        </div>
                       </div>
                     <% else %>
                       <button
@@ -1012,6 +1113,7 @@
                             %Claper.Polls.Poll{} -> "poll-set-active"
                             %Claper.Forms.Form{} -> "form-set-active"
                             %Claper.Embeds.Embed{} -> "embed-set-active"
+                            %Claper.Quizzes.Quiz{} -> "quiz-set-active"
                             _ -> ""
                           end
                         }
@@ -1051,7 +1153,7 @@
           phx-hook="Split"
           data-gutter=".gutter-2"
           data-type="row"
-          class="md:grid grid-rows-[1fr_10px_1fr] overflow-y-auto"
+          class="md:grid grid-rows-[0.5fr_10px_1fr] overflow-y-auto"
         >
           <div
             class="bg-gray-200 border-2 overflow-auto relative grid grid-rows-[auto_1fr] h-full w-full"
@@ -1356,17 +1458,22 @@
           </div>
 
           <div
-            class="hidden md:block px-5 py-3 z-20 bg-white @container"
+            class="hidden md:block z-20 bg-white @container"
             data-tg-title={"#{gettext("Settings")}"}
             data-tg-order="3"
             data-tg-tour={"<p class='mb-3'>#{gettext("You can control each setting for the presentation (showing on the big screen) and on the attendee's room.")}</p><p class='opacity-50 text-xs'>#{gettext("Use the associated keyboard shortcuts for quick toggling of these settings.")}</p>"}
             data-tg-group="manage"
           >
+            <div class="w-full h-12 bg-gray-100 font-semibold text-xl flex items-center justify-center">
+              <%= gettext("Settings") %>
+            </div>
+
             <.live_component
               id="settings-pane"
               module={ClaperWeb.EventLive.ManagerSettingsComponent}
               create={@create}
               state={@state}
+              current_interaction={@current_interaction}
             />
           </div>
         </div>

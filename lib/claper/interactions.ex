@@ -4,7 +4,7 @@ defmodule Claper.Interactions do
   alias Claper.Embeds
   alias Claper.Events
   alias Claper.Presentations
-
+  alias Claper.Quizzes
   import Ecto.Query, warn: false
 
   @type interaction :: Polls.Poll | Forms.Form | Embeds.Embed
@@ -29,6 +29,13 @@ defmodule Claper.Interactions do
       )
       |> Claper.Repo.one()
     )
+    |> Kernel.+(
+      from(q in Quizzes.Quiz,
+        where: q.presentation_file_id == ^presentation_file_id,
+        select: count(q.id)
+      )
+      |> Claper.Repo.one()
+    )
   end
 
   def get_active_interaction(event, position) do
@@ -46,9 +53,10 @@ defmodule Claper.Interactions do
       ) do
     with polls <- Polls.list_polls_at_position(presentation_file_id, position),
          forms <- Forms.list_forms_at_position(presentation_file_id, position),
-         embeds <- Embeds.list_embeds_at_position(presentation_file_id, position) do
+         embeds <- Embeds.list_embeds_at_position(presentation_file_id, position),
+         quizzes <- Quizzes.list_quizzes_at_position(presentation_file_id, position) do
       interactions =
-        (polls ++ forms ++ embeds)
+        (polls ++ forms ++ embeds ++ quizzes)
         |> Enum.sort_by(& &1.inserted_at, {:asc, NaiveDateTime})
 
       if broadcast do
@@ -79,6 +87,10 @@ defmodule Claper.Interactions do
       {count, _} = Embeds.disable_all(interaction.presentation_file_id, interaction.position)
       {:ok, count}
     end)
+    |> Ecto.Multi.run(:disable_quizzes, fn _repo, _ ->
+      {count, _} = Quizzes.disable_all(interaction.presentation_file_id, interaction.position)
+      {:ok, count}
+    end)
     |> Ecto.Multi.run(:enable_interaction, fn _repo, _ ->
       set_enabled(interaction)
     end)
@@ -101,6 +113,10 @@ defmodule Claper.Interactions do
     Embeds.set_enabled(interaction.id)
   end
 
+  defp set_enabled(%Quizzes.Quiz{} = interaction) do
+    Quizzes.set_enabled(interaction.id)
+  end
+
   def disable_interaction(%Polls.Poll{} = interaction) do
     Polls.set_disabled(interaction.id)
   end
@@ -111,5 +127,9 @@ defmodule Claper.Interactions do
 
   def disable_interaction(%Embeds.Embed{} = interaction) do
     Embeds.set_disabled(interaction.id)
+  end
+
+  def disable_interaction(%Quizzes.Quiz{} = interaction) do
+    Quizzes.set_disabled(interaction.id)
   end
 end

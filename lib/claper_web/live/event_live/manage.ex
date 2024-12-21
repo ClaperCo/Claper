@@ -5,6 +5,8 @@ defmodule ClaperWeb.EventLive.Manage do
   alias Claper.Polls
   alias Claper.Forms
   alias Claper.Embeds
+  # Add this line
+  alias Claper.Quizzes
 
   @impl true
   def mount(%{"code" => code}, session, socket) do
@@ -15,6 +17,7 @@ defmodule ClaperWeb.EventLive.Manage do
     event =
       Claper.Events.get_event_with_code(code, [
         :user,
+        :lti_resource,
         presentation_file: [:polls, :presentation_state]
       ])
 
@@ -27,13 +30,6 @@ defmodule ClaperWeb.EventLive.Manage do
       if connected?(socket) do
         Claper.Events.Event.subscribe(event.uuid)
         Claper.Presentations.subscribe(event.presentation_file.id)
-
-        Presence.track(
-          self(),
-          "event:#{event.uuid}",
-          socket.assigns.current_user.id,
-          %{}
-        )
       end
 
       posts = list_all_posts(socket, event.uuid)
@@ -235,6 +231,13 @@ defmodule ClaperWeb.EventLive.Manage do
   end
 
   @impl true
+  def handle_info({:quiz_updated, quiz}, socket) do
+    {:noreply,
+     socket
+     |> interactions_at_position(quiz.position)}
+  end
+
+  @impl true
   def handle_info({:poll_deleted, poll}, socket) do
     {:noreply,
      socket
@@ -253,6 +256,13 @@ defmodule ClaperWeb.EventLive.Manage do
     {:noreply,
      socket
      |> interactions_at_position(form.position)}
+  end
+
+  @impl true
+  def handle_info({:quiz_deleted, quiz}, socket) do
+    {:noreply,
+     socket
+     |> interactions_at_position(quiz.position)}
   end
 
   @impl true
@@ -392,6 +402,39 @@ defmodule ClaperWeb.EventLive.Manage do
   def handle_event("embed-set-inactive", %{"id" => id}, socket) do
     with embed <- Embeds.get_embed!(id),
          {:ok, _} <- Claper.Interactions.disable_interaction(embed) do
+      Phoenix.PubSub.broadcast(
+        Claper.PubSub,
+        "event:#{socket.assigns.event.uuid}",
+        {:current_interaction, nil}
+      )
+    end
+
+    {:noreply,
+     socket
+     |> assign(:current_interaction, nil)
+     |> interactions_at_position(socket.assigns.state.position)}
+  end
+
+  @impl true
+  def handle_event("quiz-set-active", %{"id" => id}, socket) do
+    with quiz <- Quizzes.get_quiz!(id, [:quiz_questions, quiz_questions: :quiz_question_opts]),
+         :ok <- Claper.Interactions.enable_interaction(quiz) do
+      Phoenix.PubSub.broadcast(
+        Claper.PubSub,
+        "event:#{socket.assigns.event.uuid}",
+        {:current_interaction, quiz}
+      )
+
+      {:noreply,
+       socket
+       |> assign(:current_interaction, quiz)
+       |> interactions_at_position(socket.assigns.state.position)}
+    end
+  end
+
+  def handle_event("quiz-set-inactive", %{"id" => id}, socket) do
+    with quiz <- Quizzes.get_quiz!(id),
+         {:ok, _} <- Claper.Interactions.disable_interaction(quiz) do
       Phoenix.PubSub.broadcast(
         Claper.PubSub,
         "event:#{socket.assigns.event.uuid}",
@@ -553,6 +596,57 @@ defmodule ClaperWeb.EventLive.Manage do
   end
 
   @impl true
+  def handle_event(
+        "checked",
+        %{"key" => "quiz_show_results", "value" => value},
+        %{assigns: %{current_interaction: interaction}} = socket
+      ) do
+    {:ok, new_interaction} =
+      Claper.Quizzes.update_quiz(
+        socket.assigns.event.uuid,
+        interaction,
+        %{
+          :show_results => value
+        }
+      )
+
+    {:noreply, socket |> assign(:current_interaction, new_interaction)}
+  end
+
+  @impl true
+  def handle_event("checked", %{"key" => "review_quiz_questions"}, socket) do
+    Phoenix.PubSub.broadcast(
+      Claper.PubSub,
+      "event:#{socket.assigns.event.uuid}",
+      {:review_quiz_questions}
+    )
+
+    {:noreply, socket}
+  end
+
+  @impl true
+  def handle_event("checked", %{"key" => "next_quiz_question"}, socket) do
+    Phoenix.PubSub.broadcast(
+      Claper.PubSub,
+      "event:#{socket.assigns.event.uuid}",
+      {:next_quiz_question}
+    )
+
+    {:noreply, socket}
+  end
+
+  @impl true
+  def handle_event("checked", %{"key" => "prev_quiz_question"}, socket) do
+    Phoenix.PubSub.broadcast(
+      Claper.PubSub,
+      "event:#{socket.assigns.event.uuid}",
+      {:prev_quiz_question}
+    )
+
+    {:noreply, socket}
+  end
+
+  @impl true
   def handle_event("delete", %{"id" => id}, socket) do
     post = Claper.Posts.get_post!(id, [:event])
     {:ok, _} = Claper.Posts.delete_post(post)
@@ -648,6 +742,14 @@ defmodule ClaperWeb.EventLive.Manage do
   end
 
   @impl true
+  def handle_event("delete-quiz", %{"id" => id}, socket) do
+    quiz = Quizzes.get_quiz!(id)
+    {:ok, _} = Quizzes.delete_quiz(socket.assigns.event.uuid, quiz)
+
+    {:noreply, socket}
+  end
+
+  @impl true
   def handle_event("toggle-preview", _params, %{assigns: %{preview: preview}} = socket) do
     {:noreply, socket |> assign(:preview, !preview)}
   end
@@ -736,6 +838,36 @@ defmodule ClaperWeb.EventLive.Manage do
     |> assign(:create, "embed")
     |> assign(:create_action, :edit)
     |> assign(:embed, embed)
+  end
+
+  defp apply_action(socket, :add_quiz, _params) do
+    socket
+    |> assign(:create, "quiz")
+    |> assign(:quiz, %Quizzes.Quiz{
+      presentation_file_id: socket.assigns.event.presentation_file.id,
+      quiz_questions: [
+        %Quizzes.QuizQuestion{
+          id: 0,
+          quiz_question_opts: [
+            %Quizzes.QuizQuestionOpt{
+              id: 0
+            },
+            %Quizzes.QuizQuestionOpt{
+              id: 1
+            }
+          ]
+        }
+      ]
+    })
+  end
+
+  defp apply_action(socket, :edit_quiz, %{"id" => id}) do
+    quiz = Quizzes.get_quiz!(id, [:quiz_questions, quiz_questions: :quiz_question_opts])
+
+    socket
+    |> assign(:create, "quiz")
+    |> assign(:create_action, :edit)
+    |> assign(:quiz, quiz)
   end
 
   defp pin(post, socket) do

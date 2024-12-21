@@ -20,6 +20,15 @@ config :claper, ClaperWeb.Gettext,
   default_locale: "en",
   locales: ~w(fr en de es nl)
 
+config :claper, Oban,
+  engine: Oban.Engines.Basic,
+  queues: [default: 10, mailers: 20],
+  repo: Claper.Repo,
+  plugins: [
+    {Oban.Plugins.Pruner, max_age: 60 * 60 * 24 * 7},
+    {Oban.Plugins.Lifeline, rescue_after: :timer.minutes(30)}
+  ]
+
 config :dart_sass,
   version: "1.61.0",
   default: [

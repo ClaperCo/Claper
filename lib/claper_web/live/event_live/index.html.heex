@@ -1,4 +1,33 @@
 <div class="mx-3 md:max-w-3xl lg:max-w-5xl md:mx-auto">
+  <div id="product-tour-btn" class="hidden absolute bottom-5 right-5 z-30">
+    <button class="close absolute -top-1.5 -right-1.5 bg-red-500 text-white rounded-full">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 20 20"
+        fill="currentColor"
+        class="h-4 w-4"
+      >
+        <path d="M6.28 5.22a.75.75 0 0 0-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 1 0 1.06 1.06L10 11.06l3.72 3.72a.75.75 0 1 0 1.06-1.06L11.06 10l3.72-3.72a.75.75 0 0 0-1.06-1.06L10 8.94 6.28 5.22Z" />
+      </svg>
+    </button>
+
+    <button class="open text-sm text-primary-500 bg-white shadow-md border border-primary-500 rounded-md pl-2 pr-4 py-2 flex items-center justify-center space-x-2">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 20 20"
+        fill="currentColor"
+        class="h-5 w-5"
+      >
+        <path
+          fill-rule="evenodd"
+          d="M18 10a8 8 0 1 1-16 0 8 8 0 0 1 16 0ZM8.94 6.94a.75.75 0 1 1-1.061-1.061 3 3 0 1 1 2.871 5.026v.345a.75.75 0 0 1-1.5 0v-.5c0-.72.57-1.172 1.081-1.287A1.5 1.5 0 1 0 8.94 6.94ZM10 15a1 1 0 1 0 0-2 1 1 0 0 0 0 2Z"
+          clip-rule="evenodd"
+        />
+      </svg>
+
+      <span><%= gettext("How it works ?") %></span>
+    </button>
+  </div>
   <%= if @live_action in [:new, :edit] do %>
     <.live_component
       module={ClaperWeb.EventLive.EventFormComponent}
@@ -71,6 +100,7 @@
       class="border-b border-gray-200 py-4 flex items-start flex-col space-y-5 sm:space-y-0 sm:flex-row sm:items-center justify-between relative"
       id="events-header"
       phx-hook="TourGuide"
+      data-btn-trigger="#product-tour-btn"
       data-group="welcome"
       data-next-label={gettext("Next")}
       data-prev-label={gettext("Back")}
@@ -139,48 +169,61 @@
       </div>
     </div>
 
+    <nav class="flex space-x-4 mt-4 border-b border-gray-200 pb-4" aria-label="Tabs">
+      <button
+        phx-click="change-tab"
+        phx-value-tab="not_expired"
+        class={"#{if @active_tab == "not_expired", do: "bg-primary-100 text-primary-700", else: "text-gray-500 hover:text-gray-700"} px-3 py-2 font-medium rounded-md"}
+      >
+        <%= gettext("Active") %>
+      </button>
+      <button
+        phx-click="change-tab"
+        phx-value-tab="expired"
+        disabled={not @has_expired_events}
+        class={"#{if @active_tab == "expired", do: "bg-primary-100 text-primary-700", else: "text-gray-500 hover:text-gray-700"} px-3 py-2 font-medium rounded-md #{if not @has_expired_events, do: "opacity-50"}"}
+      >
+        <%= gettext("Finished") %>
+      </button>
+      <button
+        phx-click="change-tab"
+        phx-value-tab="invited"
+        disabled={not @has_invited_events}
+        class={"#{if @active_tab == "invited", do: "bg-primary-100 text-primary-700", else: "text-gray-500 hover:text-gray-700"} px-3 py-2 font-medium rounded-md #{if not @has_invited_events, do: "opacity-50"}"}
+      >
+        <%= gettext("Shared with you") %>
+      </button>
+    </nav>
+
     <div class="mt-2 relative">
-      <ul role="event-list" phx-update="stream" id="events">
+      <ul role="event-list" id="events">
         <% current_time = NaiveDateTime.utc_now() %>
-        <.live_component
-          :for={{id, event} <- @streams.events}
-          module={ClaperWeb.EventLive.EventCardComponent}
-          id={id}
-          event={event}
-          current_time={current_time}
-        />
+        <%= for event <- @events do %>
+          <.live_component
+            module={ClaperWeb.EventLive.EventCardComponent}
+            id={"event-#{event.id}"}
+            event={event}
+            current_time={current_time}
+            is_leader={@active_tab == "invited"}
+          />
+        <% end %>
       </ul>
-      <%= if Enum.count(@streams.events) == 0 do %>
+      <%= if @page < @total_pages do %>
+        <div class="flex justify-center mt-8">
+          <button
+            phx-click="load-more"
+            class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-primary-700 bg-primary-100 hover:bg-primary-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
+          >
+            <%= gettext("Load more") %>
+          </button>
+        </div>
+      <% end %>
+      <%= if Enum.count(@events) == 0 do %>
         <div class="w-full text-2xl text-black opacity-25 text-center">
           <img src="/images/icons/arrow.svg" class="h-20 float-right mr-16 -mt-5" />
           <p class="pt-12 clear-both"><%= gettext("Create your first event") %></p>
         </div>
       <% end %>
     </div>
-
-    <%= if length(@managed_events) > 0 do %>
-      <div class="border-b border-gray-200 py-4 flex items-center justify-between mt-12">
-        <div class="flex-1 min-w-0">
-          <h1 class="text-2xl font-medium leading-6 text-gray-900 sm:truncate">
-            <%= gettext("Invited events") %>
-          </h1>
-        </div>
-      </div>
-
-      <div class="mt-2 relative">
-        <ul role="managed-event-list" id="event-cards" phx-update="replace">
-          <% current_time = NaiveDateTime.utc_now() %>
-          <%= for event <- @managed_events do %>
-            <.live_component
-              module={ClaperWeb.EventLive.EventCardComponent}
-              id={"managed-event-#{event.uuid}"}
-              is_leader={true}
-              event={event}
-              current_time={current_time}
-            />
-          <% end %>
-        </ul>
-      </div>
-    <% end %>
   <% end %>
 </div>

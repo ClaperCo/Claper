@@ -9,6 +9,7 @@ defmodule Claper.Application do
   def start(_type, _args) do
     topologies = Application.get_env(:libcluster, :topologies) || []
     oidc_config = Application.get_env(:claper, :oidc) || []
+    Oban.Telemetry.attach_default_logger()
 
     children = [
       {Cluster.Supervisor, [topologies, [name: Claper.ClusterSupervisor]]},
@@ -26,7 +27,8 @@ defmodule Claper.Application do
       {Finch, name: Swoosh.Finch},
       {Task.Supervisor, name: Claper.TaskSupervisor},
       {Oidcc.ProviderConfiguration.Worker,
-       %{issuer: oidc_config[:issuer], name: Claper.OidcProviderConfig}}
+       %{issuer: oidc_config[:issuer], name: Claper.OidcProviderConfig}},
+      {Oban, Application.fetch_env!(:claper, Oban)}
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

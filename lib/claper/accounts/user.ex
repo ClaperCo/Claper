@@ -27,6 +27,7 @@ defmodule Claper.Accounts.User do
     field :locale, :string
 
     has_many :events, Claper.Events.Event
+    has_one :lti_user, Lti13.Users.User
 
     timestamps()
   end

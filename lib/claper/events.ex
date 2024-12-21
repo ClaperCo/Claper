@@ -10,6 +10,8 @@ defmodule Claper.Events do
 
   alias Claper.Events.{Event, ActivityLeader}
 
+  @default_page_size 5
+
   @doc """
   Returns the list of events of a given user.
 
@@ -23,6 +25,108 @@ defmodule Claper.Events do
     from(e in Event, where: e.user_id == ^user_id, order_by: [desc: e.inserted_at])
     |> Repo.all()
     |> Repo.preload(preload)
+  end
+
+  @doc """
+  Returns a paginated list of events for a given user.
+
+  ## Examples
+
+      iex> paginate_events(123, %{page: 1, page_size: 10})
+      {[%Event{}, ...], total_count, total_pages}
+
+  """
+  def paginate_events(user_id, params \\ %{}, preload \\ []) do
+    page = Map.get(params, "page", 1)
+    page_size = Map.get(params, "page_size", @default_page_size)
+
+    query =
+      from(e in Event,
+        where: e.user_id == ^user_id,
+        order_by: [desc: e.inserted_at]
+      )
+
+    Repo.paginate(query, page: page, page_size: page_size, preload: preload)
+  end
+
+  @doc """
+  Returns the list of not expired events for a given user.
+
+  ## Examples
+
+      iex> list_not_expired_events(123)
+      [%Event{}, ...]
+
+  """
+  def list_not_expired_events(user_id, preload \\ []) do
+    from(e in Event,
+      where: e.user_id == ^user_id and is_nil(e.expired_at),
+      order_by: [desc: e.inserted_at]
+    )
+    |> Repo.all()
+    |> Repo.preload(preload)
+  end
+
+  @doc """
+  Returns a paginated list of not expired events for a given user.
+
+  ## Examples
+
+      iex> paginate_not_expired_events(123, %{page: 1, page_size: 10})
+      {[%Event{}, ...], total_count, total_pages}
+
+  """
+  def paginate_not_expired_events(user_id, params \\ %{}, preload \\ []) do
+    page = Map.get(params, "page", 1)
+    page_size = Map.get(params, "page_size", @default_page_size)
+
+    query =
+      from(e in Event,
+        where: e.user_id == ^user_id and is_nil(e.expired_at),
+        order_by: [desc: e.inserted_at]
+      )
+
+    Repo.paginate(query, page: page, page_size: page_size, preload: preload)
+  end
+
+  @doc """
+  Returns the list of expired events for a given user.
+
+  ## Examples
+
+      iex> list_expired_events(123)
+      [%Event{}, ...]
+
+  """
+  def list_expired_events(user_id, preload \\ []) do
+    from(e in Event,
+      where: e.user_id == ^user_id and not is_nil(e.expired_at),
+      order_by: [desc: e.expired_at]
+    )
+    |> Repo.all()
+    |> Repo.preload(preload)
+  end
+
+  @doc """
+  Returns a paginated list of expired events for a given user.
+
+  ## Examples
+
+      iex> paginate_expired_events(123, %{page: 1, page_size: 10})
+      {[%Event{}, ...], total_count, total_pages}
+
+  """
+  def paginate_expired_events(user_id, params \\ %{}, preload \\ []) do
+    page = Map.get(params, "page", 1)
+    page_size = Map.get(params, "page_size", @default_page_size)
+
+    query =
+      from(e in Event,
+        where: e.user_id == ^user_id and not is_nil(e.expired_at),
+        order_by: [desc: e.inserted_at]
+      )
+
+    Repo.paginate(query, page: page, page_size: page_size, preload: preload)
   end
 
   @doc """
@@ -46,6 +150,53 @@ defmodule Claper.Events do
     )
     |> Repo.all()
     |> Repo.preload(preload)
+  end
+
+  @doc """
+  Returns a paginated list of events managed by a given user email.
+
+  ## Examples
+
+      iex> paginate_managed_events_by("email@example.com", %{page: 1, page_size: 10})
+      {[%Event{}, ...], total_count, total_pages}
+
+  """
+  def paginate_managed_events_by(email, params \\ %{}, preload \\ []) do
+    page = Map.get(params, "page", 1)
+    page_size = Map.get(params, "page_size", @default_page_size)
+
+    query =
+      from(a in ActivityLeader,
+        join: u in Claper.Accounts.User,
+        on: u.email == a.email,
+        join: e in Event,
+        on: e.id == a.event_id,
+        where: a.email == ^email,
+        order_by: [desc: e.expired_at],
+        select: e
+      )
+
+    Repo.paginate(query, page: page, page_size: page_size, preload: preload)
+  end
+
+  def count_managed_events_by(email) do
+    from(a in ActivityLeader,
+      join: u in Claper.Accounts.User,
+      on: u.email == a.email,
+      join: e in Event,
+      on: e.id == a.event_id,
+      where: a.email == ^email,
+      select: e
+    )
+    |> Repo.aggregate(:count, :id)
+  end
+
+  def count_expired_events(user_id) do
+    from(e in Event,
+      where: e.user_id == ^user_id and not is_nil(e.expired_at),
+      order_by: [desc: e.expired_at]
+    )
+    |> Repo.aggregate(:count, :id)
   end
 
   def count_events_month(user_id) do
@@ -386,6 +537,7 @@ defmodule Claper.Events do
                 polls: [:poll_opts],
                 forms: [],
                 embeds: [],
+                quizzes: [:quiz_questions, quiz_questions: :quiz_question_opts],
                 presentation_state: []
               ]
             )}
@@ -489,6 +641,37 @@ defmodule Claper.Events do
 
               {:ok, new_embed} = Claper.Embeds.create_embed(embed_attrs)
               new_embed
+            end)}
+         end)
+         |> Ecto.Multi.run(:quizzes, fn _repo,
+                                        %{
+                                          new_presentation_file: new_presentation_file,
+                                          original_event: original_event
+                                        } ->
+           {:ok,
+            Enum.map(original_event.presentation_file.quizzes, fn quiz ->
+              quiz_attrs =
+                Map.from_struct(quiz)
+                |> Map.drop([:id, :inserted_at, :updated_at])
+                |> Map.put(:presentation_file_id, new_presentation_file.id)
+                |> Map.put(
+                  :quiz_questions,
+                  Enum.map(quiz.quiz_questions, fn question ->
+                    Map.from_struct(question)
+                    |> Map.drop([:id, :inserted_at, :updated_at])
+                    |> Map.put(
+                      :quiz_question_opts,
+                      Enum.map(question.quiz_question_opts, fn opt ->
+                        Map.from_struct(opt)
+                        |> Map.drop([:id, :inserted_at, :updated_at])
+                        |> Map.put(:response_count, 0)
+                      end)
+                    )
+                  end)
+                )
+
+              {:ok, new_quiz} = Claper.Quizzes.create_quiz(quiz_attrs)
+              new_quiz
             end)}
          end)
          |> Repo.transaction() do

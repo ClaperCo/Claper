@@ -39,10 +39,7 @@ defmodule Claper.AccountsTest do
     end
 
     test "sends magic link through notification", %{user: user} do
-      token =
-        extract_magic_token(fn url ->
-          Accounts.deliver_magic_link(user.email, url)
-        end)
+      {:ok, token} = Accounts.deliver_magic_link(user.email, &"/users/magic/#{&1}")
 
       {:ok, token} = Base.url_decode64(token, padding: false)
 
@@ -142,10 +139,12 @@ defmodule Claper.AccountsTest do
     end
 
     test "sends token through notification", %{user: user} do
-      token =
-        extract_user_token(fn url ->
-          Accounts.deliver_update_email_instructions(user, "current@example.com", url)
-        end)
+      {:ok, token} =
+        Accounts.deliver_update_email_instructions(
+          user,
+          "current@example.com",
+          &"/users/settings/confirm_email/#{&1}"
+        )
 
       {:ok, token} = Base.url_decode64(token, padding: false)
       assert user_token = Repo.get_by(UserToken, token: :crypto.hash(:sha256, token))
@@ -160,10 +159,12 @@ defmodule Claper.AccountsTest do
       user = user_fixture()
       email = unique_user_email()
 
-      token =
-        extract_user_token(fn url ->
-          Accounts.deliver_update_email_instructions(%{user | email: email}, user.email, url)
-        end)
+      {:ok, token} =
+        Accounts.deliver_update_email_instructions(
+          %{user | email: email},
+          user.email,
+          &"/users/settings/confirm_email/#{&1}"
+        )
 
       %{user: user, token: token, email: email}
     end
@@ -266,10 +267,8 @@ defmodule Claper.AccountsTest do
     end
 
     test "sends token through notification", %{user: user} do
-      token =
-        extract_user_token(fn url ->
-          Accounts.deliver_user_confirmation_instructions(user, url)
-        end)
+      {:ok, token} =
+        Accounts.deliver_user_confirmation_instructions(user, &"/users/confirm/#{&1}")
 
       {:ok, token} = Base.url_decode64(token, padding: false)
       assert user_token = Repo.get_by(UserToken, token: :crypto.hash(:sha256, token))
@@ -283,10 +282,8 @@ defmodule Claper.AccountsTest do
     setup do
       user = user_fixture()
 
-      token =
-        extract_user_token(fn url ->
-          Accounts.deliver_user_confirmation_instructions(user, url)
-        end)
+      {:ok, token} =
+        Accounts.deliver_user_confirmation_instructions(user, &"/users/confirm/#{&1}")
 
       %{user: user, token: token}
     end

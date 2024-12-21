@@ -5,12 +5,14 @@ defmodule Lti13.RegistrationsFixtures do
   """
 
   import Lti13.JwksFixtures
+  import Claper.AccountsFixtures
 
   @doc """
   Generate a registration.
   """
   def registration_fixture(attrs \\ %{}) do
     jwk = jwk_fixture()
+    user = confirmed_user_fixture()
 
     {:ok, registration} =
       attrs
@@ -21,7 +23,8 @@ defmodule Lti13.RegistrationsFixtures do
         auth_login_url: "https://example.com/auth_login_url",
         key_set_url: "https://example.com/key_set_url",
         auth_server: "https://example.com/",
-        tool_jwk_id: attrs[:tool_jwk_id] || jwk.id
+        tool_jwk_id: attrs[:tool_jwk_id] || jwk.id,
+        user_id: user.id
       })
       |> Lti13.Registrations.create_registration()
 

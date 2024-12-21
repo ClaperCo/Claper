@@ -5,7 +5,7 @@ defmodule ClaperWeb.EventLive.Presenter do
   alias Claper.Embeds.Embed
   alias Claper.Polls.Poll
   alias Claper.Forms.Form
-
+  alias Claper.Quizzes.Quiz
   @impl true
   def mount(%{"code" => code} = params, session, socket) do
     with %{"locale" => locale} <- session do
@@ -64,6 +64,7 @@ defmodule ClaperWeb.EventLive.Presenter do
         |> poll_at_position
         |> form_at_position
         |> embed_at_position
+        |> quiz_at_position
 
       {:ok, socket, temporary_assigns: []}
     end
@@ -202,6 +203,20 @@ defmodule ClaperWeb.EventLive.Presenter do
   end
 
   @impl true
+  def handle_info({:quiz_updated, quiz}, socket) do
+    {:noreply,
+     socket
+     |> update(:current_quiz, fn _current_quiz -> quiz end)}
+  end
+
+  @impl true
+  def handle_info({:quiz_deleted, _quiz}, socket) do
+    {:noreply,
+     socket
+     |> update(:current_quiz, fn _current_quiz -> nil end)}
+  end
+
+  @impl true
   def handle_info({:chat_visible, value}, socket) do
     {:noreply,
      socket
@@ -249,7 +264,8 @@ defmodule ClaperWeb.EventLive.Presenter do
      socket
      |> assign(:current_poll, interaction)
      |> assign(:current_embed, nil)
-     |> assign(:current_form, nil)}
+     |> assign(:current_form, nil)
+     |> assign(:current_quiz, nil)}
   end
 
   @impl true
@@ -261,7 +277,8 @@ defmodule ClaperWeb.EventLive.Presenter do
      socket
      |> assign(:current_embed, interaction)
      |> assign(:current_poll, nil)
-     |> assign(:current_form, nil)}
+     |> assign(:current_form, nil)
+     |> assign(:current_quiz, nil)}
   end
 
   @impl true
@@ -273,7 +290,21 @@ defmodule ClaperWeb.EventLive.Presenter do
      socket
      |> assign(:current_form, interaction)
      |> assign(:current_poll, nil)
-     |> assign(:current_embed, nil)}
+     |> assign(:current_embed, nil)
+     |> assign(:current_quiz, nil)}
+  end
+
+  @impl true
+  def handle_info(
+        {:current_interaction, %Quiz{} = interaction},
+        socket
+      ) do
+    {:noreply,
+     socket
+     |> assign(:current_quiz, interaction)
+     |> assign(:current_poll, nil)
+     |> assign(:current_embed, nil)
+     |> assign(:current_form, nil)}
   end
 
   @impl true
@@ -285,7 +316,61 @@ defmodule ClaperWeb.EventLive.Presenter do
      socket
      |> assign(:current_poll, nil)
      |> assign(:current_embed, nil)
-     |> assign(:current_form, nil)}
+     |> assign(:current_form, nil)
+     |> assign(:current_quiz, nil)}
+  end
+
+  @impl true
+  def handle_info(
+        {:review_quiz_questions},
+        socket
+      ) do
+    send_update(
+      ClaperWeb.EventLive.ManageableQuizComponent,
+      id: "#{socket.assigns.current_quiz.id}-quiz",
+      current_question_idx: 0
+    )
+
+    {:noreply, socket |> assign(:current_question_idx, 0)}
+  end
+
+  @impl true
+  def handle_info(
+        {:next_quiz_question},
+        socket
+      ) do
+    idx =
+      if socket.assigns.current_question_idx <
+           length(socket.assigns.current_quiz.quiz_questions) - 1,
+         do: socket.assigns.current_question_idx + 1,
+         else: -1
+
+    send_update(
+      ClaperWeb.EventLive.ManageableQuizComponent,
+      id: "#{socket.assigns.current_quiz.id}-quiz",
+      current_question_idx: idx
+    )
+
+    {:noreply, socket |> assign(:current_question_idx, idx)}
+  end
+
+  @impl true
+  def handle_info(
+        {:prev_quiz_question},
+        socket
+      ) do
+    idx =
+      if socket.assigns.current_question_idx > 0,
+        do: socket.assigns.current_question_idx - 1,
+        else: 0
+
+    send_update(
+      ClaperWeb.EventLive.ManageableQuizComponent,
+      id: "#{socket.assigns.current_quiz.id}-quiz",
+      current_question_idx: idx
+    )
+
+    {:noreply, socket |> assign(:current_question_idx, idx)}
   end
 
   @impl true
@@ -329,6 +414,16 @@ defmodule ClaperWeb.EventLive.Presenter do
              state.position
            ) do
       socket |> assign(:current_embed, embed)
+    end
+  end
+
+  defp quiz_at_position(%{assigns: %{event: event, state: state}} = socket) do
+    with quiz <-
+           Claper.Quizzes.get_quiz_current_position(
+             event.presentation_file.id,
+             state.position
+           ) do
+      socket |> assign(:current_quiz, quiz) |> assign(:current_question_idx, 0)
     end
   end
 

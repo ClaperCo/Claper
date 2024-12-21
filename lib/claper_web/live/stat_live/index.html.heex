@@ -21,16 +21,16 @@
           <div class="absolute bg-primary-500 rounded-md p-3">
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              class="h-6 w-6 text-white"
               fill="none"
               viewBox="0 0 24 24"
-              stroke="currentColor"
               stroke-width="2"
+              stroke="currentColor"
+              class="h-6 w-6 text-white"
             >
               <path
                 stroke-linecap="round"
                 stroke-linejoin="round"
-                d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+                d="M2.25 18 9 11.25l4.306 4.306a11.95 11.95 0 0 1 5.814-5.518l2.74-1.22m0 0-5.94-2.281m5.94 2.28-2.28 5.941"
               />
             </svg>
           </div>
@@ -51,7 +51,38 @@
       <div class="relative bg-white pt-5 px-4 sm:pt-6 sm:px-6 pb-4 shadow rounded-lg overflow-hidden">
         <dt>
           <div class="absolute bg-primary-500 rounded-md p-3">
-            <!-- Heroicon name: outline/users -->
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="2"
+              stroke="currentColor"
+              class="h-6 w-6 text-white"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z"
+              />
+            </svg>
+          </div>
+          <p class="ml-16 text-sm font-medium text-gray-500 truncate">
+            <%= gettext("Unique attendees") %>
+          </p>
+        </dt>
+        <dd class="ml-16 flex items-baseline">
+          <p class="text-2xl font-semibold text-gray-900">
+            <%= @distinct_attendee_count %>
+            <span class="text-xs text-gray-500 font-normal">
+              <%= ngettext("attendee", "attendees", @distinct_attendee_count) %>
+            </span>
+          </p>
+        </dd>
+      </div>
+
+      <div class="relative bg-white pt-5 px-4 sm:pt-6 sm:px-6 pb-4 shadow rounded-lg overflow-hidden">
+        <dt>
+          <div class="absolute bg-primary-500 rounded-md p-3">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               class="h-6 w-6 text-white"
@@ -88,44 +119,6 @@
       <div class="relative bg-white pt-5 px-4 sm:pt-6 sm:px-6 pb-4 shadow rounded-lg overflow-hidden">
         <dt>
           <div class="absolute bg-primary-500 rounded-md p-3">
-            <!-- Heroicon name: outline/mail-open -->
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              class="h-6 w-6 text-white"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              stroke-width="2"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                d="M16 8v8m-4-5v5m-4-2v2m-2 4h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
-              />
-            </svg>
-          </div>
-          <p class="ml-16 text-sm font-medium text-gray-500 truncate">
-            <%= gettext("Average voters") %>
-          </p>
-        </dt>
-        <dd class="ml-16 flex items-baseline">
-          <p class="text-2xl font-semibold text-gray-900">
-            <%= @average_voters %>
-            <span class="text-xs text-gray-500 font-normal">
-              <%= ngettext(
-                "from %{count} poll",
-                "from %{count} polls",
-                length(@event.presentation_file.polls)
-              ) %>
-            </span>
-          </p>
-        </dd>
-      </div>
-
-      <div class="relative bg-white pt-5 px-4 sm:pt-6 sm:px-6 pb-4 shadow rounded-lg overflow-hidden">
-        <dt>
-          <div class="absolute bg-primary-500 rounded-md p-3">
-            <!-- Heroicon name: outline/cursor-click -->
             <svg
               class="h-6 w-6 text-white"
               xmlns="http://www.w3.org/2000/svg"
@@ -142,12 +135,31 @@
               />
             </svg>
           </div>
-          <p class="ml-16 text-sm font-medium text-gray-500 truncate">
+          <p class="ml-16 text-sm font-medium truncate text-gray-500">
             <%= gettext("Engagement rate") %>
           </p>
         </dt>
-        <dd class="ml-16 flex items-baseline">
+        <dd class="ml-16 flex items-baseline flex items-center">
           <p class="text-2xl font-semibold text-gray-900"><%= @engagement_rate %>%</p>
+          <a
+            href="https://docs.claper.co/usage/reports.html#metrics"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="ml-1"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 16 16"
+              fill="currentColor"
+              class="text-gray-400 w-4 h-4"
+            >
+              <path
+                fill-rule="evenodd"
+                d="M15 8A7 7 0 1 1 1 8a7 7 0 0 1 14 0Zm-6 3.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0ZM7.293 5.293a1 1 0 1 1 .99 1.667c-.459.134-1.033.566-1.033 1.29v.25a.75.75 0 1 0 1.5 0v-.115a2.5 2.5 0 1 0-2.518-4.153.75.75 0 1 0 1.061 1.06Z"
+                clip-rule="evenodd"
+              />
+            </svg>
+          </a>
         </dd>
       </div>
     </dl>
@@ -155,137 +167,309 @@
 
   <div class="pt-5 pb-5">
     <h3 class="text-lg leading-6 font-medium text-gray-900 mb-4">
-      <%= gettext("Interactions history") %>
+      <%= gettext("Interactions") %>
     </h3>
-    <%= for position <- 0..max(0, @event.presentation_file.length-1) do %>
-      <div class="my-10">
-        <%= if @event.presentation_file.length > 0 do %>
-          <%= if Application.get_env(:claper, :presentations) |> Keyword.get(:storage) == "local" do %>
-            <img
-              class="w-1/3 mx-auto"
-              src={"/uploads/#{@event.presentation_file.hash}/#{position+1}.jpg"}
-            />
-          <% else %>
-            <img
-              class="w-1/2 md:w-1/3 mb-4"
-              src={"https://#{Application.get_env(:claper, :presentations) |> Keyword.get(:aws_bucket)}.s3.#{Application.get_env(:ex_aws, :region)}.amazonaws.com/presentations/#{@event.presentation_file.hash}/#{position+1}.jpg"}
-            />
-          <% end %>
-        <% end %>
 
-        <%= for poll <- Enum.filter(@event.presentation_file.polls, fn p -> p.position == position end) do %>
-          <% total = Enum.map(poll.poll_opts, fn e -> e.vote_count end) |> Enum.sum() %>
-          <div class="bg-black w-full py-3 px-6 my-5 text-black shadow-lg rounded-md">
-            <div class="block w-full h-full cursor-pointer">
-              <p class="text-white text-lg font-semibold mb-4"><%= poll.title %></p>
-            </div>
-            <div>
-              <div class="flex flex-col space-y-3">
-                <%= if (length poll.poll_opts) > 0 do %>
-                  <%= for {opt, idx} <- Enum.with_index(poll.poll_opts) do %>
-                    <% percentage =
-                      if total > 0,
-                        do:
-                          Float.round(opt.vote_count / total * 100)
-                          |> :erlang.float_to_binary(decimals: 0),
-                        else: 0 %>
-                    <button
-                      id={"poll-opt-#{idx}"}
-                      class="bg-gray-500 px-3 py-2 rounded-3xl flex justify-between items-center relative text-white"
-                    >
-                      <div
-                        style={"width: #{percentage}%;"}
-                        class={"bg-gradient-to-r from-primary-500 to-secondary-500 h-full absolute left-0 transition-all rounded-l-3xl #{if percentage == "100", do: "rounded-r-3xl"}"}
+    <div class="border-b border-gray-200">
+      <nav class="-mb-px flex space-x-8" aria-label="Tabs">
+        <button
+          phx-click="change_tab"
+          phx-value-tab="messages"
+          class={"whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm #{if @current_tab == :messages, do: 'border-primary-500 text-primary-600', else: 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'}"}
+        >
+          <%= gettext("Messages") %>
+        </button>
+        <button
+          phx-click="change_tab"
+          phx-value-tab="polls"
+          class={"whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm #{if @current_tab == :polls, do: 'border-primary-500 text-primary-600', else: 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'}"}
+        >
+          <%= gettext("Polls") %>
+        </button>
+        <button
+          phx-click="change_tab"
+          phx-value-tab="forms"
+          class={"whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm #{if @current_tab == :forms, do: 'border-primary-500 text-primary-600', else: 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'}"}
+        >
+          <%= gettext("Forms") %>
+        </button>
+        <button
+          phx-click="change_tab"
+          phx-value-tab="web_content"
+          class={"whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm #{if @current_tab == :web_content, do: 'border-primary-500 text-primary-600', else: 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'}"}
+        >
+          <%= gettext("Web Content") %>
+        </button>
+        <button
+          phx-click="change_tab"
+          phx-value-tab="quizzes"
+          class={"whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm #{if @current_tab == :quizzes, do: 'border-primary-500 text-primary-600', else: 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'}"}
+        >
+          <%= gettext("Quizzes") %>
+        </button>
+      </nav>
+    </div>
+
+    <div class="my-4">
+      <%= case @current_tab do %>
+        <% :polls -> %>
+          <div>
+            <%= if length(@event.presentation_file.polls) > 0 do %>
+              <%= for poll <- @event.presentation_file.polls do %>
+                <% total = Enum.map(poll.poll_opts, fn e -> e.vote_count end) |> Enum.sum() %>
+                <div class="bg-gray-900 w-full p-6 my-5 text-black shadow-lg rounded-md">
+                  <div class="w-full h-full flex items-center justify-between mb-4">
+                    <p class="text-white text-xl font-semibold"><%= poll.title %></p>
+                    <%= link to: ~p"/export/polls/#{poll.id}", class: "text-sm text-white bg-primary-500 hover:bg-primary-600 rounded-md px-3 py-1 flex items-center gap-1", method: :post, target: "_blank" do %>
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        class="w-5 h-5"
                       >
-                      </div>
-                      <div class="flex space-x-3 items-center z-10 text-left">
-                        <span class="flex-1 pr-2"><%= opt.content %></span>
-                      </div>
-                      <span class="text-sm z-10"><%= percentage %>% (<%= opt.vote_count %>)</span>
-                    </button>
-                  <% end %>
-                <% end %>
-              </div>
-            </div>
-          </div>
-        <% end %>
-
-        <% forms = Enum.filter(@event.presentation_file.forms, fn f -> f.position == position end) %>
-
-        <%= for form <- forms do %>
-          <span class="text-xl font-semibold text-gray-900 mb-4">
-            <%= gettext("Form") %>: <%= form.title %>
-          </span>
-
-          <%= if length(form.form_submits) > 0 do %>
-            <%= link to: ~p"/export/#{form.id}", class: "text-xs text-white bg-primary-500 rounded-md px-2 py-0.5", method: :post do %>
-              <%= gettext("Export all submissions") %>
-            <% end %>
-          <% end %>
-
-          <%= if length(form.form_submits) == 0 do %>
-            <p class="italic text-gray-500"><%= gettext("No form submission has been sent") %></p>
-          <% end %>
-
-          <%= for fs <- form.form_submits do %>
-            <div id={"#{fs.id}-form"}>
-              <div class="px-4 pb-2 pt-3 rounded-b-lg rounded-tr-lg bg-white relative shadow-md text-black break-all mt-4">
-                <div class="flex space-x-3 items-center">
-                  <%= if fs.attendee_identifier do %>
-                    <img
-                      class="h-8 w-8"
-                      src={"https://api.dicebear.com/7.x/personas/svg?seed=#{fs.attendee_identifier}.svg"}
-                    />
-                  <% else %>
-                    <img
-                      class="h-8 w-8"
-                      src={"https://api.dicebear.com/7.x/personas/svg?seed=#{fs.user_id}.svg"}
-                    />
-                  <% end %>
-
-                  <div>
-                    <%= for res <- fs.response do %>
-                      <p><strong><%= elem(res, 0) %>:</strong> <%= elem(res, 1) %></p>
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M14 3v4a1 1 0 0 0 1 1h4" /><path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z" /><path d="M9 15h6" /><path d="M12.5 17.5l2.5 -2.5l-2.5 -2.5" />
+                      </svg>
+                      <span><%= gettext("Export") %> (CSV)</span>
                     <% end %>
                   </div>
+                  <div>
+                    <div class="flex flex-col space-y-3">
+                      <%= if (length poll.poll_opts) > 0 do %>
+                        <%= for {opt, idx} <- Enum.with_index(poll.poll_opts) do %>
+                          <% percentage =
+                            if total > 0,
+                              do:
+                                Float.round(opt.vote_count / total * 100)
+                                |> :erlang.float_to_binary(decimals: 0),
+                              else: 0 %>
+                          <div
+                            id={"poll-opt-#{idx}"}
+                            class="bg-gray-500 px-3 py-2 rounded-lg flex justify-between items-center relative text-white"
+                          >
+                            <div
+                              style={"width: #{percentage}%;"}
+                              class={"bg-gradient-to-r from-primary-500 to-secondary-500 h-full absolute left-0 transition-all rounded-l-lg #{if percentage == "100", do: "rounded-r-lg"}"}
+                            >
+                            </div>
+                            <div class="flex space-x-3 items-center z-10 text-left">
+                              <span class="flex-1 pr-2"><%= opt.content %></span>
+                            </div>
+                            <span class="text-sm z-10">
+                              <%= percentage %>% (<%= opt.vote_count %>)
+                            </span>
+                          </div>
+                        <% end %>
+                      <% end %>
+                    </div>
+                  </div>
                 </div>
-              </div>
-            </div>
-          <% end %>
-        <% end %>
+              <% end %>
+            <% else %>
+              <p class="italic text-gray-500"><%= gettext("No poll has been created") %></p>
+            <% end %>
+          </div>
+        <% :forms -> %>
+          <div>
+            <%= if length(@event.presentation_file.forms) > 0 do %>
+              <%= for form <- @event.presentation_file.forms do %>
+                <div class="flex justify-between items-center mb-5">
+                  <span class="text-xl font-semibold text-gray-900">
+                    <%= form.title %>
+                  </span>
 
-        <%= for embed <- Enum.filter(@event.presentation_file.embeds , fn e -> e.position == position end) do %>
-          <span class="text-xl font-semibold text-gray-900 mb-4">
-            <%= gettext("Web content") %>: <%= embed.title %>
-          </span>
-          <div class="px-4 pb-2 pt-3 rounded-b-lg rounded-tr-lg bg-white relative shadow-md text-black break-all mt-4">
-            <div class="flex space-x-3 items-center">
-              <%= raw(embed.content) %>
+                  <%= if length(form.form_submits) > 0 do %>
+                    <%= link to: ~p"/export/forms/#{form.id}", class: "text-sm text-white bg-primary-500 hover:bg-primary-600 rounded-md px-3 py-1 flex items-center gap-1", method: :post, target: "_blank" do %>
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        class="w-5 h-5"
+                      >
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M14 3v4a1 1 0 0 0 1 1h4" /><path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z" /><path d="M9 15h6" /><path d="M12.5 17.5l2.5 -2.5l-2.5 -2.5" />
+                      </svg>
+                      <span><%= gettext("Export") %> (CSV)</span>
+                    <% end %>
+                  <% end %>
+                </div>
+
+                <%= if length(form.form_submits) == 0 do %>
+                  <p class="italic text-gray-500">
+                    <%= gettext("No form submission has been sent") %>
+                  </p>
+                <% end %>
+
+                <div class="mb-10">
+                  <%= for fs <- form.form_submits do %>
+                    <div id={"#{fs.id}-form"}>
+                      <div class="px-4 pb-2 pt-3 rounded-b-lg rounded-tr-lg bg-white relative shadow-md text-black break-all mt-4">
+                        <div class="flex space-x-3 items-center">
+                          <%= if fs.attendee_identifier do %>
+                            <img
+                              class="h-8 w-8"
+                              src={"https://api.dicebear.com/7.x/personas/svg?seed=#{fs.attendee_identifier}.svg"}
+                            />
+                          <% else %>
+                            <img
+                              class="h-8 w-8"
+                              src={"https://api.dicebear.com/7.x/personas/svg?seed=#{fs.user_id}.svg"}
+                            />
+                          <% end %>
+
+                          <div>
+                            <%= for res <- fs.response do %>
+                              <p><strong><%= elem(res, 0) %>:</strong> <%= elem(res, 1) %></p>
+                            <% end %>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  <% end %>
+                </div>
+              <% end %>
+            <% else %>
+              <p class="italic text-gray-500"><%= gettext("No form has been created") %></p>
+            <% end %>
+          </div>
+        <% :web_content -> %>
+          <div>
+            <%= if length(@event.presentation_file.embeds) > 0 do %>
+              <%= for embed <- @event.presentation_file.embeds do %>
+                <span class="text-xl font-semibold text-gray-900 mb-4">
+                  <%= embed.title %>
+                </span>
+                <div class="text-black break-all mt-4 mb-10">
+                  <.live_component
+                    id={"embed-component-#{embed.id}"}
+                    module={ClaperWeb.EventLive.EmbedIframeComponent}
+                    provider={embed.provider}
+                    content={embed.content}
+                  />
+                </div>
+              <% end %>
+            <% else %>
+              <p class="italic text-gray-500">
+                <%= gettext("No web content has been created") %>
+              </p>
+            <% end %>
+          </div>
+        <% :messages -> %>
+          <div>
+            <%= if length(@posts) > 0 do %>
+              <div class="flex justify-start mb-4">
+                <%= link to: ~p"/export/#{@event.uuid}/messages", class: "text-sm text-white bg-primary-500 hover:bg-primary-600 rounded-md px-3 py-1 flex items-center gap-1", method: :post, target: "_blank" do %>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    class="w-5 h-5"
+                  >
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M14 3v4a1 1 0 0 0 1 1h4" /><path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z" /><path d="M9 15h6" /><path d="M12.5 17.5l2.5 -2.5l-2.5 -2.5" />
+                  </svg>
+                  <span><%= gettext("Export") %> (CSV)</span>
+                <% end %>
+              </div>
+            <% end %>
+
+            <%= if length(@posts) == 0 do %>
+              <p class="italic text-gray-500"><%= gettext("No messages has been sent") %></p>
+            <% end %>
+
+            <div>
+              <.live_component
+                :for={post <- @posts}
+                module={ClaperWeb.EventLive.ManageablePostComponent}
+                readonly={true}
+                id={post.uuid}
+                event={@event}
+                post={post}
+              />
             </div>
           </div>
-        <% end %>
+        <% :quizzes -> %>
+          <div>
+            <%= if length(@event.presentation_file.quizzes) > 0 do %>
+              <div>
+                <%= for quiz <- @event.presentation_file.quizzes do %>
+                  <div class="bg-gray-900 w-full p-4 text-black shadow-lg rounded-md mb-10">
+                    <div class="mb-4">
+                      <div class="w-full flex items-center justify-between">
+                        <p class="text-white text-xl font-semibold mb-2"><%= quiz.title %></p>
+                        <%= link to: ~p"/export/quizzes/#{quiz.id}", class: "text-sm text-white bg-primary-500 hover:bg-primary-600 rounded-md px-3 py-1 flex items-center gap-1", method: :post, target: "_blank" do %>
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            class="w-5 h-5"
+                          >
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M14 3v4a1 1 0 0 0 1 1h4" /><path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z" /><path d="M9 15h6" /><path d="M12.5 17.5l2.5 -2.5l-2.5 -2.5" />
+                          </svg>
+                          <span><%= gettext("Export") %> (CSV)</span>
+                        <% end %>
+                      </div>
+                      <p class="text-gray-400 text-sm">
+                        <%= gettext("Average score") %>:
+                        <span class="font-semibold">
+                          <%= Claper.Quizzes.calculate_average_score(quiz.id) %>/<%= length(
+                            quiz.quiz_questions
+                          ) %>
+                        </span>
+                      </p>
+                    </div>
 
-        <% posts = Enum.filter(@posts, fn p -> p.position == position end) %>
-
-        <span class="text-xl font-semibold text-gray-900 mb-4">
-          <%= gettext("Messages") %>
-        </span>
-
-        <%= if length(posts) == 0 do %>
-          <p class="italic text-gray-500"><%= gettext("No messages has been sent") %></p>
-        <% end %>
-
-        <div class="h-64 pb-5 px-2 overflow-y-auto">
-          <.live_component
-            :for={post <- posts}
-            module={ClaperWeb.EventLive.ManageablePostComponent}
-            readonly={true}
-            id={post.uuid}
-            event={@event}
-            post={post}
-          />
-        </div>
-      </div>
-    <% end %>
+                    <div class="flex flex-col space-y-3 overflow-y-auto max-h-[500px]">
+                      <%= for {question, _idx} <- Enum.with_index(quiz.quiz_questions) do %>
+                        <div class="border-t border-gray-700 pt-4 mt-4 first:border-t-0 first:pt-0 first:mt-0">
+                          <p class="text-white text-lg font-medium mb-3">
+                            <%= question.content %>
+                          </p>
+                          <div class="space-y-2">
+                            <%= for opt <- question.quiz_question_opts do %>
+                              <div class={"bg-gray-500 px-3 py-2 rounded-lg flex justify-between items-center relative text-white #{if opt.is_correct, do: "bg-green-600"}"}>
+                                <div class="flex justify-between items-center z-10 text-left w-full">
+                                  <div class="flex items-center text-left space-x-3">
+                                    <%= if opt.is_correct do %>
+                                      <div class="h-5 w-5 mt-0.5 rounded-md point-select bg-white">
+                                      </div>
+                                    <% else %>
+                                      <div class="h-5 w-5 mt-0.5 rounded-md point-select border-2 border-white">
+                                      </div>
+                                    <% end %>
+                                    <span class="flex-1 pr-2"><%= opt.content %></span>
+                                  </div>
+                                  <span class="text-sm">
+                                    <%= opt.percentage %>% (<%= opt.response_count %>)
+                                  </span>
+                                </div>
+                              </div>
+                            <% end %>
+                          </div>
+                        </div>
+                      <% end %>
+                    </div>
+                  </div>
+                <% end %>
+              </div>
+            <% else %>
+              <p class="italic text-gray-500"><%= gettext("No quiz has been created") %></p>
+            <% end %>
+          </div>
+      <% end %>
+    </div>
   </div>
 </div>

@@ -276,6 +276,7 @@ defmodule Claper.Accounts do
 
     Repo.insert!(user_token)
     UserNotifier.deliver_magic_link(email, magic_link_url_fun.(encoded_token))
+    {:ok, encoded_token}
   end
 
   @doc """
@@ -293,6 +294,7 @@ defmodule Claper.Accounts do
 
     Repo.insert!(user_token)
     UserNotifier.deliver_update_email_instructions(user, update_email_url_fun.(encoded_token))
+    {:ok, encoded_token}
   end
 
   @doc """
@@ -393,6 +395,7 @@ defmodule Claper.Accounts do
       {encoded_token, user_token} = UserToken.build_email_token(user, "confirm")
       Repo.insert!(user_token)
       UserNotifier.deliver_confirmation_instructions(user, confirmation_url_fun.(encoded_token))
+      {:ok, encoded_token}
     end
   end
 

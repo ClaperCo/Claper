@@ -51,7 +51,11 @@ defmodule ClaperWeb.Router do
     scope "/", ClaperWeb do
       pipe_through([:browser, :require_authenticated_user])
 
-      post "/export/:form_id", StatController, :export
+      post "/export/forms/:form_id", StatController, :export_form
+      post "/export/polls/:poll_id", StatController, :export_poll
+      post "/export/quizzes/:quiz_id", StatController, :export_quiz
+      post "/export/quizzes/:quiz_id/qti", StatController, :export_quiz_qti
+      post "/export/:event_id/messages", StatController, :export_all_messages
 
       live("/events", EventLive.Index, :index)
       live("/events/new", EventLive.Index, :new)
@@ -78,6 +82,8 @@ defmodule ClaperWeb.Router do
       live("/e/:code/manage/edit/form/:id", EventLive.Manage, :edit_form)
       live("/e/:code/manage/add/embed", EventLive.Manage, :add_embed)
       live("/e/:code/manage/edit/embed/:id", EventLive.Manage, :edit_embed)
+      live("/e/:code/manage/add/quiz", EventLive.Manage, :add_quiz)
+      live("/e/:code/manage/edit/quiz/:id", EventLive.Manage, :edit_quiz)
     end
   end
 
@@ -141,7 +147,6 @@ defmodule ClaperWeb.Router do
     post("/lti/login", Lti.LaunchController, :login)
     get("/lti/login", Lti.LaunchController, :login)
     post("/lti/launch", Lti.LaunchController, :launch)
-    get("/lti/grades", Lti.GradeController, :create)
   end
 
   scope "/", ClaperWeb do

@@ -1,11 +1,41 @@
 <div
   id="wrapper"
   phx-hook="TourGuide"
+  data-btn-trigger="#product-tour-btn"
   data-next-label={gettext("Next")}
   data-prev-label={gettext("Back")}
   data-finish-label={gettext("Finish")}
   data-group="create-event"
 >
+  <div id="product-tour-btn" class="hidden absolute bottom-5 right-5 z-30">
+    <button class="close absolute -top-1.5 -right-1.5 bg-red-500 text-white rounded-full">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 20 20"
+        fill="currentColor"
+        class="h-4 w-4"
+      >
+        <path d="M6.28 5.22a.75.75 0 0 0-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 1 0 1.06 1.06L10 11.06l3.72 3.72a.75.75 0 1 0 1.06-1.06L11.06 10l3.72-3.72a.75.75 0 0 0-1.06-1.06L10 8.94 6.28 5.22Z" />
+      </svg>
+    </button>
+
+    <button class="open text-sm text-primary-500 bg-white shadow-md border border-primary-500 rounded-md pl-2 pr-4 py-2 flex items-center justify-center space-x-2">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 20 20"
+        fill="currentColor"
+        class="h-5 w-5"
+      >
+        <path
+          fill-rule="evenodd"
+          d="M18 10a8 8 0 1 1-16 0 8 8 0 0 1 16 0ZM8.94 6.94a.75.75 0 1 1-1.061-1.061 3 3 0 1 1 2.871 5.026v.345a.75.75 0 0 1-1.5 0v-.5c0-.72.57-1.172 1.081-1.287A1.5 1.5 0 1 0 8.94 6.94ZM10 15a1 1 0 1 0 0-2 1 1 0 0 0 0 2Z"
+          clip-rule="evenodd"
+        />
+      </svg>
+
+      <span><%= gettext("How it works ?") %></span>
+    </button>
+  </div>
   <div class="border-b border-gray-200 py-4 flex flex-col sm:flex-row sm:items-center justify-between">
     <div class="flex-1 min-w-0">
       <h1 class="text-2xl font-medium leading-6 text-gray-900 sm:truncate">

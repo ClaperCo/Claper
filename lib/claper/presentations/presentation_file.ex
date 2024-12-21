@@ -11,6 +11,7 @@ defmodule Claper.Presentations.PresentationFile do
           polls: [Claper.Polls.Poll.t()] | nil,
           forms: [Claper.Forms.Form.t()] | nil,
           embeds: [Claper.Embeds.Embed.t()] | nil,
+          quizzes: [Claper.Quizzes.Quiz.t()] | nil,
           presentation_state: Claper.Presentations.PresentationState.t(),
           inserted_at: NaiveDateTime.t(),
           updated_at: NaiveDateTime.t()
@@ -25,6 +26,7 @@ defmodule Claper.Presentations.PresentationFile do
     has_many :polls, Claper.Polls.Poll
     has_many :forms, Claper.Forms.Form
     has_many :embeds, Claper.Embeds.Embed
+    has_many :quizzes, Claper.Quizzes.Quiz
     has_one :presentation_state, Claper.Presentations.PresentationState, on_replace: :delete
 
     timestamps()

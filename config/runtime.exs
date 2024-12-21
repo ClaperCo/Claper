@@ -30,27 +30,37 @@ port = get_int_from_path_or_env(config_dir, "PORT", "4000")
 
 secret_key_base = get_var_from_path_or_env(config_dir, "SECRET_KEY_BASE", nil)
 
-case secret_key_base do
-  nil ->
-    raise "SECRET_KEY_BASE configuration option is required. See https://docs.claper.co/configuration.html#production-docker"
+if System.get_env("MIX_ENV") == "prod" or Application.get_env(:claper, :server, false) do
+  case secret_key_base do
+    nil ->
+      raise "SECRET_KEY_BASE configuration option is required. See https://docs.claper.co/configuration.html#production-docker"
 
-  key when byte_size(key) < 32 ->
-    raise "SECRET_KEY_BASE must be at least 32 bytes long. See https://docs.claper.co/configuration.html#production-docker"
+    key when byte_size(key) < 32 ->
+      raise "SECRET_KEY_BASE must be at least 32 bytes long. See https://docs.claper.co/configuration.html#production-docker"
 
-  _ ->
-    nil
+    _ ->
+      nil
+  end
 end
 
-base_url = get_var_from_path_or_env(config_dir, "BASE_URL")
+base_url = get_var_from_path_or_env(config_dir, "BASE_URL", "http://localhost:4000")
 
-if !base_url do
-  raise "BASE_URL configuration option is required. See https://docs.claper.co/configuration.html#production-docker"
+if System.get_env("MIX_ENV") == "prod" or Application.get_env(:claper, :server, false) do
+  case base_url do
+    nil ->
+      raise "BASE_URL configuration option is required. See https://docs.claper.co/configuration.html#production-docker"
+
+    _ ->
+      nil
+  end
 end
 
 base_url = URI.parse(base_url)
 
-if base_url.scheme not in ["http", "https"] do
-  raise "BASE_URL must start with `http` or `https`. Currently configured as `#{System.get_env("BASE_URL")}`"
+if System.get_env("MIX_ENV") == "prod" or Application.get_env(:claper, :server, false) do
+  if base_url.scheme not in ["http", "https"] do
+    raise "BASE_URL must start with `http` or `https`. Currently configured as `#{System.get_env("BASE_URL")}`"
+  end
 end
 
 max_file_size = get_int_from_path_or_env(config_dir, "MAX_FILE_SIZE_MB", 15)
