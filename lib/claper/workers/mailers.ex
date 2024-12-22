@@ -2,7 +2,7 @@ defmodule Claper.Workers.Mailers do
   use Oban.Worker, queue: :mailers
 
   alias Claper.Mailer
-  alias ClaperWeb.Notifiers.UserNotifier
+  alias ClaperWeb.Notifiers.{UserNotifier, LeaderNotifier}
 
   @impl Oban.Worker
   def perform(%Oban.Job{args: %{"type" => type, "user_id" => user_id, "url" => url}})
@@ -29,6 +29,11 @@ defmodule Claper.Workers.Mailers do
     Mailer.deliver(email)
   end
 
+  def perform(%Oban.Job{args: %{"type" => "event_invitation", "event_name" => event_name, "email" => email, "url" => url}}) do
+    email = LeaderNotifier.event_invitation(event_name, email, url)
+    Mailer.deliver(email)
+  end
+
   # Helper functions to create jobs
   def new_confirmation(user_id, url) do
     new(%{type: "confirm", user_id: user_id, url: url})
@@ -48,5 +53,9 @@ defmodule Claper.Workers.Mailers do
 
   def new_welcome(email) do
     new(%{type: "welcome", email: email})
+  end
+
+  def event_invitation(event_name, email, url) do
+    new(%{type: "event_invitation", event_name: event_name, email: email, url: url})
   end
 end
