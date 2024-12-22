@@ -38,7 +38,7 @@ defmodule ClaperWeb.EventLive.Index do
       |> assign(:total_pages, 1)
       |> assign(:total_entries, 0)
       |> assign(:events, [])
-      |> assign(:temporary_assigns, [events: []])
+      |> assign(:temporary_assigns, events: [])
       |> load_events()
 
     {:ok, socket}
@@ -53,7 +53,8 @@ defmodule ClaperWeb.EventLive.Index do
   def handle_info({:presentation_file_process_done, presentation}, socket) do
     event = Claper.Events.get_event!(presentation.event.uuid, [:presentation_file])
 
-    {:noreply, socket |> assign(:events, [event | socket.assigns.events]) |> put_flash(:info, nil)}
+    {:noreply,
+     socket |> assign(:events, [event | socket.assigns.events]) |> put_flash(:info, nil)}
   end
 
   @impl true
@@ -239,6 +240,9 @@ defmodule ClaperWeb.EventLive.Index do
     socket
     |> assign(:total_entries, total_entries)
     |> assign(:total_pages, total_pages)
-    |> assign(:events, if(socket.assigns.page == 1, do: events, else: socket.assigns.events ++ events))
+    |> assign(
+      :events,
+      if(socket.assigns.page == 1, do: events, else: socket.assigns.events ++ events)
+    )
   end
 end

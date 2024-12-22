@@ -29,7 +29,14 @@ defmodule Claper.Workers.Mailers do
     Mailer.deliver(email)
   end
 
-  def perform(%Oban.Job{args: %{"type" => "event_invitation", "event_name" => event_name, "email" => email, "url" => url}}) do
+  def perform(%Oban.Job{
+        args: %{
+          "type" => "event_invitation",
+          "event_name" => event_name,
+          "email" => email,
+          "url" => url
+        }
+      }) do
     email = LeaderNotifier.event_invitation(event_name, email, url)
     Mailer.deliver(email)
   end
