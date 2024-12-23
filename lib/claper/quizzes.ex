@@ -147,6 +147,7 @@ defmodule Claper.Quizzes do
         if quiz.lti_resource_id do
           Claper.Workers.QuizLti.edit(quiz.id) |> Oban.insert()
         end
+
         broadcast({:ok, updated_quiz, event_uuid}, :quiz_updated)
 
       error ->
