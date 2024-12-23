@@ -102,11 +102,12 @@ defmodule ClaperWeb.QuizLive.QuizComponent do
 
   defp save_quiz(socket, :new, quiz_params) do
     lti_resource = socket.assigns.event.lti_resource
+    lti_resource_id = if lti_resource, do: lti_resource.id, else: nil
 
     case Quizzes.create_quiz(
            quiz_params
            |> Map.put("presentation_file_id", socket.assigns.presentation_file.id)
-           |> Map.put("lti_resource_id", lti_resource.id)
+           |> Map.put("lti_resource_id", lti_resource_id)
            |> Map.put("position", socket.assigns.position)
            |> Map.put("enabled", false)
          ) do
