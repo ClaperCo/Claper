@@ -85,31 +85,34 @@ defmodule ClaperWeb.StatLive.Index do
     distinct_poster_count / unique_attendees
   end
 
-  defp average_polls(_event, 0), do: 0
-
   defp average_polls(event, unique_attendees) do
     poll_ids = Claper.Polls.list_polls(event.presentation_file.id) |> Enum.map(& &1.id)
-    distinct_votes = Claper.Stats.get_distinct_poll_votes(poll_ids)
-
-    distinct_votes / (Enum.count(poll_ids) * unique_attendees)
+    case poll_ids do
+      [] -> 0
+      poll_ids ->
+        distinct_votes = Claper.Stats.get_distinct_poll_votes(poll_ids)
+        distinct_votes / (Enum.count(poll_ids) * unique_attendees)
+    end
   end
-
-  defp average_quizzes(_event, 0), do: 0
 
   defp average_quizzes(event, unique_attendees) do
     quiz_ids = Claper.Quizzes.list_quizzes(event.presentation_file.id) |> Enum.map(& &1.id)
-    distinct_votes = Claper.Stats.get_distinct_quiz_responses(quiz_ids)
-
-    distinct_votes / (Enum.count(quiz_ids) * unique_attendees)
+    case quiz_ids do
+      [] -> 0
+      quiz_ids ->
+        distinct_votes = Claper.Stats.get_distinct_quiz_responses(quiz_ids)
+        distinct_votes / (Enum.count(quiz_ids) * unique_attendees)
+    end
   end
-
-  defp average_forms(_event, 0), do: 0
 
   defp average_forms(event, unique_attendees) do
     form_ids = Claper.Forms.list_forms(event.presentation_file.id) |> Enum.map(& &1.id)
-    distinct_submits = Claper.Stats.get_distinct_form_submits(form_ids)
-
-    distinct_submits / (Enum.count(form_ids) * unique_attendees)
+    case form_ids do
+      [] -> 0
+      form_ids ->
+        distinct_submits = Claper.Stats.get_distinct_form_submits(form_ids)
+        distinct_submits / (Enum.count(form_ids) * unique_attendees)
+    end
   end
 
   defp list_posts(_socket, event_id) do
