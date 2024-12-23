@@ -110,7 +110,10 @@ defmodule Claper.Quizzes do
     |> Repo.insert()
     |> case do
       {:ok, quiz} ->
-        Claper.Workers.QuizLti.create(quiz.id) |> Oban.insert()
+        if attrs["lti_resource_id"] do
+          Claper.Workers.QuizLti.create(quiz.id) |> Oban.insert()
+        end
+
         {:ok, quiz}
 
       error ->
@@ -141,7 +144,9 @@ defmodule Claper.Quizzes do
     |> Repo.update()
     |> case do
       {:ok, updated_quiz} ->
-        Claper.Workers.QuizLti.edit(updated_quiz.id) |> Oban.insert()
+        if quiz.lti_resource_id do
+          Claper.Workers.QuizLti.edit(quiz.id) |> Oban.insert()
+        end
         broadcast({:ok, updated_quiz, event_uuid}, :quiz_updated)
 
       error ->
