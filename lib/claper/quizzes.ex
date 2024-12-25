@@ -113,7 +113,14 @@ defmodule Claper.Quizzes do
         if attrs["lti_resource_id"] do
           Claper.Workers.QuizLti.create(quiz.id) |> Oban.insert()
         end
-        quiz = get_quiz!(quiz.id, [:quiz_questions, quiz_questions: :quiz_question_opts, presentation_file: :event])
+
+        quiz =
+          get_quiz!(quiz.id, [
+            :quiz_questions,
+            quiz_questions: :quiz_question_opts,
+            presentation_file: :event
+          ])
+
         broadcast({:ok, quiz, quiz.presentation_file.event.uuid}, :quiz_created)
 
         {:ok, quiz}
