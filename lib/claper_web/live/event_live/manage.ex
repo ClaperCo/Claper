@@ -210,6 +210,13 @@ defmodule ClaperWeb.EventLive.Manage do
   end
 
   @impl true
+  def handle_info({:quiz_created, quiz}, socket) do
+    {:noreply,
+     socket
+     |> interactions_at_position(quiz.position)}
+  end
+
+  @impl true
   def handle_info({:poll_updated, poll}, socket) do
     {:noreply,
      socket
