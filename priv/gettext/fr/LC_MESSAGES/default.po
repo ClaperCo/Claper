@@ -103,7 +103,7 @@ msgstr "Soyez le premier à réagir !"
 msgid "Join"
 msgstr "Rejoindre"
 
-#: lib/claper_web/live/event_live/index.ex:203
+#: lib/claper_web/live/event_live/index.ex:212
 #: lib/claper_web/live/event_live/join.html.heex:31
 #: lib/claper_web/live/event_live/join.html.heex:54
 #, elixir-autogen, elixir-format
@@ -178,7 +178,7 @@ msgstr "Mis à jour avec succès"
 #: lib/claper_web/live/event_live/event_card_component.ex:245
 #: lib/claper_web/live/event_live/event_card_component.ex:325
 #: lib/claper_web/live/event_live/form_component.ex:97
-#: lib/claper_web/live/event_live/index.ex:184
+#: lib/claper_web/live/event_live/index.ex:193
 #, elixir-autogen, elixir-format
 msgid "Edit"
 msgstr "Modifier"
@@ -186,7 +186,7 @@ msgstr "Modifier"
 #: lib/claper_web/live/embed_live/form_component.html.heex:69
 #: lib/claper_web/live/event_live/event_form_component.html.heex:55
 #: lib/claper_web/live/event_live/event_form_component.html.heex:62
-#: lib/claper_web/live/event_live/index.ex:193
+#: lib/claper_web/live/event_live/index.ex:202
 #: lib/claper_web/live/event_live/index.html.heex:93
 #: lib/claper_web/live/form_live/form_component.html.heex:98
 #: lib/claper_web/live/poll_live/form_component.html.heex:106
@@ -1118,7 +1118,7 @@ msgstr "Les participants qui tentent d'accéder à l'événement avant cette dat
 msgid "Create event"
 msgstr "Créer un événement"
 
-#: lib/claper_web/live/event_live/index.html.heex:223
+#: lib/claper_web/live/event_live/index.html.heex:224
 #, elixir-autogen, elixir-format
 msgid "Create your first event"
 msgstr "Créez votre premier événement"
@@ -1174,7 +1174,7 @@ msgstr "Fichier de présentation (facultatif)"
 msgid "Quick event"
 msgstr "Événement rapide"
 
-#: lib/claper_web/live/event_live/index.ex:88
+#: lib/claper_web/live/event_live/index.ex:91
 #, elixir-autogen, elixir-format
 msgid "Quick event created successfully"
 msgstr "Événement rapide créé avec succès"
@@ -1866,7 +1866,7 @@ msgstr "Contenu web"
 msgid "Active"
 msgstr "Actif"
 
-#: lib/claper_web/live/event_live/index.html.heex:216
+#: lib/claper_web/live/event_live/index.html.heex:217
 #, elixir-autogen, elixir-format
 msgid "Load more"
 msgstr "Charger plus"
@@ -1880,3 +1880,8 @@ msgstr "Partagé avec vous"
 #, elixir-autogen, elixir-format
 msgid "You must login to continue"
 msgstr "Vous devez vous connecter pour continuer"
+
+#: lib/claper/quizzes/quiz_question.ex:41
+#, elixir-autogen, elixir-format
+msgid "must have at least one correct answer"
+msgstr "doit avoir au moins une bonne réponse"

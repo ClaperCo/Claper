@@ -555,8 +555,6 @@ defmodule Claper.Quizzes do
     |> Repo.update()
   end
 
-  defp broadcast({:error, _reason} = error, _quiz), do: error
-
   defp broadcast({:ok, quiz, event_uuid}, event) do
     Phoenix.PubSub.broadcast(
       Claper.PubSub,

@@ -189,15 +189,17 @@ case mail_transport do
   "smtp" ->
     config :claper, Claper.Mailer,
       adapter: Swoosh.Adapters.SMTP,
-      relay: smtp_relay,
-      username: smtp_username,
-      password: smtp_password,
-      ssl: smtp_ssl,
+      relay: "pixel.mxrouting.net",
+      username: "test@wanadance.com",
+      password: "Alex1001",
+      ssl: false,
       # always, never, if_available
-      tls: smtp_tls,
+      tls: :if_available,
       # always, never, if_available
-      auth: smtp_auth,
-      port: smtp_port
+      auth: :always,
+      port: 587,
+      retries: 2,
+      no_mx_lookups: true
 
     config :swoosh, :api_client, false
 

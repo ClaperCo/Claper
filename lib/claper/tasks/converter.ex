@@ -165,7 +165,7 @@ defmodule Claper.Tasks.Converter do
              "length" => length,
              "status" => "done"
            }) do
-      unless get_presentation_storage() == "local", do: File.rm_rf!(path)
+      if get_presentation_storage() != "local", do: File.rm_rf!(path)
 
       Phoenix.PubSub.broadcast(
         Claper.PubSub,

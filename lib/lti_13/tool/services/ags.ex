@@ -206,7 +206,7 @@ defmodule Lti13.Tool.Services.AGS do
       |> Map.get(@lti_ags_claim_url, %{})
       |> Map.get("lineitems")
 
-    unless is_nil(line_items_url) do
+    if not is_nil(line_items_url) do
       %URI{path: line_items_path} = URI.parse(line_items_url)
 
       registration

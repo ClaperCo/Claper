@@ -2,6 +2,8 @@ defmodule Claper.Quizzes.QuizQuestion do
   use Ecto.Schema
   import Ecto.Changeset
 
+  import ClaperWeb.Gettext
+
   schema "quiz_questions" do
     field :content, :string
     field :type, :string, default: "qcm"
@@ -36,7 +38,7 @@ defmodule Claper.Quizzes.QuizQuestion do
     if has_correct_opt do
       changeset
     else
-      add_error(changeset, :quiz_question_opts, "must have at least one correct answer")
+      add_error(changeset, :quiz_question_opts, gettext("must have at least one correct answer"))
     end
   end
 end

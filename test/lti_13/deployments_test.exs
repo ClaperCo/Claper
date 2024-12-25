@@ -14,7 +14,10 @@ defmodule Lti13.DeploymentsTest do
 
     test "create_deployment/1 with valid attributes", %{registration: registration} do
       assert {:ok, %Deployment{}} =
-               Deployments.create_deployment(%{deployment_id: 1, registration_id: registration.id})
+               Deployments.create_deployment(%{
+                 deployment_id: 1,
+                 registration_id: registration.id
+               })
     end
 
     test "get_deployment/2 with existing deployment", %{registration: registration} do

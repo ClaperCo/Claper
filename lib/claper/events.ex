@@ -777,8 +777,6 @@ defmodule Claper.Events do
     ActivityLeader.changeset(activity_leader, attrs)
   end
 
-  defp broadcast({:error, _reason} = error, _event), do: error
-
   defp broadcast({:ok, e, event_uuid}, event) do
     Phoenix.PubSub.broadcast(
       Claper.PubSub,

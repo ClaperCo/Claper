@@ -201,8 +201,6 @@ defmodule Claper.Forms do
     |> Repo.update()
   end
 
-  defp broadcast({:error, _reason} = error, _form), do: error
-
   defp broadcast({:ok, form, event_uuid}, event) do
     Phoenix.PubSub.broadcast(
       Claper.PubSub,
