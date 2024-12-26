@@ -188,16 +188,10 @@ config :claper, ClaperWeb.MailboxGuard,
 case mail_transport do
   "smtp" ->
     config :claper, Claper.Mailer,
-      adapter: Swoosh.Adapters.SMTP,
+      adapter: Swoosh.Adapters.Mua,
       relay: smtp_relay,
-      username: smtp_username,
-      password: smtp_password,
-      ssl: smtp_ssl,
-      # always, never, if_available
-      tls: smtp_tls,
-      # always, never, if_available
-      auth: smtp_auth,
-      port: smtp_port
+      port: smtp_port,
+      auth: [username: smtp_username, password: smtp_password]
 
     config :swoosh, :api_client, false
 

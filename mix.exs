@@ -107,7 +107,6 @@ defmodule Claper.MixProject do
       {:libcluster, "~> 3.3"},
       {:porcelain, "~> 2.0"},
       {:hackney, "~> 1.18"},
-      {:gen_smtp, "~> 1.2"},
       {:csv, "~> 3.0"},
       {:credo, "~> 1.7", only: [:dev, :test], runtime: false},
       {:joken, "~> 2.6.1"},
@@ -115,7 +114,9 @@ defmodule Claper.MixProject do
       {:req, "~> 0.5.0"},
       {:uuid, "~> 1.1"},
       {:oidcc, "~> 3.2"},
-      {:oban, "~> 2.17"}
+      {:oban, "~> 2.17"},
+      {:mua, "~> 0.2.4"},
+      {:mail, "~> 0.4.3"}
     ]
   end
 
