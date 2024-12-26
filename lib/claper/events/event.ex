@@ -59,6 +59,7 @@ defmodule Claper.Events.Event do
     |> cast_assoc(:leaders)
     |> validate_required([:code, :started_at])
     |> downcase_code
+    |> put_change(:uuid, Ecto.UUID.generate())
   end
 
   def downcase_code(changeset) do
