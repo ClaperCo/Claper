@@ -190,8 +190,21 @@ case mail_transport do
     config :claper, Claper.Mailer,
       adapter: Swoosh.Adapters.Mua,
       relay: smtp_relay,
-      port: smtp_port,
-      auth: [username: smtp_username, password: smtp_password]
+      port: smtp_port
+
+    cond do
+      smtp_username && smtp_password ->
+        config :claper, Claper.Mailer, auth: [username: smtp_username, password: smtp_password]
+
+      smtp_username || smtp_password ->
+        raise ArgumentError, """
+        Both SMTP_USERNAME and SMTP_PASSWORD must be set for SMTP authentication.
+        Please provide values for both environment variables.
+        """
+
+      true ->
+        nil
+    end
 
     config :swoosh, :api_client, false
 
