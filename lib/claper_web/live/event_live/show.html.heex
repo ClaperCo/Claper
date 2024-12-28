@@ -111,6 +111,26 @@
             />
           </div>
         </div>
+      <% %Claper.Quizzes.Quiz{} -> %>
+        <div
+          id="quiz-wrapper-parent"
+          class="animate__animated animate__zoomInDown w-full lg:w-1/3 lg:mx-auto fixed top-16 z-10 px-2 pb-6 lg:px-7 max-h-screen overflow-y-auto"
+        >
+          <div class="transition-all" id="quiz-wrapper">
+            <.live_component
+              module={ClaperWeb.EventLive.QuizComponent}
+              id={"#{@current_interaction.id}-quiz"}
+              quiz={@current_interaction}
+              current_user={@current_user}
+              attendee_identifier={@attendee_identifier}
+              event={@event}
+              selected_quiz_question_opts={@selected_quiz_question_opts}
+              current_quiz_question_idx={@current_quiz_question_idx}
+              current_quiz_responses={@current_quiz_responses}
+              quiz_score={@quiz_score}
+            />
+          </div>
+        </div>
       <% _ -> %>
         <!-- Handle any other types of interactions here if needed -->
     <% end %>
@@ -134,9 +154,9 @@
         attendee_identifier={@attendee_identifier}
         event={@event}
         reaction_enabled={@state.message_reaction_enabled}
-        liked_posts={@liked_posts}
-        loved_posts={@loved_posts}
-        loled_posts={@loled_posts}
+        liked_posts={@like_posts}
+        loved_posts={@love_posts}
+        loled_posts={@lol_posts}
       />
     </div>
 

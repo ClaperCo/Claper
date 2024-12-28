@@ -2,7 +2,7 @@ defmodule ClaperWeb.Lti.RegistrationController do
   use ClaperWeb, :controller
 
   def new(conn, %{"openid_configuration" => conf, "registration_token" => token}) do
-    render(conn, "new.html", conf: conf, token: token)
+    render(conn, "new.html", conf: conf, token: token, current_user: conn.assigns.current_user)
   end
 
   def new(conn, _params) do
@@ -45,6 +45,7 @@ defmodule ClaperWeb.Lti.RegistrationController do
       Lti13.Registrations.create_registration(%{
         issuer: issuer,
         client_id: client_id,
+        user_id: conn.assigns.current_user.id,
         key_set_url: jwks_uri,
         auth_token_url: token_endpoint,
         auth_login_url: auth_endpoint,

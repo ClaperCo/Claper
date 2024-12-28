@@ -77,6 +77,15 @@
       </div>
     </div>
   <% end %>
+  <!-- QUIZ -->
+  <%= if @current_quiz do %>
+    <.live_component
+      module={ClaperWeb.EventLive.ManageableQuizComponent}
+      id={"#{@current_quiz.id}-quiz"}
+      quiz={@current_quiz}
+      iframe={@iframe}
+    />
+  <% end %>
   <!-- MESSAGES -->
   <div
     id="slider-wrapper"

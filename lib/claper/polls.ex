@@ -295,8 +295,6 @@ defmodule Claper.Polls do
     |> Repo.update()
   end
 
-  defp broadcast({:error, _reason} = error, _poll), do: error
-
   defp broadcast({:ok, poll, event_uuid}, event) do
     Phoenix.PubSub.broadcast(
       Claper.PubSub,

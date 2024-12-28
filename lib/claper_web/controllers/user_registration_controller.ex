@@ -21,7 +21,7 @@ defmodule ClaperWeb.UserRegistrationController do
   end
 
   def create(conn, %{"user" => user_params}) do
-    case Accounts.register_user(user_params) do
+    case Accounts.register_user(user_params(user_params)) do
       {:ok, user} ->
         if Application.get_env(:claper, :email_confirmation) do
           {:ok, _} =
@@ -40,6 +40,23 @@ defmodule ClaperWeb.UserRegistrationController do
 
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "new.html", changeset: changeset)
+    end
+  end
+
+  def delete(conn, _params) do
+    Accounts.delete_user(conn.assigns.current_user)
+
+    conn
+    |> put_flash(:info, gettext("Your account has been deleted."))
+    |> UserAuth.log_out_user()
+  end
+
+  defp user_params(params) do
+    if Application.get_env(:claper, :email_confirmation) do
+      params
+    else
+      params
+      |> Map.put("confirmed_at", NaiveDateTime.utc_now())
     end
   end
 end

@@ -18,6 +18,7 @@ defmodule Claper.DataCase do
 
   using do
     quote do
+      use Oban.Testing, repo: Claper.Repo
       alias Claper.Repo
 
       import Ecto

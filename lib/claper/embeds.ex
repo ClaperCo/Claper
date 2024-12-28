@@ -177,8 +177,6 @@ defmodule Claper.Embeds do
     |> Repo.update()
   end
 
-  defp broadcast({:error, _reason} = error, _embed), do: error
-
   defp broadcast({:ok, embed, event_uuid}, event) do
     Phoenix.PubSub.broadcast(
       Claper.PubSub,

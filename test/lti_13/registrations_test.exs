@@ -4,10 +4,12 @@ defmodule Lti13.RegistrationsTest do
   alias Lti13.Registrations
 
   import Lti13.JwksFixtures
+  import Claper.AccountsFixtures
 
   describe "registrations" do
     test "create and get registration by issuer client id" do
       jwk = jwk_fixture()
+      user = confirmed_user_fixture()
 
       registration = %{
         issuer: "some issuer",
@@ -16,6 +18,7 @@ defmodule Lti13.RegistrationsTest do
         auth_token_url: "some auth_token_url",
         auth_login_url: "some auth_login_url",
         auth_server: "some auth_server",
+        user_id: user.id,
         tool_jwk_id: jwk.id
       }
 

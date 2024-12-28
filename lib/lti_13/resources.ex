@@ -24,14 +24,17 @@ defmodule Lti13.Resources do
   Creates a resource and event with the given title and resource_id
 
   ## Examples
-      iex> create_resource_with_event(%{title: "Test", resource_id: "123", lti_user: %Lti13.Users.User{}})
+      iex> create_resource_with_event(%{title: "Test", resource_id: "123", line_items_url: "https://example.com", lti_user: %Lti13.Users.User{}})
       {:ok, %Claper.Events.Event{}, %Lti13.Resources.Resource{}}
       iex> create_resource_with_event(%{})
       {:error, %{reason: :invalid_resource, msg: "Failed to create resource"}}
   """
-  @spec create_resource_with_event(map()) ::
-          {:ok, Resource.t()} | {:error, map()}
-  def create_resource_with_event(%{title: title, resource_id: resource_id, lti_user: lti_user}) do
+  def create_resource_with_event(%{
+        title: title,
+        resource_id: resource_id,
+        line_items_url: line_items_url,
+        lti_user: lti_user
+      }) do
     with {:ok, event} <-
            Claper.Events.create_event(%{
              name: title,
@@ -49,6 +52,7 @@ defmodule Lti13.Resources do
            create_resource(%{
              title: title,
              resource_id: resource_id,
+             line_items_url: line_items_url,
              event_id: event.id,
              registration_id: lti_user.registration_id
            }) do

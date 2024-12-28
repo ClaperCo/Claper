@@ -13,8 +13,6 @@ defmodule Lti13.Tool.Services.AccessToken do
           scope: String.t()
         }
 
-  require Logger
-
   @doc """
   Requests an OAuth2 access token. Returns {:ok, %AccessToken{}} on success, {:error, error}
   otherwise.
@@ -39,7 +37,6 @@ defmodule Lti13.Tool.Services.AccessToken do
       iex> fetch_access_token(bad_tool)
       {:error, "invalid_scope"}
   """
-
   def fetch_access_token(
         %{auth_token_url: auth_token_url, client_id: client_id, auth_server: auth_audience},
         scopes,
@@ -55,6 +52,21 @@ defmodule Lti13.Tool.Services.AccessToken do
     request_token(auth_token_url, client_assertion, scopes)
   end
 
+  def fetch_access_token(lti_resource) do
+    Lti13.Tool.Services.AccessToken.fetch_access_token(
+      %{
+        auth_token_url: lti_resource.registration.auth_token_url,
+        client_id: lti_resource.registration.client_id,
+        auth_server: lti_resource.registration.auth_server
+      },
+      [
+        "https://purl.imsglobal.org/spec/lti-ags/scope/lineitem",
+        "https://purl.imsglobal.org/spec/lti-ags/scope/score"
+      ],
+      Application.get_env(:claper, ClaperWeb.Endpoint)[:url][:host]
+    )
+  end
+
   defp request_token(url, client_assertion, scopes) do
     body =
       [
@@ -67,24 +79,22 @@ defmodule Lti13.Tool.Services.AccessToken do
 
     headers = %{"Content-Type" => "application/x-www-form-urlencoded"}
 
-    Logger.debug("Fetching access token with the following parameters")
-    Logger.debug("client_assertion: #{inspect(client_assertion)}")
-    Logger.debug("scopes #{inspect(scopes)}")
-
     with {:ok, %Req.Response{status: 200, body: body}} <-
            Req.post(url, body: body, headers: headers),
-         {:ok, result} <- body do
+         {:ok, parsed_body} <- Jason.decode(body) do
       {:ok,
        %__MODULE__{
-         access_token: Map.get(result, "access_token"),
-         token_type: Map.get(result, "token_type"),
-         expires_in: Map.get(result, "expires_in"),
-         scope: Map.get(result, "scope")
+         access_token: Map.get(parsed_body, "access_token"),
+         token_type: Map.get(parsed_body, "token_type"),
+         expires_in: Map.get(parsed_body, "expires_in"),
+         scope: Map.get(parsed_body, "scope")
        }}
     else
+      {:error, %Jason.DecodeError{}} ->
+        {:error, "Invalid JSON response"}
+
       e ->
-        Logger.error("Error encountered fetching access token #{inspect(e)}")
-        {:error, "Error fetching access token"}
+        {:error, "Error fetching access token: #{inspect(e)}"}
     end
   end
 

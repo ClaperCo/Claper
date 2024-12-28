@@ -5,6 +5,7 @@ defmodule Lti13.Registrations.Registration do
   @type t :: %__MODULE__{
           id: integer(),
           issuer: String.t() | nil,
+          user_id: integer() | nil,
           client_id: String.t() | nil,
           key_set_url: String.t() | nil,
           auth_token_url: String.t() | nil,
@@ -25,6 +26,7 @@ defmodule Lti13.Registrations.Registration do
 
     has_many :deployments, Lti13.Deployments.Deployment
     belongs_to :tool_jwk, Lti13.Jwks.Jwk, foreign_key: :tool_jwk_id
+    belongs_to :user, Claper.Accounts.User
 
     timestamps()
   end
@@ -34,6 +36,7 @@ defmodule Lti13.Registrations.Registration do
     registration
     |> cast(attrs, [
       :issuer,
+      :user_id,
       :client_id,
       :key_set_url,
       :auth_token_url,
@@ -43,6 +46,7 @@ defmodule Lti13.Registrations.Registration do
     ])
     |> validate_required([
       :issuer,
+      :user_id,
       :client_id,
       :key_set_url,
       :auth_token_url,

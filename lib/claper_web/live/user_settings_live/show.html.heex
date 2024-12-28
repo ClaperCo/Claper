@@ -280,16 +280,15 @@
         </div>
         <div class="border-t border-gray-200 py-5 sm:p-0">
           <dl class="sm:divide-y sm:divide-gray-200">
-            <div class="mt-5">
-              <button
-                data-confirm={
-                  gettext("All your events and files will be permanently deleted, are you sure?")
-                }
-                phx-click="delete_account"
-                class="w-full lg:w-auto px-6 text-center text-white py-2 rounded-md tracking-wide font-bold focus:outline-none focus:shadow-outline bg-gradient-to-tl from-supporting-red-600 to-supporting-red-400 bg-size-200 bg-pos-0 hover:bg-pos-100 transition-all duration-500"
-              >
-                <%= gettext("Delete account") %>
-              </button>
+            <div class="my-5">
+              <%= link(gettext("Delete account"),
+                to: ~p"/users/register/delete",
+                method: :delete,
+                "data-confirm":
+                  gettext("All your events and files will be permanently deleted, are you sure?"),
+                class:
+                  "w-full lg:w-auto px-6 text-center text-white py-2 rounded-md tracking-wide font-bold focus:outline-none focus:shadow-outline bg-gradient-to-tl from-supporting-red-600 to-supporting-red-400 bg-size-200 bg-pos-0 hover:bg-pos-100 transition-all duration-500"
+              ) %>
             </div>
           </dl>
         </div>

@@ -22,15 +22,16 @@ defmodule Claper.Events.Event do
     field :uuid, :binary_id
     field :name, :string
     field :code, :string
-    field :audience_peak, :integer, default: 1
+    field :audience_peak, :integer, default: 0
     field :started_at, :naive_datetime
     field :expired_at, :naive_datetime
 
     has_many :posts, Claper.Posts.Post
-
     has_many :leaders, Claper.Events.ActivityLeader, on_replace: :delete
 
     has_one :presentation_file, Claper.Presentations.PresentationFile
+    has_one :lti_resource, Lti13.Resources.Resource
+
     belongs_to :user, Claper.Accounts.User
 
     timestamps()
@@ -58,6 +59,7 @@ defmodule Claper.Events.Event do
     |> cast_assoc(:leaders)
     |> validate_required([:code, :started_at])
     |> downcase_code
+    |> put_change(:uuid, Ecto.UUID.generate())
   end
 
   def downcase_code(changeset) do

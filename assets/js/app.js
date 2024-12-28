@@ -68,6 +68,10 @@ Hooks.EmbeddedBanner = {
 
 Hooks.TourGuide = {
   mounted() {
+    this.triggerDiv = document.querySelector(this.el.dataset.btnTrigger);
+    this.btnTrigger = this.triggerDiv.querySelector('.open');
+    this.closeBtnTrigger = this.triggerDiv.querySelector('.close');
+
     this.tour = new TourGuideClient({
       nextLabel: this.el.dataset.nextLabel,
       prevLabel: this.el.dataset.prevLabel,
@@ -77,10 +81,33 @@ Hooks.TourGuide = {
     });
 
     if (!this.tour.isFinished(this.el.dataset.group)) {
-      this.tour.start(this.el.dataset.group);
+      this.triggerDiv.classList.remove("hidden");
     }
 
     this.tour.onBeforeExit(() => {
+      this.tour.finishTour(true, this.el.dataset.group);
+    });
+
+    this.btnTrigger.addEventListener("click", () => {
+      this.startTour();
+    });
+
+    this.closeBtnTrigger.addEventListener("click", (e) => {
+      this.triggerDiv.classList.add("hidden");
+      this.tour.finishTour(true, this.el.dataset.group);
+    });
+  },
+
+  startTour() {
+    this.triggerDiv.classList.add("hidden");
+    this.tour.start(this.el.dataset.group);
+  },
+  destroyed() {
+    this.btnTrigger.removeEventListener("click", () => {
+      this.startTour();
+    }); 
+    this.closeBtnTrigger.removeEventListener("click", () => {
+      this.triggerDiv.classList.add("hidden");
       this.tour.finishTour(true, this.el.dataset.group);
     });
   },
@@ -95,7 +122,7 @@ Hooks.Split = {
     const columnSlitValue =
       localStorage.getItem(`column-split-${id}`) || "1fr 10px 1fr";
     const rowSlitValue =
-      localStorage.getItem(`row-split-${id}`) || "1fr 10px 1fr";
+      localStorage.getItem(`row-split-${id}`) || "0.5fr 10px 1fr";
 
     if (type === "column") {
       this.columnSplit = Split({

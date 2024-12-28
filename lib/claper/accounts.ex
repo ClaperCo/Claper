@@ -38,7 +38,9 @@ defmodule Claper.Accounts do
 
   """
   def get_user_by_email(email) when is_binary(email) do
-    Repo.get_by(User, email: email)
+    User
+    |> where([u], is_nil(u.deleted_at))
+    |> Repo.get_by(email: email)
   end
 
   @doc """
@@ -79,8 +81,8 @@ defmodule Claper.Accounts do
   """
   def get_user_by_email_and_password(email, password)
       when is_binary(email) and is_binary(password) do
-    user = Repo.get_by(User, email: email)
-    if User.valid_password?(user, password), do: user
+    user = User |> where([u], u.email == ^email and is_nil(u.deleted_at)) |> Repo.one()
+    if user && User.valid_password?(user, password), do: user
   end
 
   @doc """
@@ -98,6 +100,37 @@ defmodule Claper.Accounts do
 
   """
   def get_user!(id), do: Repo.get!(User, id)
+
+  def get_user(id) do
+    User
+    |> where([u], is_nil(u.deleted_at))
+    |> Repo.get(id)
+  end
+
+  @doc """
+  Soft deletes a user.
+
+  ## Examples
+
+      iex> delete_user(user)
+      {:ok, %User{}}
+
+      iex> delete_user(user)
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def delete_user(%User{} = user) do
+    user
+    |> User.delete_changeset()
+    |> Repo.update()
+  end
+
+  @doc """
+  Returns true if the user has been soft deleted.
+  """
+  def deleted?(%User{} = user) do
+    not is_nil(user.deleted_at)
+  end
 
   ## User registration
 
@@ -276,6 +309,7 @@ defmodule Claper.Accounts do
 
     Repo.insert!(user_token)
     UserNotifier.deliver_magic_link(email, magic_link_url_fun.(encoded_token))
+    {:ok, encoded_token}
   end
 
   @doc """
@@ -293,6 +327,7 @@ defmodule Claper.Accounts do
 
     Repo.insert!(user_token)
     UserNotifier.deliver_update_email_instructions(user, update_email_url_fun.(encoded_token))
+    {:ok, encoded_token}
   end
 
   @doc """
@@ -393,6 +428,7 @@ defmodule Claper.Accounts do
       {encoded_token, user_token} = UserToken.build_email_token(user, "confirm")
       Repo.insert!(user_token)
       UserNotifier.deliver_confirmation_instructions(user, confirmation_url_fun.(encoded_token))
+      {:ok, encoded_token}
     end
   end
 
@@ -510,10 +546,6 @@ defmodule Claper.Accounts do
       :tokens,
       UserToken.user_magic_and_contexts_query(token.sent_to, ["magic"])
     )
-  end
-
-  def delete(user) do
-    Repo.delete(user)
   end
 
   ## OIDC

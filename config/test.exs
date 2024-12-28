@@ -23,6 +23,8 @@ config :claper, ClaperWeb.Endpoint,
 # In test we don't send emails.
 config :claper, Claper.Mailer, adapter: Swoosh.Adapters.Test
 
+config :claper, Oban, testing: :inline
+
 # Print only warnings and errors during test
 config :logger, level: :warning
 

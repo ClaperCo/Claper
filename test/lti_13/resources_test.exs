@@ -80,6 +80,7 @@ defmodule Lti13.ResourcesTest do
       attrs = %{
         title: "Resource 1",
         resource_id: 1,
+        line_items_url: "https://example.com/line_items",
         lti_user: lti_user
       }
 
@@ -104,6 +105,7 @@ defmodule Lti13.ResourcesTest do
       attrs = %{
         title: nil,
         resource_id: nil,
+        line_items_url: nil,
         lti_user: lti_user
       }
 
