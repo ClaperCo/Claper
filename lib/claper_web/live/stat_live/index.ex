@@ -85,6 +85,8 @@ defmodule ClaperWeb.StatLive.Index do
     distinct_poster_count / unique_attendees
   end
 
+  defp average_polls(_event, 0), do: 0
+
   defp average_polls(event, unique_attendees) do
     poll_ids = Claper.Polls.list_polls(event.presentation_file.id) |> Enum.map(& &1.id)
 
@@ -98,6 +100,8 @@ defmodule ClaperWeb.StatLive.Index do
     end
   end
 
+  defp average_quizzes(_event, 0), do: 0
+
   defp average_quizzes(event, unique_attendees) do
     quiz_ids = Claper.Quizzes.list_quizzes(event.presentation_file.id) |> Enum.map(& &1.id)
 
@@ -110,6 +114,8 @@ defmodule ClaperWeb.StatLive.Index do
         distinct_votes / (Enum.count(quiz_ids) * unique_attendees)
     end
   end
+
+  defp average_forms(_event, 0), do: 0
 
   defp average_forms(event, unique_attendees) do
     form_ids = Claper.Forms.list_forms(event.presentation_file.id) |> Enum.map(& &1.id)
