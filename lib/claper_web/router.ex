@@ -154,6 +154,7 @@ defmodule ClaperWeb.Router do
 
     post("/events/:uuid/slide.jpg", EventController, :slide_generate)
     get("/users/settings/confirm_email/:token", UserSettingsController, :confirm_email)
+    delete("/users/register/delete", UserRegistrationController, :delete)
   end
 
   scope "/", ClaperWeb do

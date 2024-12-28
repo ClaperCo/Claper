@@ -43,6 +43,14 @@ defmodule ClaperWeb.UserRegistrationController do
     end
   end
 
+  def delete(conn, _params) do
+    Accounts.delete_user(conn.assigns.current_user)
+
+    conn
+    |> put_flash(:info, gettext("Your account has been deleted."))
+    |> UserAuth.log_out_user()
+  end
+
   defp user_params(params) do
     if Application.get_env(:claper, :email_confirmation) do
       params

@@ -16,6 +16,7 @@
 - Improve design and UX for interactions and presentation settings in the manager view
 - Add pagination for events on the dashboard
 - Fix STMP adapter to work with secure connection
+- Add soft delete for user accounts
 
 ## v2.2.0
 

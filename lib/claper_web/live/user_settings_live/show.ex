@@ -211,16 +211,6 @@ defmodule ClaperWeb.UserSettingsLive.Show do
   end
 
   @impl true
-  def handle_event("delete_account", _params, %{assigns: %{current_user: user}} = socket) do
-    Accounts.delete(user)
-
-    {:noreply,
-     socket
-     |> put_flash(:info, gettext("Your account has been deleted."))
-     |> redirect(to: ~p"/users/log_in")}
-  end
-
-  @impl true
   def handle_event("validate", _params, socket) do
     {:noreply, socket}
   end

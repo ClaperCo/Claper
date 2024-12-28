@@ -14,7 +14,8 @@ defmodule Claper.Accounts.User do
           locale: String.t() | nil,
           events: [Claper.Events.Event.t()] | nil,
           inserted_at: NaiveDateTime.t(),
-          updated_at: NaiveDateTime.t()
+          updated_at: NaiveDateTime.t(),
+          deleted_at: NaiveDateTime.t() | nil
         }
 
   schema "users" do
@@ -25,6 +26,7 @@ defmodule Claper.Accounts.User do
     field :is_randomized_password, :boolean
     field :confirmed_at, :naive_datetime
     field :locale, :string
+    field :deleted_at, :naive_datetime
 
     has_many :events, Claper.Events.Event
     has_one :lti_user, Lti13.Users.User
@@ -42,6 +44,14 @@ defmodule Claper.Accounts.User do
   def preferences_changeset(user, attrs) do
     user
     |> cast(attrs, [:locale])
+  end
+
+  @doc """
+  A changeset for marking a user as deleted.
+  """
+  def delete_changeset(user) do
+    now = NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
+    change(user, deleted_at: now)
   end
 
   defp validate_email(changeset) do
