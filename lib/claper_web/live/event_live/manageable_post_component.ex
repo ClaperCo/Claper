@@ -119,7 +119,7 @@ defmodule ClaperWeb.EventLive.ManageablePostComponent do
           <% end %>
 
           <p class="text-xl">
-            <%= @post.body %>
+            <%= ClaperWeb.Helpers.format_body(@post.body) %>
           </p>
         </div>
       </div>
