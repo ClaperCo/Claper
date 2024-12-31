@@ -14,9 +14,14 @@ defmodule ClaperWeb.EventLive.EventCardComponent do
         <div class="px-4 py-4 sm:px-6">
           <div class="flex items-center justify-between">
             <div class="flex items-center">
-              <p class="text-lg font-medium text-primary-600 truncate">
+              <a
+                data-phx-link="patch"
+                data-phx-link-state="push"
+                class="text-lg font-medium text-primary-600 truncate"
+                href={~p"/e/#{@event.code}/manage"}
+              >
                 <%= @event.name %>
-              </p>
+              </a>
               <p
                 :if={@event.lti_resource}
                 class="text-xs text-white rounded-md px-2 py-0.5 bg-gray-500 mx-2 flex items-center space-x-1"
