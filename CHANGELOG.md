@@ -5,6 +5,7 @@
 - Improve performance of presentation to load slides faster
 - Fix manager layout on small screens
 - Add clickable hyperlinks in messages
+- Add ipv6 support for database
 
 ### v.2.3.0
 

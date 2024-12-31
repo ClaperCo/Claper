@@ -145,6 +145,7 @@ config :claper, Claper.Repo,
   ssl_opts: [
     verify: :verify_none
   ],
+  socket_options: [:inet6],
   prepare: :unnamed,
   pool_size: pool_size,
   queue_target: queue_target
