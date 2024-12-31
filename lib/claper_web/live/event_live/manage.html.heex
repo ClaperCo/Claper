@@ -502,11 +502,6 @@
       </div>
       <div>
         <div class="flex items-center gap-x-3 justify-end">
-          <span class="hidden lg:block italic text-gray-400 text-sm">
-            <%= raw(
-              gettext("Press <strong>F</strong> in the presentation window to enable fullscreen")
-            ) %>
-          </span>
           <div class="hidden lg:flex items-center justify-center border-2 border-secondary-500 rounded-md">
             <button
               phx-click="toggle-preview"
@@ -550,7 +545,7 @@
               type="button"
               data-tg-title={"🙌 #{gettext("Time to launch your presentation!")}"}
               data-tg-order="4"
-              data-tg-tour={"<p>#{gettext("Click here to open the presentation window.")}</p>"}
+              data-tg-tour={"<p>#{gettext("Click here to open the presentation window. Press <strong>F</strong> in the presentation window to enable fullscreen.")}</p>"}
               data-tg-group="manage"
               class="hidden lg:inline-flex items-center py-1 px-5 rounded-r-sm text-base font-medium text-white bg-gradient-to-tl from-primary-500 to-secondary-500 bg-size-200 bg-pos-0 hover:bg-pos-100 transition-all duration-500"
             >
