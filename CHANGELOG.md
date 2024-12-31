@@ -1,3 +1,9 @@
+### v.2.3.1
+
+### Fixes and improvements
+
+- Improve performance of presentation to load slides faster
+
 ### v.2.3.0
 
 ### Features

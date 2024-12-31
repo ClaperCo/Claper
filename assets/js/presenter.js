@@ -19,6 +19,7 @@ export class Presenter {
       controls: false,
       swipeAngle: false,
       startIndex: this.currentPage,
+      speed: 0,
       loop: false,
       nav: false,
     });
@@ -29,8 +30,13 @@ export class Presenter {
 
     this.context.handleEvent("page", (data) => {
       //set current page
+      if (this.currentPage == data.current_page) {
+        return;
+      }
+
       this.currentPage = parseInt(data.current_page);
       this.slider.goTo(data.current_page);
+
     });
 
     this.context.handleEvent("chat-visible", (data) => {
@@ -103,35 +109,37 @@ export class Presenter {
 
     window.addEventListener("keyup", (e) => {
       if (e.target.tagName.toLowerCase() != "input") {
-        e.preventDefault();
 
         switch (e.key) {
           case "f": // F
+            e.preventDefault();
             this.fullscreen();
             break;
-          case "ArrowUp":
-            window.opener.dispatchEvent(
-              new KeyboardEvent("keydown", { key: "ArrowUp" })
-            );
-            break;
           case "ArrowLeft":
+            e.preventDefault();
             window.opener.dispatchEvent(
               new KeyboardEvent("keydown", { key: "ArrowLeft" })
             );
             break;
           case "ArrowRight":
+            e.preventDefault();
             window.opener.dispatchEvent(
               new KeyboardEvent("keydown", { key: "ArrowRight" })
-            );
-            break;
-          case "ArrowDown":
-            window.opener.dispatchEvent(
-              new KeyboardEvent("keydown", { key: "ArrowDown" })
             );
             break;
         }
       }
     });
+
+    window.addEventListener("storage", (e) => {
+      console.log(e)
+      if (e.key == "slide-position") {
+        console.log("settings new value " + Date.now())
+        this.currentPage = parseInt(e.newValue);
+        this.slider.goTo(e.newValue);
+
+      }
+    })
   }
 
   update() {

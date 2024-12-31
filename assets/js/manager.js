@@ -5,6 +5,8 @@ export class Manager {
     this.context = context;
     this.currentPage = parseInt(context.el.dataset.currentPage);
     this.maxPage = parseInt(context.el.dataset.maxPage);
+    
+    localStorage.setItem("slide-position", this.currentPage);
   }
 
   init() {
@@ -31,19 +33,14 @@ export class Manager {
 
     window.addEventListener("keydown", (e) => {
       if ((e.target.tagName || "").toLowerCase() != "input") {
-        e.preventDefault();
 
         switch (e.key) {
-          case "ArrowUp":
-            this.prevPage();
-            break;
           case "ArrowLeft":
+            e.preventDefault();
             this.prevPage();
             break;
           case "ArrowRight":
-            this.nextPage();
-            break;
-          case "ArrowDown":
+            e.preventDefault();
             this.nextPage();
             break;
         }
@@ -168,6 +165,7 @@ export class Manager {
     if (this.currentPage == this.maxPage - 1) return;
 
     this.currentPage += 1;
+    localStorage.setItem("slide-position", this.currentPage);
     this.context.pushEventTo(this.context.el, "current-page", {
       page: this.currentPage.toString(),
     });
@@ -177,6 +175,7 @@ export class Manager {
     if (this.currentPage == 0) return;
 
     this.currentPage -= 1;
+    localStorage.setItem("slide-position", this.currentPage);
     this.context.pushEventTo(this.context.el, "current-page", {
       page: this.currentPage.toString(),
     });
