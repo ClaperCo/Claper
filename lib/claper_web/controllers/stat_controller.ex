@@ -86,41 +86,85 @@ defmodule ClaperWeb.StatController do
     with quiz <-
            Quizzes.get_quiz!(quiz_id, [
              :quiz_questions,
+             :quiz_responses,
              quiz_questions: :quiz_question_opts,
+             quiz_responses: [:quiz_question_opt, :user],
              presentation_file: :event
            ]),
          event <- quiz.presentation_file.event,
          :ok <- authorize_event_access(current_user, event) do
-      # Create headers for the CSV
-      headers = ["Question", "Correct Answers", "Total Responses", "Response Distribution (%)"]
+      questions = quiz.quiz_questions
+      headers = build_quiz_headers(questions)
 
-      # Format data rows
-      data =
-        quiz.quiz_questions
-        |> Enum.map(fn question ->
-          [
-            question.content,
-            # Correct answers
-            question.quiz_question_opts
-            |> Enum.filter(& &1.is_correct)
-            |> Enum.map_join(", ", & &1.content),
-            # Total responses
-            question.quiz_question_opts
-            |> Enum.map(& &1.response_count)
-            |> Enum.sum()
-            |> to_string(),
-            # Response distribution
-            question.quiz_question_opts
-            |> Enum.map_join(", ", fn opt ->
-              "#{opt.content}: #{opt.percentage}%"
-            end)
-          ]
-        end)
+      # Group responses by user/attendee and question
+      responses_by_user =
+        Enum.group_by(
+          quiz.quiz_responses,
+          fn response -> response.user_id || response.attendee_identifier end
+        )
 
-      export_as_csv(conn, headers, data, "quiz-#{sanitize(quiz.title)}")
-    else
-      :unauthorized -> send_resp(conn, 403, "Forbidden")
+      # Format data rows - one row per user with their answers and score
+      data = Enum.map(responses_by_user, &process_user_responses(&1, questions))
+
+      csv_content =
+        CSV.encode([headers | data])
+        |> Enum.to_list()
+        |> to_string()
+
+      send_download(conn, {:binary, csv_content},
+        filename: "quiz_#{quiz.id}_results.csv",
+        content_type: "text/csv"
+      )
     end
+  end
+
+  defp build_quiz_headers(questions) do
+    question_headers =
+      questions
+      |> Enum.with_index(1)
+      |> Enum.map(fn {question, _index} -> question.content end)
+
+    ["Attendee identifier", "User email"] ++ question_headers ++ ["Total"]
+  end
+
+  defp process_user_responses({_user_id, responses}, questions) do
+    user_identifier = format_attendee_identifier(List.first(responses).attendee_identifier)
+    user_email = Map.get(List.first(responses).user || %{}, :email, "N/A")
+    responses_by_question = Enum.group_by(responses, & &1.quiz_question_id)
+
+    answers_with_correctness = process_question_responses(questions, responses_by_question)
+    answers = Enum.map(answers_with_correctness, fn {answer, _} -> answer || "" end)
+    correct_count = Enum.count(answers_with_correctness, fn {_, correct} -> correct end)
+    total = "#{correct_count}/#{length(questions)}"
+
+    [user_identifier, user_email] ++ answers ++ [total]
+  end
+
+  defp process_question_responses(questions, responses_by_question) do
+    Enum.map(questions, fn question ->
+      question_responses = Map.get(responses_by_question, question.id, [])
+
+      correct_opt_ids =
+        question.quiz_question_opts
+        |> Enum.filter(& &1.is_correct)
+        |> Enum.map(& &1.id)
+        |> MapSet.new()
+
+      format_question_response(question_responses, correct_opt_ids)
+    end)
+  end
+
+  defp format_question_response([], _correct_opt_ids), do: {nil, false}
+
+  defp format_question_response(question_responses, correct_opt_ids) do
+    answers = Enum.map(question_responses, & &1.quiz_question_opt.content)
+
+    all_correct =
+      Enum.all?(question_responses, fn r ->
+        MapSet.member?(correct_opt_ids, r.quiz_question_opt_id)
+      end)
+
+    {Enum.join(answers, ", "), all_correct}
   end
 
   @doc """

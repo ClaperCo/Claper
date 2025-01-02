@@ -5,6 +5,9 @@
 - Improve performance of presentation to load slides faster
 - Fix manager layout on small screens
 - Add clickable hyperlinks in messages
+- Improve quiz export
+- Add option to force login to submit quizzes
+- Fix url with question mark being flagged as a question
 
 ### v.2.3.0
 
