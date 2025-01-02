@@ -6,7 +6,8 @@ defmodule Claper.Quizzes.Quiz do
     field :title, :string
     field :position, :integer, default: 0
     field :enabled, :boolean, default: false
-    field :show_results, :boolean, default: false
+    field :show_results, :boolean, default: true
+    field :allow_anonymous, :boolean, default: false
     field :lti_line_item_url, :string
 
     belongs_to :presentation_file, Claper.Presentations.PresentationFile
@@ -30,6 +31,7 @@ defmodule Claper.Quizzes.Quiz do
       :presentation_file_id,
       :enabled,
       :show_results,
+      :allow_anonymous,
       :lti_resource_id,
       :lti_line_item_url
     ])

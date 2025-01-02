@@ -92,7 +92,7 @@ defmodule ClaperWeb.EventLive.Manage do
       |> stream_insert(:posts, post)
       |> update(:post_count, fn post_count -> post_count + 1 end)
 
-    case post.body =~ "?" do
+    case ClaperWeb.Helpers.body_without_links(post.body) =~ "?" do
       true ->
         {:noreply,
          socket
@@ -130,7 +130,7 @@ defmodule ClaperWeb.EventLive.Manage do
       end)
       |> update(:post_count, fn post_count -> post_count - 1 end)
 
-    case deleted_post.body =~ "?" do
+    case ClaperWeb.Helpers.body_without_links(deleted_post.body) =~ "?" do
       true ->
         {:noreply,
          socket
@@ -920,6 +920,7 @@ defmodule ClaperWeb.EventLive.Manage do
 
   defp list_all_questions(_socket, event_id, sort \\ "date") do
     Claper.Posts.list_questions(event_id, [:event, :reactions], String.to_atom(sort))
+    |> Enum.filter(&(ClaperWeb.Helpers.body_without_links(&1.body) =~ "?"))
   end
 
   defp list_form_submits(_socket, presentation_file_id) do

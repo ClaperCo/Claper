@@ -7,10 +7,10 @@ defmodule ClaperWeb.EventLive.ManageablePostComponent do
     ~H"""
     <div
       id={"#{@id}"}
-      class={"#{if @post.body =~ "?", do: "border-supporting-yellow-400 border-2"} flex flex-col md:block px-4 pb-2 pt-3 rounded-b-lg rounded-tr-lg bg-white relative shadow-md text-black break-all mt-2"}
+      class={"#{if ClaperWeb.Helpers.body_without_links(@post.body) =~ "?", do: "border-supporting-yellow-400 border-2"} flex flex-col md:block px-4 pb-2 pt-3 rounded-b-lg rounded-tr-lg bg-white relative shadow-md text-black break-all mt-2"}
     >
       <div
-        :if={@post.body =~ "?"}
+        :if={ClaperWeb.Helpers.body_without_links(@post.body) =~ "?"}
         class="inline-flex items-center space-x-1 justify-center px-3 py-0.5 rounded-full text-xs font-medium bg-supporting-yellow-400 text-white mb-2"
       >
         <svg

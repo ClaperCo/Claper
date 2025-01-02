@@ -50,7 +50,7 @@
 
       <%= inputs_for f, :quiz_questions, fn q -> %>
         <div class={[
-          "mb-8 p-4 border rounded-b-md",
+          "mb-4 p-4 border rounded-b-md",
           if(@current_quiz_question_index != q.index, do: "hidden", else: "")
         ]}>
           <div class="flex gap-x-3 mt-3 items-center justify-start">
@@ -167,6 +167,18 @@
           <% end %>
         </div>
       <% end %>
+    </div>
+
+    <p class="text-gray-700 text-xl font-semibold"><%= gettext("Options") %></p>
+
+    <div class="flex gap-x-2 mb-5 mt-3">
+      <%= checkbox(f, :allow_anonymous, class: "h-4 w-4") %>
+      <%= label(
+        f,
+        :allow_anonymous,
+        gettext("Allow anonymous submissions"),
+        class: "text-sm font-medium"
+      ) %>
     </div>
 
     <div class="flex justify-between items-center">

@@ -444,6 +444,26 @@ defmodule Claper.Quizzes do
   end
 
   @doc """
+  Get number of submissions for a given quiz_id
+
+  ## Examples
+
+      iex> get_number_submissions(quiz_id)
+      12
+
+  """
+  def get_submission_count(quiz_id) do
+    from(r in QuizResponse,
+      where: r.quiz_id == ^quiz_id,
+      select:
+        count(
+          fragment("DISTINCT COALESCE(?, CAST(? AS varchar))", r.attendee_identifier, r.user_id)
+        )
+    )
+    |> Repo.one()
+  end
+
+  @doc """
   Calculate percentage of all quiz questions for a given quiz.
 
   ## Examples

@@ -14,4 +14,9 @@ defmodule ClaperWeb.Helpers do
         text
     end)
   end
+
+  def body_without_links(text) do
+    url_regex = ~r/(https?:\/\/[^\s]+)/
+    String.replace(text, url_regex, "")
+  end
 end

@@ -123,7 +123,7 @@ defmodule Claper.Events do
     query =
       from(e in Event,
         where: e.user_id == ^user_id and not is_nil(e.expired_at),
-        order_by: [desc: e.inserted_at]
+        order_by: [desc: e.expired_at]
       )
 
     Repo.paginate(query, page: page, page_size: page_size, preload: preload)
