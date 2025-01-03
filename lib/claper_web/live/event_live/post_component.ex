@@ -76,7 +76,7 @@ defmodule ClaperWeb.EventLive.PostComponent do
               ) %>
             </span>
           </div>
-          <p><%= @post.body %></p>
+          <p><%= ClaperWeb.Helpers.format_body(@post.body) %></p>
 
           <div class="flex h-6 text-sm float-right text-white space-x-2">
             <%= if @post.like_count > 0 do %>
@@ -176,7 +176,7 @@ defmodule ClaperWeb.EventLive.PostComponent do
             </div>
           <% end %>
 
-          <p><%= @post.body %></p>
+          <p><%= ClaperWeb.Helpers.format_body(@post.body) %></p>
 
           <div class="flex h-6 text-xs float-right space-x-2">
             <%= if @reaction_enabled do %>
@@ -273,7 +273,5 @@ defmodule ClaperWeb.EventLive.PostComponent do
          end))
   end
 
-  defp pinned?(post) do
-    post.pinned == true
-  end
+  defp pinned?(post), do: post.pinned
 end

@@ -430,6 +430,13 @@
                           ) %>
                         </span>
                       </p>
+
+                      <p class="text-gray-400 text-sm">
+                        <%= gettext("Total submissions") %>:
+                        <span class="font-semibold">
+                          <%= Claper.Quizzes.get_submission_count(quiz.id) %>
+                        </span>
+                      </p>
                     </div>
 
                     <div class="flex flex-col space-y-3 overflow-y-auto max-h-[500px]">

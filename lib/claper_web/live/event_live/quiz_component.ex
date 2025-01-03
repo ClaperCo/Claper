@@ -150,27 +150,40 @@ defmodule ClaperWeb.EventLive.QuizComponent do
               <button phx-click="prev-question" class="px-3 py-2 text-white font-medium">
                 <%= gettext("Back") %>
               </button>
-            <% else %>
-              <div class="w-1/2"></div>
             <% end %>
 
-            <button
-              :if={@current_quiz_question_idx < length(@quiz.quiz_questions) - 1}
-              phx-click="next-question"
-              disabled={not @has_selection}
-              class={"px-3 py-2 text-white font-medium rounded-md h-full #{if @has_selection, do: "bg-primary-400 hover:bg-primary-500", else: "bg-gray-500 cursor-not-allowed"}"}
-            >
-              <%= gettext("Next") %>
-            </button>
-
-            <button
-              :if={@current_quiz_question_idx == length(@quiz.quiz_questions) - 1}
-              phx-click="submit-quiz"
-              disabled={not @has_selection}
-              class={"px-3 py-2 text-white font-medium rounded-md h-full #{if @has_selection, do: "bg-primary-400 hover:bg-primary-500", else: "bg-gray-500 cursor-not-allowed"}"}
-            >
-              <%= gettext("Submit") %>
-            </button>
+            <%= if @current_quiz_question_idx < length(@quiz.quiz_questions) - 1 do %>
+              <button
+                phx-click="next-question"
+                class={"px-3 py-2 text-white font-medium rounded-md h-full #{if @has_selection, do: "bg-primary-400 hover:bg-primary-500", else: "bg-gray-500 cursor-not-allowed"}"}
+                disabled={not @has_selection}
+              >
+                <%= gettext("Next") %>
+              </button>
+            <% else %>
+              <%= if is_nil(@current_user) && !@quiz.allow_anonymous do %>
+                <div class="w-full flex items-center justify-between">
+                  <div class="text-white text-sm font-semibold">
+                    <%= gettext("Please sign in to submit your answers") %>
+                  </div>
+                  <%= link(
+                    gettext("Sign in"),
+                    target: "_blank",
+                    to: ~p"/users/log_in",
+                    class:
+                      "inline px-3 py-2 text-white font-medium rounded-md h-full bg-primary-400 hover:bg-primary-500"
+                  ) %>
+                </div>
+              <% else %>
+                <button
+                  phx-click="submit-quiz"
+                  class={"px-3 py-2 text-white font-medium rounded-md h-full #{if @has_selection, do: "bg-primary-400 hover:bg-primary-500", else: "bg-gray-500 cursor-not-allowed"}"}
+                  disabled={not @has_selection}
+                >
+                  <%= gettext("Submit") %>
+                </button>
+              <% end %>
+            <% end %>
           </div>
 
           <div
