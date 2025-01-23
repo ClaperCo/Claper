@@ -40,6 +40,7 @@ defmodule ClaperWeb.EventLive.Join do
     socket
     |> assign(:page_title, gettext("Join"))
     |> assign(:about_url, Application.get_env(:claper, ClaperWeb.Endpoint)[:about_url])
+    |> assign(:privacy_url, Application.get_env(:claper, ClaperWeb.Endpoint)[:privacy_url])
     |> assign(:event, nil)
   end
 end
