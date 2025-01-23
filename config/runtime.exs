@@ -169,6 +169,7 @@ config :claper, ClaperWeb.Endpoint,
   ],
   secret_key_base: secret_key_base,
   same_site_cookie: same_site_cookie,
+  about_url: about_url,
   secure_cookie: secure_cookie
 
 config :claper,

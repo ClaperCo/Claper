@@ -20,7 +20,7 @@
       class="absolute h-24 bg-white w-full top-0 md:hidden px-5 py-3 flex flex-col items-center justify-center space-y-2"
       @click.away="open = false"
     >
-      <a href="{@about_url}" class="text-sm font-semibold text-black">
+      <a href={@about_url} class="text-sm font-semibold text-black">
         <%= gettext("About") %>
       </a>
       <%= if @current_user do %>
@@ -43,7 +43,7 @@
       <img src="/images/icons/menu-outline.svg" class="h-9" />
     </button>
     <div class="hidden md:block">
-      <a href="{@about_url}" class="text-sm text-white font-semibold mr-3">
+      <a href={@about_url} class="text-sm text-white font-semibold mr-3">
         <%= gettext("About") %>
       </a>
       <%= if @current_user do %>
