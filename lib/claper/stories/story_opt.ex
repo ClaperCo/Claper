@@ -5,6 +5,7 @@ defmodule Claper.Stories.StoryOpt do
   @type t :: %__MODULE__{
           id: integer(),
           content: String.t(),
+          next_slide: integer(),
           vote_count: integer(),
           percentage: float(),
           story_id: integer(),
@@ -17,6 +18,7 @@ defmodule Claper.Stories.StoryOpt do
   @derive {Jason.Encoder, only: [:content, :vote_count]}
   schema "story_opts" do
     field :content, :string
+    field :next_slide, :integer
     field :vote_count, :integer
     field :percentage, :float, virtual: true
 
@@ -29,8 +31,8 @@ defmodule Claper.Stories.StoryOpt do
   @doc false
   def changeset(story_opt, attrs) do
     story_opt
-    |> cast(attrs, [:content, :vote_count, :story_id])
-    |> validate_required([:content])
+    |> cast(attrs, [:content, :vote_count, :next_slide, :story_id])
+    |> validate_required([:content, :next_slide])
     |> validate_length(:content, max: 255)
   end
 end

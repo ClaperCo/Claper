@@ -32,6 +32,17 @@
             required="true"
           />
         </div>
+        <div class="flex-1">
+          <ClaperWeb.Component.Input.text
+            form={i}
+            labelClass={if @dark, do: "text-white"}
+            fieldClass={if @dark, do: "bg-gray-700 text-white"}
+            key={:next_slide}
+            name={ngettext("Next Slide %{count}", "Next Side %{count}", i.index + 1)}
+            autofocus="true"
+            required="true"
+          />
+        </div>
         <%= if i.index >= 2 do %>
           <button
             type="button"
