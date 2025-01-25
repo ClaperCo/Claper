@@ -181,6 +181,13 @@
         </button>
         <button
           phx-click="change_tab"
+          phx-value-tab="stories"
+          class={"whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm #{if @current_tab == :stories, do: "border-primary-500 text-primary-600", else: "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"}"}
+        >
+          <%= gettext("Polls") %>
+        </button>
+        <button
+          phx-click="change_tab"
           phx-value-tab="polls"
           class={"whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm #{if @current_tab == :polls, do: "border-primary-500 text-primary-600", else: "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"}"}
         >
@@ -270,6 +277,66 @@
               <% end %>
             <% else %>
               <p class="italic text-gray-500"><%= gettext("No poll has been created") %></p>
+            <% end %>
+          </div>
+        <% :stories -> %>
+          <div>
+            <%= if length(@event.presentation_file.stories) > 0 do %>
+              <%= for story <- @event.presentation_file.stories do %>
+                <% total = Enum.map(story.story_opts, fn e -> e.vote_count end) |> Enum.sum() %>
+                <div class="bg-gray-900 w-full p-6 my-5 text-black shadow-lg rounded-md">
+                  <div class="w-full h-full flex items-center justify-between mb-4">
+                    <p class="text-white text-xl font-semibold"><%= story.title %></p>
+                    <%= link to: ~p"/export/stories/#{story.id}", class: "text-sm text-white bg-primary-500 hover:bg-primary-600 rounded-md px-3 py-1 flex items-center gap-1", method: :post, target: "_blank" do %>
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        class="w-5 h-5"
+                      >
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M14 3v4a1 1 0 0 0 1 1h4" /><path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z" /><path d="M9 15h6" /><path d="M12.5 17.5l2.5 -2.5l-2.5 -2.5" />
+                      </svg>
+                      <span><%= gettext("Export") %> (CSV)</span>
+                    <% end %>
+                  </div>
+                  <div>
+                    <div class="flex flex-col space-y-3">
+                      <%= if (length story.story_opts) > 0 do %>
+                        <%= for {opt, idx} <- Enum.with_index(story.story_opts) do %>
+                          <% percentage =
+                            if total > 0,
+                              do:
+                                Float.round(opt.vote_count / total * 100)
+                                |> :erlang.float_to_binary(decimals: 0),
+                              else: 0 %>
+                          <div
+                            id={"story-opt-#{idx}"}
+                            class="bg-gray-500 px-3 py-2 rounded-lg flex justify-between items-center relative text-white"
+                          >
+                            <div
+                              style={"width: #{percentage}%;"}
+                              class={"bg-gradient-to-r from-primary-500 to-secondary-500 h-full absolute left-0 transition-all rounded-l-lg #{if percentage == "100", do: "rounded-r-lg"}"}
+                            >
+                            </div>
+                            <div class="flex space-x-3 items-center z-10 text-left">
+                              <span class="flex-1 pr-2"><%= opt.content %></span>
+                            </div>
+                            <span class="text-sm z-10">
+                              <%= percentage %>% (<%= opt.vote_count %>)
+                            </span>
+                          </div>
+                        <% end %>
+                      <% end %>
+                    </div>
+                  </div>
+                </div>
+              <% end %>
+            <% else %>
+              <p class="italic text-gray-500"><%= gettext("No story has been created") %></p>
             <% end %>
           </div>
         <% :forms -> %>

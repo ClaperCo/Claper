@@ -73,6 +73,56 @@ defmodule ClaperWeb.EventLive.ManagerSettingsComponent do
                 <div :if={!@show_shortcut}></div>
               </ClaperWeb.Component.Input.check_button>
             </div>
+          <% %Claper.Stories.Story{} -> %>
+            <div class="flex space-x-2 space-y-1.5 items-center mt-1.5">
+              <ClaperWeb.Component.Input.check_button
+                key={:story_visible}
+                checked={@state.story_visible}
+                shortcut={if @create == nil, do: "Z", else: nil}
+              >
+                <svg
+                  :if={@state.story_visible}
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="h-6 w-6"
+                >
+                  <path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M3 4h1m4 0h13" /><path d="M4 4v10a2 2 0 0 0 2 2h10m3.42 -.592c.359 -.362 .58 -.859 .58 -1.408v-10" /><path d="M12 16v4" /><path d="M9 20h6" /><path d="M8 12l2 -2m4 0l2 -2" /><path d="M3 3l18 18" />
+                </svg>
+
+                <svg
+                  :if={!@state.story_visible}
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="h-6 w-6"
+                >
+                  <path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M3 4l18 0" /><path d="M4 4v10a2 2 0 0 0 2 2h12a2 2 0 0 0 2 -2v-10" /><path d="M12 16l0 4" /><path d="M9 20l6 0" /><path d="M8 12l3 -3l2 2l3 -3" />
+                </svg>
+
+                <span :if={@state.story_visible}>
+                  <%= gettext("Hide results on presentation") %>
+                </span>
+                <span :if={!@state.story_visible}>
+                  <%= gettext("Show results on presentation") %>
+                </span>
+                <code
+                  :if={@show_shortcut}
+                  class="px-2 py-1.5 text-xs font-semibold text-gray-800 bg-gray-100 border border-gray-200 rounded-lg"
+                >
+                  z
+                </code>
+                <div :if={!@show_shortcut}></div>
+              </ClaperWeb.Component.Input.check_button>
+            </div>
           <% %Claper.Quizzes.Quiz{} -> %>
             <div class="grid grid-cols-1 space-y-1.5 items-center mt-1.5">
               <ClaperWeb.Component.Input.check_button

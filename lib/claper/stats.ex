@@ -46,6 +46,27 @@ defmodule Claper.Stats do
     |> Enum.sum()
   end
 
+  def get_distinct_story_votes(story_ids) do
+    from(pv in Claper.Stories.StoryVote,
+      where: pv.story_id in ^story_ids,
+      group_by: pv.story_id,
+      select: %{
+        story_id: pv.story_id,
+        count:
+          count(
+            fragment(
+              "DISTINCT COALESCE(?, CAST(? AS varchar))",
+              pv.attendee_identifier,
+              pv.user_id
+            )
+          )
+      }
+    )
+    |> Repo.all()
+    |> Enum.map(fn %{count: count} -> count end)
+    |> Enum.sum()
+  end
+
   def get_distinct_quiz_responses(quiz_ids) do
     from(pv in Claper.Quizzes.QuizResponse,
       where: pv.quiz_id in ^quiz_ids,

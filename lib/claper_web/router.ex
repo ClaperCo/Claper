@@ -53,6 +53,7 @@ defmodule ClaperWeb.Router do
 
       post "/export/forms/:form_id", StatController, :export_form
       post "/export/polls/:poll_id", StatController, :export_poll
+      post "/export/stories/:story_id", StatController, :export_story
       post "/export/quizzes/:quiz_id", StatController, :export_quiz
       post "/export/quizzes/:quiz_id/qti", StatController, :export_quiz_qti
       post "/export/:event_id/messages", StatController, :export_all_messages
@@ -77,6 +78,8 @@ defmodule ClaperWeb.Router do
       live("/e/:code/manage", EventLive.Manage, :show)
       live("/e/:code/manage/add/poll", EventLive.Manage, :add_poll)
       live("/e/:code/manage/edit/poll/:id", EventLive.Manage, :edit_poll)
+      live("/e/:code/manage/add/story", EventLive.Manage, :add_story)
+      live("/e/:code/manage/edit/story/:id", EventLive.Manage, :edit_story)
       live("/e/:code/manage/add/form", EventLive.Manage, :add_form)
       live("/e/:code/manage/import", EventLive.Manage, :import)
       live("/e/:code/manage/edit/form/:id", EventLive.Manage, :edit_form)
