@@ -667,7 +667,7 @@ defmodule ClaperWeb.EventLive.Show do
 
   @impl true
   def handle_event(
-        "vote",
+        "svote",
         _params,
         %{assigns: %{current_user: current_user, selected_story_opt: opts}} = socket
       )
@@ -684,13 +684,13 @@ defmodule ClaperWeb.EventLive.Show do
            socket.assigns.current_interaction.id
          ) do
       {:ok, story} ->
-        {:noreply, socket |> get_current_vote(story.id)}
+        {:noreply, socket |> get_current_svote(story.id)}
     end
   end
 
   @impl true
   def handle_event(
-        "vote",
+        "svote",
         _params,
         %{assigns: %{attendee_identifier: attendee_identifier, selected_story_opt: opts}} = socket
       ) do
@@ -706,7 +706,7 @@ defmodule ClaperWeb.EventLive.Show do
            socket.assigns.current_interaction.id
          ) do
       {:ok, story} ->
-        {:noreply, socket |> get_current_vote(story.id)}
+        {:noreply, socket |> get_current_svote(story.id)}
     end
   end
 
@@ -873,13 +873,13 @@ defmodule ClaperWeb.EventLive.Show do
     socket |> assign(:current_poll_vote, vote)
   end
 
-  defp get_current_vote(%{assigns: %{current_user: current_user}} = socket, story_id)
+  defp get_current_svote(%{assigns: %{current_user: current_user}} = socket, story_id)
        when is_map(current_user) do
     vote = Stories.get_story_vote(current_user.id, story_id)
     socket |> assign(:current_story_vote, vote)
   end
 
-  defp get_current_vote(%{assigns: %{attendee_identifier: attendee_identifier}} = socket, story_id) do
+  defp get_current_svote(%{assigns: %{attendee_identifier: attendee_identifier}} = socket, story_id) do
     vote = Stories.get_story_vote(attendee_identifier, story_id)
     socket |> assign(:current_story_vote, vote)
   end
@@ -969,7 +969,7 @@ defmodule ClaperWeb.EventLive.Show do
       %{story | story_opts: Enum.sort_by(story.story_opts, & &1.id, :asc)}
     )
     |> maybe_reset_selected_story_opt(same_interaction)
-    |> get_current_vote(story.id)
+    |> get_current_svote(story.id)
   end
 
   defp load_current_interaction(socket, %Forms.Form{} = interaction, _same_interaction) do

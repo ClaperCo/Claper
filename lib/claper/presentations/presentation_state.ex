@@ -6,6 +6,7 @@ defmodule Claper.Presentations.PresentationState do
           id: integer(),
           position: integer() | nil,
           chat_visible: boolean() | nil,
+          story_visible: boolean() | nil,
           poll_visible: boolean() | nil,
           join_screen_visible: boolean() | nil,
           chat_enabled: boolean() | nil,
@@ -22,6 +23,7 @@ defmodule Claper.Presentations.PresentationState do
     field :position, :integer
     field :chat_visible, :boolean
     field :poll_visible, :boolean
+    field :story_visible, :boolean
     field :join_screen_visible, :boolean
     field :chat_enabled, :boolean
     field :anonymous_chat_enabled, :boolean
@@ -41,6 +43,7 @@ defmodule Claper.Presentations.PresentationState do
       :position,
       :chat_visible,
       :poll_visible,
+      :story_visible,
       :join_screen_visible,
       :banned,
       :presentation_file_id,

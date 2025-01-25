@@ -41,6 +41,7 @@ defmodule Claper.PresentationsFixtures do
         banned: [],
         chat_visible: false,
         poll_visible: false,
+        story_visible: false,
         join_screen_visible: false
       })
       |> Claper.Presentations.create_presentation_state()

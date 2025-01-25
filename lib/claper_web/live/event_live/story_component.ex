@@ -128,7 +128,7 @@ defmodule ClaperWeb.EventLive.StoryComponent do
             </button>
           <% else %>
             <button
-              phx-click="vote"
+              phx-click="svote"
               phx-disable-with="..."
               class="px-3 py-2 text-white font-medium bg-primary-400 hover:bg-primary-500 rounded-md mt-3 mb-4"
             >
