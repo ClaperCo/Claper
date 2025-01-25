@@ -18,7 +18,7 @@ defmodule Claper.Stories.Story do
         }
 
   @derive {Jason.Encoder, only: [:title, :position]}
-  schema "storys" do
+  schema "stories" do
     field :title, :string
     field :position, :integer
     field :total, :integer, virtual: true
