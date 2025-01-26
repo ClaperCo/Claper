@@ -187,6 +187,7 @@ defmodule Claper.Stories do
     |> Repo.update()
     |> case do
       {:ok, story} ->
+        set_next_slide(story)
         broadcast({:ok, story, event_uuid}, :story_updated)
 
       {:error, changeset} ->
