@@ -170,16 +170,16 @@ defmodule ClaperWeb.EventLive.ManagerSettingsComponent do
                     <g>
                       <g id="XMLID_1_">
                         <g>
-                          
+
                             <path fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" d="
                             M57.4,48l-5.5,11.4c-0.4,0.9-1.5,1.5-2.4,1.2c-1.2-0.4-1.8-1.7-1.3-2.8l5.5-11.5"/>
-                          
+
                             <path fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" d="
                             M56.5,38.1l-1.9-1.6c-1.5-0.7-3.4-0.1-4.1,1.4l-1.6,3.4c-0.7,1.5-0.1,3.4,1.4,4.1l2.5,0.5l1,0.2h0l3.7,1.8l0,0l0.5,0.5l2,1.7
                             c1.5,0.7,3.4,0.1,4.1-1.4l1.6-3.4c0.7-1.5,0.1-3.4-1.4-4.1l-2.5-0.5L61,40.5l-3.6-1.8L56.5,38.1z"/>
-                          
+
                             <line fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" x1="61.8" y1="40.9" x2="58.4" y2="48"/>
-                          
+
                             <line fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" x1="53" y1="45.3" x2="56.4" y2="38.3"/>
                         </g>
                       </g>
