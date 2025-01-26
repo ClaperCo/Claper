@@ -126,7 +126,8 @@ defmodule ClaperWeb.EventLive.ManagerSettingsComponent do
             <div class="flex space-x-2 space-y-1.5 items-center mt-1.5">
               <ClaperWeb.Component.Input.page_button
                 key={:story_visible}
-                checked={@state.story_visible}
+                checked={if @current_interaction.story_result == -1, do: false, else: true}
+                disabled={if @current_interaction.story_result == -1, do: true, else: false}
                 page={@current_interaction.story_result}
                 shortcut={if @create == nil, do: "N", else: nil}
               >
@@ -209,7 +210,7 @@ defmodule ClaperWeb.EventLive.ManagerSettingsComponent do
                     </g>
                   </g>
                 </svg>
-                <%= gettext("Go to decision") %>: <%= @current_interaction.story_result %>
+                <%= gettext("Go to decision") %>: <%= if @current_interaction.story_result != -1, do: @current_interaction.story_result, else: "N/A"%>
                 <code
                   :if={@show_shortcut}
                   class="px-2 py-1.5 text-xs font-semibold text-gray-800 bg-gray-100 border border-gray-200 rounded-lg"
