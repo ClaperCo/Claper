@@ -128,7 +128,7 @@ defmodule ClaperWeb.EventLive.ManagerSettingsComponent do
                 key={:story_visible}
                 checked={if @current_interaction.story_result == -1, do: false, else: true}
                 disabled={if @current_interaction.story_result == -1, do: true, else: false}
-                page={@current_interaction.story_result}
+                page={@current_interaction.story_result - 1}
                 shortcut={if @create == nil, do: "N", else: nil}
               >
 
