@@ -124,11 +124,13 @@ defmodule ClaperWeb.EventLive.ManagerSettingsComponent do
               </ClaperWeb.Component.Input.check_button>
             </div>
             <div class="flex space-x-2 space-y-1.5 items-center mt-1.5">
-              <ClaperWeb.Component.Input.check_button
+              <ClaperWeb.Component.Input.page_button
                 key={:story_visible}
                 checked={@state.story_visible}
+                page={@current_interaction.story_result}
                 shortcut={if @create == nil, do: "N", else: nil}
               >
+
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 72 72"
@@ -207,8 +209,7 @@ defmodule ClaperWeb.EventLive.ManagerSettingsComponent do
                     </g>
                   </g>
                 </svg>
-
-                <%= gettext("Go to decision") %>
+                <%= gettext("Go to decision") %>: <%= @current_interaction.story_result %>
                 <code
                   :if={@show_shortcut}
                   class="px-2 py-1.5 text-xs font-semibold text-gray-800 bg-gray-100 border border-gray-200 rounded-lg"
@@ -216,7 +217,7 @@ defmodule ClaperWeb.EventLive.ManagerSettingsComponent do
                   n
                 </code>
                 <div :if={!@show_shortcut}></div>
-              </ClaperWeb.Component.Input.check_button>
+              </ClaperWeb.Component.Input.page_button>
             </div>
           <% %Claper.Quizzes.Quiz{} -> %>
             <div class="grid grid-cols-1 space-y-1.5 items-center mt-1.5">

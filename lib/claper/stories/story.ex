@@ -12,6 +12,7 @@ defmodule Claper.Stories.Story do
           presentation_file_id: integer() | nil,
           story_opts: [Claper.Stories.StoryOpt.t()],
           story_votes: [Claper.Stories.StoryVote.t()] | nil,
+          story_result: integer() | 0,
           show_results: boolean() | nil,
           inserted_at: NaiveDateTime.t(),
           updated_at: NaiveDateTime.t()
@@ -25,6 +26,7 @@ defmodule Claper.Stories.Story do
     field :enabled, :boolean
     field :multiple, :boolean
     field :show_results, :boolean
+    field :story_result, :integer
 
     belongs_to :presentation_file, Claper.Presentations.PresentationFile
     has_many :story_opts, Claper.Stories.StoryOpt, on_replace: :delete
@@ -43,6 +45,7 @@ defmodule Claper.Stories.Story do
       :enabled,
       :total,
       :multiple,
+      :story_result,
       :show_results
     ])
     |> cast_assoc(:story_opts, required: true)
