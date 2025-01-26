@@ -99,6 +99,23 @@ defmodule Claper.Stories do
   end
 
   @doc """
+  Determines the next-slide based on the submitted votes for a story.
+
+  ## Examples
+
+      iex> set_next_slide(story)
+      %Story{}
+
+  """
+  def set_next_slide(%Story{story_opts: story_opts} = story) when is_list(story_opts) do
+    nxt_sld = Enum.max_by(story.story_opts, &(&1.vote_count)).next_slide
+
+    story
+    |> Story.changeset(%{story_result: nxt_sld})
+    |> Repo.update()
+  end
+
+  @doc """
   Calculate percentage of all story options for a given story.
 
   ## Examples
@@ -249,6 +266,7 @@ defmodule Claper.Stories do
          |> Repo.transaction() do
       {:ok, _} ->
         story = get_story!(story_id)
+        set_next_slide(story)
         broadcast({:ok, story, event_uuid}, :story_updated)
     end
   end
@@ -272,6 +290,7 @@ defmodule Claper.Stories do
          |> Repo.transaction() do
       {:ok, _} ->
         story = get_story!(story_id)
+        set_next_slide(story)
         broadcast({:ok, story, event_uuid}, :story_updated)
     end
   end
