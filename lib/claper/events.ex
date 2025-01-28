@@ -609,10 +609,10 @@ defmodule Claper.Events do
             end)}
          end)
          |> Ecto.Multi.run(:stories, fn _repo,
-                                      %{
-                                        new_presentation_file: new_presentation_file,
-                                        original_event: original_event
-                                      } ->
+                                        %{
+                                          new_presentation_file: new_presentation_file,
+                                          original_event: original_event
+                                        } ->
            {:ok,
             Enum.map(original_event.presentation_file.stories, fn story ->
               story_attrs =

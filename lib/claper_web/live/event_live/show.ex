@@ -879,7 +879,10 @@ defmodule ClaperWeb.EventLive.Show do
     socket |> assign(:current_story_vote, vote)
   end
 
-  defp get_current_svote(%{assigns: %{attendee_identifier: attendee_identifier}} = socket, story_id) do
+  defp get_current_svote(
+         %{assigns: %{attendee_identifier: attendee_identifier}} = socket,
+         story_id
+       ) do
     vote = Stories.get_story_vote(attendee_identifier, story_id)
     socket |> assign(:current_story_vote, vote)
   end

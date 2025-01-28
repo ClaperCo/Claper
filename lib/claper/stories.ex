@@ -108,7 +108,7 @@ defmodule Claper.Stories do
 
   """
   def set_next_slide(%Story{story_opts: story_opts} = story) when is_list(story_opts) do
-    nxt_sld = Enum.max_by(story.story_opts, &(&1.vote_count)).next_slide
+    nxt_sld = Enum.max_by(story.story_opts, & &1.vote_count).next_slide
 
     story
     |> Story.changeset(%{story_result: nxt_sld})

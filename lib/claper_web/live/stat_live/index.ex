@@ -72,7 +72,7 @@ defmodule ClaperWeb.StatLive.Index do
     total =
       average_messages(event, unique_attendees) + average_polls(event, unique_attendees) +
         average_quizzes(event, unique_attendees) + average_forms(event, unique_attendees) +
-          average_stories(event, unique_attendees)
+        average_stories(event, unique_attendees)
 
     (total / 4 * 100)
     |> Float.round()

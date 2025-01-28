@@ -429,7 +429,8 @@ defmodule ClaperWeb.EventLive.Manage do
   end
 
   def handle_event("story-set-inactive", %{"id" => id}, socket) do
-    with story <- Stories.get_story!(id), {:ok, _} <- Claper.Interactions.disable_interaction(story) do
+    with story <- Stories.get_story!(id),
+         {:ok, _} <- Claper.Interactions.disable_interaction(story) do
       Phoenix.PubSub.broadcast(
         Claper.PubSub,
         "event:#{socket.assigns.event.uuid}",
@@ -887,7 +888,10 @@ defmodule ClaperWeb.EventLive.Manage do
     socket
     |> assign(:create, "story")
     |> assign(:story, %Stories.Story{
-      story_opts: [%Stories.StoryOpt{content: gettext("Yes")}, %Stories.StoryOpt{content: gettext("No")}]
+      story_opts: [
+        %Stories.StoryOpt{content: gettext("Yes")},
+        %Stories.StoryOpt{content: gettext("No")}
+      ]
     })
   end
 

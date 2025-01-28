@@ -9,7 +9,11 @@ defmodule ClaperWeb.EventLive.StoryComponent do
         id="collapsed-story"
         class="bg-gray-900 py-3 px-6 text-black shadow-lg mx-auto rounded-full w-max hidden"
       >
-        <div class="block w-full h-full cursor-pointer" phx-click={toggle_story()} phx-target={@myself}>
+        <div
+          class="block w-full h-full cursor-pointer"
+          phx-click={toggle_story()}
+          phx-target={@myself}
+        >
           <div class="text-white flex space-x-2 items-center">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -30,7 +34,11 @@ defmodule ClaperWeb.EventLive.StoryComponent do
         </div>
       </div>
       <div id="extended-story" class="bg-gray-900 w-full py-3 px-6 text-black shadow-lg rounded-md">
-        <div class="block w-full h-full cursor-pointer" phx-click={toggle_story()} phx-target={@myself}>
+        <div
+          class="block w-full h-full cursor-pointer"
+          phx-click={toggle_story()}
+          phx-target={@myself}
+        >
           <div id="story-pane" class="float-right mt-2">
             <svg
               xmlns="http://www.w3.org/2000/svg"
