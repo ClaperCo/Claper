@@ -76,6 +76,7 @@ privacy_url = get_var_from_path_or_env(config_dir, "PRIVACY_URL", nil)
 
 if privacy_url do
   privacy_url = URI.parse(privacy_url)
+
   if System.get_env("MIX_ENV") == "prod" or Application.get_env(:claper, :server, false) do
     if privacy_url.scheme not in ["http", "https"] do
       raise "PRIVACY_URL must start with `http` or `https`. Currently configured as `#{System.get_env("PRIVACY_URL")}`"
