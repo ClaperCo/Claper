@@ -63,6 +63,27 @@ if System.get_env("MIX_ENV") == "prod" or Application.get_env(:claper, :server, 
   end
 end
 
+about_url = get_var_from_path_or_env(config_dir, "ABOUT_URL", "https://claper.co/")
+about_url = URI.parse(about_url)
+
+if System.get_env("MIX_ENV") == "prod" or Application.get_env(:claper, :server, false) do
+  if about_url.scheme not in ["http", "https"] do
+    raise "ABOUT_URL must start with `http` or `https`. Currently configured as `#{System.get_env("ABOUT_URL")}`"
+  end
+end
+
+privacy_url = get_var_from_path_or_env(config_dir, "PRIVACY_URL", nil)
+
+if privacy_url do
+  privacy_url = URI.parse(privacy_url)
+
+  if System.get_env("MIX_ENV") == "prod" or Application.get_env(:claper, :server, false) do
+    if privacy_url.scheme not in ["http", "https"] do
+      raise "PRIVACY_URL must start with `http` or `https`. Currently configured as `#{System.get_env("PRIVACY_URL")}`"
+    end
+  end
+end
+
 max_file_size = get_int_from_path_or_env(config_dir, "MAX_FILE_SIZE_MB", 15)
 
 enable_account_creation =
@@ -160,6 +181,8 @@ config :claper, ClaperWeb.Endpoint,
   ],
   secret_key_base: secret_key_base,
   same_site_cookie: same_site_cookie,
+  about_url: about_url,
+  privacy_url: privacy_url,
   secure_cookie: secure_cookie
 
 config :claper,
