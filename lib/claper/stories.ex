@@ -114,11 +114,14 @@ defmodule Claper.Stories do
     |> Story.changeset(%{story_result: nxt_sld})
     |> Repo.update()
 
-    next_story = from(p in Story,
-      where: p.presentation_file_id == ^story.presentation_file_id and p.position == ^nxt_sld - 1,
-      select: p.id
-    )
-    |> Repo.one()
+    next_story =
+      from(p in Story,
+        where:
+          p.presentation_file_id == ^story.presentation_file_id and p.position == ^nxt_sld - 1,
+        select: p.id
+      )
+      |> Repo.one()
+
     set_clear(next_story)
   end
 
@@ -326,9 +329,11 @@ defmodule Claper.Stories do
 
   def set_clear(id) do
     story = get_story!(id)
+
     story
     |> Story.changeset(%{story_result: -1})
     |> Repo.update()
+
     Enum.reduce(story.story_opts, Ecto.Multi.new(), fn opt, multi ->
       Ecto.Multi.update(
         multi,
@@ -337,6 +342,7 @@ defmodule Claper.Stories do
       )
     end)
     |> Repo.transaction()
+
     from(p in StoryVote,
       where: p.story_id == ^id
     )
