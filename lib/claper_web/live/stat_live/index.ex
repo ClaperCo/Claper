@@ -15,6 +15,7 @@ defmodule ClaperWeb.StatLive.Index do
       Events.get_managed_event!(socket.assigns.current_user, id,
         presentation_file: [
           polls: [:poll_opts],
+          stories: [:story_opts],
           forms: [:form_submits],
           embeds: [],
           quizzes: [:quiz_questions, quiz_questions: :quiz_question_opts]
@@ -70,7 +71,8 @@ defmodule ClaperWeb.StatLive.Index do
   defp calculate_engagement_rate(event, unique_attendees) do
     total =
       average_messages(event, unique_attendees) + average_polls(event, unique_attendees) +
-        average_quizzes(event, unique_attendees) + average_forms(event, unique_attendees)
+        average_quizzes(event, unique_attendees) + average_forms(event, unique_attendees) +
+        average_stories(event, unique_attendees)
 
     (total / 4 * 100)
     |> Float.round()
@@ -97,6 +99,21 @@ defmodule ClaperWeb.StatLive.Index do
       poll_ids ->
         distinct_votes = Claper.Stats.get_distinct_poll_votes(poll_ids)
         distinct_votes / (Enum.count(poll_ids) * unique_attendees)
+    end
+  end
+
+  defp average_stories(_event, 0), do: 0
+
+  defp average_stories(event, unique_attendees) do
+    story_ids = Claper.Stories.list_stories(event.presentation_file.id) |> Enum.map(& &1.id)
+
+    case story_ids do
+      [] ->
+        0
+
+      story_ids ->
+        distinct_votes = Claper.Stats.get_distinct_story_votes(story_ids)
+        distinct_votes / (Enum.count(story_ids) * unique_attendees)
     end
   end
 

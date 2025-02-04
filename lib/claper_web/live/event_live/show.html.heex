@@ -77,6 +77,25 @@
             />
           </div>
         </div>
+      <% %Claper.Stories.Story{} -> %>
+        <div
+          id="story-wrapper-parent"
+          class="animate__animated animate__zoomInDown w-full lg:w-1/3 lg:mx-auto fixed top-16 z-10 px-2 lg:px-7 pb-6 max-h-screen overflow-y-auto"
+        >
+          <div class="transition-all" id="story-wrapper">
+            <.live_component
+              module={ClaperWeb.EventLive.StoryComponent}
+              id={"#{@current_interaction.id}-story"}
+              story={@current_interaction}
+              current_user={@current_user}
+              attendee_identifier={@attendee_identifier}
+              event={@event}
+              selected_story_opt={@selected_story_opt}
+              current_story_vote={@current_story_vote}
+              show_results={@current_interaction.show_results}
+            />
+          </div>
+        </div>
       <% %Claper.Forms.Form{} -> %>
         <div
           id="form-wrapper-parent"

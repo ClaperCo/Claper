@@ -9,6 +9,7 @@ defmodule Claper.Presentations.PresentationFile do
           status: String.t() | nil,
           event_id: integer() | nil,
           polls: [Claper.Polls.Poll.t()] | nil,
+          stories: [Claper.Stories.Story.t()] | nil,
           forms: [Claper.Forms.Form.t()] | nil,
           embeds: [Claper.Embeds.Embed.t()] | nil,
           quizzes: [Claper.Quizzes.Quiz.t()] | nil,
@@ -24,6 +25,7 @@ defmodule Claper.Presentations.PresentationFile do
 
     belongs_to :event, Claper.Events.Event
     has_many :polls, Claper.Polls.Poll
+    has_many :stories, Claper.Stories.Story
     has_many :forms, Claper.Forms.Form
     has_many :embeds, Claper.Embeds.Embed
     has_many :quizzes, Claper.Quizzes.Quiz

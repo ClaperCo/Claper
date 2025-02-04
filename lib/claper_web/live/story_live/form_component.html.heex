@@ -1,0 +1,139 @@
+<div>
+  <.form
+    :let={f}
+    for={@changeset}
+    id="story-form"
+    phx-target={@myself}
+    phx-change="validate"
+    phx-submit="save"
+  >
+    <div class="my-3 mb-5">
+      <ClaperWeb.Component.Input.text
+        form={f}
+        key={:title}
+        name={gettext("Title of your story")}
+        labelClass={if @dark, do: "text-white"}
+        fieldClass={if @dark, do: "bg-gray-700 text-white"}
+        autofocus="true"
+        required="true"
+      />
+    </div>
+
+    <%= inputs_for f, :story_opts, fn i -> %>
+      <div class="flex space-x-3 mt-3 items-center justify-start">
+        <div class="flex-1">
+          <ClaperWeb.Component.Input.text
+            form={i}
+            labelClass={if @dark, do: "text-white"}
+            fieldClass={if @dark, do: "bg-gray-700 text-white"}
+            key={:content}
+            name={ngettext("Choice %{count}", "Choice %{count}", i.index + 1)}
+            autofocus="true"
+            required="true"
+          />
+        </div>
+        <div class="flex-1">
+          <ClaperWeb.Component.Input.text
+            form={i}
+            labelClass={if @dark, do: "text-white"}
+            fieldClass={if @dark, do: "bg-gray-700 text-white"}
+            key={:next_slide}
+            name={ngettext("Next Slide %{count}", "Next Slide %{count}", i.index + 1)}
+            autofocus="true"
+            required="true"
+          />
+        </div>
+        <%= if i.index >= 2 do %>
+          <button
+            type="button"
+            phx-click="remove_opt"
+            phx-value-opt={i.index}
+            phx-target={@myself}
+            class="rounded-md bg-red-500 hover:bg-red-600 transition block mt-4"
+          >
+            <svg
+              class="text-white h-10 transform rotate-45"
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+              aria-hidden="true"
+            >
+              <path
+                fill-rule="evenodd"
+                d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
+                clip-rule="evenodd"
+              />
+            </svg>
+          </button>
+        <% end %>
+      </div>
+    <% end %>
+
+    <button
+      type="button"
+      phx-click="add_opt"
+      phx-target={@myself}
+      class="rounded-md bg-primary-500 hover:bg-primary-600 transition block mt-3 mb-8"
+    >
+      <svg
+        class="text-white h-10"
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 20 20"
+        fill="currentColor"
+        aria-hidden="true"
+      >
+        <path
+          fill-rule="evenodd"
+          d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
+          clip-rule="evenodd"
+        />
+      </svg>
+    </button>
+
+    <p class="text-gray-700 text-xl font-semibold"><%= gettext("Options") %></p>
+
+    <div class="flex gap-x-2 mb-5 mt-3">
+      <%= checkbox(f, :show_results, class: "h-4 w-4") %>
+      <%= label(
+        f,
+        :show_results,
+        gettext("Attendees can see the results on their device"),
+        class: "text-sm font-medium"
+      ) %>
+    </div>
+
+    <div class="flex gap-x-2 mb-5">
+      <%= checkbox(f, :multiple, class: "h-4 w-4") %>
+      <%= label(f, :multiple, gettext("Multiple answers"), class: "text-sm font-medium") %>
+    </div>
+
+    <div class="flex space-x-3">
+      <button
+        type="submit"
+        phx_disable_with="Loading..."
+        class="w-full lg:w-auto px-6 text-white py-2 rounded-md tracking-wide font-bold focus:outline-none focus:shadow-outline bg-gradient-to-tl from-primary-500 to-secondary-500 bg-size-200 bg-pos-0 hover:bg-pos-100 transition-all duration-500"
+      >
+        <%= case @live_action do
+          :new -> gettext("Create")
+          :edit -> gettext("Save")
+        end %>
+      </button>
+      <%= if @live_action == :edit do %>
+        <%= link(gettext("Delete"),
+          to: "#",
+          phx_click: "delete",
+          phx_target: @myself,
+          phx_value_id: @story.id,
+          data: [
+            confirm:
+              gettext(
+                "This will delete all responses associated and the story itself, are you sure?"
+              )
+          ],
+          class:
+            "w-full lg:w-auto px-6 text-center text-white py-2 rounded-md tracking-wide font-bold focus:outline-none focus:shadow-outline bg-gradient-to-tl from-supporting-red-600 to-supporting-red-400 bg-size-200 bg-pos-0 hover:bg-pos-100 transition-all duration-500"
+        ) %>
+      <% end %>
+    </div>
+  </.form>
+</div>

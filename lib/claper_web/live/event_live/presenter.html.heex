@@ -77,6 +77,41 @@
       </div>
     </div>
   <% end %>
+  <!-- STORY -->
+  <%= if @current_story do %>
+    <div
+      id="story"
+      class={"#{if @state.story_visible, do: "opacity-100", else: "opacity-0"} h-full w-full flex flex-col justify-center bg-black bg-opacity-90 absolute z-30 left-1/2 top-1/2 transform -translate-y-1/2 -translate-x-1/2 p-10 transition-opacity"}
+    >
+      <div class="w-full md:w-1/2 mx-auto h-full">
+        <p class={"#{if @iframe, do: "text-xl mb-12", else: "text-5xl mb-24"} text-white font-bold  text-center"}>
+          <%= @current_story.title %>
+        </p>
+
+        <div class={"#{if @iframe, do: "space-y-5", else: "space-y-8"} flex flex-col"}>
+          <%= if (length @current_story.story_opts) > 0 do %>
+            <%= for opt <- @current_story.story_opts do %>
+              <div class={"#{if @iframe, do: "py-1", else: "py-4"} bg-gray-500 px-6 rounded-3xl flex justify-between items-center relative text-white"}>
+                <div
+                  style={"width: #{opt.percentage}%;"}
+                  class="bg-gradient-to-r from-primary-500 to-secondary-500 rounded-3xl h-full absolute left-0 transition-all"
+                >
+                </div>
+                <div class="flex space-x-3 z-10 text-left">
+                  <span class={"#{if @iframe, do: "text-base", else: "text-2xl"} flex-1 font-bold pr-2"}>
+                    <%= opt.content %>
+                  </span>
+                </div>
+                <span class={"#{if @iframe, do: "text-base", else: "text-2xl"} z-10 font-bold"}>
+                  <%= opt.percentage %>% (<%= opt.vote_count %>)
+                </span>
+              </div>
+            <% end %>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  <% end %>
   <!-- QUIZ -->
   <%= if @current_quiz do %>
     <.live_component

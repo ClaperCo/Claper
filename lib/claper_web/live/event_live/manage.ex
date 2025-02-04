@@ -7,6 +7,7 @@ defmodule ClaperWeb.EventLive.Manage do
   alias Claper.Embeds
   # Add this line
   alias Claper.Quizzes
+  alias Claper.Stories
 
   @impl true
   def mount(%{"code" => code}, session, socket) do
@@ -196,6 +197,13 @@ defmodule ClaperWeb.EventLive.Manage do
   end
 
   @impl true
+  def handle_info({:story_created, story}, socket) do
+    {:noreply,
+     socket
+     |> interactions_at_position(story.position)}
+  end
+
+  @impl true
   def handle_info({:form_created, form}, socket) do
     {:noreply,
      socket
@@ -224,6 +232,13 @@ defmodule ClaperWeb.EventLive.Manage do
   end
 
   @impl true
+  def handle_info({:story_updated, story}, socket) do
+    {:noreply,
+     socket
+     |> interactions_at_position(story.position)}
+  end
+
+  @impl true
   def handle_info({:embed_updated, embed}, socket) do
     {:noreply,
      socket
@@ -249,6 +264,13 @@ defmodule ClaperWeb.EventLive.Manage do
     {:noreply,
      socket
      |> interactions_at_position(poll.position)}
+  end
+
+  @impl true
+  def handle_info({:story_deleted, story}, socket) do
+    {:noreply,
+     socket
+     |> interactions_at_position(story.position)}
   end
 
   @impl true
@@ -346,6 +368,21 @@ defmodule ClaperWeb.EventLive.Manage do
     end
   end
 
+  def handle_event("story-set-active", %{"id" => id}, socket) do
+    with story <- Stories.get_story!(id), :ok <- Claper.Interactions.enable_interaction(story) do
+      Phoenix.PubSub.broadcast(
+        Claper.PubSub,
+        "event:#{socket.assigns.event.uuid}",
+        {:current_interaction, story}
+      )
+
+      {:noreply,
+       socket
+       |> assign(:current_interaction, story)
+       |> interactions_at_position(socket.assigns.state.position)}
+    end
+  end
+
   def handle_event("form-set-active", %{"id" => id}, socket) do
     with form <- Forms.get_form!(id), :ok <- Claper.Interactions.enable_interaction(form) do
       Phoenix.PubSub.broadcast(
@@ -378,6 +415,22 @@ defmodule ClaperWeb.EventLive.Manage do
 
   def handle_event("poll-set-inactive", %{"id" => id}, socket) do
     with poll <- Polls.get_poll!(id), {:ok, _} <- Claper.Interactions.disable_interaction(poll) do
+      Phoenix.PubSub.broadcast(
+        Claper.PubSub,
+        "event:#{socket.assigns.event.uuid}",
+        {:current_interaction, nil}
+      )
+    end
+
+    {:noreply,
+     socket
+     |> assign(:current_interaction, nil)
+     |> interactions_at_position(socket.assigns.state.position)}
+  end
+
+  def handle_event("story-set-inactive", %{"id" => id}, socket) do
+    with story <- Stories.get_story!(id),
+         {:ok, _} <- Claper.Interactions.disable_interaction(story) do
       Phoenix.PubSub.broadcast(
         Claper.PubSub,
         "event:#{socket.assigns.event.uuid}",
@@ -511,6 +564,23 @@ defmodule ClaperWeb.EventLive.Manage do
         state,
         %{
           :poll_visible => value
+        }
+      )
+
+    {:noreply, socket |> assign(:state, new_state)}
+  end
+
+  @impl true
+  def handle_event(
+        "checked",
+        %{"key" => "story_visible", "value" => value},
+        %{assigns: %{state: state}} = socket
+      ) do
+    {:ok, new_state} =
+      Claper.Presentations.update_presentation_state(
+        state,
+        %{
+          :story_visible => value
         }
       )
 
@@ -749,6 +819,14 @@ defmodule ClaperWeb.EventLive.Manage do
   end
 
   @impl true
+  def handle_event("delete-story", %{"id" => id}, socket) do
+    story = Stories.get_story!(id)
+    {:ok, _} = Stories.delete_story(socket.assigns.event.uuid, story)
+
+    {:noreply, socket}
+  end
+
+  @impl true
   def handle_event("delete-quiz", %{"id" => id}, socket) do
     quiz = Quizzes.get_quiz!(id)
     {:ok, _} = Quizzes.delete_quiz(socket.assigns.event.uuid, quiz)
@@ -804,6 +882,26 @@ defmodule ClaperWeb.EventLive.Manage do
     |> assign(:create, "poll")
     |> assign(:create_action, :edit)
     |> assign(:poll, poll)
+  end
+
+  defp apply_action(socket, :add_story, _params) do
+    socket
+    |> assign(:create, "story")
+    |> assign(:story, %Stories.Story{
+      story_opts: [
+        %Stories.StoryOpt{content: gettext("Yes")},
+        %Stories.StoryOpt{content: gettext("No")}
+      ]
+    })
+  end
+
+  defp apply_action(socket, :edit_story, %{"id" => id}) do
+    story = Stories.get_story!(id)
+
+    socket
+    |> assign(:create, "story")
+    |> assign(:create_action, :edit)
+    |> assign(:story, story)
   end
 
   defp apply_action(socket, :add_form, _params) do

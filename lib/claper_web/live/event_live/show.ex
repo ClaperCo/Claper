@@ -2,7 +2,7 @@ defmodule ClaperWeb.EventLive.Show do
   alias Claper.Interactions
   use ClaperWeb, :live_view
 
-  alias Claper.{Posts, Polls, Forms, Quizzes, Stats}
+  alias Claper.{Posts, Polls, Stories, Forms, Quizzes, Stats}
   alias ClaperWeb.Presence
 
   on_mount(ClaperWeb.AttendeeLiveAuth)
@@ -81,6 +81,7 @@ defmodule ClaperWeb.EventLive.Show do
       |> assign(:love_posts, reacted_posts(socket, event.id, "❤️"))
       |> assign(:lol_posts, reacted_posts(socket, event.id, "😂"))
       |> assign(:selected_poll_opt, [])
+      |> assign(:selected_story_opt, [])
       |> assign(:selected_quiz_question_opts, [])
       |> assign(:current_quiz_question_idx, 0)
       |> assign(:event, event)
@@ -284,6 +285,20 @@ defmodule ClaperWeb.EventLive.Show do
 
   @impl true
   def handle_info({:poll_deleted, %Claper.Polls.Poll{enabled: true}}, socket) do
+    {:noreply,
+     socket
+     |> update(:current_interaction, fn _current_interaction -> nil end)}
+  end
+
+  @impl true
+  def handle_info({:story_updated, %Claper.Stories.Story{enabled: true} = story}, socket) do
+    {:noreply,
+     socket
+     |> load_current_interaction(story, true)}
+  end
+
+  @impl true
+  def handle_info({:story_deleted, %Claper.Stories.Story{enabled: true}}, socket) do
     {:noreply,
      socket
      |> update(:current_interaction, fn _current_interaction -> nil end)}
@@ -625,6 +640,78 @@ defmodule ClaperWeb.EventLive.Show do
 
   @impl true
   def handle_event(
+        "select-story-opt",
+        %{"opt" => opt},
+        %{assigns: %{current_interaction: %{multiple: true}}} = socket
+      ) do
+    if Enum.member?(socket.assigns.selected_story_opt, opt) do
+      {:noreply,
+       socket
+       |> assign(
+         :selected_story_opt,
+         Enum.filter(socket.assigns.selected_story_opt, fn x -> x != opt end)
+       )}
+    else
+      {:noreply, socket |> assign(:selected_story_opt, [opt | socket.assigns.selected_story_opt])}
+    end
+  end
+
+  @impl true
+  def handle_event(
+        "select-story-opt",
+        %{"opt" => opt},
+        %{assigns: %{current_interaction: %{multiple: false}}} = socket
+      ) do
+    {:noreply, socket |> assign(:selected_story_opt, [opt])}
+  end
+
+  @impl true
+  def handle_event(
+        "svote",
+        _params,
+        %{assigns: %{current_user: current_user, selected_story_opt: opts}} = socket
+      )
+      when is_map(current_user) do
+    opts = Enum.map(opts, fn opt -> Integer.parse(opt) |> elem(0) end)
+
+    story_opts =
+      Enum.map(opts, fn opt -> Enum.at(socket.assigns.current_interaction.story_opts, opt) end)
+
+    case Claper.Stories.vote(
+           current_user.id,
+           socket.assigns.event.uuid,
+           story_opts,
+           socket.assigns.current_interaction.id
+         ) do
+      {:ok, story} ->
+        {:noreply, socket |> get_current_svote(story.id)}
+    end
+  end
+
+  @impl true
+  def handle_event(
+        "svote",
+        _params,
+        %{assigns: %{attendee_identifier: attendee_identifier, selected_story_opt: opts}} = socket
+      ) do
+    opts = Enum.map(opts, fn opt -> Integer.parse(opt) |> elem(0) end)
+
+    story_opts =
+      Enum.map(opts, fn opt -> Enum.at(socket.assigns.current_interaction.story_opts, opt) end)
+
+    case Claper.Stories.vote(
+           attendee_identifier,
+           socket.assigns.event.uuid,
+           story_opts,
+           socket.assigns.current_interaction.id
+         ) do
+      {:ok, story} ->
+        {:noreply, socket |> get_current_svote(story.id)}
+    end
+  end
+
+  @impl true
+  def handle_event(
         "next-question",
         _params,
         %{assigns: %{current_quiz_question_idx: current_quiz_question_idx}} = socket
@@ -786,6 +873,20 @@ defmodule ClaperWeb.EventLive.Show do
     socket |> assign(:current_poll_vote, vote)
   end
 
+  defp get_current_svote(%{assigns: %{current_user: current_user}} = socket, story_id)
+       when is_map(current_user) do
+    vote = Stories.get_story_vote(current_user.id, story_id)
+    socket |> assign(:current_story_vote, vote)
+  end
+
+  defp get_current_svote(
+         %{assigns: %{attendee_identifier: attendee_identifier}} = socket,
+         story_id
+       ) do
+    vote = Stories.get_story_vote(attendee_identifier, story_id)
+    socket |> assign(:current_story_vote, vote)
+  end
+
   defp get_current_form_submit(%{assigns: %{current_user: current_user}} = socket, form_id)
        when is_map(current_user) do
     fs = Forms.get_form_submit(current_user.id, form_id)
@@ -862,6 +963,18 @@ defmodule ClaperWeb.EventLive.Show do
     |> get_current_vote(poll.id)
   end
 
+  defp load_current_interaction(socket, %Stories.Story{} = interaction, same_interaction) do
+    story = Stories.set_percentages(interaction)
+
+    socket
+    |> assign(
+      :current_interaction,
+      %{story | story_opts: Enum.sort_by(story.story_opts, & &1.id, :asc)}
+    )
+    |> maybe_reset_selected_story_opt(same_interaction)
+    |> get_current_svote(story.id)
+  end
+
   defp load_current_interaction(socket, %Forms.Form{} = interaction, _same_interaction) do
     socket |> assign(:current_interaction, interaction) |> get_current_form_submit(interaction.id)
   end
@@ -892,6 +1005,14 @@ defmodule ClaperWeb.EventLive.Show do
 
   defp maybe_reset_selected_poll_opt(socket, _same_interaction) do
     socket |> assign(:selected_poll_opt, [])
+  end
+
+  defp maybe_reset_selected_story_opt(socket, true) do
+    socket
+  end
+
+  defp maybe_reset_selected_story_opt(socket, _same_interaction) do
+    socket |> assign(:selected_story_opt, [])
   end
 
   defp update_stats(%{assigns: %{current_user: current_user}}, event) when is_map(current_user) do

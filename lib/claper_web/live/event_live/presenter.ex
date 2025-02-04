@@ -4,6 +4,7 @@ defmodule ClaperWeb.EventLive.Presenter do
   alias ClaperWeb.Presence
   alias Claper.Embeds.Embed
   alias Claper.Polls.Poll
+  alias Claper.Stories.Story
   alias Claper.Forms.Form
   alias Claper.Quizzes.Quiz
   @impl true
@@ -55,6 +56,7 @@ defmodule ClaperWeb.EventLive.Presenter do
         |> assign(:show_only_pinned, event.presentation_file.presentation_state.show_only_pinned)
         |> assign(:reacts, [])
         |> poll_at_position
+        |> story_at_position
         |> form_at_position
         |> embed_at_position
         |> quiz_at_position
@@ -112,6 +114,7 @@ defmodule ClaperWeb.EventLive.Presenter do
      |> push_event("page", %{current_page: state.position})
      |> push_event("reset-global-react", %{})
      |> poll_at_position
+     |> story_at_position
      |> embed_at_position}
   end
 
@@ -153,6 +156,26 @@ defmodule ClaperWeb.EventLive.Presenter do
     {:noreply,
      socket
      |> update(:current_poll, fn _current_poll -> nil end)}
+  end
+
+  @impl true
+  def handle_info({:story_updated, story}, socket) do
+    if story.enabled do
+      {:noreply,
+       socket
+       |> update(:current_story, fn _current_story -> story end)}
+    else
+      {:noreply,
+       socket
+       |> update(:current_story, fn _current_story -> nil end)}
+    end
+  end
+
+  @impl true
+  def handle_info({:story_deleted, _story}, socket) do
+    {:noreply,
+     socket
+     |> update(:current_story, fn _current_story -> nil end)}
   end
 
   @impl true
@@ -234,6 +257,14 @@ defmodule ClaperWeb.EventLive.Presenter do
   end
 
   @impl true
+  def handle_info({:story_visible, value}, socket) do
+    {:noreply,
+     socket
+     |> push_event("story-visible", %{value: value})
+     |> update(:story_visible, fn _story_visible -> value end)}
+  end
+
+  @impl true
   def handle_info({:join_screen_visible, value}, socket) do
     {:noreply,
      socket
@@ -256,6 +287,21 @@ defmodule ClaperWeb.EventLive.Presenter do
     {:noreply,
      socket
      |> assign(:current_poll, interaction)
+     |> assign(:current_story, nil)
+     |> assign(:current_embed, nil)
+     |> assign(:current_form, nil)
+     |> assign(:current_quiz, nil)}
+  end
+
+  @impl true
+  def handle_info(
+        {:current_interaction, %Story{} = interaction},
+        socket
+      ) do
+    {:noreply,
+     socket
+     |> assign(:current_story, interaction)
+     |> assign(:current_poll, nil)
      |> assign(:current_embed, nil)
      |> assign(:current_form, nil)
      |> assign(:current_quiz, nil)}
@@ -270,6 +316,7 @@ defmodule ClaperWeb.EventLive.Presenter do
      socket
      |> assign(:current_embed, interaction)
      |> assign(:current_poll, nil)
+     |> assign(:current_story, nil)
      |> assign(:current_form, nil)
      |> assign(:current_quiz, nil)}
   end
@@ -283,6 +330,7 @@ defmodule ClaperWeb.EventLive.Presenter do
      socket
      |> assign(:current_form, interaction)
      |> assign(:current_poll, nil)
+     |> assign(:current_story, nil)
      |> assign(:current_embed, nil)
      |> assign(:current_quiz, nil)}
   end
@@ -296,6 +344,7 @@ defmodule ClaperWeb.EventLive.Presenter do
      socket
      |> assign(:current_quiz, interaction)
      |> assign(:current_poll, nil)
+     |> assign(:current_story, nil)
      |> assign(:current_embed, nil)
      |> assign(:current_form, nil)}
   end
@@ -308,6 +357,7 @@ defmodule ClaperWeb.EventLive.Presenter do
     {:noreply,
      socket
      |> assign(:current_poll, nil)
+     |> assign(:current_story, nil)
      |> assign(:current_embed, nil)
      |> assign(:current_form, nil)
      |> assign(:current_quiz, nil)}
@@ -387,6 +437,16 @@ defmodule ClaperWeb.EventLive.Presenter do
              state.position
            ) do
       socket |> assign(:current_poll, poll)
+    end
+  end
+
+  defp story_at_position(%{assigns: %{event: event, state: state}} = socket) do
+    with story <-
+           Claper.Stories.get_story_current_position(
+             event.presentation_file.id,
+             state.position
+           ) do
+      socket |> assign(:current_story, story)
     end
   end
 

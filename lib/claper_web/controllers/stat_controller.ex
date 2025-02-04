@@ -5,7 +5,7 @@ defmodule ClaperWeb.StatController do
   """
   use ClaperWeb, :controller
 
-  alias Claper.{Forms, Events, Polls, Presentations, Quizzes}
+  alias Claper.{Forms, Events, Polls, Stories, Presentations, Quizzes}
 
   @doc """
   Exports form submissions as a CSV file.
@@ -73,6 +73,28 @@ defmodule ClaperWeb.StatController do
           Enum.map(poll.poll_opts, & &1.vote_count)
 
       export_as_csv(conn, headers, [content], "poll-#{sanitize(poll.title)}")
+    else
+      :unauthorized -> send_resp(conn, 403, "Forbidden")
+    end
+  end
+
+  @doc """
+  Exports story results as a CSV file.
+  Requires user to be either an event leader or the event owner.
+  """
+  def export_story(%{assigns: %{current_user: current_user}} = conn, %{"story_id" => story_id}) do
+    with story <- Stories.get_story!(story_id),
+         presentation_file <-
+           Presentations.get_presentation_file!(story.presentation_file_id, [:event]),
+         event <- presentation_file.event,
+         :ok <- authorize_event_access(current_user, event) do
+      headers = ["Name", "Multiple choice", "Slide #"] ++ Enum.map(story.story_opts, & &1.content)
+
+      content =
+        [story.title, story.multiple, story.position + 1] ++
+          Enum.map(story.story_opts, & &1.vote_count)
+
+      export_as_csv(conn, headers, [content], "story-#{sanitize(story.title)}")
     else
       :unauthorized -> send_resp(conn, 403, "Forbidden")
     end

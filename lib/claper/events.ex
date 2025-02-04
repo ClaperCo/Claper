@@ -535,6 +535,7 @@ defmodule Claper.Events do
             get_user_event!(user_id, event_uuid,
               presentation_file: [
                 polls: [:poll_opts],
+                stories: [:story_opts],
                 forms: [],
                 embeds: [],
                 quizzes: [:quiz_questions, quiz_questions: :quiz_question_opts],
@@ -605,6 +606,29 @@ defmodule Claper.Events do
 
               {:ok, new_poll} = Claper.Polls.create_poll(poll_attrs)
               new_poll
+            end)}
+         end)
+         |> Ecto.Multi.run(:stories, fn _repo,
+                                        %{
+                                          new_presentation_file: new_presentation_file,
+                                          original_event: original_event
+                                        } ->
+           {:ok,
+            Enum.map(original_event.presentation_file.stories, fn story ->
+              story_attrs =
+                Map.from_struct(story)
+                |> Map.drop([:id, :inserted_at, :updated_at])
+                |> Map.put(:presentation_file_id, new_presentation_file.id)
+                |> Map.put(
+                  :story_opts,
+                  Enum.map(story.story_opts, fn opt ->
+                    Map.from_struct(opt)
+                    |> Map.drop([:id, :inserted_at, :updated_at])
+                  end)
+                )
+
+              {:ok, new_story} = Claper.Stories.create_story(story_attrs)
+              new_story
             end)}
          end)
          |> Ecto.Multi.run(:forms, fn _repo,
