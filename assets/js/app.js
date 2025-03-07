@@ -119,11 +119,18 @@ Hooks.Split = {
     const id = this.el.id;
     const gutter = this.el.dataset.gutter;
     const forceLayout = this.el.classList.contains("grid-cols-[1fr]");
+    const isTabletSize = window.innerWidth >= 768 && window.innerWidth <= 1180;
+
     const columnSlitValue =
-      localStorage.getItem(`column-split-${id}`) || "1fr 10px 1fr";
+      localStorage.getItem(`column-split-${id}`) || (isTabletSize ? "2fr 10px 0fr" : "1fr 10px 1fr");
     const rowSlitValue =
       localStorage.getItem(`row-split-${id}`) || "0.5fr 10px 1fr";
 
+    const hasSetColumnSplitValue = localStorage.getItem(`column-split-layout`);
+
+    if (hasSetColumnSplitValue == null && isTabletSize) {
+      localStorage.setItem(`column-split-layout`, "2fr 10px 0fr");
+    }
     if (type === "column") {
       this.columnSplit = Split({
         columnGutters: [
