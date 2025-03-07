@@ -445,3 +445,26 @@
 .animate__slow_slow {
   --animate-duration: 5s;
 }
+
+/* Settings Panel */
+@media (min-width: 768px) and (max-width: 1024px) {
+  #settings-panel {
+    position: fixed;
+    right: 0;
+    top: 0;
+    height: 100vh;
+    width: 300px;
+    z-index: 50;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    border-left: 1px solid #e5e7eb;
+    overflow-y: auto;
+  }
+
+  #settings-panel.translate-x-full {
+    transform: translateX(100%);
+  }
+
+  .settings-toggle {
+    z-index: 51;
+  }
+}

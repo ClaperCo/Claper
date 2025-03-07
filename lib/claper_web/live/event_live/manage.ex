@@ -40,6 +40,7 @@ defmodule ClaperWeb.EventLive.Manage do
       socket =
         socket
         |> assign(:settings_modal, false)
+        |> assign(:settings_panel_hidden, false)
         |> assign(:attendees_nb, 1)
         |> assign(:event, event)
         |> assign(:sort_questions_by, "date")
@@ -925,5 +926,9 @@ defmodule ClaperWeb.EventLive.Manage do
 
   defp list_form_submits(_socket, presentation_file_id) do
     Claper.Forms.list_form_submits(presentation_file_id, [:form])
+  end
+
+  def handle_event("toggle_settings_panel", _params, socket) do
+    {:noreply, assign(socket, :settings_panel_hidden, !socket.assigns.settings_panel_hidden)}
   end
 end
