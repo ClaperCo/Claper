@@ -312,9 +312,27 @@ defmodule ClaperWeb.EventLive.Show do
 
   @impl true
   def handle_info({:embed_deleted, %Claper.Embeds.Embed{enabled: true}}, socket) do
+  end
+
+  @impl true
+  def handle_info({:embed_deleted, %Claper.Embeds.Embed{enabled: true}}, socket) do
     {:noreply,
      socket
-     |> update(:current_embed, fn _current_embed -> nil end)}
+     |> update(:current_interaction, fn _current_interaction -> nil end)}
+  end
+
+  @impl true
+  def handle_info({:quiz_updated, %Claper.Quizzes.Quiz{enabled: true} = quiz}, socket) do
+    {:noreply,
+     socket
+     |> load_current_interaction(quiz, true)}
+  end
+
+  @impl true
+  def handle_info({:quiz_deleted, %Claper.Quizzes.Quiz{enabled: true}}, socket) do
+    {:noreply,
+     socket
+     |> update(:current_interaction, fn _current_interaction -> nil end)}
   end
 
   @impl true

@@ -30,6 +30,8 @@ defmodule ClaperWeb.UserOidcAuth do
       |> put_session(:oidc_state, state)
       |> put_session(:oidc_nonce, nonce)
 
+  @doc false
+  def new(conn, _params) do
     {:ok, redirect_uri} =
       Oidcc.create_redirect_url(
         Claper.OidcProviderConfig,
@@ -81,6 +83,37 @@ defmodule ClaperWeb.UserOidcAuth do
           |> put_view(ClaperWeb.ErrorView)
           |> render("csrf_error.html", %{error: "Authentication failed: #{inspect(reason)}"})
       end
+        opts()
+      )
+
+    uri = Enum.join(redirect_uri, "")
+
+    redirect(conn, external: uri)
+  end
+
+  def callback(conn, %{"code" => code} = _params) do
+    with {:ok,
+          %Oidcc.Token{
+            id: %Oidcc.Token.Id{token: id_token, claims: claims},
+            access: %Oidcc.Token.Access{token: access_token},
+            refresh: refresh_token
+          }} <-
+           Oidcc.retrieve_token(
+             code,
+             Claper.OidcProviderConfig,
+             client_id(),
+             client_secret(),
+             opts()
+           ),
+         {:ok, oidc_user} <- validate_user(id_token, access_token, refresh_token, claims) do
+      conn
+      |> UserAuth.log_in_user(oidc_user.user)
+    else
+      {:error, reason} ->
+        conn
+        |> put_status(:unauthorized)
+        |> put_view(ClaperWeb.ErrorView)
+        |> render("csrf_error.html", %{error: "Authentication failed: #{inspect(reason)}"})
     end
   end
 
@@ -116,6 +149,7 @@ defmodule ClaperWeb.UserOidcAuth do
   end
 
   defp opts(pkce_challenge_or_verifier, state, nonce) do
+  defp opts() do
     url = base_url()
 
     %{
@@ -128,6 +162,7 @@ defmodule ClaperWeb.UserOidcAuth do
       code_challenge_method: "S256",
       require_pkce: true,
       response_mode: "query"
+      preferred_auth_methods: [:client_secret_basic, :client_secret_post]
     }
   end
 
@@ -163,6 +198,29 @@ defmodule ClaperWeb.UserOidcAuth do
         {:error, _} -> {:error, %{reason: :invalid_user, msg: "Invalid user"}}
         {:ok, user} -> {:ok, user}
       end
+  defp validate_user(id_token, access_token, refresh_token, claims) do
+    mappings = config()[:property_mappings]
+
+    case Claper.Accounts.get_or_create_user_with_oidc(%{
+           sub: claims["sub"],
+           issuer: claims["iss"],
+           name: claims["name"],
+           email: claims["email"],
+           provider: provider_name(),
+           expires_at: claims["exp"] |> DateTime.from_unix!() |> DateTime.to_naive(),
+           id_token: id_token,
+           access_token: access_token,
+           refresh_token: format_refresh_token(refresh_token),
+           groups: claims["groups"],
+           roles: claims[mappings["roles"]],
+           organization: claims[mappings["organization"]],
+           photo_url: claims[mappings["photo_url"]]
+         }) do
+      {:error, _} ->
+        {:error, %{reason: :invalid_user, msg: "Invalid user"}}
+
+      {:ok, user} ->
+        {:ok, user}
     end
   end
 end

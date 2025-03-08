@@ -37,6 +37,10 @@
           </button>
         <% end %>
         <%= if Ecto.Changeset.get_field(@changeset, :quiz_questions) |> length() <= 10 do %>
+            <%= i + 1 %>
+          </button>
+        <% end %>
+        <%= if Ecto.Changeset.get_field(@changeset, :quiz_questions) |> length() < 10 do %>
           <button
             type="button"
             phx-click="add_quiz_question"

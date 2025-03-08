@@ -1,0 +1,16 @@
+# .github/workflows/check-branches.yml
+name: Check PR Source
+on:
+  pull_request_target:
+    branches: [ "main", "dev" ]
+
+jobs:
+  validate-branches:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check source branch
+        run: |
+          if [ "${{ github.event.pull_request.head.ref }}" != "dev" ]; then
+            echo "PRs to main must come from dev branch"
+            exit 1
+          fi
