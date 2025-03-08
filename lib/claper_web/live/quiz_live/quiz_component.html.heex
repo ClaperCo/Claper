@@ -33,10 +33,10 @@
               if(i == 0, do: "rounded-tl-md")
             ]}
           >
-            <%= i %>
+            <%= i+1 %>
           </button>
         <% end %>
-        <%= if Ecto.Changeset.get_field(@changeset, :quiz_questions) |> length() <= 10 do %>
+        <%= if Ecto.Changeset.get_field(@changeset, :quiz_questions) |> length() < 10 do %>
           <button
             type="button"
             phx-click="add_quiz_question"
