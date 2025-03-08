@@ -464,23 +464,15 @@
 @media (max-width: 767px) {
   .settings-panel {
     position: fixed;
-    right: 0;
-    top: 0;
-    bottom: 0;
-    width: 100%;
     height: 100vh;
   }
 }
 
 /* Tablet/iPad layout */
-@media (min-width: 768px) and (max-width: 1024px) {
+@media (min-width: 768px) {
   .settings-panel {
-    position: fixed;
-    right: 0;
-    top: 0;
-    bottom: 0;
-    width: 320px;
-    max-width: 90%;
+    position: absolute;
+    height: 100%;
   }
 }
 

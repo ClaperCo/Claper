@@ -1466,7 +1466,10 @@
           
           <!-- Settings panel -->
           <div
-            class={"fixed inset-0 z-50 md:relative md:inset-auto settings-panel settings-panel-transition #{if @settings_panel_hidden, do: 'translate-x-full'} bg-white border-l border-gray-200 shadow-lg"}
+            class={"fixed md:absolute h-full #{if @settings_panel_hidden, do: 'translate-x-full'} 
+              w-full md:w-[320px] right-0 top-0 
+              settings-panel settings-panel-transition 
+              bg-white border-l border-gray-200 shadow-lg"}
             data-tg-title={gettext("Settings")}
             data-tg-order="3"
             data-tg-tour={"<p class='mb-3'>#{gettext("You can control each setting for the presentation (showing on the big screen) and on the attendee's room.")}</p><p class='opacity-50 text-xs'>#{gettext("Use the associated keyboard shortcuts for quick toggling of these settings.")}</p>"}
@@ -1484,7 +1487,7 @@
                 </svg>
               </button>
             </div>
-            <div class="overflow-y-auto h-[calc(100vh-3rem)] md:h-auto">
+            <div class="overflow-y-auto h-[calc(100vh-3rem)] md:h-[calc(100%-3rem)]">
               <.live_component
                 id="settings-pane"
                 module={ClaperWeb.EventLive.ManagerSettingsComponent}
