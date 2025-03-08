@@ -44,6 +44,7 @@ defmodule ClaperWeb.EventLive.Manage do
         |> assign(:event, event)
         |> assign(:sort_questions_by, "date")
         |> assign(:state, event.presentation_file.presentation_state)
+        |> assign(:settings_panel_hidden, true)
         |> stream(:posts, posts)
         |> stream(:questions, questions)
         |> stream(:pinned_posts, pinned_posts)
@@ -759,6 +760,11 @@ defmodule ClaperWeb.EventLive.Manage do
   @impl true
   def handle_event("toggle-preview", _params, %{assigns: %{preview: preview}} = socket) do
     {:noreply, socket |> assign(:preview, !preview)}
+  end
+
+  @impl true
+  def handle_event("toggle_settings_panel", _params, socket) do
+    {:noreply, assign(socket, :settings_panel_hidden, !socket.assigns.settings_panel_hidden)}
   end
 
   @impl true
