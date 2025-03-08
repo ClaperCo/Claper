@@ -1,3 +1,10 @@
+### v.2.3.2
+
+### Fixes and improvements
+
+- Fix question counting for quiz component
+- Fix embed deletion bad keys for attendees
+
 ### v.2.3.1
 
 ### Fixes and improvements
