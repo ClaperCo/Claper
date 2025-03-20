@@ -567,8 +567,8 @@
             </button>
           </div>
           <div class="flex items-center gap-x-2 lg:hidden">
-            <button 
-              phx-click="toggle_settings_panel" 
+            <button
+              phx-click="toggle_settings_panel"
               class="mx-2 text-gray-600 hover:text-gray-800 transition-colors"
               aria-label={gettext("Toggle settings panel")}
             >
@@ -1457,13 +1457,12 @@
           <div class="hidden md:block gutter-2 col-span-full cursor-row-resize z-20 row-[2] bg-gray-50 text-center text-gray-300 text-sm leading-3">
             •••
           </div>
-
           <!-- Settings panel backdrop -->
-          <div 
-            class={"fixed inset-0 bg-black/50 z-40 md:hidden transition-opacity duration-300 #{if @settings_panel_hidden, do: 'opacity-0 pointer-events-none', else: 'opacity-100'}"} 
+          <div
+            class={"fixed inset-0 bg-black/50 z-40 md:hidden transition-opacity duration-300 #{if @settings_panel_hidden, do: 'opacity-0 pointer-events-none', else: 'opacity-100'}"}
             phx-click="toggle_settings_panel"
-          ></div>
-          
+          >
+          </div>
           <!-- Settings panel -->
           <div
             class={"fixed md:absolute h-full #{if @settings_panel_hidden, do: 'translate-x-full'} 
@@ -1477,12 +1476,19 @@
           >
             <div class="w-full h-12 bg-gray-100 font-semibold text-xl flex items-center justify-between px-4">
               <span><%= gettext("Settings") %></span>
-              <button 
+              <button
                 phx-click="toggle_settings_panel"
                 class="text-gray-600 hover:text-gray-800 transition-colors"
                 aria-label={gettext("Close settings panel")}
               >
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke-width="1.5"
+                  stroke="currentColor"
+                  class="w-6 h-6"
+                >
                   <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
                 </svg>
               </button>
