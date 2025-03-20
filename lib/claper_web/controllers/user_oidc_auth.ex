@@ -56,12 +56,14 @@ defmodule ClaperWeb.UserOidcAuth do
            ),
          {:ok, oidc_user} <- validate_user(id_token, access_token, refresh_token, claims) do
       conn
-      |> delete_session(:pkce_verifier)  # Clean up the verifier
+      # Clean up the verifier
+      |> delete_session(:pkce_verifier)
       |> UserAuth.log_in_user(oidc_user.user)
     else
       {:error, reason} ->
         conn
-        |> delete_session(:pkce_verifier)  # Clean up the verifier even on error
+        # Clean up the verifier even on error
+        |> delete_session(:pkce_verifier)
         |> put_status(:unauthorized)
         |> put_view(ClaperWeb.ErrorView)
         |> render("csrf_error.html", %{error: "Authentication failed: #{inspect(reason)}"})
@@ -70,7 +72,8 @@ defmodule ClaperWeb.UserOidcAuth do
 
   def callback(conn, %{"error" => error} = _params) do
     conn
-    |> delete_session(:pkce_verifier)  # Clean up the verifier even on error
+    # Clean up the verifier even on error
+    |> delete_session(:pkce_verifier)
     |> put_status(:unauthorized)
     |> put_view(ClaperWeb.ErrorView)
     |> render("csrf_error.html", %{error: "Authentication failed: #{error}"})
@@ -102,6 +105,7 @@ defmodule ClaperWeb.UserOidcAuth do
 
   defp opts(pkce_verifier \\ nil) do
     url = base_url()
+
     base_opts = %{
       redirect_uri: "#{url}/users/oidc/callback",
       scopes: scopes(),
