@@ -9,6 +9,8 @@
 - Fix settings panel on tablet-sized screens (#121)
 - Fix question counting for quiz component
 - Fix embed deletion bad keys for attendees
+- Fix event name length validation (min: 5, max: 50)
+- Fix event code length validation (min: 5, max: 10)
 
 ### v.2.3.1
 
