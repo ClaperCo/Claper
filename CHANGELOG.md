@@ -11,6 +11,7 @@
 - Fix embed deletion bad keys for attendees
 - Fix event name length validation (min: 5, max: 50)
 - Fix event code length validation (min: 5, max: 10)
+- Fix presentation upload progress when editing an event
 
 ### v.2.3.1
 

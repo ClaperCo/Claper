@@ -203,6 +203,16 @@
                 <.live_file_input upload={@uploads.presentation_file} class="sr-only" />
               </form>
             </label>
+            <%= for entry <- @uploads.presentation_file.entries do %>
+              <progress id="file" max="100" value={entry.progress}>
+                <%= entry.progress %>
+              </progress>
+              <%= for err <- upload_errors(@uploads.presentation_file, entry) do %>
+                <p class="text-red-500 text-sm px-4 py-2 border border-red-600 rounded-md my-3">
+                  <%= error_to_string(err) %>
+                </p>
+              <% end %>
+            <% end %>
             <p class="text-supporting-red-500 text-sm italic text-center hidden">
               <%= gettext(
                 "Changing your file will remove all interaction elements like polls associated."
@@ -230,6 +240,16 @@
 
           <%= for entry <- @uploads.presentation_file.entries do %>
             <p class="text-xs text-gray-400"><%= entry.client_name %></p>
+            <div :if={entry.progress < 100}>
+              <progress id="file" max="100" value={entry.progress}>
+                <%= entry.progress %>
+              </progress>
+            </div>
+            <%= for err <- upload_errors(@uploads.presentation_file, entry) do %>
+              <p class="text-red-500 text-sm px-4 py-2 border border-red-600 rounded-md my-3">
+                <%= error_to_string(err) %>
+              </p>
+            <% end %>
             <p>
               <a
                 href="#"
