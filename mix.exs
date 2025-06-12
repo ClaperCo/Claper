@@ -76,8 +76,8 @@ defmodule Claper.MixProject do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
-      {:ex_aws, "~> 2.2"},
-      {:ex_aws_s3, "~> 2.3"},
+      # {:ex_aws, "~> 2.2"},
+      # {:ex_aws_s3, "~> 2.3"},
       {:ex_doc, "~> 0.32", only: :dev, runtime: false},
       {:bcrypt_elixir, "~> 2.0"},
       {:phoenix, "~> 1.7"},
@@ -108,7 +108,7 @@ defmodule Claper.MixProject do
       {:porcelain, "~> 2.0"},
       {:hackney, "~> 1.18"},
       {:csv, "~> 3.0"},
-      {:credo, "~> 1.7", only: [:dev, :test], runtime: false},
+      # {:credo, "~> 1.7", only: [:dev, :test], runtime: false},
       {:joken, "~> 2.6.1"},
       {:jose, "~> 1.11"},
       {:req, "~> 0.5.0"},
