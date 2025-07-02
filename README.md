@@ -45,8 +45,6 @@ Claper is proudly powered by Phoenix and Elixir.
 ### Our partners and sponsors
 
 <a href="https://www.lmddc.lu/"><img src="priv/static/images/partners/lmddc.png" alt="LMDDC" height="50"></a>
-<a href="https://www.pixilearn.fr/en/"><img src="priv/static/images/partners/pixilearn.png" alt="Pixilearn" height="50"></a>
-<a href="https://www.uccs.edu/"><img src="priv/static/images/partners/uccs.png" alt="UCCS" height="50"></a>
 
 ## Documentation
 
