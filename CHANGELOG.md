@@ -1,11 +1,8 @@
 ### v.2.3.2
 
-### Features
-
-- Add PKCE support for OpenID Connect (#134) (@onyedikachi-david)
-
 ### Fixes and improvements
 
+- Add PKCE support for OpenID Connect (#134) (@onyedikachi-david)
 - Fix settings panel on tablet-sized screens (#121)
 - Fix question counting for quiz component
 - Fix embed deletion bad keys for attendees
