@@ -294,6 +294,7 @@ defmodule ClaperWeb.EventLive.Show do
     {:noreply,
      socket
      |> update(:current_interaction, fn _current_interaction -> nil end)}
+
     {:noreply,
      socket
      |> load_current_interaction(form, true)}
