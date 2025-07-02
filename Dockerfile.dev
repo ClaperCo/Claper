@@ -47,9 +47,16 @@ ENV LC_ALL en_US.UTF-8
 
 # Install asdf
 ENV ASDF_VERSION=0.18.0
-RUN wget https://github.com/asdf-vm/asdf/releases/download/v${ASDF_VERSION}/asdf-v${ASDF_VERSION}-linux-arm64.tar.gz \
-    && tar -xzf asdf-v${ASDF_VERSION}-linux-arm64.tar.gz \
-    && rm asdf-v${ASDF_VERSION}-linux-arm64.tar.gz \
+
+RUN ARCH=$(uname -m) && \
+    if [ "$ARCH" = "aarch64" ] || [ "$ARCH" = "arm64" ]; then \
+        ASDF_ARCH="arm64"; \
+    else \
+        ASDF_ARCH="amd64"; \
+    fi && \
+    wget https://github.com/asdf-vm/asdf/releases/download/v${ASDF_VERSION}/asdf-v${ASDF_VERSION}-linux-${ASDF_ARCH}.tar.gz \
+    && tar -xzf asdf-v${ASDF_VERSION}-linux-${ASDF_ARCH}.tar.gz \
+    && rm asdf-v${ASDF_VERSION}-linux-${ASDF_ARCH}.tar.gz \
     && mv asdf /usr/bin/
 
 
