@@ -87,4 +87,4 @@ ENV ERL_FLAGS=$ERL_FLAGS
 EXPOSE 4000
 USER root
 WORKDIR /app
-ENTRYPOINT ["mix", "phx.server"]
+ENTRYPOINT ["bash", "-c", "mix deps.get && mix ecto.migrate && cd assets && npm i && cd .. && mix phx.server"]
