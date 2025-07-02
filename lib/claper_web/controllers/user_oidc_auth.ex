@@ -7,14 +7,29 @@ defmodule ClaperWeb.UserOidcAuth do
 
   import Phoenix.Controller
 
+  # Add PKCE-related functions
+  defp generate_pkce_verifier do
+    :crypto.strong_rand_bytes(32)
+    |> Base.url_encode64(padding: false)
+  end
+
+  defp generate_pkce_challenge(verifier) do
+    :crypto.hash(:sha256, verifier)
+    |> Base.url_encode64(padding: false)
+  end
+
   @doc false
   def new(conn, _params) do
+    # Generate PKCE verifier and store it in session
+    pkce_verifier = generate_pkce_verifier()
+    conn = put_session(conn, :pkce_verifier, pkce_verifier)
+
     {:ok, redirect_uri} =
       Oidcc.create_redirect_url(
         Claper.OidcProviderConfig,
         client_id(),
         client_secret(),
-        opts()
+        opts(pkce_verifier)
       )
 
     uri = Enum.join(redirect_uri, "")
@@ -23,6 +38,9 @@ defmodule ClaperWeb.UserOidcAuth do
   end
 
   def callback(conn, %{"code" => code} = _params) do
+    # Get PKCE verifier from session
+    pkce_verifier = get_session(conn, :pkce_verifier)
+
     with {:ok,
           %Oidcc.Token{
             id: %Oidcc.Token.Id{token: id_token, claims: claims},
@@ -34,14 +52,18 @@ defmodule ClaperWeb.UserOidcAuth do
              Claper.OidcProviderConfig,
              client_id(),
              client_secret(),
-             opts()
+             opts(pkce_verifier)
            ),
          {:ok, oidc_user} <- validate_user(id_token, access_token, refresh_token, claims) do
       conn
+      # Clean up the verifier
+      |> delete_session(:pkce_verifier)
       |> UserAuth.log_in_user(oidc_user.user)
     else
       {:error, reason} ->
         conn
+        # Clean up the verifier even on error
+        |> delete_session(:pkce_verifier)
         |> put_status(:unauthorized)
         |> put_view(ClaperWeb.ErrorView)
         |> render("csrf_error.html", %{error: "Authentication failed: #{inspect(reason)}"})
@@ -50,6 +72,8 @@ defmodule ClaperWeb.UserOidcAuth do
 
   def callback(conn, %{"error" => error} = _params) do
     conn
+    # Clean up the verifier even on error
+    |> delete_session(:pkce_verifier)
     |> put_status(:unauthorized)
     |> put_view(ClaperWeb.ErrorView)
     |> render("csrf_error.html", %{error: "Authentication failed: #{error}"})
@@ -79,14 +103,25 @@ defmodule ClaperWeb.UserOidcAuth do
     Application.get_env(:claper, ClaperWeb.Endpoint)[:base_url]
   end
 
-  defp opts() do
+  defp opts(pkce_verifier \\ nil) do
     url = base_url()
 
-    %{
+    base_opts = %{
       redirect_uri: "#{url}/users/oidc/callback",
       scopes: scopes(),
-      preferred_auth_methods: [:client_secret_basic, :client_secret_post]
+      preferred_auth_methods: [:client_secret_basic, :client_secret_post],
+      require_pkce: true
     }
+
+    if pkce_verifier do
+      Map.merge(base_opts, %{
+        pkce_verifier: pkce_verifier,
+        code_challenge: generate_pkce_challenge(pkce_verifier),
+        code_challenge_method: "S256"
+      })
+    else
+      base_opts
+    end
   end
 
   defp format_refresh_token(%Oidcc.Token.Refresh{token: token}) do

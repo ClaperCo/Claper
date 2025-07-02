@@ -50,7 +50,7 @@ defmodule Claper.EventsTest do
 
       valid_attrs = %{
         name: "some name",
-        code: "code",
+        code: "12345",
         user_id: user.id,
         started_at: NaiveDateTime.utc_now(),
         expired_at: NaiveDateTime.add(NaiveDateTime.utc_now(), 7200, :second)
@@ -58,6 +58,20 @@ defmodule Claper.EventsTest do
 
       assert {:ok, %Event{} = event} = Events.create_event(valid_attrs)
       assert event.name == "some name"
+    end
+
+    test "create_event/1 with too short code returns error changeset" do
+      user = user_fixture()
+
+      valid_attrs = %{
+        name: "some name",
+        code: "code",
+        user_id: user.id,
+        started_at: NaiveDateTime.utc_now(),
+        expired_at: NaiveDateTime.add(NaiveDateTime.utc_now(), 7200, :second)
+      }
+
+      assert {:error, %Ecto.Changeset{}} = Events.create_event(valid_attrs)
     end
 
     test "create_event/1 with invalid data returns error changeset" do

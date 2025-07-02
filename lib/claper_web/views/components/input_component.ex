@@ -14,6 +14,8 @@ defmodule ClaperWeb.Component.Input do
       |> assign_new(:labelClass, fn -> "text-gray-700" end)
       |> assign_new(:fieldClass, fn -> "bg-white" end)
       |> assign_new(:value, fn -> input_value(assigns.form, assigns.key) end)
+      |> assign_new(:minlength, fn -> nil end)
+      |> assign_new(:maxlength, fn -> nil end)
 
     ~H"""
     <div class="relative">
@@ -26,6 +28,8 @@ defmodule ClaperWeb.Component.Input do
           placeholder: @placeholder,
           autocomplete: @key,
           value: @value,
+          minlength: @minlength,
+          maxlength: @maxlength,
           class:
             "#{@fieldClass} read-only:opacity-50 outline-none shadow-base focus:ring-primary-500 focus:border-primary-500 focus:ring-2 block w-full text-lg border-gray-300 rounded-md py-2 px-3"
         ) %>
@@ -210,6 +214,8 @@ defmodule ClaperWeb.Component.Input do
           placeholder: @placeholder,
           autofocus: @autofocus,
           autocomplete: @key,
+          minlength: 5,
+          maxlength: 10,
           class:
             "read-only:opacity-50 outline-none shadow-base focus:ring-primary-500 focus:border-primary-500 block w-full text-lg border-gray-300 rounded-md py-2 pr-3 pl-9 uppercase"
         ) %>

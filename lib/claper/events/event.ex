@@ -58,6 +58,8 @@ defmodule Claper.Events.Event do
     |> cast_assoc(:presentation_file)
     |> cast_assoc(:leaders)
     |> validate_required([:code, :started_at])
+    |> validate_length(:code, min: 5, max: 10)
+    |> validate_length(:name, min: 5, max: 50)
     |> downcase_code
     |> put_change(:uuid, Ecto.UUID.generate())
   end
@@ -76,6 +78,8 @@ defmodule Claper.Events.Event do
     |> cast_assoc(:presentation_file)
     |> cast_assoc(:leaders)
     |> validate_required([:code, :started_at])
+    |> validate_length(:code, min: 5, max: 10)
+    |> validate_length(:name, min: 5, max: 50)
     |> downcase_code
   end
 
