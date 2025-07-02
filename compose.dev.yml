@@ -1,0 +1,46 @@
+services:
+  db:
+    image: postgres:15
+    ports:
+      - 5432:5432
+    volumes:
+      - "claper-db:/var/lib/postgresql/data"
+    healthcheck:
+      test:
+        - CMD
+        - pg_isready
+        - "-q"
+        - "-d"
+        - "claper"
+        - "-U"
+        - "claper"
+      retries: 3
+      timeout: 5s
+    environment:
+      POSTGRES_PASSWORD: claper
+      POSTGRES_USER: claper
+      POSTGRES_DB: claper
+    networks:
+      - claper-dev
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    ports:
+      - 4000:4000
+    volumes:
+      - ".:/app"
+    env_file: .env
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - claper-dev
+
+volumes:
+  claper-db:
+    driver: local
+
+networks:
+  claper-dev:
+    driver: bridge
