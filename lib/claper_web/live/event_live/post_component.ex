@@ -25,12 +25,12 @@ defmodule ClaperWeb.EventLive.PostComponent do
           <%= if @post.name || leader?(@post, @event, @leaders) || pinned?(@post) do %>
             <div class="inline-flex items-center">
               <%= if @post.name do %>
-                <p class="text-white text-xs font-semibold mb-2 mr-2"><%= @post.name %></p>
+                <p class="text-white text-xs font-semibold mb-2 mr-2">{@post.name}</p>
               <% end %>
               <%= if leader?(@post, @event, @leaders) do %>
                 <div class="inline-flex items-center space-x-1 justify-center px-3 py-0.5 rounded-full text-xs font-medium bg-supporting-yellow-100 text-supporting-yellow-800 mb-2">
                   <img src="/images/icons/star.svg" class="h-3" />
-                  <span><%= gettext("Host") %></span>
+                  <span>{gettext("Host")}</span>
                 </div>
               <% end %>
 
@@ -56,7 +56,7 @@ defmodule ClaperWeb.EventLive.PostComponent do
                     >
                     </path>
                   </svg>
-                  <span><%= gettext("Pinned") %></span>
+                  <span>{gettext("Pinned")}</span>
                 </div>
               <% end %>
             </div>
@@ -67,34 +67,34 @@ defmodule ClaperWeb.EventLive.PostComponent do
             class="hidden absolute right-4 top-7 bg-white rounded-lg px-5 py-2 animate__faster"
           >
             <span class="text-red-500">
-              <%= link(gettext("Delete"),
+              {link(gettext("Delete"),
                 to: "#",
                 phx_click: "delete",
                 phx_value_id: @post.uuid,
                 phx_value_event_id: @event.uuid,
                 data: [confirm: gettext("Are you sure?")]
-              ) %>
+              )}
             </span>
           </div>
-          <p><%= ClaperWeb.Helpers.format_body(@post.body) %></p>
+          <p>{ClaperWeb.Helpers.format_body(@post.body)}</p>
 
           <div class="flex h-6 text-sm float-right text-white space-x-2">
             <%= if @post.like_count > 0 do %>
               <div class="flex px-1 items-center">
                 <img src="/images/icons/thumb.svg" class="h-4" />
-                <span class="ml-1 text-white"><%= @post.like_count %></span>
+                <span class="ml-1 text-white">{@post.like_count}</span>
               </div>
             <% end %>
             <%= if @post.love_count > 0 do %>
               <div class="flex px-1 items-center">
                 <img src="/images/icons/heart.svg" class="h-4" />
-                <span class="ml-1 text-white"><%= @post.love_count %></span>
+                <span class="ml-1 text-white">{@post.love_count}</span>
               </div>
             <% end %>
             <%= if @post.lol_count > 0 do %>
               <div class="flex px-1 items-center">
                 <img src="/images/icons/laugh.svg" class="h-4" />
-                <span class="ml-1 text-white"><%= @post.lol_count %></span>
+                <span class="ml-1 text-white">{@post.lol_count}</span>
               </div>
             <% end %>
           </div>
@@ -104,12 +104,12 @@ defmodule ClaperWeb.EventLive.PostComponent do
           <%= if @post.name || leader?(@post, @event, @leaders) do %>
             <div class="inline-flex items-center">
               <%= if @post.name do %>
-                <p class="text-black text-xs font-semibold mb-2 mr-2"><%= @post.name %></p>
+                <p class="text-black text-xs font-semibold mb-2 mr-2">{@post.name}</p>
               <% end %>
               <%= if leader?(@post, @event, @leaders) do %>
                 <div class="inline-flex items-center space-x-1 justify-center px-3 py-0.5 rounded-full text-xs font-medium bg-supporting-yellow-100 text-supporting-yellow-800 mb-2">
                   <img src="/images/icons/star.svg" class="h-3" />
-                  <span><%= gettext("Host") %></span>
+                  <span>{gettext("Host")}</span>
                 </div>
               <% end %>
             </div>
@@ -139,13 +139,13 @@ defmodule ClaperWeb.EventLive.PostComponent do
               class="hidden absolute right-4 top-7 bg-gray-900 rounded-lg px-5 py-2"
             >
               <span class="text-red-500">
-                <%= link(gettext("Delete"),
+                {link(gettext("Delete"),
                   to: "#",
                   phx_click: "delete",
                   phx_value_id: @post.uuid,
                   phx_value_event_id: @event.uuid,
                   data: [confirm: gettext("Are you sure?")]
-                ) %>
+                )}
               </span>
             </div>
           <% end %>
@@ -172,11 +172,11 @@ defmodule ClaperWeb.EventLive.PostComponent do
                 >
                 </path>
               </svg>
-              <span><%= gettext("Pinned") %></span>
+              <span>{gettext("Pinned")}</span>
             </div>
           <% end %>
 
-          <p><%= ClaperWeb.Helpers.format_body(@post.body) %></p>
+          <p>{ClaperWeb.Helpers.format_body(@post.body)}</p>
 
           <div class="flex h-6 text-xs float-right space-x-2">
             <%= if @reaction_enabled do %>
@@ -189,7 +189,7 @@ defmodule ClaperWeb.EventLive.PostComponent do
                 >
                   <img src="/images/icons/thumb.svg" class="h-4" />
                   <%= if @post.like_count > 0 do %>
-                    <span class="ml-1"><%= @post.like_count %></span>
+                    <span class="ml-1">{@post.like_count}</span>
                   <% end %>
                 </button>
               <% else %>
@@ -203,7 +203,7 @@ defmodule ClaperWeb.EventLive.PostComponent do
                     <img src="/images/icons/thumb.svg" class="h-4" />
                   </span>
                   <%= if @post.like_count > 0 do %>
-                    <span class="ml-1"><%= @post.like_count %></span>
+                    <span class="ml-1">{@post.like_count}</span>
                   <% end %>
                 </button>
               <% end %>
@@ -216,7 +216,7 @@ defmodule ClaperWeb.EventLive.PostComponent do
                 >
                   <img src="/images/icons/heart.svg" class="h-4" />
                   <%= if @post.love_count > 0 do %>
-                    <span class="ml-1"><%= @post.love_count %></span>
+                    <span class="ml-1">{@post.love_count}</span>
                   <% end %>
                 </button>
               <% else %>
@@ -228,7 +228,7 @@ defmodule ClaperWeb.EventLive.PostComponent do
                 >
                   <img src="/images/icons/heart.svg" class="h-4" />
                   <%= if @post.love_count > 0 do %>
-                    <span class="ml-1"><%= @post.love_count %></span>
+                    <span class="ml-1">{@post.love_count}</span>
                   <% end %>
                 </button>
               <% end %>
@@ -241,7 +241,7 @@ defmodule ClaperWeb.EventLive.PostComponent do
                 >
                   <img src="/images/icons/laugh.svg" class="h-4" />
                   <%= if @post.lol_count > 0 do %>
-                    <span class="ml-1"><%= @post.lol_count %></span>
+                    <span class="ml-1">{@post.lol_count}</span>
                   <% end %>
                 </button>
               <% else %>
@@ -253,7 +253,7 @@ defmodule ClaperWeb.EventLive.PostComponent do
                 >
                   <img src="/images/icons/laugh.svg" class="h-4" />
                   <%= if @post.lol_count > 0 do %>
-                    <span class="ml-1"><%= @post.lol_count %></span>
+                    <span class="ml-1">{@post.lol_count}</span>
                   <% end %>
                 </button>
               <% end %>

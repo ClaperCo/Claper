@@ -1,16 +1,16 @@
 <h1>Resend confirmation instructions</h1>
 
 <%= form_for :user, ~p"/users/confirm", fn f -> %>
-  <%= label(f, :email) %>
-  <%= email_input(f, :email, required: true) %>
+  {label(f, :email)}
+  {email_input(f, :email, required: true)}
 
   <div>
-    <%= submit("Resend confirmation instructions") %>
+    {submit("Resend confirmation instructions")}
   </div>
 <% end %>
 
 <p>
-  <%= link("Register", to: ~p"/users/register") %> | <%= link("Log in",
+  {link("Register", to: ~p"/users/register")} | {link("Log in",
     to: ~p"/users/log_in"
-  ) %>
+  )}
 </p>

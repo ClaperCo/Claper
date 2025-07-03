@@ -4,8 +4,8 @@
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <%= csrf_meta_tag() %>
-    <.live_title suffix=" · Claper" )><%= assigns[:page_title] || "Claper" %></.live_title>
+    {csrf_meta_tag()}
+    <.live_title suffix=" · Claper" )>{assigns[:page_title] || "Claper"}</.live_title>
     <link phx-track-static rel="stylesheet" href="/assets/app.css" />
     <link rel="icon" type="image/png" href="/images/favicon.png" />
     <link phx-track-static rel="stylesheet" href="/assets/custom.css" />
@@ -16,9 +16,9 @@
     <div class="min-h-full">
       <!-- Main column -->
       <div class="flex flex-col" x-data="{profileMobileDropdown: false}">
-        <%= render("_profile_dropdown.html", user: @current_user, conn: @conn) %>
+        {render("_profile_dropdown.html", user: @current_user, conn: @conn)}
         <main class="flex-1">
-          <%= @inner_content %>
+          {@inner_content}
         </main>
       </div>
     </div>

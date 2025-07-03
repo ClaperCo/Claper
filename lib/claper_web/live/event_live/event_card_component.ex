@@ -20,7 +20,7 @@ defmodule ClaperWeb.EventLive.EventCardComponent do
                 class="text-lg font-medium text-primary-600 truncate"
                 href={~p"/e/#{@event.code}/manage"}
               >
-                <%= @event.name %>
+                {@event.name}
               </a>
               <p
                 :if={@event.lti_resource}
@@ -47,17 +47,17 @@ defmodule ClaperWeb.EventLive.EventCardComponent do
                 <div class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-500 text-white items-center gap-x-1">
                   <span class="h-2 w-2 bg-white rounded-full animate__animated animate__flash animate__infinite animate__slow_slow">
                   </span>
-                  <%= gettext("Live") %>
+                  {gettext("Live")}
                 </div>
               <% end %>
               <%= if !Event.started?(@event) && !Event.finished?(@event) do %>
                 <p class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-                  <%= gettext("Incoming") %>
+                  {gettext("Incoming")}
                 </p>
               <% end %>
               <%= if Event.finished?(@event) do %>
                 <p class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-gray-100 text-gray-800">
-                  <%= gettext("Finished") %>
+                  {gettext("Finished")}
                 </p>
               <% end %>
             </div>
@@ -66,7 +66,7 @@ defmodule ClaperWeb.EventLive.EventCardComponent do
             <div class="text-sm font-medium uppercase text-gray-700 flex justify-center space-x-1 items-center">
               <img src="/images/icons/hashtag.svg" class="h-5 w-5" />
               <p>
-                <%= @event.code %>
+                {@event.code}
               </p>
             </div>
             <div
@@ -83,11 +83,11 @@ defmodule ClaperWeb.EventLive.EventCardComponent do
                 class="h-5 w-5"
               />
               <p :if={!Event.finished?(@event) && !Event.started?(@event)}>
-                <%= gettext("Starting on") %>
+                {gettext("Starting on")}
                 <span x-text={"moment.utc('#{@event.started_at}').local().format('lll')"}></span>
               </p>
               <p :if={Event.finished?(@event)}>
-                <%= gettext("Finished on") %>
+                {gettext("Finished on")}
                 <span x-text={"moment.utc('#{@event.expired_at}').local().format('lll')"}></span>
               </p>
             </div>
@@ -108,7 +108,7 @@ defmodule ClaperWeb.EventLive.EventCardComponent do
                   phx-target={@myself}
                   class="flex w-full lg:w-auto pl-3 pr-4 text-white items-center justify-between py-2 rounded-md tracking-wide font-bold focus:outline-none focus:shadow-outline hover:bg-primary-600 bg-primary-500"
                 >
-                  <span class="mr-2"><%= gettext("Join") %></span>
+                  <span class="mr-2">{gettext("Join")}</span>
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
@@ -149,7 +149,7 @@ defmodule ClaperWeb.EventLive.EventCardComponent do
                             clip-rule="evenodd"
                           />
                         </svg>
-                        <span><%= gettext("Event manager") %></span>
+                        <span>{gettext("Event manager")}</span>
                       </a>
                     </li>
                     <li>
@@ -172,7 +172,7 @@ defmodule ClaperWeb.EventLive.EventCardComponent do
                           />
                           <path d="M5.082 14.254a8.287 8.287 0 0 0-1.308 5.135 9.687 9.687 0 0 1-1.764-.44l-.115-.04a.563.563 0 0 1-.373-.487l-.01-.121a3.75 3.75 0 0 1 3.57-4.047ZM20.226 19.389a8.287 8.287 0 0 0-1.308-5.135 3.75 3.75 0 0 1 3.57 4.047l-.01.121a.563.563 0 0 1-.373.486l-.115.04c-.567.2-1.156.349-1.764.441Z" />
                         </svg>
-                        <span><%= gettext("Attendees room") %></span>
+                        <span>{gettext("Attendees room")}</span>
                       </a>
                     </li>
                   </ul>
@@ -198,7 +198,7 @@ defmodule ClaperWeb.EventLive.EventCardComponent do
                   >
                     <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
                   </svg>
-                  <span><%= gettext("End") %></span>
+                  <span>{gettext("End")}</span>
                 </.link>
               </div>
               <div class="flex items-start gap-x-2 relative text-sm ">
@@ -209,7 +209,7 @@ defmodule ClaperWeb.EventLive.EventCardComponent do
                     phx-target={@myself}
                     class="flex w-full lg:w-auto pl-3 pr-4 text-gray-700 items-center justify-between py-2 rounded-md tracking-wide font-bold focus:outline-none focus:shadow-outline hover:bg-gray-300 bg-gray-200"
                   >
-                    <span class="mr-2"><%= gettext("More options") %></span>
+                    <span class="mr-2">{gettext("More options")}</span>
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       fill="none"
@@ -247,7 +247,7 @@ defmodule ClaperWeb.EventLive.EventCardComponent do
                             <path d="m5.433 13.917 1.262-3.155A4 4 0 0 1 7.58 9.42l6.92-6.918a2.121 2.121 0 0 1 3 3l-6.92 6.918c-.383.383-.84.685-1.343.886l-3.154 1.262a.5.5 0 0 1-.65-.65Z" />
                             <path d="M3.5 5.75c0-.69.56-1.25 1.25-1.25H10A.75.75 0 0 0 10 3H4.75A2.75 2.75 0 0 0 2 5.75v9.5A2.75 2.75 0 0 0 4.75 18h9.5A2.75 2.75 0 0 0 17 15.25V10a.75.75 0 0 0-1.5 0v5.25c0 .69-.56 1.25-1.25 1.25h-9.5c-.69 0-1.25-.56-1.25-1.25v-9.5Z" />
                           </svg>
-                          <span><%= gettext("Edit") %></span>
+                          <span>{gettext("Edit")}</span>
                         </a>
                       </li>
                       <li>
@@ -265,7 +265,7 @@ defmodule ClaperWeb.EventLive.EventCardComponent do
                             <path d="M7 3.5A1.5 1.5 0 0 1 8.5 2h3.879a1.5 1.5 0 0 1 1.06.44l3.122 3.12A1.5 1.5 0 0 1 17 6.622V12.5a1.5 1.5 0 0 1-1.5 1.5h-1v-3.379a3 3 0 0 0-.879-2.121L10.5 5.379A3 3 0 0 0 8.379 4.5H7v-1Z" />
                             <path d="M4.5 6A1.5 1.5 0 0 0 3 7.5v9A1.5 1.5 0 0 0 4.5 18h7a1.5 1.5 0 0 0 1.5-1.5v-5.879a1.5 1.5 0 0 0-.44-1.06L9.44 6.439A1.5 1.5 0 0 0 8.378 6H4.5Z" />
                           </svg>
-                          <span><%= gettext("Duplicate") %></span>
+                          <span>{gettext("Duplicate")}</span>
                         </button>
                       </li>
                     </ul>
@@ -279,7 +279,7 @@ defmodule ClaperWeb.EventLive.EventCardComponent do
               class="mt-2 flex flex-col space-y-2 sm:space-y-0 justify-between sm:flex-row items-center"
             >
               <span class="text-sm text-supporting-red-500">
-                <%= gettext("Error when processing the file") %>
+                {gettext("Error when processing the file")}
               </span>
               <div class="relative text-sm">
                 <%= if not @is_leader do %>
@@ -289,7 +289,7 @@ defmodule ClaperWeb.EventLive.EventCardComponent do
                     phx-target={@myself}
                     class="flex w-full lg:w-auto pl-3 pr-4 text-gray-700 items-center justify-between py-2 rounded-md tracking-wide font-bold focus:outline-none focus:shadow-outline hover:bg-gray-300 bg-gray-200"
                   >
-                    <span class="mr-2"><%= gettext("More options") %></span>
+                    <span class="mr-2">{gettext("More options")}</span>
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       fill="none"
@@ -327,7 +327,7 @@ defmodule ClaperWeb.EventLive.EventCardComponent do
                             <path d="m5.433 13.917 1.262-3.155A4 4 0 0 1 7.58 9.42l6.92-6.918a2.121 2.121 0 0 1 3 3l-6.92 6.918c-.383.383-.84.685-1.343.886l-3.154 1.262a.5.5 0 0 1-.65-.65Z" />
                             <path d="M3.5 5.75c0-.69.56-1.25 1.25-1.25H10A.75.75 0 0 0 10 3H4.75A2.75 2.75 0 0 0 2 5.75v9.5A2.75 2.75 0 0 0 4.75 18h9.5A2.75 2.75 0 0 0 17 15.25V10a.75.75 0 0 0-1.5 0v5.25c0 .69-.56 1.25-1.25 1.25h-9.5c-.69 0-1.25-.56-1.25-1.25v-9.5Z" />
                           </svg>
-                          <span><%= gettext("Edit") %></span>
+                          <span>{gettext("Edit")}</span>
                         </a>
                       </li>
                     </ul>
@@ -341,7 +341,7 @@ defmodule ClaperWeb.EventLive.EventCardComponent do
               class="flex space-x-1 items-center"
             >
               <img src="/images/loading.gif" class="h-8" />
-              <span class="text-sm text-gray-500"><%= gettext("Processing your file...") %></span>
+              <span class="text-sm text-gray-500">{gettext("Processing your file...")}</span>
             </div>
           <% end %>
 
@@ -367,7 +367,7 @@ defmodule ClaperWeb.EventLive.EventCardComponent do
                   <path d="M2 10a8 8 0 018-8v8h8a8 8 0 11-16 0z" />
                   <path d="M12 2.252A8.014 8.014 0 0117.748 8H12V2.252z" />
                 </svg>
-                <span><%= gettext("View report") %></span>
+                <span>{gettext("View report")}</span>
               </a>
             </div>
             <div class="relative text-sm">
@@ -378,7 +378,7 @@ defmodule ClaperWeb.EventLive.EventCardComponent do
                   phx-target={@myself}
                   class="flex w-full lg:w-auto pl-3 pr-4 text-gray-700 items-center justify-between py-2 rounded-md tracking-wide font-bold focus:outline-none focus:shadow-outline hover:bg-gray-300 bg-gray-200"
                 >
-                  <span class="mr-2"><%= gettext("More options") %></span>
+                  <span class="mr-2">{gettext("More options")}</span>
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
@@ -415,7 +415,7 @@ defmodule ClaperWeb.EventLive.EventCardComponent do
                           <path d="M7 3.5A1.5 1.5 0 0 1 8.5 2h3.879a1.5 1.5 0 0 1 1.06.44l3.122 3.12A1.5 1.5 0 0 1 17 6.622V12.5a1.5 1.5 0 0 1-1.5 1.5h-1v-3.379a3 3 0 0 0-.879-2.121L10.5 5.379A3 3 0 0 0 8.379 4.5H7v-1Z" />
                           <path d="M4.5 6A1.5 1.5 0 0 0 3 7.5v9A1.5 1.5 0 0 0 4.5 18h7a1.5 1.5 0 0 0 1.5-1.5v-5.879a1.5 1.5 0 0 0-.44-1.06L9.44 6.439A1.5 1.5 0 0 0 8.378 6H4.5Z" />
                         </svg>
-                        <span><%= gettext("Duplicate") %></span>
+                        <span>{gettext("Duplicate")}</span>
                       </button>
                     </li>
                     <li>
@@ -441,7 +441,7 @@ defmodule ClaperWeb.EventLive.EventCardComponent do
                             clip-rule="evenodd"
                           />
                         </svg>
-                        <span><%= gettext("Delete") %></span>
+                        <span>{gettext("Delete")}</span>
                       </.link>
                     </li>
                   </ul>

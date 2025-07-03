@@ -26,12 +26,12 @@ defmodule ClaperWeb.EventLive.ManageablePostComponent do
           />
         </svg>
 
-        <span><%= gettext("Question") %></span>
+        <span>{gettext("Question")}</span>
       </div>
       <div :if={!@readonly} class="float-right mr-1">
         <%= if @post.attendee_identifier do %>
           <span class="text-yellow-500">
-            <%= link(
+            {link(
               if @post.pinned do
                 gettext("Unpin")
               else
@@ -41,11 +41,11 @@ defmodule ClaperWeb.EventLive.ManageablePostComponent do
               phx_click: "pin",
               phx_value_id: @post.uuid,
               phx_value_event_id: @event.uuid
-            ) %>
+            )}
           </span>
           /
           <span class="text-red-500">
-            <%= link(gettext("Ban"),
+            {link(gettext("Ban"),
               to: "#",
               phx_click: "ban",
               phx_value_attendee_identifier: @post.attendee_identifier,
@@ -55,12 +55,12 @@ defmodule ClaperWeb.EventLive.ManageablePostComponent do
                     "Blocking this user will delete all his messages and he will not be able to join again, confirm ?"
                   )
               ]
-            ) %>
+            )}
           </span>
           /
         <% else %>
           <span class="text-yellow-500">
-            <%= link(
+            {link(
               if @post.pinned do
                 gettext("Unpin")
               else
@@ -70,11 +70,11 @@ defmodule ClaperWeb.EventLive.ManageablePostComponent do
               phx_click: "pin",
               phx_value_id: @post.uuid,
               phx_value_event_id: @event.uuid
-            ) %>
+            )}
           </span>
           /
           <span class="text-red-500">
-            <%= link(gettext("Ban"),
+            {link(gettext("Ban"),
               to: "#",
               phx_click: "ban",
               phx_value_user_id: @post.user_id,
@@ -84,17 +84,17 @@ defmodule ClaperWeb.EventLive.ManageablePostComponent do
                     "Blocking this user will delete all his messages and he will not be able to join again, confirm ?"
                   )
               ]
-            ) %>
+            )}
           </span>
           /
         <% end %>
         <span class="text-red-500">
-          <%= link(gettext("Delete"),
+          {link(gettext("Delete"),
             to: "#",
             phx_click: "delete",
             phx_value_id: @post.uuid,
             phx_value_event_id: @event.uuid
-          ) %>
+          )}
         </span>
       </div>
 
@@ -114,12 +114,12 @@ defmodule ClaperWeb.EventLive.ManageablePostComponent do
         <div class="flex flex-col">
           <%= if @post.name do %>
             <p class="text-black text-sm font-semibold mr-2">
-              <%= @post.name %>
+              {@post.name}
             </p>
           <% end %>
 
           <p class="text-xl">
-            <%= ClaperWeb.Helpers.format_body(@post.body) %>
+            {ClaperWeb.Helpers.format_body(@post.body)}
           </p>
         </div>
       </div>
@@ -130,7 +130,7 @@ defmodule ClaperWeb.EventLive.ManageablePostComponent do
             <%= if @post.like_count> 0 do %>
               <img src="/images/icons/thumb.svg" class="h-4" />
               <span class="ml-1">
-                <%= @post.like_count %>
+                {@post.like_count}
               </span>
             <% end %>
           </div>
@@ -138,7 +138,7 @@ defmodule ClaperWeb.EventLive.ManageablePostComponent do
             <%= if @post.love_count> 0 do %>
               <img src="/images/icons/heart.svg" class="h-4" />
               <span class="ml-1">
-                <%= @post.love_count %>
+                {@post.love_count}
               </span>
             <% end %>
           </div>
@@ -146,7 +146,7 @@ defmodule ClaperWeb.EventLive.ManageablePostComponent do
             <%= if @post.lol_count> 0 do %>
               <img src="/images/icons/laugh.svg" class="h-4" />
               <span class="ml-1">
-                <%= @post.lol_count %>
+                {@post.lol_count}
               </span>
             <% end %>
           </div>

@@ -1,7 +1,7 @@
 defmodule Claper.MixProject do
   use Mix.Project
 
-  @version "2.3.3"
+  @version "2.4.0"
 
   def project do
     [
@@ -87,7 +87,7 @@ defmodule Claper.MixProject do
       {:phoenix_html, "~> 4.2"},
       {:phoenix_html_helpers, "~> 1.0"},
       {:phoenix_live_reload, "~> 1.6", only: :dev},
-      {:phoenix_live_view, "~> 0.20.14"},
+      {:phoenix_live_view, "~> 1.0"},
       {:phoenix_swoosh, "~> 1.2.1"},
       {:phoenix_view, "~> 2.0"},
       {:floki, ">= 0.36.1", only: :test},

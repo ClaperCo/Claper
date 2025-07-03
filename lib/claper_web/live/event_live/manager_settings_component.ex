@@ -19,7 +19,7 @@ defmodule ClaperWeb.EventLive.ManagerSettingsComponent do
             <path d="M10.766 7.51a.75.75 0 0 0-1.37.365l-.492 6.861a.75.75 0 0 0 1.204.65l1.043-.799.985 3.678a.75.75 0 0 0 1.45-.388l-.978-3.646 1.292.204a.75.75 0 0 0 .74-1.16l-3.874-5.764Z" />
           </svg>
 
-          <span><%= gettext("Interaction") %></span>
+          <span>{gettext("Interaction")}</span>
         </div>
 
         <%= case @current_interaction do %>
@@ -59,10 +59,10 @@ defmodule ClaperWeb.EventLive.ManagerSettingsComponent do
                 </svg>
 
                 <span :if={@state.poll_visible}>
-                  <%= gettext("Hide results on presentation") %>
+                  {gettext("Hide results on presentation")}
                 </span>
                 <span :if={!@state.poll_visible}>
-                  <%= gettext("Show results on presentation") %>
+                  {gettext("Show results on presentation")}
                 </span>
                 <code
                   :if={@show_shortcut}
@@ -109,10 +109,10 @@ defmodule ClaperWeb.EventLive.ManagerSettingsComponent do
                 </svg>
 
                 <span :if={@current_interaction.show_results}>
-                  <%= gettext("Hide results on presentation") %>
+                  {gettext("Hide results on presentation")}
                 </span>
                 <span :if={!@current_interaction.show_results}>
-                  <%= gettext("Show results on presentation") %>
+                  {gettext("Show results on presentation")}
                 </span>
                 <code
                   :if={@show_shortcut}
@@ -141,7 +141,7 @@ defmodule ClaperWeb.EventLive.ManagerSettingsComponent do
                   </svg>
 
                   <span>
-                    <%= gettext("Review questions") %>
+                    {gettext("Review questions")}
                   </span>
                   <div></div>
                 </ClaperWeb.Component.Input.check_button>
@@ -165,7 +165,7 @@ defmodule ClaperWeb.EventLive.ManagerSettingsComponent do
                   </svg>
 
                   <span>
-                    <%= gettext("Previous") %>
+                    {gettext("Previous")}
                   </span>
                 </ClaperWeb.Component.Input.check_button>
                 <ClaperWeb.Component.Input.check_button
@@ -173,7 +173,7 @@ defmodule ClaperWeb.EventLive.ManagerSettingsComponent do
                   key={:next_quiz_question}
                 >
                   <span>
-                    <%= gettext("Next") %>
+                    {gettext("Next")}
                   </span>
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -214,7 +214,7 @@ defmodule ClaperWeb.EventLive.ManagerSettingsComponent do
               />
             </svg>
 
-            <span><%= gettext("Presentation") %></span>
+            <span>{gettext("Presentation")}</span>
           </div>
 
           <div class="flex space-x-1 items-center mt-3">
@@ -252,10 +252,10 @@ defmodule ClaperWeb.EventLive.ManagerSettingsComponent do
               </svg>
               <div>
                 <span :if={!@state.join_screen_visible}>
-                  <%= gettext("Show instructions to join") %>
+                  {gettext("Show instructions to join")}
                 </span>
                 <span :if={@state.join_screen_visible}>
-                  <%= gettext("Hide instructions to join") %>
+                  {gettext("Hide instructions to join")}
                 </span>
               </div>
               <code
@@ -301,8 +301,8 @@ defmodule ClaperWeb.EventLive.ManagerSettingsComponent do
                 <path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M8 9h1m4 0h3" /><path d="M8 13h5" /><path d="M8 4h10a3 3 0 0 1 3 3v8c0 .577 -.163 1.116 -.445 1.573m-2.555 1.427h-5l-5 3v-3h-2a3 3 0 0 1 -3 -3v-8c0 -1.085 .576 -2.036 1.439 -2.562" /><path d="M3 3l18 18" />
               </svg>
               <div>
-                <span :if={!@state.chat_visible}><%= gettext("Show messages") %></span>
-                <span :if={@state.chat_visible}><%= gettext("Hide messages") %></span>
+                <span :if={!@state.chat_visible}>{gettext("Show messages")}</span>
+                <span :if={@state.chat_visible}>{gettext("Hide messages")}</span>
               </div>
               <code
                 :if={@show_shortcut}
@@ -356,9 +356,9 @@ defmodule ClaperWeb.EventLive.ManagerSettingsComponent do
               </svg>
               <div>
                 <span :if={!@state.show_only_pinned}>
-                  <%= gettext("Show only pinned messages") %>
+                  {gettext("Show only pinned messages")}
                 </span>
-                <span :if={@state.show_only_pinned}><%= gettext("Show all messages") %></span>
+                <span :if={@state.show_only_pinned}>{gettext("Show all messages")}</span>
               </div>
               <code
                 :if={@show_shortcut}
@@ -387,7 +387,7 @@ defmodule ClaperWeb.EventLive.ManagerSettingsComponent do
               />
             </svg>
 
-            <span><%= gettext("Attendees") %></span>
+            <span>{gettext("Attendees")}</span>
           </div>
 
           <div class="flex space-x-2 items-center mt-3">
@@ -423,8 +423,8 @@ defmodule ClaperWeb.EventLive.ManagerSettingsComponent do
                 <path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M8 9h1m4 0h3" /><path d="M8 13h5" /><path d="M8 4h10a3 3 0 0 1 3 3v8c0 .577 -.163 1.116 -.445 1.573m-2.555 1.427h-5l-5 3v-3h-2a3 3 0 0 1 -3 -3v-8c0 -1.085 .576 -2.036 1.439 -2.562" /><path d="M3 3l18 18" />
               </svg>
               <div>
-                <span :if={!@state.chat_enabled}><%= gettext("Enable messages") %></span>
-                <span :if={@state.chat_enabled}><%= gettext("Disable messages") %></span>
+                <span :if={!@state.chat_enabled}>{gettext("Enable messages")}</span>
+                <span :if={@state.chat_enabled}>{gettext("Disable messages")}</span>
               </div>
               <code
                 :if={@show_shortcut}
@@ -479,10 +479,10 @@ defmodule ClaperWeb.EventLive.ManagerSettingsComponent do
 
               <div>
                 <span :if={!@state.anonymous_chat_enabled}>
-                  <%= gettext("Allow anonymous messages") %>
+                  {gettext("Allow anonymous messages")}
                 </span>
                 <span :if={@state.anonymous_chat_enabled}>
-                  <%= gettext("Deny anonymous messages") %>
+                  {gettext("Deny anonymous messages")}
                 </span>
               </div>
               <code
@@ -530,10 +530,10 @@ defmodule ClaperWeb.EventLive.ManagerSettingsComponent do
 
               <div>
                 <span :if={!@state.message_reaction_enabled}>
-                  <%= gettext("Enable reactions") %>
+                  {gettext("Enable reactions")}
                 </span>
                 <span :if={@state.message_reaction_enabled}>
-                  <%= gettext("Disable reactions") %>
+                  {gettext("Disable reactions")}
                 </span>
               </div>
               <code

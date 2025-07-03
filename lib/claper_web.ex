@@ -99,7 +99,7 @@ defmodule ClaperWeb do
       use PhoenixHTMLHelpers
 
       # Import LiveView and .heex helpers (live_render, live_patch, <.form>, etc)
-      import Phoenix.LiveView.Helpers
+      import Phoenix.Component
       import ClaperWeb.LiveHelpers
       alias Phoenix.LiveView.JS
 

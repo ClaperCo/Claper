@@ -4,7 +4,7 @@
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <%= csrf_meta_tag() %>
+    {csrf_meta_tag()}
     <title>Not found - Claper</title>
     <link rel="icon" type="image/png" href="/images/favicon.png" />
     <link phx-track-static rel="stylesheet" href="/assets/app.css" />
@@ -28,12 +28,12 @@
                       </a>
                     </h2>
                     <p class="mt-6  text-xl md:text-3xl font-bold text-gray-100">
-                      <%= gettext("Oops, page doesn't exist.") %>
+                      {gettext("Oops, page doesn't exist.")}
                     </p>
 
                     <div class="mt-10">
                       <a href="/" class="text-sm text-white underline">
-                        <%= gettext("Return to home") %>
+                        {gettext("Return to home")}
                       </a>
                     </div>
                   </div>

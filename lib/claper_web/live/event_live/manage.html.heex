@@ -32,7 +32,7 @@
         />
       </svg>
 
-      <span><%= gettext("How it works ?") %></span>
+      <span>{gettext("How it works ?")}</span>
     </button>
   </div>
   <div
@@ -119,8 +119,8 @@
           <path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M10.585 10.587a2 2 0 0 0 2.829 2.828" /><path d="M16.681 16.673a8.717 8.717 0 0 1 -4.681 1.327c-3.6 0 -6.6 -2 -9 -6c1.272 -2.12 2.712 -3.678 4.32 -4.674m2.86 -1.146a9.055 9.055 0 0 1 1.82 -.18c3.6 0 6.6 2 9 6c-.666 1.11 -1.379 2.067 -2.138 2.87" /><path d="M3 3l18 18" />
         </svg>
 
-        <span :if={!@preview}><%= gettext("Open preview") %></span>
-        <span :if={@preview}><%= gettext("Close preview") %></span>
+        <span :if={!@preview}>{gettext("Open preview")}</span>
+        <span :if={@preview}>{gettext("Close preview")}</span>
       </button>
       <div id="settings-modal-content" class="bg-white p-4">
         <.live_component
@@ -192,10 +192,10 @@
                 </div>
                 <div class="ml-4 flex-auto text-left">
                   <p class="font-medium text-gray-700">
-                    <%= gettext("Poll") %>
+                    {gettext("Poll")}
                   </p>
                   <p class="text-gray-500">
-                    <%= gettext("Add poll to know opinion of your public.") %>
+                    {gettext("Add poll to know opinion of your public.")}
                   </p>
                 </div>
               </a>
@@ -225,10 +225,10 @@
                 </div>
                 <div class="ml-4 flex-auto text-left">
                   <p class="font-medium text-gray-700">
-                    <%= gettext("Form") %>
+                    {gettext("Form")}
                   </p>
                   <p class="text-gray-500">
-                    <%= gettext("Add form to collect data from your public.") %>
+                    {gettext("Add form to collect data from your public.")}
                   </p>
                 </div>
               </a>
@@ -257,9 +257,9 @@
                   </svg>
                 </div>
                 <div class="ml-4 flex-auto text-left">
-                  <p class="font-medium text-gray-700"><%= gettext("Web content") %></p>
+                  <p class="font-medium text-gray-700">{gettext("Web content")}</p>
                   <p class="text-gray-500">
-                    <%= gettext("Add a Youtube video or any web content.") %>
+                    {gettext("Add a Youtube video or any web content.")}
                   </p>
                 </div>
               </a>
@@ -289,9 +289,9 @@
                   </svg>
                 </div>
                 <div class="ml-4 flex-auto text-left">
-                  <p class="font-medium text-gray-700"><%= gettext("Quiz") %></p>
+                  <p class="font-medium text-gray-700">{gettext("Quiz")}</p>
                   <p class="text-gray-500">
-                    <%= gettext("Add a quiz to test knowledge.") %>
+                    {gettext("Add a quiz to test knowledge.")}
                   </p>
                 </div>
               </a>
@@ -301,10 +301,10 @@
         <%= if @create=="poll" do %>
           <div class="scroll-py-3 overflow-y-auto bg-gray-100 p-3">
             <p class="text-xl font-bold">
-              <%= case @create_action do
+              {case @create_action do
                 :new -> gettext("New poll")
                 :edit -> gettext("Edit poll")
-              end %>
+              end}
             </p>
             <.live_component
               module={ClaperWeb.PollLive.FormComponent}
@@ -322,10 +322,10 @@
         <%= if @create=="form" do %>
           <div class="scroll-py-3 overflow-y-auto bg-gray-100 p-3">
             <p class="text-xl font-bold">
-              <%= case @create_action do
+              {case @create_action do
                 :new -> gettext("New form")
                 :edit -> gettext("Edit form")
-              end %>
+              end}
             </p>
             <.live_component
               module={ClaperWeb.FormLive.FormComponent}
@@ -343,10 +343,10 @@
         <%= if @create == "embed" do %>
           <div class="scroll-py-3 overflow-y-auto bg-gray-100 p-3">
             <p class="text-xl font-bold">
-              <%= case @create_action do
+              {case @create_action do
                 :new -> gettext("New web content")
                 :edit -> gettext("Edit web content")
-              end %>
+              end}
             </p>
             <.live_component
               module={ClaperWeb.EmbedLive.FormComponent}
@@ -364,10 +364,10 @@
         <%= if @create=="quiz" do %>
           <div class="scroll-py-3 overflow-y-auto bg-gray-100 p-3">
             <p class="text-xl font-bold">
-              <%= case @create_action do
+              {case @create_action do
                 :new -> gettext("New quiz")
                 :edit -> gettext("Edit quiz")
-              end %>
+              end}
             </p>
             <.live_component
               module={ClaperWeb.QuizLive.QuizComponent}
@@ -385,7 +385,7 @@
         <%= if @create == "import" do %>
           <div class="scroll-py-3 overflow-y-auto bg-gray-100 p-3">
             <p class="text-xl font-bold">
-              <%= gettext("Select presentation") %>
+              {gettext("Select presentation")}
             </p>
             <ul>
               <%= for event <- @events do %>
@@ -410,7 +410,7 @@
                       />
                     </svg>
                     <span>
-                      <%= event.name %>
+                      {event.name}
                     </span>
                   </button>
                 </li>
@@ -453,7 +453,7 @@
         </a>
         <div class="flex items-center justify-start gap-x-2">
           <h2 class="text-xl font-bold leading-7 text-gray-900 md:text-2xl truncate w-24 md:w-auto">
-            <%= @event.name %>
+            {@event.name}
           </h2>
           <div class="flex gap-x-3 items-center">
             <div class="flex items-center text-sm text-gray-500 gap-x-1">
@@ -471,7 +471,7 @@
                   d="M7 20l4-16m2 16l4-16M6 9h14M4 15h14"
                 />
               </svg>
-              <span class="uppercase"><%= @event.code %></span>
+              <span class="uppercase">{@event.code}</span>
             </div>
             <div class="flex items-center text-sm text-gray-500 gap-x-1">
               <svg
@@ -487,14 +487,14 @@
                 />
               </svg>
               <span id="attendees-count" phx-update="ignore" phx-hook="UpdateAttendees">
-                <%= @attendees_nb %>
+                {@attendees_nb}
               </span>
               <span>
-                <%= link(gettext("Join"),
+                {link(gettext("Join"),
                   to: ~p"/e/#{@event.code}",
                   class: "text-xs text-primary-600 font-semibold text-sm ",
                   target: "_blank"
-                ) %>
+                )}
               </span>
             </div>
           </div>
@@ -535,8 +535,8 @@
                 <path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M10.585 10.587a2 2 0 0 0 2.829 2.828" /><path d="M16.681 16.673a8.717 8.717 0 0 1 -4.681 1.327c-3.6 0 -6.6 -2 -9 -6c1.272 -2.12 2.712 -3.678 4.32 -4.674m2.86 -1.146a9.055 9.055 0 0 1 1.82 -.18c3.6 0 6.6 2 9 6c-.666 1.11 -1.379 2.067 -2.138 2.87" /><path d="M3 3l18 18" />
               </svg>
 
-              <span :if={!@preview}><%= gettext("Open preview") %></span>
-              <span :if={@preview}><%= gettext("Close preview") %></span>
+              <span :if={!@preview}>{gettext("Open preview")}</span>
+              <span :if={@preview}>{gettext("Close preview")}</span>
             </button>
             <button
               phx-hook="OpenPresenter"
@@ -563,7 +563,7 @@
                   d="M13.5 6H5.25A2.25 2.25 0 0 0 3 8.25v10.5A2.25 2.25 0 0 0 5.25 21h10.5A2.25 2.25 0 0 0 18 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25"
                 />
               </svg>
-              <%= gettext("Open presentation") %>
+              {gettext("Open presentation")}
             </button>
           </div>
           <div class="flex items-center gap-x-2 lg:hidden">
@@ -737,10 +737,10 @@
 
               <p class="text-lg">
                 <span :if={@event.presentation_file.length > 0}>
-                  <%= gettext("This slide does not have any interactions.") %>
+                  {gettext("This slide does not have any interactions.")}
                 </span>
                 <span :if={@event.presentation_file.length == 0}>
-                  <%= gettext("Create your first interaction.") %>
+                  {gettext("Create your first interaction.")}
                 </span>
               </p>
 
@@ -756,7 +756,7 @@
                 >
                   <path d="M8.75 3.75a.75.75 0 0 0-1.5 0v3.5h-3.5a.75.75 0 0 0 0 1.5h3.5v3.5a.75.75 0 0 0 1.5 0v-3.5h3.5a.75.75 0 0 0 0-1.5h-3.5v-3.5Z" />
                 </svg>
-                <span><%= gettext("Add interaction") %></span>
+                <span>{gettext("Add interaction")}</span>
               </button>
             </div>
             <div class="grid grid-cols-1 @sm:grid-cols-2 @lg:grid-cols-3 gap-4 p-4 overflow-y-auto">
@@ -783,7 +783,7 @@
                                 />
                               </svg>
                             </div>
-                            <span class="font-semibold"><%= gettext("Poll") %></span>
+                            <span class="font-semibold">{gettext("Poll")}</span>
                           </div>
 
                           <a
@@ -827,7 +827,7 @@
                                 />
                               </svg>
                             </div>
-                            <span class="font-semibold"><%= gettext("Form") %></span>
+                            <span class="font-semibold">{gettext("Form")}</span>
                           </div>
                           <a
                             class="p-2 rounded text-xs font-medium text-center text-primary-500"
@@ -871,7 +871,7 @@
                               </svg>
                             </div>
                             <span class="font-semibold">
-                              <%= gettext("Web content") %>
+                              {gettext("Web content")}
                             </span>
                           </div>
                           <a
@@ -917,7 +917,7 @@
                               </svg>
                             </div>
                             <span class="font-semibold">
-                              <%= gettext("Quiz") %>
+                              {gettext("Quiz")}
                             </span>
                             <p
                               :if={interaction.lti_resource_id}
@@ -1079,7 +1079,7 @@
                           <% end %>
                         <% _ -> %>
                       <% end %>
-                      <span><%= interaction.title %></span>
+                      <span>{interaction.title}</span>
                     </div>
                   </div>
                   <div class="w-full">
@@ -1098,7 +1098,7 @@
                           phx-value-id={interaction.id}
                           class="bg-supporting-red-100 text-supporting-red-800 px-2 py-2 rounded text-sm font-medium w-full"
                         >
-                          <%= gettext("Disable") %>
+                          {gettext("Disable")}
                         </button>
                       </div>
                     <% else %>
@@ -1115,7 +1115,7 @@
                         phx-value-id={interaction.id}
                         class="bg-primary-100 text-primary-800 px-2 py-2 rounded text-sm font-medium w-full"
                       >
-                        <%= gettext("Enable") %>
+                        {gettext("Enable")}
                       </button>
                     <% end %>
                   </div>
@@ -1129,7 +1129,7 @@
               >
                 <img src="/images/interaction-icons.png" class="w-2/3 @sm:w-1/3" />
                 <span class="font-semibold text-secondary-800">
-                  <%= gettext("Add interaction") %>
+                  {gettext("Add interaction")}
                 </span>
               </button>
             </div>
@@ -1164,35 +1164,35 @@
             >
               <li class={"rounded-md #{if @list_tab==:posts, do: "bg-secondary-600 text-white" ,
                 else: "bg-white text-gray-600" } px-2 py-0.5 text-sm shadow-sm"}>
-                <%= link(gettext("Messages") <> " (#{@post_count})",
+                {link(gettext("Messages") <> " (#{@post_count})",
                   to: "#",
                   phx_click: "list-tab",
                   phx_value_tab: :posts
-                ) %>
+                )}
               </li>
               <li class={"rounded-md #{if @list_tab==:questions, do: "bg-secondary-600 text-white" ,
                 else: "bg-white text-gray-600" } px-2 py-0.5 text-sm shadow-sm"}>
-                <%= link(gettext("Questions") <> " (#{@question_count})",
+                {link(gettext("Questions") <> " (#{@question_count})",
                   to: "#",
                   phx_click: "list-tab",
                   phx_value_tab: :questions
-                ) %>
+                )}
               </li>
               <li class={"rounded-md #{if @list_tab==:pinned_posts, do: "bg-secondary-600 text-white" ,
                 else: "bg-white text-gray-600" } px-2 py-0.5 text-sm shadow-sm"}>
-                <%= link(gettext("Pinned messages") <> " (#{@pinned_post_count})",
+                {link(gettext("Pinned messages") <> " (#{@pinned_post_count})",
                   to: "#",
                   phx_click: "list-tab",
                   phx_value_tab: :pinned_posts
-                ) %>
+                )}
               </li>
               <li class={"rounded-md #{if @list_tab==:forms, do: "bg-secondary-600 text-white" ,
                 else: "bg-white text-gray-600" } px-2 py-0.5 text-sm shadow-sm"}>
-                <%= link(gettext("Form submissions") <> " (#{@form_submit_count})",
+                {link(gettext("Form submissions") <> " (#{@form_submit_count})",
                   to: "#",
                   phx_click: "list-tab",
                   phx_value_tab: :forms
-                ) %>
+                )}
               </li>
             </ul>
 
@@ -1218,7 +1218,7 @@
                 </svg>
 
                 <p class="text-lg">
-                  <%= gettext("Messages from attendees will appear here.") %>
+                  {gettext("Messages from attendees will appear here.")}
                 </p>
               </div>
               <div
@@ -1259,7 +1259,7 @@
                 </svg>
 
                 <p class="text-lg">
-                  <%= gettext("Questions will appear here.") %>
+                  {gettext("Questions will appear here.")}
                 </p>
               </div>
 
@@ -1280,7 +1280,7 @@
                     </svg>
 
                     <p class="flex items-center gap-x-1">
-                      <%= gettext("Sort by popularity") %>
+                      {gettext("Sort by popularity")}
                     </p>
                   </button>
                   <button
@@ -1301,7 +1301,7 @@
                       />
                     </svg>
 
-                    <span><%= gettext("Sort by date") %></span>
+                    <span>{gettext("Sort by date")}</span>
                   </button>
                 </div>
                 <div
@@ -1341,7 +1341,7 @@
                 </svg>
 
                 <p class="text-lg">
-                  <%= gettext("Pinned messages will appear here.") %>
+                  {gettext("Pinned messages will appear here.")}
                 </p>
               </div>
 
@@ -1387,7 +1387,7 @@
                   </svg>
 
                   <p class="text-lg">
-                    <%= gettext("Form submissions from attendees will appear here.") %>
+                    {gettext("Form submissions from attendees will appear here.")}
                   </p>
                 </div>
               <% end %>
@@ -1402,20 +1402,20 @@
                   <div class="px-4 pb-2 pt-3 rounded-b-lg rounded-tr-lg bg-white relative shadow-md text-black break-all mt-2">
                     <div class="float-right mr-1">
                       <span class="text-red-500">
-                        <%= link(gettext("Delete"),
+                        {link(gettext("Delete"),
                           to: "#",
                           phx_click: "delete-form-submit",
                           phx_value_id: submission.id,
                           phx_value_event_id: @event.uuid,
                           data: [confirm: gettext("This cannot be undone, confirm ?")]
-                        ) %>
+                        )}
                       </span>
                     </div>
 
                     <p>
                       <span class="font-semibold text-lg">
                         <%= gettext("Form") %>
-                      </span>: <%= submission.form.title %>
+                      </span>: {submission.form.title}
                     </p>
 
                     <div class="flex space-x-3 items-center">
@@ -1435,9 +1435,9 @@
                         <%= for res <- submission.response do %>
                           <p>
                             <strong>
-                              <%= elem(res, 0) %>:
+                              {elem(res, 0)}:
                             </strong>
-                            <%= elem(res, 1) %>
+                            {elem(res, 1)}
                           </p>
                         <% end %>
                       </div>
@@ -1460,7 +1460,7 @@
             data-tg-group="manage"
           >
             <div class="w-full h-12 bg-gray-100 font-semibold text-xl flex items-center justify-center">
-              <%= gettext("Settings") %>
+              {gettext("Settings")}
             </div>
 
             <.live_component

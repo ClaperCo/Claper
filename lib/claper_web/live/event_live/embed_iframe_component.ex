@@ -39,7 +39,7 @@ defmodule ClaperWeb.EventLive.EmbedIframeComponent do
           >
           </iframe>
         <% "custom" -> %>
-          <%= raw(@content) %>
+          {raw(@content)}
       <% end %>
     </div>
     """

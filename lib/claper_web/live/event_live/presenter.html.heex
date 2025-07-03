@@ -23,7 +23,7 @@
   >
     <div class="h-full bg-white text-black text-center flex flex-col items-center justify-center">
       <span class="font-semibold mb-10 sm:text-3xl md:text-4xl lg:text-6xl">
-        <%= gettext("Scan to interact in real-time") %>
+        {gettext("Scan to interact in real-time")}
       </span>
       <div
         phx-hook="QRCode"
@@ -35,10 +35,10 @@
       >
       </div>
       <span class="font-semibold mb-10 sm:text-3xl md:text-4xl lg:text-6xl">
-        <%= gettext("Or go to %{url} and use the code:", url: @host) %>
+        {gettext("Or go to %{url} and use the code:", url: @host)}
       </span>
       <span class="font-semibold mb-10 sm:text-5xl md:text-6xl lg:text-8xl">
-        #<%= String.upcase(@event.code) %>
+        #{String.upcase(@event.code)}
       </span>
     </div>
   </div>
@@ -50,7 +50,7 @@
     >
       <div class="w-full md:w-1/2 mx-auto h-full">
         <p class={"#{if @iframe, do: "text-xl mb-12", else: "text-5xl mb-24"} text-white font-bold  text-center"}>
-          <%= @current_poll.title %>
+          {@current_poll.title}
         </p>
 
         <div class={"#{if @iframe, do: "space-y-5", else: "space-y-8"} flex flex-col"}>
@@ -64,11 +64,11 @@
                 </div>
                 <div class="flex space-x-3 z-10 text-left">
                   <span class={"#{if @iframe, do: "text-base", else: "text-2xl"} flex-1 font-bold pr-2"}>
-                    <%= opt.content %>
+                    {opt.content}
                   </span>
                 </div>
                 <span class={"#{if @iframe, do: "text-base", else: "text-2xl"} z-10 font-bold"}>
-                  <%= opt.percentage %>% (<%= opt.vote_count %>)
+                  {opt.percentage}% ({opt.vote_count})
                 </span>
               </div>
             <% end %>
@@ -107,10 +107,10 @@
               <div class="px-4 pb-2 pt-3 rounded-b-lg rounded-tr-lg bg-white shadow-md text-black break-word mt-4">
                 <%= if post.name do %>
                   <p class={"#{if @iframe, do: "text-base", else: "text-lg"} text-gray-400 font-semibold mb-2 mr-2"}>
-                    <%= post.name %>
+                    {post.name}
                   </p>
                 <% end %>
-                <p class={"#{if @iframe, do: "text-xl", else: "text-3xl"}"}><%= post.body %></p>
+                <p class={"#{if @iframe, do: "text-xl", else: "text-3xl"}"}>{post.body}</p>
 
                 <%= if post.like_count > 0 || post.love_count > 0 || post.lol_count > 0 do %>
                   <div class="flex h-6 space-x-2 text-lg text-gray-500 pb-3 items-center mt-5">
@@ -120,7 +120,7 @@
                           src="/images/icons/thumb.svg"
                           class={"#{if @iframe, do: "h-4", else: "h-7"}"}
                         />
-                        <span class="ml-1"><%= post.like_count %></span>
+                        <span class="ml-1">{post.like_count}</span>
                       <% end %>
                     </div>
                     <div class="flex items-center">
@@ -129,7 +129,7 @@
                           src="/images/icons/heart.svg"
                           class={"#{if @iframe, do: "h-4", else: "h-7"}"}
                         />
-                        <span class="ml-1"><%= post.love_count %></span>
+                        <span class="ml-1">{post.love_count}</span>
                       <% end %>
                     </div>
                     <div class="flex items-center">
@@ -138,7 +138,7 @@
                           src="/images/icons/laugh.svg"
                           class={"#{if @iframe, do: "h-4", else: "h-7"}"}
                         />
-                        <span class="ml-1"><%= post.lol_count %></span>
+                        <span class="ml-1">{post.lol_count}</span>
                       <% end %>
                     </div>
                   </div>
@@ -154,10 +154,10 @@
               <div class="px-4 pb-2 pt-3 rounded-b-lg rounded-tr-lg bg-white shadow-md text-black break-word mt-4">
                 <%= if post.name do %>
                   <p class={"#{if @iframe, do: "text-base", else: "text-lg"} text-gray-400 font-semibold mb-2 mr-2"}>
-                    <%= post.name %>
+                    {post.name}
                   </p>
                 <% end %>
-                <p class={"#{if @iframe, do: "text-xl", else: "text-3xl"}"}><%= post.body %></p>
+                <p class={"#{if @iframe, do: "text-xl", else: "text-3xl"}"}>{post.body}</p>
 
                 <%= if post.like_count > 0 || post.love_count > 0 || post.lol_count > 0 do %>
                   <div class="flex h-6 space-x-2 text-lg text-gray-500 pb-3 items-center mt-5">
@@ -167,7 +167,7 @@
                           src="/images/icons/thumb.svg"
                           class={"#{if @iframe, do: "h-4", else: "h-7"}"}
                         />
-                        <span class="ml-1"><%= post.like_count %></span>
+                        <span class="ml-1">{post.like_count}</span>
                       <% end %>
                     </div>
                     <div class="flex items-center">
@@ -176,7 +176,7 @@
                           src="/images/icons/heart.svg"
                           class={"#{if @iframe, do: "h-4", else: "h-7"}"}
                         />
-                        <span class="ml-1"><%= post.love_count %></span>
+                        <span class="ml-1">{post.love_count}</span>
                       <% end %>
                     </div>
                     <div class="flex items-center">
@@ -185,7 +185,7 @@
                           src="/images/icons/laugh.svg"
                           class={"#{if @iframe, do: "h-4", else: "h-7"}"}
                         />
-                        <span class="ml-1"><%= post.lol_count %></span>
+                        <span class="ml-1">{post.lol_count}</span>
                       <% end %>
                     </div>
                   </div>
@@ -244,7 +244,7 @@
     <div class="inline-flex justify-between items-center text-white text-2xl">
       <img src="/images/icons/online-users.svg" class="h-12 mr-2" />
       <span id="counter" phx-hook="UpdateAttendees" phx-update="ignore">
-        <%= @attendees_nb %>
+        {@attendees_nb}
       </span>
     </div>
   </div>

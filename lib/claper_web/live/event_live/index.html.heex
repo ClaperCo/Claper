@@ -25,7 +25,7 @@
         />
       </svg>
 
-      <span><%= gettext("How it works ?") %></span>
+      <span>{gettext("How it works ?")}</span>
     </button>
   </div>
   <%= if @live_action in [:new, :edit] do %>
@@ -90,7 +90,7 @@
               phx_disable_with="Loading..."
               class="mt-5 w-full lg:w-auto px-6 text-white py-2 rounded-md tracking-wide font-bold focus:outline-none focus:shadow-outline bg-gradient-to-tl from-primary-500 to-secondary-500 bg-size-200 bg-pos-0 hover:bg-pos-100 transition-all duration-500"
             >
-              <%= gettext("Create") %>
+              {gettext("Create")}
             </button>
           </.form>
         </div>
@@ -108,7 +108,7 @@
     >
       <div class="flex-1 min-w-0">
         <h1 class="text-2xl font-medium leading-6 text-gray-900 sm:truncate">
-          <%= gettext("My events") %>
+          {gettext("My events")}
         </h1>
       </div>
       <div class="flex flex-col w-full items-center sm:w-auto sm:flex-row mt-0">
@@ -138,7 +138,7 @@
             />
           </svg>
           <span>
-            <%= gettext("Quick event") %>
+            {gettext("Quick event")}
           </span>
         </.link>
         <.link
@@ -163,7 +163,7 @@
             />
           </svg>
           <span>
-            <%= gettext("Create event") %>
+            {gettext("Create event")}
           </span>
         </.link>
       </div>
@@ -175,7 +175,7 @@
         phx-value-tab="not_expired"
         class={"#{if @active_tab == "not_expired", do: "bg-primary-100 text-primary-700", else: "text-gray-500 hover:text-gray-700"} px-3 py-2 font-medium rounded-md"}
       >
-        <%= gettext("Active") %>
+        {gettext("Active")}
       </button>
       <button
         phx-click="change-tab"
@@ -183,7 +183,7 @@
         disabled={not @has_expired_events}
         class={"#{if @active_tab == "expired", do: "bg-primary-100 text-primary-700", else: "text-gray-500 hover:text-gray-700"} px-3 py-2 font-medium rounded-md #{if not @has_expired_events, do: "opacity-50"}"}
       >
-        <%= gettext("Finished") %>
+        {gettext("Finished")}
       </button>
       <button
         phx-click="change-tab"
@@ -191,7 +191,7 @@
         disabled={not @has_invited_events}
         class={"#{if @active_tab == "invited", do: "bg-primary-100 text-primary-700", else: "text-gray-500 hover:text-gray-700"} px-3 py-2 font-medium rounded-md #{if not @has_invited_events, do: "opacity-50"}"}
       >
-        <%= gettext("Shared with you") %>
+        {gettext("Shared with you")}
       </button>
     </nav>
 
@@ -214,14 +214,14 @@
             phx-click="load-more"
             class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-primary-700 bg-primary-100 hover:bg-primary-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
           >
-            <%= gettext("Load more") %>
+            {gettext("Load more")}
           </button>
         </div>
       <% end %>
       <%= if Enum.count(@events) == 0 do %>
         <div class="w-full text-2xl text-black opacity-25 text-center">
           <img src="/images/icons/arrow.svg" class="h-20 float-right mr-16 -mt-5" />
-          <p class="pt-12 clear-both"><%= gettext("Create your first event") %></p>
+          <p class="pt-12 clear-both">{gettext("Create your first event")}</p>
         </div>
       <% end %>
     </div>

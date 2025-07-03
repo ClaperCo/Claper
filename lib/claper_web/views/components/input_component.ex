@@ -19,9 +19,9 @@ defmodule ClaperWeb.Component.Input do
 
     ~H"""
     <div class="relative">
-      <%= label(@form, @key, @name, class: "block text-sm font-medium #{@labelClass}") %>
+      {label(@form, @key, @name, class: "block text-sm font-medium #{@labelClass}")}
       <div class="mt-1">
-        <%= text_input(@form, @key,
+        {text_input(@form, @key,
           required: @required,
           readonly: @readonly,
           autofocus: @autofocus,
@@ -32,10 +32,10 @@ defmodule ClaperWeb.Component.Input do
           maxlength: @maxlength,
           class:
             "#{@fieldClass} read-only:opacity-50 outline-none shadow-base focus:ring-primary-500 focus:border-primary-500 focus:ring-2 block w-full text-lg border-gray-300 rounded-md py-2 px-3"
-        ) %>
+        )}
       </div>
       <%= if Keyword.has_key?(@form.errors, @key) do %>
-        <p class="text-supporting-red-500 text-sm"><%= error_tag(@form, @key) %></p>
+        <p class="text-supporting-red-500 text-sm">{error_tag(@form, @key)}</p>
       <% end %>
     </div>
     """
@@ -54,9 +54,9 @@ defmodule ClaperWeb.Component.Input do
 
     ~H"""
     <div class="relative">
-      <%= label(@form, @key, @name, class: "block text-sm font-medium #{@labelClass}") %>
+      {label(@form, @key, @name, class: "block text-sm font-medium #{@labelClass}")}
       <div class="mt-1">
-        <%= text_input(@form, @key,
+        {text_input(@form, @key,
           required: @required,
           readonly: @readonly,
           autofocus: @autofocus,
@@ -65,10 +65,10 @@ defmodule ClaperWeb.Component.Input do
           value: @value,
           class:
             "#{@fieldClass} read-only:opacity-50 outline-none shadow-base focus:ring-primary-500 focus:border-primary-500 focus:ring-2 block w-full text-lg border-gray-300 rounded-md py-2 px-3"
-        ) %>
+        )}
       </div>
       <%= if Keyword.has_key?(@form.errors, @key) do %>
-        <p class="text-supporting-red-500 text-sm"><%= error_tag(@form, @key) %></p>
+        <p class="text-supporting-red-500 text-sm">{error_tag(@form, @key)}</p>
       <% end %>
     </div>
     """
@@ -85,19 +85,19 @@ defmodule ClaperWeb.Component.Input do
 
     ~H"""
     <div class="relative">
-      <%= label(@form, @key, @name, class: "block text-sm font-medium #{@labelClass}") %>
+      {label(@form, @key, @name, class: "block text-sm font-medium #{@labelClass}")}
       <div class="mt-1">
-        <%= select(@form, @key, @array,
+        {select(@form, @key, @array,
           required: @required,
           autofocus: @autofocus,
           placeholder: @placeholder,
           autocomplete: @key,
           class:
             "#{@fieldClass} outline-none shadow-base focus:ring-primary-500 focus:border-primary-500 block w-full text-lg border-gray-300 rounded-md py-2 px-3"
-        ) %>
+        )}
       </div>
       <%= if Keyword.has_key?(@form.errors, @key) do %>
-        <p class="text-supporting-red-500 text-sm"><%= error_tag(@form, @key) %></p>
+        <p class="text-supporting-red-500 text-sm">{error_tag(@form, @key)}</p>
       <% end %>
     </div>
     """
@@ -156,7 +156,7 @@ defmodule ClaperWeb.Component.Input do
       phx-key={@shortcut}
       phx-window-keydown={if @shortcut && not @disabled, do: checked(@checked, @key)}
     >
-      <%= render_slot(@inner_block) %>
+      {render_slot(@inner_block)}
     </button>
     """
   end
@@ -201,14 +201,14 @@ defmodule ClaperWeb.Component.Input do
 
     ~H"""
     <div class="relative">
-      <%= label(@form, @key, @name, class: "block text-sm font-medium text-gray-700") %>
+      {label(@form, @key, @name, class: "block text-sm font-medium text-gray-700")}
       <div class="mt-1 relative">
         <img
           class="icon absolute transition-all top-2.5 left-2 duration-100 h-6"
           src="/images/icons/hashtag.svg"
           alt="code"
         />
-        <%= text_input(@form, @key,
+        {text_input(@form, @key,
           required: @required,
           readonly: @readonly,
           placeholder: @placeholder,
@@ -218,10 +218,10 @@ defmodule ClaperWeb.Component.Input do
           maxlength: 10,
           class:
             "read-only:opacity-50 outline-none shadow-base focus:ring-primary-500 focus:border-primary-500 block w-full text-lg border-gray-300 rounded-md py-2 pr-3 pl-9 uppercase"
-        ) %>
+        )}
       </div>
       <%= if Keyword.has_key?(@form.errors, @key) do %>
-        <p class="text-supporting-red-500 text-sm"><%= error_tag(@form, @key) %></p>
+        <p class="text-supporting-red-500 text-sm">{error_tag(@form, @key)}</p>
       <% end %>
     </div>
     """
@@ -238,20 +238,20 @@ defmodule ClaperWeb.Component.Input do
     ~H"""
     <div>
       <div class="relative" id="date" phx-hook="Pickr">
-        <%= label(@form, @key, @name, class: "block text-sm font-medium text-gray-700") %>
+        {label(@form, @key, @name, class: "block text-sm font-medium text-gray-700")}
         <div class="mt-1 relative">
-          <%= hidden_input(@form, @key) %>
-          <%= text_input(@form, :local_date,
+          {hidden_input(@form, @key)}
+          {text_input(@form, :local_date,
             autofocus: @autofocus,
             placeholder: @placeholder,
             autocomplete: false,
             class:
               "outline-none shadow-base focus:ring-primary-500 focus:border-primary-500 block w-full text-lg border-gray-300 rounded-md py-2 px-3 read-only:opacity-50"
-          ) %>
+          )}
         </div>
 
         <%= if Keyword.has_key?(@form.errors, @key) do %>
-          <p class="text-supporting-red-500 text-sm"><%= error_tag(@form, @key) %></p>
+          <p class="text-supporting-red-500 text-sm">{error_tag(@form, @key)}</p>
         <% end %>
       </div>
     </div>
@@ -271,9 +271,9 @@ defmodule ClaperWeb.Component.Input do
 
     ~H"""
     <div class="relative" x-data={"{input: '#{assigns.value}'}"}>
-      <%= label(@form, @key, @name, class: "block text-sm font-medium #{@labelClass}") %>
+      {label(@form, @key, @name, class: "block text-sm font-medium #{@labelClass}")}
       <div class="mt-1">
-        <%= email_input(@form, @key,
+        {email_input(@form, @key,
           required: @required,
           autofocus: @autofocus,
           placeholder: @placeholder,
@@ -284,10 +284,10 @@ defmodule ClaperWeb.Component.Input do
             "#{@fieldClass} read-only:opacity-50 shadow-base block w-full text-lg focus:ring-primary-500 focus:ring-2 outline-none rounded-md py-2 px-3",
           "x-model": "input",
           "x-ref": "input"
-        ) %>
+        )}
       </div>
       <%= if Keyword.has_key?(@form.errors, @key) do %>
-        <p class="text-supporting-red-500 text-sm"><%= error_tag(@form, @key) %></p>
+        <p class="text-supporting-red-500 text-sm">{error_tag(@form, @key)}</p>
       <% end %>
     </div>
     """
@@ -305,9 +305,9 @@ defmodule ClaperWeb.Component.Input do
 
     ~H"""
     <div class="relative" x-data={"{input: '#{assigns.value}'}"}>
-      <%= label(@form, @key, @name, class: "block text-sm font-medium #{@labelClass}") %>
+      {label(@form, @key, @name, class: "block text-sm font-medium #{@labelClass}")}
       <div class="mt-1">
-        <%= password_input(@form, @key,
+        {password_input(@form, @key,
           required: @required,
           autofocus: @autofocus,
           placeholder: @placeholder,
@@ -315,10 +315,10 @@ defmodule ClaperWeb.Component.Input do
             "#{@fieldClass} shadow-base block w-full text-lg focus:ring-primary-500 focus:ring-2 outline-none rounded-md py-2 px-3",
           "x-model": "input",
           "x-ref": "input"
-        ) %>
+        )}
       </div>
       <%= if Keyword.has_key?(@form.errors, @key) do %>
-        <p class="text-supporting-red-500 text-sm"><%= error_tag(@form, @key) %></p>
+        <p class="text-supporting-red-500 text-sm">{error_tag(@form, @key)}</p>
       <% end %>
     </div>
     """

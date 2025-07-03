@@ -19,10 +19,10 @@
               <img src="/images/logo.svg" class="h-10 w-auto inline" />
             </h2>
             <h2 class="mt-6 text-4xl md:text-6xl font-bold text-gray-100">
-              <%= gettext("It's time to empower your presentations.") %>
+              {gettext("It's time to empower your presentations.")}
             </h2>
             <p class="mt-10 text-2xl md:text-4xl text-gray-200">
-              <%= gettext("Connect to your account") %>
+              {gettext("Connect to your account")}
             </p>
           </div>
           <div class="flex flex-row justify-center items-center space-x-3"></div>
@@ -59,7 +59,7 @@
                 type="submit"
                 class="w-full flex justify-center text-white p-4 rounded-md tracking-wide font-bold focus:outline-none focus:shadow-outline shadow-lg bg-gradient-to-tl from-primary-500 to-secondary-500 bg-size-200 bg-pos-0 hover:bg-pos-100 transition-all duration-500"
               >
-                <%= gettext("Login") %>
+                {gettext("Login")}
               </button>
             </div>
           </.form>
@@ -71,20 +71,20 @@
                 "w-full flex justify-center items-center gap-x-2 py-2 px-4 rounded-md shadow-sm text-sm font-medium text-white border-2 border-secondary-500 hover:bg-secondary-500 hover:bg-opacity-40"
             ) do %>
               <img width="24" src={@oidc_logo_url} />
-              <span><%= gettext("Login with %{provider}", provider: @oidc_provider_name) %></span>
+              <span>{gettext("Login with %{provider}", provider: @oidc_provider_name)}</span>
             <% end %>
           </div>
 
           <div class="mt-4 text-center justify-center">
-            <%= link(gettext("Forgot your password?"),
+            {link(gettext("Forgot your password?"),
               to: ~p"/users/reset_password",
               class: "text-white text-sm text-center"
-            ) %>
+            )}
             <%= if Application.get_env(:claper, :enable_account_creation) do %>
-              <span class="text-white">•</span> <%= link(gettext("Create account"),
+              <span class="text-white">•</span> {link(gettext("Create account"),
                 to: ~p"/users/register",
                 class: "text-white text-sm text-center"
-              ) %>
+              )}
             <% end %>
           </div>
         </div>

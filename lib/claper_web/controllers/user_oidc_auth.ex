@@ -103,7 +103,7 @@ defmodule ClaperWeb.UserOidcAuth do
     Application.get_env(:claper, ClaperWeb.Endpoint)[:base_url]
   end
 
-  defp opts(pkce_verifier \\ nil) do
+  defp opts(pkce_verifier) do
     url = base_url()
 
     base_opts = %{

@@ -21,21 +21,21 @@
       @click.away="open = false"
     >
       <a href="https://get.claper.co/" class="text-sm font-semibold text-black">
-        <%= gettext("About") %>
+        {gettext("About")}
       </a>
       <%= if @current_user do %>
         <.link
           href={~p"/events"}
           class="relative inline-flex items-center px-4 py-1 text-base font-sm rounded-md text-white bg-gradient-to-tl from-primary-500 to-secondary-500 bg-size-200 bg-pos-0 hover:bg-pos-100 transition-all duration-500"
         >
-          <%= gettext("Dashboard") %>
+          {gettext("Dashboard")}
         </.link>
       <% else %>
         <.link
           href={~p"/users/log_in"}
           class="relative inline-flex items-center px-4 py-1 text-base font-sm rounded-md text-white bg-gradient-to-tl from-primary-500 to-secondary-500 bg-size-200 bg-pos-0 hover:bg-pos-100 transition-all duration-500"
         >
-          <%= gettext("Login") %>
+          {gettext("Login")}
         </.link>
       <% end %>
     </div>
@@ -44,21 +44,21 @@
     </button>
     <div class="hidden md:block">
       <a href="https://get.claper.co/" class="text-sm text-white font-semibold mr-3">
-        <%= gettext("About") %>
+        {gettext("About")}
       </a>
       <%= if @current_user do %>
         <.link
           href={~p"/events"}
           class="relative inline-flex items-center px-4 py-1 text-base font-sm rounded-md text-white bg-gradient-to-tl from-primary-500 to-secondary-500 bg-size-200 bg-pos-0 hover:bg-pos-100 transition-all duration-500"
         >
-          <%= gettext("Dashboard") %>
+          {gettext("Dashboard")}
         </.link>
       <% else %>
         <.link
           href={~p"/users/log_in"}
           class="relative inline-flex items-center px-4 py-1 text-base font-sm rounded-md text-white bg-gradient-to-tl from-primary-500 to-secondary-500 bg-size-200 bg-pos-0 hover:bg-pos-100 transition-all duration-500"
         >
-          <%= gettext("Login") %>
+          {gettext("Login")}
         </.link>
       <% end %>
     </div>
@@ -71,13 +71,13 @@
 
     <%= form_for :event, ~p"/join", ["phx-submit": "join", "phx-hook": "JoinEvent", id: "form"], fn f -> %>
       <div class="relative">
-        <%= text_input(f, :code,
+        {text_input(f, :code,
           required: true,
           autofocus: true,
           id: "input",
           class:
             "transition-all bg-transparent tracking-widest w-full uppercase text-white text-2xl px-3 border-b border-gray-200 focus:border-b-2 pt-5 pl-12 pb-3 outline-none"
-        ) %>
+        )}
         <img
           class="icon absolute top-5 left-2 transition-all duration-100"
           src="/images/icons/hashtag-white.svg"
@@ -91,7 +91,7 @@
           id="submit"
           class="w-full flex justify-center text-white p-4 rounded-full tracking-wide font-bold outline-none focus:shadow-outline shadow-lg bg-gradient-to-tl from-primary-500 to-secondary-500 bg-size-200 bg-pos-0 hover:bg-pos-100 transition-all duration-500"
         >
-          <%= gettext("Join") %>
+          {gettext("Join")}
         </button>
         <img src="/images/loading.gif" id="loading" class="hidden h-12 mx-auto" />
       </div>
@@ -101,7 +101,7 @@
           <div class="rounded-md bg-gray-600 bg-opacity-50 p-4 mt-8">
             <div class="flex justify-center items-center">
               <p class="text-sm text-white">
-                <%= gettext("Return to your last event") %> (<%= @last_event.name %>)
+                {gettext("Return to your last event")} ({@last_event.name})
               </p>
               <p class="text-base ml-3 mt-1">
                 <a href="#" class="whitespace-nowrap font-medium text-white">

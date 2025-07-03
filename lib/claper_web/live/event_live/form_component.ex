@@ -29,7 +29,7 @@ defmodule ClaperWeb.EventLive.FormComponent do
               <path d="M17 12h.01"></path>
               <path d="M13 12h.01"></path>
             </svg>
-            <span class="font-bold"><%= gettext("See current form") %></span>
+            <span class="font-bold">{gettext("See current form")}</span>
           </div>
         </div>
       </div>
@@ -48,8 +48,8 @@ defmodule ClaperWeb.EventLive.FormComponent do
             </svg>
           </div>
 
-          <p class="text-xs text-gray-500 my-1"><%= gettext("Current form") %></p>
-          <p class="text-white text-lg font-semibold mb-4"><%= @form.title %></p>
+          <p class="text-xs text-gray-500 my-1">{gettext("Current form")}</p>
+          <p class="text-white text-lg font-semibold mb-4">{@form.title}</p>
         </div>
         <%= form_for :form_submit, "#", [id: @id, phx_change: "validate", phx_target: @myself, phx_submit: "submit"], fn f -> %>
           <div class="flex flex-col space-y-3">
@@ -94,7 +94,7 @@ defmodule ClaperWeb.EventLive.FormComponent do
               type="submit"
               class="px-3 py-2 text-white font-semibold bg-primary-500 hover:bg-primary-600 rounded-md my-5"
             >
-              <%= if is_nil(assigns.current_form_submit), do: gettext("Submit"), else: gettext("Edit") %>
+              {if is_nil(assigns.current_form_submit), do: gettext("Submit"), else: gettext("Edit")}
             </button>
 
             <%= unless is_nil(assigns.current_form_submit) do %>
@@ -111,7 +111,7 @@ defmodule ClaperWeb.EventLive.FormComponent do
                 >
                   <path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0" /><path d="M9 12l2 2l4 -4" />
                 </svg>
-                <span><%= gettext("Saved") %></span>
+                <span>{gettext("Saved")}</span>
               </div>
             <% end %>
           </div>

@@ -15,7 +15,6 @@ defmodule ClaperWeb.ModalComponent do
       phx-window-keydown={hide_modal()}
       phx-key="escape"
       phx-target={@myself}
-      phx-page-loading
     >
       <div class="flex items-center justify-center pt-4 px-4 pb-20 text-center sm:block sm:p-4">
         <div
@@ -36,16 +35,16 @@ defmodule ClaperWeb.ModalComponent do
           </div>
 
           <h3 class="text-lg leading-6 font-medium text-gray-900">
-            <%= @title %>
+            {@title}
           </h3>
           <div class="mt-2 max-w-xl text-sm text-gray-500">
             <p>
-              <%= @description %>
+              {@description}
             </p>
           </div>
           <div class="mt-2">
             <p class="text-sm text-gray-500">
-              <%= render_slot(@inner_block) %>
+              {render_slot(@inner_block)}
             </p>
           </div>
         </div>
@@ -64,6 +63,6 @@ defmodule ClaperWeb.ModalComponent do
   def hide_modal(js \\ %JS{}) do
     js
     |> JS.hide(to: "#modal", transition: "animate__animated animate__fadeOut", time: 300)
-    |> JS.push("hide", target: "#modal")
+    |> JS.push("hide", target: "#modal", page_loading: true)
   end
 end

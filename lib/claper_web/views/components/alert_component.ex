@@ -32,7 +32,7 @@ defmodule ClaperWeb.Component.Alert do
         </div>
         <div class="ml-3">
           <p class="text-sm text-supporting-green-700">
-            <%= @message %>
+            {@message}
           </p>
         </div>
       </div>
@@ -72,7 +72,7 @@ defmodule ClaperWeb.Component.Alert do
         </div>
         <div class="ml-3">
           <p class="text-sm text-supporting-red-700">
-            <%= @message %>
+            {@message}
           </p>
         </div>
       </div>

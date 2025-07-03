@@ -1,11 +1,11 @@
 <div class="fixed max-w-xl w-full bottom-5 left-1/2 tranform -translate-x-1/2 z-10">
-  <%= if live_flash(@flash, :info) do %>
-    <ClaperWeb.Component.Alert.info message={live_flash(@flash, :info)} />
+  <%= if Phoenix.Flash.get(@flash, :info) do %>
+    <ClaperWeb.Component.Alert.info message={Phoenix.Flash.get(@flash, :info)} />
   <% end %>
 
-  <%= if live_flash(@flash, :error) do %>
-    <ClaperWeb.Component.Alert.error message={live_flash(@flash, :error)} />
+  <%= if Phoenix.Flash.get(@flash, :error) do %>
+    <ClaperWeb.Component.Alert.error message={Phoenix.Flash.get(@flash, :error)} />
   <% end %>
 </div>
 
-<%= @inner_content %>
+{@inner_content}

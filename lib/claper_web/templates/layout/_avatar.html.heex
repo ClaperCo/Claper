@@ -4,9 +4,9 @@
   <% else %>
     <div class="bg-neutral-500 h-10 w-10 rounded-full text-center flex items-center justify-center">
       <%= if @user.full_name do %>
-        <%= with [first | _] <- String.codepoints(@user.full_name), do: String.capitalize(first) %>
+        {with [first | _] <- String.codepoints(@user.full_name), do: String.capitalize(first)}
       <% else %>
-        <%= with [first | _] <- String.codepoints(@user.email), do: String.capitalize(first) %>
+        {with [first | _] <- String.codepoints(@user.email), do: String.capitalize(first)}
       <% end %>
     </div>
   <% end %>

@@ -3,24 +3,24 @@
     href={~p"/users/settings"}
     class="text-gray-700 block px-4 py-2 text-sm hover:bg-gray-100 hover:text-gray-900"
   >
-    <%= gettext("My account") %>
+    {gettext("My account")}
   </a>
   <a
     href="https://docs.claper.co"
     class="text-gray-700 block px-4 py-2 text-sm hover:bg-gray-100 hover:text-gray-900"
   >
-    <%= gettext("Documentation") %>
+    {gettext("Documentation")}
   </a>
 </div>
 <div class="py-1" role="none">
-  <%= link(gettext("Logout"),
+  {link(gettext("Logout"),
     to: ~p"/users/log_out",
     method: :delete,
     class: "text-gray-700 block px-4 py-2 text-sm hover:bg-gray-100 hover:text-gray-900"
-  ) %>
+  )}
 </div>
 <div class="py-1" role="none">
   <p class="text-gray-500 block px-4 text-xs py-1">
-    Version <%= Application.spec(:claper, :vsn) %>
+    Version {Application.spec(:claper, :vsn)}
   </p>
 </div>

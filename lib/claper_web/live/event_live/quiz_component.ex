@@ -38,7 +38,7 @@ defmodule ClaperWeb.EventLive.QuizComponent do
                 d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
               />
             </svg>
-            <span class="font-bold"><%= gettext("See current quiz") %></span>
+            <span class="font-bold">{gettext("See current quiz")}</span>
           </div>
         </div>
       </div>
@@ -57,13 +57,13 @@ defmodule ClaperWeb.EventLive.QuizComponent do
             </svg>
           </div>
 
-          <p class="text-sm text-gray-400 my-1"><%= gettext("Current quiz") %></p>
+          <p class="text-sm text-gray-400 my-1">{gettext("Current quiz")}</p>
           <%= if is_nil(@current_question) do %>
-            <p class="text-white text-xl font-semibold mb-2"><%= @quiz.title %></p>
+            <p class="text-white text-xl font-semibold mb-2">{@quiz.title}</p>
           <% else %>
-            <p class="text-white text-xl font-semibold mb-2"><%= @current_question.content %></p>
+            <p class="text-white text-xl font-semibold mb-2">{@current_question.content}</p>
             <p class="text-gray-400 text-sm mb-4">
-              <%= @current_quiz_question_idx + 1 %>/<%= length(@quiz.quiz_questions) %>
+              {@current_quiz_question_idx + 1}/{length(@quiz.quiz_questions)}
             </p>
           <% end %>
         </div>
@@ -81,10 +81,10 @@ defmodule ClaperWeb.EventLive.QuizComponent do
                           <div class="h-5 w-5 mt-0.5 rounded-md point-select border-2 border-white">
                           </div>
                         <% end %>
-                        <span class="flex-1 pr-2"><%= opt.content %></span>
+                        <span class="flex-1 pr-2">{opt.content}</span>
                       </div>
 
-                      <span class="text-sm"><%= opt.percentage %>% (<%= opt.response_count %>)</span>
+                      <span class="text-sm">{opt.percentage}% ({opt.response_count})</span>
                     </div>
                   </div>
                 <% else %>
@@ -102,7 +102,7 @@ defmodule ClaperWeb.EventLive.QuizComponent do
                         <span class="h-5 w-5 mt-0.5 rounded-md point-select border-2 border-white">
                         </span>
                       <% end %>
-                      <span class="flex-1 pr-2"><%= opt.content %></span>
+                      <span class="flex-1 pr-2">{opt.content}</span>
                     </div>
                   </button>
                 <% end %>
@@ -110,18 +110,18 @@ defmodule ClaperWeb.EventLive.QuizComponent do
             <% else %>
               <div class="text-gray-400 flex flex-col items-center justify-center font-semibold text-lg mt-4">
                 <%= if @quiz.show_results do %>
-                  <p><%= gettext("Your score") %></p>
+                  <p>{gettext("Your score")}</p>
                   <p class="text-6xl font-bold mt-2">
-                    <%= elem(@quiz_score, 0) %>/<%= elem(@quiz_score, 1) %>
+                    {elem(@quiz_score, 0)}/{elem(@quiz_score, 1)}
                   </p>
                   <button
                     phx-click="show-quiz-results"
                     class="mt-7 px-3 py-2 text-white font-medium bg-primary-400 hover:bg-primary-500 rounded-md mt-3 mb-4"
                   >
-                    <%= gettext("Show results") %>
+                    {gettext("Show results")}
                   </button>
                 <% else %>
-                  <p><%= gettext("Waiting for results...") %></p>
+                  <p>{gettext("Waiting for results...")}</p>
                   <svg
                     class="w-32 h-32 mt-4"
                     viewBox="0 0 360 360"
@@ -148,7 +148,7 @@ defmodule ClaperWeb.EventLive.QuizComponent do
           <div :if={not @is_submitted} class="flex justify-between items-baseline w-full h-12 mt-5">
             <%= if @current_quiz_question_idx > 0 do %>
               <button phx-click="prev-question" class="px-3 py-2 text-white font-medium">
-                <%= gettext("Back") %>
+                {gettext("Back")}
               </button>
             <% end %>
 
@@ -158,21 +158,21 @@ defmodule ClaperWeb.EventLive.QuizComponent do
                 class={"px-3 py-2 text-white font-medium rounded-md h-full #{if @has_selection, do: "bg-primary-400 hover:bg-primary-500", else: "bg-gray-500 cursor-not-allowed"}"}
                 disabled={not @has_selection}
               >
-                <%= gettext("Next") %>
+                {gettext("Next")}
               </button>
             <% else %>
               <%= if is_nil(@current_user) && !@quiz.allow_anonymous do %>
                 <div class="w-full flex items-center justify-between">
                   <div class="text-white text-sm font-semibold">
-                    <%= gettext("Please sign in to submit your answers") %>
+                    {gettext("Please sign in to submit your answers")}
                   </div>
-                  <%= link(
+                  {link(
                     gettext("Sign in"),
                     target: "_blank",
                     to: ~p"/users/log_in",
                     class:
                       "inline px-3 py-2 text-white font-medium rounded-md h-full bg-primary-400 hover:bg-primary-500"
-                  ) %>
+                  )}
                 </div>
               <% else %>
                 <button
@@ -180,7 +180,7 @@ defmodule ClaperWeb.EventLive.QuizComponent do
                   class={"px-3 py-2 text-white font-medium rounded-md h-full #{if @has_selection, do: "bg-primary-400 hover:bg-primary-500", else: "bg-gray-500 cursor-not-allowed"}"}
                   disabled={not @has_selection}
                 >
-                  <%= gettext("Submit") %>
+                  {gettext("Submit")}
                 </button>
               <% end %>
             <% end %>
@@ -195,7 +195,7 @@ defmodule ClaperWeb.EventLive.QuizComponent do
           >
             <%= if (@current_quiz_question_idx > 0 && @current_quiz_question_idx <= length(@quiz.quiz_questions) - 1) do %>
               <button phx-click="prev-question" class="px-3 py-2 text-white font-medium">
-                <%= gettext("Back") %>
+                {gettext("Back")}
               </button>
             <% else %>
               <div class="w-1/2"></div>
@@ -206,7 +206,7 @@ defmodule ClaperWeb.EventLive.QuizComponent do
               phx-click="next-question"
               class="px-3 py-2 text-white font-medium bg-primary-400 hover:bg-primary-500 rounded-md h-full"
             >
-              <%= gettext("Next") %>
+              {gettext("Next")}
             </button>
           </div>
         </div>

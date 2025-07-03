@@ -1,3 +1,11 @@
+### v.2.4.0
+
+### Fixes and improvements
+
+- Upgrade JS dependencies
+- Upgrade Elixir dependencies, including Phoenix Live View to 1.0.17
+- Refactor view templates to use {} instead of <%= %>
+
 ### v.2.3.2
 
 ### Fixes and improvements

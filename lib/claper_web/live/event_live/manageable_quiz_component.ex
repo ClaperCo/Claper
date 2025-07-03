@@ -16,9 +16,9 @@ defmodule ClaperWeb.EventLive.ManageableQuizComponent do
     >
       <div class="w-full md:w-1/2 mx-auto h-full">
         <p class={"#{if @iframe, do: "text-xl mb-12", else: "text-5xl mb-24"} text-white font-bold text-center"}>
-          <span :if={@current_question_idx < 0}><%= @quiz.title %></span>
+          <span :if={@current_question_idx < 0}>{@quiz.title}</span>
           <span :if={@current_question_idx >= 0}>
-            <%= Enum.at(@quiz.quiz_questions, @current_question_idx).content %>
+            {Enum.at(@quiz.quiz_questions, @current_question_idx).content}
           </span>
         </p>
 
@@ -26,9 +26,9 @@ defmodule ClaperWeb.EventLive.ManageableQuizComponent do
           :if={@current_question_idx == -1}
           class={"#{if @iframe, do: "space-y-5", else: "space-y-8"} flex flex-col text-white text-center"}
         >
-          <p class="font-semibold text-2xl"><%= gettext("Average score") %>:</p>
+          <p class="font-semibold text-2xl">{gettext("Average score")}:</p>
           <p class="font-semibold text-7xl">
-            <%= Claper.Quizzes.calculate_average_score(@quiz.id) %>/<%= length(@quiz.quiz_questions) %>
+            {Claper.Quizzes.calculate_average_score(@quiz.id)}/{length(@quiz.quiz_questions)}
           </p>
         </div>
 
@@ -41,8 +41,8 @@ defmodule ClaperWeb.EventLive.ManageableQuizComponent do
               <div class="bg-gradient-to-r from-primary-500 to-secondary-500 h-full absolute left-0 transition-all rounded-l-3xl">
               </div>
               <div class="flex space-x-3 justify-between w-full items-center z-10 text-left">
-                <span class="flex-1 pr-2 text-3xl"><%= opt.content %></span>
-                <span class="text-xl"><%= opt.percentage %>% (<%= opt.response_count %>)</span>
+                <span class="flex-1 pr-2 text-3xl">{opt.content}</span>
+                <span class="text-xl">{opt.percentage}% ({opt.response_count})</span>
               </div>
             </div>
           <% end %>

@@ -10,23 +10,23 @@
           </h2>
           <p class="mt-6  text-lg md:text-xl font-bold text-gray-100">
             <%= if @conn.query_params["retry"] do %>
-              <%= gettext("We already sent you an email to login, please retry in 5 minutes.") %>
+              {gettext("We already sent you an email to login, please retry in 5 minutes.")}
             <% else %>
               <%= if @conn.query_params["email"] do %>
-                <%= gettext("We sent you an email at") <>
+                {gettext("We sent you an email at") <>
                   " #{@conn.query_params["email"]}" <>
-                  gettext(", click on the provided link to connect (check your spam !)") %>
+                  gettext(", click on the provided link to connect (check your spam !)")}
               <% else %>
-                <%= gettext(
+                {gettext(
                   "We sent you an email, click on the provided link to connect (check your spam !)"
-                ) %>
+                )}
               <% end %>
             <% end %>
           </p>
 
           <div class="mt-10">
             <.link href={~p"/"} class="text-sm text-white underline">
-              <%= gettext("back to the home page") %>
+              {gettext("back to the home page")}
             </.link>
           </div>
         </div>

@@ -2,12 +2,12 @@
 
 <.form :let={_f} for={:user} action={~p"/users/confirm/#{@token}"}>
   <div>
-    <%= submit("Confirm my account") %>
+    {submit("Confirm my account")}
   </div>
 </.form>
 
 <p>
-  <%= link("Register", to: ~p"/users/register") %> | <%= link("Log in",
+  {link("Register", to: ~p"/users/register")} | {link("Log in",
     to: ~p"/users/log_in"
-  ) %>
+  )}
 </p>

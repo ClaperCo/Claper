@@ -25,7 +25,7 @@ defmodule ClaperWeb.EventLive.PollComponent do
                 d="M16 8v8m-4-5v5m-4-2v2m-2 4h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
               />
             </svg>
-            <span class="font-bold"><%= gettext("See current poll") %></span>
+            <span class="font-bold">{gettext("See current poll")}</span>
           </div>
         </div>
       </div>
@@ -44,12 +44,12 @@ defmodule ClaperWeb.EventLive.PollComponent do
             </svg>
           </div>
 
-          <p class="text-sm text-gray-400 my-1"><%= gettext("Current poll") %></p>
-          <p class="text-white text-xl font-semibold mb-2"><%= @poll.title %></p>
+          <p class="text-sm text-gray-400 my-1">{gettext("Current poll")}</p>
+          <p class="text-white text-xl font-semibold mb-2">{@poll.title}</p>
           <%= if @poll.multiple do %>
-            <p class="text-gray-400 text-sm mb-4"><%= gettext("Select one or multiple options") %></p>
+            <p class="text-gray-400 text-sm mb-4">{gettext("Select one or multiple options")}</p>
           <% else %>
-            <p class="text-gray-400 text-sm mb-4"><%= gettext("Select one option") %></p>
+            <p class="text-gray-400 text-sm mb-4">{gettext("Select one option")}</p>
           <% end %>
         </div>
         <div>
@@ -78,10 +78,10 @@ defmodule ClaperWeb.EventLive.PollComponent do
                           </span>
                         <% end %>
                       <% end %>
-                      <span class="flex-1 pr-2"><%= opt.content %></span>
+                      <span class="flex-1 pr-2">{opt.content}</span>
                     </div>
                     <span :if={@show_results} class="text-sm z-10">
-                      <%= opt.percentage %>% (<%= opt.vote_count %>)
+                      {opt.percentage}% ({opt.vote_count})
                     </span>
                   </button>
                 <% else %>
@@ -111,10 +111,10 @@ defmodule ClaperWeb.EventLive.PollComponent do
                           </span>
                         <% end %>
                       <% end %>
-                      <span class="flex-1 pr-2"><%= opt.content %></span>
+                      <span class="flex-1 pr-2">{opt.content}</span>
                     </div>
                     <span :if={@show_results} class="text-sm z-10">
-                      <%= opt.percentage %>% (<%= opt.vote_count %>)
+                      {opt.percentage}% ({opt.vote_count})
                     </span>
                   </button>
                 <% end %>
@@ -124,7 +124,7 @@ defmodule ClaperWeb.EventLive.PollComponent do
 
           <%= if (length @selected_poll_opt) == 0 || (length @current_poll_vote) > 0 do %>
             <button class="px-3 py-2 text-white font-medium bg-gray-500 rounded-md mt-3 mb-4 cursor-default">
-              <%= gettext("Vote") %>
+              {gettext("Vote")}
             </button>
           <% else %>
             <button
@@ -132,7 +132,7 @@ defmodule ClaperWeb.EventLive.PollComponent do
               phx-disable-with="..."
               class="px-3 py-2 text-white font-medium bg-primary-400 hover:bg-primary-500 rounded-md mt-3 mb-4"
             >
-              <%= gettext("Vote") %>
+              {gettext("Vote")}
             </button>
           <% end %>
         </div>
