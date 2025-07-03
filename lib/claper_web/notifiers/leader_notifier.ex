@@ -1,6 +1,6 @@
 defmodule ClaperWeb.Notifiers.LeaderNotifier do
   use Phoenix.Swoosh, view: ClaperWeb.LeaderNotifierView, layout: {ClaperWeb.LayoutView, :email}
-  import ClaperWeb.Gettext
+  use Gettext, backend: ClaperWeb.Gettext
 
   def event_invitation(event_name, email, url) do
     new()

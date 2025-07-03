@@ -24,7 +24,7 @@ defmodule ClaperWeb do
       use Phoenix.Controller, namespace: ClaperWeb
 
       import Plug.Conn
-      import ClaperWeb.Gettext
+      use Gettext, backend: ClaperWeb.Gettext
 
       unquote(verified_routes())
     end
@@ -87,7 +87,7 @@ defmodule ClaperWeb do
     quote do
       use Phoenix.Channel
       import Phoenix.View
-      import ClaperWeb.Gettext
+      use Gettext, backend: ClaperWeb.Gettext
     end
   end
 
@@ -107,7 +107,7 @@ defmodule ClaperWeb do
       import Phoenix.View
 
       import ClaperWeb.ErrorHelpers
-      import ClaperWeb.Gettext
+      use Gettext, backend: ClaperWeb.Gettext
 
       unquote(verified_routes())
     end

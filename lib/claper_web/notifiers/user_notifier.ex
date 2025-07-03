@@ -1,6 +1,6 @@
 defmodule ClaperWeb.Notifiers.UserNotifier do
   use Phoenix.Swoosh, view: ClaperWeb.UserNotifierView, layout: {ClaperWeb.LayoutView, :email}
-  import ClaperWeb.Gettext
+  use Gettext, backend: ClaperWeb.Gettext
 
   def magic(email, url) do
     new()

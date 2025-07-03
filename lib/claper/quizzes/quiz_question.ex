@@ -2,7 +2,7 @@ defmodule Claper.Quizzes.QuizQuestion do
   use Ecto.Schema
   import Ecto.Changeset
 
-  import ClaperWeb.Gettext
+  use Gettext, backend: ClaperWeb.Gettext
 
   schema "quiz_questions" do
     field :content, :string
