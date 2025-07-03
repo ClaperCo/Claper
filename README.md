@@ -45,57 +45,10 @@ Claper is proudly powered by Phoenix and Elixir.
 ### Our partners and sponsors
 
 <a href="https://www.lmddc.lu/"><img src="priv/static/images/partners/lmddc.png" alt="LMDDC" height="50"></a>
-<a href="https://www.pixilearn.fr/en/"><img src="priv/static/images/partners/pixilearn.png" alt="Pixilearn" height="50"></a>
-<a href="https://www.uccs.edu/"><img src="priv/static/images/partners/uccs.png" alt="UCCS" height="50"></a>
 
 ## Documentation
 
 You can find all the instructions and configuration in [the documentation](https://docs.claper.co/).
-
-## Development environment
-
-### Prerequisites
-
-To run Claper on your local environment you need to have:
-
-- Postgres >= 15
-- Elixir >= 1.16
-- Erlang >= 26
-- NPM >= 10
-- NodeJS >= 20
-- Ghostscript >= 9 (for PDF support)
-- Libreoffice >= 24 (for PPT/PPTX support)
-
-### Installation
-
-1. Clone the repo
-   ```sh
-   git clone https://github.com/ClaperCo/Claper.git
-   ```
-2. Install dependencies
-   ```sh
-   mix deps.get
-   ```
-3. Migrate your database
-   ```sh
-   mix ecto.migrate
-   ```
-4. Install JS dependencies
-   ```sh
-   cd assets && npm i
-   ```
-5. Allow execution of startup file
-   ```sh
-   chmod +x ./start.sh
-   ```
-6. Start Phoenix endpoint with
-   ```sh
-   ./start.sh
-   ```
-
-Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
-
-If you have configured `MAIL` to `local`, you can access to the mailbox at [`localhost:4000/dev/mailbox`](http://localhost:4000/dev/mailbox).
 
 ## Contributing
 
@@ -108,7 +61,7 @@ Don't forget to give the project a star! Thanks again!
 2. Create your Feature Branch (`git checkout -b feature/amazing_feature`)
 3. Commit your Changes (`git commit -m 'Add some amazing feature'`)
 4. Push to the Branch (`git push origin feature/amazing_feature`)
-5. Open a Pull Request
+5. Open a Pull Request on the `dev` branch
 
 <!-- LICENSE -->
 
