@@ -83,7 +83,7 @@ FROM ${RUNNER_IMAGE}
 
 # RUN apt-get update -y && apt-get install -y curl libstdc++6 openssl libncurses5 locales ghostscript default-jre libreoffice-java-common \
 #   && apt-get install -y libreoffice --no-install-recommends && apt-get clean && rm -f /var/lib/apt/lists/*_*
-RUN apk add --no-cache curl libstdc++6 openssl ncurses ghostscript openjdk11-jre
+RUN apk add --no-cache curl libstdc++ openssl ncurses ghostscript openjdk11-jre
 
 # Install LibreOffice & Common Fonts
 RUN apk --no-cache add bash libreoffice util-linux libreoffice-common \
