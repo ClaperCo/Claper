@@ -12,8 +12,8 @@
 #   - https://pkgs.org/ - resource for finding needed packages
 #   - Ex: hexpm/elixir:1.13.2-erlang-24.2.1-debian-bullseye-20210902-slim
 #
-ARG BUILDER_IMAGE="hexpm/elixir:1.16.0-erlang-26.2.1-alpine-3.18.4"
-ARG RUNNER_IMAGE="alpine:3.18.4"
+ARG BUILDER_IMAGE="hexpm/elixir:1.18.4-erlang-28.0.1-alpine-3.21.3"
+ARG RUNNER_IMAGE="alpine:3.21.3"
 
 FROM ${BUILDER_IMAGE} as builder
 
@@ -22,26 +22,13 @@ FROM ${BUILDER_IMAGE} as builder
 #     && apt-get clean && rm -f /var/lib/apt/lists/*_*
 RUN apk add --no-cache -U build-base git curl bash ca-certificates nodejs npm openssl ncurses
 
-ENV NODE_VERSION 16.20.0
+ENV NODE_VERSION 22.17.0
 ENV PRESENTATION_STORAGE_DIR /app/uploads
 
 # custom ERL_FLAGS are passed for (public) multi-platform builds
 # to fix qemu segfault, more info: https://github.com/erlang/otp/pull/6340
 ARG ERL_FLAGS
 ENV ERL_FLAGS=$ERL_FLAGS
-
-# Install nvm with node and npm
-# RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash \
-#     && . $HOME/.nvm/nvm.sh \
-#     && nvm install $NODE_VERSION \
-#     && nvm alias default $NODE_VERSION \
-#     && nvm use default
-
-# ENV NODE_PATH $HOME/.nvm/versions/node/v$NODE_VERSION/lib/node_modules 
-# ENV PATH      $HOME/.nvm/versions/node/v$NODE_VERSION/bin:$PATH
-
-# RUN ln -sf $HOME/.nvm/versions/node/v$NODE_VERSION/bin/npm /usr/bin/npm
-# RUN ln -sf $HOME/.nvm/versions/node/v$NODE_VERSION/bin/node /usr/bin/node
 
 # prepare build dir
 WORKDIR /app

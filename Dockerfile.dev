@@ -61,19 +61,18 @@ RUN ARCH=$(uname -m) && \
     && rm asdf-v${ASDF_VERSION}-linux-${ASDF_ARCH}.tar.gz \
     && mv asdf /usr/bin/
 
-
 # Install Erlang and Elixir using asdf
 RUN asdf plugin add erlang \
     && asdf plugin add elixir \
-    && asdf install erlang 26.2.1 \
-    && asdf install elixir 1.16.0 \
-    && asdf set -u erlang 26.2.1 \
-    && asdf set -u elixir 1.16.0
+    && asdf install erlang 28.0.1 \
+    && asdf install elixir 1.18.4-otp-28 \
+    && asdf set -u erlang 28.0.1 \
+    && asdf set -u elixir 1.18.4-otp-28
 
 # Install Node.js using asdf
 RUN asdf plugin add nodejs \
-    && asdf install nodejs 22.1.0 \
-    && asdf set -u nodejs 22.1.0
+    && asdf install nodejs 22.17.0 \
+    && asdf set -u nodejs 22.17.0
 
 ENV PATH="/root/.asdf/shims:$PATH"
 
