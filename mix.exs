@@ -1,7 +1,7 @@
 defmodule Claper.MixProject do
   use Mix.Project
 
-  @version "2.3.2"
+  @version "2.3.3"
 
   def project do
     [
@@ -76,47 +76,47 @@ defmodule Claper.MixProject do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
-      {:ex_aws, "~> 2.2"},
-      {:ex_aws_s3, "~> 2.3"},
-      {:ex_doc, "~> 0.32", only: :dev, runtime: false},
-      {:bcrypt_elixir, "~> 2.0"},
+      {:ex_aws, "~> 2.5"},
+      {:ex_aws_s3, "~> 2.5"},
+      {:ex_doc, "~> 0.38", only: :dev, runtime: false},
+      {:bcrypt_elixir, "~> 3.3"},
       {:phoenix, "~> 1.7"},
-      {:phoenix_ecto, "~> 4.5"},
-      {:ecto_sql, "~> 3.11"},
-      {:postgrex, ">= 0.0.0"},
-      {:phoenix_html, "~> 4.1"},
+      {:phoenix_ecto, "~> 4.6"},
+      {:ecto_sql, "~> 3.13"},
+      {:postgrex, "~> 0.20.0"},
+      {:phoenix_html, "~> 4.2"},
       {:phoenix_html_helpers, "~> 1.0"},
-      {:phoenix_live_reload, "~> 1.5.2", only: :dev},
+      {:phoenix_live_reload, "~> 1.6", only: :dev},
       {:phoenix_live_view, "~> 0.20.14"},
       {:phoenix_swoosh, "~> 1.2.1"},
       {:phoenix_view, "~> 2.0"},
       {:floki, ">= 0.36.1", only: :test},
       {:phoenix_live_dashboard, "~> 0.8"},
-      {:esbuild, "~> 0.2", runtime: Mix.env() == :dev},
+      {:esbuild, "~> 0.10", runtime: Mix.env() == :dev},
       {:dart_sass, "~> 0.7", runtime: Mix.env() == :dev},
-      {:swoosh, "~> 1.12"},
-      {:finch, "~> 0.16"},
-      {:telemetry_metrics, "~> 0.6"},
-      {:telemetry_poller, "~> 1.0"},
-      {:gettext, "~> 0.18"},
-      {:jason, "~> 1.2"},
-      {:sweet_xml, "~> 0.7.1"},
-      {:plug_cowboy, "~> 2.5"},
-      {:hashids, "~> 2.0"},
-      {:mogrify, "~> 0.9.1"},
-      {:libcluster, "~> 3.3"},
+      {:swoosh, "~> 1.19"},
+      {:finch, "~> 0.19"},
+      {:telemetry_metrics, "~> 1.1"},
+      {:telemetry_poller, "~> 1.2"},
+      {:gettext, "~> 0.26"},
+      {:jason, "~> 1.4"},
+      {:sweet_xml, "~> 0.7"},
+      {:plug_cowboy, "~> 2.7"},
+      {:hashids, "~> 2.1"},
+      {:mogrify, "~> 0.9"},
+      {:libcluster, "~> 3.5"},
       {:porcelain, "~> 2.0"},
-      {:hackney, "~> 1.18"},
-      {:csv, "~> 3.0"},
+      {:hackney, "~> 1.24"},
+      {:csv, "~> 3.2"},
       {:credo, "~> 1.7", only: [:dev, :test], runtime: false},
-      {:joken, "~> 2.6.1"},
+      {:joken, "~> 2.6"},
       {:jose, "~> 1.11"},
-      {:req, "~> 0.5.0"},
+      {:req, "~> 0.5"},
       {:uuid, "~> 1.1"},
-      {:oidcc, "~> 3.2"},
-      {:oban, "~> 2.17"},
-      {:mua, "~> 0.2.4"},
-      {:mail, "~> 0.4.3"}
+      {:oidcc, "~> 3.5"},
+      {:oban, "~> 2.19"},
+      {:mua, "~> 0.2"},
+      {:mail, "~> 0.5"}
     ]
   end
 
