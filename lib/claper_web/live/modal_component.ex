@@ -18,16 +18,16 @@ defmodule ClaperWeb.ModalComponent do
     >
       <div class="flex items-center justify-center pt-4 px-4 pb-20 text-center sm:block sm:p-4">
         <div
-          class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"
+          class="fixed inset-0 bg-gray-500/75 transition-opacity -z-10"
           phx-click={hide_modal()}
           phx-target={@myself}
           aria-hidden="true"
         >
         </div>
 
-        <div class="inline-block align-middle bg-white rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all">
+        <div class="inline-block align-middle bg-white rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all relative">
           <div
-            class="text-2xl text-gray-400 absolute right-5 top-3"
+            class="text-2xl text-gray-400 absolute right-5 top-3 cursor-pointer"
             phx-click={hide_modal()}
             phx-target={@myself}
           >

@@ -39,6 +39,7 @@ defmodule ClaperWeb.EventLive.Manage do
 
       socket =
         socket
+        |> assign(:interaction_modal, false)
         |> assign(:settings_modal, false)
         |> assign(:attendees_nb, 1)
         |> assign(:event, event)
@@ -762,18 +763,26 @@ defmodule ClaperWeb.EventLive.Manage do
   end
 
   @impl true
-  def handle_params(params, _url, socket) do
-    {:noreply, apply_action(socket, socket.assigns.live_action, params)}
+  def handle_event(
+        "toggle-interaction-modal",
+        _params,
+        %{assigns: %{interaction_modal: interaction_modal = true}} = socket
+      ) do
+    {:noreply, socket |> push_navigate(to: ~p"/e/#{socket.assigns.event.code}/manage")}
   end
 
-  def toggle_add_modal(js \\ %JS{}) do
-    js
-    |> JS.toggle(
-      to: "#add-modal",
-      out: "animate__animated animate__fadeOut",
-      in: "animate__animated animate__fadeIn"
-    )
-    |> JS.push("maybe-redirect", target: "#add-modal")
+  @impl true
+  def handle_event(
+        "toggle-interaction-modal",
+        _params,
+        %{assigns: %{interaction_modal: interaction_modal = false}} = socket
+      ) do
+    {:noreply, socket |> assign(:interaction_modal, true)}
+  end
+
+  @impl true
+  def handle_params(params, _url, socket) do
+    {:noreply, apply_action(socket, socket.assigns.live_action, params)}
   end
 
   def toggle_settings_modal(js \\ %JS{}) do
@@ -802,6 +811,7 @@ defmodule ClaperWeb.EventLive.Manage do
 
     socket
     |> assign(:create, "poll")
+    |> assign(:interaction_modal, true)
     |> assign(:create_action, :edit)
     |> assign(:poll, poll)
   end
@@ -834,6 +844,7 @@ defmodule ClaperWeb.EventLive.Manage do
 
     socket
     |> assign(:create, "form")
+    |> assign(:interaction_modal, true)
     |> assign(:create_action, :edit)
     |> assign(:form, form)
   end
@@ -843,6 +854,7 @@ defmodule ClaperWeb.EventLive.Manage do
 
     socket
     |> assign(:create, "embed")
+    |> assign(:interaction_modal, true)
     |> assign(:create_action, :edit)
     |> assign(:embed, embed)
   end
@@ -873,6 +885,7 @@ defmodule ClaperWeb.EventLive.Manage do
 
     socket
     |> assign(:create, "quiz")
+    |> assign(:interaction_modal, true)
     |> assign(:create_action, :edit)
     |> assign(:quiz, quiz)
   end

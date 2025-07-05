@@ -42,7 +42,7 @@ defmodule ClaperWeb.EventLive.EventCardComponent do
                 <span>LTI</span>
               </p>
             </div>
-            <div class="ml-2 flex-shrink-0 flex">
+            <div class="ml-2 shrink-0 flex">
               <%= if Event.started?(@event) && !Event.finished?(@event) do %>
                 <div class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-500 text-white items-center gap-x-1">
                   <span class="h-2 w-2 bg-white rounded-full animate__animated animate__flash animate__infinite animate__slow_slow">
@@ -106,7 +106,7 @@ defmodule ClaperWeb.EventLive.EventCardComponent do
                   phx-click-away={JS.hide(to: "#dropdown-#{@event.uuid}")}
                   phx-click={JS.toggle(to: "#dropdown-#{@event.uuid}")}
                   phx-target={@myself}
-                  class="flex w-full lg:w-auto pl-3 pr-4 text-white items-center justify-between py-2 rounded-md tracking-wide font-bold focus:outline-none focus:shadow-outline hover:bg-primary-600 bg-primary-500"
+                  class="flex w-full lg:w-auto pl-3 pr-4 text-white items-center justify-between py-2 rounded-md tracking-wide font-bold focus:outline-hidden focus:shadow-outline hover:bg-primary-600 bg-primary-500"
                 >
                   <span class="mr-2">{gettext("Join")}</span>
                   <svg
@@ -127,14 +127,14 @@ defmodule ClaperWeb.EventLive.EventCardComponent do
                 <div
                   phx-hook="Dropdown"
                   id={"dropdown-#{@event.uuid}"}
-                  class="hidden rounded shadow-lg bg-white border px-1 py-1 absolute -left-1 top-9 w-max z-30"
+                  class="hidden rounded-sm shadow-lg bg-white border px-1 py-1 absolute -left-1 top-9 w-max z-30"
                 >
                   <ul>
                     <li>
                       <a
                         data-phx-link="patch"
                         data-phx-link-state="push"
-                        class="py-2 px-2 rounded text-gray-600 hover:bg-gray-100 flex items-center gap-x-2"
+                        class="py-2 px-2 rounded-sm text-gray-600 hover:bg-gray-100 flex items-center gap-x-2"
                         href={~p"/e/#{@event.code}/manage"}
                       >
                         <svg
@@ -156,7 +156,7 @@ defmodule ClaperWeb.EventLive.EventCardComponent do
                       <a
                         data-phx-link="patch"
                         data-phx-link-state="push"
-                        class="py-2 px-2 rounded text-gray-600 hover:bg-gray-100 flex items-center gap-x-2"
+                        class="py-2 px-2 rounded-sm text-gray-600 hover:bg-gray-100 flex items-center gap-x-2"
                         href={~p"/e/#{@event.code}"}
                       >
                         <svg
@@ -186,7 +186,7 @@ defmodule ClaperWeb.EventLive.EventCardComponent do
                   }
                   phx-value-id={@event.uuid}
                   phx-click="terminate"
-                  class="flex w-full lg:w-auto pl-3 pr-4 text-white items-center justify-between py-2 rounded-md tracking-wide font-bold focus:outline-none focus:shadow-outline bg-red-500 hover:bg-red-600 transition"
+                  class="flex w-full lg:w-auto pl-3 pr-4 text-white items-center justify-between py-2 rounded-md tracking-wide font-bold focus:outline-hidden focus:shadow-outline bg-red-500 hover:bg-red-600 transition"
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -207,7 +207,7 @@ defmodule ClaperWeb.EventLive.EventCardComponent do
                     phx-click-away={JS.hide(to: "#dropdown-action-#{@event.uuid}")}
                     phx-click={JS.toggle(to: "#dropdown-action-#{@event.uuid}")}
                     phx-target={@myself}
-                    class="flex w-full lg:w-auto pl-3 pr-4 text-gray-700 items-center justify-between py-2 rounded-md tracking-wide font-bold focus:outline-none focus:shadow-outline hover:bg-gray-300 bg-gray-200"
+                    class="flex w-full lg:w-auto pl-3 pr-4 text-gray-700 items-center justify-between py-2 rounded-md tracking-wide font-bold focus:outline-hidden focus:shadow-outline hover:bg-gray-300 bg-gray-200"
                   >
                     <span class="mr-2">{gettext("More options")}</span>
                     <svg
@@ -228,12 +228,12 @@ defmodule ClaperWeb.EventLive.EventCardComponent do
                   <div
                     phx-hook="Dropdown"
                     id={"dropdown-action-#{@event.uuid}"}
-                    class="hidden rounded shadow-lg bg-white border px-1 py-1 absolute -left-1 top-9 w-max font-medium text-sm z-30"
+                    class="hidden rounded-sm shadow-lg bg-white border px-1 py-1 absolute -left-1 top-9 w-max font-medium text-sm z-30"
                   >
                     <ul>
                       <li>
                         <a
-                          class="py-2 px-2 rounded text-gray-600 hover:bg-gray-100 flex items-center gap-x-2"
+                          class="py-2 px-2 rounded-sm text-gray-600 hover:bg-gray-100 flex items-center gap-x-2"
                           href={~p"/events/#{@event.uuid}/edit"}
                           data-phx-link="patch"
                           data-phx-link-state="push"
@@ -254,7 +254,7 @@ defmodule ClaperWeb.EventLive.EventCardComponent do
                         <button
                           phx-value-id={@event.uuid}
                           phx-click="duplicate"
-                          class="py-2 px-2 rounded text-gray-600 hover:bg-gray-100 flex items-center gap-x-2"
+                          class="py-2 px-2 rounded-sm text-gray-600 hover:bg-gray-100 flex items-center gap-x-2"
                         >
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
@@ -287,7 +287,7 @@ defmodule ClaperWeb.EventLive.EventCardComponent do
                     phx-click-away={JS.hide(to: "#dropdown-action-#{@event.uuid}")}
                     phx-click={JS.toggle(to: "#dropdown-action-#{@event.uuid}")}
                     phx-target={@myself}
-                    class="flex w-full lg:w-auto pl-3 pr-4 text-gray-700 items-center justify-between py-2 rounded-md tracking-wide font-bold focus:outline-none focus:shadow-outline hover:bg-gray-300 bg-gray-200"
+                    class="flex w-full lg:w-auto pl-3 pr-4 text-gray-700 items-center justify-between py-2 rounded-md tracking-wide font-bold focus:outline-hidden focus:shadow-outline hover:bg-gray-300 bg-gray-200"
                   >
                     <span class="mr-2">{gettext("More options")}</span>
                     <svg
@@ -308,12 +308,12 @@ defmodule ClaperWeb.EventLive.EventCardComponent do
                   <div
                     phx-hook="Dropdown"
                     id={"dropdown-action-#{@event.uuid}"}
-                    class="hidden rounded shadow-lg bg-white border px-1 py-1 absolute -left-1 top-9 w-max font-medium text-sm"
+                    class="hidden rounded-sm shadow-lg bg-white border px-1 py-1 absolute -left-1 top-9 w-max font-medium text-sm"
                   >
                     <ul>
                       <li>
                         <a
-                          class="py-2 px-2 rounded text-gray-600 hover:bg-gray-100 flex items-center gap-x-2"
+                          class="py-2 px-2 rounded-sm text-gray-600 hover:bg-gray-100 flex items-center gap-x-2"
                           href={~p"/events/#{@event.uuid}/edit"}
                           data-phx-link="patch"
                           data-phx-link-state="push"
@@ -356,7 +356,7 @@ defmodule ClaperWeb.EventLive.EventCardComponent do
             >
               <a
                 href={~p"/events/#{@event.uuid}/stats"}
-                class="flex w-full lg:w-auto px-3 text-white py-2 justify-center rounded-md tracking-wide font-bold focus:outline-none focus:shadow-outline hover:bg-primary-600 bg-primary-500 space-x-2"
+                class="flex w-full lg:w-auto px-3 text-white py-2 justify-center rounded-md tracking-wide font-bold focus:outline-hidden focus:shadow-outline hover:bg-primary-600 bg-primary-500 space-x-2"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -376,7 +376,7 @@ defmodule ClaperWeb.EventLive.EventCardComponent do
                   phx-click-away={JS.hide(to: "#dropdown-action-#{@event.uuid}")}
                   phx-click={JS.toggle(to: "#dropdown-action-#{@event.uuid}")}
                   phx-target={@myself}
-                  class="flex w-full lg:w-auto pl-3 pr-4 text-gray-700 items-center justify-between py-2 rounded-md tracking-wide font-bold focus:outline-none focus:shadow-outline hover:bg-gray-300 bg-gray-200"
+                  class="flex w-full lg:w-auto pl-3 pr-4 text-gray-700 items-center justify-between py-2 rounded-md tracking-wide font-bold focus:outline-hidden focus:shadow-outline hover:bg-gray-300 bg-gray-200"
                 >
                   <span class="mr-2">{gettext("More options")}</span>
                   <svg
@@ -397,14 +397,14 @@ defmodule ClaperWeb.EventLive.EventCardComponent do
                 <div
                   phx-hook="Dropdown"
                   id={"dropdown-action-#{@event.uuid}"}
-                  class="hidden rounded shadow-lg bg-white border px-1 py-1 absolute -left-1 top-9 w-max font-medium text-sm z-30"
+                  class="hidden rounded-sm shadow-lg bg-white border px-1 py-1 absolute -left-1 top-9 w-max font-medium text-sm z-30"
                 >
                   <ul>
                     <li>
                       <button
                         phx-value-id={@event.uuid}
                         phx-click="duplicate"
-                        class="py-2 px-2 rounded text-gray-600 hover:bg-gray-100 flex items-center gap-x-2"
+                        class="py-2 px-2 rounded-sm text-gray-600 hover:bg-gray-100 flex items-center gap-x-2"
                       >
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
@@ -427,7 +427,7 @@ defmodule ClaperWeb.EventLive.EventCardComponent do
                             "This will delete all data related to your event, this cannot be undone. Confirm ?"
                           )
                         }
-                        class="py-2 px-2 rounded text-red-500 hover:bg-gray-100 flex items-center gap-x-2 flex items-center gap-x-2 cursor-pointer"
+                        class="py-2 px-2 rounded-sm text-red-500 hover:bg-gray-100 flex items-center gap-x-2 flex items-center gap-x-2 cursor-pointer"
                       >
                         <svg
                           xmlns="http://www.w3.org/2000/svg"

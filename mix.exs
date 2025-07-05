@@ -116,7 +116,8 @@ defmodule Claper.MixProject do
       {:oidcc, "~> 3.5"},
       {:oban, "~> 2.19"},
       {:mua, "~> 0.2"},
-      {:mail, "~> 0.5"}
+      {:mail, "~> 0.5"},
+      {:tailwind, "~> 0.3", runtime: Mix.env() == :dev}
     ]
   end
 
@@ -134,6 +135,7 @@ defmodule Claper.MixProject do
       test: ["ecto.create --quiet", "ecto.migrate --quiet", "test"],
       "assets.deploy": [
         "cmd --cd assets npm install && npm run deploy",
+        "tailwind default --minify",
         "esbuild default --minify",
         "sass default --no-source-map --style=compressed",
         "phx.digest"

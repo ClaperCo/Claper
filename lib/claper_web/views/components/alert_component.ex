@@ -15,7 +15,7 @@ defmodule ClaperWeb.Component.Alert do
       x-transition
     >
       <div class="flex">
-        <div class="flex-shrink-0">
+        <div class="shrink-0">
           <svg
             class="h-5 w-5 text-green-400"
             xmlns="http://www.w3.org/2000/svg"
@@ -54,7 +54,7 @@ defmodule ClaperWeb.Component.Alert do
       x-transition
     >
       <div class="flex">
-        <div class="flex-shrink-0">
+        <div class="shrink-0">
           <!-- Heroicon name: solid/exclamation -->
           <svg
             class="h-5 w-5 text-supporting-red-400"

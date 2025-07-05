@@ -93,7 +93,7 @@ defmodule ClaperWeb.EventLive.QuizComponent do
                     phx-value-opt={opt.id}
                     class="bg-gray-500 px-3 py-2 rounded-lg flex justify-between items-center relative text-white"
                   >
-                    <div class="bg-gradient-to-r from-primary-500 to-secondary-500 h-full absolute left-0 transition-all rounded-l-3xl">
+                    <div class="bg-linear-to-r from-primary-500 to-secondary-500 h-full absolute left-0 transition-all rounded-l-3xl">
                     </div>
                     <div class="flex space-x-3 items-center z-10 text-left">
                       <%= if Enum.member?(@selected_quiz_question_opts, opt) do %>
