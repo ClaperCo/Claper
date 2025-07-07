@@ -68,6 +68,8 @@ RUN npm install -g sass
 RUN cd assets && npm i && \
     sass --no-source-map --style=compressed css/custom.scss ../priv/static/assets/custom.css
 
+RUN tailwind.install
+
 # compile assets
 RUN mix assets.deploy.nosass
 

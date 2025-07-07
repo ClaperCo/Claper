@@ -143,6 +143,7 @@ defmodule Claper.MixProject do
       "assets.deploy.nosass": [
         "cmd --cd assets npm install && npm run deploy",
         "esbuild default --minify",
+        "tailwind default --minify",
         "phx.digest"
       ]
     ]
