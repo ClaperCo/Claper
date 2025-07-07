@@ -12,8 +12,6 @@
         form={f}
         key={:title}
         name={gettext("Title")}
-        labelClass={if @dark, do: "text-white"}
-        fieldClass={if @dark, do: "bg-gray-700 text-white"}
         autofocus="true"
         required="true"
       />
@@ -56,8 +54,6 @@
           <div class="flex gap-x-3 mt-3 items-center justify-start">
             <ClaperWeb.Component.Input.text
               form={q}
-              labelClass={if @dark, do: "text-white"}
-              fieldClass={if @dark, do: "bg-gray-700 text-white"}
               key={:content}
               name={gettext("Your question")}
               autofocus="true"
@@ -78,8 +74,6 @@
                   <div class="flex-1">
                     <ClaperWeb.Component.Input.text
                       form={o}
-                      labelClass={if @dark, do: "text-white"}
-                      fieldClass={if @dark, do: "bg-gray-700 text-white"}
                       key={:content}
                       name={gettext("Answer %{index}", index: o.index + 1)}
                       required="true"
@@ -154,7 +148,7 @@
 
           <%= if Ecto.Changeset.get_field(@changeset, :quiz_questions) |> length() > 1 do %>
             <label phx-click="remove_quiz_question" phx-target={@myself}>
-              <div class="cursor-pointer mt-4 w-full lg:w-auto px-6 text-center text-white py-2 rounded-md tracking-wide font-bold focus:outline-none focus:shadow-outline bg-gradient-to-tl from-supporting-red-600 to-supporting-red-400 bg-size-200 bg-pos-0 hover:bg-pos-100 transition-all duration-500">
+              <div class="cursor-pointer mt-4 w-full lg:w-auto px-6 text-center text-white py-2 rounded-md tracking-wide font-bold focus:outline-hidden focus:shadow-outline bg-linear-to-tl from-supporting-red-600 to-supporting-red-400 bg-size-[200%_200%] bg-position-[0%_0%] hover:bg-position-[100%_100%] transition-all duration-500">
                 {gettext("Remove question")}
               </div>
               <input
@@ -187,7 +181,7 @@
           type="submit"
           phx_disable_with="Loading..."
           disabled={!@changeset.valid?}
-          class="w-full lg:w-auto px-6 text-white py-2 rounded-md tracking-wide font-bold focus:outline-none focus:shadow-outline bg-gradient-to-tl from-primary-500 to-secondary-500 bg-size-200 bg-pos-0 hover:bg-pos-100 transition-all duration-500 disabled:opacity-50 disabled:cursor-not-allowed"
+          class="w-full lg:w-auto px-6 text-white py-2 rounded-md tracking-wide font-bold focus:outline-hidden focus:shadow-outline bg-linear-to-tl from-primary-500 to-secondary-500 bg-size-[200%_200%] bg-position-[0%_0%] hover:bg-position-[100%_100%] transition-all duration-500 disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {case @live_action do
             :new -> gettext("Create")
@@ -208,7 +202,7 @@
                 )
             ],
             class:
-              "w-full lg:w-auto px-6 text-center text-white py-2 rounded-md tracking-wide font-bold focus:outline-none focus:shadow-outline bg-gradient-to-tl from-supporting-red-600 to-supporting-red-400 bg-size-200 bg-pos-0 hover:bg-pos-100 transition-all duration-500"
+              "w-full lg:w-auto px-6 text-center text-white py-2 rounded-md tracking-wide font-bold focus:outline-hidden focus:shadow-outline bg-linear-to-tl from-supporting-red-600 to-supporting-red-400 bg-size-[200%_200%] bg-position-[0%_0%] hover:bg-position-[100%_100%] transition-all duration-500"
           )}
         <% end %>
       </div>

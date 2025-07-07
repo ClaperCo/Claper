@@ -48,11 +48,11 @@
     >
       <div
         phx-click="toggle-quick-create"
-        class="fixed inset-0 bg-gray-800 bg-opacity-75 transition-opacity w-full h-full"
+        class="fixed inset-0 bg-gray-800/75 transition-opacity w-full h-full -z-10"
         aria-hidden="true"
       >
       </div>
-      <div class="mx-auto max-w-xl transform divide-y divide-gray-100 overflow-hidden rounded-xl bg-white shadow-2xl ring-1 ring-black ring-opacity-5 transition-all">
+      <div class="mx-auto max-w-xl transform divide-y divide-gray-100 overflow-hidden rounded-xl bg-white shadow-2xl ring-1 ring-black/5 transition-all relative">
         <button phx-click="toggle-quick-create" class="absolute right-0 top-0">
           <svg
             class="text-gray-500 h-9 transform rotate-45"
@@ -80,15 +80,16 @@
             <ClaperWeb.Component.Input.text
               form={f}
               key={:name}
-              name=""
+              name={gettext("Name of your event")}
               readonly={false}
+              minlength="5"
+              maxlength="50"
               class="h-12"
-              placeholder={gettext("Name of your event")}
             />
             <button
               type="submit"
               phx_disable_with="Loading..."
-              class="mt-5 w-full lg:w-auto px-6 text-white py-2 rounded-md tracking-wide font-bold focus:outline-none focus:shadow-outline bg-gradient-to-tl from-primary-500 to-secondary-500 bg-size-200 bg-pos-0 hover:bg-pos-100 transition-all duration-500"
+              class="mt-5 w-full lg:w-auto px-6 text-white py-2 rounded-md tracking-wide font-bold focus:outline-hidden focus:shadow-outline bg-linear-to-tl from-primary-500 to-secondary-500 bg-size-[200%_200%] bg-position-[0px_0px] hover:bg-position-[100%_100%] transition-all duration-500"
             >
               {gettext("Create")}
             </button>
@@ -147,7 +148,7 @@
           data-tg-tour={gettext("Welcome to Claper! You can create a new event here.")}
           data-tg-title={"#{gettext("Your first steps with Claper")} 👋"}
           href={~p"/events/new"}
-          class="relative w-full sm:w-auto inline-flex justify-center items-center px-5 py-2 text-lg font-medium rounded-md text-white bg-gradient-to-tl from-primary-500 to-secondary-500 bg-size-200 bg-pos-0 hover:bg-pos-100 transition-all duration-500"
+          class="relative w-full sm:w-auto inline-flex justify-center items-center px-5 py-2 text-lg font-medium rounded-md text-white bg-linear-to-tl from-primary-500 to-secondary-500 bg-size-[200%_200%] bg-position-[0%_0%] hover:bg-position-[100%_100%] transition-all duration-500"
         >
           <svg
             class="-ml-1 mr-1 h-5 w-5"
@@ -212,7 +213,7 @@
         <div class="flex justify-center my-4">
           <button
             phx-click="load-more"
-            class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-primary-700 bg-primary-100 hover:bg-primary-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
+            class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-primary-700 bg-primary-100 hover:bg-primary-200 focus:outline-hidden focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
           >
             {gettext("Load more")}
           </button>

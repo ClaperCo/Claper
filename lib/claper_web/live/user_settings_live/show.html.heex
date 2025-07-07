@@ -146,8 +146,8 @@
               {gettext("Email address")}
             </dt>
             <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-              <span class="flex-grow">{@current_user.email}</span>
-              <span :if={!@is_external_user} class="ml-4 flex-shrink-0">
+              <span class="grow">{@current_user.email}</span>
+              <span :if={!@is_external_user} class="ml-4 shrink-0">
                 <.link
                   patch={~p"/users/settings/edit/email"}
                   class="rounded-md font-medium text-purple-600 hover:text-purple-500"
@@ -161,8 +161,8 @@
               {gettext("Password")}
             </dt>
             <dd :if={!@is_external_user} class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-              <span class="flex-grow">********</span>
-              <span class="ml-4 flex-shrink-0">
+              <span class="grow">********</span>
+              <span class="ml-4 shrink-0">
                 <.link
                   patch={~p"/users/settings/edit/password"}
                   class="rounded-md font-medium text-purple-600 hover:text-purple-500"
@@ -179,7 +179,7 @@
               <%= for account <- @oidc_accounts do %>
                 <div class="text-sm text-gray-900 bg-white rounded-md py-2 px-4 shadow-base flex gap-x-2 items-center justify-start mt-2 sm:mt-0 mb-2">
                   <img src="/images/icons/openid.png" class="w-5" />
-                  <span class="flex-grow flex items-center gap-x-2">
+                  <span class="grow flex items-center gap-x-2">
                     <span>{account.provider}</span>
                     <div
                       :if={account.organization}
@@ -216,10 +216,10 @@
               <%= for account <- @lti_accounts do %>
                 <div class="text-sm text-gray-900 bg-white rounded-md py-2 px-4 shadow-base flex gap-x-2 items-center justify-start mb-2">
                   <img src="/images/icons/lms.png" class="w-8" />
-                  <span class="flex-grow">
+                  <span class="grow">
                     LMS <span class="text-gray-500 text-xs">#{account.registration_id}</span>
                   </span>
-                  <span :if={@allow_unlink_external_provider} class="ml-4 flex-shrink-0">
+                  <span :if={@allow_unlink_external_provider} class="ml-4 shrink-0">
                     <button
                       phx-click="unlink"
                       phx-value-registration_id={account.registration_id}
@@ -251,7 +251,7 @@
                 {hidden_input(f, :action, name: "action", value: "update_preferences")}
                 <ClaperWeb.Component.Input.select
                   form={f}
-                  fieldClass="!w-auto"
+                  fieldClass="w-auto!"
                   labelClass="text-sm font-medium text-gray-500"
                   array={[
                     {"Deutsch", "de"},
@@ -287,7 +287,7 @@
                 "data-confirm":
                   gettext("All your events and files will be permanently deleted, are you sure?"),
                 class:
-                  "w-full lg:w-auto px-6 text-center text-white py-2 rounded-md tracking-wide font-bold focus:outline-none focus:shadow-outline bg-gradient-to-tl from-supporting-red-600 to-supporting-red-400 bg-size-200 bg-pos-0 hover:bg-pos-100 transition-all duration-500"
+                  "w-full lg:w-auto px-6 text-center text-white py-2 rounded-md tracking-wide font-bold focus:outline-hidden focus:shadow-outline bg-linear-to-tl from-supporting-red-600 to-supporting-red-400 bg-size-[200%_200%] bg-position-[0%_0%] hover:bg-position-[100%_100%] transition-all duration-500"
               )}
             </div>
           </dl>

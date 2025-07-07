@@ -1,12 +1,21 @@
-@import url('air-datepicker/air-datepicker.css');
-@import url("animate.css/animate.min.css");
+@import 'air-datepicker/air-datepicker.css';
+@import 'animate.css/animate.min.css';
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import 'tailwindcss';
+@import './theme.css';
+
+@layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-gray-200, currentcolor);
+  }
+}
 
 * {
-  font-family: 'Roboto', sans-serif;
+  font-family: var(--font-family-sans);
 }
 
 [x-cloak] { display: none !important; }
@@ -19,19 +28,19 @@
   border-radius: 4px;
 }
 .alert-info {
-  color: #31708f;
-  background-color: #d9edf7;
-  border-color: #bce8f1;
+  color: var(--color-primary-700);
+  background-color: var(--color-primary-100);
+  border-color: var(--color-primary-200);
 }
 .alert-warning {
-  color: #8a6d3b;
-  background-color: #fcf8e3;
-  border-color: #faebcc;
+  color: var(--color-supporting-yellow-700);
+  background-color: var(--color-supporting-yellow-50);
+  border-color: var(--color-supporting-yellow-100);
 }
 .alert-danger {
-  color: #a94442;
-  background-color: #f2dede;
-  border-color: #ebccd1;
+  color: var(--color-supporting-red-700);
+  background-color: var(--color-supporting-red-100);
+  border-color: var(--color-supporting-red-200);
 }
 .alert p {
   margin-bottom: 0;
@@ -40,7 +49,7 @@
   display: none;
 }
 .invalid-feedback {
-  color: #a94442;
+  color: var(--color-supporting-red-700);
   display: block;
   margin-top: 2px;
 }
@@ -80,12 +89,13 @@
   background-color: #fefefe;
   margin: 15vh auto;
   padding: 20px;
-  border: 1px solid #888;
+  border: 1px solid var(--color-neutral-300);
   width: 80%;
+  box-shadow: var(--shadow-lg);
 }
 
 .phx-modal-close {
-  color: #aaa;
+  color: var(--color-neutral-400);
   float: right;
   font-size: 28px;
   font-weight: bold;
@@ -93,7 +103,7 @@
 
 .phx-modal-close:hover,
 .phx-modal-close:focus {
-  color: black;
+  color: var(--color-neutral-900);
   text-decoration: none;
   cursor: pointer;
 }
@@ -104,13 +114,21 @@
 .input:focus~.label,
 .input:active~.label,
 .input.filled~.label {
-  @apply text-sm transition-all duration-100 -top-1.5 text-primary-500;
+  font-size: 0.875rem;
+  transition-property: all;
+  transition-duration: 100ms;
+  top: -0.375rem;
+  color: var(--color-primary-500);
 }
 
 .input:focus~.icon,
 .input:active~.icon,
 .input.filled~.icon {
-  @apply transition-all duration-100 left-3 top-6 h-5;
+  transition-property: all;
+  transition-duration: 100ms;
+  left: 0.75rem;
+  top: 1.5rem;
+  height: 1.25rem;
 }
 
 .date-placeholder-hidden::-webkit-datetime-edit {
@@ -285,7 +303,7 @@
 }
 
 .bg-gradient-animate {
-  background: linear-gradient(-45deg, #b80fef, #8611ed, #14bfdb, #14bfdb);
+  background: linear-gradient(-45deg, var(--color-secondary-500), var(--color-secondary-600), var(--color-primary-400), var(--color-primary-400));
   background-size: 400% 400%;
   animation: gradient 15s ease infinite;
 }
@@ -305,7 +323,7 @@
 .arrow_box {
 	position: relative;
 	background: #fff;
-	border: 2px solid #e1e1e1;
+	border: 2px solid var(--color-neutral-100);
 }
 .arrow_box.arrow_right:after, .arrow_box.arrow_right:before {
 	left: 100%;
@@ -419,8 +437,7 @@
   left: 0;
   top: 50%;
   right: 0;
-  border-top: 3px solid;
-  @apply border-supporting-red-600;
+  border-top: var(--color-supporting-red-600) 3px solid;
   
   -webkit-transform:rotate(-20deg);
   -moz-transform:rotate(-20deg);
@@ -431,15 +448,16 @@
 
 /* Air datepicker */
 .air-datepicker-body--day-name {
-  @apply text-primary-600;
+  color: var(--color-primary-600);
 }
 
 .air-datepicker-cell.-selected-, .air-datepicker-cell.-selected-.-current- {
-  @apply bg-primary-500 text-white hover:bg-primary-600;
+  background-color: var(--color-primary-500);
+  color: var(--color-white);
 }
 
 .air-datepicker-cell.-current- {
-  @apply text-secondary-500;
+  color: var(--color-secondary-500);
 }
 
 .animate__slow_slow {

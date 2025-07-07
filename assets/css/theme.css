@@ -1,0 +1,86 @@
+/* Theme variables based on tailwind.config.js */
+@theme {
+  /* Primary Colors (water-blue) */
+  --color-primary-50: #E3F2FD;
+  --color-primary-100: #C2E3FA;
+  --color-primary-200: #84C8F6;
+  --color-primary-300: #3DA7F0;
+  --color-primary-400: #1395EC;
+  --color-primary-500: #1186D5;
+  --color-primary-600: #0D65A1;
+  --color-primary-700: #0A5689;
+  --color-primary-800: #0A4B76;
+  --color-primary-900: #073250;
+  
+  /* Secondary Colors (electric-purple) */
+  --color-secondary-50: #F2E0FF;
+  --color-secondary-100: #E3BDFF;
+  --color-secondary-200: #C77AFF;
+  --color-secondary-300: #A62EFF;
+  --color-secondary-400: #9200FF;
+  --color-secondary-500: #A327FF;
+  --color-secondary-600: #6400AD;
+  --color-secondary-700: #550094;
+  --color-secondary-800: #490080;
+  --color-secondary-900: #320057;
+  
+  /* Neutral Colors (wedgewood) */
+  --color-neutral-50: #F0F4F8;
+  --color-neutral-100: #D9E3ED;
+  --color-neutral-200: #B9CCDF;
+  --color-neutral-300: #97B3CE;
+  --color-neutral-400: #7499BE;
+  --color-neutral-500: #507DAA;
+  --color-neutral-600: #3F6388;
+  --color-neutral-700: #314D68;
+  --color-neutral-800: #253B50;
+  --color-neutral-900: #1A2938;
+  
+  /* Supporting Red Colors (rose-madder) */
+  --color-supporting-red-50: #FCEDEE;
+  --color-supporting-red-100: #F9D5D7;
+  --color-supporting-red-200: #F3ABB0;
+  --color-supporting-red-300: #ED8188;
+  --color-supporting-red-400: #E75761;
+  --color-supporting-red-500: #E12D39;
+  --color-supporting-red-600: #B4242E;
+  --color-supporting-red-700: #871B22;
+  --color-supporting-red-800: #5A1217;
+  --color-supporting-red-900: #2D090B;
+  
+  /* Supporting Yellow Colors (school-bus-yellow) */
+  --color-supporting-yellow-50: #FFFBEB;
+  --color-supporting-yellow-100: #FEF3C7;
+  --color-supporting-yellow-200: #FDE68A;
+  --color-supporting-yellow-300: #FCD34D;
+  --color-supporting-yellow-400: #FBBF24;
+  --color-supporting-yellow-500: #F59E0B;
+  --color-supporting-yellow-600: #D97706;
+  --color-supporting-yellow-700: #B45309;
+  --color-supporting-yellow-800: #92400E;
+  --color-supporting-yellow-900: #78350F;
+  
+  /* Supporting Green Colors (green-teal) */
+  --color-supporting-green-50: #ECFDF5;
+  --color-supporting-green-100: #D1FAE5;
+  --color-supporting-green-200: #A7F3D0;
+  --color-supporting-green-300: #6EE7B7;
+  --color-supporting-green-400: #34D399;
+  --color-supporting-green-500: #10B981;
+  --color-supporting-green-600: #059669;
+  --color-supporting-green-700: #047857;
+  --color-supporting-green-800: #065F46;
+  --color-supporting-green-900: #064E3B;
+  
+  /* Font Family */
+  --font-family-sans: 'Roboto', sans-serif;
+  --font-family-serif: 'Merriweather', serif;
+  
+  /* Box Shadows */
+  --shadow-base: 0px 1px 3px 0px rgba(0,0,0,0.1), 0px 1px 2px 0px rgba(0,0,0,0.06);
+  --shadow-md: 0px 4px 6px 0px rgba(0,0,0,0.1), 0px 2px 4px 0px rgba(0,0,0,0.06);
+  --shadow-lg: 0px 4px 6px 0px rgba(0,0,0,0.05), 0px 10px 15px 0px rgba(0,0,0,0.1);
+  --shadow-xl: 0px 10px 10px 0px rgba(0,0,0,0.04), 0px 20px 25px 0px rgba(0,0,0,0.1);
+  --shadow-2xl: 0px 25px 50px 0px rgba(0,0,0,0.25);
+  --shadow-inner: inset 0px 2px 4px 0px rgba(0,0,0,0.06);
+}

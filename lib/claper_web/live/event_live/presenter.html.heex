@@ -46,7 +46,7 @@
   <%= if @current_poll do %>
     <div
       id="poll"
-      class={"#{if @state.poll_visible, do: "opacity-100", else: "opacity-0"} h-full w-full flex flex-col justify-center bg-black bg-opacity-90 absolute z-30 left-1/2 top-1/2 transform -translate-y-1/2 -translate-x-1/2 p-10 transition-opacity"}
+      class={"#{if @state.poll_visible, do: "opacity-100", else: "opacity-0"} h-full w-full flex flex-col justify-center bg-black/90 absolute z-30 left-1/2 top-1/2 transform -translate-y-1/2 -translate-x-1/2 p-10 transition-opacity"}
     >
       <div class="w-full md:w-1/2 mx-auto h-full">
         <p class={"#{if @iframe, do: "text-xl mb-12", else: "text-5xl mb-24"} text-white font-bold  text-center"}>
@@ -59,7 +59,7 @@
               <div class={"#{if @iframe, do: "py-1", else: "py-4"} bg-gray-500 px-6 rounded-3xl flex justify-between items-center relative text-white"}>
                 <div
                   style={"width: #{opt.percentage}%;"}
-                  class="bg-gradient-to-r from-primary-500 to-secondary-500 rounded-3xl h-full absolute left-0 transition-all"
+                  class="bg-linear-to-r from-primary-500 to-secondary-500 rounded-3xl h-full absolute left-0 transition-all"
                 >
                 </div>
                 <div class="flex space-x-3 z-10 text-left">
@@ -197,7 +197,7 @@
       <% end %>
     </div>
     <div
-      class={"gutter-1 row-span-full cursor-col-resize col-[2] text-center text-sm leading-3 text-white #{if (!@state.chat_visible && @event.presentation_file.length > 0) || (!@current_embed && @event.presentation_file.length == 0), do: "hidden"}"}
+      class={"gutter-1 row-span-full cursor-col-resize col-2 text-center text-sm leading-3 text-white #{if (!@state.chat_visible && @event.presentation_file.length > 0) || (!@current_embed && @event.presentation_file.length == 0), do: "hidden"}"}
       style="writing-mode: vertical-rl"
     >
       •••
@@ -220,12 +220,12 @@
           <%= if @event.presentation_file.length > 0 do %>
             <%= if Application.get_env(:claper, :presentations) |> Keyword.get(:storage) == "local" do %>
               <img
-                class="max-h-screen !w-auto"
+                class="max-h-screen w-auto!"
                 src={"/uploads/#{@event.presentation_file.hash}/#{index}.jpg"}
               />
             <% else %>
               <img
-                class=" max-h-screen !w-auto"
+                class=" max-h-screen w-auto!"
                 src={"https://#{Application.get_env(:claper, :presentations) |> Keyword.get(:aws_bucket)}.s3.#{Application.get_env(:ex_aws, :region)}.amazonaws.com/presentations/#{@event.presentation_file.hash}/#{index}.jpg"}
               />
             <% end %>
