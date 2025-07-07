@@ -57,7 +57,7 @@ defmodule Claper.Events.Event do
     |> cast(attrs, [:name, :code, :user_id, :started_at, :expired_at])
     |> cast_assoc(:presentation_file)
     |> cast_assoc(:leaders)
-    |> validate_required([:code, :started_at])
+    |> validate_required([:name, :code, :started_at])
     |> validate_length(:code, min: 5, max: 10)
     |> validate_length(:name, min: 5, max: 50)
     |> downcase_code

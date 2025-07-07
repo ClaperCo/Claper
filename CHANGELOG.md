@@ -6,6 +6,7 @@
 - Upgrade Elixir dependencies, including Phoenix Live View to 1.0.17
 - Upgrade to Tailwind 4+
 - Refactor view templates to use {} instead of <%= %>
+- Fix event name validation to be required
 
 ### v.2.3.2
 
