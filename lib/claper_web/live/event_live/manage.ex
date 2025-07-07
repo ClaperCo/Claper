@@ -766,7 +766,7 @@ defmodule ClaperWeb.EventLive.Manage do
   def handle_event(
         "toggle-interaction-modal",
         _params,
-        %{assigns: %{interaction_modal: interaction_modal = true}} = socket
+        %{assigns: %{interaction_modal: _interaction_modal = true}} = socket
       ) do
     {:noreply, socket |> push_navigate(to: ~p"/e/#{socket.assigns.event.code}/manage")}
   end
@@ -775,7 +775,7 @@ defmodule ClaperWeb.EventLive.Manage do
   def handle_event(
         "toggle-interaction-modal",
         _params,
-        %{assigns: %{interaction_modal: interaction_modal = false}} = socket
+        %{assigns: %{interaction_modal: _interaction_modal}} = socket
       ) do
     {:noreply, socket |> assign(:interaction_modal, true)}
   end
