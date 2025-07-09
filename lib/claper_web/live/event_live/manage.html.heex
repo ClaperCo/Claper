@@ -758,7 +758,7 @@
                 <span>{gettext("Add interaction")}</span>
               </button>
             </div>
-            <div class="grid grid-cols-1 @sm:grid-cols-2 @lg:grid-cols-3 gap-4 p-4 overflow-y-auto">
+            <div class="grid grid-cols-1 @sm:grid-cols-2 @lg:grid-cols-3 gap-4 p-4 overflow-y-auto" style="max-height: calc(100vh - 80px);">
               <%= for interaction <- @interactions do %>
                 <div class="bg-white rounded-lg p-3 shadow-base transition-all flex flex-col justify-between relative">
                   <div>
