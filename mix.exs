@@ -134,16 +134,10 @@ defmodule Claper.MixProject do
       "ecto.reset": ["ecto.drop", "ecto.setup"],
       test: ["ecto.create --quiet", "ecto.migrate --quiet", "test"],
       "assets.deploy": [
-        "cmd --cd assets npm install && npm run deploy",
+        "cmd --cd assets npm install",
         "tailwind default --minify",
         "esbuild default --minify",
         "sass default --no-source-map --style=compressed",
-        "phx.digest"
-      ],
-      "assets.deploy.nosass": [
-        "cmd --cd assets npm install && npm run deploy",
-        "esbuild default --minify",
-        "tailwind default --minify",
         "phx.digest"
       ]
     ]

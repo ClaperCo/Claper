@@ -7,6 +7,7 @@
 - Upgrade to Tailwind 4+
 - Refactor view templates to use {} instead of <%= %>
 - Fix event name validation to be required
+- Docker image is now using Ubuntu instead of Alpine for better dependencies support
 
 ### v.2.3.2
 

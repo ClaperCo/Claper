@@ -1,26 +1,20 @@
-# Find eligible builder and runner images on Docker Hub. We use Ubuntu/Debian instead of
-# Alpine to avoid DNS resolution issues in production.
-#
-# https://hub.docker.com/r/hexpm/elixir/tags?page=1&name=ubuntu
-# https://hub.docker.com/_/ubuntu?tab=tags
-#
-#
-# This file is based on these images:
-#
-#   - https://hub.docker.com/r/hexpm/elixir/tags - for the build image
-#   - https://hub.docker.com/_/debian?tab=tags&page=1&name=bullseye-20210902-slim - for the release image
-#   - https://pkgs.org/ - resource for finding needed packages
-#   - Ex: hexpm/elixir:1.13.2-erlang-24.2.1-debian-bullseye-20210902-slim
-#
-ARG BUILDER_IMAGE="hexpm/elixir:1.18.4-erlang-28.0.1-alpine-3.21.3"
-ARG RUNNER_IMAGE="alpine:3.21.3"
+ARG BUILDER_IMAGE="hexpm/elixir:1.18.4-erlang-28.0.1-ubuntu-noble-20250619"
+ARG RUNNER_IMAGE="ubuntu:24.04"
 
 FROM ${BUILDER_IMAGE} as builder
 
-# install build dependencies
-# RUN apt-get update -y && apt-get install -y curl build-essential git \
-#     && apt-get clean && rm -f /var/lib/apt/lists/*_*
-RUN apk add --no-cache -U build-base git curl bash ca-certificates nodejs npm openssl ncurses
+RUN apt-get update && apt-get install -y \
+    build-essential \
+    git \
+    curl \
+    bash \
+    ca-certificates \
+    nodejs \
+    npm \
+    openssl \
+    libncurses5-dev \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
 
 ENV NODE_VERSION 22.17.0
 ENV PRESENTATION_STORAGE_DIR /app/uploads
@@ -53,27 +47,14 @@ RUN mix deps.compile
 
 COPY priv priv
 
-# note: if your project uses a tool like https://purgecss.com/,
-# which customizes asset compilation based on what it finds in
-# your Elixir templates, you will need to move the asset compilation
-# step down so that `lib` is available.
 COPY assets assets
 
-# Compile the release
 COPY lib lib
 
 RUN mix compile
 
-RUN npm install -g sass
-RUN cd assets && npm i && \
-    sass --no-source-map --style=compressed css/custom.scss ../priv/static/assets/custom.css
+RUN mix assets.deploy
 
-RUN npm install -g tailwindcss
-
-# compile assets
-RUN mix assets.deploy.nosass
-
-# Changes to config/runtime.exs don't require recompiling the code
 COPY config/runtime.exs config/
 
 COPY rel rel
@@ -83,20 +64,27 @@ RUN mix release
 # the compiled release and other runtime necessities
 FROM ${RUNNER_IMAGE}
 
-# RUN apt-get update -y && apt-get install -y curl libstdc++6 openssl libncurses5 locales ghostscript default-jre libreoffice-java-common \
-#   && apt-get install -y libreoffice --no-install-recommends && apt-get clean && rm -f /var/lib/apt/lists/*_*
-RUN apk add --no-cache curl libstdc++ openssl ncurses ghostscript openjdk11-jre
+RUN apt-get update -y && apt-get install -y curl libstdc++6 openssl locales ghostscript default-jre libreoffice-java-common \
+  && apt-get install -y libreoffice --no-install-recommends && apt-get clean && rm -f /var/lib/apt/lists/*_*
+# RUN apk add --no-cache curl libstdc++ openssl ncurses ghostscript openjdk11-jre
 
 # Install LibreOffice & Common Fonts
-RUN apk --no-cache add bash libreoffice util-linux libreoffice-common \
-  font-droid-nonlatin font-droid ttf-dejavu ttf-freefont ttf-liberation && \
-  rm -rf /var/cache/apk/*
+RUN apt-get update && apt-get install -y \
+    libreoffice \
+    fonts-dejavu \
+    fonts-freefont-ttf \
+    fonts-liberation \
+    fonts-droid-fallback \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
 
 # Install Microsoft Core Fonts
-RUN apk --no-cache add msttcorefonts-installer fontconfig && \
-  update-ms-fonts && \
-  fc-cache -f && \
-  rm -rf /var/cache/apk/*
+RUN apt-get update && apt-get install -y \
+    ttf-mscorefonts-installer \
+    fontconfig \
+    && fc-cache -f \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
 
 ENV LANG en_US.UTF-8
 ENV LANGUAGE en_US:en
