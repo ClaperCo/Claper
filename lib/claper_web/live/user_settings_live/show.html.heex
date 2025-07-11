@@ -262,7 +262,7 @@
                       {"Italiano", "it"},
                       {"Nederlands", "nl"}
                     ]
-                    |> Enum.filter(fn {_name, code} -> 
+                    |> Enum.filter(fn {_name, code} ->
                       code in Application.get_env(:claper, :languages, ["en", "fr", "es"])
                     end)
                   }
