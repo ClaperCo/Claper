@@ -128,7 +128,7 @@ allow_unlink_external_provider =
 
 logout_redirect_url = get_var_from_path_or_env(config_dir, "LOGOUT_REDIRECT_URL", nil)
 
-languages = 
+languages =
   get_var_from_path_or_env(config_dir, "LANGUAGES", "en,fr,es")
   |> String.split(",")
   |> Enum.map(&String.trim/1)
