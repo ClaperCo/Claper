@@ -128,6 +128,11 @@ allow_unlink_external_provider =
 
 logout_redirect_url = get_var_from_path_or_env(config_dir, "LOGOUT_REDIRECT_URL", nil)
 
+languages = 
+  get_var_from_path_or_env(config_dir, "LANGUAGES", "en,fr,es")
+  |> String.split(",")
+  |> Enum.map(&String.trim/1)
+
 config :claper, :oidc,
   enabled: oidc_enabled,
   issuer: oidc_issuer,
@@ -166,7 +171,8 @@ config :claper,
   enable_account_creation: enable_account_creation,
   email_confirmation: email_confirmation,
   allow_unlink_external_provider: allow_unlink_external_provider,
-  logout_redirect_url: logout_redirect_url
+  logout_redirect_url: logout_redirect_url,
+  languages: languages
 
 config :claper, :presentations,
   max_file_size: max_file_size,

@@ -9,6 +9,11 @@
     <link rel="icon" type="image/png" href="/images/favicon.png" />
     <link phx-track-static rel="stylesheet" href="/assets/app.css" />
     <link phx-track-static rel="stylesheet" href="/assets/custom.css" />
+    <script>
+      window.claperConfig = {
+        supportedLocales: <%= Jason.encode!(Application.get_env(:claper, :languages, ["en", "fr", "es"])) %>
+      };
+    </script>
     <script defer phx-track-static type="text/javascript" src="/assets/app.js">
     </script>
   </head>

@@ -1,5 +1,9 @@
 ### v.2.4.0
 
+### Features
+
+- Add `LANGUAGES` setting to configure available languages in the app
+
 ### Fixes and improvements
 
 - Upgrade JS dependencies
