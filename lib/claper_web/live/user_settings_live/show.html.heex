@@ -130,7 +130,7 @@
       </.live_component>
     <% end %>
 
-    <div class="shadow overflow-hidden sm:rounded-lg">
+    <div class="overflow-hidden sm:rounded-lg">
       <div class="py-5">
         <h3 class="text-lg leading-6 font-medium text-gray-900">
           {gettext("Personal informations")}
@@ -251,16 +251,21 @@
                 {hidden_input(f, :action, name: "action", value: "update_preferences")}
                 <ClaperWeb.Component.Input.select
                   form={f}
-                  fieldClass="w-auto!"
+                  fieldClass="w-auto! bg-white"
                   labelClass="text-sm font-medium text-gray-500"
-                  array={[
-                    {"Deutsch", "de"},
-                    {"English", "en"},
-                    {"Español", "es"},
-                    {"Français", "fr"},
-                    {"Italiano", "it"},
-                    {"Nederlands", "nl"}
-                  ]}
+                  array={
+                    [
+                      {"Deutsch", "de"},
+                      {"English", "en"},
+                      {"Español", "es"},
+                      {"Français", "fr"},
+                      {"Italiano", "it"},
+                      {"Nederlands", "nl"}
+                    ]
+                    |> Enum.filter(fn {_name, code} -> 
+                      code in Application.get_env(:claper, :languages, ["en", "fr", "es"])
+                    end)
+                  }
                   key={:locale}
                   name={gettext("Language")}
                 />
