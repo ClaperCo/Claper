@@ -13,6 +13,8 @@ defmodule Claper.Accounts.User do
           confirmed_at: NaiveDateTime.t() | nil,
           locale: String.t() | nil,
           events: [Claper.Events.Event.t()] | nil,
+          role: Claper.Accounts.Role.t() | nil,
+          role_id: integer() | nil,
           inserted_at: NaiveDateTime.t(),
           updated_at: NaiveDateTime.t(),
           deleted_at: NaiveDateTime.t() | nil
@@ -30,6 +32,7 @@ defmodule Claper.Accounts.User do
 
     has_many :events, Claper.Events.Event
     has_one :lti_user, Lti13.Users.User
+    belongs_to :role, Claper.Accounts.Role
 
     timestamps()
   end
@@ -44,6 +47,15 @@ defmodule Claper.Accounts.User do
   def preferences_changeset(user, attrs) do
     user
     |> cast(attrs, [:locale])
+  end
+
+  @doc """
+  Changeset for assigning a role to a user.
+  """
+  def role_changeset(user, attrs) do
+    user
+    |> cast(attrs, [:role_id])
+    |> foreign_key_constraint(:role_id)
   end
 
   @doc """

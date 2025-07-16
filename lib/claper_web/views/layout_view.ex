@@ -1,5 +1,6 @@
 defmodule ClaperWeb.LayoutView do
   import Phoenix.Component
+  import Phoenix.LiveView.Helpers
   use ClaperWeb, :view
 
   # Phoenix LiveDashboard is available only in development by default,
@@ -21,6 +22,17 @@ defmodule ClaperWeb.LayoutView do
       "bg-gray-900 text-white"
     else
       ""
+    end
+  end
+
+  def get_section_path(conn) do
+    section = Enum.at(conn.path_info, 1)
+    
+    case section do
+      "users" -> Routes.admin_user_path(conn, :index)
+      "events" -> Routes.admin_event_path(conn, :index)
+      "oidc_providers" -> Routes.admin_oidc_provider_path(conn, :index)
+      _ -> Routes.admin_dashboard_path(conn, :index)
     end
   end
 

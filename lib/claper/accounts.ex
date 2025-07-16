@@ -7,7 +7,7 @@ defmodule Claper.Accounts do
   alias Claper.Accounts
   alias Claper.Repo
 
-  alias Claper.Accounts.{User, UserToken, UserNotifier}
+  alias Claper.Accounts.{User, UserToken, UserNotifier, Role}
 
   @doc """
   Creates a user.
@@ -43,6 +43,7 @@ defmodule Claper.Accounts do
     |> Repo.get_by(email: email)
   end
 
+
   @doc """
   Gets a user by email and creates a new user if the user does not exist.
 
@@ -65,6 +66,22 @@ defmodule Claper.Accounts do
       user ->
         {:ok, user}
     end
+  end
+
+  @doc """
+  Lists all users that are not deleted.
+
+  ## Examples
+
+      iex> list_users()
+      [%User{}, ...]
+
+  """
+  def list_users(preload \\ []) do
+    User
+    |> where([u], is_nil(u.deleted_at))
+    |> Repo.all()
+    |> Repo.preload(preload)
   end
 
   @doc """
@@ -569,6 +586,333 @@ defmodule Claper.Accounts do
 
   def get_oidc_user_by_sub(sub) do
     Repo.get_by(Accounts.Oidc.User, sub: sub)
+  end
+
+  ## Role Management
+
+  @doc """
+  Returns the list of roles.
+
+  ## Examples
+
+      iex> list_roles()
+      [%Role{}, ...]
+
+  """
+  def list_roles do
+    Repo.all(Role)
+  end
+
+  @doc """
+  Gets a single role.
+
+  Raises `Ecto.NoResultsError` if the Role does not exist.
+
+  ## Examples
+
+      iex> get_role!(123)
+      %Role{}
+
+      iex> get_role!(456)
+      ** (Ecto.NoResultsError)
+
+  """
+  def get_role!(id), do: Repo.get!(Role, id)
+
+  @doc """
+  Gets a role by name.
+
+  Returns nil if the Role does not exist.
+
+  ## Examples
+
+      iex> get_role_by_name("admin")
+      %Role{}
+
+      iex> get_role_by_name("nonexistent")
+      nil
+
+  """
+  def get_role_by_name(name) when is_binary(name) do
+    Repo.get_by(Role, name: name)
+  end
+
+  @doc """
+  Creates a role.
+
+  ## Examples
+
+      iex> create_role(%{field: value})
+      {:ok, %Role{}}
+
+      iex> create_role(%{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def create_role(attrs \\ %{}) do
+    %Role{}
+    |> Role.changeset(attrs)
+    |> Repo.insert()
+  end
+
+  @doc """
+  Updates a role.
+
+  ## Examples
+
+      iex> update_role(role, %{field: new_value})
+      {:ok, %Role{}}
+
+      iex> update_role(role, %{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def update_role(%Role{} = role, attrs) do
+    role
+    |> Role.changeset(attrs)
+    |> Repo.update()
+  end
+
+  @doc """
+  Deletes a role.
+
+  ## Examples
+
+      iex> delete_role(role)
+      {:ok, %Role{}}
+
+      iex> delete_role(role)
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def delete_role(%Role{} = role) do
+    Repo.delete(role)
+  end
+
+  @doc """
+  Returns an `%Ecto.Changeset{}` for tracking role changes.
+
+  ## Examples
+
+      iex> change_role(role)
+      %Ecto.Changeset{data: %Role{}}
+
+  """
+  def change_role(%Role{} = role, attrs \\ %{}) do
+    Role.changeset(role, attrs)
+  end
+
+  @doc """
+  Assigns a role to a user.
+
+  ## Examples
+
+      iex> assign_role(user, role)
+      {:ok, %User{}}
+
+  """
+  def assign_role(%User{} = user, %Role{} = role) do
+    user
+    |> User.role_changeset(%{role_id: role.id})
+    |> Repo.update()
+  end
+
+  @doc """
+  Gets the role of a user.
+
+  ## Examples
+
+      iex> get_user_role(user)
+      %Role{}
+
+  """
+  def get_user_role(%User{} = user) do
+    user = Repo.preload(user, :role)
+    user.role
+  end
+
+  @doc """
+  Lists users by role name.
+
+  ## Examples
+
+      iex> list_users_by_role("admin")
+      [%User{}, ...]
+
+  """
+  def list_users_by_role(role_name) when is_binary(role_name) do
+    role = get_role_by_name(role_name)
+
+    if role do
+      User
+      |> where([u], u.role_id == ^role.id)
+      |> where([u], is_nil(u.deleted_at))
+      |> Repo.all()
+    else
+      []
+    end
+  end
+
+  @doc """
+  Checks if a user has a specific role.
+
+  ## Examples
+
+      iex> user_has_role?(user, "admin")
+      true
+
+  """
+  def user_has_role?(%User{} = user, role_name) when is_binary(role_name) do
+    user = Repo.preload(user, :role)
+
+    case user.role do
+      nil -> false
+      role -> role.name == role_name
+    end
+  end
+
+  @doc """
+  Promotes a user to admin role.
+
+  ## Examples
+
+      iex> promote_to_admin(user)
+      {:ok, %User{}}
+
+  """
+  def promote_to_admin(%User{} = user) do
+    admin_role = get_role_by_name("admin")
+
+    if admin_role do
+      assign_role(user, admin_role)
+    else
+      {:error, :admin_role_not_found}
+    end
+  end
+
+  @doc """
+  Demotes a user from admin to regular user role.
+
+  ## Examples
+
+      iex> demote_from_admin(user)
+      {:ok, %User{}}
+
+  """
+  def demote_from_admin(%User{} = user) do
+    user_role = get_role_by_name("user")
+
+    if user_role do
+      assign_role(user, user_role)
+    else
+      {:error, :user_role_not_found}
+    end
+  end
+
+  @doc """
+  Assigns a role to a user.
+
+  ## Examples
+
+      iex> assign_role(user, "admin")
+      {:ok, %User{}}
+
+      iex> assign_role(user, "unknown")
+      {:error, :role_not_found}
+  """
+  def assign_role(%User{} = user, role_name) when is_binary(role_name) do
+    case get_role_by_name(role_name) do
+      nil -> {:error, :role_not_found}
+      role ->
+        user
+        |> Ecto.Changeset.change(%{role_id: role.id})
+        |> Repo.update()
+    end
+  end
+
+  @doc """
+  Gets the role of a user.
+
+  ## Examples
+
+      iex> get_user_role(user)
+      %Role{}
+
+      iex> get_user_role(user_without_role)
+      nil
+  """
+  def get_user_role(%User{} = user) do
+    user = user |> Repo.preload(:role)
+    user.role
+  end
+
+  @doc """
+  Lists users by role name.
+
+  ## Examples
+
+      iex> list_users_by_role("admin")
+      [%User{}, ...]
+
+      iex> list_users_by_role("unknown")
+      []
+  """
+  def list_users_by_role(role_name) when is_binary(role_name) do
+    case get_role_by_name(role_name) do
+      nil -> []
+      role ->
+        User
+        |> where([u], u.role_id == ^role.id and is_nil(u.deleted_at))
+        |> Repo.all()
+    end
+  end
+
+  @doc """
+  Checks if a user has a specific role.
+
+  ## Examples
+
+      iex> user_has_role?(user, "admin")
+      true
+
+      iex> user_has_role?(user, "unknown")
+      false
+  """
+  def user_has_role?(%User{} = user, role_name) when is_binary(role_name) do
+    case get_user_role(user) do
+      nil -> false
+      role -> role.name == role_name
+    end
+  end
+
+  @doc """
+  Promotes a user to admin role.
+
+  ## Examples
+
+      iex> promote_to_admin(user)
+      {:ok, %User{}}
+
+      iex> promote_to_admin(already_admin_user)
+      {:ok, %User{}}
+  """
+  def promote_to_admin(%User{} = user) do
+    assign_role(user, "admin")
+  end
+
+  @doc """
+  Demotes a user from admin role to regular user role.
+
+  ## Examples
+
+      iex> demote_from_admin(admin_user)
+      {:ok, %User{}}
+
+      iex> demote_from_admin(already_user_user)
+      {:ok, %User{}}
+  """
+  def demote_from_admin(%User{} = user) do
+    assign_role(user, "user")
   end
 
   def get_or_create_user_with_oidc(

@@ -22,6 +22,7 @@ import QRCodeStyling from "qr-code-styling";
 import { Presenter } from "./presenter";
 import { Manager } from "./manager";
 import Split from "split-grid";
+import CustomHooks from "./hooks";
 import { TourGuideClient } from "@sjmc11/tourguidejs/src/Tour";
 window.moment = moment;
 
@@ -570,6 +571,9 @@ Hooks.Dropdown = {
     });
   },
 };
+
+// Merge our custom hooks with the existing hooks
+Object.assign(Hooks, CustomHooks);
 
 let Uploaders = {};
 

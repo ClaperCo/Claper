@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    {csrf_meta_tag()}
+    <.live_title suffix=" · Claper">{assigns[:page_title] || "Claper"}</.live_title>
+    <link phx-track-static rel="stylesheet" href="/assets/app.css" />
+    <link rel="icon" type="image/png" href="/images/favicon.png" />
+    <link phx-track-static rel="stylesheet" href="/assets/custom.css" />
+    <script defer phx-track-static type="text/javascript" src="/assets/app.js"></script>
+  </head>
+  <body class="bg-gray-100">
+    <div class="flex h-screen overflow-hidden">
+      <!-- Sidebar -->
+      <div class="hidden md:flex md:flex-shrink-0">
+        <div class="flex flex-col w-64">
+          <div class="flex flex-col flex-grow pt-5 overflow-y-auto bg-indigo-700 border-r">
+            <div class="flex flex-col items-center flex-shrink-0 px-4">
+              <a href={~p"/admin"} class="text-white text-2xl font-bold">
+                Claper Admin
+              </a>
+            </div>
+            <div class="flex flex-col flex-grow px-4 mt-5">
+              <nav class="flex-1 space-y-1 bg-indigo-700">
+                <a href={~p"/admin"} class={"#{if @conn.path_info == ["admin"], do: "bg-indigo-800"} group flex items-center px-4 py-2 text-sm font-medium rounded-md text-white hover:bg-indigo-600"}>
+                  <i class="fas fa-tachometer-alt mr-3 text-indigo-300"></i>
+                  Dashboard
+                </a>
+                <a href={~p"/admin/users"} class={"#{if @conn.path_info == ["admin", "users"], do: "bg-indigo-800"} group flex items-center px-4 py-2 text-sm font-medium rounded-md text-white hover:bg-indigo-600"}>
+                  <i class="fas fa-users mr-3 text-indigo-300"></i>
+                  Users
+                </a>
+                <a href={~p"/admin/events"} class={"#{if @conn.path_info == ["admin", "events"], do: "bg-indigo-800"} group flex items-center px-4 py-2 text-sm font-medium rounded-md text-white hover:bg-indigo-600"}>
+                  <i class="fas fa-calendar-alt mr-3 text-indigo-300"></i>
+                  Events
+                </a>
+                <a href={~p"/admin/oidc_providers"} class={"#{if @conn.path_info == ["admin", "oidc_providers"], do: "bg-indigo-800"} group flex items-center px-4 py-2 text-sm font-medium rounded-md text-white hover:bg-indigo-600"}>
+                  <i class="fas fa-key mr-3 text-indigo-300"></i>
+                  OIDC Providers
+                </a>
+                <div class="pt-8">
+                  <a href={~p"/events"} class="group flex items-center px-4 py-2 text-sm font-medium rounded-md text-white hover:bg-indigo-600">
+                    <i class="fas fa-arrow-left mr-3 text-indigo-300"></i>
+                    Back to App
+                  </a>
+                </div>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Mobile header -->
+      <div class="md:hidden fixed top-0 left-0 right-0 z-30 bg-indigo-700 text-white shadow-md">
+        <div class="flex justify-between items-center p-4">
+          <a href={~p"/admin"} class="text-xl font-bold flex items-center">
+            <i class="fas fa-cog mr-2"></i>
+            Claper Admin
+          </a>
+          <div class="flex items-center space-x-3">
+            <a href={~p"/events"} class="text-white hover:text-indigo-200" title="Back to App">
+              <i class="fas fa-arrow-left"></i>
+            </a>
+            <button id="mobile-menu-button" class="focus:outline-none hover:text-indigo-200 p-1">
+              <i class="fas fa-bars text-xl"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Mobile menu overlay -->
+      <div id="mobile-menu" class="hidden md:hidden fixed inset-0 z-40 bg-black bg-opacity-50">
+        <!-- Mobile menu panel -->
+        <div class="absolute right-0 top-0 bottom-0 w-64 bg-indigo-700 shadow-lg transform transition-transform duration-300 ease-in-out">
+          <div class="flex justify-between items-center p-4 border-b border-indigo-600">
+            <span class="text-lg font-bold text-white">Menu</span>
+            <button id="mobile-menu-close" class="text-white focus:outline-none hover:text-indigo-200 p-1">
+              <i class="fas fa-times text-xl"></i>
+            </button>
+          </div>
+          
+          <div class="overflow-y-auto h-full pb-20">
+            <nav class="mt-2">
+              <a href={~p"/admin"} class={[
+                  if(@conn.path_info == ["admin"], do: "bg-indigo-800", else: ""),
+                  "flex items-center px-4 py-3 text-base font-medium text-white hover:bg-indigo-600 border-l-4",
+                  if(@conn.path_info == ["admin"], do: "border-white", else: "border-transparent"),
+                  "transition-colors duration-200"
+                ]}>
+                <i class="fas fa-tachometer-alt mr-3 text-indigo-300"></i>
+                <span>Dashboard</span>
+              </a>
+              <a href={~p"/admin/users"} class={[
+                  if(@conn.path_info == ["admin", "users"], do: "bg-indigo-800", else: ""),
+                  "flex items-center px-4 py-3 text-base font-medium text-white hover:bg-indigo-600 border-l-4",
+                  if(@conn.path_info == ["admin", "users"], do: "border-white", else: "border-transparent"),
+                  "transition-colors duration-200"
+                ]}>
+                <i class="fas fa-users mr-3 text-indigo-300"></i>
+                <span>Users</span>
+              </a>
+              <a href={~p"/admin/events"} class={[
+                  if(@conn.path_info == ["admin", "events"], do: "bg-indigo-800", else: ""),
+                  "flex items-center px-4 py-3 text-base font-medium text-white hover:bg-indigo-600 border-l-4",
+                  if(@conn.path_info == ["admin", "events"], do: "border-white", else: "border-transparent"),
+                  "transition-colors duration-200"
+                ]}>
+                <i class="fas fa-calendar-alt mr-3 text-indigo-300"></i>
+                <span>Events</span>
+              </a>
+              <a href={~p"/admin/oidc_providers"} class={[
+                  if(@conn.path_info == ["admin", "oidc_providers"], do: "bg-indigo-800", else: ""),
+                  "flex items-center px-4 py-3 text-base font-medium text-white hover:bg-indigo-600 border-l-4",
+                  if(@conn.path_info == ["admin", "oidc_providers"], do: "border-white", else: "border-transparent"),
+                  "transition-colors duration-200"
+                ]}>
+                <i class="fas fa-key mr-3 text-indigo-300"></i>
+                <span>OIDC Providers</span>
+              </a>
+              <div class="border-t border-indigo-600 my-4"></div>
+              <a href={~p"/events"} class="flex items-center px-4 py-3 text-base font-medium text-white hover:bg-indigo-600 border-l-4 border-transparent transition-colors duration-200">
+                <i class="fas fa-arrow-left mr-3 text-indigo-300"></i>
+                <span>Back to App</span>
+              </a>
+            </nav>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Mobile content padding -->
+      <div class="md:hidden h-16"></div>
+      
+      <!-- Main content -->
+      <div class="flex flex-col flex-1 w-0 overflow-hidden">
+        <main class="relative flex-1 overflow-y-auto focus:outline-none">
+          <div class="py-6">
+            <div class="px-4 mx-auto max-w-7xl sm:px-6 md:px-8">
+              <!-- Breadcrumbs -->
+              <nav class="flex mb-5" aria-label="Breadcrumb">
+                <ol class="inline-flex items-center space-x-1 md:space-x-3">
+                  <li class="inline-flex items-center">
+                    <a href={~p"/admin"} class="inline-flex items-center text-sm font-medium text-gray-700 hover:text-indigo-600">
+                      <i class="fas fa-home mr-2"></i>
+                      Admin
+                    </a>
+                  </li>
+                  
+                  <%= if length(@conn.path_info) > 1 do %>
+                    <li>
+                      <div class="flex items-center">
+                        <i class="fas fa-chevron-right text-gray-400 mx-2"></i>
+                        <a href={get_section_path(@conn)} class="text-sm font-medium text-gray-700 hover:text-indigo-600 capitalize">
+                          <%= case Enum.at(@conn.path_info, 1) do %>
+                            <% "users" -> %>
+                              <i class="fas fa-users mr-2 text-gray-500"></i> Users
+                            <% "events" -> %>
+                              <i class="fas fa-calendar-alt mr-2 text-gray-500"></i> Events
+                            <% "oidc_providers" -> %>
+                              <i class="fas fa-key mr-2 text-gray-500"></i> OIDC Providers
+                            <% _ -> %>
+                              <%= Enum.at(@conn.path_info, 1) |> String.replace("_", " ") |> String.capitalize() %>
+                          <% end %>
+                        </a>
+                      </div>
+                    </li>
+                  <% end %>
+                  
+                  <%= if length(@conn.path_info) > 2 do %>
+                    <li aria-current="page">
+                      <div class="flex items-center">
+                        <i class="fas fa-chevron-right text-gray-400 mx-2"></i>
+                        <span class="text-sm font-medium text-gray-500">
+                          <%= case Enum.at(@conn.path_info, 2) do %>
+                            <% "new" -> %>
+                              <i class="fas fa-plus mr-2"></i> New
+                            <% "edit" -> %>
+                              <i class="fas fa-edit mr-2"></i> Edit
+                            <% "show" -> %>
+                              <i class="fas fa-eye mr-2"></i> View
+                            <% id -> %>
+                              <%= id %>
+                          <% end %>
+                        </span>
+                      </div>
+                    </li>
+                  <% end %>
+                </ol>
+              </nav>
+              
+              <!-- Page title -->
+              <div class="mb-6">
+                <h1 class="text-2xl font-semibold text-gray-900"><%= @page_title %></h1>
+              </div>
+              
+              <!-- Flash messages -->
+              <div id="flash-messages">
+                <%= if get_flash(@conn, :info) do %>
+                  <div id="flash-info" class="p-4 mb-4 text-sm text-green-700 bg-green-100 rounded-lg flex items-center justify-between" role="alert">
+                    <div>
+                      <i class="fas fa-check-circle mr-2"></i>
+                      <span class="font-medium">Success!</span> <%= get_flash(@conn, :info) %>
+                    </div>
+                    <button type="button" class="flash-close text-green-700 hover:text-green-900 focus:outline-none" aria-label="Close">
+                      <i class="fas fa-times"></i>
+                    </button>
+                  </div>
+                <% end %>
+                
+                <%= if get_flash(@conn, :error) do %>
+                  <div id="flash-error" class="p-4 mb-4 text-sm text-red-700 bg-red-100 rounded-lg flex items-center justify-between" role="alert">
+                    <div>
+                      <i class="fas fa-exclamation-circle mr-2"></i>
+                      <span class="font-medium">Error!</span> <%= get_flash(@conn, :error) %>
+                    </div>
+                    <button type="button" class="flash-close text-red-700 hover:text-red-900 focus:outline-none" aria-label="Close">
+                      <i class="fas fa-times"></i>
+                    </button>
+                  </div>
+                <% end %>
+                
+                <%= if get_flash(@conn, :warning) do %>
+                  <div id="flash-warning" class="p-4 mb-4 text-sm text-yellow-700 bg-yellow-100 rounded-lg flex items-center justify-between" role="alert">
+                    <div>
+                      <i class="fas fa-exclamation-triangle mr-2"></i>
+                      <span class="font-medium">Warning!</span> <%= get_flash(@conn, :warning) %>
+                    </div>
+                    <button type="button" class="flash-close text-yellow-700 hover:text-yellow-900 focus:outline-none" aria-label="Close">
+                      <i class="fas fa-times"></i>
+                    </button>
+                  </div>
+                <% end %>
+              </div>
+              
+              <!-- Page content -->
+              <div class="bg-white shadow rounded-lg p-6">
+                <%= @inner_content %>
+              </div>
+            </div>
+          </div>
+        </main>
+      </div>
+    </div>
+    
+    <!-- Mobile menu and flash messages scripts -->
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        // Mobile menu toggle
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const mobileMenuClose = document.getElementById('mobile-menu-close');
+        const mobileMenuPanel = mobileMenu ? mobileMenu.querySelector('.absolute') : null;
+        
+        function openMobileMenu() {
+          mobileMenu.classList.remove('hidden');
+          // Slide in animation
+          setTimeout(() => {
+            if (mobileMenuPanel) {
+              mobileMenuPanel.style.transform = 'translateX(0)';
+            }
+          }, 50);
+          // Prevent body scrolling when menu is open
+          document.body.style.overflow = 'hidden';
+        }
+        
+        function closeMobileMenu() {
+          // Slide out animation
+          if (mobileMenuPanel) {
+            mobileMenuPanel.style.transform = 'translateX(100%)';
+          }
+          
+          // Wait for animation to complete before hiding
+          setTimeout(() => {
+            mobileMenu.classList.add('hidden');
+            // Restore body scrolling
+            document.body.style.overflow = '';
+          }, 300);
+        }
+        
+        if (mobileMenuButton && mobileMenu) {
+          // Initialize panel position
+          if (mobileMenuPanel) {
+            mobileMenuPanel.style.transform = 'translateX(100%)';
+          }
+          
+          mobileMenuButton.addEventListener('click', openMobileMenu);
+          
+          // Close on backdrop click
+          mobileMenu.addEventListener('click', function(e) {
+            if (e.target === mobileMenu) {
+              closeMobileMenu();
+            }
+          });
+          
+          // Close on close button click
+          if (mobileMenuClose) {
+            mobileMenuClose.addEventListener('click', closeMobileMenu);
+          }
+        }
+        
+        // Flash message dismiss functionality
+        const flashCloseButtons = document.querySelectorAll('.flash-close');
+        
+        flashCloseButtons.forEach(function(button) {
+          button.addEventListener('click', function() {
+            const flashMessage = button.closest('[role="alert"]');
+            
+            // Add fade-out animation
+            flashMessage.style.transition = 'opacity 0.5s ease';
+            flashMessage.style.opacity = '0';
+            
+            // Remove element after animation completes
+            setTimeout(function() {
+              flashMessage.remove();
+            }, 500);
+          });
+        });
+        
+        // Auto-dismiss flash messages after 5 seconds
+        const flashMessages = document.querySelectorAll('#flash-messages [role="alert"]');
+        if (flashMessages.length > 0) {
+          setTimeout(function() {
+            flashMessages.forEach(function(message) {
+              // Only auto-dismiss if still in the DOM
+              if (document.body.contains(message)) {
+                message.style.transition = 'opacity 0.5s ease';
+                message.style.opacity = '0';
+                
+                setTimeout(function() {
+                  message.remove();
+                }, 500);
+              }
+            });
+          }, 5000);
+        }
+      });
+    </script>
+  </body>
+</html>

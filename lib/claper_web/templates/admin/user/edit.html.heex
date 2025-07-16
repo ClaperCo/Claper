@@ -1,0 +1,123 @@
+<div class="mb-6 flex flex-col md:flex-row md:items-center md:justify-between">
+  <h2 class="text-lg font-medium text-gray-900">Edit User</h2>
+  <div class="mt-4 md:mt-0">
+    <a href={Routes.admin_user_path(@conn, :index)} class="inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+      <i class="fas fa-arrow-left mr-2"></i> Back to List
+    </a>
+  </div>
+</div>
+
+<div class="bg-white shadow overflow-hidden sm:rounded-lg">
+  <div class="px-4 py-5 sm:px-6">
+    <h3 class="text-lg leading-6 font-medium text-gray-900">User Information</h3>
+    <p class="mt-1 max-w-2xl text-sm text-gray-500">Edit user details and account information.</p>
+  </div>
+  
+  <%= form_for @changeset, Routes.admin_user_path(@conn, :update, @user), fn f -> %>
+    <div class="border-t border-gray-200 px-4 py-5 sm:p-6">
+      <div class="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
+        <div class="sm:col-span-3">
+          <%= render ClaperWeb.Admin.SharedView, "_form_field.html",
+            form: f,
+            field: :email,
+            type: :email,
+            label: "Email",
+            required: true,
+            description: "The user's email address is used for login and notifications."
+          %>
+        </div>
+
+        <div class="sm:col-span-3">
+          <%= render ClaperWeb.Admin.SharedView, "_form_field.html",
+            form: f,
+            field: :role_id,
+            type: :select,
+            label: "Role",
+            options: Enum.map(@roles, &{&1.name, &1.id}),
+            prompt: "Select role",
+            description: "Determines the user's permissions in the system."
+          %>
+        </div>
+
+        <div class="sm:col-span-3">
+          <%= render ClaperWeb.Admin.SharedView, "_form_field.html",
+            form: f,
+            field: :first_name,
+            type: :text,
+            label: "First Name"
+          %>
+        </div>
+
+        <div class="sm:col-span-3">
+          <%= render ClaperWeb.Admin.SharedView, "_form_field.html",
+            form: f,
+            field: :last_name,
+            type: :text,
+            label: "Last Name"
+          %>
+        </div>
+
+        <div class="sm:col-span-3">
+          <%= render ClaperWeb.Admin.SharedView, "_form_field.html",
+            form: f,
+            field: :locale,
+            type: :select,
+            label: "Preferred Language",
+            options: [{"English", "en"}, {"French", "fr"}, {"German", "de"}, {"Spanish", "es"}],
+            selected: @user.preferences["locale"],
+            description: "The user's preferred language for the interface."
+          %>
+        </div>
+      </div>
+    </div>
+    
+    <div class="px-4 py-3 bg-gray-50 text-right sm:px-6">
+      <button type="submit" class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+        <i class="fas fa-save mr-2"></i> Save Changes
+      </button>
+    </div>
+  <% end %>
+</div>
+
+<div class="mt-6">
+  <div class="bg-white shadow overflow-hidden sm:rounded-lg">
+    <div class="px-4 py-5 sm:px-6">
+      <h3 class="text-lg leading-6 font-medium text-gray-900">Danger Zone</h3>
+      <p class="mt-1 max-w-2xl text-sm text-gray-500">Destructive actions for this user account.</p>
+    </div>
+    <div class="border-t border-gray-200 px-4 py-5 sm:p-6">
+      <div class="space-y-6">
+        <div>
+          <h3 class="text-sm font-medium text-gray-900">Delete User Account</h3>
+          <div class="mt-2 max-w-xl text-sm text-gray-500">
+            <p>Once you delete this user account, there is no going back. Please be certain.</p>
+          </div>
+          <div class="mt-3">
+            <%= if @user.role && @user.role.name != "admin" do %>
+              <button type="button" data-modal-toggle="delete-user-modal" class="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
+                <i class="fas fa-trash-alt mr-2"></i> Delete User
+              </button>
+            <% else %>
+              <div class="text-sm text-gray-500 italic">Admin users cannot be deleted.</div>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<%= if @user.role && @user.role.name != "admin" do %>
+  <%= render ClaperWeb.Admin.SharedView, "_modal.html", 
+    id: "delete-user-modal",
+    title: "Delete User",
+    content: "Are you sure you want to delete #{@user.email}? This action cannot be undone.",
+    confirm_action: "Delete",
+    confirm_path: Routes.admin_user_path(@conn, :delete, @user),
+    confirm_method: :delete,
+    confirm_class: "bg-red-600 hover:bg-red-700",
+    cancel_action: "Cancel",
+    icon: "fa-exclamation-triangle",
+    conn: @conn
+  %>
+<% end %>

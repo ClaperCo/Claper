@@ -1,0 +1,114 @@
+<div class="mb-6 flex flex-col md:flex-row md:items-center md:justify-between">
+  <h2 class="text-lg font-medium text-gray-900">Create New Event</h2>
+  <div class="mt-4 md:mt-0">
+    <a href={Routes.admin_event_path(@conn, :index)} class="inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+      <i class="fas fa-arrow-left mr-2"></i> Back to List
+    </a>
+  </div>
+</div>
+
+<div class="bg-white shadow overflow-hidden sm:rounded-lg">
+  <div class="px-4 py-5 sm:px-6">
+    <h3 class="text-lg leading-6 font-medium text-gray-900">Event Information</h3>
+    <p class="mt-1 max-w-2xl text-sm text-gray-500">Create a new event.</p>
+  </div>
+  
+  <%= form_for @changeset, Routes.admin_event_path(@conn, :create), fn f -> %>
+    <div class="border-t border-gray-200 px-4 py-5 sm:p-6">
+      <div class="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
+        <div class="sm:col-span-3">
+          <%= render ClaperWeb.Admin.SharedView, "_form_field.html",
+            form: f,
+            field: :name,
+            type: :text,
+            label: "Event Name",
+            required: true,
+            description: "The name of the event as it will appear to attendees."
+          %>
+        </div>
+
+        <div class="sm:col-span-3">
+          <div class="relative">
+            <%= render ClaperWeb.Admin.SharedView, "_form_field.html",
+              form: f,
+              field: :code,
+              type: :text,
+              label: "Event Code",
+              required: true,
+              description: "Unique code for event access.",
+              append_content: raw("<button type=\"button\" id=\"generate-code\" class=\"absolute inset-y-0 right-0 mt-6 px-3 flex items-center bg-gray-50 rounded-r-md border border-l-0 border-gray-300 text-gray-500 sm:text-sm hover:bg-gray-100\">Generate</button>")
+            %>
+          </div>
+        </div>
+
+        <div class="sm:col-span-3">
+          <%= render ClaperWeb.Admin.SharedView, "_form_field.html",
+            form: f,
+            field: :scheduled_at,
+            type: :datetime,
+            label: "Scheduled Date & Time",
+            description: "When the event is scheduled to take place."
+          %>
+        </div>
+
+        <div class="sm:col-span-3">
+          <%= render ClaperWeb.Admin.SharedView, "_form_field.html",
+            form: f,
+            field: :active,
+            type: :checkbox,
+            label: "Active Status",
+            description: "When active, the event is visible and accessible to attendees."
+          %>
+        </div>
+
+        <div class="sm:col-span-6">
+          <%= render ClaperWeb.Admin.SharedView, "_form_field.html",
+            form: f,
+            field: :description,
+            type: :textarea,
+            label: "Description",
+            rows: 3,
+            description: "Brief description of the event visible to attendees."
+          %>
+        </div>
+
+        <div class="sm:col-span-6">
+          <%= render ClaperWeb.Admin.SharedView, "_form_field.html",
+            form: f,
+            field: :user_id,
+            type: :select,
+            options: @users,
+            label: "Creator",
+            description: "User who will own this event."
+          %>
+        </div>
+      </div>
+    </div>
+    
+    <div class="px-4 py-3 bg-gray-50 text-right sm:px-6">
+      <button type="submit" class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+        <i class="fas fa-plus mr-2"></i> Create Event
+      </button>
+    </div>
+  <% end %>
+</div>
+
+<!-- JavaScript for generating random event code -->
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const generateButton = document.getElementById('generate-code');
+    const codeInput = document.querySelector('input[name="event[code]"]');
+    
+    if (generateButton && codeInput) {
+      generateButton.addEventListener('click', function() {
+        // Generate a random 6-character alphanumeric code
+        const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+        let result = '';
+        for (let i = 0; i < 6; i++) {
+          result += characters.charAt(Math.floor(Math.random() * characters.length));
+        }
+        codeInput.value = result;
+      });
+    }
+  });
+</script>

@@ -1,0 +1,78 @@
+<div class="mb-6 flex flex-col md:flex-row md:items-center md:justify-between">
+  <h2 class="text-lg font-medium text-gray-900">Users List</h2>
+</div>
+
+<%= render ClaperWeb.Admin.SharedView, "_search_filter.html", 
+  search_path: Routes.admin_user_path(@conn, :index),
+  search_placeholder: "Search by email, name...",
+  search_value: @search,
+  filters: [
+    %{name: "role", label: "Role", options: [{"All Roles", ""}] ++ Enum.map(@roles, fn role -> {role.name, role.name} end)}
+  ],
+  role: @role,
+  clear_path: Routes.admin_user_path(@conn, :index),
+  new_path: Routes.admin_user_path(@conn, :new),
+  new_label: "Add User",
+  export_csv_path: Routes.admin_user_path(@conn, :index, Map.put(@conn.params, "format", "csv")),
+  conn: @conn
+%>
+
+<%= render ClaperWeb.Admin.SharedView, "_table.html", 
+  id: "users-table",
+  headers: ["Email", "Name", "Role", "Confirmed", "Created", "Actions"],
+  rows: @users,
+  row_func: fn user -> [
+    user.email,
+    if user.first_name || user.last_name do
+      [user.first_name, user.last_name] |> Enum.reject(&is_nil/1) |> Enum.join(" ")
+    else
+      "<span class=\"text-gray-400\">Not set</span>"
+    end,
+    if user.role do
+      role_class = if user.role.name == "admin", do: "bg-purple-100 text-purple-800", else: "bg-green-100 text-green-800"
+      "<span class=\"px-2 inline-flex text-xs leading-5 font-semibold rounded-full #{role_class}\">#{user.role.name}</span>"
+    else
+      "<span class=\"text-gray-400\">No role</span>"
+    end,
+    if user.confirmed_at do
+      "<span class=\"text-green-600\"><i class=\"fas fa-check-circle\"></i> Yes</span>"
+    else
+      "<span class=\"text-red-600\"><i class=\"fas fa-times-circle\"></i> No</span>"
+    end,
+    NaiveDateTime.to_date(user.inserted_at),
+    render_to_string(ClaperWeb.Admin.SharedView, "_table_actions.html", 
+      view_path: Routes.admin_user_path(@conn, :show, user),
+      edit_path: Routes.admin_user_path(@conn, :edit, user),
+      delete_path: (if user.role && user.role.name != "admin" do 
+        Routes.admin_user_path(@conn, :delete, user)
+      end),
+      delete_modal_id: "delete-user-#{user.id}",
+      conn: @conn
+    )
+  ] end,
+  empty_message: "No users found",
+  conn: @conn,
+  pagination: %{
+    page_number: @page_number,
+    page_size: @page_size,
+    total_pages: @total_pages,
+    total_entries: @total_entries
+  }
+%>
+
+<%= for user <- @users do %>
+  <%= if user.role && user.role.name != "admin" do %>
+    <%= render ClaperWeb.Admin.SharedView, "_modal.html", 
+      id: "delete-user-#{user.id}",
+      title: "Delete User",
+      content: "Are you sure you want to delete #{user.email}? This action cannot be undone.",
+      confirm_action: "Delete",
+      confirm_path: Routes.admin_user_path(@conn, :delete, user),
+      confirm_method: :delete,
+      confirm_class: "bg-red-600 hover:bg-red-700",
+      cancel_action: "Cancel",
+      icon: "fa-exclamation-triangle",
+      conn: @conn
+    %>
+  <% end %>
+<% end %>

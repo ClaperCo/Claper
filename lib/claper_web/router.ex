@@ -13,6 +13,10 @@ defmodule ClaperWeb.Router do
     plug(:fetch_current_user)
     plug(ClaperWeb.Plugs.Locale)
   end
+  
+  pipeline :admin_required do
+    plug(ClaperWeb.Plugs.AdminRequiredPlug)
+  end
 
   pipeline :lti do
     plug(:accepts, ["html", "json"])
@@ -164,5 +168,29 @@ defmodule ClaperWeb.Router do
     get("/privacy", PageController, :privacy)
 
     delete("/users/log_out", UserSessionController, :delete)
+  end
+  
+  # Admin panel routes - LiveView implementation
+  live_session :admin, root_layout: {ClaperWeb.LayoutView, :admin} do
+    scope "/admin", ClaperWeb.AdminLive do
+      pipe_through [:browser, :require_authenticated_user, :admin_required]
+      
+      live "/", DashboardLive, :index
+      
+      live "/users", UserLive, :index
+      live "/users/new", UserLive, :new
+      live "/users/:id/edit", UserLive, :edit
+      live "/users/:id", UserLive, :show
+      
+      live "/events", EventLive, :index
+      live "/events/new", EventLive, :new
+      live "/events/:id/edit", EventLive, :edit
+      live "/events/:id", EventLive, :show
+      
+      live "/oidc_providers", OidcProviderLive, :index
+      live "/oidc_providers/new", OidcProviderLive, :new
+      live "/oidc_providers/:id/edit", OidcProviderLive, :edit
+      live "/oidc_providers/:id", OidcProviderLive, :show
+    end
   end
 end

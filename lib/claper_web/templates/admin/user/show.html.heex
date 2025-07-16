@@ -1,0 +1,90 @@
+<div class="mb-6 flex flex-col md:flex-row md:items-center md:justify-between">
+  <h2 class="text-lg font-medium text-gray-900">User Details</h2>
+  <div class="mt-4 md:mt-0 flex space-x-3">
+    <a href={Routes.admin_user_path(@conn, :edit, @user)} class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+      <i class="fas fa-edit mr-2"></i> Edit User
+    </a>
+    <a href={Routes.admin_user_path(@conn, :index)} class="inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+      <i class="fas fa-arrow-left mr-2"></i> Back to List
+    </a>
+  </div>
+</div>
+
+<div class="bg-white shadow overflow-hidden sm:rounded-lg">
+  <div class="px-4 py-5 sm:px-6">
+    <h3 class="text-lg leading-6 font-medium text-gray-900">User Information</h3>
+    <p class="mt-1 max-w-2xl text-sm text-gray-500">Personal details and account information.</p>
+  </div>
+  <div class="border-t border-gray-200">
+    <dl>
+      <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+        <dt class="text-sm font-medium text-gray-500">Email</dt>
+        <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2"><%= @user.email %></dd>
+      </div>
+      <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+        <dt class="text-sm font-medium text-gray-500">Full name</dt>
+        <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+          <%= if @user.first_name || @user.last_name do %>
+            <%= [user.first_name, user.last_name] |> Enum.reject(&is_nil/1) |> Enum.join(" ") %>
+          <% else %>
+            <span class="text-gray-400">Not set</span>
+          <% end %>
+        </dd>
+      </div>
+      <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+        <dt class="text-sm font-medium text-gray-500">Role</dt>
+        <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+          <%= if @user.role do %>
+            <span class={"px-2 inline-flex text-xs leading-5 font-semibold rounded-full #{if @user.role.name == "admin", do: "bg-purple-100 text-purple-800", else: "bg-green-100 text-green-800"}"}>
+              <%= @user.role.name %>
+            </span>
+          <% else %>
+            <span class="text-gray-400">No role</span>
+          <% end %>
+        </dd>
+      </div>
+      <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+        <dt class="text-sm font-medium text-gray-500">Account status</dt>
+        <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+          <%= if @user.confirmed_at do %>
+            <span class="text-green-600"><i class="fas fa-check-circle"></i> Confirmed on <%= NaiveDateTime.to_date(@user.confirmed_at) %></span>
+          <% else %>
+            <span class="text-red-600"><i class="fas fa-times-circle"></i> Not confirmed</span>
+          <% end %>
+        </dd>
+      </div>
+      <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+        <dt class="text-sm font-medium text-gray-500">Locale</dt>
+        <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+          <%= if @user.preferences && @user.preferences["locale"] do %>
+            <%= @user.preferences["locale"] %>
+          <% else %>
+            <span class="text-gray-400">Default</span>
+          <% end %>
+        </dd>
+      </div>
+      <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+        <dt class="text-sm font-medium text-gray-500">Created at</dt>
+        <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2"><%= NaiveDateTime.to_string(@user.inserted_at) %></dd>
+      </div>
+      <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+        <dt class="text-sm font-medium text-gray-500">Last updated</dt>
+        <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2"><%= NaiveDateTime.to_string(@user.updated_at) %></dd>
+      </div>
+    </dl>
+  </div>
+</div>
+
+<div class="mt-6 flex justify-between">
+  <div>
+    <%= if @user.role && @user.role.name != "admin" do %>
+      <%= link "Promote to Admin", to: Routes.admin_user_path(@conn, :promote, @user), method: :post, data: [confirm: "Are you sure you want to promote this user to admin?"], class: "inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500" %>
+    <% end %>
+    
+    <%= if @user.role && @user.role.name == "admin" do %>
+      <%= link "Demote from Admin", to: Routes.admin_user_path(@conn, :demote, @user), method: :post, data: [confirm: "Are you sure you want to demote this user from admin?"], class: "inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-yellow-600 hover:bg-yellow-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500" %>
+    <% end %>
+  </div>
+  
+  <%= link "Delete User", to: Routes.admin_user_path(@conn, :delete, @user), method: :delete, data: [confirm: "Are you sure you want to delete this user? This action cannot be undone."], class: "inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500" %>
+</div>
