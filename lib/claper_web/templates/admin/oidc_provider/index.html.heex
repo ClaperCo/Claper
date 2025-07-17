@@ -3,14 +3,14 @@
 </div>
 
 <%= render ClaperWeb.Admin.SharedView, "_search_filter.html", 
-  search_path: Routes.admin_oidc_provider_path(@conn, :index),
+  search_path: ~p"/admin/oidc_providers",
   search_placeholder: "Search by name, issuer...",
   search_value: @search,
   filters: [],
-  clear_path: Routes.admin_oidc_provider_path(@conn, :index),
-  new_path: Routes.admin_oidc_provider_path(@conn, :new),
+  clear_path: ~p"/admin/oidc_providers",
+  new_path: ~p"/admin/oidc_providers/new",
   new_label: "Add Provider",
-  export_csv_path: Routes.admin_oidc_provider_path(@conn, :index, Map.put(@conn.params, "format", "csv")),
+  export_csv_path: ~p"/admin/oidc_providers?format=csv",
   conn: @conn
 %>
 
@@ -39,9 +39,9 @@
     end}
   ],
   actions: fn provider -> [
-    %{label: "View", icon: "eye", path: Routes.admin_oidc_provider_path(@conn, :show, provider), color: "indigo"},
-    %{label: "Edit", icon: "edit", path: Routes.admin_oidc_provider_path(@conn, :edit, provider), color: "indigo"},
-    %{label: "Test Connection", icon: "plug", path: Routes.admin_oidc_provider_path(@conn, :test_connection, provider), color: "indigo"},
+    %{label: "View", icon: "eye", path: ~p"/admin/oidc_providers/#{provider}", color: "indigo"},
+    %{label: "Edit", icon: "edit", path: ~p"/admin/oidc_providers/#{provider}/edit", color: "indigo"},
+    %{label: "Test Connection", icon: "plug", path: ~p"/admin/oidc_providers/#{provider}/test_connection", color: "indigo"},
     %{label: "Delete", icon: "trash", path: "#", color: "red", modal_id: "delete-provider-#{provider.id}"}
   ] end,
   empty_message: "No OIDC providers found"
@@ -53,7 +53,7 @@
     title: "Delete OIDC Provider",
     content: "Are you sure you want to delete the OIDC provider '#{provider.name}'? This action cannot be undone.",
     confirm_action: "Delete",
-    confirm_path: Routes.admin_oidc_provider_path(@conn, :delete, provider),
+    confirm_path: ~p"/admin/oidc_providers/#{provider}",
     confirm_method: :delete,
     confirm_class: "bg-red-600 hover:bg-red-700",
     cancel_action: "Cancel",
@@ -70,12 +70,12 @@
     </div>
     <div class="flex-1 flex justify-between sm:justify-end">
       <%= if @page_number > 1 do %>
-        <a href={Routes.admin_oidc_provider_path(@conn, :index, page: @page_number - 1, search: @search)} class="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
+        <a href={~p"/admin/oidc_providers?page=#{@page_number - 1}&search=#{@search}"} class="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
           Previous
         </a>
       <% end %>
       <%= if @page_number < @total_pages do %>
-        <a href={Routes.admin_oidc_provider_path(@conn, :index, page: @page_number + 1, search: @search)} class="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
+        <a href={~p"/admin/oidc_providers?page=#{@page_number + 1}&search=#{@search}"} class="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
           Next
         </a>
       <% end %>

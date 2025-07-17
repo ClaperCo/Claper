@@ -1,7 +1,7 @@
 defmodule ClaperWeb.AdminLive.EventLive do
   use ClaperWeb, :live_view
 
-  alias Claper.Events
+  alias Claper.Admin
   alias Claper.Events.Event
   alias ClaperWeb.Helpers.CSVExporter
   alias ClaperWeb.AdminLive.EventLive.FormComponent
@@ -37,19 +37,19 @@ defmodule ClaperWeb.AdminLive.EventLive do
   defp apply_action(socket, :edit, %{"id" => id}) do
     socket
     |> assign(:page_title, "Edit Event")
-    |> assign(:event, Events.get_event!(id))
+    |> assign(:event, Claper.Events.get_event_by_id!(id, [:user]))
   end
 
   defp apply_action(socket, :show, %{"id" => id}) do
     socket
     |> assign(:page_title, "Event Details")
-    |> assign(:event, Events.get_event!(id))
+    |> assign(:event, Claper.Events.get_event_by_id!(id, [:user]))
   end
 
   @impl true
   def handle_event("delete", %{"id" => id}, socket) do
-    event = Events.get_event!(id)
-    {:ok, _} = Events.delete_event(event)
+    event = Claper.Events.get_event_by_id!(id)
+    {:ok, _} = Claper.Events.delete_event(event)
 
     {:noreply,
      socket
@@ -96,15 +96,12 @@ defmodule ClaperWeb.AdminLive.EventLive do
   end
 
   defp list_events do
-    Events.list_events()
-    |> Enum.map(&Events.preload_event_user/1)
+    Admin.list_all_events()
   end
 
   defp search_events(search) when search == "", do: list_events()
   defp search_events(search) do
-    search_term = "%#{search}%"
-    Events.search_events(search_term)
-    |> Enum.map(&Events.preload_event_user/1)
+    Admin.list_all_events(%{"search" => search})
   end
 
   defp sort_events(events, field, order) do
@@ -302,12 +299,6 @@ defmodule ClaperWeb.AdminLive.EventLive do
                 </dd>
               </div>
               <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                <dt class="text-sm font-medium text-gray-500">Theme</dt>
-                <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                  <%= @event.theme || "Default theme" %>
-                </dd>
-              </div>
-              <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                 <dt class="text-sm font-medium text-gray-500">Started At</dt>
                 <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
                   <%= if @event.started_at, do: Calendar.strftime(@event.started_at, "%Y-%m-%d %H:%M"), else: "Not started" %>
@@ -317,12 +308,6 @@ defmodule ClaperWeb.AdminLive.EventLive do
                 <dt class="text-sm font-medium text-gray-500">Expired At</dt>
                 <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
                   <%= if @event.expired_at, do: Calendar.strftime(@event.expired_at, "%Y-%m-%d %H:%M"), else: "Not expired" %>
-                </dd>
-              </div>
-              <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                <dt class="text-sm font-medium text-gray-500">Password Protected</dt>
-                <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                  <%= if @event.password, do: "Yes", else: "No" %>
                 </dd>
               </div>
               <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">

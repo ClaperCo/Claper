@@ -18,7 +18,7 @@
     </div>
     <div class="bg-gray-50 px-5 py-3">
       <div class="text-sm">
-        <a href={Routes.admin_user_path(@conn, :index)} class="font-medium text-indigo-600 hover:text-indigo-500">View all users</a>
+        <a href={~p"/admin/users"} class="font-medium text-indigo-600 hover:text-indigo-500">View all users</a>
       </div>
     </div>
   </div>
@@ -42,7 +42,7 @@
     </div>
     <div class="bg-gray-50 px-5 py-3">
       <div class="text-sm">
-        <a href={Routes.admin_event_path(@conn, :index)} class="font-medium text-indigo-600 hover:text-indigo-500">View all events</a>
+        <a href={~p"/admin/events"} class="font-medium text-indigo-600 hover:text-indigo-500">View all events</a>
       </div>
     </div>
   </div>
@@ -66,7 +66,7 @@
     </div>
     <div class="bg-gray-50 px-5 py-3">
       <div class="text-sm">
-        <a href={Routes.admin_event_path(@conn, :index, status: "upcoming")} class="font-medium text-indigo-600 hover:text-indigo-500">View upcoming events</a>
+        <a href={~p"/admin/events?status=upcoming"} class="font-medium text-indigo-600 hover:text-indigo-500">View upcoming events</a>
       </div>
     </div>
   </div>
@@ -105,8 +105,8 @@
                 <% end %>
               </td>
               <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                <a href={Routes.admin_event_path(@conn, :show, event)} class="text-indigo-600 hover:text-indigo-900 mr-3">View</a>
-                <a href={Routes.admin_event_path(@conn, :edit, event)} class="text-indigo-600 hover:text-indigo-900">Edit</a>
+                <a href={~p"/admin/event/#{event.uuid}"} class="text-indigo-600 hover:text-indigo-900 mr-3">View</a>
+                <a href={~p"/admin/event/#{event.uuid}/edit"} class="text-indigo-600 hover:text-indigo-900">Edit</a>
               </td>
             </tr>
           <% end %>
@@ -120,7 +120,7 @@
 <div class="mt-8">
   <h2 class="text-lg font-medium text-gray-900 mb-4">Quick Links</h2>
   <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-    <a href={Routes.admin_user_path(@conn, :new)} class="bg-white overflow-hidden shadow rounded-lg p-4 hover:bg-gray-50">
+    <a href={~p"/admin/users/new"} class="bg-white overflow-hidden shadow rounded-lg p-4 hover:bg-gray-50">
       <div class="flex items-center">
         <div class="flex-shrink-0 bg-indigo-100 rounded-md p-2">
           <i class="fas fa-user-plus text-indigo-600"></i>
@@ -130,8 +130,8 @@
         </div>
       </div>
     </a>
-    
-    <a href={Routes.admin_oidc_provider_path(@conn, :new)} class="bg-white overflow-hidden shadow rounded-lg p-4 hover:bg-gray-50">
+
+    <a href={~p"/admin/oidc_providers/new"} class="bg-white overflow-hidden shadow rounded-lg p-4 hover:bg-gray-50">
       <div class="flex items-center">
         <div class="flex-shrink-0 bg-indigo-100 rounded-md p-2">
           <i class="fas fa-key text-indigo-600"></i>
@@ -141,8 +141,8 @@
         </div>
       </div>
     </a>
-    
-    <a href={Routes.admin_user_path(@conn, :index, role: "admin")} class="bg-white overflow-hidden shadow rounded-lg p-4 hover:bg-gray-50">
+
+    <a href={~p"/admin/users?role=admin"} class="bg-white overflow-hidden shadow rounded-lg p-4 hover:bg-gray-50">
       <div class="flex items-center">
         <div class="flex-shrink-0 bg-indigo-100 rounded-md p-2">
           <i class="fas fa-user-shield text-indigo-600"></i>
@@ -152,8 +152,8 @@
         </div>
       </div>
     </a>
-    
-    <a href={Routes.admin_event_path(@conn, :index)} class="bg-white overflow-hidden shadow rounded-lg p-4 hover:bg-gray-50">
+
+    <a href={~p"/admin/events"} class="bg-white overflow-hidden shadow rounded-lg p-4 hover:bg-gray-50">
       <div class="flex items-center">
         <div class="flex-shrink-0 bg-indigo-100 rounded-md p-2">
           <i class="fas fa-calendar-alt text-indigo-600"></i>

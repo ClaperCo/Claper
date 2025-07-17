@@ -3,17 +3,17 @@
 </div>
 
 <%= render ClaperWeb.Admin.SharedView, "_search_filter.html", 
-  search_path: Routes.admin_user_path(@conn, :index),
+  search_path: ~p"/admin/users",
   search_placeholder: "Search by email, name...",
   search_value: @search,
   filters: [
     %{name: "role", label: "Role", options: [{"All Roles", ""}] ++ Enum.map(@roles, fn role -> {role.name, role.name} end)}
   ],
   role: @role,
-  clear_path: Routes.admin_user_path(@conn, :index),
-  new_path: Routes.admin_user_path(@conn, :new),
+  clear_path: ~p"/admin/users",
+  new_path: ~p"/admin/users/new",
   new_label: "Add User",
-  export_csv_path: Routes.admin_user_path(@conn, :index, Map.put(@conn.params, "format", "csv")),
+  export_csv_path: ~p"/admin/users?format=csv",
   conn: @conn
 %>
 
@@ -41,10 +41,10 @@
     end,
     NaiveDateTime.to_date(user.inserted_at),
     render_to_string(ClaperWeb.Admin.SharedView, "_table_actions.html", 
-      view_path: Routes.admin_user_path(@conn, :show, user),
-      edit_path: Routes.admin_user_path(@conn, :edit, user),
+      view_path: ~p"/admin/users/#{user}",
+      edit_path: ~p"/admin/users/#{user}/edit",
       delete_path: (if user.role && user.role.name != "admin" do 
-        Routes.admin_user_path(@conn, :delete, user)
+        ~p"/admin/users/#{user}"
       end),
       delete_modal_id: "delete-user-#{user.id}",
       conn: @conn
@@ -67,7 +67,7 @@
       title: "Delete User",
       content: "Are you sure you want to delete #{user.email}? This action cannot be undone.",
       confirm_action: "Delete",
-      confirm_path: Routes.admin_user_path(@conn, :delete, user),
+      confirm_path: ~p"/admin/users/#{user}",
       confirm_method: :delete,
       confirm_class: "bg-red-600 hover:bg-red-700",
       cancel_action: "Cancel",

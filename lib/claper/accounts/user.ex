@@ -59,6 +59,17 @@ defmodule Claper.Accounts.User do
   end
 
   @doc """
+  A changeset for admin operations on users.
+  """
+  def admin_changeset(user, attrs, opts \\ []) do
+    user
+    |> cast(attrs, [:email, :confirmed_at, :password, :role_id])
+    |> validate_email()
+    |> validate_admin_password(opts)
+    |> foreign_key_constraint(:role_id)
+  end
+
+  @doc """
   A changeset for marking a user as deleted.
   """
   def delete_changeset(user) do
@@ -80,6 +91,19 @@ defmodule Claper.Accounts.User do
     |> validate_required([:password])
     |> validate_length(:password, min: 6, max: 72)
     |> maybe_hash_password(opts)
+  end
+
+  defp validate_admin_password(changeset, opts) do
+    password = get_change(changeset, :password)
+    
+    # Only validate password if it's provided
+    if password && password != "" do
+      changeset
+      |> validate_length(:password, min: 6, max: 72)
+      |> maybe_hash_password(opts)
+    else
+      changeset
+    end
   end
 
   defp maybe_hash_password(changeset, opts) do

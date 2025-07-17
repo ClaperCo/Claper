@@ -1,6 +1,7 @@
 defmodule ClaperWeb.AdminLive.UserLive do
   use ClaperWeb, :live_view
 
+  alias Claper.Admin
   alias Claper.Accounts
   alias Claper.Accounts.User
   alias ClaperWeb.Helpers.CSVExporter
@@ -37,13 +38,13 @@ defmodule ClaperWeb.AdminLive.UserLive do
   defp apply_action(socket, :edit, %{"id" => id}) do
     socket
     |> assign(:page_title, "Edit User")
-    |> assign(:user, Accounts.get_user!(id))
+    |> assign(:user, Accounts.get_user!(id) |> Claper.Repo.preload(:role))
   end
 
   defp apply_action(socket, :show, %{"id" => id}) do
     socket
     |> assign(:page_title, "User Details")
-    |> assign(:user, Accounts.get_user!(id))
+    |> assign(:user, Accounts.get_user!(id) |> Claper.Repo.preload(:role))
   end
 
   @impl true
@@ -96,13 +97,12 @@ defmodule ClaperWeb.AdminLive.UserLive do
   end
 
   def list_users do
-    Accounts.list_users([:role])
+    Admin.list_all_users()
   end
 
   defp search_users(search) when search == "", do: list_users()
   defp search_users(search) do
-    search_term = "%#{search}%"
-    Accounts.search_users(search_term, [:role])
+    Admin.list_all_users(%{"search" => search})
   end
 
   defp sort_users(users, field, order) do

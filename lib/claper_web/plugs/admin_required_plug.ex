@@ -8,7 +8,12 @@ defmodule ClaperWeb.Plugs.AdminRequiredPlug do
   
   import Plug.Conn
   import Phoenix.Controller
-  alias ClaperWeb.Router.Helpers, as: Routes
+  
+  use Phoenix.VerifiedRoutes,
+    endpoint: ClaperWeb.Endpoint,
+    router: ClaperWeb.Router,
+    statics: ClaperWeb.static_paths()
+  
   alias Claper.Accounts
 
   def init(opts), do: opts
@@ -21,7 +26,7 @@ defmodule ClaperWeb.Plugs.AdminRequiredPlug do
     else
       conn
       |> put_flash(:error, "You must be an admin to access this page.")
-      |> redirect(to: Routes.page_path(conn, :index))
+      |> redirect(to: ~p"/")
       |> halt()
     end
   end

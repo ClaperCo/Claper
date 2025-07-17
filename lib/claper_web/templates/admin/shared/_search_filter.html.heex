@@ -2,13 +2,13 @@
   Search and filter component for admin panel tables
   Usage:
   <%= render ClaperWeb.Admin.SharedView, "_search_filter.html", 
-    search_path: Routes.admin_user_path(@conn, :index),
+    search_path: ~p"/admin/users",
     search_placeholder: "Search users...",
     filters: [
       %{name: "role", label: "Role", options: [{"All", ""}, {"Admin", "admin"}, {"User", "user"}]},
       %{name: "status", label: "Status", options: [{"All", ""}, {"Active", "active"}, {"Inactive", "inactive"}]}
     ],
-    export_csv_path: Routes.admin_user_path(@conn, :export_csv),
+    export_csv_path: ~p"/admin/users/export_csv",
     conn: @conn
   %>
 --%>

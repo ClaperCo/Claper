@@ -1,7 +1,7 @@
 <div class="mb-6 flex flex-col md:flex-row md:items-center md:justify-between">
   <h2 class="text-lg font-medium text-gray-900">Add New OIDC Provider</h2>
   <div class="mt-4 md:mt-0">
-    <a href={Routes.admin_oidc_provider_path(@conn, :index)} class="inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+    <a href={~p"/admin/oidc_providers"} class="inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
       <i class="fas fa-arrow-left mr-2"></i> Back to List
     </a>
   </div>
@@ -13,7 +13,7 @@
     <p class="mt-1 max-w-2xl text-sm text-gray-500">Configure a new OIDC provider for authentication.</p>
   </div>
   
-  <%= form_for @changeset, Routes.admin_oidc_provider_path(@conn, :create), fn f -> %>
+  <%= form_for @changeset, ~p"/admin/oidc_providers", fn f -> %>
     <div class="border-t border-gray-200 px-4 py-5 sm:p-6">
       <div class="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
         <div class="sm:col-span-3">

@@ -2,9 +2,9 @@
   Table actions component for admin panel tables
   Usage:
   <%= render ClaperWeb.Admin.SharedView, "_table_actions.html", 
-    view_path: Routes.admin_user_path(@conn, :show, user),
-    edit_path: Routes.admin_user_path(@conn, :edit, user),
-    delete_path: Routes.admin_user_path(@conn, :delete, user),
+    view_path: ~p"/admin/users/#{user}",
+    edit_path: ~p"/admin/users/#{user}/edit",
+    delete_path: ~p"/admin/users/#{user}",
     delete_modal_id: "delete-user-#{user.id}",  # Optional
     conn: @conn
   %>

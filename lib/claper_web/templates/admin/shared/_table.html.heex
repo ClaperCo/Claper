@@ -10,9 +10,9 @@
       user.email,
       user.role.name,
       render_to_string(ClaperWeb.Admin.SharedView, "_table_actions.html", 
-        view_path: Routes.admin_user_path(@conn, :show, user),
-        edit_path: Routes.admin_user_path(@conn, :edit, user),
-        delete_path: Routes.admin_user_path(@conn, :delete, user),
+        view_path: ~p"/admin/users/#{user}",
+        edit_path: ~p"/admin/users/#{user}/edit",
+        delete_path: ~p"/admin/users/#{user}",
         conn: @conn
       )
     ] end,

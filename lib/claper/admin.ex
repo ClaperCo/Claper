@@ -31,10 +31,11 @@ defmodule Claper.Admin do
       Event
       |> Repo.aggregate(:count, :id)
 
-    now = NaiveDateTime.utc_now()
+    _now = NaiveDateTime.utc_now()
+
     upcoming_events =
       Event
-      |> where([e], e.started_at > ^now)
+      |> where([e], is_nil(e.expired_at))
       |> Repo.aggregate(:count, :id)
 
     %{
@@ -42,6 +43,237 @@ defmodule Claper.Admin do
       events_count: events_count,
       upcoming_events: upcoming_events
     }
+  end
+
+  @doc """
+  Gets users over time for analytics charts.
+  
+  Returns user registration data grouped by time period.
+  
+  ## Parameters
+  - period: :day, :week, :month (default: :day)
+  - days_back: number of days to look back (default: 30)
+  
+  ## Examples
+  
+      iex> get_users_over_time(:day, 7)
+      %{
+        labels: ["2025-01-10", "2025-01-11", ...],
+        values: [2, 5, 1, 3, ...]
+      }
+  """
+  def get_users_over_time(period \\ :day, days_back \\ 30) do
+    end_date = NaiveDateTime.utc_now()
+    start_date = NaiveDateTime.add(end_date, -(days_back * 24 * 60 * 60), :second)
+    
+    # Generate all dates in the range
+    date_range = generate_date_range(start_date, end_date, period)
+    
+    # Get actual user counts per period using raw SQL to avoid parameter conflicts
+    period_sql_value = period_sql(period)
+    
+    sql = """
+    SELECT DATE_TRUNC($1, inserted_at) as period, COUNT(id) as count
+    FROM users
+    WHERE deleted_at IS NULL
+    AND inserted_at >= $2
+    AND inserted_at <= $3
+    GROUP BY DATE_TRUNC($1, inserted_at)
+    ORDER BY period
+    """
+    
+    result = Repo.query!(sql, [period_sql_value, start_date, end_date])
+    
+    user_counts = 
+      result.rows
+      |> Enum.map(fn [period, count] -> {period, count} end)
+      |> Enum.into(%{})
+    
+    # Format data for charts
+    labels = Enum.map(date_range, &format_date_label(&1, period))
+    values = Enum.map(date_range, fn date -> 
+      Map.get(user_counts, truncate_date(date, period), 0)
+    end)
+    
+    %{
+      labels: labels,
+      values: values
+    }
+  end
+
+  @doc """
+  Gets events over time for analytics charts.
+  
+  Returns event creation data grouped by time period.
+  
+  ## Parameters
+  - period: :day, :week, :month (default: :day)  
+  - days_back: number of days to look back (default: 30)
+  
+  ## Examples
+  
+      iex> get_events_over_time(:day, 7)
+      %{
+        labels: ["2025-01-10", "2025-01-11", ...],
+        values: [1, 3, 0, 2, ...]
+      }
+  """
+  def get_events_over_time(period \\ :day, days_back \\ 30) do
+    end_date = NaiveDateTime.utc_now()
+    start_date = NaiveDateTime.add(end_date, -(days_back * 24 * 60 * 60), :second)
+    
+    # Generate all dates in the range
+    date_range = generate_date_range(start_date, end_date, period)
+    
+    # Get actual event counts per period using raw SQL to avoid parameter conflicts
+    period_sql_value = period_sql(period)
+    
+    sql = """
+    SELECT DATE_TRUNC($1, inserted_at) as period, COUNT(id) as count
+    FROM events
+    WHERE inserted_at >= $2
+    AND inserted_at <= $3
+    GROUP BY DATE_TRUNC($1, inserted_at)
+    ORDER BY period
+    """
+    
+    result = Repo.query!(sql, [period_sql_value, start_date, end_date])
+    
+    event_counts = 
+      result.rows
+      |> Enum.map(fn [period, count] -> {period, count} end)
+      |> Enum.into(%{})
+    
+    # Format data for charts
+    labels = Enum.map(date_range, &format_date_label(&1, period))
+    values = Enum.map(date_range, fn date -> 
+      Map.get(event_counts, truncate_date(date, period), 0)
+    end)
+    
+    %{
+      labels: labels,
+      values: values
+    }
+  end
+
+  @doc """
+  Gets growth metrics for dashboard statistics.
+  
+  Returns percentage growth for users and events compared to previous period.
+  """
+  def get_growth_metrics do
+    now = NaiveDateTime.utc_now()
+    thirty_days_ago = NaiveDateTime.add(now, -(30 * 24 * 60 * 60), :second)
+    sixty_days_ago = NaiveDateTime.add(now, -(60 * 24 * 60 * 60), :second)
+    
+    # Current period (last 30 days)
+    current_users = 
+      User
+      |> where([u], is_nil(u.deleted_at))
+      |> where([u], u.inserted_at >= ^thirty_days_ago and u.inserted_at <= ^now)
+      |> Repo.aggregate(:count, :id)
+      
+    current_events =
+      Event
+      |> where([e], e.inserted_at >= ^thirty_days_ago and e.inserted_at <= ^now)
+      |> Repo.aggregate(:count, :id)
+    
+    # Previous period (30-60 days ago)
+    previous_users = 
+      User
+      |> where([u], is_nil(u.deleted_at))
+      |> where([u], u.inserted_at >= ^sixty_days_ago and u.inserted_at < ^thirty_days_ago)
+      |> Repo.aggregate(:count, :id)
+      
+    previous_events =
+      Event
+      |> where([e], e.inserted_at >= ^sixty_days_ago and e.inserted_at < ^thirty_days_ago)
+      |> Repo.aggregate(:count, :id)
+    
+    %{
+      users_growth: calculate_growth_percentage(current_users, previous_users),
+      events_growth: calculate_growth_percentage(current_events, previous_events)
+    }
+  end
+
+  @doc """
+  Gets recent activity stats for dashboard.
+  
+  Returns counts of recent activities.
+  """
+  def get_activity_stats do
+    now = NaiveDateTime.utc_now()
+    twenty_four_hours_ago = NaiveDateTime.add(now, -(24 * 60 * 60), :second)
+    seven_days_ago = NaiveDateTime.add(now, -(7 * 24 * 60 * 60), :second)
+    
+    %{
+      users_today: User 
+        |> where([u], is_nil(u.deleted_at))
+        |> where([u], u.inserted_at >= ^twenty_four_hours_ago)
+        |> Repo.aggregate(:count, :id),
+      events_today: Event 
+        |> where([e], e.inserted_at >= ^twenty_four_hours_ago)
+        |> Repo.aggregate(:count, :id),
+      users_this_week: User 
+        |> where([u], is_nil(u.deleted_at))
+        |> where([u], u.inserted_at >= ^seven_days_ago)
+        |> Repo.aggregate(:count, :id),
+      events_this_week: Event 
+        |> where([e], e.inserted_at >= ^seven_days_ago)
+        |> Repo.aggregate(:count, :id)
+    }
+  end
+
+  # Private helper functions
+
+  defp generate_date_range(start_date, end_date, period) do
+    start_date
+    |> NaiveDateTime.to_date()
+    |> Date.range(NaiveDateTime.to_date(end_date))
+    |> Enum.to_list()
+    |> case do
+      dates when period == :day -> dates
+      dates when period == :week -> dates |> Enum.chunk_every(7) |> Enum.map(&List.first/1)
+      dates when period == :month -> dates |> Enum.group_by(&Date.beginning_of_month/1) |> Map.keys()
+    end
+  end
+
+
+  defp period_sql(period) do
+    case period do
+      :day -> "day"
+      :week -> "week"
+      :month -> "month"
+    end
+  end
+
+  defp format_date_label(date, period) do
+    case period do
+      :day -> Date.to_string(date)
+      :week -> "Week of #{Date.to_string(date)}"
+      :month -> "#{Date.to_string(date) |> String.slice(0..6)}"
+    end
+  end
+
+  defp truncate_date(date, period) do
+    naive_date = NaiveDateTime.new!(date, ~T[00:00:00])
+    case period do
+      :day -> NaiveDateTime.truncate(naive_date, :second)
+      :week -> 
+        days_to_subtract = Date.day_of_week(date) - 1
+        date |> Date.add(-days_to_subtract) |> NaiveDateTime.new!(~T[00:00:00]) |> NaiveDateTime.truncate(:second)
+      :month -> 
+        date |> Date.beginning_of_month() |> NaiveDateTime.new!(~T[00:00:00]) |> NaiveDateTime.truncate(:second)
+    end
+  end
+
+  defp calculate_growth_percentage(current, previous) do
+    cond do
+      previous == 0 and current > 0 -> 100.0
+      previous == 0 and current == 0 -> 0.0
+      previous > 0 -> ((current - previous) / previous * 100) |> Float.round(1)
+      true -> 0.0
+    end
   end
 
   @doc """
@@ -134,9 +366,11 @@ defmodule Claper.Admin do
         "upcoming" ->
           now = NaiveDateTime.utc_now()
           query |> where([e], e.started_at > ^now)
+
         "past" ->
           now = NaiveDateTime.utc_now()
           query |> where([e], e.started_at <= ^now)
+
         _ ->
           query
       end
@@ -275,9 +509,11 @@ defmodule Claper.Admin do
         "upcoming" ->
           now = NaiveDateTime.utc_now()
           query |> where([e], e.started_at > ^now)
+
         "past" ->
           now = NaiveDateTime.utc_now()
           query |> where([e], e.started_at <= ^now)
+
         _ ->
           query
       end
@@ -357,6 +593,7 @@ defmodule Claper.Admin do
     Repo.all(query)
     |> Enum.map(fn user ->
       role_name = if user.role, do: user.role.name, else: "none"
+
       user
       |> Map.put(:role_name, role_name)
     end)

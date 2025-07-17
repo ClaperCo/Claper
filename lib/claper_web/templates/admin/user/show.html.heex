@@ -1,10 +1,10 @@
 <div class="mb-6 flex flex-col md:flex-row md:items-center md:justify-between">
   <h2 class="text-lg font-medium text-gray-900">User Details</h2>
   <div class="mt-4 md:mt-0 flex space-x-3">
-    <a href={Routes.admin_user_path(@conn, :edit, @user)} class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+    <a href={~p"/admin/users/#{@user}/edit"} class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
       <i class="fas fa-edit mr-2"></i> Edit User
     </a>
-    <a href={Routes.admin_user_path(@conn, :index)} class="inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+    <a href={~p"/admin/users"} class="inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
       <i class="fas fa-arrow-left mr-2"></i> Back to List
     </a>
   </div>
@@ -78,13 +78,13 @@
 <div class="mt-6 flex justify-between">
   <div>
     <%= if @user.role && @user.role.name != "admin" do %>
-      <%= link "Promote to Admin", to: Routes.admin_user_path(@conn, :promote, @user), method: :post, data: [confirm: "Are you sure you want to promote this user to admin?"], class: "inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500" %>
+      <%= link "Promote to Admin", to: ~p"/admin/users/#{@user}/promote", method: :post, data: [confirm: "Are you sure you want to promote this user to admin?"], class: "inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500" %>
     <% end %>
     
     <%= if @user.role && @user.role.name == "admin" do %>
-      <%= link "Demote from Admin", to: Routes.admin_user_path(@conn, :demote, @user), method: :post, data: [confirm: "Are you sure you want to demote this user from admin?"], class: "inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-yellow-600 hover:bg-yellow-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500" %>
+      <%= link "Demote from Admin", to: ~p"/admin/users/#{@user}/demote", method: :post, data: [confirm: "Are you sure you want to demote this user from admin?"], class: "inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-yellow-600 hover:bg-yellow-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500" %>
     <% end %>
   </div>
   
-  <%= link "Delete User", to: Routes.admin_user_path(@conn, :delete, @user), method: :delete, data: [confirm: "Are you sure you want to delete this user? This action cannot be undone."], class: "inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500" %>
+  <%= link "Delete User", to: ~p"/admin/users/#{@user}", method: :delete, data: [confirm: "Are you sure you want to delete this user? This action cannot be undone."], class: "inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500" %>
 </div>

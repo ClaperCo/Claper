@@ -11,38 +11,50 @@
     <link phx-track-static rel="stylesheet" href="/assets/custom.css" />
     <script defer phx-track-static type="text/javascript" src="/assets/app.js"></script>
   </head>
-  <body class="bg-gray-100">
+  <body class="admin-background">
     <div class="flex h-screen overflow-hidden">
       <!-- Sidebar -->
       <div class="hidden md:flex md:flex-shrink-0">
         <div class="flex flex-col w-64">
-          <div class="flex flex-col flex-grow pt-5 overflow-y-auto bg-indigo-700 border-r">
-            <div class="flex flex-col items-center flex-shrink-0 px-4">
-              <a href={~p"/admin"} class="text-white text-2xl font-bold">
-                Claper Admin
+          <div class="flex flex-col flex-grow pt-5 overflow-y-auto glass-sidebar">
+            <div class="flex flex-col items-center flex-shrink-0 px-4 mb-8">
+              <a href={~p"/admin"} class="text-white text-2xl font-bold glass-text-primary">
+                ✨ Claper Admin
               </a>
+              <p class="glass-text-secondary text-sm mt-1">Management Panel</p>
             </div>
             <div class="flex flex-col flex-grow px-4 mt-5">
-              <nav class="flex-1 space-y-1 bg-indigo-700">
-                <a href={~p"/admin"} class={"#{if @conn.path_info == ["admin"], do: "bg-indigo-800"} group flex items-center px-4 py-2 text-sm font-medium rounded-md text-white hover:bg-indigo-600"}>
-                  <i class="fas fa-tachometer-alt mr-3 text-indigo-300"></i>
+              <nav class="flex-1 space-y-2">
+                <a href={~p"/admin"} class={"glass-sidebar-item #{if @conn.path_info == ["admin"], do: "active"} group flex items-center px-4 py-3 text-sm font-medium glass-text-primary"}>
+                  <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2H5a2 2 0 00-2-2z"/>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5a2 2 0 012-2h4a2 2 0 012 2v6H8V5z"/>
+                  </svg>
                   Dashboard
                 </a>
-                <a href={~p"/admin/users"} class={"#{if @conn.path_info == ["admin", "users"], do: "bg-indigo-800"} group flex items-center px-4 py-2 text-sm font-medium rounded-md text-white hover:bg-indigo-600"}>
-                  <i class="fas fa-users mr-3 text-indigo-300"></i>
+                <a href={~p"/admin/users"} class={"glass-sidebar-item #{if @conn.path_info == ["admin", "users"], do: "active"} group flex items-center px-4 py-3 text-sm font-medium glass-text-primary"}>
+                  <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/>
+                  </svg>
                   Users
                 </a>
-                <a href={~p"/admin/events"} class={"#{if @conn.path_info == ["admin", "events"], do: "bg-indigo-800"} group flex items-center px-4 py-2 text-sm font-medium rounded-md text-white hover:bg-indigo-600"}>
-                  <i class="fas fa-calendar-alt mr-3 text-indigo-300"></i>
+                <a href={~p"/admin/events"} class={"glass-sidebar-item #{if @conn.path_info == ["admin", "events"], do: "active"} group flex items-center px-4 py-3 text-sm font-medium glass-text-primary"}>
+                  <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                  </svg>
                   Events
                 </a>
-                <a href={~p"/admin/oidc_providers"} class={"#{if @conn.path_info == ["admin", "oidc_providers"], do: "bg-indigo-800"} group flex items-center px-4 py-2 text-sm font-medium rounded-md text-white hover:bg-indigo-600"}>
-                  <i class="fas fa-key mr-3 text-indigo-300"></i>
+                <a href={~p"/admin/oidc_providers"} class={"glass-sidebar-item #{if @conn.path_info == ["admin", "oidc_providers"], do: "active"} group flex items-center px-4 py-3 text-sm font-medium glass-text-primary"}>
+                  <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1721 9z"/>
+                  </svg>
                   OIDC Providers
                 </a>
-                <div class="pt-8">
-                  <a href={~p"/events"} class="group flex items-center px-4 py-2 text-sm font-medium rounded-md text-white hover:bg-indigo-600">
-                    <i class="fas fa-arrow-left mr-3 text-indigo-300"></i>
+                <div class="pt-8 mt-8 border-t border-white/20">
+                  <a href={~p"/events"} class="glass-sidebar-item group flex items-center px-4 py-3 text-sm font-medium glass-text-primary">
+                    <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+                    </svg>
                     Back to App
                   </a>
                 </div>
@@ -53,75 +65,75 @@
       </div>
       
       <!-- Mobile header -->
-      <div class="md:hidden fixed top-0 left-0 right-0 z-30 bg-indigo-700 text-white shadow-md">
+      <div class="md:hidden fixed top-0 left-0 right-0 z-30 glass-dark shadow-md">
         <div class="flex justify-between items-center p-4">
-          <a href={~p"/admin"} class="text-xl font-bold flex items-center">
-            <i class="fas fa-cog mr-2"></i>
-            Claper Admin
+          <a href={~p"/admin"} class="text-xl font-bold flex items-center glass-text-primary">
+            <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/>
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+            </svg>
+            ✨ Claper Admin
           </a>
           <div class="flex items-center space-x-3">
-            <a href={~p"/events"} class="text-white hover:text-indigo-200" title="Back to App">
-              <i class="fas fa-arrow-left"></i>
+            <a href={~p"/events"} class="glass-text-primary hover:glass-text-secondary transition-colors" title="Back to App">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+              </svg>
             </a>
-            <button id="mobile-menu-button" class="focus:outline-none hover:text-indigo-200 p-1">
-              <i class="fas fa-bars text-xl"></i>
+            <button id="mobile-menu-button" class="focus:outline-none glass-text-primary hover:glass-text-secondary p-1 transition-colors">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+              </svg>
             </button>
           </div>
         </div>
       </div>
       
       <!-- Mobile menu overlay -->
-      <div id="mobile-menu" class="hidden md:hidden fixed inset-0 z-40 bg-black bg-opacity-50">
+      <div id="mobile-menu" class="hidden md:hidden fixed inset-0 z-40 glass-modal-backdrop">
         <!-- Mobile menu panel -->
-        <div class="absolute right-0 top-0 bottom-0 w-64 bg-indigo-700 shadow-lg transform transition-transform duration-300 ease-in-out">
-          <div class="flex justify-between items-center p-4 border-b border-indigo-600">
-            <span class="text-lg font-bold text-white">Menu</span>
-            <button id="mobile-menu-close" class="text-white focus:outline-none hover:text-indigo-200 p-1">
-              <i class="fas fa-times text-xl"></i>
+        <div class="absolute right-0 top-0 bottom-0 w-64 glass-dark shadow-lg transform transition-transform duration-300 ease-in-out">
+          <div class="flex justify-between items-center p-4 border-b border-white/20">
+            <span class="text-lg font-bold glass-text-primary">Menu</span>
+            <button id="mobile-menu-close" class="glass-text-primary focus:outline-none hover:glass-text-secondary p-1 transition-colors">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+              </svg>
             </button>
           </div>
           
           <div class="overflow-y-auto h-full pb-20">
-            <nav class="mt-2">
-              <a href={~p"/admin"} class={[
-                  if(@conn.path_info == ["admin"], do: "bg-indigo-800", else: ""),
-                  "flex items-center px-4 py-3 text-base font-medium text-white hover:bg-indigo-600 border-l-4",
-                  if(@conn.path_info == ["admin"], do: "border-white", else: "border-transparent"),
-                  "transition-colors duration-200"
-                ]}>
-                <i class="fas fa-tachometer-alt mr-3 text-indigo-300"></i>
+            <nav class="mt-2 px-4">
+              <a href={~p"/admin"} class={"glass-sidebar-item #{if @conn.path_info == ["admin"], do: "active"} group flex items-center px-4 py-3 text-base font-medium glass-text-primary mb-2"}>
+                <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2H5a2 2 0 00-2-2z"/>
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5a2 2 0 012-2h4a2 2 0 012 2v6H8V5z"/>
+                </svg>
                 <span>Dashboard</span>
               </a>
-              <a href={~p"/admin/users"} class={[
-                  if(@conn.path_info == ["admin", "users"], do: "bg-indigo-800", else: ""),
-                  "flex items-center px-4 py-3 text-base font-medium text-white hover:bg-indigo-600 border-l-4",
-                  if(@conn.path_info == ["admin", "users"], do: "border-white", else: "border-transparent"),
-                  "transition-colors duration-200"
-                ]}>
-                <i class="fas fa-users mr-3 text-indigo-300"></i>
+              <a href={~p"/admin/users"} class={"glass-sidebar-item #{if @conn.path_info == ["admin", "users"], do: "active"} group flex items-center px-4 py-3 text-base font-medium glass-text-primary mb-2"}>
+                <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/>
+                </svg>
                 <span>Users</span>
               </a>
-              <a href={~p"/admin/events"} class={[
-                  if(@conn.path_info == ["admin", "events"], do: "bg-indigo-800", else: ""),
-                  "flex items-center px-4 py-3 text-base font-medium text-white hover:bg-indigo-600 border-l-4",
-                  if(@conn.path_info == ["admin", "events"], do: "border-white", else: "border-transparent"),
-                  "transition-colors duration-200"
-                ]}>
-                <i class="fas fa-calendar-alt mr-3 text-indigo-300"></i>
+              <a href={~p"/admin/events"} class={"glass-sidebar-item #{if @conn.path_info == ["admin", "events"], do: "active"} group flex items-center px-4 py-3 text-base font-medium glass-text-primary mb-2"}>
+                <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                </svg>
                 <span>Events</span>
               </a>
-              <a href={~p"/admin/oidc_providers"} class={[
-                  if(@conn.path_info == ["admin", "oidc_providers"], do: "bg-indigo-800", else: ""),
-                  "flex items-center px-4 py-3 text-base font-medium text-white hover:bg-indigo-600 border-l-4",
-                  if(@conn.path_info == ["admin", "oidc_providers"], do: "border-white", else: "border-transparent"),
-                  "transition-colors duration-200"
-                ]}>
-                <i class="fas fa-key mr-3 text-indigo-300"></i>
+              <a href={~p"/admin/oidc_providers"} class={"glass-sidebar-item #{if @conn.path_info == ["admin", "oidc_providers"], do: "active"} group flex items-center px-4 py-3 text-base font-medium glass-text-primary mb-2"}>
+                <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1721 9z"/>
+                </svg>
                 <span>OIDC Providers</span>
               </a>
-              <div class="border-t border-indigo-600 my-4"></div>
-              <a href={~p"/events"} class="flex items-center px-4 py-3 text-base font-medium text-white hover:bg-indigo-600 border-l-4 border-transparent transition-colors duration-200">
-                <i class="fas fa-arrow-left mr-3 text-indigo-300"></i>
+              <div class="border-t border-white/20 my-4"></div>
+              <a href={~p"/events"} class="glass-sidebar-item group flex items-center px-4 py-3 text-base font-medium glass-text-primary">
+                <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+                </svg>
                 <span>Back to App</span>
               </a>
             </nav>
@@ -141,8 +153,10 @@
               <nav class="flex mb-5" aria-label="Breadcrumb">
                 <ol class="inline-flex items-center space-x-1 md:space-x-3">
                   <li class="inline-flex items-center">
-                    <a href={~p"/admin"} class="inline-flex items-center text-sm font-medium text-gray-700 hover:text-indigo-600">
-                      <i class="fas fa-home mr-2"></i>
+                    <a href={~p"/admin"} class="inline-flex items-center text-sm font-medium glass-text-primary hover:glass-text-secondary transition-colors">
+                      <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+                      </svg>
                       Admin
                     </a>
                   </li>
@@ -150,15 +164,23 @@
                   <%= if length(@conn.path_info) > 1 do %>
                     <li>
                       <div class="flex items-center">
-                        <i class="fas fa-chevron-right text-gray-400 mx-2"></i>
-                        <a href={get_section_path(@conn)} class="text-sm font-medium text-gray-700 hover:text-indigo-600 capitalize">
+                        <svg class="w-4 h-4 glass-text-muted mx-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                        </svg>
+                        <a href={get_section_path(@conn)} class="text-sm font-medium glass-text-primary hover:glass-text-secondary capitalize transition-colors">
                           <%= case Enum.at(@conn.path_info, 1) do %>
                             <% "users" -> %>
-                              <i class="fas fa-users mr-2 text-gray-500"></i> Users
+                              <svg class="w-4 h-4 mr-2 glass-text-secondary inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/>
+                              </svg> Users
                             <% "events" -> %>
-                              <i class="fas fa-calendar-alt mr-2 text-gray-500"></i> Events
+                              <svg class="w-4 h-4 mr-2 glass-text-secondary inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                              </svg> Events
                             <% "oidc_providers" -> %>
-                              <i class="fas fa-key mr-2 text-gray-500"></i> OIDC Providers
+                              <svg class="w-4 h-4 mr-2 glass-text-secondary inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1721 9z"/>
+                              </svg> OIDC Providers
                             <% _ -> %>
                               <%= Enum.at(@conn.path_info, 1) |> String.replace("_", " ") |> String.capitalize() %>
                           <% end %>
@@ -170,15 +192,24 @@
                   <%= if length(@conn.path_info) > 2 do %>
                     <li aria-current="page">
                       <div class="flex items-center">
-                        <i class="fas fa-chevron-right text-gray-400 mx-2"></i>
-                        <span class="text-sm font-medium text-gray-500">
+                        <svg class="w-4 h-4 glass-text-muted mx-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                        </svg>
+                        <span class="text-sm font-medium glass-text-secondary">
                           <%= case Enum.at(@conn.path_info, 2) do %>
                             <% "new" -> %>
-                              <i class="fas fa-plus mr-2"></i> New
+                              <svg class="w-4 h-4 mr-2 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                              </svg> New
                             <% "edit" -> %>
-                              <i class="fas fa-edit mr-2"></i> Edit
+                              <svg class="w-4 h-4 mr-2 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+                              </svg> Edit
                             <% "show" -> %>
-                              <i class="fas fa-eye mr-2"></i> View
+                              <svg class="w-4 h-4 mr-2 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                              </svg> View
                             <% id -> %>
                               <%= id %>
                           <% end %>
@@ -191,7 +222,7 @@
               
               <!-- Page title -->
               <div class="mb-6">
-                <h1 class="text-2xl font-semibold text-gray-900"><%= @page_title %></h1>
+                <h1 class="text-2xl font-semibold glass-text-primary"><%= @page_title %></h1>
               </div>
               
               <!-- Flash messages -->
@@ -234,7 +265,7 @@
               </div>
               
               <!-- Page content -->
-              <div class="bg-white shadow rounded-lg p-6">
+              <div class="glass-card p-6">
                 <%= @inner_content %>
               </div>
             </div>

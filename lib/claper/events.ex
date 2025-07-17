@@ -231,6 +231,23 @@ defmodule Claper.Events do
     do: Repo.get_by!(Event, uuid: id) |> Repo.preload(preload)
 
   @doc """
+  Gets a single event by integer ID (for admin use).
+
+  Raises `Ecto.NoResultsError` if the Event does not exist.
+
+  ## Examples
+
+      iex> get_event_by_id!(123)
+      %Event{}
+
+      iex> get_event_by_id!(456)
+      ** (Ecto.NoResultsError)
+
+  """
+  def get_event_by_id!(id, preload \\ []),
+    do: Repo.get!(Event, id) |> Repo.preload(preload)
+
+  @doc """
   Gets a single managed event.
 
   Raises `Ecto.NoResultsError` if the Event does not exist.

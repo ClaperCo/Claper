@@ -27,12 +27,12 @@ defmodule ClaperWeb.LayoutView do
 
   def get_section_path(conn) do
     section = Enum.at(conn.path_info, 1)
-    
+
     case section do
-      "users" -> Routes.admin_user_path(conn, :index)
-      "events" -> Routes.admin_event_path(conn, :index)
-      "oidc_providers" -> Routes.admin_oidc_provider_path(conn, :index)
-      _ -> Routes.admin_dashboard_path(conn, :index)
+      "users" -> ~p"/admin/users"
+      "events" -> ~p"/admin/events"
+      "oidc_providers" -> ~p"/admin/oidc_providers"
+      _ -> ~p"/admin"
     end
   end
 

@@ -3,7 +3,7 @@
 </div>
 
 <%= render ClaperWeb.Admin.SharedView, "_search_filter.html", 
-  search_path: Routes.admin_event_path(@conn, :index),
+  search_path: ~p"/admin/events",
   search_placeholder: "Search by name, code...",
   search_value: @search,
   filters: [
@@ -15,10 +15,10 @@
     ]}
   ],
   status: @status,
-  clear_path: Routes.admin_event_path(@conn, :index),
-  new_path: Routes.admin_event_path(@conn, :new),
+  clear_path: ~p"/admin/events",
+  new_path: ~p"/admin/events/new",
   new_label: "Add Event",
-  export_csv_path: Routes.admin_event_path(@conn, :index, format: "csv"),
+  export_csv_path: ~p"/admin/events?format=csv",
   conn: @conn
 %>
 
@@ -32,7 +32,7 @@
   </div>
   
   <div id="advanced-filters" class="hidden px-4 py-4 bg-gray-50">
-    <form action={Routes.admin_event_path(@conn, :index)} method="get" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+    <form action={~p"/admin/events"} method="get" class="grid grid-cols-1 md:grid-cols-3 gap-4">
       <!-- Preserve existing filters -->
       <input type="hidden" name="search" value={@search}>
       <input type="hidden" name="status" value={@status}>
@@ -98,9 +98,9 @@
     end}
   ],
   actions: fn event -> [
-    %{label: "View", icon: "eye", path: Routes.admin_event_path(@conn, :show, event), color: "indigo"},
-    %{label: "Edit", icon: "edit", path: Routes.admin_event_path(@conn, :edit, event), color: "indigo"},
-    %{label: "Export", icon: "download", path: Routes.admin_event_path(@conn, :export, event, format: "csv"), color: "indigo"},
+    %{label: "View", icon: "eye", path: ~p"/admin/events/#{event.uuid}", color: "indigo"},
+    %{label: "Edit", icon: "edit", path: ~p"/admin/events/#{event.uuid}/edit", color: "indigo"},
+    %{label: "Export", icon: "download", path: ~p"/admin/events/#{event.uuid}?format=csv", color: "indigo"},
     %{label: "Delete", icon: "trash", path: "#", color: "red", modal_id: "delete-event-#{event.id}"}
   ] end,
   empty_message: "No events found"
@@ -112,7 +112,7 @@
     title: "Delete Event",
     content: "Are you sure you want to delete the event '#{event.name}'? This action cannot be undone.",
     confirm_action: "Delete",
-    confirm_path: Routes.admin_event_path(@conn, :delete, event),
+    confirm_path: ~p"/admin/events/#{event.uuid}",
     confirm_method: :delete,
     confirm_class: "bg-red-600 hover:bg-red-700",
     cancel_action: "Cancel",
@@ -129,12 +129,12 @@
     </div>
     <div class="flex-1 flex justify-between sm:justify-end">
       <%= if @page_number > 1 do %>
-        <a href={Routes.admin_event_path(@conn, :index, page: @page_number - 1, search: @search, status: @status, start_date: @start_date, end_date: @end_date, creator_id: @creator_id)} class="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
+        <a href={~p"/admin/events?page=#{@page_number - 1}&search=#{@search}&status=#{@status}&start_date=#{@start_date}&end_date=#{@end_date}&creator_id=#{@creator_id}"} class="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
           <i class="fas fa-chevron-left mr-2"></i> Previous
         </a>
       <% end %>
       <%= if @page_number < @total_pages do %>
-        <a href={Routes.admin_event_path(@conn, :index, page: @page_number + 1, search: @search, status: @status, start_date: @start_date, end_date: @end_date, creator_id: @creator_id)} class="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
+        <a href={~p"/admin/events?page=#{@page_number + 1}&search=#{@search}&status=#{@status}&start_date=#{@start_date}&end_date=#{@end_date}&creator_id=#{@creator_id}"} class="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
           Next <i class="fas fa-chevron-right ml-2"></i>
         </a>
       <% end %>
