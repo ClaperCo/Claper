@@ -101,4 +101,20 @@ defmodule Claper.Accounts.Oidc do
   def change_provider(%Provider{} = provider, attrs \\ %{}) do
     Provider.changeset(provider, attrs)
   end
+
+  @doc """
+  Search providers by name or issuer.
+
+  ## Examples
+
+      iex> search_providers("%example%")
+      [%Provider{}, ...]
+
+  """
+  def search_providers(search_term) do
+    from(p in Provider,
+      where: ilike(p.name, ^search_term) or ilike(p.issuer, ^search_term)
+    )
+    |> Repo.all()
+  end
 end

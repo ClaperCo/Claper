@@ -1,0 +1,195 @@
+<!-- Header -->
+<header class="bg-white px-8 py-6 border-b border-gray-200">
+  <h1 class="text-3xl font-bold">Dashboard</h1>
+</header>
+
+<!-- Dashboard Content -->
+<div class="p-8">
+  <!-- Stats Cards -->
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+    <div class="bg-white p-6 rounded-lg border border-gray-200">
+      <div class="text-sm text-gray-600 mb-2">Total Users</div>
+      <div class="text-4xl font-bold">2,543</div>
+      <div class="text-sm text-gray-600 mt-2">+12% vs last month</div>
+    </div>
+    
+    <div class="bg-white p-6 rounded-lg border border-gray-200">
+      <div class="text-sm text-gray-600 mb-2">Total Events</div>
+      <div class="text-4xl font-bold">1,893</div>
+      <div class="text-sm text-gray-600 mt-2">+8% vs last month</div>
+    </div>
+    
+    <div class="bg-white p-6 rounded-lg border border-gray-200">
+      <div class="text-sm text-gray-600 mb-2">Active Events</div>
+      <div class="text-4xl font-bold">24</div>
+      <div class="text-sm text-gray-600 mt-2">Currently running</div>
+    </div>
+  </div>
+  
+  <!-- Charts -->
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-12">
+    <div class="bg-white p-6 rounded-lg border border-gray-200">
+      <h3 class="text-lg font-semibold mb-6">User Growth</h3>
+      <div class="h-72 bg-gray-50 rounded flex items-center justify-center relative overflow-hidden">
+        <svg class="absolute inset-0 w-full h-full" viewBox="0 0 400 300" preserveAspectRatio="none">
+          <defs>
+            <linearGradient id="userGrowthGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" style="stop-color:#111827;stop-opacity:0.2" />
+              <stop offset="100%" style="stop-color:#111827;stop-opacity:0" />
+            </linearGradient>
+          </defs>
+          <path d="M 0 250 Q 100 200 200 150 T 400 100 L 400 300 L 0 300 Z" fill="url(#userGrowthGradient)"/>
+          <path d="M 0 250 Q 100 200 200 150 T 400 100" stroke="#111827" stroke-width="2" fill="none"/>
+        </svg>
+        <span class="text-gray-400 text-sm z-10">User registrations over time</span>
+      </div>
+    </div>
+    
+    <div class="bg-white p-6 rounded-lg border border-gray-200">
+      <h3 class="text-lg font-semibold mb-6">Event Creation</h3>
+      <div class="h-72 bg-gray-50 rounded flex items-center justify-center relative overflow-hidden">
+        <svg class="absolute inset-0 w-full h-full" viewBox="0 0 400 300" preserveAspectRatio="none">
+          <defs>
+            <linearGradient id="eventGrowthGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" style="stop-color:#111827;stop-opacity:0.2" />
+              <stop offset="100%" style="stop-color:#111827;stop-opacity:0" />
+            </linearGradient>
+          </defs>
+          <path d="M 0 280 L 100 240 L 200 180 L 300 140 L 400 120 L 400 300 L 0 300 Z" fill="url(#eventGrowthGradient)"/>
+          <path d="M 0 280 L 100 240 L 200 180 L 300 140 L 400 120" stroke="#111827" stroke-width="2" fill="none"/>
+        </svg>
+        <span class="text-gray-400 text-sm z-10">Events created over time</span>
+      </div>
+    </div>
+    
+    <div class="bg-white p-6 rounded-lg border border-gray-200">
+      <h3 class="text-lg font-semibold mb-6">Event Distribution</h3>
+      <div class="h-72 bg-gray-50 rounded flex items-center justify-center relative">
+        <svg class="w-48 h-48" viewBox="0 0 200 200">
+          <!-- Pie chart segments -->
+          <circle cx="100" cy="100" r="80" fill="none" stroke="#e5e7eb" stroke-width="40"/>
+          <!-- Active events (45%) -->
+          <circle cx="100" cy="100" r="80" fill="none" stroke="#10b981" stroke-width="40" 
+                  stroke-dasharray="113 251" stroke-dashoffset="-62" transform="rotate(-90 100 100)"/>
+          <!-- Scheduled events (35%) -->
+          <circle cx="100" cy="100" r="80" fill="none" stroke="#3b82f6" stroke-width="40" 
+                  stroke-dasharray="88 251" stroke-dashoffset="-175" transform="rotate(-90 100 100)"/>
+          <!-- Completed events (20%) -->
+          <circle cx="100" cy="100" r="80" fill="none" stroke="#6b7280" stroke-width="40" 
+                  stroke-dasharray="50 251" stroke-dashoffset="-263" transform="rotate(-90 100 100)"/>
+          
+          <!-- Center text -->
+          <text x="100" y="100" text-anchor="middle" class="text-2xl font-bold" fill="#111827">1,893</text>
+          <text x="100" y="120" text-anchor="middle" class="text-sm" fill="#6b7280">Total</text>
+        </svg>
+        
+        <!-- Legend -->
+        <div class="absolute bottom-4 left-4 right-4">
+          <div class="flex justify-around text-xs">
+            <div class="flex items-center gap-1">
+              <div class="w-3 h-3 bg-green-500 rounded"></div>
+              <span class="text-gray-600">Active</span>
+            </div>
+            <div class="flex items-center gap-1">
+              <div class="w-3 h-3 bg-blue-500 rounded"></div>
+              <span class="text-gray-600">Scheduled</span>
+            </div>
+            <div class="flex items-center gap-1">
+              <div class="w-3 h-3 bg-gray-500 rounded"></div>
+              <span class="text-gray-600">Completed</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Recent Events Table -->
+  <div class="mt-12">
+    <div class="mb-6">
+      <h2 class="text-xl font-semibold">Recent Events</h2>
+    </div>
+    
+    <div class="bg-white rounded-lg border border-gray-200 overflow-hidden">
+      <table class="w-full">
+        <thead>
+          <tr class="bg-gray-50 border-b border-gray-200">
+            <th class="text-left px-6 py-4 text-sm font-medium text-gray-600">Name</th>
+            <th class="text-left px-6 py-4 text-sm font-medium text-gray-600">Code</th>
+            <th class="text-left px-6 py-4 text-sm font-medium text-gray-600">Owner</th>
+            <th class="text-left px-6 py-4 text-sm font-medium text-gray-600">Start Date</th>
+            <th class="text-left px-6 py-4 text-sm font-medium text-gray-600">Status</th>
+            <th class="text-left px-6 py-4 text-sm font-medium text-gray-600">Actions</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-100">
+          <tr class="hover:bg-gray-50 transition-colors">
+            <td class="px-6 py-4 text-sm">Annual Conference 2025</td>
+            <td class="px-6 py-4 text-sm">CONF25</td>
+            <td class="px-6 py-4 text-sm">john@example.com</td>
+            <td class="px-6 py-4 text-sm">Mar 15, 2025</td>
+            <td class="px-6 py-4 text-sm font-medium text-green-600">Active</td>
+            <td class="px-6 py-4 text-sm">
+              <div class="flex gap-2">
+                <button class="px-3 py-1 text-xs border border-gray-300 rounded hover:bg-gray-50 transition-colors">View</button>
+                <button class="px-3 py-1 text-xs border border-gray-300 rounded hover:bg-gray-50 transition-colors">Edit</button>
+              </div>
+            </td>
+          </tr>
+          <tr class="hover:bg-gray-50 transition-colors">
+            <td class="px-6 py-4 text-sm">Q1 Team Meeting</td>
+            <td class="px-6 py-4 text-sm">TEAM01</td>
+            <td class="px-6 py-4 text-sm">sarah@example.com</td>
+            <td class="px-6 py-4 text-sm">Feb 28, 2025</td>
+            <td class="px-6 py-4 text-sm font-medium text-blue-600">Scheduled</td>
+            <td class="px-6 py-4 text-sm">
+              <div class="flex gap-2">
+                <button class="px-3 py-1 text-xs border border-gray-300 rounded hover:bg-gray-50 transition-colors">View</button>
+                <button class="px-3 py-1 text-xs border border-gray-300 rounded hover:bg-gray-50 transition-colors">Edit</button>
+              </div>
+            </td>
+          </tr>
+          <tr class="hover:bg-gray-50 transition-colors">
+            <td class="px-6 py-4 text-sm">Product Launch</td>
+            <td class="px-6 py-4 text-sm">PROD12</td>
+            <td class="px-6 py-4 text-sm">mike@example.com</td>
+            <td class="px-6 py-4 text-sm">Jan 20, 2025</td>
+            <td class="px-6 py-4 text-sm font-medium text-gray-600">Completed</td>
+            <td class="px-6 py-4 text-sm">
+              <div class="flex gap-2">
+                <button class="px-3 py-1 text-xs border border-gray-300 rounded hover:bg-gray-50 transition-colors">View</button>
+                <button class="px-3 py-1 text-xs border border-gray-300 rounded hover:bg-gray-50 transition-colors">Edit</button>
+              </div>
+            </td>
+          </tr>
+          <tr class="hover:bg-gray-50 transition-colors">
+            <td class="px-6 py-4 text-sm">Training Workshop</td>
+            <td class="px-6 py-4 text-sm">TRAIN5</td>
+            <td class="px-6 py-4 text-sm">emma@example.com</td>
+            <td class="px-6 py-4 text-sm">Apr 10, 2025</td>
+            <td class="px-6 py-4 text-sm font-medium text-blue-600">Scheduled</td>
+            <td class="px-6 py-4 text-sm">
+              <div class="flex gap-2">
+                <button class="px-3 py-1 text-xs border border-gray-300 rounded hover:bg-gray-50 transition-colors">View</button>
+                <button class="px-3 py-1 text-xs border border-gray-300 rounded hover:bg-gray-50 transition-colors">Edit</button>
+              </div>
+            </td>
+          </tr>
+          <tr class="hover:bg-gray-50 transition-colors">
+            <td class="px-6 py-4 text-sm">Client Presentation</td>
+            <td class="px-6 py-4 text-sm">PRES08</td>
+            <td class="px-6 py-4 text-sm">alex@example.com</td>
+            <td class="px-6 py-4 text-sm">Mar 22, 2025</td>
+            <td class="px-6 py-4 text-sm font-medium text-green-600">Active</td>
+            <td class="px-6 py-4 text-sm">
+              <div class="flex gap-2">
+                <button class="px-3 py-1 text-xs border border-gray-300 rounded hover:bg-gray-50 transition-colors">View</button>
+                <button class="px-3 py-1 text-xs border border-gray-300 rounded hover:bg-gray-50 transition-colors">Edit</button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
