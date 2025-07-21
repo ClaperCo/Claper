@@ -1,0 +1,1555 @@
+msgid ""
+msgstr ""
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: POEditor.com\n"
+"Project-Id-Version: claper\n"
+"Language: lv\n"
+"Plural-Forms: nplurals=3; plural=(n%10==0 || n%100>=11 && n%100<=19) ? 0 : ((n%10==1 && n%100 != 11) ? 1 : 2);\n"
+
+#: lib/claper_web/live/event_live/manage.html.heex:1457
+#: lib/claper_web/live/event_live/manage.html.heex:1463
+#: lib/claper_web/live/user_settings_live/show.ex:77
+msgid "Settings"
+msgstr "Iestatījumi"
+
+#: lib/claper_web/live/event_live/manage.ex:815
+#: lib/claper_web/live/form_live/form_component.html.heex:37
+#: lib/claper_web/live/user_settings_live/show.html.heex:34
+#: lib/claper_web/templates/user_registration/new.html.heex:29
+#: lib/claper_web/templates/user_reset_password/new.html.heex:28
+#: lib/claper_web/templates/user_session/new.html.heex:42
+msgid "Email"
+msgstr "E-pasts"
+
+#: lib/claper_web/templates/user_registration/new.html.heex:12
+msgid "Join the Claper experience"
+msgstr "Pievienojieties Claper pieredzei"
+
+#: lib/claper_web/templates/user_registration/new.html.heex:19
+#: lib/claper_web/templates/user_reset_password/edit.html.heex:25
+#: lib/claper_web/templates/user_reset_password/new.html.heex:19
+msgid "Oops, check that all fields are filled in correctly."
+msgstr "Ups, pārbaudiet, vai visi lauki ir aizpildīti pareizi."
+
+#: lib/claper_web/live/user_settings_live/show.html.heex:155
+#: lib/claper_web/live/user_settings_live/show.html.heex:170
+msgid "Change"
+msgstr "Mainīt"
+
+#: lib/claper_web/live/event_live/event_form_component.html.heex:287
+msgid "Code"
+msgstr "Kods"
+
+#: lib/claper_web/live/user_settings_live/show.html.heex:146
+#: lib/claper_web/templates/user_session/new.html.heex:40
+msgid "Email address"
+msgstr "E-pasta adrese"
+
+#: lib/claper_web/templates/layout/_user_menu.html.heex:16
+msgid "Logout"
+msgstr "Izrakstīties"
+
+#: lib/claper_web/live/user_settings_live/show.html.heex:136
+msgid "Personal informations"
+msgstr "Personīgā informācija"
+
+#: lib/claper_web/templates/user_registration/confirm.html.heex:13
+msgid "We already sent you an email to login, please retry in 5 minutes."
+msgstr "Mēs jau nosūtījām jums e-pastu, lai pieteiktos. Lūdzu, mēģiniet vēlreiz pēc 5 minūtēm."
+
+#: lib/claper_web/templates/user_registration/confirm.html.heex:16
+msgid "We sent you an email at"
+msgstr "Mēs nosūtījām jums e-pastu uz adresi"
+
+#: lib/claper_web/live/event_live/show.html.heex:437
+msgid "days"
+msgstr "dienas"
+
+#: lib/claper_web/live/event_live/show.html.heex:443
+msgid "hours"
+msgstr "stundas"
+
+#: lib/claper_web/live/event_live/show.html.heex:449
+msgid "minutes"
+msgstr "minūtes"
+
+#: lib/claper_web/live/event_live/show.html.heex:165
+msgid "Be the first to react !"
+msgstr "Esi pirmais, kas noreaģē!"
+
+#: lib/claper_web/live/event_live/event_card_component.ex:111
+#: lib/claper_web/live/event_live/join.ex:41
+#: lib/claper_web/live/event_live/join.html.heex:94
+#: lib/claper_web/live/event_live/manage.html.heex:493
+#: lib/claper_web/live/event_live/show.html.heex:286
+msgid "Join"
+msgstr "Pievienoties"
+
+#: lib/claper_web/live/event_live/index.ex:212
+#: lib/claper_web/live/event_live/join.html.heex:31
+#: lib/claper_web/live/event_live/join.html.heex:54
+msgid "Dashboard"
+msgstr "Vadības panelis"
+
+#: lib/claper_web/live/event_live/post_component.ex:33
+#: lib/claper_web/live/event_live/post_component.ex:112
+msgid "Host"
+msgstr "Organizators"
+
+#: lib/claper_web/live/event_live/show.html.heex:455
+msgid "seconds"
+msgstr "sekundes"
+
+#: lib/claper_web/live/event_live/event_card_component.ex:60
+#: lib/claper_web/live/event_live/index.html.heex:186
+msgid "Finished"
+msgstr "Pabeigts"
+
+#: lib/claper_web/live/event_live/event_card_component.ex:90
+msgid "Finished on"
+msgstr "Pabeigts"
+
+#: lib/claper_web/live/event_live/event_card_component.ex:55
+msgid "Incoming"
+msgstr "Drīzumā"
+
+#: lib/claper_web/live/event_live/show.html.heex:26
+msgid "Leave"
+msgstr "Pamest"
+
+#: lib/claper_web/live/event_live/presenter.html.heex:26
+#: lib/claper_web/live/event_live/show.html.heex:464
+msgid "Scan to interact in real-time"
+msgstr "Noskenējiet, lai mijiedarbotos reāllaikā"
+
+#: lib/claper_web/live/event_live/event_card_component.ex:86
+msgid "Starting on"
+msgstr "Sākot no"
+
+#: lib/claper_web/live/event_live/event_form_component.ex:268
+msgid "Updated successfully"
+msgstr "Veiksmīgi atjaunināts"
+
+#: lib/claper_web/templates/user_session/new.html.heex:22
+msgid "It's time to empower your presentations."
+msgstr "Ir pienācis laiks uzlabot jūsu prezentācijas."
+
+#: lib/claper_web/templates/error/404.html.heex:36
+#: lib/claper_web/templates/error/500.html.heex:37
+msgid "Return to home"
+msgstr "Atgriezties uz sākumlapu"
+
+#: lib/claper_web/live/event_live/event_form_component.ex:212
+#: lib/claper_web/live/event_live/event_form_component.ex:248
+msgid "Created successfully"
+msgstr "Veiksmīgi izveidots"
+
+#: lib/claper_web/live/event_live/event_card_component.ex:250
+#: lib/claper_web/live/event_live/event_card_component.ex:330
+#: lib/claper_web/live/event_live/form_component.ex:97
+#: lib/claper_web/live/event_live/index.ex:193
+msgid "Edit"
+msgstr "Rediģēt"
+
+#: lib/claper_web/live/embed_live/form_component.html.heex:69
+#: lib/claper_web/live/event_live/event_form_component.html.heex:55
+#: lib/claper_web/live/event_live/event_form_component.html.heex:62
+#: lib/claper_web/live/event_live/index.ex:202
+#: lib/claper_web/live/event_live/index.html.heex:93
+#: lib/claper_web/live/form_live/form_component.html.heex:98
+#: lib/claper_web/live/poll_live/form_component.html.heex:106
+#: lib/claper_web/live/quiz_live/quiz_component.html.heex:193
+msgid "Create"
+msgstr "Izveidot"
+
+#: lib/claper_web/live/embed_live/form_component.html.heex:74
+#: lib/claper_web/live/event_live/event_card_component.ex:444
+#: lib/claper_web/live/event_live/event_form_component.html.heex:67
+#: lib/claper_web/live/event_live/manage.html.heex:1405
+#: lib/claper_web/live/event_live/manageable_post_component.ex:92
+#: lib/claper_web/live/event_live/post_component.ex:70
+#: lib/claper_web/live/event_live/post_component.ex:142
+#: lib/claper_web/live/form_live/form_component.html.heex:103
+#: lib/claper_web/live/poll_live/form_component.html.heex:111
+#: lib/claper_web/live/quiz_live/quiz_component.html.heex:129
+#: lib/claper_web/live/quiz_live/quiz_component.html.heex:199
+msgid "Delete"
+msgstr "Dzēst"
+
+#: lib/claper_web/live/embed_live/form_component.html.heex:70
+#: lib/claper_web/live/event_live/event_form_component.html.heex:54
+#: lib/claper_web/live/event_live/event_form_component.html.heex:61
+#: lib/claper_web/live/form_live/form_component.html.heex:99
+#: lib/claper_web/live/poll_live/form_component.html.heex:107
+#: lib/claper_web/live/quiz_live/quiz_component.html.heex:194
+#: lib/claper_web/live/user_settings_live/show.html.heex:38
+#: lib/claper_web/live/user_settings_live/show.html.heex:80
+#: lib/claper_web/live/user_settings_live/show.html.heex:123
+msgid "Save"
+msgstr "Saglabāt"
+
+#: lib/claper_web/live/user_settings_live/show.ex:137
+msgid "A link to confirm your email change has been sent to the new address."
+msgstr "Uz jauno adresi ir nosūtīta saite, lai apstiprinātu e-pasta maiņu."
+
+#: lib/claper_web/live/user_settings_live/show.ex:53
+msgid "Change the email address you want associated with your account."
+msgstr "Mainiet e-pasta adresi, kuru vēlaties saistīt ar savu kontu."
+
+#: lib/claper_web/live/user_settings_live/show.ex:50
+msgid "Update your email"
+msgstr "Atjauniniet savu e-pasta adresi"
+
+#: lib/claper_web/notifiers/user_notifier.ex:12
+#: lib/claper_web/templates/user_notifier/magic.html.heex:17
+msgid "Connect to Claper"
+msgstr "Pieslēdzieties Claper"
+
+#: lib/claper_web/templates/user_notifier/magic.html.heex:29
+msgid "ACCESS TO MY ACCOUNT"
+msgstr "PIEKĻUVE MANAM KONTAM"
+
+#: lib/claper_web/notifiers/user_notifier.ex:34
+msgid "Update email instructions"
+msgstr "E-pasta adreses maiņas instrukcijas"
+
+#: lib/claper_web/templates/user_notifier/change.html.heex:29
+msgid "CONFIRM EMAIL"
+msgstr "APSTIPRINĀT E-PASTU"
+
+#: lib/claper_web/templates/user_notifier/change.html.heex:17
+msgid "Confirm email"
+msgstr "Apstiprināt e-pastu"
+
+#: lib/claper_web/templates/user_notifier/change.html.heex:32
+#: lib/claper_web/templates/user_notifier/confirm.html.heex:32
+#: lib/claper_web/templates/user_notifier/magic.html.heex:32
+#: lib/claper_web/templates/user_notifier/reset.html.heex:32
+msgid "If you didn't create an account with us, please ignore this."
+msgstr "Ja neesat izveidojuši mūsu kontu, lūdzu, ignorējiet šo informāciju."
+
+#: lib/claper_web/templates/user_notifier/magic.html.heex:22
+msgid "You can log into your account by clicking here."
+msgstr "Varat pieteikties savā kontā, noklikšķinot šeit."
+
+#: lib/claper_web/live/event_live/event_form_component.html.heex:71
+#: lib/claper_web/live/event_live/post_component.ex:75
+#: lib/claper_web/live/event_live/post_component.ex:147
+msgid "Are you sure?"
+msgstr "Vai esat pārliecināti?"
+
+#: lib/claper_web/live/event_live/event_form_component.html.heex:192
+msgid "Presentation attached"
+msgstr "Prezentācija ir pievienota"
+
+#: lib/claper_web/live/event_live/event_form_component.html.heex:152
+msgid "Presentation uploaded"
+msgstr "Prezentācija ir augšupielādēta"
+
+#: lib/claper_web/live/event_live/event_form_component.html.heex:163
+#: lib/claper_web/live/event_live/event_form_component.html.heex:241
+#: lib/claper_web/live/event_live/event_form_component.html.heex:369
+#: lib/claper_web/live/event_live/event_form_component.html.heex:393
+msgid "Remove"
+msgstr "Noņemt"
+
+#: lib/claper_web/live/event_live/event_form_component.html.heex:173
+msgid "Select your presentation"
+msgstr "Izvēlieties savu prezentāciju"
+
+#: lib/claper_web/live/event_live/event_form_component.html.heex:115
+msgid "Upload a file"
+msgstr "Failu augšupielāde"
+
+#: lib/claper_web/live/event_live/event_form_component.html.heex:119
+msgid "or drag and drop"
+msgstr "vai velciet un nometiet"
+
+#: lib/claper_web/live/event_live/event_form_component.ex:322
+msgid "You have selected an incorrect file type"
+msgstr "Jūs esat izvēlējies nepareizu faila tipu"
+
+#: lib/claper_web/live/event_live/event_form_component.ex:321
+msgid "Your file is too large"
+msgstr "Jūsu fails ir pārāk liels"
+
+#: lib/claper_web/live/event_live/event_form_component.html.heex:202
+msgid "Change file"
+msgstr "Mainīt failu"
+
+#: lib/claper_web/live/event_live/event_form_component.html.heex:228
+msgid "Presentation replaced"
+msgstr "Prezentācija aizstāta"
+
+#: lib/claper_web/live/event_live/manage.html.heex:306
+msgid "Edit poll"
+msgstr "Rediģēt aptauju"
+
+#: lib/claper_web/live/event_live/manage.html.heex:305
+msgid "New poll"
+msgstr "Jauna aptauja"
+
+#: lib/claper_web/live/poll_live/form_component.html.heex:14
+msgid "Title of your poll"
+msgstr "Jūsu aptaujas nosaukums"
+
+#: lib/claper_web/live/event_live/event_form_component.ex:323
+msgid "Upload failed"
+msgstr "Neizdevās augšupielādēt"
+
+#: lib/claper_web/live/event_live/manage.html.heex:198
+msgid "Add poll to know opinion of your public."
+msgstr "Pievienojiet aptauju, lai uzzinātu auditorijas viedokli."
+
+#: lib/claper_web/live/event_live/manage.html.heex:195
+#: lib/claper_web/live/event_live/manage.html.heex:786
+msgid "Poll"
+msgstr "Aptauja"
+
+#: lib/claper_web/live/poll_live/form_component.html.heex:30
+msgid "Choice %{count}"
+msgid_plural "Choice %{count}"
+msgstr[0] "Izvēle %{count}"
+msgstr[1] "Izvēle %{count}"
+msgstr[2] "Izvēle %{count}"
+
+#: lib/claper_web/live/event_live/poll_component.ex:47
+msgid "Current poll"
+msgstr "Pašreizējā aptauja"
+
+#: lib/claper_web/live/event_live/poll_component.ex:28
+msgid "See current poll"
+msgstr "Skatīt pašreizējo aptauju"
+
+#: lib/claper_web/live/event_live/poll_component.ex:127
+#: lib/claper_web/live/event_live/poll_component.ex:135
+msgid "Vote"
+msgstr "Balsot"
+
+#: lib/claper_web/live/event_live/event_form_component.html.heex:358
+#: lib/claper_web/live/event_live/event_form_component.html.heex:376
+msgid "User email address"
+msgstr "Lietotāja e-pasta adrese"
+
+#: lib/claper_web/live/event_live/event_form_component.html.heex:207
+msgid "Changing your file will remove all interaction elements like polls associated."
+msgstr "Mainot failu, tiks noņemti visi mijiedarbības elementi, piemēram, aptaujas."
+
+#: lib/claper_web/live/event_live/manage.html.heex:1221
+msgid "Messages from attendees will appear here."
+msgstr "Dalībnieku ziņojumi parādīsies šeit."
+
+#: lib/claper_web/live/event_live/event_card_component.ex:344
+msgid "Processing your file..."
+msgstr "Jūsu faila apstrāde..."
+
+#: lib/claper_web/live/poll_live/form_component.html.heex:118
+msgid "This will delete all responses associated and the poll itself, are you sure?"
+msgstr "Tas izdzēsīs visas saistītās atbildes un pašu aptauju, vai esat pārliecināti?"
+
+#: lib/claper_web/live/event_live/show.html.heex:345
+msgid "Ask, comment..."
+msgstr "Jautājiet, komentējiet..."
+
+#: lib/claper_web/live/event_live/manage.html.heex:1167
+#: lib/claper_web/live/stat_live/index.html.heex:102
+#: lib/claper_web/live/stat_live/index.html.heex:180
+msgid "Messages"
+msgstr "Ziņojumi"
+
+#: lib/claper_web/live/event_live/event_form_component.html.heex:341
+msgid "Add facilitator"
+msgstr "Pievienot moderatoru"
+
+#: lib/claper_web/templates/error/404.html.heex:31
+msgid "Oops, page doesn't exist."
+msgstr "Ups, lapa neeksistē."
+
+#: lib/claper_web/templates/error/500.html.heex:31
+msgid "The site is under maintenance, we'll be back very soon!"
+msgstr "Vietne tiek uzturēta, mēs atgriezīsimies ļoti drīz!"
+
+#: lib/claper_web/live/event_live/event_form_component.html.heex:320
+msgid "Facilitators can present and manage interactions"
+msgstr "Moderatori var prezentēt un vadīt mijiedarbību"
+
+#: lib/claper_web/templates/leader_notifier/invitation.html.heex:45
+#: lib/claper_web/templates/user_notifier/change.html.heex:42
+#: lib/claper_web/templates/user_notifier/confirm.html.heex:42
+#: lib/claper_web/templates/user_notifier/magic.html.heex:42
+#: lib/claper_web/templates/user_notifier/reset.html.heex:42
+msgid "If you’re having trouble with the button above, copy and paste the URL below into your web browser"
+msgstr "Ja jums rodas problēmas ar iepriekš norādīto pogu, nokopējiet un ielīmējiet tīmekļa pārlūkprogrammā tālāk norādīto URL adresi"
+
+#: lib/claper_web/templates/user_notifier/change.html.heex:22
+msgid "You can change your email by visiting the URL below"
+msgstr "Savu e-pasta adresi varat mainīt, apmeklējot tālāk norādīto URL adresi"
+
+#: lib/claper_web/live/event_live/manage.html.heex:759
+#: lib/claper_web/live/event_live/manage.html.heex:1132
+msgid "Add interaction"
+msgstr "Pievienot mijiedarbību"
+
+#: lib/claper_web/live/event_live/manageable_post_component.ex:54
+#: lib/claper_web/live/event_live/manageable_post_component.ex:83
+msgid "Blocking this user will delete all his messages and he will not be able to join again, confirm ?"
+msgstr "Bloķējot šo lietotāju, tiks dzēsti visi lietotāja ziņojumi un viņš vairs nevarēs pievienoties, apstipriniet?"
+
+#: lib/claper_web/live/event_live/show.ex:51
+#: lib/claper_web/live/event_live/show.ex:206
+#: lib/claper_web/live/event_live/show.ex:221
+msgid "You have been banned from this event"
+msgstr "Jums ir aizliegts piedalīties šajā pasākumā"
+
+#: lib/claper_web/live/event_live/manageable_post_component.ex:48
+#: lib/claper_web/live/event_live/manageable_post_component.ex:77
+msgid "Ban"
+msgstr "Bloķēt"
+
+#: lib/claper_web/templates/user_registration/confirm.html.heex:18
+msgid ", click on the provided link to connect (check your spam !)"
+msgstr ", noklikšķiniet uz norādītās saites, lai pieslēgtos (pārbaudiet savu surogātpastu!)"
+
+#: lib/claper_web/templates/user_notifier/welcome.html.heex:29
+msgid "<span style='font-weight: 700'>Export your current presentation</span> to PDF from your favorite slide presentation software (PowerPoint, etc)"
+msgstr "<span style='font-weight: 700'>Eksportējiet savu pašreizējo prezentāciju</span> uz PDF no savas iecienītākās prezentāciju programmatūras (PowerPoint utt.)"
+
+#: lib/claper_web/templates/user_notifier/welcome.html.heex:50
+msgid "<span style='font-weight: 700'>Wait few minutes</span> for your file to be processed"
+msgstr "<span style='font-weight: 700'>Gaidiet dažas minūtes</span>, lai jūsu fails tiktu apstrādāts"
+
+#: lib/claper_web/templates/user_notifier/welcome.html.heex:43
+msgid "Choose <span style='font-weight: 700'>a name</span> for your event, <span style='font-weight: 700'>a code</span> for your attendees to join and <span style='font-weight: 700'>dates when your attendees could start interacting</span>"
+msgstr "Izvēlieties <span style='font-weight: 700'>nosaukumu</span> savam pasākumam, <span style='font-weight: 700'>kodu</span>, ar kuru dalībnieki var pievienoties, un <span style='font-weight: 700'>datumus, kad dalībnieki var sākt mijiedarboties</span>"
+
+#: lib/claper_web/templates/user_notifier/welcome.html.heex:64
+msgid "Click <span style='font-weight: 700'>Start</span> to open your presentation and move the window on the big screen"
+msgstr "Noklikšķiniet uz <span style='font-weight: 700'>Start</span>, lai atvērtu prezentāciju un pārvietotu logu uz lielā ekrāna"
+
+#: lib/claper_web/templates/user_notifier/welcome.html.heex:57
+msgid "Click on <span style='font-weight: 700'>Present/Customize</span> to add interaction on your slides"
+msgstr "Noklikšķiniet uz <span style='font-weight: 700'>Prezentēt/Pielāgot</span>, lai pievienotu mijiedarbību diapozitīviem"
+
+#: lib/claper_web/templates/user_notifier/welcome.html.heex:22
+msgid "Congrats! You've taken the first step to improving your presentations. Here are the next steps to create step up your presentations with Claper:"
+msgstr "Apsveicam! Jūs esat spēruši pirmo soli, lai uzlabotu savas prezentācijas. Šeit ir nākamie soļi, lai ar Claper uzlabotu savas prezentācijas:"
+
+#: lib/claper_web/templates/user_notifier/welcome.html.heex:69
+msgid "Enjoy ! ✨"
+msgstr "Izbaudiet! ✨"
+
+#: lib/claper_web/templates/user_registration/confirm.html.heex:20
+msgid "We sent you an email, click on the provided link to connect (check your spam !)"
+msgstr "Mēs nosūtījām jums e-pastu, noklikšķiniet uz norādītās saites, lai pieslēgtos (pārbaudiet savu surogātpastu!)"
+
+#: lib/claper_web/templates/user_notifier/welcome.html.heex:17
+msgid "Welcome !"
+msgstr "Laipni lūdzam!"
+
+#: lib/claper_web/templates/user_notifier/welcome.html.heex:36
+msgid "Click on the <span style='font-weight: 700'>create button</span> on your dashboard"
+msgstr "Noklikšķiniet uz <span style='font-weight: 700'>Izveidot</span> pogas vadības panelī"
+
+#: lib/claper_web/notifiers/user_notifier.ex:23
+msgid "Next steps to boost your presentations"
+msgstr "Nākamie soļi, lai uzlabotu prezentāciju kvalitāti"
+
+#: lib/claper_web/live/stat_live/index.html.heex:109
+msgid "from %{count} people"
+msgid_plural "from %{count} peoples"
+msgstr[0] "no %{count} cilvēku"
+msgstr[1] "no %{count} cilvēka"
+msgstr[2] "no %{count} cilvēku"
+
+#: lib/claper_web/live/stat_live/index.html.heex:15
+msgid "Event"
+msgstr "Pasākums"
+
+#: lib/claper_web/live/stat_live/index.html.heex:386
+msgid "No messages has been sent"
+msgstr "Nav nosūtīts neviens ziņojums"
+
+#: lib/claper_web/live/event_live/event_card_component.ex:426
+msgid "This will delete all data related to your event, this cannot be undone. Confirm ?"
+msgstr "Tādējādi tiks dzēsti visi ar jūsu notikumu saistītie dati, un to nevar atcelt. Apstiprināt?"
+
+#: lib/claper_web/live/stat_live/index.html.heex:45
+#: lib/claper_web/live/stat_live/index.html.heex:77
+msgid "attendee"
+msgid_plural "attendees"
+msgstr[0] "dalībnieku"
+msgstr[1] "dalībnieks"
+msgstr[2] "dalībnieki"
+
+#: lib/claper_web/live/stat_live/index.html.heex:38
+msgid "Audience peak"
+msgstr "Auditorijas maksimums"
+
+#: lib/claper_web/live/stat_live/index.html.heex:139
+msgid "Engagement rate"
+msgstr "Iesaistīšanās līmenis"
+
+#: lib/claper_web/live/event_live/event_card_component.ex:282
+msgid "Error when processing the file"
+msgstr "Kļūda apstrādājot failu"
+
+#: lib/claper_web/live/event_live/join.html.heex:24
+#: lib/claper_web/live/event_live/join.html.heex:47
+msgid "About"
+msgstr "Par"
+
+#: lib/claper_web/live/event_live/join.html.heex:38
+#: lib/claper_web/live/event_live/join.html.heex:61
+#: lib/claper_web/templates/user_session/new.html.heex:62
+msgid "Login"
+msgstr "Pieteikšanās"
+
+#: lib/claper_web/templates/user_session/new.html.heex:25
+msgid "Connect to your account"
+msgstr "Pieslēdzieties savam kontam"
+
+#: lib/claper_web/live/event_live/show.html.heex:473
+msgid "Or use the code:"
+msgstr "Vai arī izmantojiet kodu:"
+
+#: lib/claper_web/templates/user_registration/new.html.heex:46
+#: lib/claper_web/templates/user_session/new.html.heex:84
+msgid "Create account"
+msgstr "Izveidot kontu"
+
+#: lib/claper_web/live/user_settings_live/show.html.heex:161
+#: lib/claper_web/templates/user_registration/new.html.heex:37
+#: lib/claper_web/templates/user_reset_password/edit.html.heex:34
+#: lib/claper_web/templates/user_session/new.html.heex:50
+#: lib/claper_web/templates/user_session/new.html.heex:52
+msgid "Password"
+msgstr "Parole"
+
+#: lib/claper_web/live/user_settings_live/show.ex:62
+msgid "Change the password used to access your account."
+msgstr "Mainiet paroli, kas tiek izmantota, lai piekļūtu jūsu kontam."
+
+#: lib/claper_web/live/user_settings_live/show.html.heex:70
+msgid "Current password"
+msgstr "Pašreizējā parole"
+
+#: lib/claper_web/live/user_settings_live/show.html.heex:76
+#: lib/claper_web/live/user_settings_live/show.html.heex:112
+msgid "New password"
+msgstr "Jauna parole"
+
+#: lib/claper_web/live/user_settings_live/show.ex:59
+msgid "Update your password"
+msgstr "Atjaunināt paroli"
+
+#: lib/claper_web/live/user_settings_live/show.ex:159
+msgid "Your password has been updated."
+msgstr "Jūsu parole ir atjaunināta."
+
+#: lib/claper_web/live/form_live/form_component.html.heex:30
+msgid "Field %{count}"
+msgid_plural "Field %{count}"
+msgstr[0] "Lauks %{count}"
+msgstr[1] "Lauks %{count}"
+msgstr[2] "Lauks %{count}"
+
+#: lib/claper_web/live/event_live/manage.html.heex:231
+msgid "Add form to collect data from your public."
+msgstr "Pievienojiet veidlapu, lai savāktu datus no auditorijas."
+
+#: lib/claper_web/live/event_live/form_component.ex:51
+msgid "Current form"
+msgstr "Pašreizējā forma"
+
+#: lib/claper_web/live/event_live/manage.html.heex:327
+msgid "Edit form"
+msgstr "Rediģēt veidlapu"
+
+#: lib/claper_web/live/event_live/manage.html.heex:228
+#: lib/claper_web/live/event_live/manage.html.heex:830
+#: lib/claper_web/live/event_live/manage.html.heex:1417
+msgid "Form"
+msgstr "Veidlapa"
+
+#: lib/claper_web/live/event_live/manage.html.heex:1191
+msgid "Form submissions"
+msgstr "Veidlapu iesniegumi"
+
+#: lib/claper_web/live/event_live/manage.html.heex:1390
+msgid "Form submissions from attendees will appear here."
+msgstr "Dalībnieku iesniegtās veidlapas parādīsies šeit."
+
+#: lib/claper_web/live/event_live/manage.ex:814
+msgid "Name"
+msgstr "Nosaukums"
+
+#: lib/claper_web/live/event_live/manage.html.heex:326
+msgid "New form"
+msgstr "Jauna veidlapa"
+
+#: lib/claper_web/live/stat_live/index.html.heex:305
+msgid "No form submission has been sent"
+msgstr "Nav nosūtīts neviens veidlapas iesniegums"
+
+#: lib/claper_web/live/event_live/form_component.ex:32
+msgid "See current form"
+msgstr "Skatīt pašreizējo veidlapu"
+
+#: lib/claper_web/live/event_live/form_component.ex:97
+#: lib/claper_web/live/event_live/quiz_component.ex:183
+msgid "Submit"
+msgstr "Iesniegt"
+
+#: lib/claper_web/live/form_live/form_component.html.heex:37
+msgid "Text"
+msgstr "Teksts"
+
+#: lib/claper_web/live/event_live/manage.html.heex:1410
+msgid "This cannot be undone, confirm ?"
+msgstr "Šo darbību nevar atsaukt, apstiprināt?"
+
+#: lib/claper_web/live/form_live/form_component.html.heex:110
+msgid "This will delete all responses associated and the form itself, are you sure?"
+msgstr "Tas izdzēsīs visas saistītās atbildes un pašu veidlapu, vai esat pārliecināti?"
+
+#: lib/claper_web/live/form_live/form_component.html.heex:14
+msgid "Title of your form"
+msgstr "Jūsu veidlapas nosaukums"
+
+#: lib/claper_web/live/form_live/form_component.html.heex:40
+msgid "Type"
+msgstr "Tips"
+
+#: lib/claper_web/live/event_live/poll_component.ex:52
+msgid "Select one option"
+msgstr "Izvēlieties vienu iespēju"
+
+#: lib/claper_web/live/event_live/poll_component.ex:50
+msgid "Select one or multiple options"
+msgstr "Izvēlieties vienu vai vairākas opcijas"
+
+#: lib/claper_web/live/poll_live/form_component.html.heex:96
+msgid "Multiple answers"
+msgstr "Vairākas atbildes"
+
+#: lib/claper_web/live/event_live/event_form_component.html.heex:122
+msgid "PDF, PPT, PPTX up to %{size} MB"
+msgstr "PDF, PPT, PPTX līdz %{size} MB"
+
+#: lib/claper_web/live/event_live/manager_settings_component.ex:426
+msgid "Enable messages"
+msgstr "Iespējot ziņojumus"
+
+#: lib/claper_web/live/event_live/manager_settings_component.ex:304
+msgid "Show messages"
+msgstr "Rādīt ziņojumus"
+
+#: lib/claper_web/live/event_live/show.html.heex:365
+msgid "Messages deactivated"
+msgstr "Ziņojumi atspējoti"
+
+#: lib/claper_web/live/event_live/show.html.heex:208
+#: lib/claper_web/live/event_live/show.html.heex:229
+#: lib/claper_web/live/event_live/show.html.heex:329
+msgid "Anonymous"
+msgstr "Anonīms"
+
+#: lib/claper_web/live/event_live/show.html.heex:255
+#: lib/claper_web/templates/lti/launch/error.html.heex:17
+msgid "Close"
+msgstr "Aizvērt"
+
+#: lib/claper_web/live/event_live/show.html.heex:236
+#: lib/claper_web/live/event_live/show.html.heex:281
+msgid "Enter your name"
+msgstr "Ievadiet savu vārdu"
+
+#: lib/claper_web/live/event_live/presenter.html.heex:38
+msgid "Or go to %{url} and use the code:"
+msgstr "Vai arī dodieties uz %{url} un izmantojiet kodu:"
+
+#: lib/claper_web/live/event_live/show.html.heex:249
+msgid "Use your name"
+msgstr "Izmantojiet savu vārdu"
+
+#: lib/claper_web/live/event_live/show.html.heex:229
+msgid "disabled"
+msgstr "atspējots"
+
+#: lib/claper_web/controllers/user_registration_controller.ex:14
+msgid "Account creation is disabled"
+msgstr "Konta izveide ir atspējota"
+
+#: lib/claper_web/live/event_live/manage.html.heex:262
+msgid "Add a Youtube video or any web content."
+msgstr "Pievienojiet Youtube videoklipu vai jebkuru tīmekļa saturu."
+
+#: lib/claper_web/templates/user_reset_password/edit.html.heex:51
+msgid "Confirm new password"
+msgstr "Jaunās paroles apstiprināšana"
+
+#: lib/claper_web/templates/user_session/new.html.heex:79
+msgid "Forgot your password?"
+msgstr "Aizmirsāt paroli?"
+
+#: lib/claper_web/controllers/user_reset_password_controller.ex:26
+msgid "If your email is in our system, you'll receive instructions to reset your password shortly."
+msgstr "Ja jūsu e-pasta adrese ir mūsu sistēmā, drīz saņemsiet norādījumus par paroles atiestatīšanu."
+
+#: lib/claper_web/templates/user_reset_password/edit.html.heex:42
+msgid "Password confirmation"
+msgstr "Paroles apstiprināšana"
+
+#: lib/claper_web/controllers/user_reset_password_controller.ex:44
+msgid "Password updated successfully."
+msgstr "Parole veiksmīgi atjaunināta."
+
+#: lib/claper_web/controllers/user_reset_password_controller.ex:59
+msgid "Reset password link is invalid or it has expired."
+msgstr "Paroles atiestatīšanas saite ir nederīga vai tās derīguma termiņš ir beidzies."
+
+#: lib/claper_web/templates/user_reset_password/edit.html.heex:12
+#: lib/claper_web/templates/user_reset_password/new.html.heex:12
+msgid "Reset your password"
+msgstr "Paroles atiestatīšana"
+
+#: lib/claper_web/templates/user_reset_password/new.html.heex:36
+msgid "Send link to reset password"
+msgstr "Nosūtīt saiti, lai atiestatītu paroli"
+
+#: lib/claper_web/live/event_live/embed_component.ex:55
+msgid "Current web content"
+msgstr "Pašreizējais tīmekļa saturs"
+
+#: lib/claper_web/live/event_live/manage.html.heex:348
+msgid "Edit web content"
+msgstr "Tīmekļa satura rediģēšana"
+
+#: lib/claper_web/live/event_live/manage.html.heex:347
+msgid "New web content"
+msgstr "Jauns tīmekļa saturs"
+
+#: lib/claper_web/live/event_live/embed_component.ex:32
+msgid "See current web content"
+msgstr "Skatiet pašreizējo tīmekļa saturu"
+
+#: lib/claper_web/live/embed_live/form_component.html.heex:80
+msgid "This will delete the web content, are you sure?"
+msgstr "Tas izdzēsīs tīmekļa saturu, vai esat pārliecināti?"
+
+#: lib/claper_web/live/embed_live/form_component.html.heex:14
+#: lib/claper_web/live/quiz_live/quiz_component.html.heex:14
+msgid "Title"
+msgstr "Nosaukums"
+
+#: lib/claper_web/live/event_live/manage.html.heex:260
+#: lib/claper_web/live/event_live/manage.html.heex:874
+msgid "Web content"
+msgstr "Tīmekļa saturs"
+
+#: lib/claper_web/live/event_live/manageable_post_component.ex:38
+#: lib/claper_web/live/event_live/manageable_post_component.ex:67
+msgid "Pin"
+msgstr "Piespraust"
+
+#: lib/claper_web/live/event_live/post_component.ex:59
+#: lib/claper_web/live/event_live/post_component.ex:175
+msgid "Pinned"
+msgstr "Piesprausts"
+
+#: lib/claper_web/live/event_live/manage.html.heex:1183
+msgid "Pinned messages"
+msgstr "Piespraustie ziņojumi"
+
+#: lib/claper_web/live/event_live/manage.html.heex:1344
+msgid "Pinned messages will appear here."
+msgstr "Šeit tiks rādīti piespraustie ziņojumi."
+
+#: lib/claper_web/live/event_live/manager_settings_component.ex:359
+msgid "Show only pinned messages"
+msgstr "Rādīt tikai piespraustos ziņojumus"
+
+#: lib/claper_web/live/event_live/manageable_post_component.ex:36
+#: lib/claper_web/live/event_live/manageable_post_component.ex:65
+msgid "Unpin"
+msgstr "Atspraust"
+
+#: lib/claper_web/templates/leader_notifier/invitation.html.heex:35
+msgid "Login or create account"
+msgstr "Pieslēdzieties vai izveidojiet kontu"
+
+#: lib/claper_web/templates/leader_notifier/invitation.html.heex:22
+msgid "Someone invited you to manage the event: %{name}"
+msgstr "Kāds jūs uzaicināja vadīt pasākumu: %{name}"
+
+#: lib/claper_web/templates/leader_notifier/invitation.html.heex:25
+msgid "To accept the invitation, please login or create an account with this email: %{email}"
+msgstr "Lai pieņemtu ielūgumu, lūdzu, piesakieties vai izveidojiet kontu, izmantojot šo e-pasta adresi: %{email}"
+
+#: lib/claper_web/templates/leader_notifier/invitation.html.heex:17
+msgid "You have been invited"
+msgstr "Jūs esat uzaicināti"
+
+#: lib/claper_web/notifiers/leader_notifier.ex:12
+msgid "You have been invited to manage an event"
+msgstr "Jūs esat uzaicināti vadīt pasākumu"
+
+#: lib/claper_web/live/event_live/form_component.ex:114
+msgid "Saved"
+msgstr "Saglabāts"
+
+#: lib/claper_web/live/user_settings_live/show.html.heex:288
+msgid "All your events and files will be permanently deleted, are you sure?"
+msgstr "Visi jūsu notikumi un faili tiks neatgriezeniski dzēsti, vai esat pārliecināti?"
+
+#: lib/claper_web/live/event_live/event_card_component.ex:183
+msgid "Are you sure you want to terminate this event? This action cannot be undone."
+msgstr "Vai esat pārliecināti, ka vēlaties pārtraukt šo notikumu? Šo darbību nevar atcelt."
+
+#: lib/claper_web/live/event_live/event_card_component.ex:175
+msgid "Attendees room"
+msgstr "Dalībnieku telpa"
+
+#: lib/claper_web/live/user_settings_live/show.html.heex:278
+msgid "Be careful, these actions are irreversible"
+msgstr "Esiet uzmanīgi, šīs darbības ir neatgriezeniskas"
+
+#: lib/claper_web/live/user_settings_live/show.html.heex:275
+msgid "Danger zone"
+msgstr "Bīstamā zona"
+
+#: lib/claper_web/live/user_settings_live/show.html.heex:284
+msgid "Delete account"
+msgstr "Dzēst kontu"
+
+#: lib/claper_web/live/event_live/manage.html.heex:566
+msgid "Open presentation"
+msgstr "Atvērt prezentāciju"
+
+#: lib/claper_web/live/event_live/event_card_component.ex:370
+msgid "View report"
+msgstr "Apskatīt ziņojumu"
+
+#: lib/claper_web/controllers/user_registration_controller.ex:50
+msgid "Your account has been deleted."
+msgstr "Jūsu konts ir dzēsts."
+
+#: lib/claper_web/live/event_live/event_form_component.html.heex:279
+msgid "Access code"
+msgstr "Piekļuves kods"
+
+#: lib/claper_web/live/event_live/event_form_component.html.heex:84
+msgid "Animations in PPT/PPTX files are not supported, which is why we recommend exporting your presentation to PDF to ensure it displays correctly."
+msgstr "Animācijas PPT/PPTX failos netiek atbalstītas, tāpēc mēs iesakām eksportēt prezentāciju PDF formātā, lai nodrošinātu tās pareizu rādīšanu."
+
+#: lib/claper_web/live/event_live/manage.html.heex:1155
+msgid "Attendees interactions"
+msgstr "Dalībnieku mijiedarbība"
+
+#: lib/claper_web/live/event_live/event_form_component.html.heex:6
+#: lib/claper_web/live/event_live/index.html.heex:106
+#: lib/claper_web/live/event_live/manage.html.heex:429
+#: lib/claper_web/live/event_live/quiz_component.ex:151
+#: lib/claper_web/live/event_live/quiz_component.ex:198
+msgid "Back"
+msgstr "Atpakaļ"
+
+#: lib/claper_web/live/event_live/event_form_component.html.heex:314
+msgid "Facilitators"
+msgstr "Moderatori"
+
+#: lib/claper_web/live/event_live/event_form_component.html.heex:7
+#: lib/claper_web/live/event_live/index.html.heex:107
+#: lib/claper_web/live/event_live/manage.html.heex:430
+#: lib/claper_web/templates/lti/registration/success.html.heex:26
+msgid "Finish"
+msgstr "Beigt"
+
+#: lib/claper_web/live/event_live/manage.html.heex:1157
+msgid "Here you'll find all interactions from your attendees. You can manage messages, pinned messages, and submitted forms."
+msgstr "Šeit atradīsiet visas dalībnieku mijiedarbības. Varat pārvaldīt ziņojumus, piespraustos ziņojumus un iesniegtās veidlapas."
+
+#: lib/claper_web/live/event_live/manage.html.heex:1157
+msgid "Identify users by their unique avatars."
+msgstr "Identificēt lietotājus pēc viņu unikālajiem avatariem."
+
+#: lib/claper_web/live/event_live/event_form_component.html.heex:5
+#: lib/claper_web/live/event_live/index.html.heex:105
+#: lib/claper_web/live/event_live/manage.html.heex:428
+#: lib/claper_web/live/event_live/manager_settings_component.ex:176
+#: lib/claper_web/live/event_live/quiz_component.ex:161
+#: lib/claper_web/live/event_live/quiz_component.ex:209
+msgid "Next"
+msgstr "Nākamais"
+
+#: lib/claper_web/live/event_live/event_form_component.html.heex:84
+msgid "Select your presentation file. Accepted formats are PDF, PPT, or PPTX. Ensure the file size does not exceed the maximum limit."
+msgstr "Izvēlieties prezentācijas failu. Pieņemamie formāti ir PDF, PPT vai PPTX. Pārliecinieties, ka faila lielums nepārsniedz maksimālo ierobežojumu."
+
+#: lib/claper_web/live/event_live/manage.html.heex:546
+msgid "Time to launch your presentation!"
+msgstr "Laiks uzsākt prezentāciju!"
+
+#: lib/claper_web/live/event_live/manage.html.heex:1459
+msgid "Use the associated keyboard shortcuts for quick toggling of these settings."
+msgstr "Lai ātri pārslēgtu šos iestatījumus, izmantojiet saistītās tastatūras īsceļus."
+
+#: lib/claper_web/live/event_live/manage.html.heex:1459
+msgid "You can control each setting for the presentation (showing on the big screen) and on the attendee's room."
+msgstr "Varat kontrolēt katru iestatījumu gan prezentācijai (rādīšanai uz lielā ekrāna), gan dalībnieka istabai."
+
+#: lib/claper_web/live/event_live/index.html.heex:148
+msgid "Your first steps with Claper"
+msgstr "Jūsu pirmie soļi ar Claper"
+
+#: lib/claper_web/live/event_live/event_form_component.html.heex:295
+msgid "Attendees attempting to access the event prior to this date will be directed to a waiting room."
+msgstr "Apmeklētāji, kas mēģinās iekļūt pasākumā pirms šī datuma, tiks novirzīti uz uzgaidāmo telpu."
+
+#: lib/claper_web/live/event_live/index.html.heex:166
+msgid "Create event"
+msgstr "Izveidot notikumu"
+
+#: lib/claper_web/live/event_live/index.html.heex:224
+msgid "Create your first event"
+msgstr "Izveidojiet savu pirmo notikumu"
+
+#: lib/claper_web/live/event_live/event_form_component.html.heex:294
+msgid "Event start date"
+msgstr "Pasākuma sākuma datums"
+
+#: lib/claper_web/live/event_live/index.html.heex:118
+msgid "If you don't have time and just want interactions without a presentation file, you can create a new event here."
+msgstr "Ja jums nav laika un vēlaties mijiedarbību bez prezentācijas faila, varat šeit izveidot jaunu notikumu."
+
+#: lib/claper_web/live/event_live/event_form_component.html.heex:315
+msgid "If you require assistance in managing your event, you can grant access to others. Simply enter their email addresses; once they register an account with these emails, they will be able to manage the event."
+msgstr "Ja jums ir nepieciešama palīdzība pasākuma pārvaldībā, varat piešķirt piekļuvi citiem. Vienkārši ievadiet viņu e-pasta adreses; kad viņi reģistrēs kontu ar šiem e-pastiem, viņi varēs pārvaldīt pasākumu."
+
+#: lib/claper_web/live/event_live/index.html.heex:123
+msgid "In a hurry ?"
+msgstr "Steidzaties?"
+
+#: lib/claper_web/live/event_live/event_card_component.ex:50
+msgid "Live"
+msgstr "Tiešraide"
+
+#: lib/claper_web/live/event_live/index.html.heex:111
+msgid "My events"
+msgstr "Mani pasākumi"
+
+#: lib/claper_web/live/event_live/event_form_component.html.heex:271
+#: lib/claper_web/live/event_live/index.html.heex:86
+msgid "Name of your event"
+msgstr "Jūsu pasākuma nosaukums"
+
+#: lib/claper_web/live/event_live/event_form_component.html.heex:315
+msgid "Note: Facilitators do not have the ability to delete your event."
+msgstr "Piezīme: moderatoriem nav iespējas dzēst jūsu pasākumu."
+
+#: lib/claper_web/live/event_live/event_form_component.html.heex:85
+msgid "Presentation file (optional)"
+msgstr "Prezentācijas fails (pēc izvēles)"
+
+#: lib/claper_web/live/event_live/index.html.heex:141
+msgid "Quick event"
+msgstr "Ātrs notikums"
+
+#: lib/claper_web/live/event_live/index.ex:91
+msgid "Quick event created successfully"
+msgstr "Veiksmīgi izveidots ātrais notikums"
+
+#: lib/claper_web/live/event_live/join.html.heex:104
+msgid "Return to your last event"
+msgstr "Atgriezties pie pēdējā notikuma"
+
+#: lib/claper_web/live/event_live/event_form_component.html.heex:295
+msgid "Select the start date for your event. Future dates are permissible."
+msgstr "Izvēlieties pasākuma sākuma datumu. Ir pieļaujami arī turpmākie datumi."
+
+#: lib/claper_web/live/event_live/event_form_component.html.heex:88
+msgid "Select your presentation (optional)"
+msgstr "Izvēlieties savu prezentāciju (pēc izvēles)"
+
+#: lib/claper_web/live/event_live/event_form_component.html.heex:280
+msgid "This code will be used by your attendees to access the event. You have the option to create a custom code."
+msgstr "Šo kodu dalībnieki izmantos, lai piekļūtu pasākumam. Jums ir iespēja izveidot pielāgotu kodu."
+
+#: lib/claper_web/live/event_live/show.ex:193
+msgid "This event has been terminated"
+msgstr "Šis notikums ir pārtraukts"
+
+#: lib/claper_web/live/event_live/index.html.heex:147
+msgid "Welcome to Claper! You can create a new event here."
+msgstr "Laipni lūdzam Claper! Šeit varat izveidot jaunu notikumu."
+
+#: lib/claper_web/live/event_live/event_form_component.html.heex:304
+msgid "When your event will start?"
+msgstr "Kad sāksies jūsu pasākums?"
+
+#: lib/claper_web/live/event_live/show.html.heex:38
+msgid "Create your next presentation with"
+msgstr "Izveidojiet nākamo prezentāciju, izmantojot"
+
+#: lib/claper_web/live/event_live/manage.ex:27
+#: lib/claper_web/live/event_live/presenter.ex:24
+#: lib/claper_web/live/event_live/show.ex:25
+msgid "Event doesn't exist"
+msgstr "Notikums neeksistē"
+
+#: lib/claper_web/live/user_settings_live/show.html.heex:244
+msgid "Customize your account"
+msgstr "Pielāgojiet savu kontu"
+
+#: lib/claper_web/live/user_settings_live/show.html.heex:265
+msgid "Language"
+msgstr "Valoda"
+
+#: lib/claper_web/live/user_settings_live/show.html.heex:241
+msgid "Preferences"
+msgstr "Iestatījumi"
+
+#: lib/claper_web/live/user_settings_live/show.ex:180
+msgid "Your preferences have been updated."
+msgstr "Jūsu iestatījumi ir atjaunināti."
+
+#: lib/claper_web/live/event_live/manageable_post_component.ex:29
+msgid "Question"
+msgstr "Jautājums"
+
+#: lib/claper_web/live/event_live/manage.html.heex:1175
+msgid "Questions"
+msgstr "Jautājumi"
+
+#: lib/claper_web/live/event_live/manage.html.heex:1262
+msgid "Questions will appear here."
+msgstr "Jautājumi būs redzami šeit."
+
+#: lib/claper_web/live/event_live/manage.html.heex:1304
+msgid "Sort by date"
+msgstr "Atlasīt pēc datuma"
+
+#: lib/claper_web/live/event_live/manage.html.heex:1283
+msgid "Sort by popularity"
+msgstr "Atlasīt pēc popularitātes"
+
+#: lib/claper_web/live/event_live/event_card_component.ex:152
+msgid "Event manager"
+msgstr "Pasākumu vadītājs"
+
+#: lib/claper_web/templates/layout/_user_menu.html.heex:12
+msgid "Documentation"
+msgstr "Dokumentācija"
+
+#: lib/claper_web/live/user_settings_live/show.html.heex:5
+#: lib/claper_web/templates/layout/_user_menu.html.heex:6
+msgid "My account"
+msgstr "Mans konts"
+
+#: lib/claper_web/live/user_settings_live/show.html.heex:139
+msgid "Your personal informations to access your account"
+msgstr "Jūsu personiskā informācija, lai piekļūtu savam kontam"
+
+#: lib/claper_web/live/event_live/manager_settings_component.ex:533
+msgid "Enable reactions"
+msgstr "Iespējot reakcijas"
+
+#: lib/claper_web/templates/lti/registration/success.html.heex:14
+msgid "Activate the tool in your LMS"
+msgstr "Aktivizējiet rīku savā LMS"
+
+#: lib/claper_web/templates/lti/registration/new.html.heex:24
+msgid "Bring Claper to your LMS"
+msgstr "Pievienojiet Claper savai LMS"
+
+#: lib/claper_web/templates/lti/registration/success.html.heex:17
+msgid "Check the permissions to share name and email of users"
+msgstr "Pārbaudiet lietotāju vārda un e-pasta kopīgošanas atļaujas"
+
+#: lib/claper_web/templates/lti/registration/success.html.heex:15
+msgid "Configure it to be opened in a new window"
+msgstr "Konfigurējiet, lai tas tiktu atvērts jaunā logā"
+
+#: lib/claper_web/templates/lti/launch/error.html.heex:5
+msgid "Oops"
+msgstr "Ups"
+
+#: lib/claper_web/templates/lti/registration/new.html.heex:27
+msgid "Register your platform"
+msgstr "Reģistrējiet savu platformu"
+
+#: lib/claper_web/templates/lti/registration/success.html.heex:5
+msgid "Registration completed"
+msgstr "Reģistrācija pabeigta"
+
+#: lib/claper_web/templates/lti/launch/error.html.heex:9
+msgid "You cannot perform this action"
+msgstr "Šo darbību nevar veikt"
+
+#: lib/claper_web/templates/lti/registration/success.html.heex:10
+msgid "Your next steps"
+msgstr "Nākamie soļi"
+
+#: lib/claper_web/templates/lti/registration/new.html.heex:40
+msgid "Add Claper"
+msgstr "Pievienot Claper"
+
+#: lib/claper_web/live/event_live/manage.html.heex:123
+#: lib/claper_web/live/event_live/manage.html.heex:539
+msgid "Close preview"
+msgstr "Aizvērt priekšskatījumu"
+
+#: lib/claper_web/live/event_live/manage.html.heex:743
+msgid "Create your first interaction."
+msgstr "Izveidojiet pirmo mijiedarbību."
+
+#: lib/claper_web/live/event_live/manage.html.heex:1101
+msgid "Disable"
+msgstr "Atspējot"
+
+#: lib/claper_web/live/event_live/manage.html.heex:1118
+msgid "Enable"
+msgstr "Iespējot"
+
+#: lib/claper_web/live/event_live/manager_settings_component.ex:443
+msgid "Enable messages to change this option"
+msgstr "Iespējiet ziņojumus, lai mainītu šo opciju"
+
+#: lib/claper_web/live/event_live/manage.html.heex:122
+#: lib/claper_web/live/event_live/manage.html.heex:538
+msgid "Open preview"
+msgstr "Atvērt priekšskatījumu"
+
+#: lib/claper_web/live/event_live/manager_settings_component.ex:321
+msgid "Show messages to change this option"
+msgstr "Rādīt ziņojumus, lai mainītu šo opciju"
+
+#: lib/claper_web/live/event_live/manage.html.heex:740
+msgid "This slide does not have any interactions."
+msgstr "Šim slaidam nav mijiedarbības."
+
+#: lib/claper_web/live/user_settings_live/show.html.heex:176
+msgid "Accounts linked"
+msgstr "Saistītie konti"
+
+#: lib/claper_web/live/user_settings_live/show.html.heex:208
+#: lib/claper_web/live/user_settings_live/show.html.heex:226
+msgid "Are you sure you want to unlink this account?"
+msgstr "Vai esat pārliecināti, ka vēlaties atcelt šī konta sasaisti?"
+
+#: lib/claper_web/templates/user_session/new.html.heex:74
+msgid "Login with %{provider}"
+msgstr "Pieteikšanās ar %{provider}"
+
+#: lib/claper_web/live/user_settings_live/show.ex:101
+#: lib/claper_web/live/user_settings_live/show.ex:115
+msgid "The account has been unlinked."
+msgstr "Konts ir atsaistīts."
+
+#: lib/claper_web/live/event_live/manage.html.heex:716
+msgid "This section contains all your interactions."
+msgstr "Šajā sadaļā ir iekļautas visas jūsu mijiedarbības."
+
+#: lib/claper_web/live/user_settings_live/show.html.heex:211
+#: lib/claper_web/live/user_settings_live/show.html.heex:229
+msgid "Unlink"
+msgstr "Atsaistīt"
+
+#: lib/claper_web/live/event_live/manage.html.heex:716
+msgid "You can add interactions to your presentation slides."
+msgstr "Prezentācijas slaidiem varat pievienot mijiedarbību."
+
+#: lib/claper_web/live/event_live/manage.html.heex:715
+msgid "Your interactions"
+msgstr "Jūsu mijiedarbība"
+
+#: lib/claper_web/live/user_settings_live/show.html.heex:119
+msgid "Confirm password"
+msgstr "Paroles apstiprināšana"
+
+#: lib/claper_web/live/user_settings_live/show.ex:68
+msgid "Set a new password"
+msgstr "Jaunas paroles iestatīšana"
+
+#: lib/claper_web/live/user_settings_live/show.ex:71
+msgid "Set a new password for your account before unlinking it."
+msgstr "Pirms konta atsaistīšanas iestatiet jaunu paroli."
+
+#: lib/claper_web/live/user_settings_live/show.ex:204
+msgid "Your password has been set, you can now unlink your account."
+msgstr "Jūsu parole ir iestatīta, tagad varat atsaistīt kontu."
+
+#: lib/claper_web/live/embed_live/form_component.html.heex:38
+msgid "Iframe code"
+msgstr "Iframe kods"
+
+#: lib/claper_web/live/embed_live/form_component.html.heex:39
+msgid "Link to the content"
+msgstr "Saite uz saturu"
+
+#: lib/claper/embeds/embed.ex:65
+#: lib/claper/embeds/embed.ex:74
+#: lib/claper/embeds/embed.ex:83
+#: lib/claper/embeds/embed.ex:92
+msgid "Please enter a valid %{provider} link"
+msgstr "Lūdzu, ievadiet derīgu %{provider} saiti"
+
+#: lib/claper/embeds/embed.ex:62
+#: lib/claper/embeds/embed.ex:71
+#: lib/claper/embeds/embed.ex:80
+#: lib/claper/embeds/embed.ex:89
+msgid "Please enter a valid link starting with http:// or https://"
+msgstr "Lūdzu, ievadiet derīgu saiti, kas sākas ar http:// vai https://"
+
+#: lib/claper/embeds/embed.ex:98
+msgid "Please enter valid HTML content with an iframe tag"
+msgstr "Lūdzu, ievadiet derīgu HTML saturu ar iframe tagu"
+
+#: lib/claper_web/live/embed_live/form_component.html.heex:25
+msgid "Provider"
+msgstr "Nodrošinātājs"
+
+#: lib/claper_web/live/poll_live/form_component.html.heex:89
+msgid "Attendees can see the results on their device"
+msgstr "Dalībnieki var redzēt rezultātus savā ierīcē"
+
+#: lib/claper_web/live/embed_live/form_component.html.heex:56
+msgid "Attendees can view the web content on their device"
+msgstr "Apmeklētāji var skatīt tīmekļa saturu savā ierīcē"
+
+#: lib/claper_web/live/embed_live/form_component.html.heex:49
+#: lib/claper_web/live/poll_live/form_component.html.heex:82
+#: lib/claper_web/live/quiz_live/quiz_component.html.heex:172
+msgid "Options"
+msgstr "Iespējas"
+
+#: lib/claper_web/live/event_live/event_card_component.ex:268
+#: lib/claper_web/live/event_live/event_card_component.ex:418
+msgid "Duplicate"
+msgstr "Dublēt"
+
+#: lib/claper_web/templates/error/csrf_error.html.heex:8
+msgid "A required security token was not found or was invalid."
+msgstr "Nepieciešamais drošības žetons netika atrasts vai bija nederīgs."
+
+#: lib/claper_web/templates/error/csrf_error.html.heex:26
+msgid "Back to Login"
+msgstr "Atgriezties pie pieteikšanās"
+
+#: lib/claper_web/templates/error/csrf_error.html.heex:5
+msgid "CSRF Verification Failed"
+msgstr "CSRF verifikācija neizdevās"
+
+#: lib/claper_web/templates/error/csrf_error.html.heex:17
+msgid "Clear cookies (at least for Claper domain)"
+msgstr "Notīriet sīkfailus (vismaz Claper domēnam)"
+
+#: lib/claper_web/templates/error/csrf_error.html.heex:20
+msgid "Ensure the URL does not contain an extra \"/\" anywhere"
+msgstr "Pārliecinieties, ka URL adresē nav papildu \"/\""
+
+#: lib/claper_web/templates/error/csrf_error.html.heex:23
+msgid "If the problem persists, please contact support."
+msgstr "Ja problēma saglabājas, sazinieties ar atbalsta dienestu."
+
+#: lib/claper_web/templates/error/csrf_error.html.heex:14
+msgid "If you're continually seeing this issue, try the following:"
+msgstr "Ja šī problēma atkārtojas, izmēģiniet šādu darbību:"
+
+#: lib/claper_web/templates/error/csrf_error.html.heex:18
+msgid "Reload the page you're trying to access (don't re-submit data)"
+msgstr "Atkārtoti ielādējiet lapu, kurai mēģināt piekļūt (neveiciet atkārtotu datu nosūtīšanu)"
+
+#: lib/claper_web/templates/error/csrf_error.html.heex:19
+msgid "Try logging in again"
+msgstr "Mēģiniet vēlreiz pieteikties"
+
+#: lib/claper_web/live/event_live/event_card_component.ex:201
+msgid "End"
+msgstr "Izbeigt"
+
+#: lib/claper_web/live/event_live/event_card_component.ex:212
+#: lib/claper_web/live/event_live/event_card_component.ex:292
+#: lib/claper_web/live/event_live/event_card_component.ex:381
+msgid "More options"
+msgstr "Vairāk iespēju"
+
+#: lib/claper_web/live/event_live/manage.ex:796
+msgid "No"
+msgstr "Nē"
+
+#: lib/claper_web/live/event_live/manage.ex:796
+msgid "Yes"
+msgstr "Jā"
+
+#: lib/claper_web/templates/user_notifier/confirm.html.heex:29
+msgid "CONFIRM ACCOUNT"
+msgstr "APSTIPRINĀT KONTU"
+
+#: lib/claper_web/templates/user_notifier/confirm.html.heex:17
+msgid "Confirm account"
+msgstr "Apstiprināt kontu"
+
+#: lib/claper_web/notifiers/user_notifier.ex:45
+msgid "Confirmation instructions"
+msgstr "Apstiprināšanas norādījumi"
+
+#: lib/claper_web/templates/user_notifier/reset.html.heex:29
+msgid "RESET PASSWORD"
+msgstr "PAROLES ATIESTATĪŠANA"
+
+#: lib/claper_web/templates/user_notifier/reset.html.heex:17
+msgid "Reset password"
+msgstr "Paroles atiestatīšana"
+
+#: lib/claper_web/notifiers/user_notifier.ex:56
+msgid "Reset password instructions"
+msgstr "Paroles atiestatīšanas instrukcijas"
+
+#: lib/claper_web/templates/user_notifier/confirm.html.heex:22
+msgid "You can confirm your account by visiting the URL below"
+msgstr "Varat apstiprināt savu kontu, apmeklējot tālāk norādīto URL adresi"
+
+#: lib/claper_web/templates/user_notifier/reset.html.heex:22
+msgid "You can reset your password by visiting the URL below"
+msgstr "Savu paroli varat atiestatīt, apmeklējot tālāk norādīto URL adresi"
+
+#: lib/claper_web/templates/user_registration/confirm.html.heex:29
+msgid "back to the home page"
+msgstr "atpakaļ uz sākumlapu"
+
+#: lib/claper_web/live/quiz_live/quiz_component.html.heex:46
+msgid "Add Question"
+msgstr "Pievienot jautājumu"
+
+#: lib/claper_web/live/event_live/manage.html.heex:294
+msgid "Add a quiz to test knowledge."
+msgstr "Pievienojiet viktorīnu, lai pārbaudītu zināšanas."
+
+#: lib/claper_web/live/quiz_live/quiz_component.html.heex:152
+msgid "Add answer"
+msgstr "Pievienot atbildi"
+
+#: lib/claper_web/live/event_live/manager_settings_component.ex:482
+msgid "Allow anonymous messages"
+msgstr "Atļaut anonīmus ziņojumus"
+
+#: lib/claper_web/live/quiz_live/quiz_component.html.heex:84
+msgid "Answer %{index}"
+msgstr "Atbilde %{index}"
+
+#: lib/claper_web/live/event_live/manager_settings_component.ex:390
+msgid "Attendees"
+msgstr "Dalībnieki"
+
+#: lib/claper_web/live/event_live/manageable_quiz_component.ex:29
+#: lib/claper_web/live/stat_live/index.html.heex:426
+msgid "Average score"
+msgstr "Vidējais rezultāts"
+
+#: lib/claper_web/live/event_live/quiz_component.ex:60
+msgid "Current quiz"
+msgstr "Pašreizējā viktorīna"
+
+#: lib/claper_web/live/event_live/manager_settings_component.ex:485
+msgid "Deny anonymous messages"
+msgstr "Aizliegt anonīmus ziņojumus"
+
+#: lib/claper_web/live/event_live/manager_settings_component.ex:427
+msgid "Disable messages"
+msgstr "Izslēgt ziņojumus"
+
+#: lib/claper_web/live/event_live/manager_settings_component.ex:536
+msgid "Disable reactions"
+msgstr "Izslēgt reakcijas"
+
+#: lib/claper_web/live/event_live/manage.html.heex:369
+msgid "Edit quiz"
+msgstr "Rediģēt viktorīnu"
+
+#: lib/claper_web/live/event_live/manager_settings_component.ex:258
+msgid "Hide instructions to join"
+msgstr "Paslēpt pievienošanās instrukcijas"
+
+#: lib/claper_web/live/event_live/manager_settings_component.ex:305
+msgid "Hide messages"
+msgstr "Slēpt ziņojumus"
+
+#: lib/claper_web/live/event_live/manager_settings_component.ex:62
+#: lib/claper_web/live/event_live/manager_settings_component.ex:112
+msgid "Hide results on presentation"
+msgstr "Paslēpt rezultātus prezentācijā"
+
+#: lib/claper_web/live/event_live/event_form_component.html.heex:36
+#: lib/claper_web/live/event_live/index.html.heex:28
+#: lib/claper_web/live/event_live/manage.html.heex:35
+msgid "How it works ?"
+msgstr "Kā tas darbojas?"
+
+#: lib/claper_web/live/event_live/manager_settings_component.ex:22
+msgid "Interaction"
+msgstr "Mijiedarbība"
+
+#: lib/claper_web/live/event_live/manage.html.heex:368
+msgid "New quiz"
+msgstr "Jauna viktorīna"
+
+#: lib/claper_web/live/event_live/manager_settings_component.ex:217
+msgid "Presentation"
+msgstr "Prezentācija"
+
+#: lib/claper_web/live/event_live/manager_settings_component.ex:168
+msgid "Previous"
+msgstr "Iepriekšējais"
+
+#: lib/claper_web/live/event_live/manage.html.heex:292
+#: lib/claper_web/live/event_live/manage.html.heex:920
+msgid "Quiz"
+msgstr "Viktorīna"
+
+#: lib/claper_web/live/quiz_live/quiz_component.html.heex:158
+msgid "Remove question"
+msgstr "Noņemt jautājumu"
+
+#: lib/claper_web/live/event_live/manager_settings_component.ex:144
+msgid "Review questions"
+msgstr "Pārskata jautājumi"
+
+#: lib/claper_web/live/event_live/quiz_component.ex:41
+msgid "See current quiz"
+msgstr "Skatīt pašreizējo viktorīnu"
+
+#: lib/claper_web/live/event_live/manage.html.heex:388
+msgid "Select presentation"
+msgstr "Izvēlieties prezentāciju"
+
+#: lib/claper_web/live/event_live/manager_settings_component.ex:361
+msgid "Show all messages"
+msgstr "Rādīt visus ziņojumus"
+
+#: lib/claper_web/live/event_live/manager_settings_component.ex:255
+msgid "Show instructions to join"
+msgstr "Rādīt pievienošanās instrukcijas"
+
+#: lib/claper_web/live/event_live/quiz_component.ex:121
+msgid "Show results"
+msgstr "Rādīt rezultātus"
+
+#: lib/claper_web/live/event_live/manager_settings_component.ex:65
+#: lib/claper_web/live/event_live/manager_settings_component.ex:115
+msgid "Show results on presentation"
+msgstr "Rādīt rezultātus prezentācijā"
+
+#: lib/claper_web/live/quiz_live/quiz_component.html.heex:206
+msgid "This will delete all responses associated and the quiz itself, are you sure?"
+msgstr "Tas izdzēsīs visas saistītās atbildes un pašu viktorīnu, vai esat pārliecināti?"
+
+#: lib/claper_web/live/event_live/quiz_component.ex:124
+msgid "Waiting for results..."
+msgstr "Gaidām rezultātus..."
+
+#: lib/claper_web/live/quiz_live/quiz_component.html.heex:62
+msgid "Your question"
+msgstr "Jūsu jautājums"
+
+#: lib/claper_web/live/event_live/quiz_component.ex:113
+msgid "Your score"
+msgstr "Jūsu rezultāts"
+
+#: lib/claper_web/live/stat_live/index.html.heex:236
+#: lib/claper_web/live/stat_live/index.html.heex:298
+#: lib/claper_web/live/stat_live/index.html.heex:380
+#: lib/claper_web/live/stat_live/index.html.heex:422
+msgid "Export"
+msgstr "Eksportēt"
+
+#: lib/claper_web/live/quiz_live/quiz_component.html.heex:218
+msgid "Export to QTI (XML)"
+msgstr "Eksportēšana uz QTI (XML)"
+
+#: lib/claper_web/live/stat_live/index.html.heex:194
+msgid "Forms"
+msgstr "Veidlapas"
+
+#: lib/claper_web/live/stat_live/index.html.heex:170
+msgid "Interactions"
+msgstr "Mijiedarbība"
+
+#: lib/claper_web/live/stat_live/index.html.heex:338
+msgid "No form has been created"
+msgstr "Nav izveidota neviena veidlapa"
+
+#: lib/claper_web/live/stat_live/index.html.heex:272
+msgid "No poll has been created"
+msgstr "Nav izveidota neviena aptauja"
+
+#: lib/claper_web/live/stat_live/index.html.heex:476
+msgid "No quiz has been created"
+msgstr "Nav izveidota viktorīna"
+
+#: lib/claper_web/live/stat_live/index.html.heex:359
+msgid "No web content has been created"
+msgstr "Tīmekļa saturs nav izveidots"
+
+#: lib/claper_web/live/stat_live/index.html.heex:187
+msgid "Polls"
+msgstr "Aptaujas"
+
+#: lib/claper_web/live/stat_live/index.html.heex:208
+msgid "Quizzes"
+msgstr "Viktorīnas"
+
+#: lib/claper_web/live/stat_live/index.ex:62
+msgid "Report"
+msgstr "Ziņojums"
+
+#: lib/claper_web/live/stat_live/index.html.heex:70
+msgid "Unique attendees"
+msgstr "Unikālie apmeklētāji"
+
+#: lib/claper_web/live/stat_live/index.html.heex:201
+msgid "Web Content"
+msgstr "Tīmekļa saturs"
+
+#: lib/claper_web/live/event_live/index.html.heex:178
+msgid "Active"
+msgstr "Aktīvs"
+
+#: lib/claper_web/live/event_live/index.html.heex:217
+msgid "Load more"
+msgstr "Ielādēt vairāk"
+
+#: lib/claper_web/live/event_live/index.html.heex:194
+msgid "Shared with you"
+msgstr "Kopīgots ar jums"
+
+#: lib/claper_web/templates/lti/registration/new.html.heex:43
+msgid "You must login to continue"
+msgstr "Jums ir jāpiesakās, lai turpinātu"
+
+#: lib/claper/quizzes/quiz_question.ex:41
+msgid "must have at least one correct answer"
+msgstr "jābūt vismaz vienai pareizai atbildei"
+
+#: lib/claper_web/live/event_live/manage.html.heex:548
+msgid "Click here to open the presentation window. Press <strong>F</strong> in the presentation window to enable fullscreen."
+msgstr "Noklikšķiniet šeit, lai atvērtu prezentācijas logu. Prezentācijas logā nospiediet <strong>F</strong>, lai iespējotu pilnekrāna režīmu."
+
+#: lib/claper_web/live/quiz_live/quiz_component.html.heex:179
+msgid "Allow anonymous submissions"
+msgstr "Atļaut anonīmus iesniegumus"
+
+#: lib/claper_web/live/event_live/quiz_component.ex:167
+msgid "Please sign in to submit your answers"
+msgstr "Lūdzu, pierakstieties, lai iesniegtu savas atbildes"
+
+#: lib/claper_web/live/event_live/quiz_component.ex:170
+msgid "Sign in"
+msgstr "Pierakstīties"
+
+#: lib/claper_web/live/stat_live/index.html.heex:435
+msgid "Total submissions"
+msgstr "Kopējais iesniegto pieteikumu skaits"
+
