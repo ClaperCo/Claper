@@ -24,7 +24,7 @@
                 <a href={~p"/admin"} class={"block px-6 py-3 #{if @conn.path_info == ["admin"], do: "text-gray-900 bg-gray-100 border-l-4 border-gray-900 font-medium", else: "text-gray-600 hover:text-gray-900 hover:bg-gray-50 border-l-4 border-transparent transition-colors"}"}>Dashboard</a>
                 <a href={~p"/admin/events"} class={"block px-6 py-3 #{if @conn.path_info == ["admin", "events"], do: "text-gray-900 bg-gray-100 border-l-4 border-gray-900 font-medium", else: "text-gray-600 hover:text-gray-900 hover:bg-gray-50 border-l-4 border-transparent transition-colors"}"}>Events</a>
                 <a href={~p"/admin/users"} class={"block px-6 py-3 #{if @conn.path_info == ["admin", "users"], do: "text-gray-900 bg-gray-100 border-l-4 border-gray-900 font-medium", else: "text-gray-600 hover:text-gray-900 hover:bg-gray-50 border-l-4 border-transparent transition-colors"}"}>Users</a>
-                <a href={~p"/admin/oidc_providers"} class={"block px-6 py-3 #{if @conn.path_info == ["admin", "oidc_providers"], do: "text-gray-900 bg-gray-100 border-l-4 border-gray-900 font-medium", else: "text-gray-600 hover:text-gray-900 hover:bg-gray-50 border-l-4 border-transparent transition-colors"}"}>OIDC Providers</a>
+                <%!-- <a href={~p"/admin/oidc_providers"} class={"block px-6 py-3 #{if @conn.path_info == ["admin", "oidc_providers"], do: "text-gray-900 bg-gray-100 border-l-4 border-gray-900 font-medium", else: "text-gray-600 hover:text-gray-900 hover:bg-gray-50 border-l-4 border-transparent transition-colors"}"}>OIDC Providers</a> --%>
                 <div class="h-px bg-gray-200 mx-6 my-4"></div>
                 <a href="#" class="block px-6 py-3 text-gray-600 hover:text-gray-900 hover:bg-gray-50 border-l-4 border-transparent transition-colors">Documentation</a>
             </nav>
@@ -103,14 +103,14 @@
                   <span>Events</span>
                 </div>
               </a>
-              <a href={~p"/admin/oidc_providers"} class={"block px-4 py-3 text-base font-medium #{if @conn.path_info == ["admin", "oidc_providers"], do: "bg-gray-100 text-gray-900", else: "text-gray-600 hover:text-gray-900 hover:bg-gray-50"} rounded-lg mb-2 transition-colors"}>
+              <%!-- <a href={~p"/admin/oidc_providers"} class={"block px-4 py-3 text-base font-medium #{if @conn.path_info == ["admin", "oidc_providers"], do: "bg-gray-100 text-gray-900", else: "text-gray-600 hover:text-gray-900 hover:bg-gray-50"} rounded-lg mb-2 transition-colors"}>
                 <div class="flex items-center">
                   <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"/>
                   </svg>
                   <span>OIDC Providers</span>
                 </div>
-              </a>
+              </a> --%>
               <div class="border-t border-gray-200 my-4"></div>
               <a href={~p"/events"} class="block px-4 py-3 text-base font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-lg transition-colors">
                 <div class="flex items-center">

@@ -65,20 +65,26 @@ defmodule ClaperWeb.AdminLive.DashboardLive do
     growth_metrics = Admin.get_growth_metrics()
     activity_stats = Admin.get_activity_stats()
 
-    # Get upcoming events for the dashboard
-    upcoming_events =
+    # Get recent events for the dashboard
+    recent_events =
       Event
-      |> where([e], e.started_at > ^NaiveDateTime.utc_now())
-      |> order_by([e], asc: e.started_at)
-      |> limit(10)
+      |> order_by([e], desc: e.started_at)
+      |> limit(5)
       |> preload(:user)
       |> Repo.all()
 
+    # Transform stats to match template expectations
+    transformed_stats = %{
+      total_users: stats.users_count,
+      total_events: stats.events_count,
+      active_events: stats.upcoming_events
+    }
+
     socket
-    |> assign(:stats, stats)
+    |> assign(:stats, transformed_stats)
     |> assign(:growth_metrics, growth_metrics)
     |> assign(:activity_stats, activity_stats)
-    |> assign(:upcoming_events, upcoming_events)
+    |> assign(:recent_events, recent_events)
     |> load_chart_data()
   end
 

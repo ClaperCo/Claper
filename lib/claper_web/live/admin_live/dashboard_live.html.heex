@@ -9,19 +9,19 @@
   <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
     <div class="bg-white p-6 rounded-lg border border-gray-200">
       <div class="text-sm text-gray-600 mb-2">Total Users</div>
-      <div class="text-4xl font-bold">2,543</div>
-      <div class="text-sm text-gray-600 mt-2">+12% vs last month</div>
+      <div class="text-4xl font-bold"><%= @stats.total_users %></div>
+      <div class="text-sm text-gray-600 mt-2"><span class={if @growth_metrics.users_growth > 0 do "text-green-600" else "text-red-600" end}><%= if @growth_metrics.users_growth >= 0 do %>+<% end %><%= @growth_metrics.users_growth %>%</span> vs last month</div>
     </div>
     
     <div class="bg-white p-6 rounded-lg border border-gray-200">
       <div class="text-sm text-gray-600 mb-2">Total Events</div>
-      <div class="text-4xl font-bold">1,893</div>
-      <div class="text-sm text-gray-600 mt-2">+8% vs last month</div>
+      <div class="text-4xl font-bold"><%= @stats.total_events %></div>
+      <div class="text-sm text-gray-600 mt-2"><span class={if @growth_metrics.events_growth > 0 do "text-green-600" else "text-red-600" end}><%= if @growth_metrics.events_growth >= 0 do %>+<% end %><%= @growth_metrics.events_growth %>%</span> vs last month</div>
     </div>
     
     <div class="bg-white p-6 rounded-lg border border-gray-200">
       <div class="text-sm text-gray-600 mb-2">Active Events</div>
-      <div class="text-4xl font-bold">24</div>
+      <div class="text-4xl font-bold"><%= @stats.active_events %></div>
       <div class="text-sm text-gray-600 mt-2">Currently running</div>
     </div>
   </div>
@@ -79,7 +79,7 @@
                   stroke-dasharray="50 251" stroke-dashoffset="-263" transform="rotate(-90 100 100)"/>
           
           <!-- Center text -->
-          <text x="100" y="100" text-anchor="middle" class="text-2xl font-bold" fill="#111827">1,893</text>
+          <text x="100" y="100" text-anchor="middle" class="text-2xl font-bold" fill="#111827"><%= @stats.total_events %></text>
           <text x="100" y="120" text-anchor="middle" class="text-sm" fill="#6b7280">Total</text>
         </svg>
         
