@@ -25,21 +25,21 @@ defmodule ClaperWeb.Admin.OidcProviderControllerTest do
     # Create roles
     {:ok, user_role} = Accounts.create_role(%{name: "user"})
     {:ok, admin_role} = Accounts.create_role(%{name: "admin"})
-    
+
     # Create an admin user
     {:ok, admin} = Accounts.create_user(%{email: "admin@example.com", password: "Password123!"})
     {:ok, admin} = Accounts.assign_role(admin, admin_role)
-    
+
     # Create a test OIDC provider
     {:ok, provider} = Oidc.create_provider(@valid_provider_attrs)
-    
+
     # Create a conn with admin logged in
-    admin_conn = 
+    admin_conn =
       build_conn()
       |> Map.replace!(:secret_key_base, ClaperWeb.Endpoint.config(:secret_key_base))
       |> init_test_session(%{})
       |> Accounts.Guardian.Plug.sign_in(admin)
-    
+
     %{admin: admin, provider: provider, admin_conn: admin_conn}
   end
 
@@ -52,7 +52,7 @@ defmodule ClaperWeb.Admin.OidcProviderControllerTest do
 
     test "exports providers as CSV", %{admin_conn: conn, provider: provider} do
       conn = get(conn, Routes.admin_oidc_provider_path(conn, :index, format: "csv"))
-      
+
       assert response_content_type(conn, :csv)
       assert response(conn, 200) =~ "Name,Issuer,Client ID,Active"
       assert response(conn, 200) =~ provider.name
@@ -72,7 +72,9 @@ defmodule ClaperWeb.Admin.OidcProviderControllerTest do
   describe "create provider" do
     test "redirects to show when data is valid", %{admin_conn: conn} do
       new_provider_attrs = Map.put(@valid_provider_attrs, :name, "New Test Provider")
-      conn = post(conn, Routes.admin_oidc_provider_path(conn, :create), provider: new_provider_attrs)
+
+      conn =
+        post(conn, Routes.admin_oidc_provider_path(conn, :create), provider: new_provider_attrs)
 
       assert %{id: id} = redirected_params(conn)
       assert redirected_to(conn) == Routes.admin_oidc_provider_path(conn, :show, id)
@@ -88,13 +90,17 @@ defmodule ClaperWeb.Admin.OidcProviderControllerTest do
     end
 
     test "validates provider data before creating", %{admin_conn: conn} do
-      invalid_url_attrs = Map.merge(@valid_provider_attrs, %{
-        name: "Invalid URL Provider",
-        issuer: "invalid-url", # Not a valid URL
-        redirect_uri: "also-invalid"
-      })
-      
-      conn = post(conn, Routes.admin_oidc_provider_path(conn, :create), provider: invalid_url_attrs)
+      invalid_url_attrs =
+        Map.merge(@valid_provider_attrs, %{
+          name: "Invalid URL Provider",
+          # Not a valid URL
+          issuer: "invalid-url",
+          redirect_uri: "also-invalid"
+        })
+
+      conn =
+        post(conn, Routes.admin_oidc_provider_path(conn, :create), provider: invalid_url_attrs)
+
       assert html_response(conn, 200) =~ "Add New OIDC Provider"
       assert html_response(conn, 200) =~ "must start with http"
     end
@@ -110,7 +116,11 @@ defmodule ClaperWeb.Admin.OidcProviderControllerTest do
 
   describe "update provider" do
     test "redirects when data is valid", %{admin_conn: conn, provider: provider} do
-      conn = put(conn, Routes.admin_oidc_provider_path(conn, :update, provider), provider: @update_attrs)
+      conn =
+        put(conn, Routes.admin_oidc_provider_path(conn, :update, provider),
+          provider: @update_attrs
+        )
+
       assert redirected_to(conn) == Routes.admin_oidc_provider_path(conn, :show, provider)
 
       conn = get(conn, Routes.admin_oidc_provider_path(conn, :show, provider))
@@ -118,18 +128,27 @@ defmodule ClaperWeb.Admin.OidcProviderControllerTest do
     end
 
     test "renders errors when data is invalid", %{admin_conn: conn, provider: provider} do
-      conn = put(conn, Routes.admin_oidc_provider_path(conn, :update, provider), provider: @invalid_attrs)
+      conn =
+        put(conn, Routes.admin_oidc_provider_path(conn, :update, provider),
+          provider: @invalid_attrs
+        )
+
       assert html_response(conn, 200) =~ "Edit OIDC Provider"
       assert html_response(conn, 200) =~ "can&#39;t be blank"
     end
 
     test "validates provider data before updating", %{admin_conn: conn, provider: provider} do
       invalid_url_attrs = %{
-        issuer: "invalid-url", # Not a valid URL
+        # Not a valid URL
+        issuer: "invalid-url",
         redirect_uri: "also-invalid"
       }
-      
-      conn = put(conn, Routes.admin_oidc_provider_path(conn, :update, provider), provider: invalid_url_attrs)
+
+      conn =
+        put(conn, Routes.admin_oidc_provider_path(conn, :update, provider),
+          provider: invalid_url_attrs
+        )
+
       assert html_response(conn, 200) =~ "Edit OIDC Provider"
       assert html_response(conn, 200) =~ "must start with http"
     end
@@ -139,7 +158,7 @@ defmodule ClaperWeb.Admin.OidcProviderControllerTest do
     test "deletes chosen provider", %{admin_conn: conn, provider: provider} do
       conn = delete(conn, Routes.admin_oidc_provider_path(conn, :delete, provider))
       assert redirected_to(conn) == Routes.admin_oidc_provider_path(conn, :index)
-      
+
       assert_raise Ecto.NoResultsError, fn ->
         Oidc.get_provider!(provider.id)
       end

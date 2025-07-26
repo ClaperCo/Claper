@@ -12,50 +12,53 @@ defmodule ClaperWeb.AdminLive.SearchFilterComponent do
               <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                 <i class="fas fa-search text-gray-400"></i>
               </div>
-              <input 
-                type="text" 
-                name="search" 
-                value={@search_value || ""} 
-                class="focus:ring-indigo-500 focus:border-indigo-500 block w-full pl-10 sm:text-sm border-gray-300 rounded-md" 
+              <input
+                type="text"
+                name="search"
+                value={@search_value || ""}
+                class="focus:ring-indigo-500 focus:border-indigo-500 block w-full pl-10 sm:text-sm border-gray-300 rounded-md"
                 placeholder={@search_placeholder || "Search..."}
                 phx-debounce="300"
                 phx-change="search_change"
                 phx-target={@myself}
               />
             </div>
-            
+
             <%= if @filters && length(@filters) > 0 do %>
               <div class="ml-3 flex space-x-2">
                 <%= for filter <- @filters do %>
-                  <select 
+                  <select
                     name={filter.name}
                     class="block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
                     phx-change="filter_change"
                     phx-target={@myself}
                     phx-value-filter={filter.name}
                   >
-                    <option disabled={!@filter_values[filter.name]} selected={!@filter_values[filter.name]}>
-                      <%= filter.label %>
+                    <option
+                      disabled={!@filter_values[filter.name]}
+                      selected={!@filter_values[filter.name]}
+                    >
+                      {filter.label}
                     </option>
                     <%= for {label, value} <- filter.options do %>
                       <option value={value} selected={@filter_values[filter.name] == value}>
-                        <%= label %>
+                        {label}
                       </option>
                     <% end %>
                   </select>
                 <% end %>
               </div>
             <% end %>
-            
-            <button 
-              type="submit" 
+
+            <button
+              type="submit"
               class="ml-3 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
             >
               Search
             </button>
-            
+
             <%= if @show_clear and (@search_value || has_active_filters?(@filter_values)) do %>
-              <button 
+              <button
                 type="button"
                 phx-click="clear_all"
                 phx-target={@myself}
@@ -66,7 +69,7 @@ defmodule ClaperWeb.AdminLive.SearchFilterComponent do
             <% end %>
           </form>
         </div>
-        
+
         <div class="ml-4 mt-2 flex-shrink-0">
           <%= if @export_csv_enabled do %>
             <button
@@ -75,23 +78,22 @@ defmodule ClaperWeb.AdminLive.SearchFilterComponent do
               phx-target={@myself}
               class="relative inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
             >
-              <i class="fas fa-file-csv mr-2"></i>
-              Export CSV
+              <i class="fas fa-file-csv mr-2"></i> Export CSV
             </button>
           <% end %>
-          
+
           <%= if @new_path do %>
             <.link
               navigate={@new_path}
               class="ml-3 relative inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
             >
               <i class="fas fa-plus mr-2"></i>
-              <%= @new_label || "New" %>
+              {@new_label || "New"}
             </.link>
           <% end %>
-          
+
           <%= if @custom_actions do %>
-            <%= render_slot(@custom_actions) %>
+            {render_slot(@custom_actions)}
           <% end %>
         </div>
       </div>
@@ -106,7 +108,7 @@ defmodule ClaperWeb.AdminLive.SearchFilterComponent do
 
   @impl true
   def update(assigns, socket) do
-    socket = 
+    socket =
       socket
       |> assign(assigns)
       |> assign_new(:search_placeholder, fn -> "Search..." end)
@@ -124,18 +126,31 @@ defmodule ClaperWeb.AdminLive.SearchFilterComponent do
 
   @impl true
   def handle_event("search", %{"search" => search_value}, socket) do
-    send(self(), {:search_filter_changed, %{search: search_value, filters: socket.assigns.filter_values}})
+    send(
+      self(),
+      {:search_filter_changed, %{search: search_value, filters: socket.assigns.filter_values}}
+    )
+
     {:noreply, assign(socket, search_value: search_value)}
   end
 
   def handle_event("search_change", %{"search" => search_value}, socket) do
-    send(self(), {:search_filter_changed, %{search: search_value, filters: socket.assigns.filter_values}})
+    send(
+      self(),
+      {:search_filter_changed, %{search: search_value, filters: socket.assigns.filter_values}}
+    )
+
     {:noreply, assign(socket, search_value: search_value)}
   end
 
   def handle_event("filter_change", %{"filter" => filter_name, "value" => filter_value}, socket) do
     filter_values = Map.put(socket.assigns.filter_values, filter_name, filter_value)
-    send(self(), {:search_filter_changed, %{search: socket.assigns.search_value, filters: filter_values}})
+
+    send(
+      self(),
+      {:search_filter_changed, %{search: socket.assigns.search_value, filters: filter_values}}
+    )
+
     {:noreply, assign(socket, filter_values: filter_values)}
   end
 
@@ -145,7 +160,12 @@ defmodule ClaperWeb.AdminLive.SearchFilterComponent do
   end
 
   def handle_event("export_csv", _params, socket) do
-    send(self(), {:export_csv_requested, %{search: socket.assigns.search_value, filters: socket.assigns.filter_values}})
+    send(
+      self(),
+      {:export_csv_requested,
+       %{search: socket.assigns.search_value, filters: socket.assigns.filter_values}}
+    )
+
     {:noreply, socket}
   end
 

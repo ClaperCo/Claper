@@ -3,15 +3,15 @@ defmodule Claper.Accounts.Guardian do
   Implementation module for Guardian authentication.
   This module handles JWT token generation and validation for user authentication.
   """
-  
+
   defmodule Plug do
     @moduledoc """
     Plug helpers for Guardian authentication in tests.
     """
-    
+
     @doc """
     Sign in a user to a conn.
-    
+
     ## Parameters
       - conn: The connection
       - user: The user to sign in

@@ -7,13 +7,7 @@ defmodule ClaperWeb.AdminLive.EventLive.FormComponent do
   def render(assigns) do
     ~H"""
     <div>
-      <.form
-        for={@form}
-        id="event-form"
-        phx-target={@myself}
-        phx-change="validate"
-        phx-submit="save"
-      >
+      <.form for={@form} id="event-form" phx-target={@myself} phx-change="validate" phx-submit="save">
         <div class="grid grid-cols-6 gap-6">
           <.live_component
             module={ClaperWeb.AdminLive.FormFieldComponent}
@@ -27,7 +21,7 @@ defmodule ClaperWeb.AdminLive.EventLive.FormComponent do
             width_class="sm:col-span-6"
             description="A unique name for this event"
           />
-          
+
           <.live_component
             module={ClaperWeb.AdminLive.FormFieldComponent}
             id="event-code"
@@ -40,7 +34,7 @@ defmodule ClaperWeb.AdminLive.EventLive.FormComponent do
             width_class="sm:col-span-3"
             description="A unique code for participants to join this event"
           />
-          
+
           <.live_component
             module={ClaperWeb.AdminLive.FormFieldComponent}
             id="event-started-at"
@@ -51,7 +45,7 @@ defmodule ClaperWeb.AdminLive.EventLive.FormComponent do
             required={true}
             width_class="sm:col-span-3"
           />
-          
+
           <.live_component
             module={ClaperWeb.AdminLive.FormFieldComponent}
             id="event-expired-at"
@@ -63,7 +57,7 @@ defmodule ClaperWeb.AdminLive.EventLive.FormComponent do
             width_class="sm:col-span-3"
             description="When this event expires (optional)"
           />
-          
+
           <.live_component
             module={ClaperWeb.AdminLive.FormFieldComponent}
             id="event-audience-peak"
@@ -94,7 +88,7 @@ defmodule ClaperWeb.AdminLive.EventLive.FormComponent do
               phx-disable-with="Saving..."
               class="ml-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
             >
-              <%= if @action == :new, do: "Create Event", else: "Update Event" %>
+              {if @action == :new, do: "Create Event", else: "Update Event"}
             </button>
           </div>
         </div>

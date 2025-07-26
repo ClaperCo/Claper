@@ -44,6 +44,13 @@ config :tailwind,
       --output=priv/static/assets/app.css
     ),
     cd: Path.expand("..", __DIR__)
+  ],
+  admin: [
+    args: ~w(
+      --input=assets/css/admin.css
+      --output=priv/static/assets/admin.css
+    ),
+    cd: Path.expand("..", __DIR__)
   ]
 
 # Configure esbuild (the version is required)

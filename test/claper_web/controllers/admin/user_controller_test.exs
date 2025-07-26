@@ -13,22 +13,22 @@ defmodule ClaperWeb.Admin.UserControllerTest do
     # Create roles
     {:ok, user_role} = Accounts.create_role(%{name: "user"})
     {:ok, admin_role} = Accounts.create_role(%{name: "admin"})
-    
+
     # Create an admin user
     {:ok, admin} = Accounts.create_user(%{email: "admin@example.com", password: "Password123!"})
     {:ok, admin} = Accounts.assign_role(admin, admin_role)
-    
+
     # Create a regular user for testing
     {:ok, user} = Accounts.create_user(@valid_user_attrs)
     {:ok, user} = Accounts.assign_role(user, user_role)
-    
+
     # Create a conn with admin logged in
-    admin_conn = 
+    admin_conn =
       build_conn()
       |> Map.replace!(:secret_key_base, ClaperWeb.Endpoint.config(:secret_key_base))
       |> init_test_session(%{})
       |> Accounts.Guardian.Plug.sign_in(admin)
-    
+
     %{admin: admin, user: user, admin_conn: admin_conn}
   end
 
@@ -42,7 +42,7 @@ defmodule ClaperWeb.Admin.UserControllerTest do
 
     test "exports users as CSV", %{admin_conn: conn} do
       conn = get(conn, Routes.admin_user_path(conn, :index, format: "csv"))
-      
+
       assert response_content_type(conn, :csv)
       assert response(conn, 200) =~ "Email,Name,Role,Created At"
       assert response(conn, 200) =~ "admin@example.com"
@@ -59,7 +59,10 @@ defmodule ClaperWeb.Admin.UserControllerTest do
 
   describe "create user" do
     test "redirects to show when data is valid", %{admin_conn: conn} do
-      conn = post(conn, Routes.admin_user_path(conn, :create), user: %{email: "new@example.com", password: "Password123!"})
+      conn =
+        post(conn, Routes.admin_user_path(conn, :create),
+          user: %{email: "new@example.com", password: "Password123!"}
+        )
 
       assert %{id: id} = redirected_params(conn)
       assert redirected_to(conn) == Routes.admin_user_path(conn, :show, id)
@@ -101,7 +104,7 @@ defmodule ClaperWeb.Admin.UserControllerTest do
     test "deletes chosen user", %{admin_conn: conn, user: user} do
       conn = delete(conn, Routes.admin_user_path(conn, :delete, user))
       assert redirected_to(conn) == Routes.admin_user_path(conn, :index)
-      
+
       # Verify user is deleted (or soft-deleted depending on implementation)
       assert_raise Ecto.NoResultsError, fn ->
         Accounts.get_user!(user.id)
@@ -113,7 +116,7 @@ defmodule ClaperWeb.Admin.UserControllerTest do
     test "promotes user to admin", %{admin_conn: conn, user: user} do
       conn = post(conn, Routes.admin_user_path(conn, :promote, user))
       assert redirected_to(conn) == Routes.admin_user_path(conn, :index)
-      
+
       # Verify user is now admin
       updated_user = Repo.get(User, user.id) |> Repo.preload(:role)
       assert updated_user.role.name == "admin"
@@ -124,19 +127,19 @@ defmodule ClaperWeb.Admin.UserControllerTest do
     test "demotes admin to regular user", %{admin_conn: conn, admin: admin, user: user} do
       # First promote the test user to admin
       {:ok, user} = Accounts.promote_to_admin(user)
-      
+
       # Then demote
       conn = post(conn, Routes.admin_user_path(conn, :demote, user))
       assert redirected_to(conn) == Routes.admin_user_path(conn, :index)
-      
+
       # Verify user is now a regular user
       updated_user = Repo.get(User, user.id) |> Repo.preload(:role)
       assert updated_user.role.name == "user"
-      
+
       # Cannot demote the last admin
       conn = post(conn, Routes.admin_user_path(conn, :demote, admin))
       assert get_flash(conn, :error) =~ "Cannot demote the last admin"
-      
+
       # Verify admin is still admin
       updated_admin = Repo.get(User, admin.id) |> Repo.preload(:role)
       assert updated_admin.role.name == "admin"

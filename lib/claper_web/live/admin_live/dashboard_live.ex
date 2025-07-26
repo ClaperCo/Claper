@@ -32,12 +32,15 @@ defmodule ClaperWeb.AdminLive.DashboardLive do
   def handle_event("change_period", %{"period" => period}, socket) do
     period_atom = String.to_atom(period)
 
-    days_back = case period_atom do
-      :day -> 30
-      :week -> 84  # 12 weeks
-      :month -> 365 # 12 months
-      _ -> 30
-    end
+    days_back =
+      case period_atom do
+        :day -> 30
+        # 12 weeks
+        :week -> 84
+        # 12 months
+        :month -> 365
+        _ -> 30
+      end
 
     socket =
       socket

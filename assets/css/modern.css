@@ -1,0 +1,152 @@
+@theme {
+  /* Colors */
+  /* Main colors */
+  --color-*: initial;
+  --color-sky-blue: #81EBFE;
+  --color-teal: #14BFDB;
+  --color-azure: #29ACED;
+  --color-mauve: #8611ED;
+  --color-purple: #B80FEF;
+  --color-navy: #140553;
+  
+  /* Light colors */
+  --color-cold-pink: #F3DEFA;
+  --color-warm-pink: #FFD2F6;
+  --color-yeallaw: #FFEAC2;
+  --color-pistacio: #D4FFF4;
+  --color-sky-tern: #C8EDFF;
+  --color-tealy: #81EBFE;
+  --color-earl-night: #0A7BB4;
+  --color-dark-night: #184992;
+
+  /* Gradient */
+  --gradient-primary: 123deg, var(--color-sky-blue) -36%, var(--color-teal) -12%, var(--color-azure) 21%, var(--color-mauve) 81%, var(--color-purple) 130%;
+  --gradient-secondary: 123deg, rgba(129, 235, 254, 0.9) -36%, rgba(20, 191, 219, 0.9) -12%, rgba(41, 172, 237, 0.9) 21%, rgba(134, 17, 237, 0.9) 81%, rgba(184, 15, 239, 0.9) 130%;
+
+  /* Grayscale */
+  --color-white: #FFFFFF;
+  --color-black: #191919;
+  --color-gray-20: #CCCCCC;
+  --color-gray-40: #9F9F9F;
+  --color-gray-60: #737373;
+  --color-gray-80: #464646;
+  --color-gray-100: #191919;
+  --color-gray-120: #000000;
+  
+  --color-platinum: #F0F0F0;
+  --color-platinum-20: #FFFFFF;
+  --color-platinum-40: #FCFCFC;
+  --color-platinum-60: #F8F8F8;
+  --color-platinum-80: #F4F4F4;
+  --color-platinum-100: #F0F0F0;
+  --color-platinum-120: #EEEEEE;
+  
+  /* Typography */
+  --font-display: "Montserrat", sans-serif;
+  
+  /* Font Sizes - Desktop */
+  --text-h1: 80px;
+  --leading-h1: 120%;
+  --font-weight-h1: 900;
+  
+  --text-h2: 40px;
+  --leading-h2: 120%;
+  --font-weight-h2: 700;
+  
+  --text-h3: 32px;
+  --leading-h3: 120%;
+  --font-weight-h3: 600;
+  
+  --text-h4: 24px;
+  --leading-h4: 120%;
+  --font-weight-h4: 500;
+  
+  --text-h5: 18px;
+  --leading-h5: 120%;
+  --font-weight-h5: 600;
+  
+  --text-h6: 16px;
+  --leading-h6: 120%;
+  --font-weight-h6: 500;
+  
+  --text-subheading: 20px;
+  --leading-subheading: 150%;
+  --font-weight-subheading: 300;
+  
+  --text-body-bold: 16px;
+  --leading-body-bold: 150%;
+  --font-weight-body-bold: 700;
+  
+  --text-body: 16px;
+  --leading-body: 150%;
+  --font-weight-body: 400;
+  
+  --text-small-body-bold: 14px;
+  --leading-small-body-bold: 150%;
+  --font-weight-small-body-bold: 600;
+  
+  --text-small-body: 14px;
+  --leading-small-body: 150%;
+  --font-weight-small-body: 400;
+  
+  --text-caption: 14px;
+  --leading-caption: 150%;
+  --font-weight-caption: 300;
+  
+  /* Font Sizes - Mobile */
+  --text-mobile-h1: 32px;
+  --leading-mobile-h1: 120%;
+  --font-weight-mobile-h1: 900;
+  
+  --text-mobile-h2: 28px;
+  --leading-mobile-h2: 120%;
+  --font-weight-mobile-h2: 700;
+  
+  --text-mobile-h3: 22px;
+  --leading-mobile-h3: 120%;
+  --font-weight-mobile-h3: 600;
+  
+  --text-mobile-h4: 18px;
+  --leading-mobile-h4: 120%;
+  --font-weight-mobile-h4: 500;
+  
+  --text-mobile-h5: 16px;
+  --leading-mobile-h5: 120%;
+  --font-weight-mobile-h5: 600;
+  
+  --text-mobile-h6: 14px;
+  --leading-mobile-h6: 120%;
+  --font-weight-mobile-h6: 500;
+  
+  /* Spacing */
+  --spacing-0: 0px;
+  --spacing-4: 4px;
+  --spacing-8: 8px;
+  --spacing-12: 12px;
+  --spacing-16: 16px;
+  --spacing-20: 20px;
+  --spacing-24: 24px;
+  --spacing-28: 28px;
+  --spacing-32: 32px;
+  --spacing-36: 36px;
+  --spacing-40: 40px;
+  --spacing-44: 44px;
+  --spacing-48: 48px;
+  --spacing-52: 52px;
+  --spacing-56: 56px;
+  --spacing-60: 60px;
+  --spacing-64: 64px;
+  --spacing-68: 68px;
+  --spacing-72: 72px;
+  --spacing-76: 76px;
+  --spacing-80: 80px;
+  --spacing-128: 128px;
+  
+  /* Font Weights */
+  --font-weight-regular: 400;
+  --font-weight-bold: 700;
+
+  /* Shadows */
+  --shadow-3xl: 0px 902px 253px 0px rgba(65, 69, 124, 0.00), 0px 577px 231px 0px rgba(65, 69, 124, 0.01), 0px 325px 195px 0px rgba(65, 69, 124, 0.05), 0px 144px 144px 0px rgba(65, 69, 124, 0.09), 0px 36px 79px 0px rgba(65, 69, 124, 0.10)
+
+}

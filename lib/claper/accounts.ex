@@ -43,7 +43,6 @@ defmodule Claper.Accounts do
     |> Repo.get_by(email: email)
   end
 
-
   @doc """
   Gets a user by email and creates a new user if the user does not exist.
 
@@ -853,7 +852,9 @@ defmodule Claper.Accounts do
   """
   def assign_role(%User{} = user, role_name) when is_binary(role_name) do
     case get_role_by_name(role_name) do
-      nil -> {:error, :role_not_found}
+      nil ->
+        {:error, :role_not_found}
+
       role ->
         user
         |> Ecto.Changeset.change(%{role_id: role.id})
@@ -890,7 +891,9 @@ defmodule Claper.Accounts do
   """
   def list_users_by_role(role_name) when is_binary(role_name) do
     case get_role_by_name(role_name) do
-      nil -> []
+      nil ->
+        []
+
       role ->
         User
         |> where([u], u.role_id == ^role.id and is_nil(u.deleted_at))

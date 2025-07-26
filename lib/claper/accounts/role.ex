@@ -3,12 +3,12 @@ defmodule Claper.Accounts.Role do
   import Ecto.Changeset
 
   @type t :: %__MODULE__{
-    id: integer(),
-    name: String.t(),
-    permissions: map(),
-    inserted_at: NaiveDateTime.t(),
-    updated_at: NaiveDateTime.t()
-  }
+          id: integer(),
+          name: String.t(),
+          permissions: map(),
+          inserted_at: NaiveDateTime.t(),
+          updated_at: NaiveDateTime.t()
+        }
 
   schema "roles" do
     field :name, :string

@@ -18,6 +18,7 @@ alias Claper.Repo
 if !Repo.get_by(Role, name: "admin") do
   %Role{name: "admin", permissions: %{"all" => true}}
   |> Repo.insert!()
+
   IO.puts("Created admin role")
 end
 
@@ -25,6 +26,7 @@ end
 if !Repo.get_by(Role, name: "user") do
   %Role{name: "user", permissions: %{}}
   |> Repo.insert!()
+
   IO.puts("Created user role")
 end
 

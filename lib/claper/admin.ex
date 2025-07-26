@@ -84,7 +84,6 @@ defmodule Claper.Admin do
 
     result = Repo.query!(sql, [period_sql_value, start_date, end_date])
 
-
     user_counts =
       result.rows
       |> Enum.map(fn [period, count] ->
@@ -95,9 +94,11 @@ defmodule Claper.Admin do
 
     # Format data for charts
     labels = Enum.map(date_range, &format_date_label(&1, period))
-    values = Enum.map(date_range, fn date ->
-      Map.get(user_counts, truncate_date(date, period), 0)
-    end)
+
+    values =
+      Enum.map(date_range, fn date ->
+        Map.get(user_counts, truncate_date(date, period), 0)
+      end)
 
     %{
       labels: labels,
@@ -154,9 +155,11 @@ defmodule Claper.Admin do
 
     # Format data for charts
     labels = Enum.map(date_range, &format_date_label(&1, period))
-    values = Enum.map(date_range, fn date ->
-      Map.get(event_counts, truncate_date(date, period), 0)
-    end)
+
+    values =
+      Enum.map(date_range, fn date ->
+        Map.get(event_counts, truncate_date(date, period), 0)
+      end)
 
     %{
       labels: labels,
@@ -215,18 +218,22 @@ defmodule Claper.Admin do
     seven_days_ago = NaiveDateTime.add(now, -(7 * 24 * 60 * 60), :second)
 
     %{
-      users_today: User
+      users_today:
+        User
         |> where([u], is_nil(u.deleted_at))
         |> where([u], u.inserted_at >= ^twenty_four_hours_ago)
         |> Repo.aggregate(:count, :id),
-      events_today: Event
+      events_today:
+        Event
         |> where([e], e.inserted_at >= ^twenty_four_hours_ago)
         |> Repo.aggregate(:count, :id),
-      users_this_week: User
+      users_this_week:
+        User
         |> where([u], is_nil(u.deleted_at))
         |> where([u], u.inserted_at >= ^seven_days_ago)
         |> Repo.aggregate(:count, :id),
-      events_this_week: Event
+      events_this_week:
+        Event
         |> where([e], e.inserted_at >= ^seven_days_ago)
         |> Repo.aggregate(:count, :id)
     }
@@ -240,12 +247,16 @@ defmodule Claper.Admin do
     |> Date.range(NaiveDateTime.to_date(end_date))
     |> Enum.to_list()
     |> case do
-      dates when period == :day -> dates
-      dates when period == :week -> dates |> Enum.chunk_every(7) |> Enum.map(&List.first/1)
-      dates when period == :month -> dates |> Enum.group_by(&Date.beginning_of_month/1) |> Map.keys()
+      dates when period == :day ->
+        dates
+
+      dates when period == :week ->
+        dates |> Enum.chunk_every(7) |> Enum.map(&List.first/1)
+
+      dates when period == :month ->
+        dates |> Enum.group_by(&Date.beginning_of_month/1) |> Map.keys()
     end
   end
-
 
   defp period_sql(period) do
     case period do
@@ -265,13 +276,24 @@ defmodule Claper.Admin do
 
   defp truncate_date(date, period) do
     naive_date = NaiveDateTime.new!(date, ~T[00:00:00])
+
     case period do
-      :day -> NaiveDateTime.truncate(naive_date, :second)
+      :day ->
+        NaiveDateTime.truncate(naive_date, :second)
+
       :week ->
         days_to_subtract = Date.day_of_week(date) - 1
-        date |> Date.add(-days_to_subtract) |> NaiveDateTime.new!(~T[00:00:00]) |> NaiveDateTime.truncate(:second)
+
+        date
+        |> Date.add(-days_to_subtract)
+        |> NaiveDateTime.new!(~T[00:00:00])
+        |> NaiveDateTime.truncate(:second)
+
       :month ->
-        date |> Date.beginning_of_month() |> NaiveDateTime.new!(~T[00:00:00]) |> NaiveDateTime.truncate(:second)
+        date
+        |> Date.beginning_of_month()
+        |> NaiveDateTime.new!(~T[00:00:00])
+        |> NaiveDateTime.truncate(:second)
     end
   end
 

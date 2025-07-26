@@ -96,7 +96,16 @@ defmodule ClaperWeb.Helpers.CSVExporter do
     - CSV formatted string
   """
   def export_events_to_csv(events) do
-    headers = ["Name", "Code", "Owner", "Started At", "Expired At", "Audience Peak", "Date Created"]
+    headers = [
+      "Name",
+      "Code",
+      "Owner",
+      "Started At",
+      "Expired At",
+      "Audience Peak",
+      "Date Created"
+    ]
+
     fields = [:name, :code, :user_email, :started_at, :expired_at, :audience_peak, :inserted_at]
 
     to_csv(events, headers, fields)

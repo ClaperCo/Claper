@@ -97,7 +97,11 @@ defmodule ClaperWeb.AdminLive.OidcProviderLive.FormComponent do
             field={:response_type}
             type="select"
             label="Response Type"
-            select_options={[{"Authorization Code", "code"}, {"Implicit", "token"}, {"Hybrid", "code token"}]}
+            select_options={[
+              {"Authorization Code", "code"},
+              {"Implicit", "token"},
+              {"Hybrid", "code token"}
+            ]}
             width_class="sm:col-span-3"
             description="OAuth 2.0 response type (defaults to 'code')"
           />
@@ -142,7 +146,7 @@ defmodule ClaperWeb.AdminLive.OidcProviderLive.FormComponent do
               phx-disable-with="Saving..."
               class="ml-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
             >
-              <%= if @action == :new, do: "Create Provider", else: "Update Provider" %>
+              {if @action == :new, do: "Create Provider", else: "Update Provider"}
             </button>
           </div>
         </div>

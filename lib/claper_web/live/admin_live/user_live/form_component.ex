@@ -7,13 +7,7 @@ defmodule ClaperWeb.AdminLive.UserLive.FormComponent do
   def render(assigns) do
     ~H"""
     <div>
-      <.form
-        for={@form}
-        id="user-form"
-        phx-target={@myself}
-        phx-change="validate"
-        phx-submit="save"
-      >
+      <.form for={@form} id="user-form" phx-target={@myself} phx-change="validate" phx-submit="save">
         <div class="grid grid-cols-6 gap-6">
           <.live_component
             module={ClaperWeb.AdminLive.FormFieldComponent}
@@ -27,7 +21,7 @@ defmodule ClaperWeb.AdminLive.UserLive.FormComponent do
             width_class="sm:col-span-6"
             description="User's email address (must be unique)"
           />
-          
+
           <%= if @action == :new do %>
             <.live_component
               module={ClaperWeb.AdminLive.FormFieldComponent}
@@ -42,7 +36,7 @@ defmodule ClaperWeb.AdminLive.UserLive.FormComponent do
               description="Initial password for the user"
             />
           <% end %>
-          
+
           <.live_component
             module={ClaperWeb.AdminLive.FormFieldComponent}
             id="user-role-id"
@@ -55,8 +49,7 @@ defmodule ClaperWeb.AdminLive.UserLive.FormComponent do
             width_class="sm:col-span-3"
             description="User's access level"
           />
-          
-          
+
           <%= if @action == :edit do %>
             <.live_component
               module={ClaperWeb.AdminLive.FormFieldComponent}
@@ -87,7 +80,7 @@ defmodule ClaperWeb.AdminLive.UserLive.FormComponent do
               phx-disable-with="Saving..."
               class="ml-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
             >
-              <%= if @action == :new, do: "Create User", else: "Update User" %>
+              {if @action == :new, do: "Create User", else: "Update User"}
             </button>
           </div>
         </div>
@@ -99,8 +92,8 @@ defmodule ClaperWeb.AdminLive.UserLive.FormComponent do
   @impl true
   def update(%{user: user} = assigns, socket) do
     changeset = Accounts.change_user(user)
-    
-    role_options = 
+
+    role_options =
       Accounts.list_roles()
       |> Enum.map(&{String.capitalize(&1.name), &1.id})
 
@@ -115,7 +108,7 @@ defmodule ClaperWeb.AdminLive.UserLive.FormComponent do
   def handle_event("validate", %{"user" => user_params}, socket) do
     # Convert confirmed checkbox to confirmed_at datetime
     user_params = maybe_convert_confirmed_field(user_params)
-    
+
     changeset =
       socket.assigns.user
       |> Accounts.change_user(user_params)
@@ -167,9 +160,9 @@ defmodule ClaperWeb.AdminLive.UserLive.FormComponent do
   defp assign_form(socket, %Ecto.Changeset{} = changeset) do
     # Add virtual field for confirmed status
     form = to_form(changeset, as: :user)
-    
+
     # For edit forms, set the confirmed checkbox based on confirmed_at
-    form = 
+    form =
       if socket.assigns.action == :edit do
         confirmed = !is_nil(changeset.data.confirmed_at)
         params = Map.put(form.params || %{}, "confirmed", confirmed)
@@ -177,20 +170,22 @@ defmodule ClaperWeb.AdminLive.UserLive.FormComponent do
       else
         form
       end
-    
+
     assign(socket, :form, form)
   end
 
   defp maybe_convert_confirmed_field(user_params) do
     case Map.get(user_params, "confirmed") do
-      "true" -> 
+      "true" ->
         user_params
         |> Map.delete("confirmed")
         |> Map.put("confirmed_at", NaiveDateTime.utc_now())
+
       "false" ->
         user_params
-        |> Map.delete("confirmed")  
+        |> Map.delete("confirmed")
         |> Map.put("confirmed_at", nil)
+
       _ ->
         user_params
     end

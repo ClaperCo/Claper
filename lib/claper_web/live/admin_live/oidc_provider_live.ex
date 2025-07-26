@@ -7,13 +7,12 @@ defmodule ClaperWeb.AdminLive.OidcProviderLive do
 
   @impl true
   def mount(_params, _session, socket) do
-    {:ok, 
-      socket
-      |> assign(:page_title, "Admin - OIDC Providers")
-      |> assign(:providers, list_providers())
-      |> assign(:search, "")
-      |> assign(:current_sort, %{field: :name, order: :asc})
-    }
+    {:ok,
+     socket
+     |> assign(:page_title, "Admin - OIDC Providers")
+     |> assign(:providers, list_providers())
+     |> assign(:search, "")
+     |> assign(:current_sort, %{field: :name, order: :asc})}
   end
 
   @impl true
@@ -26,15 +25,15 @@ defmodule ClaperWeb.AdminLive.OidcProviderLive do
     |> assign(:page_title, "OIDC Providers")
     |> assign(:provider, nil)
   end
-  
+
   defp apply_action(socket, :show, %{"id" => id}) do
     provider = Oidc.get_provider!(id)
-    
+
     socket
     |> assign(:page_title, "OIDC Provider Details")
     |> assign(:provider, provider)
   end
-  
+
   defp apply_action(socket, :new, _params) do
     socket
     |> assign(:page_title, "New OIDC Provider")
@@ -73,25 +72,27 @@ defmodule ClaperWeb.AdminLive.OidcProviderLive do
   @impl true
   def handle_event("sort", %{"field" => field}, socket) do
     %{current_sort: %{field: current_field, order: current_order}} = socket.assigns
-    
-    {field, order} = 
+
+    {field, order} =
       if current_field == String.to_existing_atom(field) do
         {current_field, if(current_order == :asc, do: :desc, else: :asc)}
       else
         {String.to_existing_atom(field), :asc}
       end
-    
+
     providers = sort_providers(socket.assigns.providers, field, order)
-    
-    {:noreply, 
-      socket
-      |> assign(:providers, providers)
-      |> assign(:current_sort, %{field: field, order: order})
-    }
+
+    {:noreply,
+     socket
+     |> assign(:providers, providers)
+     |> assign(:current_sort, %{field: field, order: order})}
   end
 
   @impl true
-  def handle_info({ClaperWeb.AdminLive.OidcProviderLive.FormComponent, {:saved, _provider}}, socket) do
+  def handle_info(
+        {ClaperWeb.AdminLive.OidcProviderLive.FormComponent, {:saved, _provider}},
+        socket
+      ) do
     {:noreply, assign(socket, :providers, list_providers())}
   end
 
@@ -102,7 +103,10 @@ defmodule ClaperWeb.AdminLive.OidcProviderLive do
 
     {:noreply,
      socket
-     |> put_flash(:info, "Provider #{if updated_provider.active, do: "activated", else: "deactivated"} successfully")
+     |> put_flash(
+       :info,
+       "Provider #{if updated_provider.active, do: "activated", else: "deactivated"} successfully"
+     )
      |> assign(:providers, list_providers())}
   end
 
@@ -111,6 +115,7 @@ defmodule ClaperWeb.AdminLive.OidcProviderLive do
   end
 
   defp search_providers(search) when search == "", do: list_providers()
+
   defp search_providers(search) do
     search_term = "%#{search}%"
     Oidc.search_providers(search_term)
@@ -120,24 +125,50 @@ defmodule ClaperWeb.AdminLive.OidcProviderLive do
     Enum.sort_by(providers, &Map.get(&1, field), order)
   end
 
-
   defp sort_indicator(current_sort, field) do
     assigns = %{current_sort: current_sort, field: field}
-    
+
     ~H"""
     <%= if @current_sort.field == @field do %>
       <%= if @current_sort.order == :asc do %>
-        <svg class="ml-2 h-5 w-5 text-gray-500 group-hover:text-gray-700" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-          <path fill-rule="evenodd" d="M5.293 7.707a1 1 0 010-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 01-1.414 1.414L11 5.414V17a1 1 0 11-2 0V5.414L6.707 7.707a1 1 0 01-1.414 0z" clip-rule="evenodd" />
+        <svg
+          class="ml-2 h-5 w-5 text-gray-500 group-hover:text-gray-700"
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 20 20"
+          fill="currentColor"
+        >
+          <path
+            fill-rule="evenodd"
+            d="M5.293 7.707a1 1 0 010-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 01-1.414 1.414L11 5.414V17a1 1 0 11-2 0V5.414L6.707 7.707a1 1 0 01-1.414 0z"
+            clip-rule="evenodd"
+          />
         </svg>
       <% else %>
-        <svg class="ml-2 h-5 w-5 text-gray-500 group-hover:text-gray-700" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-          <path fill-rule="evenodd" d="M14.707 12.293a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 111.414-1.414L9 14.586V3a1 1 0 012 0v11.586l2.293-2.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+        <svg
+          class="ml-2 h-5 w-5 text-gray-500 group-hover:text-gray-700"
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 20 20"
+          fill="currentColor"
+        >
+          <path
+            fill-rule="evenodd"
+            d="M14.707 12.293a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 111.414-1.414L9 14.586V3a1 1 0 012 0v11.586l2.293-2.293a1 1 0 011.414 0z"
+            clip-rule="evenodd"
+          />
         </svg>
       <% end %>
     <% else %>
-      <svg class="ml-2 h-5 w-5 text-gray-400 opacity-0 group-hover:opacity-100" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-        <path fill-rule="evenodd" d="M10 3a1 1 0 01.707.293l3 3a1 1 0 01-1.414 1.414L10 5.414 7.707 7.707a1 1 0 01-1.414-1.414l3-3A1 1 0 0110 3zm-3.707 9.293a1 1 0 011.414 0L10 14.586l2.293-2.293a1 1 0 011.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd" />
+      <svg
+        class="ml-2 h-5 w-5 text-gray-400 opacity-0 group-hover:opacity-100"
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 20 20"
+        fill="currentColor"
+      >
+        <path
+          fill-rule="evenodd"
+          d="M10 3a1 1 0 01.707.293l3 3a1 1 0 01-1.414 1.414L10 5.414 7.707 7.707a1 1 0 01-1.414-1.414l3-3A1 1 0 0110 3zm-3.707 9.293a1 1 0 011.414 0L10 14.586l2.293-2.293a1 1 0 011.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z"
+          clip-rule="evenodd"
+        />
       </svg>
     <% end %>
     """

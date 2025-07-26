@@ -9,49 +9,88 @@
   <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
     <div class="bg-white p-6 rounded-lg border border-gray-200">
       <div class="text-sm text-gray-600 mb-2">Total Users</div>
-      <div class="text-4xl font-bold"><%= @stats.total_users %></div>
-      <div class="text-sm text-gray-600 mt-2"><span class={if @growth_metrics.users_growth > 0 do "text-green-600" else "text-red-600" end}><%= if @growth_metrics.users_growth >= 0 do %>+<% end %><%= @growth_metrics.users_growth %>%</span> vs last month</div>
+      <div class="text-4xl font-bold">{@stats.total_users}</div>
+      <div class="text-sm text-gray-600 mt-2">
+        <span class={
+          if @growth_metrics.users_growth > 0 do
+            "text-green-600"
+          else
+            "text-red-600"
+          end
+        }>
+          <%= if @growth_metrics.users_growth >= 0 do %>
+            +
+          <% end %>
+          {@growth_metrics.users_growth}%
+        </span>
+        vs last month
+      </div>
     </div>
-    
+
     <div class="bg-white p-6 rounded-lg border border-gray-200">
       <div class="text-sm text-gray-600 mb-2">Total Events</div>
-      <div class="text-4xl font-bold"><%= @stats.total_events %></div>
-      <div class="text-sm text-gray-600 mt-2"><span class={if @growth_metrics.events_growth > 0 do "text-green-600" else "text-red-600" end}><%= if @growth_metrics.events_growth >= 0 do %>+<% end %><%= @growth_metrics.events_growth %>%</span> vs last month</div>
+      <div class="text-4xl font-bold">{@stats.total_events}</div>
+      <div class="text-sm text-gray-600 mt-2">
+        <span class={
+          if @growth_metrics.events_growth > 0 do
+            "text-green-600"
+          else
+            "text-red-600"
+          end
+        }>
+          <%= if @growth_metrics.events_growth >= 0 do %>
+            +
+          <% end %>
+          {@growth_metrics.events_growth}%
+        </span>
+        vs last month
+      </div>
     </div>
-    
+
     <div class="bg-white p-6 rounded-lg border border-gray-200">
       <div class="text-sm text-gray-600 mb-2">Active Events</div>
-      <div class="text-4xl font-bold"><%= @stats.active_events %></div>
+      <div class="text-4xl font-bold">{@stats.active_events}</div>
       <div class="text-sm text-gray-600 mt-2">Currently running</div>
     </div>
   </div>
   
-  <!-- Charts -->
+<!-- Charts -->
   <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-12">
     <div class="bg-white p-6 rounded-lg border border-gray-200">
       <h3 class="text-lg font-semibold">User Growth</h3>
       <h4 class="text-sm text-gray-600 mb-2">30 days</h4>
       <div class="h-72 relative">
-        <canvas id="userGrowthChart" phx-hook="UserGrowthChart" data-labels={Jason.encode!(@users_chart_data.labels)} data-values={Jason.encode!(@users_chart_data.values)}></canvas>
+        <canvas
+          id="userGrowthChart"
+          phx-hook="UserGrowthChart"
+          data-labels={Jason.encode!(@users_chart_data.labels)}
+          data-values={Jason.encode!(@users_chart_data.values)}
+        >
+        </canvas>
       </div>
     </div>
-    
+
     <div class="bg-white p-6 rounded-lg border border-gray-200">
       <h3 class="text-lg font-semibold">Event Creation</h3>
       <h4 class="text-sm text-gray-600 mb-2">30 days</h4>
       <div class="h-72 relative">
-        <canvas id="eventCreationChart" phx-hook="EventCreationChart" data-labels={Jason.encode!(@events_chart_data.labels)} data-values={Jason.encode!(@events_chart_data.values)}></canvas>
+        <canvas
+          id="eventCreationChart"
+          phx-hook="EventCreationChart"
+          data-labels={Jason.encode!(@events_chart_data.labels)}
+          data-values={Jason.encode!(@events_chart_data.values)}
+        >
+        </canvas>
       </div>
     </div>
-
   </div>
   
-  <!-- Recent Events Table -->
+<!-- Recent Events Table -->
   <div class="mt-12">
     <div class="mb-6">
       <h2 class="text-xl font-semibold">Recent Events</h2>
     </div>
-    
+
     <div class="bg-white rounded-lg border border-gray-200 overflow-hidden">
       <table class="w-full">
         <thead>
@@ -68,24 +107,40 @@
         <tbody class="divide-y divide-gray-100">
           <%= for event <- @recent_events do %>
             <% now = NaiveDateTime.utc_now() %>
-            <% status = cond do
-              is_nil(event.expired_at) == false -> {"Completed", "text-gray-600"}
-              NaiveDateTime.compare(event.started_at, now) == :gt -> {"Scheduled", "text-blue-600"}
-              true -> {"Active", "text-green-600"}
-            end %>
+            <% status =
+              cond do
+                is_nil(event.expired_at) == false ->
+                  {"Completed", "text-gray-600"}
+
+                NaiveDateTime.compare(event.started_at, now) == :gt ->
+                  {"Scheduled", "text-blue-600"}
+
+                true ->
+                  {"Active", "text-green-600"}
+              end %>
             <tr class="hover:bg-gray-50 transition-colors">
-              <td class="px-6 py-4 text-sm"><%= event.name %></td>
-              <td class="px-6 py-4 text-sm"><%= event.code %></td>
-              <td class="px-6 py-4 text-sm"><%= event.user.email %></td>
-              <td class="px-6 py-4 text-sm"><%= Calendar.strftime(event.started_at, "%b %d, %Y") %></td>
-              <td class="px-6 py-4 text-sm"><%= event.audience_peak %></td>
-              <td class={"px-6 py-4 text-sm font-medium #{elem(status, 1)}"}><%= elem(status, 0) %></td>
+              <td class="px-6 py-4 text-sm">{event.name}</td>
+              <td class="px-6 py-4 text-sm">{event.code}</td>
+              <td class="px-6 py-4 text-sm">{event.user.email}</td>
+              <td class="px-6 py-4 text-sm">
+                {Calendar.strftime(event.started_at, "%b %d, %Y")}
+              </td>
+              <td class="px-6 py-4 text-sm">{event.audience_peak}</td>
+              <td class={"px-6 py-4 text-sm font-medium #{elem(status, 1)}"}>
+                {elem(status, 0)}
+              </td>
               <td class="px-6 py-4 text-sm">
                 <div class="flex gap-2">
-                  <.link href={~p"/admin/events/#{event}"} class="px-3 py-1 text-xs border border-gray-300 rounded hover:bg-gray-50 transition-colors">
+                  <.link
+                    href={~p"/admin/events/#{event}"}
+                    class="px-3 py-1 text-xs border border-gray-300 rounded hover:bg-gray-50 transition-colors"
+                  >
                     View
                   </.link>
-                  <.link href={~p"/admin/events/#{event}/edit"} class="px-3 py-1 text-xs border border-gray-300 rounded hover:bg-gray-50 transition-colors">
+                  <.link
+                    href={~p"/admin/events/#{event}/edit"}
+                    class="px-3 py-1 text-xs border border-gray-300 rounded hover:bg-gray-50 transition-colors"
+                  >
                     Edit
                   </.link>
                 </div>

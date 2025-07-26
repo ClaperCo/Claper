@@ -95,7 +95,7 @@ defmodule Claper.Accounts.User do
 
   defp validate_admin_password(changeset, opts) do
     password = get_change(changeset, :password)
-    
+
     # Only validate password if it's provided
     if password && password != "" do
       changeset

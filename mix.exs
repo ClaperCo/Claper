@@ -136,6 +136,7 @@ defmodule Claper.MixProject do
       "assets.deploy": [
         "cmd --cd assets npm install",
         "tailwind default --minify",
+        "tailwind admin --minify",
         "esbuild default --minify",
         "sass default --no-source-map --style=compressed",
         "phx.digest"

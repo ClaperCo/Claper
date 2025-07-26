@@ -10,12 +10,11 @@ defmodule ClaperWeb.AdminLive.UserLive do
   @impl true
   def mount(_params, _session, socket) do
     {:ok,
-      socket
-      |> assign(:page_title, "Admin - Users")
-      |> assign(:users, list_users())
-      |> assign(:search, "")
-      |> assign(:current_sort, %{field: :email, order: :asc})
-    }
+     socket
+     |> assign(:page_title, "Admin - Users")
+     |> assign(:users, list_users())
+     |> assign(:search, "")
+     |> assign(:current_sort, %{field: :email, order: :asc})}
   end
 
   @impl true
@@ -70,10 +69,9 @@ defmodule ClaperWeb.AdminLive.UserLive do
     csv_content = CSVExporter.export_users_to_csv(socket.assigns.users)
 
     {:noreply,
-      socket
-      |> put_flash(:info, "Users exported successfully")
-      |> push_event("download_csv", %{filename: filename, content: csv_content})
-    }
+     socket
+     |> put_flash(:info, "Users exported successfully")
+     |> push_event("download_csv", %{filename: filename, content: csv_content})}
   end
 
   @impl true
@@ -83,21 +81,23 @@ defmodule ClaperWeb.AdminLive.UserLive do
     current_sort = %{field: field, order: direction}
 
     {:noreply,
-      socket
-      |> assign(:users, users)
-      |> assign(:current_sort, current_sort)
-    }
+     socket
+     |> assign(:users, users)
+     |> assign(:current_sort, current_sort)}
   end
 
   @impl true
   def handle_info({:table_action, action, user, _user_id}, socket) do
     case action do
-      :view -> 
+      :view ->
         {:noreply, push_navigate(socket, to: ~p"/admin/users/#{user}")}
-      :edit -> 
+
+      :edit ->
         {:noreply, push_navigate(socket, to: ~p"/admin/users/#{user}/edit")}
-      :delete -> 
+
+      :delete ->
         {:ok, _} = Accounts.delete_user(user)
+
         {:noreply,
          socket
          |> put_flash(:info, "User deleted successfully")
@@ -105,12 +105,12 @@ defmodule ClaperWeb.AdminLive.UserLive do
     end
   end
 
-
   def list_users do
     Admin.list_all_users()
   end
 
   defp search_users(search) when search == "", do: list_users()
+
   defp search_users(search) do
     Admin.list_all_users(%{"search" => search})
   end
@@ -131,9 +131,11 @@ defmodule ClaperWeb.AdminLive.UserLive do
 
   defp status_badge(user) do
     if user.confirmed_at do
-      {:safe, ~s(<span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">Confirmed</span>)}
+      {:safe,
+       ~s(<span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">Confirmed</span>)}
     else
-      {:safe, ~s(<span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">Unconfirmed</span>)}
+      {:safe,
+       ~s(<span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">Unconfirmed</span>)}
     end
   end
 
@@ -161,17 +163,44 @@ defmodule ClaperWeb.AdminLive.UserLive do
     ~H"""
     <%= if current_sort.field == field do %>
       <%= if current_sort.order == :asc do %>
-        <svg class="ml-2 h-5 w-5 text-gray-500 group-hover:text-gray-700" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-          <path fill-rule="evenodd" d="M5.293 7.707a1 1 0 010-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 01-1.414 1.414L11 5.414V17a1 1 0 11-2 0V5.414L6.707 7.707a1 1 0 01-1.414 0z" clip-rule="evenodd" />
+        <svg
+          class="ml-2 h-5 w-5 text-gray-500 group-hover:text-gray-700"
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 20 20"
+          fill="currentColor"
+        >
+          <path
+            fill-rule="evenodd"
+            d="M5.293 7.707a1 1 0 010-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 01-1.414 1.414L11 5.414V17a1 1 0 11-2 0V5.414L6.707 7.707a1 1 0 01-1.414 0z"
+            clip-rule="evenodd"
+          />
         </svg>
       <% else %>
-        <svg class="ml-2 h-5 w-5 text-gray-500 group-hover:text-gray-700" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-          <path fill-rule="evenodd" d="M14.707 12.293a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 111.414-1.414L9 14.586V3a1 1 0 012 0v11.586l2.293-2.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+        <svg
+          class="ml-2 h-5 w-5 text-gray-500 group-hover:text-gray-700"
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 20 20"
+          fill="currentColor"
+        >
+          <path
+            fill-rule="evenodd"
+            d="M14.707 12.293a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 111.414-1.414L9 14.586V3a1 1 0 012 0v11.586l2.293-2.293a1 1 0 011.414 0z"
+            clip-rule="evenodd"
+          />
         </svg>
       <% end %>
     <% else %>
-      <svg class="ml-2 h-5 w-5 text-gray-400 opacity-0 group-hover:opacity-100" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-        <path fill-rule="evenodd" d="M10 3a1 1 0 01.707.293l3 3a1 1 0 01-1.414 1.414L10 5.414 7.707 7.707a1 1 0 01-1.414-1.414l3-3A1 1 0 0110 3zm-3.707 9.293a1 1 0 011.414 0L10 14.586l2.293-2.293a1 1 0 011.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd" />
+      <svg
+        class="ml-2 h-5 w-5 text-gray-400 opacity-0 group-hover:opacity-100"
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 20 20"
+        fill="currentColor"
+      >
+        <path
+          fill-rule="evenodd"
+          d="M10 3a1 1 0 01.707.293l3 3a1 1 0 01-1.414 1.414L10 5.414 7.707 7.707a1 1 0 01-1.414-1.414l3-3A1 1 0 0110 3zm-3.707 9.293a1 1 0 011.414 0L10 14.586l2.293-2.293a1 1 0 011.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z"
+          clip-rule="evenodd"
+        />
       </svg>
     <% end %>
     """
