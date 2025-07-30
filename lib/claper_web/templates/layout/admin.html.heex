@@ -1,100 +1,66 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
   <head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     {csrf_meta_tag()}
-    <.live_title suffix=" · Claper">{assigns[:page_title] || "Claper"}</.live_title>
+    <.live_title suffix=" · Claper Admin">
+      {assigns[:page_title] || "Admin Dashboard"}
+    </.live_title>
     <link phx-track-static rel="stylesheet" href="/assets/app.css" />
     <link phx-track-static rel="stylesheet" href="/assets/admin.css" />
     <link rel="icon" type="image/png" href="/images/favicon.png" />
     <script defer phx-track-static type="text/javascript" src="/assets/app.js">
     </script>
   </head>
-  <body class="admin-background">
-    <div class="flex h-screen overflow-hidden">
-      <!-- Sidebar -->
-      <div class="hidden md:flex md:flex-shrink-0">
-        <aside class="w-60 bg-white border-r border-gray-200 flex flex-col">
-          <div class="p-6 border-b border-gray-200">
-            <div class="text-2xl font-bold">Admin</div>
+  <body>
+    <div class="drawer lg:drawer-open">
+      <input id="drawer-toggle" type="checkbox" class="drawer-toggle" />
+
+      <div class="drawer-content flex flex-col">
+        <!-- Navbar for mobile -->
+        <div class="navbar lg:hidden bg-base-100 shadow-lg">
+          <div class="flex-none">
+            <label for="drawer-toggle" class="btn btn-square btn-ghost drawer-button">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                class="inline-block w-5 h-5 stroke-current"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M4 6h16M4 12h16M4 18h16"
+                >
+                </path>
+              </svg>
+            </label>
           </div>
-
-          <nav class="flex-1 py-6">
-            <a
-              href={~p"/admin"}
-              class={"block px-6 py-3 #{if @conn.path_info == ["admin"], do: "text-gray-900 bg-gray-100 border-l-4 border-gray-900 font-medium", else: "text-gray-600 hover:text-gray-900 hover:bg-gray-50 border-l-4 border-transparent transition-colors"}"}
-            >
-              Dashboard
+          <div class="flex-1">
+            <a href={~p"/admin"} class="btn btn-ghost normal-case text-xl">
+              <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"
+                />
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                />
+              </svg>
+              Admin Panel
             </a>
-            <a
-              href={~p"/admin/events"}
-              class={"block px-6 py-3 #{if @conn.path_info == ["admin", "events"], do: "text-gray-900 bg-gray-100 border-l-4 border-gray-900 font-medium", else: "text-gray-600 hover:text-gray-900 hover:bg-gray-50 border-l-4 border-transparent transition-colors"}"}
-            >
-              Events
-            </a>
-            <a
-              href={~p"/admin/users"}
-              class={"block px-6 py-3 #{if @conn.path_info == ["admin", "users"], do: "text-gray-900 bg-gray-100 border-l-4 border-gray-900 font-medium", else: "text-gray-600 hover:text-gray-900 hover:bg-gray-50 border-l-4 border-transparent transition-colors"}"}
-            >
-              Users
-            </a>
-            <%!-- <a href={~p"/admin/oidc_providers"} class={"block px-6 py-3 #{if @conn.path_info == ["admin", "oidc_providers"], do: "text-gray-900 bg-gray-100 border-l-4 border-gray-900 font-medium", else: "text-gray-600 hover:text-gray-900 hover:bg-gray-50 border-l-4 border-transparent transition-colors"}"}>OIDC Providers</a> --%>
-            <div class="h-px bg-gray-200 mx-6 my-4"></div>
-            <a
-              href="#"
-              class="block px-6 py-3 text-gray-600 hover:text-gray-900 hover:bg-gray-50 border-l-4 border-transparent transition-colors"
-            >
-              Documentation
-            </a>
-          </nav>
-
-          <a
-            href={~p"/events"}
-            class="flex items-center gap-2 px-6 py-4 border-t border-gray-200 text-gray-600 hover:text-gray-900 transition-colors"
-          >
-            <svg
-              class="w-4 h-4"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-            >
-              <path d="M19 12H5M12 19l-7-7 7-7" />
-            </svg>
-            Back to App
-          </a>
-        </aside>
-      </div>
-      
-<!-- Mobile header -->
-      <div class="md:hidden fixed top-0 left-0 right-0 z-30 bg-white shadow-md">
-        <div class="flex justify-between items-center p-4">
-          <a href={~p"/admin"} class="text-xl font-bold flex items-center text-gray-900">
-            <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"
-              />
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-              />
-            </svg>
-            Admin Panel
-          </a>
-          <div class="flex items-center space-x-3">
-            <a
-              href={~p"/events"}
-              class="text-gray-600 hover:text-gray-900 transition-colors"
-              title="Back to App"
-            >
-              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          </div>
+          <div class="flex-none">
+            <a href={~p"/events"} class="btn btn-ghost btn-sm">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path
                   stroke-linecap="round"
                   stroke-linejoin="round"
@@ -102,116 +68,236 @@
                   d="M10 19l-7-7m0 0l7-7m-7 7h18"
                 />
               </svg>
+              Back
             </a>
-            <button
-              id="mobile-menu-button"
-              class="focus:outline-none text-gray-600 hover:text-gray-900 p-1 transition-colors"
-            >
-              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M4 6h16M4 12h16M4 18h16"
-                />
-              </svg>
-            </button>
           </div>
         </div>
-      </div>
-      
-<!-- Mobile menu overlay -->
-      <div id="mobile-menu" class="hidden md:hidden fixed inset-0 z-40 bg-gray-800 bg-opacity-50">
-        <!-- Mobile menu panel -->
-        <div class="absolute right-0 top-0 bottom-0 w-64 bg-white shadow-lg transform transition-transform duration-300 ease-in-out">
-          <div class="flex justify-between items-center p-4 border-b border-gray-200">
-            <span class="text-lg font-bold text-gray-900">Menu</span>
-            <button
-              id="mobile-menu-close"
-              class="text-gray-600 focus:outline-none hover:text-gray-900 p-1 transition-colors"
-            >
-              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M6 18L18 6M6 6l12 12"
-                />
-              </svg>
-            </button>
+        
+<!-- Page content -->
+        <main class="flex-1 overflow-y-auto bg-base-200 p-4 lg:p-8">
+          <!-- Toast container for flash messages -->
+          <div class="toast toast-top toast-end" id="flash-messages">
+            <%= if get_flash(@conn, :info) do %>
+              <div class="alert alert-info shadow-lg">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  class="stroke-current shrink-0 w-6 h-6"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                  >
+                  </path>
+                </svg>
+                <span>{get_flash(@conn, :info)}</span>
+                <button class="btn btn-ghost btn-xs" onclick="this.parentElement.remove()">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M6 18L18 6M6 6l12 12"
+                    />
+                  </svg>
+                </button>
+              </div>
+            <% end %>
+
+            <%= if get_flash(@conn, :success) do %>
+              <div class="alert alert-success shadow-lg">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="stroke-current shrink-0 h-6 w-6"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                  />
+                </svg>
+                <span>{get_flash(@conn, :success)}</span>
+                <button class="btn btn-ghost btn-xs" onclick="this.parentElement.remove()">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M6 18L18 6M6 6l12 12"
+                    />
+                  </svg>
+                </button>
+              </div>
+            <% end %>
+
+            <%= if get_flash(@conn, :warning) do %>
+              <div class="alert alert-warning shadow-lg">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="stroke-current shrink-0 h-6 w-6"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
+                  />
+                </svg>
+                <span>{get_flash(@conn, :warning)}</span>
+                <button class="btn btn-ghost btn-xs" onclick="this.parentElement.remove()">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M6 18L18 6M6 6l12 12"
+                    />
+                  </svg>
+                </button>
+              </div>
+            <% end %>
+
+            <%= if get_flash(@conn, :error) do %>
+              <div class="alert alert-error shadow-lg">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="stroke-current shrink-0 h-6 w-6"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
+                  />
+                </svg>
+                <span>{get_flash(@conn, :error)}</span>
+                <button class="btn btn-ghost btn-xs" onclick="this.parentElement.remove()">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M6 18L18 6M6 6l12 12"
+                    />
+                  </svg>
+                </button>
+              </div>
+            <% end %>
           </div>
 
-          <div class="overflow-y-auto h-full pb-20">
-            <nav class="mt-2 px-4">
-              <a
-                href={~p"/admin"}
-                class={"block px-4 py-3 text-base font-medium #{if @conn.path_info == ["admin"], do: "bg-gray-100 text-gray-900", else: "text-gray-600 hover:text-gray-900 hover:bg-gray-50"} rounded-lg mb-2 transition-colors"}
+          {@inner_content}
+        </main>
+      </div>
+      
+<!-- Sidebar -->
+      <div class="drawer-side">
+        <label for="drawer-toggle" class="drawer-overlay"></label>
+        <aside class="bg-base-100 min-h-full px-12">
+          <h1 class="text-xl font-bold !font-display p-5">Admin Panel</h1>
+          <ul class="menu">
+            <li>
+              <.link
+                patch={~p"/admin"}
+                class={"#{if @conn.path_info == ["admin"], do: "active", else: ""}"}
               >
-                <div class="flex items-center">
-                  <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2H5a2 2 0 00-2-2z"
-                    />
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M8 5a2 2 0 012-2h4a2 2 0 012 2v6H8V5z"
-                    />
-                  </svg>
-                  <span>Dashboard</span>
-                </div>
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"
+                  />
+                </svg>
+                Dashboard
+              </.link>
+            </li>
+            <li>
+              <.link
+                patch={~p"/admin/events"}
+                class={"#{if @conn.path_info == ["admin", "events"], do: "active", else: ""}"}
+              >
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+                  />
+                </svg>
+                Events
+              </.link>
+            </li>
+            <li>
+              <.link
+                patch={~p"/admin/users"}
+                class={"#{if @conn.path_info == ["admin", "users"], do: "active", else: ""}"}
+              >
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"
+                  />
+                </svg>
+                Users
+              </.link>
+            </li>
+            <li>
+              <.link
+                patch={~p"/admin/oidc_providers"}
+                class={"#{if @conn.path_info == ["admin", "oidc_providers"], do: "active", else: ""}"}
+              >
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"
+                  />
+                </svg>
+                OIDC Providers
+              </.link>
+            </li>
+
+            <div class="divider"></div>
+
+            <li>
+              <a href="https://docs.claper.co" target="_blank" rel="noopener noreferrer">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"
+                  />
+                </svg>
+                Documentation
+                <svg class="w-3 h-3 ml-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
+                  />
+                </svg>
               </a>
-              <a
-                href={~p"/admin/users"}
-                class={"block px-4 py-3 text-base font-medium #{if @conn.path_info == ["admin", "users"], do: "bg-gray-100 text-gray-900", else: "text-gray-600 hover:text-gray-900 hover:bg-gray-50"} rounded-lg mb-2 transition-colors"}
-              >
-                <div class="flex items-center">
-                  <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"
-                    />
-                  </svg>
-                  <span>Users</span>
-                </div>
-              </a>
-              <a
-                href={~p"/admin/events"}
-                class={"block px-4 py-3 text-base font-medium #{if @conn.path_info == ["admin", "events"], do: "bg-gray-100 text-gray-900", else: "text-gray-600 hover:text-gray-900 hover:bg-gray-50"} rounded-lg mb-2 transition-colors"}
-              >
-                <div class="flex items-center">
-                  <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
-                    />
-                  </svg>
-                  <span>Events</span>
-                </div>
-              </a>
-              <%!-- <a href={~p"/admin/oidc_providers"} class={"block px-4 py-3 text-base font-medium #{if @conn.path_info == ["admin", "oidc_providers"], do: "bg-gray-100 text-gray-900", else: "text-gray-600 hover:text-gray-900 hover:bg-gray-50"} rounded-lg mb-2 transition-colors"}>
-                <div class="flex items-center">
-                  <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"/>
-                  </svg>
-                  <span>OIDC Providers</span>
-                </div>
-              </a> --%>
-              <div class="border-t border-gray-200 my-4"></div>
-              <a
-                href={~p"/events"}
-                class="block px-4 py-3 text-base font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-lg transition-colors"
-              >
-                <div class="flex items-center">
-                  <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            </li>
+
+            <div class="mt-auto pt-4">
+              <li>
+                <a href={~p"/events"} class="btn btn-outline btn-sm">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path
                       stroke-linecap="round"
                       stroke-linejoin="round"
@@ -219,239 +305,27 @@
                       d="M10 19l-7-7m0 0l7-7m-7 7h18"
                     />
                   </svg>
-                  <span>Back to App</span>
-                </div>
-              </a>
-            </nav>
-          </div>
-        </div>
+                  Back to App
+                </a>
+              </li>
+            </div>
+          </ul>
+        </aside>
       </div>
-      
-<!-- Mobile content padding -->
-      <div class="md:hidden h-16"></div>
-      
-<!-- Main content -->
-      <main class="flex-1 overflow-y-auto bg-gray-50">
-        <!-- Flash Messages -->
-        <div id="flash-messages" class="fixed top-4 right-4 z-50 max-w-sm">
-          <%= if get_flash(@conn, :info) do %>
-            <div
-              role="alert"
-              class="mb-4 bg-blue-50 border border-blue-200 shadow-lg rounded-lg p-4 flex items-start gap-3"
-            >
-              <svg
-                class="w-5 h-5 text-blue-400 flex-shrink-0 mt-0.5"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                />
-              </svg>
-              <p class="text-blue-800 flex-1">{get_flash(@conn, :info)}</p>
-              <button class="flash-close text-blue-600 hover:text-blue-800 transition-colors">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M6 18L18 6M6 6l12 12"
-                  />
-                </svg>
-              </button>
-            </div>
-          <% end %>
-
-          <%= if get_flash(@conn, :success) do %>
-            <div
-              role="alert"
-              class="mb-4 bg-green-50 border border-green-200 shadow-lg rounded-lg p-4 flex items-start gap-3"
-            >
-              <svg
-                class="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-                />
-              </svg>
-              <p class="text-green-800 flex-1">{get_flash(@conn, :success)}</p>
-              <button class="flash-close text-green-600 hover:text-green-800 transition-colors">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M6 18L18 6M6 6l12 12"
-                  />
-                </svg>
-              </button>
-            </div>
-          <% end %>
-
-          <%= if get_flash(@conn, :warning) do %>
-            <div
-              role="alert"
-              class="mb-4 bg-yellow-50 border border-yellow-200 shadow-lg rounded-lg p-4 flex items-start gap-3"
-            >
-              <svg
-                class="w-5 h-5 text-yellow-500 flex-shrink-0 mt-0.5"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
-                />
-              </svg>
-              <p class="text-yellow-800 flex-1">{get_flash(@conn, :warning)}</p>
-              <button class="flash-close text-yellow-600 hover:text-yellow-800 transition-colors">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M6 18L18 6M6 6l12 12"
-                  />
-                </svg>
-              </button>
-            </div>
-          <% end %>
-
-          <%= if get_flash(@conn, :error) do %>
-            <div
-              role="alert"
-              class="mb-4 bg-red-50 border border-red-200 shadow-lg rounded-lg p-4 flex items-start gap-3"
-            >
-              <svg
-                class="w-5 h-5 text-red-500 flex-shrink-0 mt-0.5"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
-                />
-              </svg>
-              <p class="text-red-800 flex-1">{get_flash(@conn, :error)}</p>
-              <button class="flash-close text-red-600 hover:text-red-800 transition-colors">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M6 18L18 6M6 6l12 12"
-                  />
-                </svg>
-              </button>
-            </div>
-          <% end %>
-        </div>
-        
-<!-- Inner Content -->
-        {@inner_content}
-      </main>
     </div>
     
-<!-- Mobile menu and flash messages scripts -->
+<!-- Auto-dismiss flash messages script -->
     <script>
       document.addEventListener('DOMContentLoaded', function() {
-        // Mobile menu toggle
-        const mobileMenuButton = document.getElementById('mobile-menu-button');
-        const mobileMenu = document.getElementById('mobile-menu');
-        const mobileMenuClose = document.getElementById('mobile-menu-close');
-        const mobileMenuPanel = mobileMenu ? mobileMenu.querySelector('.absolute') : null;
-        
-        function openMobileMenu() {
-          mobileMenu.classList.remove('hidden');
-          // Slide in animation
-          setTimeout(() => {
-            if (mobileMenuPanel) {
-              mobileMenuPanel.style.transform = 'translateX(0)';
-            }
-          }, 50);
-          // Prevent body scrolling when menu is open
-          document.body.style.overflow = 'hidden';
-        }
-        
-        function closeMobileMenu() {
-          // Slide out animation
-          if (mobileMenuPanel) {
-            mobileMenuPanel.style.transform = 'translateX(100%)';
-          }
-          
-          // Wait for animation to complete before hiding
-          setTimeout(() => {
-            mobileMenu.classList.add('hidden');
-            // Restore body scrolling
-            document.body.style.overflow = '';
-          }, 300);
-        }
-        
-        if (mobileMenuButton && mobileMenu) {
-          // Initialize panel position
-          if (mobileMenuPanel) {
-            mobileMenuPanel.style.transform = 'translateX(100%)';
-          }
-          
-          mobileMenuButton.addEventListener('click', openMobileMenu);
-          
-          // Close on backdrop click
-          mobileMenu.addEventListener('click', function(e) {
-            if (e.target === mobileMenu) {
-              closeMobileMenu();
-            }
-          });
-          
-          // Close on close button click
-          if (mobileMenuClose) {
-            mobileMenuClose.addEventListener('click', closeMobileMenu);
-          }
-        }
-        
-        // Flash message dismiss functionality
-        const flashCloseButtons = document.querySelectorAll('.flash-close');
-        
-        flashCloseButtons.forEach(function(button) {
-          button.addEventListener('click', function() {
-            const flashMessage = button.closest('[role="alert"]');
-            
-            // Add fade-out animation
-            flashMessage.style.transition = 'opacity 0.5s ease';
-            flashMessage.style.opacity = '0';
-            
-            // Remove element after animation completes
-            setTimeout(function() {
-              flashMessage.remove();
-            }, 500);
-          });
-        });
-        
         // Auto-dismiss flash messages after 5 seconds
-        const flashMessages = document.querySelectorAll('#flash-messages [role="alert"]');
+        const flashMessages = document.querySelectorAll('#flash-messages .alert');
         if (flashMessages.length > 0) {
           setTimeout(function() {
             flashMessages.forEach(function(message) {
-              // Only auto-dismiss if still in the DOM
               if (document.body.contains(message)) {
                 message.style.transition = 'opacity 0.5s ease';
                 message.style.opacity = '0';
-                
+
                 setTimeout(function() {
                   message.remove();
                 }, 500);

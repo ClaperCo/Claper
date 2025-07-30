@@ -1,2 +1,59 @@
-@import 'tailwindcss';
-@import './modern.css' layer(theme);
+@import "tailwindcss";
+@plugin "daisyui";
+
+@utility btn {
+    @apply rounded-full !font-display text-small-body;
+}
+
+@utility input {
+    @apply rounded-full focus:outline-none focus-within:outline-none focus:border-2 focus-within:border-2 !font-display text-small-body transition-all;
+}
+
+@utility label {
+    @apply ml-5;
+}
+
+@utility fieldset-legend {
+    @apply ml-3;
+}
+
+@plugin "daisyui/theme" {
+    name: "claper";
+    default: true; /* set as default */
+    prefersdark: false; /* set as default dark mode (prefers-color-scheme:dark) */
+    color-scheme: light; /* color of browser-provided UI */
+
+    --color-primary: #140753;
+    --color-primary-content: #ffffff;
+    --color-secondary: #f4f4f4;
+    --color-secondary-content: #140553;
+    --color-accent: #8611ed;
+    --color-accent-content: #ffffff;
+    --color-neutral: #000000;
+    --color-neutral-content: #ffffff;
+    --color-info: #79bfe2;
+    --color-info-content: #0e3649;
+    --color-success: #3cb957;
+    --color-success-content: #143e1d;
+    --color-warning: #ffb62e;
+    --color-warning-content: #523500;
+    --color-error: #e7000b;
+    --color-error-content: #fff;
+    /* border radius */
+    --radius-selector: 1rem;
+    --radius-field: 0.25rem;
+    --radius-box: 0.5rem;
+
+    /* base sizes */
+    --size-selector: 0.25rem;
+    --size-field: 0.25rem;
+
+    /* border size */
+    --border: 1px;
+
+    /* effects */
+    --depth: 1;
+    --noise: 0;
+}
+
+@import "./modern.css" layer(theme);

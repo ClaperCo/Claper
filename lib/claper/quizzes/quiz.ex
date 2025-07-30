@@ -2,6 +2,22 @@ defmodule Claper.Quizzes.Quiz do
   use Ecto.Schema
   import Ecto.Changeset
 
+  @type t :: %__MODULE__{
+          id: integer(),
+          title: String.t(),
+          position: integer() | nil,
+          enabled: boolean(),
+          show_results: boolean(),
+          allow_anonymous: boolean(),
+          lti_line_item_url: String.t() | nil,
+          lti_resource: Lti13.Resources.Resource.t() | nil,
+          quiz_responses: [Claper.Quizzes.QuizResponse.t()] | nil,
+          quiz_questions: [Claper.Quizzes.QuizQuestion.t()] | nil,
+          presentation_file: Claper.Presentations.PresentationFile.t(),
+          inserted_at: NaiveDateTime.t(),
+          updated_at: NaiveDateTime.t()
+        }
+
   schema "quizzes" do
     field :title, :string
     field :position, :integer, default: 0

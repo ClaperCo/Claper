@@ -6,7 +6,6 @@ defmodule Claper.Accounts.Oidc do
   import Ecto.Query, warn: false
   alias Claper.Repo
   alias Claper.Accounts.Oidc.Provider
-  alias Claper.Accounts.Oidc.User
 
   @doc """
   Returns the list of oidc_providers.

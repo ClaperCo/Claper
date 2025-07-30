@@ -4,7 +4,6 @@ defmodule ClaperWeb.AdminLive.EventLive do
   alias Claper.Admin
   alias Claper.Events.Event
   alias ClaperWeb.Helpers.CSVExporter
-  alias ClaperWeb.AdminLive.EventLive.FormComponent
 
   @impl true
   def mount(_params, _session, socket) do
@@ -121,42 +120,6 @@ defmodule ClaperWeb.AdminLive.EventLive do
 
   defp sort_events(events, field, order) do
     Enum.sort_by(events, &Map.get(&1, field), order)
-  end
-
-  defp event_row_func(event) do
-    [
-      event.name,
-      event.code,
-      if(event.user, do: event.user.email, else: "No owner"),
-      if(event.started_at,
-        do: Calendar.strftime(event.started_at, "%Y-%m-%d %H:%M"),
-        else: "Not started"
-      ),
-      if(event.expired_at,
-        do: Calendar.strftime(event.expired_at, "%Y-%m-%d %H:%M"),
-        else: "Not expired"
-      ),
-      event.audience_peak || 0,
-      {:safe, render_event_actions(event)}
-    ]
-  end
-
-  defp render_event_actions(event) do
-    ~s'''
-    <div class="flex items-center space-x-2">
-      <a href="/admin/events/#{event.id}" class="text-indigo-600 hover:text-indigo-900" title="View">
-        <i class="fas fa-eye"></i>
-      </a>
-      <a href="/admin/events/#{event.id}/edit" class="text-indigo-600 hover:text-indigo-900" title="Edit">
-        <i class="fas fa-edit"></i>
-      </a>
-      <button type="button" phx-click="delete" phx-value-id="#{event.id}" 
-              class="text-red-600 hover:text-red-900" title="Delete"
-              data-confirm="Are you sure you want to delete this event?">
-        <i class="fas fa-trash-alt"></i>
-      </button>
-    </div>
-    '''
   end
 
   def sort_indicator(assigns) do

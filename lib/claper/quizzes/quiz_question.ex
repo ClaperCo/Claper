@@ -4,6 +4,16 @@ defmodule Claper.Quizzes.QuizQuestion do
 
   use Gettext, backend: ClaperWeb.Gettext
 
+  @type t :: %__MODULE__{
+          id: integer(),
+          content: String.t(),
+          type: String.t(),
+          quiz: Claper.Quizzes.Quiz.t() | nil,
+          quiz_question_opts: [Claper.Quizzes.QuizQuestionOpt.t()] | nil,
+          inserted_at: NaiveDateTime.t(),
+          updated_at: NaiveDateTime.t()
+        }
+
   schema "quiz_questions" do
     field :content, :string
     field :type, :string, default: "qcm"

@@ -1,25 +1,28 @@
 <!-- Header -->
-<header class="bg-white px-8 py-6 border-b border-gray-200">
+<div class="mb-8">
   <h1 class="text-3xl font-bold">Dashboard</h1>
-</header>
+  <p class="text-base-content/60 mt-2">Welcome to your admin dashboard</p>
+</div>
 
 <!-- Dashboard Content -->
-<div class="p-8">
+<div>
   <!-- Stats Cards -->
   <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
-    <div class="bg-white p-6 rounded-lg border border-gray-200">
-      <div class="text-sm text-gray-600 mb-2">Total Users</div>
-      <div class="text-4xl font-bold">{@stats.total_users}</div>
-      <div class="text-sm text-gray-600 mt-2">
+    <div class="stat bg-base-100 shadow-xl">
+      <div class="stat-title">Total Users</div>
+      <div class="stat-value">{@stats.total_users}</div>
+      <div class="stat-desc">
         <span class={
           if @growth_metrics.users_growth > 0 do
-            "text-green-600"
+            "text-success"
           else
-            "text-red-600"
+            "text-error"
           end
         }>
           <%= if @growth_metrics.users_growth >= 0 do %>
-            +
+            ↗︎ +
+          <% else %>
+            ↘︎
           <% end %>
           {@growth_metrics.users_growth}%
         </span>
@@ -27,19 +30,21 @@
       </div>
     </div>
 
-    <div class="bg-white p-6 rounded-lg border border-gray-200">
-      <div class="text-sm text-gray-600 mb-2">Total Events</div>
-      <div class="text-4xl font-bold">{@stats.total_events}</div>
-      <div class="text-sm text-gray-600 mt-2">
+    <div class="stat bg-base-100 shadow-xl">
+      <div class="stat-title">Total Events</div>
+      <div class="stat-value">{@stats.total_events}</div>
+      <div class="stat-desc">
         <span class={
           if @growth_metrics.events_growth > 0 do
-            "text-green-600"
+            "text-success"
           else
-            "text-red-600"
+            "text-error"
           end
         }>
           <%= if @growth_metrics.events_growth >= 0 do %>
-            +
+            ↗︎ +
+          <% else %>
+            ↘︎
           <% end %>
           {@growth_metrics.events_growth}%
         </span>
@@ -47,115 +52,129 @@
       </div>
     </div>
 
-    <div class="bg-white p-6 rounded-lg border border-gray-200">
-      <div class="text-sm text-gray-600 mb-2">Active Events</div>
-      <div class="text-4xl font-bold">{@stats.active_events}</div>
-      <div class="text-sm text-gray-600 mt-2">Currently running</div>
+    <div class="stat bg-base-100 shadow-xl">
+      <div class="stat-title">Active Events</div>
+      <div class="stat-value">{@stats.active_events}</div>
+      <div class="stat-desc">Currently running</div>
     </div>
   </div>
   
 <!-- Charts -->
   <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-12">
-    <div class="bg-white p-6 rounded-lg border border-gray-200">
-      <h3 class="text-lg font-semibold">User Growth</h3>
-      <h4 class="text-sm text-gray-600 mb-2">30 days</h4>
-      <div class="h-72 relative">
-        <canvas
-          id="userGrowthChart"
-          phx-hook="UserGrowthChart"
-          data-labels={Jason.encode!(@users_chart_data.labels)}
-          data-values={Jason.encode!(@users_chart_data.values)}
-        >
-        </canvas>
+    <div class="card bg-base-100 shadow-xl">
+      <div class="card-body">
+        <h2 class="card-title">User Growth</h2>
+        <p class="text-sm text-base-content/60">Last 30 days</p>
+        <div class="h-72 relative mt-4">
+          <canvas
+            id="userGrowthChart"
+            phx-hook="UserGrowthChart"
+            data-labels={Jason.encode!(@users_chart_data.labels)}
+            data-values={Jason.encode!(@users_chart_data.values)}
+          >
+          </canvas>
+        </div>
       </div>
     </div>
 
-    <div class="bg-white p-6 rounded-lg border border-gray-200">
-      <h3 class="text-lg font-semibold">Event Creation</h3>
-      <h4 class="text-sm text-gray-600 mb-2">30 days</h4>
-      <div class="h-72 relative">
-        <canvas
-          id="eventCreationChart"
-          phx-hook="EventCreationChart"
-          data-labels={Jason.encode!(@events_chart_data.labels)}
-          data-values={Jason.encode!(@events_chart_data.values)}
-        >
-        </canvas>
+    <div class="card bg-base-100 shadow-xl">
+      <div class="card-body">
+        <h2 class="card-title">Event Creation</h2>
+        <p class="text-sm text-base-content/60">Last 30 days</p>
+        <div class="h-72 relative mt-4">
+          <canvas
+            id="eventCreationChart"
+            phx-hook="EventCreationChart"
+            data-labels={Jason.encode!(@events_chart_data.labels)}
+            data-values={Jason.encode!(@events_chart_data.values)}
+          >
+          </canvas>
+        </div>
       </div>
     </div>
   </div>
   
 <!-- Recent Events Table -->
   <div class="mt-12">
-    <div class="mb-6">
-      <h2 class="text-xl font-semibold">Recent Events</h2>
-    </div>
+    <div class="card bg-base-100 shadow-xl">
+      <div class="card-body">
+        <h2 class="card-title mb-4">Recent Events</h2>
+        
+        <div class="overflow-x-auto">
+          <table class="table table-zebra">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Code</th>
+                <th>Owner</th>
+                <th>Start Date</th>
+                <th>Audience Peak</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <%= for event <- @recent_events do %>
+                <% now = NaiveDateTime.utc_now() %>
+                <% {status_text, status_class} =
+                  cond do
+                    is_nil(event.expired_at) == false ->
+                      {"Completed", "badge-ghost"}
 
-    <div class="bg-white rounded-lg border border-gray-200 overflow-hidden">
-      <table class="w-full">
-        <thead>
-          <tr class="bg-gray-50 border-b border-gray-200">
-            <th class="text-left px-6 py-4 text-sm font-medium text-gray-600">Name</th>
-            <th class="text-left px-6 py-4 text-sm font-medium text-gray-600">Code</th>
-            <th class="text-left px-6 py-4 text-sm font-medium text-gray-600">Owner</th>
-            <th class="text-left px-6 py-4 text-sm font-medium text-gray-600">Start Date</th>
-            <th class="text-left px-6 py-4 text-sm font-medium text-gray-600">Audience peak</th>
-            <th class="text-left px-6 py-4 text-sm font-medium text-gray-600">Status</th>
-            <th class="text-left px-6 py-4 text-sm font-medium text-gray-600">Actions</th>
-          </tr>
-        </thead>
-        <tbody class="divide-y divide-gray-100">
-          <%= for event <- @recent_events do %>
-            <% now = NaiveDateTime.utc_now() %>
-            <% status =
-              cond do
-                is_nil(event.expired_at) == false ->
-                  {"Completed", "text-gray-600"}
+                    NaiveDateTime.compare(event.started_at, now) == :gt ->
+                      {"Scheduled", "badge-info"}
 
-                NaiveDateTime.compare(event.started_at, now) == :gt ->
-                  {"Scheduled", "text-blue-600"}
-
-                true ->
-                  {"Active", "text-green-600"}
-              end %>
-            <tr class="hover:bg-gray-50 transition-colors">
-              <td class="px-6 py-4 text-sm">{event.name}</td>
-              <td class="px-6 py-4 text-sm">{event.code}</td>
-              <td class="px-6 py-4 text-sm">{event.user.email}</td>
-              <td class="px-6 py-4 text-sm">
-                {Calendar.strftime(event.started_at, "%b %d, %Y")}
-              </td>
-              <td class="px-6 py-4 text-sm">{event.audience_peak}</td>
-              <td class={"px-6 py-4 text-sm font-medium #{elem(status, 1)}"}>
-                {elem(status, 0)}
-              </td>
-              <td class="px-6 py-4 text-sm">
-                <div class="flex gap-2">
-                  <.link
-                    href={~p"/admin/events/#{event}"}
-                    class="px-3 py-1 text-xs border border-gray-300 rounded hover:bg-gray-50 transition-colors"
-                  >
-                    View
-                  </.link>
-                  <.link
-                    href={~p"/admin/events/#{event}/edit"}
-                    class="px-3 py-1 text-xs border border-gray-300 rounded hover:bg-gray-50 transition-colors"
-                  >
-                    Edit
-                  </.link>
-                </div>
-              </td>
-            </tr>
-          <% end %>
-          <%= if Enum.empty?(@recent_events) do %>
-            <tr>
-              <td colspan="6" class="px-6 py-8 text-center text-gray-500">
-                No events found
-              </td>
-            </tr>
-          <% end %>
-        </tbody>
-      </table>
+                    true ->
+                      {"Active", "badge-success"}
+                  end %>
+                <tr>
+                  <td>
+                    <div class="font-bold">{event.name}</div>
+                  </td>
+                  <td>
+                    <code class="text-sm">{event.code}</code>
+                  </td>
+                  <td>{event.user.email}</td>
+                  <td>{Calendar.strftime(event.started_at, "%b %d, %Y")}</td>
+                  <td>
+                    <div class="badge badge-outline">{event.audience_peak}</div>
+                  </td>
+                  <td>
+                    <div class={"badge #{status_class}"}>
+                      {status_text}
+                    </div>
+                  </td>
+                  <td>
+                    <div class="flex gap-2">
+                      <.link
+                        navigate={~p"/admin/events/#{event}"}
+                        class="btn btn-ghost btn-xs"
+                      >
+                        View
+                      </.link>
+                      <.link
+                        navigate={~p"/admin/events/#{event}/edit"}
+                        class="btn btn-ghost btn-xs"
+                      >
+                        Edit
+                      </.link>
+                    </div>
+                  </td>
+                </tr>
+              <% end %>
+              <%= if Enum.empty?(@recent_events) do %>
+                <tr>
+                  <td colspan="7" class="text-center">
+                    <div class="py-8 text-base-content/60">
+                      No events found
+                    </div>
+                  </td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+      </div>
     </div>
   </div>
 </div>

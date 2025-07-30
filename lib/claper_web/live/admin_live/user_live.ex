@@ -119,44 +119,6 @@ defmodule ClaperWeb.AdminLive.UserLive do
     Enum.sort_by(users, &Map.get(&1, field), order)
   end
 
-  defp user_row_func(user) do
-    [
-      user.email,
-      if(user.role, do: user.role.name, else: "No role"),
-      Calendar.strftime(user.inserted_at, "%Y-%m-%d %H:%M"),
-      status_badge(user),
-      {:safe, render_user_actions(user)}
-    ]
-  end
-
-  defp status_badge(user) do
-    if user.confirmed_at do
-      {:safe,
-       ~s(<span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">Confirmed</span>)}
-    else
-      {:safe,
-       ~s(<span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">Unconfirmed</span>)}
-    end
-  end
-
-  defp render_user_actions(user) do
-    ~s'''
-    <div class="flex items-center space-x-2">
-      <a href="/admin/users/#{user.id}" class="text-indigo-600 hover:text-indigo-900" title="View">
-        <i class="fas fa-eye"></i>
-      </a>
-      <a href="/admin/users/#{user.id}/edit" class="text-indigo-600 hover:text-indigo-900" title="Edit">
-        <i class="fas fa-edit"></i>
-      </a>
-      <button type="button" phx-click="delete" phx-value-id="#{user.id}" 
-              class="text-red-600 hover:text-red-900" title="Delete"
-              data-confirm="Are you sure you want to delete this user?">
-        <i class="fas fa-trash-alt"></i>
-      </button>
-    </div>
-    '''
-  end
-
   def sort_indicator(assigns) do
     %{current_sort: current_sort, field: field} = assigns
 

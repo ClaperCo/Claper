@@ -309,6 +309,23 @@ defmodule Claper.Accounts do
     end
   end
 
+  # Alternative version with different signature - keeping for compatibility
+  def update_user_password(user, %{"current_password" => curr_pw} = attrs) do
+    changeset =
+      user
+      |> User.password_changeset(attrs)
+      |> User.validate_current_password(curr_pw)
+
+    Ecto.Multi.new()
+    |> Ecto.Multi.update(:user, changeset)
+    |> Ecto.Multi.delete_all(:tokens, UserToken.user_and_contexts_query(user, :all))
+    |> Repo.transaction()
+    |> case do
+      {:ok, %{user: user}} -> {:ok, user}
+      {:error, :user, changeset, _} -> {:error, changeset}
+    end
+  end
+
   @doc """
   Sets the user password.
   ## Examples
@@ -388,34 +405,6 @@ defmodule Claper.Accounts do
   """
   def change_user_password(user, attrs \\ %{}) do
     User.password_changeset(user, attrs)
-  end
-
-  @doc """
-  Updates the user password.
-
-  ## Examples
-
-      iex> update_user_password(user, "valid password", %{password: ...})
-      {:ok, %User{}}
-
-      iex> update_user_password(user, "invalid password", %{password: ...})
-      {:error, %Ecto.Changeset{}}
-
-  """
-  def update_user_password(user, %{"current_password" => curr_pw} = attrs) do
-    changeset =
-      user
-      |> User.password_changeset(attrs)
-      |> User.validate_current_password(curr_pw)
-
-    Ecto.Multi.new()
-    |> Ecto.Multi.update(:user, changeset)
-    |> Ecto.Multi.delete_all(:tokens, UserToken.user_and_contexts_query(user, :all))
-    |> Repo.transaction()
-    |> case do
-      {:ok, %{user: user}} -> {:ok, user}
-      {:error, :user, changeset, _} -> {:error, changeset}
-    end
   end
 
   ## Session
@@ -618,6 +607,38 @@ defmodule Claper.Accounts do
     Repo.get_by(Accounts.Oidc.User, sub: sub)
   end
 
+  def get_or_create_user_with_oidc(
+        %{
+          sub: sub
+        } = attrs
+      ) do
+    case get_oidc_user_by_sub(sub) do
+      nil -> create_new_user(attrs)
+      %Accounts.Oidc.User{} = user -> update_oidc_user(user, attrs)
+    end
+  end
+
+  defp create_new_user(attrs) do
+    with {:ok, claper_user} <- get_user_by_email_or_create(attrs.email),
+         updated_attrs <-
+           Map.merge(attrs, %{user_id: claper_user.id}),
+         {:ok, user} <- create_oidc_user(updated_attrs) do
+      {:ok, user |> Repo.preload(:user)}
+    else
+      _ -> {:error, %{reason: :invalid_user, msg: "Invalid Claper user"}}
+    end
+  end
+
+  defp update_oidc_user(user, attrs) do
+    user
+    |> Accounts.Oidc.User.changeset(attrs)
+    |> Repo.update()
+    |> case do
+      {:ok, user} -> {:ok, user |> Repo.preload(:user)}
+      {:error, changeset} -> {:error, changeset}
+    end
+  end
+
   ## Role Management
 
   @doc """
@@ -737,113 +758,6 @@ defmodule Claper.Accounts do
 
   ## Examples
 
-      iex> assign_role(user, role)
-      {:ok, %User{}}
-
-  """
-  def assign_role(%User{} = user, %Role{} = role) do
-    user
-    |> User.role_changeset(%{role_id: role.id})
-    |> Repo.update()
-  end
-
-  @doc """
-  Gets the role of a user.
-
-  ## Examples
-
-      iex> get_user_role(user)
-      %Role{}
-
-  """
-  def get_user_role(%User{} = user) do
-    user = Repo.preload(user, :role)
-    user.role
-  end
-
-  @doc """
-  Lists users by role name.
-
-  ## Examples
-
-      iex> list_users_by_role("admin")
-      [%User{}, ...]
-
-  """
-  def list_users_by_role(role_name) when is_binary(role_name) do
-    role = get_role_by_name(role_name)
-
-    if role do
-      User
-      |> where([u], u.role_id == ^role.id)
-      |> where([u], is_nil(u.deleted_at))
-      |> Repo.all()
-    else
-      []
-    end
-  end
-
-  @doc """
-  Checks if a user has a specific role.
-
-  ## Examples
-
-      iex> user_has_role?(user, "admin")
-      true
-
-  """
-  def user_has_role?(%User{} = user, role_name) when is_binary(role_name) do
-    user = Repo.preload(user, :role)
-
-    case user.role do
-      nil -> false
-      role -> role.name == role_name
-    end
-  end
-
-  @doc """
-  Promotes a user to admin role.
-
-  ## Examples
-
-      iex> promote_to_admin(user)
-      {:ok, %User{}}
-
-  """
-  def promote_to_admin(%User{} = user) do
-    admin_role = get_role_by_name("admin")
-
-    if admin_role do
-      assign_role(user, admin_role)
-    else
-      {:error, :admin_role_not_found}
-    end
-  end
-
-  @doc """
-  Demotes a user from admin to regular user role.
-
-  ## Examples
-
-      iex> demote_from_admin(user)
-      {:ok, %User{}}
-
-  """
-  def demote_from_admin(%User{} = user) do
-    user_role = get_role_by_name("user")
-
-    if user_role do
-      assign_role(user, user_role)
-    else
-      {:error, :user_role_not_found}
-    end
-  end
-
-  @doc """
-  Assigns a role to a user.
-
-  ## Examples
-
       iex> assign_role(user, "admin")
       {:ok, %User{}}
 
@@ -947,37 +861,5 @@ defmodule Claper.Accounts do
   """
   def demote_from_admin(%User{} = user) do
     assign_role(user, "user")
-  end
-
-  def get_or_create_user_with_oidc(
-        %{
-          sub: sub
-        } = attrs
-      ) do
-    case get_oidc_user_by_sub(sub) do
-      nil -> create_new_user(attrs)
-      %Accounts.Oidc.User{} = user -> update_oidc_user(user, attrs)
-    end
-  end
-
-  defp create_new_user(attrs) do
-    with {:ok, claper_user} <- get_user_by_email_or_create(attrs.email),
-         updated_attrs <-
-           Map.merge(attrs, %{user_id: claper_user.id}),
-         {:ok, user} <- create_oidc_user(updated_attrs) do
-      {:ok, user |> Repo.preload(:user)}
-    else
-      _ -> {:error, %{reason: :invalid_user, msg: "Invalid Claper user"}}
-    end
-  end
-
-  defp update_oidc_user(user, attrs) do
-    user
-    |> Accounts.Oidc.User.changeset(attrs)
-    |> Repo.update()
-    |> case do
-      {:ok, user} -> {:ok, user |> Repo.preload(:user)}
-      {:error, changeset} -> {:error, changeset}
-    end
   end
 end

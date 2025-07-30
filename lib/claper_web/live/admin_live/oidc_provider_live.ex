@@ -3,7 +3,6 @@ defmodule ClaperWeb.AdminLive.OidcProviderLive do
 
   alias Claper.Accounts.Oidc
   alias Claper.Accounts.Oidc.Provider
-  alias ClaperWeb.AdminLive.OidcProviderLive.FormComponent
 
   @impl true
   def mount(_params, _session, socket) do
