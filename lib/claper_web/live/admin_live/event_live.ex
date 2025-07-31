@@ -12,7 +12,7 @@ defmodule ClaperWeb.AdminLive.EventLive do
      |> assign(:page_title, "Admin - Events")
      |> assign(:events, list_events())
      |> assign(:search, "")
-     |> assign(:current_sort, %{field: :name, order: :asc})}
+     |> assign(:current_sort, %{field: :na, order: :asc})}
   end
 
   @impl true
@@ -123,11 +123,9 @@ defmodule ClaperWeb.AdminLive.EventLive do
   end
 
   def sort_indicator(assigns) do
-    %{current_sort: current_sort, field: field} = assigns
-
     ~H"""
-    <%= if current_sort.field == field do %>
-      <%= if current_sort.order == :asc do %>
+    <%= if @current_sort.field == @field do %>
+      <%= if @current_sort.order == :asc do %>
         <svg
           class="ml-2 h-5 w-5 text-gray-500 group-hover:text-gray-700"
           xmlns="http://www.w3.org/2000/svg"

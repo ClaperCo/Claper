@@ -1,14 +1,13 @@
 <!-- Header -->
 <div class="mb-8">
   <h1 class="text-3xl font-bold">Dashboard</h1>
-  <p class="text-base-content/60 mt-2">Welcome to your admin dashboard</p>
 </div>
 
 <!-- Dashboard Content -->
 <div>
   <!-- Stats Cards -->
-  <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
-    <div class="stat bg-base-100 shadow-xl">
+  <div class="stats w-full stats-horizontal shadow mb-12">
+    <div class="stat bg-base-100">
       <div class="stat-title">Total Users</div>
       <div class="stat-value">{@stats.total_users}</div>
       <div class="stat-desc">
@@ -20,7 +19,7 @@
           end
         }>
           <%= if @growth_metrics.users_growth >= 0 do %>
-            ↗︎ +
+            ↗︎
           <% else %>
             ↘︎
           <% end %>
@@ -30,7 +29,7 @@
       </div>
     </div>
 
-    <div class="stat bg-base-100 shadow-xl">
+    <div class="stat bg-base-100">
       <div class="stat-title">Total Events</div>
       <div class="stat-value">{@stats.total_events}</div>
       <div class="stat-desc">
@@ -52,7 +51,7 @@
       </div>
     </div>
 
-    <div class="stat bg-base-100 shadow-xl">
+    <div class="stat bg-base-100">
       <div class="stat-title">Active Events</div>
       <div class="stat-value">{@stats.active_events}</div>
       <div class="stat-desc">Currently running</div>
@@ -61,7 +60,7 @@
   
 <!-- Charts -->
   <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-12">
-    <div class="card bg-base-100 shadow-xl">
+    <div class="card bg-base-100 shadow">
       <div class="card-body">
         <h2 class="card-title">User Growth</h2>
         <p class="text-sm text-base-content/60">Last 30 days</p>
@@ -77,7 +76,7 @@
       </div>
     </div>
 
-    <div class="card bg-base-100 shadow-xl">
+    <div class="card bg-base-100 shadow">
       <div class="card-body">
         <h2 class="card-title">Event Creation</h2>
         <p class="text-sm text-base-content/60">Last 30 days</p>
@@ -99,7 +98,7 @@
     <div class="card bg-base-100 shadow-xl">
       <div class="card-body">
         <h2 class="card-title mb-4">Recent Events</h2>
-        
+
         <div class="overflow-x-auto">
           <table class="table table-zebra">
             <thead>
@@ -146,10 +145,7 @@
                   </td>
                   <td>
                     <div class="flex gap-2">
-                      <.link
-                        navigate={~p"/admin/events/#{event}"}
-                        class="btn btn-ghost btn-xs"
-                      >
+                      <.link navigate={~p"/admin/events/#{event}"} class="btn btn-ghost btn-xs">
                         View
                       </.link>
                       <.link

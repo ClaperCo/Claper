@@ -525,11 +525,19 @@ defmodule Claper.Admin do
 
     query =
       Event
-      |> preload(:user)
+      |> join(:left, [e], u in assoc(e, :user))
+      |> preload([e, u], user: u)
 
     query =
       if search != "" do
-        query |> where([e], ilike(e.name, ^"%#{search}%"))
+        search_term = "%#{search}%"
+
+        query
+        |> where(
+          [e, u],
+          ilike(e.name, ^search_term) or ilike(e.code, ^search_term) or
+            ilike(u.email, ^search_term)
+        )
       else
         query
       end
