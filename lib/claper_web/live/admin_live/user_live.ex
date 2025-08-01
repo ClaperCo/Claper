@@ -14,7 +14,7 @@ defmodule ClaperWeb.AdminLive.UserLive do
      |> assign(:page_title, "Admin - Users")
      |> assign(:users, list_users())
      |> assign(:search, "")
-     |> assign(:current_sort, %{field: :email, order: :asc})}
+     |> assign(:current_sort, %{field: :na, order: :asc})}
   end
 
   @impl true
@@ -55,6 +55,27 @@ defmodule ClaperWeb.AdminLive.UserLive do
      socket
      |> put_flash(:info, "User deleted successfully")
      |> assign(:users, list_users())}
+  end
+
+  @impl true
+  def handle_event("sort", %{"field" => field}, socket) do
+    field_atom = String.to_existing_atom(field)
+    current_sort = socket.assigns.current_sort
+
+    new_direction =
+      if current_sort.field == field_atom do
+        if current_sort.order == :asc, do: :desc, else: :asc
+      else
+        :asc
+      end
+
+    users = sort_users(socket.assigns.users, field_atom, new_direction)
+    current_sort = %{field: field_atom, order: new_direction}
+
+    {:noreply,
+     socket
+     |> assign(:users, users)
+     |> assign(:current_sort, current_sort)}
   end
 
   @impl true
@@ -120,11 +141,9 @@ defmodule ClaperWeb.AdminLive.UserLive do
   end
 
   def sort_indicator(assigns) do
-    %{current_sort: current_sort, field: field} = assigns
-
     ~H"""
-    <%= if current_sort.field == field do %>
-      <%= if current_sort.order == :asc do %>
+    <%= if @current_sort.field == @field do %>
+      <%= if @current_sort.order == :asc do %>
         <svg
           class="ml-2 h-5 w-5 text-gray-500 group-hover:text-gray-700"
           xmlns="http://www.w3.org/2000/svg"

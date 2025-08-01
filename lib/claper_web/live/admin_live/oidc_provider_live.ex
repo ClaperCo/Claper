@@ -11,7 +11,7 @@ defmodule ClaperWeb.AdminLive.OidcProviderLive do
      |> assign(:page_title, "Admin - OIDC Providers")
      |> assign(:providers, list_providers())
      |> assign(:search, "")
-     |> assign(:current_sort, %{field: :name, order: :asc})}
+     |> assign(:current_sort, %{field: :na, order: :asc})}
   end
 
   @impl true
@@ -124,9 +124,7 @@ defmodule ClaperWeb.AdminLive.OidcProviderLive do
     Enum.sort_by(providers, &Map.get(&1, field), order)
   end
 
-  defp sort_indicator(current_sort, field) do
-    assigns = %{current_sort: current_sort, field: field}
-
+  def sort_indicator(assigns) do
     ~H"""
     <%= if @current_sort.field == @field do %>
       <%= if @current_sort.order == :asc do %>
