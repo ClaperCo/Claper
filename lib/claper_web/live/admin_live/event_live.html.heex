@@ -129,7 +129,7 @@
                           <td class="font-medium">
                             {event.name}
                           </td>
-                          <td>
+                          <td class="uppercase">
                             {event.code}
                           </td>
                           <td>
@@ -146,7 +146,9 @@
                               else: "Not expired"}
                           </td>
                           <td>
-                            {event.audience_peak || 0}
+                            <div class="badge badge-outline">
+                              {event.audience_peak || 0}
+                            </div>
                           </td>
                           <td class="text-right">
                             <div class="flex justify-end gap-2">

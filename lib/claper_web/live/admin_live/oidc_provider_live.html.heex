@@ -123,21 +123,15 @@
                             {provider.issuer}
                           </td>
                           <td>
-                            <button
-                              phx-click="toggle_active"
-                              phx-value-id={provider.id}
-                              class="focus:outline-none"
-                            >
-                              <%= if provider.active do %>
-                                <span class="badge badge-success">
-                                  Active
-                                </span>
-                              <% else %>
-                                <span class="badge badge-ghost">
-                                  Inactive
-                                </span>
-                              <% end %>
-                            </button>
+                            <%= if provider.active do %>
+                              <span class="badge badge-success">
+                                Active
+                              </span>
+                            <% else %>
+                              <span class="badge badge-ghost">
+                                Inactive
+                              </span>
+                            <% end %>
                           </td>
                           <td>
                             {Calendar.strftime(provider.inserted_at, "%Y-%m-%d %H:%M")}
@@ -287,11 +281,11 @@
                 <dt class="text-sm font-medium text-gray-500">Status</dt>
                 <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
                   <%= if @provider.active do %>
-                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                    <span class="badge badge-success">
                       Active
                     </span>
                   <% else %>
-                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-gray-100 text-gray-800">
+                    <span class="badge badge-ghost">
                       Inactive
                     </span>
                   <% end %>

@@ -32,6 +32,7 @@ defmodule ClaperWeb.AdminLive.EventLive.FormComponent do
             placeholder="Enter event code"
             required={true}
             width_class="sm:col-span-3"
+            field_class="uppercase"
             description="A unique code for participants to join this event"
           />
 
@@ -57,37 +58,14 @@ defmodule ClaperWeb.AdminLive.EventLive.FormComponent do
             width_class="sm:col-span-3"
             description="When this event expires (optional)"
           />
-
-          <.live_component
-            module={ClaperWeb.AdminLive.FormFieldComponent}
-            id="event-audience-peak"
-            form={@form}
-            field={:audience_peak}
-            type="text"
-            label="Audience Peak"
-            placeholder="Enter peak audience count"
-            required={false}
-            width_class="sm:col-span-3"
-            extra_attrs={[min: "0", pattern: "[0-9]*"]}
-            description="Peak number of participants (optional)"
-          />
         </div>
 
         <div class="pt-6">
-          <div class="flex justify-end space-x-3">
-            <button
-              type="button"
-              phx-click="cancel"
-              phx-target={@myself}
-              class="bg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-            >
+          <div class="flex justify-end gap-3">
+            <button type="button" phx-click="cancel" phx-target={@myself} class="btn btn-ghost">
               Cancel
             </button>
-            <button
-              type="submit"
-              phx-disable-with="Saving..."
-              class="ml-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-            >
+            <button type="submit" phx-disable-with="Saving..." class="btn btn-primary">
               {if @action == :new, do: "Create Event", else: "Update Event"}
             </button>
           </div>

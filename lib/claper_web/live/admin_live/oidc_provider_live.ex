@@ -95,20 +95,6 @@ defmodule ClaperWeb.AdminLive.OidcProviderLive do
     {:noreply, assign(socket, :providers, list_providers())}
   end
 
-  @impl true
-  def handle_event("toggle_active", %{"id" => id}, socket) do
-    provider = Oidc.get_provider!(id)
-    {:ok, updated_provider} = Oidc.update_provider(provider, %{active: !provider.active})
-
-    {:noreply,
-     socket
-     |> put_flash(
-       :info,
-       "Provider #{if updated_provider.active, do: "activated", else: "deactivated"} successfully"
-     )
-     |> assign(:providers, list_providers())}
-  end
-
   defp list_providers do
     Oidc.list_providers()
   end
