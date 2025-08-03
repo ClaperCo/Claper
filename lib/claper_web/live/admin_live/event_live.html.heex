@@ -29,7 +29,7 @@
       <div class="max-w-7xl mx-auto px-4 sm:px-6 md:px-8 mt-4">
         <div class="py-4">
           <!-- Search Bar -->
-          <div class="mb-4">
+          <div class="mb-6">
             <form phx-change="search" class="flex w-full md:w-1/2 my-3">
               <label class="input">
                 <svg
@@ -249,20 +249,16 @@
         </div>
       </div>
 
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 md:px-8 mt-4">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 md:px-8 mt-6">
         <div class="card bg-base-100 shadow-xl">
           <div class="card-body">
             <h2 class="card-title">{@event.name}</h2>
-            <p class="text-base-content/70">Event code: {@event.code}</p>
+            <p class="text-base-content/70 uppercase">#{@event.code}</p>
             <div class="divider"></div>
             <dl class="space-y-4">
               <div class="grid grid-cols-3 gap-4">
                 <dt class="font-medium">Name</dt>
                 <dd class="col-span-2">{@event.name}</dd>
-              </div>
-              <div class="grid grid-cols-3 gap-4">
-                <dt class="font-medium">Code</dt>
-                <dd class="col-span-2">{@event.code}</dd>
               </div>
               <div class="grid grid-cols-3 gap-4">
                 <dt class="font-medium">Owner</dt>
@@ -314,15 +310,10 @@
       <div class="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
         <div class="flex justify-between items-center">
           <h1 class="text-2xl font-semibold text-gray-900">New Event</h1>
-          <div class="flex gap-3">
-            <.link navigate={~p"/admin/events"} class="btn btn-outline btn-sm">
-              Back to Events
-            </.link>
-          </div>
         </div>
       </div>
 
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 md:px-8 mt-4">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 md:px-8 mt-6">
         <div class="card bg-base-100 shadow-xl">
           <div class="card-body">
             <.live_component
@@ -342,15 +333,10 @@
       <div class="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
         <div class="flex justify-between items-center">
           <h1 class="text-2xl font-semibold text-gray-900">Edit Event</h1>
-          <div class="flex gap-3">
-            <.link navigate={~p"/admin/events"} class="btn btn-outline btn-sm">
-              Back to Events
-            </.link>
-          </div>
         </div>
       </div>
 
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 md:px-8 mt-4">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 md:px-8 mt-6">
         <div class="card bg-base-100 shadow-xl">
           <div class="card-body">
             <.live_component
