@@ -74,12 +74,14 @@ defmodule ClaperWeb.AdminLive.FormFieldComponent do
             )}
           <% "checkbox" -> %>
             <div class="form-control">
-              <label class="label cursor-pointer">
+              <label class="label cursor-pointer justify-start">
                 {checkbox(
                   @form,
                   @field,
-                  [class: "checkbox checkbox-primary"] ++
-                    @extra_attrs
+                  [
+                    class: "checkbox checkbox-primary",
+                    checked: Phoenix.HTML.Form.input_value(@form, @field) == true || Phoenix.HTML.Form.input_value(@form, @field) == "true"
+                  ] ++ @extra_attrs
                 )}
                 <span class="label-text ml-2">{@checkbox_label || @label}</span>
               </label>

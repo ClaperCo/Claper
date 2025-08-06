@@ -2,6 +2,7 @@ defmodule ClaperWeb.AdminLive.EventLive.FormComponent do
   use ClaperWeb, :live_component
 
   alias Claper.Events
+  alias Claper.Accounts
 
   @impl true
   def render(assigns) do
@@ -58,6 +59,20 @@ defmodule ClaperWeb.AdminLive.EventLive.FormComponent do
             width_class="sm:col-span-3"
             description="When this event expires (optional)"
           />
+
+          <.live_component
+            module={ClaperWeb.AdminLive.FormFieldComponent}
+            id="event-user-id"
+            form={@form}
+            field={:user_id}
+            type="select"
+            label="Assigned User"
+            select_options={@user_options}
+            prompt="Select a user"
+            required={true}
+            width_class="sm:col-span-6"
+            description="The user who owns this event"
+          />
         </div>
 
         <div class="pt-6">
@@ -79,9 +94,14 @@ defmodule ClaperWeb.AdminLive.EventLive.FormComponent do
   def update(%{event: event} = assigns, socket) do
     changeset = Events.change_event(event)
 
+    user_options =
+      Accounts.list_users()
+      |> Enum.map(&{"#{&1.email}", &1.id})
+
     {:ok,
      socket
      |> assign(assigns)
+     |> assign(:user_options, user_options)
      |> assign_form(changeset)}
   end
 
