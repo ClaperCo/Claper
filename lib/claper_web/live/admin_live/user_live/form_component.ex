@@ -52,9 +52,6 @@ defmodule ClaperWeb.AdminLive.UserLive.FormComponent do
 
           <div class="sm:col-span-6">
             <div class="form-control">
-              <label class="label">
-                <span class="label-text">Account Status</span>
-              </label>
               <label class="label cursor-pointer justify-start">
                 <input
                   type="checkbox"
@@ -64,11 +61,6 @@ defmodule ClaperWeb.AdminLive.UserLive.FormComponent do
                   class="checkbox checkbox-primary"
                 />
                 <span class="label-text ml-2">Account is confirmed and active</span>
-              </label>
-              <label class="label">
-                <span class="label-text-alt">
-                  {if @action == :new, do: "Check to create an already confirmed account", else: "Whether the user's email has been confirmed"}
-                </span>
               </label>
             </div>
           </div>
@@ -91,14 +83,21 @@ defmodule ClaperWeb.AdminLive.UserLive.FormComponent do
 
   @impl true
   def update(%{user: user} = assigns, socket) do
+    # For edit action, ensure we have the current role_id in the changeset
+    # attrs = 
+    #  case assigns.action do
+    #    :edit -> %{"role_id" => user.role_id}
+    #    :new -> %{}
+    #  end
+
     changeset = Accounts.change_user(user)
 
     role_options =
       Accounts.list_roles()
       |> Enum.map(&{String.capitalize(&1.name), &1.id})
-    
+
     # Determine if confirmed checkbox should be checked
-    confirmed_checked = 
+    confirmed_checked =
       case assigns.action do
         :edit -> !is_nil(user.confirmed_at)
         :new -> false
@@ -116,7 +115,7 @@ defmodule ClaperWeb.AdminLive.UserLive.FormComponent do
   def handle_event("validate", %{"user" => user_params}, socket) do
     # Update the confirmed_checked state based on form params
     confirmed_checked = Map.get(user_params, "confirmed") == "true"
-    
+
     # Convert confirmed checkbox to confirmed_at datetime
     user_params = maybe_convert_confirmed_field(user_params)
 
@@ -125,7 +124,7 @@ defmodule ClaperWeb.AdminLive.UserLive.FormComponent do
       |> Accounts.change_user(user_params)
       |> Map.put(:action, :validate)
 
-    {:noreply, 
+    {:noreply,
      socket
      |> assign(:confirmed_checked, confirmed_checked)
      |> assign_form(changeset)}
