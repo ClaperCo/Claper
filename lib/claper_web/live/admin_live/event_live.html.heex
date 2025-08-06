@@ -1,9 +1,9 @@
 <%= case @live_action do %>
   <% :index -> %>
-    <div class="py-6" phx-hook="CSVDownloader" id="event-list">
+    <div phx-hook="CSVDownloader" id="event-list">
       <div>
-        <div class="flex justify-between items-center">
-          <h1 class="text-2xl font-semibold text-gray-900">Events</h1>
+        <div class="flex justify-between items-center mb-24">
+          <h1 class="text-3xl font-bold">Events</h1>
           <div class="flex space-x-3">
             <.link navigate={~p"/admin/events/new"} class="btn btn-primary btn-sm">
               <svg
@@ -234,10 +234,10 @@
       </div>
     </div>
   <% :show -> %>
-    <div class="py-6">
+    <div>
       <div>
-        <div class="flex justify-between items-center">
-          <h1 class="text-2xl font-semibold text-gray-900">Event Details</h1>
+        <div class="flex justify-between items-center mb-24">
+          <h1 class="text-3xl font-bold">Event details</h1>
           <div class="flex gap-3">
             <.link navigate={~p"/admin/events"} class="btn btn-outline btn-sm">
               Back to Events
@@ -306,10 +306,10 @@
       </div>
     </div>
   <% :new -> %>
-    <div class="py-6">
+    <div>
       <div>
         <div class="flex justify-between items-center">
-          <h1 class="text-2xl font-semibold text-gray-900">New Event</h1>
+          <h1 class="text-3xl font-bold">New event</h1>
         </div>
       </div>
 
@@ -329,10 +329,10 @@
       </div>
     </div>
   <% :edit -> %>
-    <div class="py-6">
+    <div>
       <div>
         <div class="flex justify-between items-center">
-          <h1 class="text-2xl font-semibold text-gray-900">Edit Event</h1>
+          <h1 class="text-3xl font-bold">Edit event</h1>
         </div>
       </div>
 
