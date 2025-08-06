@@ -8,7 +8,7 @@ defmodule ClaperWeb.AdminLive.OidcProviderLive do
   def mount(_params, _session, socket) do
     {:ok,
      socket
-     |> assign(:page_title, "Admin - OIDC Providers")
+     |> assign(:page_title, "OIDC Providers")
      |> assign(:providers, list_providers())
      |> assign(:search, "")
      |> assign(:current_sort, %{field: :na, order: :asc})}

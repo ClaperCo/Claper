@@ -11,7 +11,7 @@ defmodule ClaperWeb.AdminLive.UserLive do
   def mount(_params, _session, socket) do
     {:ok,
      socket
-     |> assign(:page_title, "Admin - Users")
+     |> assign(:page_title, "Users")
      |> assign(:users, list_users())
      |> assign(:search, "")
      |> assign(:current_sort, %{field: :na, order: :asc})}
@@ -24,7 +24,7 @@ defmodule ClaperWeb.AdminLive.UserLive do
 
   defp apply_action(socket, :index, _params) do
     socket
-    |> assign(:page_title, "Admin - Users")
+    |> assign(:page_title, "Users")
     |> assign(:user, nil)
   end
 

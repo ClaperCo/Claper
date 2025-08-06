@@ -1,9 +1,9 @@
 <%= case @live_action do %>
   <% :index -> %>
-    <div class="py-6">
+    <div>
       <div>
-        <div class="flex justify-between items-center">
-          <h1 class="text-2xl font-semibold text-gray-900">OIDC Providers</h1>
+        <div class="flex justify-between items-center mb-24">
+          <h1 class="text-3xl font-bold">OIDC Providers</h1>
           <div class="flex space-x-3">
             <.link navigate={~p"/admin/oidc_providers/new"} class="btn btn-primary btn-sm">
               <svg
@@ -220,10 +220,10 @@
       </div>
     </div>
   <% :show -> %>
-    <div class="py-6">
+    <div>
       <div>
-        <div class="flex justify-between items-center">
-          <h1 class="text-2xl font-semibold text-gray-900">OIDC Provider Details</h1>
+        <div class="flex justify-between items-center mb-24">
+          <h1 class="text-3xl font-bold">OIDC Provider details</h1>
           <div class="flex space-x-3">
             <.link navigate={~p"/admin/oidc_providers"} class="btn btn-outline btn-sm">
               Back to Providers
@@ -239,44 +239,43 @@
       </div>
 
       <div class="mt-6">
-        <div class="bg-white shadow overflow-hidden sm:rounded-lg">
-          <div class="px-4 py-5 sm:px-6">
-            <h3 class="text-lg leading-6 font-medium text-gray-900">{@provider.name}</h3>
-            <p class="mt-1 max-w-2xl text-sm text-gray-500">OIDC Provider</p>
-          </div>
-          <div class="border-t border-gray-200 px-4 py-5 sm:p-0">
-            <dl class="sm:divide-y sm:divide-gray-200">
-              <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                <dt class="text-sm font-medium text-gray-500">Name</dt>
-                <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">{@provider.name}</dd>
+        <div class="card bg-base-100 shadow-xl">
+          <div class="card-body">
+            <h2 class="card-title">{@provider.name}</h2>
+            <p class="text-base-content/70">OIDC Provider</p>
+            <div class="divider"></div>
+            <dl class="space-y-4">
+              <div class="grid grid-cols-3 gap-4">
+                <dt class="font-medium">Name</dt>
+                <dd class="col-span-2">{@provider.name}</dd>
               </div>
-              <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                <dt class="text-sm font-medium text-gray-500">Issuer</dt>
-                <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+              <div class="grid grid-cols-3 gap-4">
+                <dt class="font-medium">Issuer</dt>
+                <dd class="col-span-2">
                   {@provider.issuer}
                 </dd>
               </div>
-              <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                <dt class="text-sm font-medium text-gray-500">Client ID</dt>
-                <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+              <div class="grid grid-cols-3 gap-4">
+                <dt class="font-medium">Client ID</dt>
+                <dd class="col-span-2">
                   {@provider.client_id}
                 </dd>
               </div>
-              <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                <dt class="text-sm font-medium text-gray-500">Response Type</dt>
-                <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+              <div class="grid grid-cols-3 gap-4">
+                <dt class="font-medium">Response Type</dt>
+                <dd class="col-span-2">
                   {@provider.response_type}
                 </dd>
               </div>
-              <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                <dt class="text-sm font-medium text-gray-500">Scope</dt>
-                <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+              <div class="grid grid-cols-3 gap-4">
+                <dt class="font-medium">Scope</dt>
+                <dd class="col-span-2">
                   {@provider.scope}
                 </dd>
               </div>
-              <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                <dt class="text-sm font-medium text-gray-500">Status</dt>
-                <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+              <div class="grid grid-cols-3 gap-4">
+                <dt class="font-medium">Status</dt>
+                <dd class="col-span-2">
                   <%= if @provider.active do %>
                     <span class="badge badge-success">
                       Active
@@ -288,15 +287,15 @@
                   <% end %>
                 </dd>
               </div>
-              <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                <dt class="text-sm font-medium text-gray-500">Created At</dt>
-                <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+              <div class="grid grid-cols-3 gap-4">
+                <dt class="font-medium">Created At</dt>
+                <dd class="col-span-2">
                   {Calendar.strftime(@provider.inserted_at, "%Y-%m-%d %H:%M")}
                 </dd>
               </div>
-              <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                <dt class="text-sm font-medium text-gray-500">Last Updated</dt>
-                <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+              <div class="grid grid-cols-3 gap-4">
+                <dt class="font-medium">Last Updated</dt>
+                <dd class="col-span-2">
                   {Calendar.strftime(@provider.updated_at, "%Y-%m-%d %H:%M")}
                 </dd>
               </div>
@@ -306,44 +305,48 @@
       </div>
     </div>
   <% :new -> %>
-    <div class="py-6">
+    <div>
       <div>
         <div class="flex justify-between items-center">
-          <h1 class="text-2xl font-semibold text-gray-900">New OIDC Provider</h1>
+          <h1 class="text-3xl font-bold">New OIDC Provider</h1>
         </div>
       </div>
 
       <div class="mt-6">
-        <div class="bg-white shadow overflow-hidden sm:rounded-lg p-6">
-          <.live_component
-            module={ClaperWeb.AdminLive.OidcProviderLive.FormComponent}
-            id="provider-form"
-            title="New OIDC Provider"
-            action={:new}
-            provider={@provider}
-            navigate={~p"/admin/oidc_providers"}
-          />
+        <div class="card bg-base-100 shadow-xl">
+          <div class="card-body">
+            <.live_component
+              module={ClaperWeb.AdminLive.OidcProviderLive.FormComponent}
+              id="provider-form"
+              title="New OIDC Provider"
+              action={:new}
+              provider={@provider}
+              navigate={~p"/admin/oidc_providers"}
+            />
+          </div>
         </div>
       </div>
     </div>
   <% :edit -> %>
-    <div class="py-6">
+    <div>
       <div>
         <div class="flex justify-between items-center">
-          <h1 class="text-2xl font-semibold text-gray-900">Edit OIDC Provider</h1>
+          <h1 class="text-3xl font-bold">Edit OIDC Provider</h1>
         </div>
       </div>
 
       <div class="mt-6">
-        <div class="bg-white shadow overflow-hidden sm:rounded-lg p-6">
-          <.live_component
-            module={ClaperWeb.AdminLive.OidcProviderLive.FormComponent}
-            id={"provider-form-#{@provider.id}"}
-            title="Edit OIDC Provider"
-            action={:edit}
-            provider={@provider}
-            navigate={~p"/admin/oidc_providers"}
-          />
+        <div class="card bg-base-100 shadow-xl">
+          <div class="card-body">
+            <.live_component
+              module={ClaperWeb.AdminLive.OidcProviderLive.FormComponent}
+              id={"provider-form-#{@provider.id}"}
+              title="Edit OIDC Provider"
+              action={:edit}
+              provider={@provider}
+              navigate={~p"/admin/oidc_providers"}
+            />
+          </div>
         </div>
       </div>
     </div>

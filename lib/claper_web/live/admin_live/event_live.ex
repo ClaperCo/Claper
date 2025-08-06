@@ -9,7 +9,7 @@ defmodule ClaperWeb.AdminLive.EventLive do
   def mount(_params, _session, socket) do
     {:ok,
      socket
-     |> assign(:page_title, "Admin - Events")
+     |> assign(:page_title, "Events")
      |> assign(:events, list_events())
      |> assign(:search, "")
      |> assign(:current_sort, %{field: :na, order: :asc})}
@@ -22,7 +22,7 @@ defmodule ClaperWeb.AdminLive.EventLive do
 
   defp apply_action(socket, :index, _params) do
     socket
-    |> assign(:page_title, "Admin - Events")
+    |> assign(:page_title, "Events")
     |> assign(:event, nil)
   end
 

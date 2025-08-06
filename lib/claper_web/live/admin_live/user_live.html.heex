@@ -1,9 +1,9 @@
 <%= case @live_action do %>
   <% :index -> %>
-    <div class="py-6">
+    <div>
       <div>
-        <div class="flex justify-between items-center">
-          <h1 class="text-2xl font-semibold text-gray-900">Users</h1>
+        <div class="flex justify-between items-center mb-24">
+          <h1 class="text-3xl font-bold">Users</h1>
           <div class="flex space-x-3">
             <.link navigate={~p"/admin/users/new"} class="btn btn-primary btn-sm">
               <svg
@@ -215,10 +215,10 @@
       </div>
     </div>
   <% :show -> %>
-    <div class="py-6">
+    <div>
       <div>
-        <div class="flex justify-between items-center">
-          <h1 class="text-2xl font-semibold text-gray-900">User Details</h1>
+        <div class="flex justify-between items-center mb-24">
+          <h1 class="text-3xl font-bold">User details</h1>
           <div class="flex space-x-3">
             <.link navigate={~p"/admin/users"} class="btn btn-outline btn-sm">
               Back to Users
@@ -231,26 +231,25 @@
       </div>
 
       <div class="mt-6">
-        <div class="bg-white shadow overflow-hidden sm:rounded-lg">
-          <div class="px-4 py-5 sm:px-6">
-            <h3 class="text-lg leading-6 font-medium text-gray-900">{@user.email}</h3>
-            <p class="mt-1 max-w-2xl text-sm text-gray-500">User Account</p>
-          </div>
-          <div class="border-t border-gray-200 px-4 py-5 sm:p-0">
-            <dl class="sm:divide-y sm:divide-gray-200">
-              <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                <dt class="text-sm font-medium text-gray-500">Email</dt>
-                <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">{@user.email}</dd>
+        <div class="card bg-base-100 shadow-xl">
+          <div class="card-body">
+            <h2 class="card-title">{@user.email}</h2>
+            <p class="text-base-content/70">User Account</p>
+            <div class="divider"></div>
+            <dl class="space-y-4">
+              <div class="grid grid-cols-3 gap-4">
+                <dt class="font-medium">Email</dt>
+                <dd class="col-span-2">{@user.email}</dd>
               </div>
-              <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                <dt class="text-sm font-medium text-gray-500">Role</dt>
-                <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+              <div class="grid grid-cols-3 gap-4">
+                <dt class="font-medium">Role</dt>
+                <dd class="col-span-2">
                   {if @user.role, do: @user.role.name, else: "No role"}
                 </dd>
               </div>
-              <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                <dt class="text-sm font-medium text-gray-500">Status</dt>
-                <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+              <div class="grid grid-cols-3 gap-4">
+                <dt class="font-medium">Status</dt>
+                <dd class="col-span-2">
                   <%= if @user.confirmed_at do %>
                     <span class="badge badge-success">
                       Confirmed
@@ -262,22 +261,22 @@
                   <% end %>
                 </dd>
               </div>
-              <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                <dt class="text-sm font-medium text-gray-500">Created At</dt>
-                <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+              <div class="grid grid-cols-3 gap-4">
+                <dt class="font-medium">Created At</dt>
+                <dd class="col-span-2">
                   {Calendar.strftime(@user.inserted_at, "%Y-%m-%d %H:%M")}
                 </dd>
               </div>
-              <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                <dt class="text-sm font-medium text-gray-500">Last Updated</dt>
-                <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+              <div class="grid grid-cols-3 gap-4">
+                <dt class="font-medium">Last Updated</dt>
+                <dd class="col-span-2">
                   {Calendar.strftime(@user.updated_at, "%Y-%m-%d %H:%M")}
                 </dd>
               </div>
               <%= if @user.confirmed_at do %>
-                <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                  <dt class="text-sm font-medium text-gray-500">Confirmed At</dt>
-                  <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                <div class="grid grid-cols-3 gap-4">
+                  <dt class="font-medium">Confirmed At</dt>
+                  <dd class="col-span-2">
                     {Calendar.strftime(@user.confirmed_at, "%Y-%m-%d %H:%M")}
                   </dd>
                 </div>
@@ -288,44 +287,48 @@
       </div>
     </div>
   <% :new -> %>
-    <div class="py-6">
+    <div>
       <div>
         <div class="flex justify-between items-center">
-          <h1 class="text-2xl font-semibold text-gray-900">New User</h1>
+          <h1 class="text-3xl font-bold">New User</h1>
         </div>
       </div>
 
       <div class="mt-6">
-        <div class="bg-white shadow overflow-hidden sm:rounded-lg p-6">
-          <.live_component
-            module={ClaperWeb.AdminLive.UserLive.FormComponent}
-            id="user-form"
-            title="New User"
-            action={:new}
-            user={@user}
-            navigate={~p"/admin/users"}
-          />
+        <div class="card bg-base-100 shadow-xl">
+          <div class="card-body">
+            <.live_component
+              module={ClaperWeb.AdminLive.UserLive.FormComponent}
+              id="user-form"
+              title="New User"
+              action={:new}
+              user={@user}
+              navigate={~p"/admin/users"}
+            />
+          </div>
         </div>
       </div>
     </div>
   <% :edit -> %>
-    <div class="py-6">
+    <div>
       <div>
         <div class="flex justify-between items-center">
-          <h1 class="text-2xl font-semibold text-gray-900">Edit User</h1>
+          <h1 class="text-3xl font-bold">Edit User</h1>
         </div>
       </div>
 
       <div class="mt-6">
-        <div class="bg-white shadow overflow-hidden sm:rounded-lg p-6">
-          <.live_component
-            module={ClaperWeb.AdminLive.UserLive.FormComponent}
-            id={"user-form-#{@user.id}"}
-            title="Edit User"
-            action={:edit}
-            user={@user}
-            navigate={~p"/admin/users"}
-          />
+        <div class="card bg-base-100 shadow-xl">
+          <div class="card-body">
+            <.live_component
+              module={ClaperWeb.AdminLive.UserLive.FormComponent}
+              id={"user-form-#{@user.id}"}
+              title="Edit User"
+              action={:edit}
+              user={@user}
+              navigate={~p"/admin/users"}
+            />
+          </div>
         </div>
       </div>
     </div>
