@@ -61,17 +61,16 @@ defmodule ClaperWeb.AdminLive.EventLive.FormComponent do
           />
 
           <.live_component
-            module={ClaperWeb.AdminLive.FormFieldComponent}
+            module={ClaperWeb.AdminLive.SearchableSelectComponent}
             id="event-user-id"
             form={@form}
             field={:user_id}
-            type="select"
             label="Assigned User"
-            select_options={@user_options}
-            prompt="Select a user"
+            options={@user_options}
+            placeholder="Search for a user..."
             required={true}
             width_class="sm:col-span-6"
-            description="The user who owns this event"
+            description="The user who owns this event (required)"
           />
         </div>
 

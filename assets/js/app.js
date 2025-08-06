@@ -268,6 +268,19 @@ Hooks.EmptyNickname = {
   },
 };
 
+Hooks.SearchableSelect = {
+  mounted() {
+    this.handleEvent("update_hidden_field", (payload) => {
+      if (payload.id === this.el.id) {
+        this.el.value = payload.value;
+        // Trigger a change event to update the form
+        const event = new Event('input', { bubbles: true });
+        this.el.dispatchEvent(event);
+      }
+    });
+  }
+};
+
 Hooks.PostForm = {
   onPress(e, submitBtn, TA) {
     if (e.key == "Enter" && !e.shiftKey) {
