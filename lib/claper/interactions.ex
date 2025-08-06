@@ -51,10 +51,31 @@ defmodule Claper.Interactions do
         position,
         broadcast \\ false
       ) do
-    with polls <- Polls.list_polls_at_position(presentation_file_id, position),
-         forms <- Forms.list_forms_at_position(presentation_file_id, position),
-         embeds <- Embeds.list_embeds_at_position(presentation_file_id, position),
-         quizzes <- Quizzes.list_quizzes_at_position(presentation_file_id, position) do
+    # Ensure position is properly handled - convert nil to 0 or handle appropriately
+    normalized_position = case position do
+      nil -> 
+        require Logger
+        Logger.warn("Position is nil in get_interactions_at_position for event #{event.uuid}, defaulting to 0")
+        0
+      pos when is_integer(pos) -> pos
+      pos when is_binary(pos) -> 
+        case Integer.parse(pos) do
+          {int_pos, _} -> int_pos
+          :error -> 
+            require Logger
+            Logger.warn("Invalid position string '#{pos}' in get_interactions_at_position for event #{event.uuid}, defaulting to 0")
+            0
+        end
+      _ -> 
+        require Logger
+        Logger.warn("Unexpected position type #{inspect(position)} in get_interactions_at_position for event #{event.uuid}, defaulting to 0")
+        0
+    end
+
+    with polls <- Polls.list_polls_at_position(presentation_file_id, normalized_position),
+         forms <- Forms.list_forms_at_position(presentation_file_id, normalized_position),
+         embeds <- Embeds.list_embeds_at_position(presentation_file_id, normalized_position),
+         quizzes <- Quizzes.list_quizzes_at_position(presentation_file_id, normalized_position) do
       interactions =
         (polls ++ forms ++ embeds ++ quizzes)
         |> Enum.sort_by(& &1.inserted_at, {:asc, NaiveDateTime})
