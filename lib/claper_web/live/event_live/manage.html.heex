@@ -1453,7 +1453,7 @@
           </div>
 
           <div
-            class="hidden lg:block z-20 bg-white @container"
+            class="hidden lg:flex flex-col z-20 bg-white @container max-h-full min-h-0"
             data-tg-title={"#{gettext("Settings")}"}
             data-tg-order="3"
             data-tg-tour={"<p class='mb-3'>#{gettext("You can control each setting for the presentation (showing on the big screen) and on the attendee's room.")}</p><p class='opacity-50 text-xs'>#{gettext("Use the associated keyboard shortcuts for quick toggling of these settings.")}</p>"}
@@ -1462,14 +1462,15 @@
             <div class="w-full h-12 bg-gray-100 font-semibold text-xl flex items-center justify-center">
               {gettext("Settings")}
             </div>
-
-            <.live_component
-              id="settings-pane"
-              module={ClaperWeb.EventLive.ManagerSettingsComponent}
-              create={@create}
-              state={@state}
-              current_interaction={@current_interaction}
-            />
+            <div class="grow @md:overflow-hidden overflow-auto min-h-0 ">
+              <.live_component
+                id="settings-pane"
+                module={ClaperWeb.EventLive.ManagerSettingsComponent}
+                create={@create}
+                state={@state}
+                current_interaction={@current_interaction}
+              />
+            </div>
           </div>
         </div>
       </div>
