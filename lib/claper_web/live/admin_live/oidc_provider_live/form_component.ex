@@ -21,11 +21,11 @@ defmodule ClaperWeb.AdminLive.OidcProviderLive.FormComponent do
             form={@form}
             field={:name}
             type="text"
-            label="Name"
-            placeholder="Enter provider name"
+            label={gettext("Name")}
+            placeholder={gettext("Enter provider name")}
             required={true}
             width_class="sm:col-span-6"
-            description="A unique name to identify this OIDC provider"
+            description={gettext("A unique name to identify this OIDC provider")}
           />
 
           <.live_component
@@ -34,11 +34,11 @@ defmodule ClaperWeb.AdminLive.OidcProviderLive.FormComponent do
             form={@form}
             field={:issuer}
             type="text"
-            label="Issuer URL"
-            placeholder="https://example.com"
+            label={gettext("Issuer URL")}
+            placeholder={gettext("https://example.com")}
             required={true}
             width_class="sm:col-span-6"
-            description="The OIDC issuer URL (must start with http:// or https://)"
+            description={gettext("The OIDC issuer URL (must start with http:// or https://)")}
           />
 
           <.live_component
@@ -47,8 +47,8 @@ defmodule ClaperWeb.AdminLive.OidcProviderLive.FormComponent do
             form={@form}
             field={:client_id}
             type="text"
-            label="Client ID"
-            placeholder="Enter client ID"
+            label={gettext("Client ID")}
+            placeholder={gettext("Enter client ID")}
             required={true}
             width_class="sm:col-span-3"
           />
@@ -59,8 +59,8 @@ defmodule ClaperWeb.AdminLive.OidcProviderLive.FormComponent do
             form={@form}
             field={:client_secret}
             type="text"
-            label="Client Secret"
-            placeholder="Enter client secret"
+            label={gettext("Client Secret")}
+            placeholder={gettext("Enter client secret")}
             required={true}
             width_class="sm:col-span-3"
           />
@@ -71,11 +71,11 @@ defmodule ClaperWeb.AdminLive.OidcProviderLive.FormComponent do
             form={@form}
             field={:redirect_uri}
             type="text"
-            label="Redirect URI"
-            placeholder="https://yourapp.com/auth/callback"
+            label={gettext("Redirect URI")}
+            placeholder={gettext("https://yourapp.com/auth/callback")}
             required={true}
             width_class="sm:col-span-6"
-            description="The callback URL for your application (must start with http:// or https://)"
+            description={gettext("The callback URL for your application (must start with http:// or https://)")}
           />
 
           <.live_component
@@ -84,10 +84,10 @@ defmodule ClaperWeb.AdminLive.OidcProviderLive.FormComponent do
             form={@form}
             field={:scope}
             type="text"
-            label="Scope"
-            placeholder="openid email profile"
+            label={gettext("Scope")}
+            placeholder={gettext("openid email profile")}
             width_class="sm:col-span-3"
-            description="OIDC scopes to request (defaults to 'openid email profile')"
+            description={gettext("OIDC scopes to request (defaults to 'openid email profile')")}
           />
 
           <.live_component
@@ -96,14 +96,14 @@ defmodule ClaperWeb.AdminLive.OidcProviderLive.FormComponent do
             form={@form}
             field={:response_type}
             type="select"
-            label="Response Type"
+            label={gettext("Response Type")}
             select_options={[
-              {"Authorization Code", "code"},
-              {"Implicit", "token"},
-              {"Hybrid", "code token"}
+              {gettext("Authorization Code"), "code"},
+              {gettext("Implicit"), "token"},
+              {gettext("Hybrid"), "code token"}
             ]}
             width_class="sm:col-span-3"
-            description="OAuth 2.0 response type (defaults to 'code')"
+            description={gettext("OAuth 2.0 response type (defaults to 'code')")}
           />
 
           <.live_component
@@ -112,10 +112,10 @@ defmodule ClaperWeb.AdminLive.OidcProviderLive.FormComponent do
             form={@form}
             field={:response_mode}
             type="select"
-            label="Response Mode"
-            select_options={[{"Query", "query"}, {"Fragment", "fragment"}, {"Form Post", "form_post"}]}
+            label={gettext("Response Mode")}
+            select_options={[{gettext("Query"), "query"}, {gettext("Fragment"), "fragment"}, {gettext("Form Post"), "form_post"}]}
             width_class="sm:col-span-3"
-            description="How the authorization response should be returned (defaults to 'query')"
+            description={gettext("How the authorization response should be returned (defaults to 'query')")}
           />
 
           <.live_component
@@ -124,20 +124,20 @@ defmodule ClaperWeb.AdminLive.OidcProviderLive.FormComponent do
             form={@form}
             field={:active}
             type="checkbox"
-            label="Active"
-            checkbox_label="Enable this OIDC provider"
+            label={gettext("Active")}
+            checkbox_label={gettext("Enable this OIDC provider")}
             width_class="sm:col-span-3"
-            description="Whether this provider is currently active and available for authentication"
+            description={gettext("Whether this provider is currently active and available for authentication")}
           />
         </div>
 
         <div class="pt-6">
           <div class="flex justify-end gap-3">
             <button type="button" phx-click="cancel" phx-target={@myself} class="btn btn-ghost">
-              Cancel
+              {gettext("Cancel")}
             </button>
-            <button type="submit" phx-disable-with="Saving..." class="btn btn-primary">
-              {if @action == :new, do: "Create Provider", else: "Update Provider"}
+            <button type="submit" phx-disable-with={gettext("Saving...")} class="btn btn-primary">
+              {if @action == :new, do: gettext("Create Provider"), else: gettext("Update Provider")}
             </button>
           </div>
         </div>
@@ -181,7 +181,7 @@ defmodule ClaperWeb.AdminLive.OidcProviderLive.FormComponent do
 
         {:noreply,
          socket
-         |> put_flash(:info, "Provider updated successfully")
+         |> put_flash(:info, gettext("Provider updated successfully"))
          |> push_navigate(to: socket.assigns.navigate)}
 
       {:error, %Ecto.Changeset{} = changeset} ->
@@ -196,7 +196,7 @@ defmodule ClaperWeb.AdminLive.OidcProviderLive.FormComponent do
 
         {:noreply,
          socket
-         |> put_flash(:info, "Provider created successfully")
+         |> put_flash(:info, gettext("Provider created successfully"))
          |> push_navigate(to: socket.assigns.navigate)}
 
       {:error, %Ecto.Changeset{} = changeset} ->

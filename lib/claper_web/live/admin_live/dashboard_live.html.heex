@@ -1,6 +1,6 @@
 <!-- Header -->
 <div class="mb-24">
-  <h1 class="text-3xl font-bold">Dashboard</h1>
+  <h1 class="text-3xl font-bold">{gettext("Dashboard")}</h1>
 </div>
 
 <!-- Dashboard Content -->
@@ -8,7 +8,7 @@
   <!-- Stats Cards -->
   <div class="stats w-full stats-horizontal shadow mb-12">
     <div class="stat bg-base-100">
-      <div class="stat-title">Total Users</div>
+      <div class="stat-title">{gettext("Total Users")}</div>
       <div class="stat-value">{@stats.total_users}</div>
       <div class="stat-desc">
         <span class={
@@ -25,12 +25,12 @@
           <% end %>
           {@growth_metrics.users_growth}%
         </span>
-        vs last month
+        {gettext("vs last month")}
       </div>
     </div>
 
     <div class="stat bg-base-100">
-      <div class="stat-title">Total Events</div>
+      <div class="stat-title">{gettext("Total Events")}</div>
       <div class="stat-value">{@stats.total_events}</div>
       <div class="stat-desc">
         <span class={
@@ -47,14 +47,14 @@
           <% end %>
           {@growth_metrics.events_growth}%
         </span>
-        vs last month
+        {gettext("vs last month")}
       </div>
     </div>
 
     <div class="stat bg-base-100">
-      <div class="stat-title">Active Events</div>
+      <div class="stat-title">{gettext("Active Events")}</div>
       <div class="stat-value">{@stats.active_events}</div>
-      <div class="stat-desc">Currently running</div>
+      <div class="stat-desc">{gettext("Currently running")}</div>
     </div>
   </div>
   
@@ -62,8 +62,8 @@
   <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-12">
     <div class="card bg-base-100 shadow">
       <div class="card-body">
-        <h2 class="card-title">User Growth</h2>
-        <p class="text-sm text-base-content/60">Last 30 days</p>
+        <h2 class="card-title">{gettext("User Growth")}</h2>
+        <p class="text-sm text-base-content/60">{gettext("Last 30 days")}</p>
         <div class="h-72 relative mt-4">
           <canvas
             id="userGrowthChart"
@@ -78,8 +78,8 @@
 
     <div class="card bg-base-100 shadow">
       <div class="card-body">
-        <h2 class="card-title">Event Creation</h2>
-        <p class="text-sm text-base-content/60">Last 30 days</p>
+        <h2 class="card-title">{gettext("Event Creation")}</h2>
+        <p class="text-sm text-base-content/60">{gettext("Last 30 days")}</p>
         <div class="h-72 relative mt-4">
           <canvas
             id="eventCreationChart"
@@ -97,18 +97,18 @@
   <div class="mt-12">
     <div class="card bg-base-100 shadow-xl">
       <div class="card-body">
-        <h2 class="card-title mb-4">Recent Events</h2>
+        <h2 class="card-title mb-4">{gettext("Recent Events")}</h2>
 
         <div class="overflow-x-auto">
           <table class="table table-zebra">
             <thead>
               <tr>
-                <th>Name</th>
-                <th>Code</th>
-                <th>Owner</th>
-                <th>Start Date</th>
-                <th>Audience Peak</th>
-                <th>Status</th>
+                <th>{gettext("Name")}</th>
+                <th>{gettext("Code")}</th>
+                <th>{gettext("Owner")}</th>
+                <th>{gettext("Start Date")}</th>
+                <th>{gettext("Audience Peak")}</th>
+                <th>{gettext("Status")}</th>
                 <th></th>
               </tr>
             </thead>
@@ -118,13 +118,13 @@
                 <% {status_text, status_class} =
                   cond do
                     is_nil(event.expired_at) == false ->
-                      {"Completed", "badge-ghost"}
+                      {gettext("Completed"), "badge-ghost"}
 
                     NaiveDateTime.compare(event.started_at, now) == :gt ->
-                      {"Scheduled", "badge-info"}
+                      {gettext("Scheduled"), "badge-info"}
 
                     true ->
-                      {"Active", "badge-success"}
+                      {gettext("Active"), "badge-success"}
                   end %>
                 <tr>
                   <td>
@@ -148,7 +148,7 @@
                       <.link
                         navigate={~p"/admin/events/#{event}"}
                         class="btn btn-link btn-xs"
-                        title="View event"
+                        title={gettext("View event")}
                       >
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
@@ -173,7 +173,7 @@
                       <.link
                         navigate={~p"/admin/events/#{event}/edit"}
                         class="btn btn-link btn-xs text-primary"
-                        title="Edit event"
+                        title={gettext("Edit event")}
                       >
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
@@ -198,7 +198,7 @@
                 <tr>
                   <td colspan="7" class="text-center">
                     <div class="py-8 text-base-content/60">
-                      No events found
+                      {gettext("No events found")}
                     </div>
                   </td>
                 </tr>

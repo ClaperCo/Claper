@@ -8,7 +8,7 @@ defmodule ClaperWeb.AdminLive.OidcProviderLive do
   def mount(_params, _session, socket) do
     {:ok,
      socket
-     |> assign(:page_title, "OIDC Providers")
+     |> assign(:page_title, gettext("OIDC Providers"))
      |> assign(:providers, list_providers())
      |> assign(:search, "")
      |> assign(:current_sort, %{field: :na, order: :asc})}
@@ -29,25 +29,25 @@ defmodule ClaperWeb.AdminLive.OidcProviderLive do
     provider = Oidc.get_provider!(id)
 
     socket
-    |> assign(:page_title, "OIDC Provider Details")
+    |> assign(:page_title, gettext("OIDC Provider Details"))
     |> assign(:provider, provider)
   end
 
   defp apply_action(socket, :new, _params) do
     socket
-    |> assign(:page_title, "New OIDC Provider")
+    |> assign(:page_title, gettext("New OIDC Provider"))
     |> assign(:provider, %Provider{})
   end
 
   defp apply_action(socket, :edit, %{"id" => id}) do
     socket
-    |> assign(:page_title, "Edit OIDC Provider")
+    |> assign(:page_title, gettext("Edit OIDC Provider"))
     |> assign(:provider, Oidc.get_provider!(id))
   end
 
   defp apply_action(socket, :show, %{"id" => id}) do
     socket
-    |> assign(:page_title, "OIDC Provider Details")
+    |> assign(:page_title, gettext("OIDC Provider Details"))
     |> assign(:provider, Oidc.get_provider!(id))
   end
 
@@ -58,7 +58,7 @@ defmodule ClaperWeb.AdminLive.OidcProviderLive do
 
     {:noreply,
      socket
-     |> put_flash(:info, "OIDC provider deleted successfully")
+     |> put_flash(:info, gettext("OIDC provider deleted successfully"))
      |> assign(:providers, list_providers())}
   end
 

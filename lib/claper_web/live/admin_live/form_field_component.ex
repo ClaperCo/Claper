@@ -68,7 +68,7 @@ defmodule ClaperWeb.AdminLive.FormFieldComponent do
               @select_options,
               [
                 class: "select w-full",
-                prompt: @prompt || "Select an option",
+                prompt: @prompt || gettext("Select an option"),
                 required: @required
               ] ++ @extra_attrs
             )}
@@ -109,7 +109,7 @@ defmodule ClaperWeb.AdminLive.FormFieldComponent do
           <% "file" -> %>
             <div class="flex items-center gap-3">
               <label class="btn btn-outline btn-sm">
-                <span>Choose file</span>
+                <span>{gettext("Choose file")}</span>
                 {file_input(
                   @form,
                   @field,
@@ -122,7 +122,7 @@ defmodule ClaperWeb.AdminLive.FormFieldComponent do
                 )}
               </label>
               <span class="text-sm text-base-content/70" id={"file-name-#{@field}"}>
-                {if @selected_file, do: @selected_file, else: "No file chosen"}
+                {if @selected_file, do: @selected_file, else: gettext("No file chosen")}
               </span>
             </div>
           <% _ -> %>
@@ -174,7 +174,7 @@ defmodule ClaperWeb.AdminLive.FormFieldComponent do
 
   @impl true
   def handle_event("file_selected", %{"_target" => [_field_name]}, socket) do
-    {:noreply, assign(socket, selected_file: "File selected")}
+    {:noreply, assign(socket, selected_file: gettext("File selected"))}
   end
 
   defp toggle_password_visibility(field_id) do

@@ -15,11 +15,11 @@ defmodule ClaperWeb.AdminLive.UserLive.FormComponent do
             form={@form}
             field={:email}
             type="email"
-            label="Email"
-            placeholder="Enter user email"
+            label={gettext("Email")}
+            placeholder={gettext("Enter user email")}
             required={true}
             width_class="sm:col-span-6"
-            description="User's email address (must be unique)"
+            description={gettext("User's email address (must be unique)")}
           />
 
           <%= if @action == :new do %>
@@ -29,11 +29,11 @@ defmodule ClaperWeb.AdminLive.UserLive.FormComponent do
               form={@form}
               field={:password}
               type="password"
-              label="Password"
-              placeholder="Enter password"
+              label={gettext("Password")}
+              placeholder={gettext("Enter password")}
               required={true}
               width_class="sm:col-span-3"
-              description="Initial password for the user"
+              description={gettext("Initial password for the user")}
             />
           <% end %>
 
@@ -43,11 +43,11 @@ defmodule ClaperWeb.AdminLive.UserLive.FormComponent do
             form={@form}
             field={:role_id}
             type="select"
-            label="Role"
+            label={gettext("Role")}
             select_options={@role_options}
             required={true}
             width_class="sm:col-span-3"
-            description="User's access level"
+            description={gettext("User's access level")}
           />
 
           <div class="sm:col-span-6">
@@ -60,7 +60,7 @@ defmodule ClaperWeb.AdminLive.UserLive.FormComponent do
                   checked={@confirmed_checked}
                   class="checkbox checkbox-primary"
                 />
-                <span class="label-text ml-2">Account is confirmed and active</span>
+                <span class="label-text ml-2">{gettext("Account is confirmed and active")}</span>
               </label>
             </div>
           </div>
@@ -69,10 +69,10 @@ defmodule ClaperWeb.AdminLive.UserLive.FormComponent do
         <div class="pt-6">
           <div class="flex justify-end gap-3">
             <button type="button" phx-click="cancel" phx-target={@myself} class="btn btn-ghost">
-              Cancel
+              {gettext("Cancel")}
             </button>
-            <button type="submit" phx-disable-with="Saving..." class="btn btn-primary">
-              {if @action == :new, do: "Create User", else: "Update User"}
+            <button type="submit" phx-disable-with={gettext("Saving...")} class="btn btn-primary">
+              {if @action == :new, do: gettext("Create User"), else: gettext("Update User")}
             </button>
           </div>
         </div>
@@ -147,7 +147,7 @@ defmodule ClaperWeb.AdminLive.UserLive.FormComponent do
 
         {:noreply,
          socket
-         |> put_flash(:info, "User updated successfully")
+         |> put_flash(:info, gettext("User updated successfully"))
          |> push_navigate(to: socket.assigns.navigate)}
 
       {:error, %Ecto.Changeset{} = changeset} ->
@@ -162,7 +162,7 @@ defmodule ClaperWeb.AdminLive.UserLive.FormComponent do
 
         {:noreply,
          socket
-         |> put_flash(:info, "User created successfully")
+         |> put_flash(:info, gettext("User created successfully"))
          |> push_navigate(to: socket.assigns.navigate)}
 
       {:error, %Ecto.Changeset{} = changeset} ->

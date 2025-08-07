@@ -16,11 +16,11 @@ defmodule ClaperWeb.AdminLive.EventLive.FormComponent do
             form={@form}
             field={:name}
             type="text"
-            label="Name"
-            placeholder="Enter event name"
+            label={gettext("Name")}
+            placeholder={gettext("Enter event name")}
             required={true}
             width_class="sm:col-span-6"
-            description="A unique name for this event"
+            description={gettext("A unique name for this event")}
           />
 
           <.live_component
@@ -29,12 +29,12 @@ defmodule ClaperWeb.AdminLive.EventLive.FormComponent do
             form={@form}
             field={:code}
             type="text"
-            label="Code"
-            placeholder="Enter event code"
+            label={gettext("Code")}
+            placeholder={gettext("Enter event code")}
             required={true}
             width_class="sm:col-span-3"
             field_class="uppercase"
-            description="A unique code for participants to join this event"
+            description={gettext("A unique code for participants to join this event")}
           />
 
           <.live_component
@@ -43,7 +43,7 @@ defmodule ClaperWeb.AdminLive.EventLive.FormComponent do
             form={@form}
             field={:started_at}
             type="datetime"
-            label="Started At"
+            label={gettext("Started At")}
             required={true}
             width_class="sm:col-span-3"
           />
@@ -54,10 +54,10 @@ defmodule ClaperWeb.AdminLive.EventLive.FormComponent do
             form={@form}
             field={:expired_at}
             type="datetime"
-            label="Expired At"
+            label={gettext("Expired At")}
             required={false}
             width_class="sm:col-span-3"
-            description="When this event expires (optional)"
+            description={gettext("When this event expires (optional)")}
           />
 
           <.live_component
@@ -65,22 +65,22 @@ defmodule ClaperWeb.AdminLive.EventLive.FormComponent do
             id="event-user-id"
             form={@form}
             field={:user_id}
-            label="Assigned User"
+            label={gettext("Assigned User")}
             options={@user_options}
-            placeholder="Search for a user..."
+            placeholder={gettext("Search for a user...")}
             required={true}
             width_class="sm:col-span-6"
-            description="The user who owns this event (required)"
+            description={gettext("The user who owns this event (required)")}
           />
         </div>
 
         <div class="pt-6">
           <div class="flex justify-end gap-3">
             <button type="button" phx-click="cancel" phx-target={@myself} class="btn btn-ghost">
-              Cancel
+              {gettext("Cancel")}
             </button>
-            <button type="submit" phx-disable-with="Saving..." class="btn btn-primary">
-              {if @action == :new, do: "Create Event", else: "Update Event"}
+            <button type="submit" phx-disable-with={gettext("Saving...")} class="btn btn-primary">
+              {if @action == :new, do: gettext("Create Event"), else: gettext("Update Event")}
             </button>
           </div>
         </div>
@@ -129,7 +129,7 @@ defmodule ClaperWeb.AdminLive.EventLive.FormComponent do
 
         {:noreply,
          socket
-         |> put_flash(:info, "Event updated successfully")
+         |> put_flash(:info, gettext("Event updated successfully"))
          |> push_navigate(to: socket.assigns.navigate)}
 
       {:error, %Ecto.Changeset{} = changeset} ->
@@ -144,7 +144,7 @@ defmodule ClaperWeb.AdminLive.EventLive.FormComponent do
 
         {:noreply,
          socket
-         |> put_flash(:info, "Event created successfully")
+         |> put_flash(:info, gettext("Event created successfully"))
          |> push_navigate(to: socket.assigns.navigate)}
 
       {:error, %Ecto.Changeset{} = changeset} ->

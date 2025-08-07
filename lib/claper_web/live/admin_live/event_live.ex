@@ -9,7 +9,7 @@ defmodule ClaperWeb.AdminLive.EventLive do
   def mount(_params, _session, socket) do
     {:ok,
      socket
-     |> assign(:page_title, "Events")
+     |> assign(:page_title, gettext("Events"))
      |> assign(:events, list_events())
      |> assign(:search, "")
      |> assign(:current_sort, %{field: :na, order: :asc})}
@@ -28,19 +28,19 @@ defmodule ClaperWeb.AdminLive.EventLive do
 
   defp apply_action(socket, :new, _params) do
     socket
-    |> assign(:page_title, "New Event")
+    |> assign(:page_title, gettext("New Event"))
     |> assign(:event, %Event{})
   end
 
   defp apply_action(socket, :edit, %{"id" => id}) do
     socket
-    |> assign(:page_title, "Edit Event")
+    |> assign(:page_title, gettext("Edit Event"))
     |> assign(:event, Claper.Events.get_event_by_id!(id, [:user]))
   end
 
   defp apply_action(socket, :show, %{"id" => id}) do
     socket
-    |> assign(:page_title, "Event Details")
+    |> assign(:page_title, gettext("Event Details"))
     |> assign(:event, Claper.Events.get_event_by_id!(id, [:user]))
   end
 
@@ -51,7 +51,7 @@ defmodule ClaperWeb.AdminLive.EventLive do
 
     {:noreply,
      socket
-     |> put_flash(:info, "Event deleted successfully")
+     |> put_flash(:info, gettext("Event deleted successfully"))
      |> assign(:events, list_events())}
   end
 
@@ -68,7 +68,7 @@ defmodule ClaperWeb.AdminLive.EventLive do
 
     {:noreply,
      socket
-     |> put_flash(:info, "Events exported successfully")
+     |> put_flash(:info, gettext("Events exported successfully"))
      |> push_event("download_csv", %{filename: filename, content: csv_content})}
   end
 
@@ -103,7 +103,7 @@ defmodule ClaperWeb.AdminLive.EventLive do
 
         {:noreply,
          socket
-         |> put_flash(:info, "Event deleted successfully")
+         |> put_flash(:info, gettext("Event deleted successfully"))
          |> assign(:events, list_events())}
     end
   end

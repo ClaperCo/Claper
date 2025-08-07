@@ -82,7 +82,7 @@ defmodule ClaperWeb.AdminLive.SearchableSelectComponent do
     socket =
       socket
       |> assign(assigns)
-      |> assign_new(:placeholder, fn -> "Select..." end)
+      |> assign_new(:placeholder, fn -> gettext("Select...") end)
       |> assign_new(:required, fn -> false end)
       |> assign_new(:description, fn -> nil end)
       |> assign_new(:width_class, fn -> nil end)

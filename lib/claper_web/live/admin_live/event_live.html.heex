@@ -3,7 +3,7 @@
     <div phx-hook="CSVDownloader" id="event-list">
       <div>
         <div class="flex justify-between items-center mb-24">
-          <h1 class="text-3xl font-bold">Events</h1>
+          <h1 class="text-3xl font-bold">{gettext("Events")}</h1>
           <div class="flex space-x-3">
             <.link navigate={~p"/admin/events/new"} class="btn btn-primary btn-sm">
               <svg
@@ -20,7 +20,7 @@
                   d="M12 4v16m8-8H4"
                 />
               </svg>
-              New Event
+              {gettext("New Event")}
             </.link>
           </div>
         </div>
@@ -48,7 +48,7 @@
                     <path d="m21 21-4.3-4.3"></path>
                   </g>
                 </svg>
-                <input type="search" name="search" value={@search} placeholder="Search events..." />
+                <input type="search" name="search" value={@search} placeholder={gettext("Search events...")} />
               </label>
             </form>
           </div>
@@ -66,7 +66,7 @@
                           phx-value-field="name"
                           class="btn btn-ghost btn-sm"
                         >
-                          Name {sort_indicator(assigns |> Map.put(:field, :name))}
+                          {gettext("Name")} {sort_indicator(assigns |> Map.put(:field, :name))}
                         </button>
                       </th>
                       <th class="text-left">
@@ -75,11 +75,11 @@
                           phx-value-field="code"
                           class="btn btn-ghost btn-sm"
                         >
-                          Code {sort_indicator(assigns |> Map.put(:field, :code))}
+                          {gettext("Code")} {sort_indicator(assigns |> Map.put(:field, :code))}
                         </button>
                       </th>
                       <th class="text-left">
-                        Owner
+                        {gettext("Owner")}
                       </th>
                       <th class="text-left">
                         <button
@@ -87,7 +87,7 @@
                           phx-value-field="started_at"
                           class="btn btn-ghost btn-sm"
                         >
-                          Started At {sort_indicator(assigns |> Map.put(:field, :started_at))}
+                          {gettext("Started At")} {sort_indicator(assigns |> Map.put(:field, :started_at))}
                         </button>
                       </th>
                       <th class="text-left">
@@ -96,7 +96,7 @@
                           phx-value-field="expired_at"
                           class="btn btn-ghost btn-sm"
                         >
-                          Expired At {sort_indicator(assigns |> Map.put(:field, :expired_at))}
+                          {gettext("Expired At")} {sort_indicator(assigns |> Map.put(:field, :expired_at))}
                         </button>
                       </th>
                       <th class="text-left">
@@ -105,14 +105,14 @@
                           phx-value-field="audience_peak"
                           class="btn btn-ghost btn-sm"
                         >
-                          Audience Peak {sort_indicator(
+                          {gettext("Audience Peak")} {sort_indicator(
                             assigns
                             |> Map.put(:field, :audience_peak)
                           )}
                         </button>
                       </th>
                       <th class="text-right">
-                        <span class="sr-only">Actions</span>
+                        <span class="sr-only">{gettext("Actions")}</span>
                       </th>
                     </tr>
                   </thead>
@@ -120,7 +120,7 @@
                     <%= if Enum.empty?(@events) do %>
                       <tr>
                         <td colspan="7" class="text-center">
-                          No events found
+                          {gettext("No events found")}
                         </td>
                       </tr>
                     <% else %>
@@ -133,17 +133,17 @@
                             {event.code}
                           </td>
                           <td>
-                            {if event.user, do: event.user.email, else: "No owner"}
+                            {if event.user, do: event.user.email, else: gettext("No owner")}
                           </td>
                           <td>
                             {if event.started_at,
                               do: Calendar.strftime(event.started_at, "%Y-%m-%d %H:%M"),
-                              else: "Not started"}
+                              else: gettext("Not started")}
                           </td>
                           <td>
                             {if event.expired_at,
                               do: Calendar.strftime(event.expired_at, "%Y-%m-%d %H:%M"),
-                              else: "Not expired"}
+                              else: gettext("Not expired")}
                           </td>
                           <td>
                             <div class="badge badge-outline">
@@ -155,7 +155,7 @@
                               <.link
                                 navigate={~p"/admin/events/#{event}"}
                                 class="btn btn-link btn-sm"
-                                title="View event"
+                                title={gettext("View event")}
                               >
                                 <svg
                                   xmlns="http://www.w3.org/2000/svg"
@@ -180,7 +180,7 @@
                               <.link
                                 navigate={~p"/admin/events/#{event}/edit"}
                                 class="btn btn-link btn-sm text-primary"
-                                title="Edit event"
+                                title={gettext("Edit event")}
                               >
                                 <svg
                                   xmlns="http://www.w3.org/2000/svg"
@@ -201,9 +201,9 @@
                                 href="#"
                                 phx-click="delete"
                                 phx-value-id={event.id}
-                                data-confirm="Are you sure you want to delete this event?"
+                                data-confirm={gettext("Are you sure you want to delete this event?")}
                                 class="btn btn-link btn-sm text-error"
-                                title="Delete event"
+                                title={gettext("Delete event")}
                               >
                                 <svg
                                   xmlns="http://www.w3.org/2000/svg"
@@ -237,13 +237,13 @@
     <div>
       <div>
         <div class="flex justify-between items-center mb-24">
-          <h1 class="text-3xl font-bold">Event details</h1>
+          <h1 class="text-3xl font-bold">{gettext("Event details")}</h1>
           <div class="flex gap-3">
             <.link navigate={~p"/admin/events"} class="btn btn-outline btn-sm">
-              Back to Events
+              {gettext("Back to Events")}
             </.link>
             <.link navigate={~p"/admin/events/#{@event}/edit"} class="btn btn-primary btn-sm">
-              Edit
+              {gettext("Edit")}
             </.link>
           </div>
         </div>
@@ -257,45 +257,45 @@
             <div class="divider"></div>
             <dl class="space-y-4">
               <div class="grid grid-cols-3 gap-4">
-                <dt class="font-medium">Name</dt>
+                <dt class="font-medium">{gettext("Name")}</dt>
                 <dd class="col-span-2">{@event.name}</dd>
               </div>
               <div class="grid grid-cols-3 gap-4">
-                <dt class="font-medium">Owner</dt>
+                <dt class="font-medium">{gettext("Owner")}</dt>
                 <dd class="col-span-2">
-                  {if @event.user, do: @event.user.email, else: "No owner"}
+                  {if @event.user, do: @event.user.email, else: gettext("No owner")}
                 </dd>
               </div>
               <div class="grid grid-cols-3 gap-4">
-                <dt class="font-medium">Started At</dt>
+                <dt class="font-medium">{gettext("Started At")}</dt>
                 <dd class="col-span-2">
                   {if @event.started_at,
                     do: Calendar.strftime(@event.started_at, "%Y-%m-%d %H:%M"),
-                    else: "Not started"}
+                    else: gettext("Not started")}
                 </dd>
               </div>
               <div class="grid grid-cols-3 gap-4">
-                <dt class="font-medium">Expired At</dt>
+                <dt class="font-medium">{gettext("Expired At")}</dt>
                 <dd class="col-span-2">
                   {if @event.expired_at,
                     do: Calendar.strftime(@event.expired_at, "%Y-%m-%d %H:%M"),
-                    else: "Not expired"}
+                    else: gettext("Not expired")}
                 </dd>
               </div>
               <div class="grid grid-cols-3 gap-4">
-                <dt class="font-medium">Audience Peak</dt>
+                <dt class="font-medium">{gettext("Audience Peak")}</dt>
                 <dd class="col-span-2">
-                  {@event.audience_peak || 0} attendees
+                  {@event.audience_peak || 0} {gettext("attendees")}
                 </dd>
               </div>
               <div class="grid grid-cols-3 gap-4">
-                <dt class="font-medium">Created At</dt>
+                <dt class="font-medium">{gettext("Created At")}</dt>
                 <dd class="col-span-2">
                   {Calendar.strftime(@event.inserted_at, "%Y-%m-%d %H:%M")}
                 </dd>
               </div>
               <div class="grid grid-cols-3 gap-4">
-                <dt class="font-medium">Last Updated</dt>
+                <dt class="font-medium">{gettext("Last Updated")}</dt>
                 <dd class="col-span-2">
                   {Calendar.strftime(@event.updated_at, "%Y-%m-%d %H:%M")}
                 </dd>
@@ -309,7 +309,7 @@
     <div>
       <div>
         <div class="flex justify-between items-center">
-          <h1 class="text-3xl font-bold">New event</h1>
+          <h1 class="text-3xl font-bold">{gettext("New event")}</h1>
         </div>
       </div>
 
@@ -319,7 +319,7 @@
             <.live_component
               module={ClaperWeb.AdminLive.EventLive.FormComponent}
               id="event-form"
-              title="New Event"
+              title={gettext("New Event")}
               action={:new}
               event={@event}
               navigate={~p"/admin/events"}
@@ -332,7 +332,7 @@
     <div>
       <div>
         <div class="flex justify-between items-center">
-          <h1 class="text-3xl font-bold">Edit event</h1>
+          <h1 class="text-3xl font-bold">{gettext("Edit event")}</h1>
         </div>
       </div>
 
@@ -342,7 +342,7 @@
             <.live_component
               module={ClaperWeb.AdminLive.EventLive.FormComponent}
               id={"event-form-#{@event.id}"}
-              title="Edit Event"
+              title={gettext("Edit Event")}
               action={:edit}
               event={@event}
               navigate={~p"/admin/events"}

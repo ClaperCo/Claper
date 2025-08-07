@@ -15,7 +15,7 @@ defmodule ClaperWeb.AdminLive.DashboardLive do
 
     socket =
       socket
-      |> assign(:page_title, "Dashboard")
+      |> assign(:page_title, gettext("Dashboard"))
       |> assign(:selected_period, :day)
       |> assign(:days_back, 30)
       |> load_dashboard_data()

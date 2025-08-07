@@ -11,7 +11,7 @@ defmodule ClaperWeb.AdminLive.UserLive do
   def mount(_params, _session, socket) do
     {:ok,
      socket
-     |> assign(:page_title, "Users")
+     |> assign(:page_title, gettext("Users"))
      |> assign(:users, list_users())
      |> assign(:search, "")
      |> assign(:current_sort, %{field: :na, order: :asc})}
@@ -30,19 +30,19 @@ defmodule ClaperWeb.AdminLive.UserLive do
 
   defp apply_action(socket, :new, _params) do
     socket
-    |> assign(:page_title, "New User")
+    |> assign(:page_title, gettext("New User"))
     |> assign(:user, %User{})
   end
 
   defp apply_action(socket, :edit, %{"id" => id}) do
     socket
-    |> assign(:page_title, "Edit User")
+    |> assign(:page_title, gettext("Edit User"))
     |> assign(:user, Accounts.get_user!(id) |> Claper.Repo.preload(:role))
   end
 
   defp apply_action(socket, :show, %{"id" => id}) do
     socket
-    |> assign(:page_title, "User Details")
+    |> assign(:page_title, gettext("User Details"))
     |> assign(:user, Accounts.get_user!(id) |> Claper.Repo.preload(:role))
   end
 
@@ -53,7 +53,7 @@ defmodule ClaperWeb.AdminLive.UserLive do
 
     {:noreply,
      socket
-     |> put_flash(:info, "User deleted successfully")
+     |> put_flash(:info, gettext("User deleted successfully"))
      |> assign(:users, list_users())}
   end
 
@@ -91,7 +91,7 @@ defmodule ClaperWeb.AdminLive.UserLive do
 
     {:noreply,
      socket
-     |> put_flash(:info, "Users exported successfully")
+     |> put_flash(:info, gettext("Users exported successfully"))
      |> push_event("download_csv", %{filename: filename, content: csv_content})}
   end
 
@@ -121,7 +121,7 @@ defmodule ClaperWeb.AdminLive.UserLive do
 
         {:noreply,
          socket
-         |> put_flash(:info, "User deleted successfully")
+         |> put_flash(:info, gettext("User deleted successfully"))
          |> assign(:users, list_users())}
     end
   end

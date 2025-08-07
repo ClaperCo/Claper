@@ -3,7 +3,7 @@
     <div>
       <div>
         <div class="flex justify-between items-center mb-24">
-          <h1 class="text-3xl font-bold">OIDC Providers</h1>
+          <h1 class="text-3xl font-bold">{gettext("OIDC Providers")}</h1>
           <div class="flex space-x-3">
             <.link navigate={~p"/admin/oidc_providers/new"} class="btn btn-primary btn-sm">
               <svg
@@ -20,7 +20,7 @@
                   d="M12 4v16m8-8H4"
                 />
               </svg>
-              New Provider
+              {gettext("New Provider")}
             </.link>
           </div>
         </div>
@@ -52,7 +52,7 @@
                   type="search"
                   name="search"
                   value={@search}
-                  placeholder="Search providers..."
+                  placeholder={gettext("Search providers...")}
                 />
               </label>
             </form>
@@ -71,7 +71,7 @@
                           phx-value-field="name"
                           class="btn btn-ghost btn-sm"
                         >
-                          Name {sort_indicator(assigns |> Map.put(:field, :name))}
+                          {gettext("Name")} {sort_indicator(assigns |> Map.put(:field, :name))}
                         </button>
                       </th>
                       <th class="text-left">
@@ -80,7 +80,7 @@
                           phx-value-field="issuer"
                           class="btn btn-ghost btn-sm"
                         >
-                          Issuer {sort_indicator(assigns |> Map.put(:field, :issuer))}
+                          {gettext("Issuer")} {sort_indicator(assigns |> Map.put(:field, :issuer))}
                         </button>
                       </th>
                       <th class="text-left">
@@ -89,7 +89,7 @@
                           phx-value-field="active"
                           class="btn btn-ghost btn-sm"
                         >
-                          Status {sort_indicator(assigns |> Map.put(:field, :active))}
+                          {gettext("Status")} {sort_indicator(assigns |> Map.put(:field, :active))}
                         </button>
                       </th>
                       <th class="text-left">
@@ -98,11 +98,11 @@
                           phx-value-field="inserted_at"
                           class="btn btn-ghost btn-sm"
                         >
-                          Created {sort_indicator(assigns |> Map.put(:field, :inserted_at))}
+                          {gettext("Created")} {sort_indicator(assigns |> Map.put(:field, :inserted_at))}
                         </button>
                       </th>
                       <th class="text-right">
-                        <span class="sr-only">Actions</span>
+                        <span class="sr-only">{gettext("Actions")}</span>
                       </th>
                     </tr>
                   </thead>
@@ -110,7 +110,7 @@
                     <%= if Enum.empty?(@providers) do %>
                       <tr>
                         <td colspan="5" class="text-center">
-                          No OIDC providers found
+                          {gettext("No OIDC providers found")}
                         </td>
                       </tr>
                     <% else %>
@@ -125,11 +125,11 @@
                           <td>
                             <%= if provider.active do %>
                               <span class="badge badge-success">
-                                Active
+                                {gettext("Active")}
                               </span>
                             <% else %>
                               <span class="badge badge-ghost">
-                                Inactive
+                                {gettext("Inactive")}
                               </span>
                             <% end %>
                           </td>
@@ -141,7 +141,7 @@
                               <.link
                                 navigate={~p"/admin/oidc_providers/#{provider}"}
                                 class="btn btn-link btn-sm"
-                                title="View provider"
+                                title={gettext("View provider")}
                               >
                                 <svg
                                   xmlns="http://www.w3.org/2000/svg"
@@ -166,7 +166,7 @@
                               <.link
                                 navigate={~p"/admin/oidc_providers/#{provider}/edit"}
                                 class="btn btn-link btn-sm text-primary"
-                                title="Edit provider"
+                                title={gettext("Edit provider")}
                               >
                                 <svg
                                   xmlns="http://www.w3.org/2000/svg"
@@ -187,9 +187,9 @@
                                 href="#"
                                 phx-click="delete"
                                 phx-value-id={provider.id}
-                                data-confirm="Are you sure you want to delete this provider?"
+                                data-confirm={gettext("Are you sure you want to delete this provider?")}
                                 class="btn btn-link btn-sm text-error"
-                                title="Delete provider"
+                                title={gettext("Delete provider")}
                               >
                                 <svg
                                   xmlns="http://www.w3.org/2000/svg"
@@ -223,16 +223,16 @@
     <div>
       <div>
         <div class="flex justify-between items-center mb-24">
-          <h1 class="text-3xl font-bold">OIDC Provider details</h1>
+          <h1 class="text-3xl font-bold">{gettext("OIDC Provider details")}</h1>
           <div class="flex space-x-3">
             <.link navigate={~p"/admin/oidc_providers"} class="btn btn-outline btn-sm">
-              Back to Providers
+              {gettext("Back to Providers")}
             </.link>
             <.link
               navigate={~p"/admin/oidc_providers/#{@provider}/edit"}
               class="btn btn-primary btn-sm"
             >
-              Edit
+              {gettext("Edit")}
             </.link>
           </div>
         </div>
@@ -242,59 +242,59 @@
         <div class="card bg-base-100 shadow-xl">
           <div class="card-body">
             <h2 class="card-title">{@provider.name}</h2>
-            <p class="text-base-content/70">OIDC Provider</p>
+            <p class="text-base-content/70">{gettext("OIDC Provider")}</p>
             <div class="divider"></div>
             <dl class="space-y-4">
               <div class="grid grid-cols-3 gap-4">
-                <dt class="font-medium">Name</dt>
+                <dt class="font-medium">{gettext("Name")}</dt>
                 <dd class="col-span-2">{@provider.name}</dd>
               </div>
               <div class="grid grid-cols-3 gap-4">
-                <dt class="font-medium">Issuer</dt>
+                <dt class="font-medium">{gettext("Issuer")}</dt>
                 <dd class="col-span-2">
                   {@provider.issuer}
                 </dd>
               </div>
               <div class="grid grid-cols-3 gap-4">
-                <dt class="font-medium">Client ID</dt>
+                <dt class="font-medium">{gettext("Client ID")}</dt>
                 <dd class="col-span-2">
                   {@provider.client_id}
                 </dd>
               </div>
               <div class="grid grid-cols-3 gap-4">
-                <dt class="font-medium">Response Type</dt>
+                <dt class="font-medium">{gettext("Response Type")}</dt>
                 <dd class="col-span-2">
                   {@provider.response_type}
                 </dd>
               </div>
               <div class="grid grid-cols-3 gap-4">
-                <dt class="font-medium">Scope</dt>
+                <dt class="font-medium">{gettext("Scope")}</dt>
                 <dd class="col-span-2">
                   {@provider.scope}
                 </dd>
               </div>
               <div class="grid grid-cols-3 gap-4">
-                <dt class="font-medium">Status</dt>
+                <dt class="font-medium">{gettext("Status")}</dt>
                 <dd class="col-span-2">
                   <%= if @provider.active do %>
                     <span class="badge badge-success">
-                      Active
+                      {gettext("Active")}
                     </span>
                   <% else %>
                     <span class="badge badge-ghost">
-                      Inactive
+                      {gettext("Inactive")}
                     </span>
                   <% end %>
                 </dd>
               </div>
               <div class="grid grid-cols-3 gap-4">
-                <dt class="font-medium">Created At</dt>
+                <dt class="font-medium">{gettext("Created At")}</dt>
                 <dd class="col-span-2">
                   {Calendar.strftime(@provider.inserted_at, "%Y-%m-%d %H:%M")}
                 </dd>
               </div>
               <div class="grid grid-cols-3 gap-4">
-                <dt class="font-medium">Last Updated</dt>
+                <dt class="font-medium">{gettext("Last Updated")}</dt>
                 <dd class="col-span-2">
                   {Calendar.strftime(@provider.updated_at, "%Y-%m-%d %H:%M")}
                 </dd>
@@ -308,7 +308,7 @@
     <div>
       <div>
         <div class="flex justify-between items-center">
-          <h1 class="text-3xl font-bold">New OIDC Provider</h1>
+          <h1 class="text-3xl font-bold">{gettext("New OIDC Provider")}</h1>
         </div>
       </div>
 
@@ -318,7 +318,7 @@
             <.live_component
               module={ClaperWeb.AdminLive.OidcProviderLive.FormComponent}
               id="provider-form"
-              title="New OIDC Provider"
+              title={gettext("New OIDC Provider")}
               action={:new}
               provider={@provider}
               navigate={~p"/admin/oidc_providers"}
@@ -331,7 +331,7 @@
     <div>
       <div>
         <div class="flex justify-between items-center">
-          <h1 class="text-3xl font-bold">Edit OIDC Provider</h1>
+          <h1 class="text-3xl font-bold">{gettext("Edit OIDC Provider")}</h1>
         </div>
       </div>
 
@@ -341,7 +341,7 @@
             <.live_component
               module={ClaperWeb.AdminLive.OidcProviderLive.FormComponent}
               id={"provider-form-#{@provider.id}"}
-              title="Edit OIDC Provider"
+              title={gettext("Edit OIDC Provider")}
               action={:edit}
               provider={@provider}
               navigate={~p"/admin/oidc_providers"}
