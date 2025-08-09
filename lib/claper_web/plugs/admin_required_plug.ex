@@ -26,7 +26,7 @@ defmodule ClaperWeb.Plugs.AdminRequiredPlug do
     else
       conn
       |> put_flash(:error, "You must be an admin to access this page.")
-      |> redirect(to: ~p"/")
+      |> redirect(to: ~p"/events")
       |> halt()
     end
   end

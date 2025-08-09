@@ -75,7 +75,9 @@ defmodule ClaperWeb.AdminLive.OidcProviderLive.FormComponent do
             placeholder={gettext("https://yourapp.com/auth/callback")}
             required={true}
             width_class="sm:col-span-6"
-            description={gettext("The callback URL for your application (must start with http:// or https://)")}
+            description={
+              gettext("The callback URL for your application (must start with http:// or https://)")
+            }
           />
 
           <.live_component
@@ -113,9 +115,15 @@ defmodule ClaperWeb.AdminLive.OidcProviderLive.FormComponent do
             field={:response_mode}
             type="select"
             label={gettext("Response Mode")}
-            select_options={[{gettext("Query"), "query"}, {gettext("Fragment"), "fragment"}, {gettext("Form Post"), "form_post"}]}
+            select_options={[
+              {gettext("Query"), "query"},
+              {gettext("Fragment"), "fragment"},
+              {gettext("Form Post"), "form_post"}
+            ]}
             width_class="sm:col-span-3"
-            description={gettext("How the authorization response should be returned (defaults to 'query')")}
+            description={
+              gettext("How the authorization response should be returned (defaults to 'query')")
+            }
           />
 
           <.live_component
@@ -127,7 +135,9 @@ defmodule ClaperWeb.AdminLive.OidcProviderLive.FormComponent do
             label={gettext("Active")}
             checkbox_label={gettext("Enable this OIDC provider")}
             width_class="sm:col-span-3"
-            description={gettext("Whether this provider is currently active and available for authentication")}
+            description={
+              gettext("Whether this provider is currently active and available for authentication")
+            }
           />
         </div>
 

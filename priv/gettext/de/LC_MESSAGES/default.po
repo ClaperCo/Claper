@@ -114,6 +114,7 @@ msgstr "Teilnehmen"
 #: lib/claper_web/live/event_live/index.ex:212
 #: lib/claper_web/live/event_live/join.html.heex:31
 #: lib/claper_web/live/event_live/join.html.heex:54
+#: lib/claper_web/templates/layout/admin.html.heex:198
 #, elixir-autogen, elixir-format
 msgid "Dashboard"
 msgstr "Dashboard"
@@ -1282,6 +1283,7 @@ msgid "Event manager"
 msgstr "Veranstaltungsmanager"
 
 #: lib/claper_web/templates/layout/_user_menu.html.heex:12
+#: lib/claper_web/templates/layout/admin.html.heex:262
 #, elixir-autogen, elixir-format
 msgid "Documentation"
 msgstr "Dokumentation"
@@ -1870,7 +1872,7 @@ msgstr "Webinhalt"
 #: lib/claper_web/live/admin_live/dashboard_live.html.heex:127
 #: lib/claper_web/live/admin_live/oidc_provider_live.html.heex:131
 #: lib/claper_web/live/admin_live/oidc_provider_live.html.heex:286
-#: lib/claper_web/live/admin_live/oidc_provider_live/form_component.ex:127
+#: lib/claper_web/live/admin_live/oidc_provider_live/form_component.ex:135
 #: lib/claper_web/live/event_live/index.html.heex:179
 #, elixir-autogen, elixir-format
 msgid "Active"
@@ -1980,13 +1982,13 @@ msgstr "Zugewiesener Benutzer"
 msgid "Audience Peak"
 msgstr "Max. Zuschauer"
 
-#: lib/claper_web/live/admin_live/oidc_provider_live/form_component.ex:101
+#: lib/claper_web/live/admin_live/oidc_provider_live/form_component.ex:103
 #, elixir-autogen, elixir-format
 msgid "Authorization Code"
 msgstr "Autorisierungscode"
 
 #: lib/claper_web/live/admin_live/event_live/form_component.ex:80
-#: lib/claper_web/live/admin_live/oidc_provider_live/form_component.ex:137
+#: lib/claper_web/live/admin_live/oidc_provider_live/form_component.ex:147
 #: lib/claper_web/live/admin_live/user_live/form_component.ex:72
 #, elixir-autogen, elixir-format
 msgid "Cancel"
@@ -2029,7 +2031,7 @@ msgstr "Bestätigt am"
 msgid "Create Event"
 msgstr "Veranstaltung erstellen"
 
-#: lib/claper_web/live/admin_live/oidc_provider_live/form_component.ex:140
+#: lib/claper_web/live/admin_live/oidc_provider_live/form_component.ex:150
 #, elixir-autogen, elixir-format
 msgid "Create Provider"
 msgstr "Anbieter erstellen"
@@ -2101,7 +2103,7 @@ msgstr "Anbieter bearbeiten"
 msgid "Edit user"
 msgstr "Ändern"
 
-#: lib/claper_web/live/admin_live/oidc_provider_live/form_component.ex:128
+#: lib/claper_web/live/admin_live/oidc_provider_live/form_component.ex:136
 #, elixir-autogen, elixir-format
 msgid "Enable this OIDC provider"
 msgstr "Diesen OIDC-Anbieter aktivieren"
@@ -2170,6 +2172,7 @@ msgstr "Event erfolgreich aktualisiert"
 
 #: lib/claper_web/live/admin_live/event_live.ex:16
 #: lib/claper_web/live/admin_live/event_live.html.heex:6
+#: lib/claper_web/templates/layout/admin.html.heex:214
 #, elixir-autogen, elixir-format, fuzzy
 msgid "Events"
 msgstr "Veranstaltung"
@@ -2191,27 +2194,27 @@ msgstr "Abgelaufen am"
 msgid "File selected"
 msgstr "Datei ausgewählt"
 
-#: lib/claper_web/live/admin_live/oidc_provider_live/form_component.ex:116
+#: lib/claper_web/live/admin_live/oidc_provider_live/form_component.ex:121
 #, elixir-autogen, elixir-format, fuzzy
 msgid "Form Post"
 msgstr "Formulare"
 
-#: lib/claper_web/live/admin_live/oidc_provider_live/form_component.ex:116
+#: lib/claper_web/live/admin_live/oidc_provider_live/form_component.ex:120
 #, elixir-autogen, elixir-format
 msgid "Fragment"
 msgstr "Fragment"
 
-#: lib/claper_web/live/admin_live/oidc_provider_live/form_component.ex:118
+#: lib/claper_web/live/admin_live/oidc_provider_live/form_component.ex:125
 #, elixir-autogen, elixir-format
 msgid "How the authorization response should be returned (defaults to 'query')"
 msgstr "Wie die Autorisierungsantwort zurückgegeben werden soll (Standard ist 'query')"
 
-#: lib/claper_web/live/admin_live/oidc_provider_live/form_component.ex:103
+#: lib/claper_web/live/admin_live/oidc_provider_live/form_component.ex:105
 #, elixir-autogen, elixir-format
 msgid "Hybrid"
 msgstr "Hybrid"
 
-#: lib/claper_web/live/admin_live/oidc_provider_live/form_component.ex:102
+#: lib/claper_web/live/admin_live/oidc_provider_live/form_component.ex:104
 #, elixir-autogen, elixir-format
 msgid "Implicit"
 msgstr "Implizit"
@@ -2299,7 +2302,7 @@ msgstr "Nicht abgelaufen"
 msgid "Not started"
 msgstr "Nicht gestartet"
 
-#: lib/claper_web/live/admin_live/oidc_provider_live/form_component.ex:106
+#: lib/claper_web/live/admin_live/oidc_provider_live/form_component.ex:108
 #, elixir-autogen, elixir-format
 msgid "OAuth 2.0 response type (defaults to 'code')"
 msgstr "OAuth 2.0 Antworttyp (Standard ist 'code')"
@@ -2316,11 +2319,12 @@ msgstr "OIDC-Anbieter-Details"
 
 #: lib/claper_web/live/admin_live/oidc_provider_live.ex:15
 #: lib/claper_web/live/admin_live/oidc_provider_live.html.heex:6
+#: lib/claper_web/templates/layout/admin.html.heex:246
 #, elixir-autogen, elixir-format, fuzzy
 msgid "OIDC Providers"
 msgstr "Anbieter"
 
-#: lib/claper_web/live/admin_live/oidc_provider_live/form_component.ex:90
+#: lib/claper_web/live/admin_live/oidc_provider_live/form_component.ex:92
 #, elixir-autogen, elixir-format
 msgid "OIDC scopes to request (defaults to 'openid email profile')"
 msgstr "OIDC-Bereiche, die angefordert werden sollen (Standard ist 'openid email profile')"
@@ -2332,17 +2336,17 @@ msgstr "OIDC-Bereiche, die angefordert werden sollen (Standard ist 'openid email
 msgid "Owner"
 msgstr "Besitzer"
 
-#: lib/claper_web/live/admin_live/oidc_provider_live/form_component.ex:199
+#: lib/claper_web/live/admin_live/oidc_provider_live/form_component.ex:209
 #, elixir-autogen, elixir-format
 msgid "Provider created successfully"
 msgstr "Anbieter erfolgreich erstellt"
 
-#: lib/claper_web/live/admin_live/oidc_provider_live/form_component.ex:184
+#: lib/claper_web/live/admin_live/oidc_provider_live/form_component.ex:194
 #, elixir-autogen, elixir-format, fuzzy
 msgid "Provider updated successfully"
 msgstr "Anbieter erfolgreich aktualisiert"
 
-#: lib/claper_web/live/admin_live/oidc_provider_live/form_component.ex:116
+#: lib/claper_web/live/admin_live/oidc_provider_live/form_component.ex:119
 #, elixir-autogen, elixir-format
 msgid "Query"
 msgstr "Query"
@@ -2357,13 +2361,13 @@ msgstr "Aktuelle Events"
 msgid "Redirect URI"
 msgstr "Umleitungs-URI"
 
-#: lib/claper_web/live/admin_live/oidc_provider_live/form_component.ex:115
+#: lib/claper_web/live/admin_live/oidc_provider_live/form_component.ex:117
 #, elixir-autogen, elixir-format
 msgid "Response Mode"
 msgstr "Antwortmodus"
 
 #: lib/claper_web/live/admin_live/oidc_provider_live.html.heex:270
-#: lib/claper_web/live/admin_live/oidc_provider_live/form_component.ex:99
+#: lib/claper_web/live/admin_live/oidc_provider_live/form_component.ex:101
 #, elixir-autogen, elixir-format
 msgid "Response Type"
 msgstr "Antworttyp"
@@ -2376,7 +2380,7 @@ msgid "Role"
 msgstr "Rolle"
 
 #: lib/claper_web/live/admin_live/event_live/form_component.ex:82
-#: lib/claper_web/live/admin_live/oidc_provider_live/form_component.ex:139
+#: lib/claper_web/live/admin_live/oidc_provider_live/form_component.ex:149
 #: lib/claper_web/live/admin_live/user_live/form_component.ex:74
 #, elixir-autogen, elixir-format
 msgid "Saving..."
@@ -2388,7 +2392,7 @@ msgid "Scheduled"
 msgstr "Geplant"
 
 #: lib/claper_web/live/admin_live/oidc_provider_live.html.heex:276
-#: lib/claper_web/live/admin_live/oidc_provider_live/form_component.ex:87
+#: lib/claper_web/live/admin_live/oidc_provider_live/form_component.ex:89
 #, elixir-autogen, elixir-format
 msgid "Scope"
 msgstr "Bereich"
@@ -2449,7 +2453,7 @@ msgstr "Status"
 msgid "The OIDC issuer URL (must start with http:// or https://)"
 msgstr "Die OIDC-Aussteller-URL (muss mit http:// oder https:// beginnen)"
 
-#: lib/claper_web/live/admin_live/oidc_provider_live/form_component.ex:78
+#: lib/claper_web/live/admin_live/oidc_provider_live/form_component.ex:79
 #, elixir-autogen, elixir-format
 msgid "The callback URL for your application (must start with http:// or https://)"
 msgstr "Die Callback-URL für Ihre Anwendung (muss mit http:// oder https:// beginnen)"
@@ -2480,7 +2484,7 @@ msgstr "Unbestätigt"
 msgid "Update Event"
 msgstr "Event aktualisieren"
 
-#: lib/claper_web/live/admin_live/oidc_provider_live/form_component.ex:140
+#: lib/claper_web/live/admin_live/oidc_provider_live/form_component.ex:150
 #, elixir-autogen, elixir-format
 msgid "Update Provider"
 msgstr "Anbieter aktualisieren"
@@ -2534,6 +2538,7 @@ msgstr "E-Mail-Adresse des Benutzers (muss eindeutig sein)"
 
 #: lib/claper_web/live/admin_live/user_live.ex:18
 #: lib/claper_web/live/admin_live/user_live.html.heex:6
+#: lib/claper_web/templates/layout/admin.html.heex:230
 #, elixir-autogen, elixir-format
 msgid "Users"
 msgstr "Benutzer"
@@ -2564,7 +2569,7 @@ msgstr "Benutzer anzeigen"
 msgid "When this event expires (optional)"
 msgstr "Wann dieses Event abläuft (optional)"
 
-#: lib/claper_web/live/admin_live/oidc_provider_live/form_component.ex:130
+#: lib/claper_web/live/admin_live/oidc_provider_live/form_component.ex:139
 #, elixir-autogen, elixir-format
 msgid "Whether this provider is currently active and available for authentication"
 msgstr "Ob dieser Anbieter derzeit aktiv und für die Authentifizierung verfügbar ist"
@@ -2584,7 +2589,7 @@ msgstr "https://example.com"
 msgid "https://yourapp.com/auth/callback"
 msgstr "https://yourapp.com/auth/callback"
 
-#: lib/claper_web/live/admin_live/oidc_provider_live/form_component.ex:88
+#: lib/claper_web/live/admin_live/oidc_provider_live/form_component.ex:90
 #, elixir-autogen, elixir-format
 msgid "openid email profile"
 msgstr "openid email profile"
@@ -2641,3 +2646,14 @@ msgstr "Anbieter erfolgreich gelöscht"
 #, elixir-autogen, elixir-format, fuzzy
 msgid "Provider details"
 msgstr "Anbieter"
+
+#: lib/claper_web/templates/layout/admin.html.heex:44
+#: lib/claper_web/templates/layout/admin.html.heex:182
+#, elixir-autogen, elixir-format
+msgid "Admin"
+msgstr "Admin"
+
+#: lib/claper_web/templates/layout/admin.html.heex:285
+#, elixir-autogen, elixir-format
+msgid "Back to app"
+msgstr "Zurück zur App"
