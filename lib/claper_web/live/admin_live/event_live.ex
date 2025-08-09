@@ -6,7 +6,11 @@ defmodule ClaperWeb.AdminLive.EventLive do
   alias ClaperWeb.Helpers.CSVExporter
 
   @impl true
-  def mount(_params, _session, socket) do
+  def mount(_params, session, socket) do
+    with %{"locale" => locale} <- session do
+      Gettext.put_locale(ClaperWeb.Gettext, locale)
+    end
+
     {:ok,
      socket
      |> assign(:page_title, gettext("Events"))
@@ -28,19 +32,19 @@ defmodule ClaperWeb.AdminLive.EventLive do
 
   defp apply_action(socket, :new, _params) do
     socket
-    |> assign(:page_title, gettext("New Event"))
+    |> assign(:page_title, gettext("New event"))
     |> assign(:event, %Event{})
   end
 
   defp apply_action(socket, :edit, %{"id" => id}) do
     socket
-    |> assign(:page_title, gettext("Edit Event"))
+    |> assign(:page_title, gettext("Edit event"))
     |> assign(:event, Claper.Events.get_event_by_id!(id, [:user]))
   end
 
   defp apply_action(socket, :show, %{"id" => id}) do
     socket
-    |> assign(:page_title, gettext("Event Details"))
+    |> assign(:page_title, gettext("Event details"))
     |> assign(:event, Claper.Events.get_event_by_id!(id, [:user]))
   end
 

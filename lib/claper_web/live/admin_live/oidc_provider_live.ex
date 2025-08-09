@@ -5,7 +5,11 @@ defmodule ClaperWeb.AdminLive.OidcProviderLive do
   alias Claper.Accounts.Oidc.Provider
 
   @impl true
-  def mount(_params, _session, socket) do
+  def mount(_params, session, socket) do
+    with %{"locale" => locale} <- session do
+      Gettext.put_locale(ClaperWeb.Gettext, locale)
+    end
+
     {:ok,
      socket
      |> assign(:page_title, gettext("OIDC Providers"))
@@ -29,25 +33,25 @@ defmodule ClaperWeb.AdminLive.OidcProviderLive do
     provider = Oidc.get_provider!(id)
 
     socket
-    |> assign(:page_title, gettext("OIDC Provider Details"))
+    |> assign(:page_title, gettext("Provider details"))
     |> assign(:provider, provider)
   end
 
   defp apply_action(socket, :new, _params) do
     socket
-    |> assign(:page_title, gettext("New OIDC Provider"))
+    |> assign(:page_title, gettext("New provider"))
     |> assign(:provider, %Provider{})
   end
 
   defp apply_action(socket, :edit, %{"id" => id}) do
     socket
-    |> assign(:page_title, gettext("Edit OIDC Provider"))
+    |> assign(:page_title, gettext("Edit provider"))
     |> assign(:provider, Oidc.get_provider!(id))
   end
 
   defp apply_action(socket, :show, %{"id" => id}) do
     socket
-    |> assign(:page_title, gettext("OIDC Provider Details"))
+    |> assign(:page_title, gettext("Provider details"))
     |> assign(:provider, Oidc.get_provider!(id))
   end
 
@@ -58,7 +62,7 @@ defmodule ClaperWeb.AdminLive.OidcProviderLive do
 
     {:noreply,
      socket
-     |> put_flash(:info, gettext("OIDC provider deleted successfully"))
+     |> put_flash(:info, gettext("Provider deleted successfully"))
      |> assign(:providers, list_providers())}
   end
 

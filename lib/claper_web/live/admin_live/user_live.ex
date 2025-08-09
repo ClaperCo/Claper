@@ -8,7 +8,11 @@ defmodule ClaperWeb.AdminLive.UserLive do
   alias ClaperWeb.AdminLive.UserLive.FormComponent
 
   @impl true
-  def mount(_params, _session, socket) do
+  def mount(_params, session, socket) do
+    with %{"locale" => locale} <- session do
+      Gettext.put_locale(ClaperWeb.Gettext, locale)
+    end
+
     {:ok,
      socket
      |> assign(:page_title, gettext("Users"))
@@ -30,19 +34,19 @@ defmodule ClaperWeb.AdminLive.UserLive do
 
   defp apply_action(socket, :new, _params) do
     socket
-    |> assign(:page_title, gettext("New User"))
+    |> assign(:page_title, gettext("New user"))
     |> assign(:user, %User{})
   end
 
   defp apply_action(socket, :edit, %{"id" => id}) do
     socket
-    |> assign(:page_title, gettext("Edit User"))
+    |> assign(:page_title, gettext("Edit user"))
     |> assign(:user, Accounts.get_user!(id) |> Claper.Repo.preload(:role))
   end
 
   defp apply_action(socket, :show, %{"id" => id}) do
     socket
-    |> assign(:page_title, gettext("User Details"))
+    |> assign(:page_title, gettext("User details"))
     |> assign(:user, Accounts.get_user!(id) |> Claper.Repo.preload(:role))
   end
 

@@ -20,7 +20,7 @@
                   d="M12 4v16m8-8H4"
                 />
               </svg>
-              {gettext("New User")}
+              {gettext("New user")}
             </.link>
           </div>
         </div>
@@ -48,7 +48,12 @@
                     <path d="m21 21-4.3-4.3"></path>
                   </g>
                 </svg>
-                <input type="search" name="search" value={@search} placeholder={gettext("Search users...")} />
+                <input
+                  type="search"
+                  name="search"
+                  value={@search}
+                  placeholder={gettext("Search users...")}
+                />
               </label>
             </form>
           </div>
@@ -84,7 +89,10 @@
                           phx-value-field="confirmed_at"
                           class="btn btn-ghost btn-sm"
                         >
-                          {gettext("Status")} {sort_indicator(assigns |> Map.put(:field, :confirmed_at))}
+                          {gettext("Status")} {sort_indicator(
+                            assigns
+                            |> Map.put(:field, :confirmed_at)
+                          )}
                         </button>
                       </th>
                       <th class="text-left">
@@ -93,7 +101,10 @@
                           phx-value-field="inserted_at"
                           class="btn btn-ghost btn-sm"
                         >
-                          {gettext("Created")} {sort_indicator(assigns |> Map.put(:field, :inserted_at))}
+                          {gettext("Created")} {sort_indicator(
+                            assigns
+                            |> Map.put(:field, :inserted_at)
+                          )}
                         </button>
                       </th>
                       <th class="text-right">
@@ -182,7 +193,9 @@
                                 href="#"
                                 phx-click="delete"
                                 phx-value-id={user.id}
-                                data-confirm={gettext("Are you sure you want to delete this user?")}
+                                data-confirm={
+                                  gettext("Are you sure you want to delete this user?")
+                                }
                                 class="btn btn-link btn-sm text-error"
                                 title={gettext("Delete user")}
                               >
@@ -221,7 +234,7 @@
           <h1 class="text-3xl font-bold">{gettext("User details")}</h1>
           <div class="flex space-x-3">
             <.link navigate={~p"/admin/users"} class="btn btn-outline btn-sm">
-              {gettext("Back to Users")}
+              {gettext("Back to users")}
             </.link>
             <.link navigate={~p"/admin/users/#{@user}/edit"} class="btn btn-primary btn-sm">
               {gettext("Edit")}
@@ -290,7 +303,7 @@
     <div>
       <div>
         <div class="flex justify-between items-center">
-          <h1 class="text-3xl font-bold">{gettext("New User")}</h1>
+          <h1 class="text-3xl font-bold">{gettext("New user")}</h1>
         </div>
       </div>
 
@@ -300,7 +313,7 @@
             <.live_component
               module={ClaperWeb.AdminLive.UserLive.FormComponent}
               id="user-form"
-              title={gettext("New User")}
+              title={gettext("New user")}
               action={:new}
               user={@user}
               navigate={~p"/admin/users"}
@@ -313,7 +326,7 @@
     <div>
       <div>
         <div class="flex justify-between items-center">
-          <h1 class="text-3xl font-bold">{gettext("Edit User")}</h1>
+          <h1 class="text-3xl font-bold">{gettext("Edit user")}</h1>
         </div>
       </div>
 
@@ -323,7 +336,7 @@
             <.live_component
               module={ClaperWeb.AdminLive.UserLive.FormComponent}
               id={"user-form-#{@user.id}"}
-              title={gettext("Edit User")}
+              title={gettext("Edit user")}
               action={:edit}
               user={@user}
               navigate={~p"/admin/users"}

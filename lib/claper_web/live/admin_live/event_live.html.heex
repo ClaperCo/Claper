@@ -20,7 +20,7 @@
                   d="M12 4v16m8-8H4"
                 />
               </svg>
-              {gettext("New Event")}
+              {gettext("New event")}
             </.link>
           </div>
         </div>
@@ -48,12 +48,17 @@
                     <path d="m21 21-4.3-4.3"></path>
                   </g>
                 </svg>
-                <input type="search" name="search" value={@search} placeholder={gettext("Search events...")} />
+                <input
+                  type="search"
+                  name="search"
+                  value={@search}
+                  placeholder={gettext("Search events...")}
+                />
               </label>
             </form>
           </div>
           
-<!-- Events Table -->
+<!-- events Table -->
           <div class="card bg-base-100 shadow-xl">
             <div class="card-body p-0">
               <div class="overflow-x-auto">
@@ -87,7 +92,10 @@
                           phx-value-field="started_at"
                           class="btn btn-ghost btn-sm"
                         >
-                          {gettext("Started At")} {sort_indicator(assigns |> Map.put(:field, :started_at))}
+                          {gettext("Started At")} {sort_indicator(
+                            assigns
+                            |> Map.put(:field, :started_at)
+                          )}
                         </button>
                       </th>
                       <th class="text-left">
@@ -96,7 +104,10 @@
                           phx-value-field="expired_at"
                           class="btn btn-ghost btn-sm"
                         >
-                          {gettext("Expired At")} {sort_indicator(assigns |> Map.put(:field, :expired_at))}
+                          {gettext("Expired At")} {sort_indicator(
+                            assigns
+                            |> Map.put(:field, :expired_at)
+                          )}
                         </button>
                       </th>
                       <th class="text-left">
@@ -201,7 +212,9 @@
                                 href="#"
                                 phx-click="delete"
                                 phx-value-id={event.id}
-                                data-confirm={gettext("Are you sure you want to delete this event?")}
+                                data-confirm={
+                                  gettext("Are you sure you want to delete this event?")
+                                }
                                 class="btn btn-link btn-sm text-error"
                                 title={gettext("Delete event")}
                               >
@@ -240,7 +253,7 @@
           <h1 class="text-3xl font-bold">{gettext("Event details")}</h1>
           <div class="flex gap-3">
             <.link navigate={~p"/admin/events"} class="btn btn-outline btn-sm">
-              {gettext("Back to Events")}
+              {gettext("Back to events")}
             </.link>
             <.link navigate={~p"/admin/events/#{@event}/edit"} class="btn btn-primary btn-sm">
               {gettext("Edit")}
@@ -319,7 +332,7 @@
             <.live_component
               module={ClaperWeb.AdminLive.EventLive.FormComponent}
               id="event-form"
-              title={gettext("New Event")}
+              title={gettext("New event")}
               action={:new}
               event={@event}
               navigate={~p"/admin/events"}
@@ -342,7 +355,7 @@
             <.live_component
               module={ClaperWeb.AdminLive.EventLive.FormComponent}
               id={"event-form-#{@event.id}"}
-              title={gettext("Edit Event")}
+              title={gettext("Edit event")}
               action={:edit}
               event={@event}
               navigate={~p"/admin/events"}

@@ -7,10 +7,14 @@ defmodule ClaperWeb.AdminLive.DashboardLive do
   alias Claper.Repo
 
   @impl true
-  def mount(_params, _session, socket) do
+  def mount(_params, session, socket) do
     if connected?(socket) do
       # Set up periodic updates every 30 seconds
       :timer.send_interval(30_000, self(), :update_charts)
+    end
+
+    with %{"locale" => locale} <- session do
+      Gettext.put_locale(ClaperWeb.Gettext, locale)
     end
 
     socket =
