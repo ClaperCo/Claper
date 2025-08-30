@@ -259,12 +259,6 @@ msgstr "Email-Einweisung ändern"
 msgid "CONFIRM EMAIL"
 msgstr "E-MAIL BESTÄTIGEN"
 
-#: lib/claper_web/templates/user_notifier/change.html.heex:17
-#, elixir-autogen, elixir-format
-msgid "Confirm email"
-msgstr "E-Mail bestätigen"
-
-#: lib/claper_web/templates/user_notifier/change.html.heex:32
 #: lib/claper_web/templates/user_notifier/confirm.html.heex:32
 #: lib/claper_web/templates/user_notifier/magic.html.heex:32
 #: lib/claper_web/templates/user_notifier/reset.html.heex:32
@@ -457,11 +451,6 @@ msgstr "Moderatoren können präsentieren und Interaktionen steuern"
 #, elixir-autogen, elixir-format
 msgid "If you’re having trouble with the button above, copy and paste the URL below into your web browser"
 msgstr "Wenn Sie Probleme mit der obigen Schaltfläche haben, kopieren Sie die folgende URL und fügen Sie sie in Ihren Webbrowser ein"
-
-#: lib/claper_web/templates/user_notifier/change.html.heex:22
-#, elixir-autogen, elixir-format
-msgid "You can change your email by visiting the URL below"
-msgstr "Sie können Ihre E-Mail-Adresse ändern, indem Sie die folgende URL aufrufen"
 
 #: lib/claper_web/live/event_live/manage.html.heex:758
 #: lib/claper_web/live/event_live/manage.html.heex:1132
@@ -1897,3 +1886,18 @@ msgstr "Anmelden"
 #, elixir-autogen, elixir-format
 msgid "Total submissions"
 msgstr "Gesamtanzahl der Einreichungen"
+
+#: lib/claper_web/templates/user_notifier/change.html.heex:17
+#, elixir-autogen, elixir-format, fuzzy
+msgid "Confirm email change"
+msgstr "E-Mail bestätigen"
+
+#: lib/claper_web/templates/user_notifier/change.html.heex:32
+#, elixir-autogen, elixir-format, fuzzy
+msgid "If you didn't request an email change, please ignore this."
+msgstr "Wenn Sie kein Konto bei uns erstellt haben, ignorieren Sie dies bitte."
+
+#: lib/claper_web/templates/user_notifier/change.html.heex:22
+#, elixir-autogen, elixir-format, fuzzy
+msgid "You can confirm your email change by visiting the URL below"
+msgstr "Sie können Ihre E-Mail-Adresse ändern, indem Sie die folgende URL aufrufen"

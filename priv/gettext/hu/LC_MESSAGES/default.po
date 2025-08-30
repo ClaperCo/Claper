@@ -259,12 +259,6 @@ msgstr "E-mail frissítése"
 msgid "CONFIRM EMAIL"
 msgstr "E-MAIL MEGERŐSÍTÉSE"
 
-#: lib/claper_web/templates/user_notifier/change.html.heex:17
-#, elixir-autogen, elixir-format
-msgid "Confirm email"
-msgstr "E-mail megerősítése"
-
-#: lib/claper_web/templates/user_notifier/change.html.heex:32
 #: lib/claper_web/templates/user_notifier/confirm.html.heex:32
 #: lib/claper_web/templates/user_notifier/magic.html.heex:32
 #: lib/claper_web/templates/user_notifier/reset.html.heex:32
@@ -457,11 +451,6 @@ msgstr "A facilitátorok kezelhetik és vezethetik az interakciókat"
 #, elixir-autogen, elixir-format
 msgid "If you’re having trouble with the button above, copy and paste the URL below into your web browser"
 msgstr "Ha a fenti gomb nem működik, másolja be az alábbi címet a böngészőbe"
-
-#: lib/claper_web/templates/user_notifier/change.html.heex:22
-#, elixir-autogen, elixir-format
-msgid "You can change your email by visiting the URL below"
-msgstr "Az e-mail megváltoztatásához kattintson az alábbi linkre:"
 
 #: lib/claper_web/live/event_live/manage.html.heex:758
 #: lib/claper_web/live/event_live/manage.html.heex:1132
@@ -1897,3 +1886,18 @@ msgstr "Bejelentkezés"
 #, elixir-autogen, elixir-format
 msgid "Total submissions"
 msgstr "Összes beküldés"
+
+#: lib/claper_web/templates/user_notifier/change.html.heex:17
+#, elixir-autogen, elixir-format, fuzzy
+msgid "Confirm email change"
+msgstr "E-mail megerősítése"
+
+#: lib/claper_web/templates/user_notifier/change.html.heex:32
+#, elixir-autogen, elixir-format, fuzzy
+msgid "If you didn't request an email change, please ignore this."
+msgstr "Amennyiben nem regisztrált fiókot nálunk, kérjük, hagyja ezt az üzenetet figyelmen kívül."
+
+#: lib/claper_web/templates/user_notifier/change.html.heex:22
+#, elixir-autogen, elixir-format, fuzzy
+msgid "You can confirm your email change by visiting the URL below"
+msgstr "Az e-mail megváltoztatásához kattintson az alábbi linkre:"

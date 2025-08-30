@@ -259,12 +259,6 @@ msgstr "E-pasta adreses maiņas instrukcijas"
 msgid "CONFIRM EMAIL"
 msgstr "APSTIPRINĀT E-PASTU"
 
-#: lib/claper_web/templates/user_notifier/change.html.heex:17
-#, elixir-autogen, elixir-format
-msgid "Confirm email"
-msgstr "Apstiprināt e-pastu"
-
-#: lib/claper_web/templates/user_notifier/change.html.heex:32
 #: lib/claper_web/templates/user_notifier/confirm.html.heex:32
 #: lib/claper_web/templates/user_notifier/magic.html.heex:32
 #: lib/claper_web/templates/user_notifier/reset.html.heex:32
@@ -458,11 +452,6 @@ msgstr "Moderatori var prezentēt un vadīt mijiedarbību"
 #, elixir-autogen, elixir-format
 msgid "If you’re having trouble with the button above, copy and paste the URL below into your web browser"
 msgstr "Ja jums rodas problēmas ar iepriekš norādīto pogu, nokopējiet un ielīmējiet tīmekļa pārlūkprogrammā tālāk norādīto URL adresi"
-
-#: lib/claper_web/templates/user_notifier/change.html.heex:22
-#, elixir-autogen, elixir-format
-msgid "You can change your email by visiting the URL below"
-msgstr "Savu e-pasta adresi varat mainīt, apmeklējot tālāk norādīto URL adresi"
 
 #: lib/claper_web/live/event_live/manage.html.heex:758
 #: lib/claper_web/live/event_live/manage.html.heex:1132
@@ -1901,3 +1890,18 @@ msgstr "Pierakstīties"
 #, elixir-autogen, elixir-format
 msgid "Total submissions"
 msgstr "Kopējais iesniegto pieteikumu skaits"
+
+#: lib/claper_web/templates/user_notifier/change.html.heex:17
+#, elixir-autogen, elixir-format, fuzzy
+msgid "Confirm email change"
+msgstr "Apstiprināt e-pastu"
+
+#: lib/claper_web/templates/user_notifier/change.html.heex:32
+#, elixir-autogen, elixir-format, fuzzy
+msgid "If you didn't request an email change, please ignore this."
+msgstr "Ja neesat izveidojuši mūsu kontu, lūdzu, ignorējiet šo informāciju."
+
+#: lib/claper_web/templates/user_notifier/change.html.heex:22
+#, elixir-autogen, elixir-format, fuzzy
+msgid "You can confirm your email change by visiting the URL below"
+msgstr "Savu e-pasta adresi varat mainīt, apmeklējot tālāk norādīto URL adresi"

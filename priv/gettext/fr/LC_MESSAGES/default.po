@@ -259,12 +259,6 @@ msgstr "Instructions de modification d'email"
 msgid "CONFIRM EMAIL"
 msgstr "CONFIRMER L'EMAIL"
 
-#: lib/claper_web/templates/user_notifier/change.html.heex:17
-#, elixir-autogen, elixir-format
-msgid "Confirm email"
-msgstr "Confirmer l'email"
-
-#: lib/claper_web/templates/user_notifier/change.html.heex:32
 #: lib/claper_web/templates/user_notifier/confirm.html.heex:32
 #: lib/claper_web/templates/user_notifier/magic.html.heex:32
 #: lib/claper_web/templates/user_notifier/reset.html.heex:32
@@ -458,11 +452,6 @@ msgstr "Les animateurs peuvent présenter et gérer les interactions"
 #, elixir-autogen, elixir-format
 msgid "If you’re having trouble with the button above, copy and paste the URL below into your web browser"
 msgstr "Si vous rencontrez des difficultés avec le bouton ci-dessus, copiez et collez l'URL ci-dessous dans votre navigateur web"
-
-#: lib/claper_web/templates/user_notifier/change.html.heex:22
-#, elixir-autogen, elixir-format, fuzzy
-msgid "You can change your email by visiting the URL below"
-msgstr "Vous pouvez modifier votre email en visitant l'URL ci-dessous"
 
 #: lib/claper_web/live/event_live/manage.html.heex:758
 #: lib/claper_web/live/event_live/manage.html.heex:1132
@@ -1901,3 +1890,18 @@ msgstr "Se connecter"
 #, elixir-autogen, elixir-format
 msgid "Total submissions"
 msgstr "Total des soumissions"
+
+#: lib/claper_web/templates/user_notifier/change.html.heex:17
+#, elixir-autogen, elixir-format, fuzzy
+msgid "Confirm email change"
+msgstr "Confirmer l'email"
+
+#: lib/claper_web/templates/user_notifier/change.html.heex:32
+#, elixir-autogen, elixir-format, fuzzy
+msgid "If you didn't request an email change, please ignore this."
+msgstr "Si vous n'avez pas créé de compte chez nous, veuillez ignorer ceci."
+
+#: lib/claper_web/templates/user_notifier/change.html.heex:22
+#, elixir-autogen, elixir-format, fuzzy
+msgid "You can confirm your email change by visiting the URL below"
+msgstr "Vous pouvez modifier votre email en visitant l'URL ci-dessous"

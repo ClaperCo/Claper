@@ -261,12 +261,6 @@ msgstr ""
 msgid "CONFIRM EMAIL"
 msgstr ""
 
-#: lib/claper_web/templates/user_notifier/change.html.heex:17
-#, elixir-autogen, elixir-format
-msgid "Confirm email"
-msgstr ""
-
-#: lib/claper_web/templates/user_notifier/change.html.heex:32
 #: lib/claper_web/templates/user_notifier/confirm.html.heex:32
 #: lib/claper_web/templates/user_notifier/magic.html.heex:32
 #: lib/claper_web/templates/user_notifier/reset.html.heex:32
@@ -458,11 +452,6 @@ msgstr ""
 #: lib/claper_web/templates/user_notifier/reset.html.heex:42
 #, elixir-autogen, elixir-format
 msgid "If you’re having trouble with the button above, copy and paste the URL below into your web browser"
-msgstr ""
-
-#: lib/claper_web/templates/user_notifier/change.html.heex:22
-#, elixir-autogen, elixir-format
-msgid "You can change your email by visiting the URL below"
 msgstr ""
 
 #: lib/claper_web/live/event_live/manage.html.heex:758
@@ -1898,4 +1887,19 @@ msgstr ""
 #: lib/claper_web/live/stat_live/index.html.heex:435
 #, elixir-autogen, elixir-format
 msgid "Total submissions"
+msgstr ""
+
+#: lib/claper_web/templates/user_notifier/change.html.heex:17
+#, elixir-autogen, elixir-format
+msgid "Confirm email change"
+msgstr ""
+
+#: lib/claper_web/templates/user_notifier/change.html.heex:32
+#, elixir-autogen, elixir-format
+msgid "If you didn't request an email change, please ignore this."
+msgstr ""
+
+#: lib/claper_web/templates/user_notifier/change.html.heex:22
+#, elixir-autogen, elixir-format
+msgid "You can confirm your email change by visiting the URL below"
 msgstr ""
