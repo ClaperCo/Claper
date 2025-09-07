@@ -66,17 +66,6 @@ defmodule ClaperWeb.AdminLive.EventLive do
   end
 
   @impl true
-  def handle_info({:export_csv_requested, _params}, socket) do
-    filename = CSVExporter.generate_filename("events")
-    csv_content = CSVExporter.export_events_to_csv(socket.assigns.events)
-
-    {:noreply,
-     socket
-     |> put_flash(:info, gettext("Events exported successfully"))
-     |> push_event("download_csv", %{filename: filename, content: csv_content})}
-  end
-
-  @impl true
   def handle_event("sort", %{"field" => field}, socket) do
     field = String.to_existing_atom(field)
     current_sort = socket.assigns.current_sort
@@ -91,6 +80,17 @@ defmodule ClaperWeb.AdminLive.EventLive do
      socket
      |> assign(:events, events)
      |> assign(:current_sort, current_sort)}
+  end
+
+  @impl true
+  def handle_info({:export_csv_requested, _params}, socket) do
+    filename = CSVExporter.generate_filename("events")
+    csv_content = CSVExporter.export_events_to_csv(socket.assigns.events)
+
+    {:noreply,
+     socket
+     |> put_flash(:info, gettext("Events exported successfully"))
+     |> push_event("download_csv", %{filename: filename, content: csv_content})}
   end
 
   @impl true

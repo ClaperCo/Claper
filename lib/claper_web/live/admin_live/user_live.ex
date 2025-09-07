@@ -5,7 +5,6 @@ defmodule ClaperWeb.AdminLive.UserLive do
   alias Claper.Accounts
   alias Claper.Accounts.User
   alias ClaperWeb.Helpers.CSVExporter
-  alias ClaperWeb.AdminLive.UserLive.FormComponent
 
   @impl true
   def mount(_params, session, socket) do
