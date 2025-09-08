@@ -18,7 +18,9 @@ defmodule Claper.Workers.Mailers do
     Mailer.deliver(email)
   end
 
-  def perform(%Oban.Job{args: %{"type" => "update_email", "new_email" => new_email, "url" => url}}) do
+  def perform(%Oban.Job{
+        args: %{"type" => "update_email", "new_email" => new_email, "url" => url}
+      }) do
     email = UserNotifier.update_email(new_email, url)
     Mailer.deliver(email)
   end
