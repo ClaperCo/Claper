@@ -214,37 +214,35 @@ defmodule Claper.Events do
   end
 
   @doc """
-  Gets a single event.
+  Gets a single event by serial ID or UUID.
 
   Raises `Ecto.NoResultsError` if the Event does not exist.
 
   ## Examples
 
+      iex> get_event!(123)
+      %Event{}
+
       iex> get_event!("123e4567-e89b-12d3-a456-426614174000")
       %Event{}
+
+      iex> get_event!(456)
+      ** (Ecto.NoResultsError)
 
       iex> get_event!("123e4567-e89b-12d3-a456-4266141740111")
       ** (Ecto.NoResultsError)
 
   """
-  def get_event!(id, preload \\ []),
-    do: Repo.get_by!(Event, uuid: id) |> Repo.preload(preload)
+  def get_event!(id_or_uuid, preload \\ [])
 
-  @doc """
-  Gets a single event by integer ID (for admin use).
+  def get_event!(
+        <<_::bytes-8, "-", _::bytes-4, "-", _::bytes-4, "-", _::bytes-4, "-", _::bytes-12>> =
+          uuid,
+        preload
+      ),
+      do: Repo.get_by!(Event, uuid: uuid) |> Repo.preload(preload)
 
-  Raises `Ecto.NoResultsError` if the Event does not exist.
-
-  ## Examples
-
-      iex> get_event_by_id!(123)
-      %Event{}
-
-      iex> get_event_by_id!(456)
-      ** (Ecto.NoResultsError)
-
-  """
-  def get_event_by_id!(id, preload \\ []),
+  def get_event!(id, preload),
     do: Repo.get!(Event, id) |> Repo.preload(preload)
 
   @doc """

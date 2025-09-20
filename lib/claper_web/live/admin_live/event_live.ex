@@ -39,18 +39,18 @@ defmodule ClaperWeb.AdminLive.EventLive do
   defp apply_action(socket, :edit, %{"id" => id}) do
     socket
     |> assign(:page_title, gettext("Edit event"))
-    |> assign(:event, Claper.Events.get_event_by_id!(id, [:user]))
+    |> assign(:event, Claper.Events.get_event!(id, [:user]))
   end
 
   defp apply_action(socket, :show, %{"id" => id}) do
     socket
     |> assign(:page_title, gettext("Event details"))
-    |> assign(:event, Claper.Events.get_event_by_id!(id, [:user]))
+    |> assign(:event, Claper.Events.get_event!(id, [:user]))
   end
 
   @impl true
   def handle_event("delete", %{"id" => id}, socket) do
-    event = Claper.Events.get_event_by_id!(id)
+    event = Claper.Events.get_event!(id)
     {:ok, _} = Claper.Events.delete_event(event)
 
     {:noreply,
