@@ -22,7 +22,7 @@ defmodule Claper.Events do
 
   """
   def list_events(user_id, preload \\ []) do
-    from(e in Event, where: e.user_id == ^user_id, order_by: [desc: e.inserted_at])
+    from(e in Event, where: e.user_id == ^user_id, order_by: [desc: e.id])
     |> Repo.all()
     |> Repo.preload(preload)
   end
@@ -43,7 +43,7 @@ defmodule Claper.Events do
     query =
       from(e in Event,
         where: e.user_id == ^user_id,
-        order_by: [desc: e.inserted_at]
+        order_by: [desc: e.id]
       )
 
     Repo.paginate(query, page: page, page_size: page_size, preload: preload)
@@ -61,7 +61,7 @@ defmodule Claper.Events do
   def list_not_expired_events(user_id, preload \\ []) do
     from(e in Event,
       where: e.user_id == ^user_id and is_nil(e.expired_at),
-      order_by: [desc: e.inserted_at]
+      order_by: [desc: e.id]
     )
     |> Repo.all()
     |> Repo.preload(preload)
@@ -83,7 +83,7 @@ defmodule Claper.Events do
     query =
       from(e in Event,
         where: e.user_id == ^user_id and is_nil(e.expired_at),
-        order_by: [desc: e.inserted_at]
+        order_by: [desc: e.id]
       )
 
     Repo.paginate(query, page: page, page_size: page_size, preload: preload)
@@ -145,7 +145,7 @@ defmodule Claper.Events do
       join: e in Event,
       on: e.id == a.event_id,
       where: a.email == ^email,
-      order_by: [desc: e.expired_at],
+      order_by: [desc: e.expired_at, desc: e.id],
       select: e
     )
     |> Repo.all()
@@ -172,7 +172,7 @@ defmodule Claper.Events do
         join: e in Event,
         on: e.id == a.event_id,
         where: a.email == ^email,
-        order_by: [desc: e.expired_at],
+        order_by: [desc: e.expired_at, desc: e.id],
         select: e
       )
 
@@ -193,8 +193,7 @@ defmodule Claper.Events do
 
   def count_expired_events(user_id) do
     from(e in Event,
-      where: e.user_id == ^user_id and not is_nil(e.expired_at),
-      order_by: [desc: e.expired_at]
+      where: e.user_id == ^user_id and not is_nil(e.expired_at)
     )
     |> Repo.aggregate(:count, :id)
   end
@@ -207,8 +206,7 @@ defmodule Claper.Events do
     from(e in Event,
       where:
         e.user_id == ^user_id and e.inserted_at <= ^DateTime.utc_now() and
-          e.inserted_at >= ^last_month,
-      order_by: [desc: e.id]
+          e.inserted_at >= ^last_month
     )
     |> Repo.aggregate(:count, :id)
   end
@@ -327,7 +325,6 @@ defmodule Claper.Events do
       iex> get_different_event_with_code("Hello", 123)
       %Event{}
 
-
   """
   def get_different_event_with_code(nil, _event_id), do: nil
 
@@ -346,7 +343,6 @@ defmodule Claper.Events do
       iex> leaded_by?("email@example.com", 123)
       true
 
-
   """
   def leaded_by?(email, event) do
     from(a in ActivityLeader,
@@ -354,8 +350,7 @@ defmodule Claper.Events do
       on: u.email == a.email,
       join: e in Event,
       on: e.id == a.event_id,
-      where: a.email == ^email and e.id == ^event.id,
-      order_by: [desc: e.expired_at]
+      where: a.email == ^email and e.id == ^event.id
     )
     |> Repo.exists?()
   end
