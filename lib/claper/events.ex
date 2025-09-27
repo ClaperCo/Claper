@@ -261,7 +261,7 @@ defmodule Claper.Events do
     event = Repo.get_by!(Event, uuid: id)
 
     is_leader =
-      Claper.Events.leaded_by?(current_user.email, event) || event.user_id == current_user.id
+      Claper.Events.led_by?(current_user.email, event) || event.user_id == current_user.id
 
     if is_leader do
       event |> Repo.preload(preload)
@@ -340,11 +340,11 @@ defmodule Claper.Events do
 
   ## Examples
 
-      iex> leaded_by?("email@example.com", 123)
+      iex> led_by?("email@example.com", 123)
       true
 
   """
-  def leaded_by?(email, event) do
+  def led_by?(email, event) do
     from(a in ActivityLeader,
       join: u in Claper.Accounts.User,
       on: u.email == a.email,
