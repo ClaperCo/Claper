@@ -8,6 +8,7 @@ defmodule Claper.Events do
   import Ecto.Query, warn: false
   alias Claper.Repo
 
+  alias Claper.Accounts.User
   alias Claper.Events.{Event, ActivityLeader}
 
   @default_page_size 5
@@ -257,17 +258,18 @@ defmodule Claper.Events do
       ** (Ecto.NoResultsError)
 
   """
-  def get_managed_event!(current_user, id, preload \\ []) do
-    event = Repo.get_by!(Event, uuid: id)
-
-    is_leader =
-      Claper.Events.led_by?(current_user.email, event) || event.user_id == current_user.id
-
-    if is_leader do
-      event |> Repo.preload(preload)
-    else
-      raise Ecto.NoResultsError
-    end
+  def get_managed_event!(user, uuid, preload \\ []) do
+    from(
+      a in ActivityLeader,
+      join: e in Event,
+      on: e.id == a.event_id,
+      join: u in User,
+      on: e.user_id == u.id,
+      where: e.uuid == ^uuid and (u.id == ^user.id or a.email == ^user.email),
+      select: e
+    )
+    |> Repo.one!()
+    |> Repo.preload(preload)
   end
 
   @doc """
