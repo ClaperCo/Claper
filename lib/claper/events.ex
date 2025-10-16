@@ -320,24 +320,6 @@ defmodule Claper.Events do
   end
 
   @doc """
-  Get a single event with the same code excluding a specific event.
-
-  ## Examples
-
-      iex> get_different_event_with_code("Hello", 123)
-      %Event{}
-
-  """
-  def get_different_event_with_code(nil, _event_id), do: nil
-
-  def get_different_event_with_code(code, event_id) do
-    now = DateTime.utc_now()
-
-    from(e in Event, where: e.code == ^code and e.id != ^event_id and e.expired_at > ^now)
-    |> Repo.one()
-  end
-
-  @doc """
   Check if a user is a facilitator of a specific event.
 
   ## Examples
@@ -394,6 +376,15 @@ defmodule Claper.Events do
       %Event{} -> {:error, Ecto.Changeset.add_error(changeset, :code, "Already exists")}
       nil -> {:ok, changeset}
     end
+  end
+
+  defp get_different_event_with_code(nil, _event_id), do: nil
+
+  defp get_different_event_with_code(code, event_id) do
+    now = DateTime.utc_now()
+
+    from(e in Event, where: e.code == ^code and e.id != ^event_id and e.expired_at > ^now)
+    |> Repo.one()
   end
 
   @doc """
