@@ -61,7 +61,7 @@ defmodule Claper.Embeds.Embed do
         |> validate_format(:content, ~r/^https?:\/\/.+$/,
           message: gettext("Please enter a valid link starting with http:// or https://")
         )
-        |> validate_format(:content, ~r/youtu\.be/,
+        |> validate_format(:content, ~r/(youtu\.be)|(youtube\.com)/,
           message: gettext("Please enter a valid %{provider} link", provider: "YouTube")
         )
 
