@@ -10,6 +10,7 @@ defmodule Claper.Events do
 
   alias Claper.Accounts.User
   alias Claper.Events.{Event, ActivityLeader}
+  alias Claper.Presentations
 
   @default_page_size 5
 
@@ -520,7 +521,10 @@ defmodule Claper.Events do
   end
 
   @doc """
-  Duplicate an event
+  Duplicates an event.
+
+  Raises `Ecto.NoResultsError` for invalid `user_id`-`event_uuid` combinations
+  and returns an error tuple if any part of the transaction fails.
 
   ## Examples
 
@@ -530,156 +534,179 @@ defmodule Claper.Events do
       iex> duplicate(user_id, event_uuid)
       {:error, %Ecto.Changeset{}}
 
+      iex> duplicate(another_user_id, event_uuid)
+      ** (Ecto.NoResultsError)
+
   """
   def duplicate_event(user_id, event_uuid) do
-    case Ecto.Multi.new()
-         |> Ecto.Multi.run(:original_event, fn _repo, _changes ->
-           {:ok,
-            get_user_event!(user_id, event_uuid,
-              presentation_file: [
-                polls: [:poll_opts],
-                forms: [],
-                embeds: [],
-                quizzes: [:quiz_questions, quiz_questions: :quiz_question_opts],
-                presentation_state: []
-              ]
-            )}
-         end)
-         |> Ecto.Multi.run(:new_event, fn _repo, %{original_event: original_event} ->
-           new_code =
-             for _ <- 1..5,
-                 into: "",
-                 do: <<Enum.random(~c"0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ")>>
+    original =
+      get_user_event!(user_id, event_uuid,
+        presentation_file: [
+          presentation_state: [],
+          polls: [:poll_opts],
+          forms: [],
+          embeds: [],
+          quizzes: [quiz_questions: [:quiz_question_opts]]
+        ]
+      )
 
-           attrs =
-             Map.from_struct(original_event)
-             |> Map.drop([:id, :inserted_at, :updated_at, :presentation_file, :expired_at])
-             |> Map.put(:leaders, [])
-             |> Map.put(:code, "#{new_code}")
-             |> Map.put(:name, "#{original_event.name} (Copy)")
+    multi =
+      Ecto.Multi.new()
+      |> Ecto.Multi.run(:event, fn _repo, _changes ->
+        code =
+          for _ <- 1..5,
+              into: "",
+              do: <<Enum.random(~c"0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ")>>
 
-           create_event(attrs)
-         end)
-         |> Ecto.Multi.run(:new_presentation_file, fn _repo,
-                                                      %{
-                                                        original_event: original_event,
-                                                        new_event: new_event
-                                                      } ->
-           attrs =
-             Map.from_struct(original_event.presentation_file)
-             |> Map.drop([:id, :inserted_at, :updated_at, :presentation_state])
-             |> Map.put(:event_id, new_event.id)
+        attrs =
+          Map.from_struct(original)
+          |> Map.drop([:id, :inserted_at, :updated_at, :presentation_file, :expired_at])
+          |> Map.put(:leaders, [])
+          |> Map.put(:code, "#{code}")
+          |> Map.put(:name, "#{original.name} (Copy)")
 
-           Claper.Presentations.create_presentation_file(attrs)
-         end)
-         |> Ecto.Multi.run(:new_presentation_state, fn _repo,
-                                                       %{
-                                                         original_event: original_event,
-                                                         new_presentation_file:
-                                                           new_presentation_file
-                                                       } ->
-           attrs =
-             Map.from_struct(original_event.presentation_file.presentation_state)
-             |> Map.drop([:id, :inserted_at, :updated_at])
-             |> Map.put(:presentation_file_id, new_presentation_file.id)
-             |> Map.put(:position, 0)
-             |> Map.put(:banned, [])
+        create_event(attrs)
+      end)
+      |> Ecto.Multi.run(:presentation_file, fn _repo, changes ->
+        case get_in(original.presentation_file) do
+          %Presentations.PresentationFile{} = presentation_file ->
+            attrs =
+              Map.from_struct(presentation_file)
+              |> Map.drop([:id, :inserted_at, :updated_at, :presentation_state])
+              |> Map.put(:event_id, changes.event.id)
 
-           Claper.Presentations.create_presentation_state(attrs)
-         end)
-         |> Ecto.Multi.run(:polls, fn _repo,
-                                      %{
-                                        new_presentation_file: new_presentation_file,
-                                        original_event: original_event
-                                      } ->
-           {:ok,
-            Enum.map(original_event.presentation_file.polls, fn poll ->
-              poll_attrs =
-                Map.from_struct(poll)
-                |> Map.drop([:id, :inserted_at, :updated_at])
-                |> Map.put(:presentation_file_id, new_presentation_file.id)
-                |> Map.put(
-                  :poll_opts,
-                  Enum.map(poll.poll_opts, fn opt ->
-                    Map.from_struct(opt)
-                    |> Map.drop([:id, :inserted_at, :updated_at])
-                  end)
-                )
+            Claper.Presentations.create_presentation_file(attrs)
 
-              {:ok, new_poll} = Claper.Polls.create_poll(poll_attrs)
-              new_poll
-            end)}
-         end)
-         |> Ecto.Multi.run(:forms, fn _repo,
-                                      %{
-                                        new_presentation_file: new_presentation_file,
-                                        original_event: original_event
-                                      } ->
-           {:ok,
-            Enum.map(original_event.presentation_file.forms, fn form ->
-              form_attrs =
-                Map.from_struct(form)
-                |> Map.drop([:id, :inserted_at, :updated_at])
-                |> Map.put(:presentation_file_id, new_presentation_file.id)
-                |> Map.put(
-                  :fields,
-                  Enum.map(form.fields, &Map.from_struct(&1))
-                )
+          _ ->
+            {:ok, nil}
+        end
+      end)
+      |> Ecto.Multi.run(:presentation_state, fn _repo, changes ->
+        case get_in(original.presentation_file.presentation_state) do
+          %Presentations.PresentationState{} = presentation_state ->
+            attrs =
+              Map.from_struct(presentation_state)
+              |> Map.drop([:id, :inserted_at, :updated_at])
+              |> Map.put(:presentation_file_id, changes.presentation_file.id)
+              |> Map.put(:position, 0)
+              |> Map.put(:banned, [])
 
-              {:ok, new_form} = Claper.Forms.create_form(form_attrs)
-              new_form
-            end)}
-         end)
-         |> Ecto.Multi.run(:embeds, fn _repo,
-                                       %{
-                                         new_presentation_file: new_presentation_file,
-                                         original_event: original_event
-                                       } ->
-           {:ok,
-            Enum.map(original_event.presentation_file.embeds, fn embed ->
-              embed_attrs =
-                Map.from_struct(embed)
-                |> Map.drop([:id, :inserted_at, :updated_at])
-                |> Map.put(:presentation_file_id, new_presentation_file.id)
+            Claper.Presentations.create_presentation_state(attrs)
 
-              {:ok, new_embed} = Claper.Embeds.create_embed(embed_attrs)
-              new_embed
-            end)}
-         end)
-         |> Ecto.Multi.run(:quizzes, fn _repo,
-                                        %{
-                                          new_presentation_file: new_presentation_file,
-                                          original_event: original_event
-                                        } ->
-           {:ok,
-            Enum.map(original_event.presentation_file.quizzes, fn quiz ->
-              quiz_attrs =
-                Map.from_struct(quiz)
-                |> Map.drop([:id, :inserted_at, :updated_at])
-                |> Map.put(:presentation_file_id, new_presentation_file.id)
-                |> Map.put(
-                  :quiz_questions,
-                  Enum.map(quiz.quiz_questions, fn question ->
-                    Map.from_struct(question)
-                    |> Map.drop([:id, :inserted_at, :updated_at])
-                    |> Map.put(
-                      :quiz_question_opts,
-                      Enum.map(question.quiz_question_opts, fn opt ->
-                        Map.from_struct(opt)
-                        |> Map.drop([:id, :inserted_at, :updated_at])
-                        |> Map.put(:response_count, 0)
-                      end)
-                    )
-                  end)
-                )
+          _ ->
+            {:ok, nil}
+        end
+      end)
+      |> Ecto.Multi.run(:polls, fn _repo, changes ->
+        case get_in(original.presentation_file.polls) do
+          polls when is_list(polls) ->
+            polls =
+              for poll <- polls do
+                attrs =
+                  Map.from_struct(poll)
+                  |> Map.drop([:id, :inserted_at, :updated_at])
+                  |> Map.put(:presentation_file_id, changes.presentation_file.id)
+                  |> Map.put(
+                    :poll_opts,
+                    Enum.map(poll.poll_opts, fn opt ->
+                      Map.from_struct(opt)
+                      |> Map.drop([:id, :inserted_at, :updated_at, :vote_count])
+                    end)
+                  )
 
-              {:ok, new_quiz} = Claper.Quizzes.create_quiz(quiz_attrs)
-              new_quiz
-            end)}
-         end)
-         |> Repo.transaction() do
-      {:ok, %{new_event: new_event}} -> {:ok, new_event}
-      {:error, _failed_operation, failed_value, _changes_so_far} -> {:error, failed_value}
+                {:ok, poll} = Claper.Polls.create_poll(attrs)
+                poll
+              end
+
+            {:ok, polls}
+
+          _ ->
+            {:ok, nil}
+        end
+      end)
+      |> Ecto.Multi.run(:forms, fn _repo, changes ->
+        case get_in(original.presentation_file.forms) do
+          forms when is_list(forms) ->
+            forms =
+              for form <- forms do
+                attrs =
+                  Map.from_struct(form)
+                  |> Map.drop([:id, :inserted_at, :updated_at])
+                  |> Map.put(:presentation_file_id, changes.presentation_file.id)
+                  |> Map.put(
+                    :fields,
+                    Enum.map(form.fields, &Map.from_struct(&1))
+                  )
+
+                {:ok, form} = Claper.Forms.create_form(attrs)
+                form
+              end
+
+            {:ok, forms}
+
+          _ ->
+            {:ok, nil}
+        end
+      end)
+      |> Ecto.Multi.run(:embeds, fn _repo, changes ->
+        case get_in(original.presentation_file.embeds) do
+          embeds when is_list(embeds) ->
+            embeds =
+              for embed <- embeds do
+                attrs =
+                  Map.from_struct(embed)
+                  |> Map.drop([:id, :inserted_at, :updated_at])
+                  |> Map.put(:presentation_file_id, changes.presentation_file.id)
+
+                {:ok, embed} = Claper.Embeds.create_embed(attrs)
+                embed
+              end
+
+            {:ok, embeds}
+
+          _ ->
+            {:ok, nil}
+        end
+      end)
+      |> Ecto.Multi.run(:quizzes, fn _repo, changes ->
+        case get_in(original.presentation_file.quizzes) do
+          quizzes when is_list(quizzes) ->
+            quizzes =
+              for quiz <- quizzes do
+                attrs =
+                  Map.from_struct(quiz)
+                  |> Map.drop([:id, :inserted_at, :updated_at])
+                  |> Map.put(:presentation_file_id, changes.presentation_file.id)
+                  |> Map.put(
+                    :quiz_questions,
+                    Enum.map(quiz.quiz_questions, fn question ->
+                      Map.from_struct(question)
+                      |> Map.drop([:id, :inserted_at, :updated_at])
+                      |> Map.put(
+                        :quiz_question_opts,
+                        Enum.map(question.quiz_question_opts, fn opt ->
+                          Map.from_struct(opt)
+                          |> Map.drop([:id, :inserted_at, :updated_at])
+                          |> Map.put(:response_count, 0)
+                        end)
+                      )
+                    end)
+                  )
+
+                {:ok, quiz} = Claper.Quizzes.create_quiz(attrs)
+                quiz
+              end
+
+            {:ok, quizzes}
+
+          _ ->
+            {:ok, nil}
+        end
+      end)
+
+    case Repo.transaction(multi) do
+      {:ok, %{event: event}} -> {:ok, event}
+      {:error, _operation, value, _changes} -> {:error, value}
     end
   end
 
