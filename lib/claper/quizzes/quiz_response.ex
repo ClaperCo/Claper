@@ -20,8 +20,7 @@ defmodule Claper.Quizzes.QuizResponse do
       :attendee_identifier,
       :quiz_id,
       :quiz_question_id,
-      :quiz_question_opt_id,
-      :user_id
+      :quiz_question_opt_id
     ])
     |> validate_required([:quiz_id, :quiz_question_id, :quiz_question_opt_id])
   end
