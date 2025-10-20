@@ -9,7 +9,27 @@ defmodule Claper.EventsFixtures do
   require Claper.UtilFixture
 
   @doc """
-  Generate a event.
+  Generate an activity leader.
+  """
+  def activity_leader_fixture(attrs \\ %{}, preload \\ []) do
+    assoc = %{
+      event: attrs[:event] || event_fixture(),
+      user: attrs[:user] || user_fixture()
+    }
+
+    {:ok, activity_leader} =
+      attrs
+      |> Enum.into(%{
+        email: assoc.user.email,
+        event_id: assoc.event.id
+      })
+      |> Claper.Events.create_activity_leader()
+
+    Claper.UtilFixture.merge_preload(activity_leader, preload, assoc)
+  end
+
+  @doc """
+  Generate an event.
   """
   def event_fixture(attrs \\ %{}, preload \\ []) do
     assoc = %{user: attrs[:user] || user_fixture()}
