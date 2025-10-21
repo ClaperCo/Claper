@@ -236,7 +236,7 @@
   </div>
   <!-- ONLINE BADGE -->
   <div
-    :if={!@iframe}
+    :if={!@iframe && @state.show_attendee_count}
     class="absolute z-20 bottom-5 right-5 px-4 pt-3 pb-1 rounded-md bg-black shadow-md text-white flex-1"
   >
     <div id="reacts" phx-hook="GlobalReacts" data-class-name="h-24" phx-update="ignore"></div>

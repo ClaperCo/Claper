@@ -370,6 +370,61 @@ defmodule ClaperWeb.EventLive.ManagerSettingsComponent do
                 <div :if={!@show_shortcut}></div>
               </ClaperWeb.Component.Input.check_button>
             </div>
+            <div>
+              <ClaperWeb.Component.Input.check_button
+                key={:show_attendee_count}
+                checked={@state.show_attendee_count}
+                shortcut={if @create == nil, do: "R", else: nil}
+              >
+                <svg
+                  :if={!@state.show_attendee_count}
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="w-5 h-5"
+                >
+                  <path
+                    fill="currentColor"
+                    d="M12 4a4 4 0 0 1 4 4a4 4 0 0 1-4 4a4 4 0 0 1-4-4a4 4 0 0 1 4-4m0 10c4.42 0 8 1.79 8 4v2H4v-2c0-2.21 3.58-4 8-4"
+                  />
+                </svg>
+                <svg
+                  :if={@state.show_attendee_count}
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="w-5 h-5"
+                >
+                  <path
+                    fill="currentColor"
+                    d="M12 4a4 4 0 0 1 4 4c0 1.95-1.4 3.58-3.25 3.93L8.07 7.25A4.004 4.004 0 0 1 12 4m.28 10l6 6L20 21.72L18.73 23l-3-3H4v-2c0-1.84 2.5-3.39 5.87-3.86L2.78 7.05l1.27-1.27zM20 18v1.18l-4.86-4.86C18 14.93 20 16.35 20 18"
+                  />
+                </svg>
+                <div>
+                  <span :if={!@state.show_attendee_count}>
+                    {gettext("Show attendee count")}
+                  </span>
+                  <span :if={@state.show_attendee_count}>
+                    {gettext("Hide attendee count")}
+                  </span>
+                </div>
+                <code
+                  :if={@show_shortcut}
+                  class="px-2 py-1.5 text-xs font-semibold text-gray-800 bg-gray-100 border border-gray-200 rounded-lg"
+                >
+                  r
+                </code>
+                <div :if={!@show_shortcut}></div>
+              </ClaperWeb.Component.Input.check_button>
+            </div>
           </div>
 
           <div class="grid grid-cols-1 space-y-1.5">
