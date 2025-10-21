@@ -15,7 +15,7 @@ msgstr ""
 msgid "Settings"
 msgstr "Iestatījumi"
 
-#: lib/claper_web/live/event_live/manage.ex:825
+#: lib/claper_web/live/event_live/manage.ex:841
 #: lib/claper_web/live/form_live/form_component.html.heex:32
 #: lib/claper_web/live/user_settings_live/show.html.heex:34
 #: lib/claper_web/templates/user_registration/new.html.heex:29
@@ -689,7 +689,7 @@ msgstr "Veidlapu iesniegumi"
 msgid "Form submissions from attendees will appear here."
 msgstr "Dalībnieku iesniegtās veidlapas parādīsies šeit."
 
-#: lib/claper_web/live/event_live/manage.ex:824
+#: lib/claper_web/live/event_live/manage.ex:840
 #, elixir-autogen, elixir-format
 msgid "Name"
 msgstr "Nosaukums"
@@ -760,7 +760,7 @@ msgstr "Vairākas atbildes"
 msgid "PDF, PPT, PPTX up to %{size} MB"
 msgstr "PDF, PPT, PPTX līdz %{size} MB"
 
-#: lib/claper_web/live/event_live/manager_settings_component.ex:427
+#: lib/claper_web/live/event_live/manager_settings_component.ex:482
 #, elixir-autogen, elixir-format
 msgid "Enable messages"
 msgstr "Iespējot ziņojumus"
@@ -1198,7 +1198,7 @@ msgstr "Kad sāksies jūsu pasākums?"
 msgid "Create your next presentation with"
 msgstr "Izveidojiet nākamo prezentāciju, izmantojot"
 
-#: lib/claper_web/live/event_live/manage.ex:27
+#: lib/claper_web/live/event_live/manage.ex:26
 #: lib/claper_web/live/event_live/presenter.ex:24
 #: lib/claper_web/live/event_live/show.ex:25
 #, elixir-autogen, elixir-format
@@ -1271,7 +1271,7 @@ msgstr "Mans konts"
 msgid "Your personal informations to access your account"
 msgstr "Jūsu personiskā informācija, lai piekļūtu savam kontam"
 
-#: lib/claper_web/live/event_live/manager_settings_component.ex:534
+#: lib/claper_web/live/event_live/manager_settings_component.ex:589
 #, elixir-autogen, elixir-format
 msgid "Enable reactions"
 msgstr "Iespējot reakcijas"
@@ -1347,7 +1347,7 @@ msgstr "Atspējot"
 msgid "Enable"
 msgstr "Iespējot"
 
-#: lib/claper_web/live/event_live/manager_settings_component.ex:444
+#: lib/claper_web/live/event_live/manager_settings_component.ex:499
 #, elixir-autogen, elixir-format
 msgid "Enable messages to change this option"
 msgstr "Iespējiet ziņojumus, lai mainītu šo opciju"
@@ -1547,12 +1547,12 @@ msgstr "Izbeigt"
 msgid "More options"
 msgstr "Vairāk iespēju"
 
-#: lib/claper_web/live/event_live/manage.ex:805
+#: lib/claper_web/live/event_live/manage.ex:821
 #, elixir-autogen, elixir-format
 msgid "No"
 msgstr "Nē"
 
-#: lib/claper_web/live/event_live/manage.ex:805
+#: lib/claper_web/live/event_live/manage.ex:821
 #, elixir-autogen, elixir-format
 msgid "Yes"
 msgstr "Jā"
@@ -1617,7 +1617,7 @@ msgstr "Pievienojiet viktorīnu, lai pārbaudītu zināšanas."
 msgid "Add answer"
 msgstr "Pievienot atbildi"
 
-#: lib/claper_web/live/event_live/manager_settings_component.ex:483
+#: lib/claper_web/live/event_live/manager_settings_component.ex:538
 #, elixir-autogen, elixir-format
 msgid "Allow anonymous messages"
 msgstr "Atļaut anonīmus ziņojumus"
@@ -1627,7 +1627,7 @@ msgstr "Atļaut anonīmus ziņojumus"
 msgid "Answer %{index}"
 msgstr "Atbilde %{index}"
 
-#: lib/claper_web/live/event_live/manager_settings_component.ex:391
+#: lib/claper_web/live/event_live/manager_settings_component.ex:446
 #, elixir-autogen, elixir-format
 msgid "Attendees"
 msgstr "Dalībnieki"
@@ -1643,17 +1643,17 @@ msgstr "Vidējais rezultāts"
 msgid "Current quiz"
 msgstr "Pašreizējā viktorīna"
 
-#: lib/claper_web/live/event_live/manager_settings_component.ex:486
+#: lib/claper_web/live/event_live/manager_settings_component.ex:541
 #, elixir-autogen, elixir-format
 msgid "Deny anonymous messages"
 msgstr "Aizliegt anonīmus ziņojumus"
 
-#: lib/claper_web/live/event_live/manager_settings_component.ex:428
+#: lib/claper_web/live/event_live/manager_settings_component.ex:483
 #, elixir-autogen, elixir-format
 msgid "Disable messages"
 msgstr "Izslēgt ziņojumus"
 
-#: lib/claper_web/live/event_live/manager_settings_component.ex:537
+#: lib/claper_web/live/event_live/manager_settings_component.ex:592
 #, elixir-autogen, elixir-format
 msgid "Disable reactions"
 msgstr "Izslēgt reakcijas"
@@ -1905,3 +1905,13 @@ msgstr "Ja neesat izveidojuši mūsu kontu, lūdzu, ignorējiet šo informāciju
 #, elixir-autogen, elixir-format, fuzzy
 msgid "You can confirm your email change by visiting the URL below"
 msgstr "Savu e-pasta adresi varat mainīt, apmeklējot tālāk norādīto URL adresi"
+
+#: lib/claper_web/live/event_live/manager_settings_component.ex:416
+#, elixir-autogen, elixir-format
+msgid "Hide attendee count"
+msgstr "Slēpt dalībnieku skaitu"
+
+#: lib/claper_web/live/event_live/manager_settings_component.ex:413
+#, elixir-autogen, elixir-format, fuzzy
+msgid "Show attendee count"
+msgstr "Rādīt dalībnieku skaitu"

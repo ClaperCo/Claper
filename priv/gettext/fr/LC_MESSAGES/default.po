@@ -15,7 +15,7 @@ msgstr ""
 msgid "Settings"
 msgstr "Paramètres"
 
-#: lib/claper_web/live/event_live/manage.ex:825
+#: lib/claper_web/live/event_live/manage.ex:841
 #: lib/claper_web/live/form_live/form_component.html.heex:32
 #: lib/claper_web/live/user_settings_live/show.html.heex:34
 #: lib/claper_web/templates/user_registration/new.html.heex:29
@@ -689,7 +689,7 @@ msgstr "Soumissions de formulaire"
 msgid "Form submissions from attendees will appear here."
 msgstr "Les formulaires soumis par les participants apparaîtront ici."
 
-#: lib/claper_web/live/event_live/manage.ex:824
+#: lib/claper_web/live/event_live/manage.ex:840
 #, elixir-autogen, elixir-format
 msgid "Name"
 msgstr "Nom"
@@ -760,7 +760,7 @@ msgstr "Réponses multiples"
 msgid "PDF, PPT, PPTX up to %{size} MB"
 msgstr "PDF, PPT, PPTX jusqu'à %{size} MB"
 
-#: lib/claper_web/live/event_live/manager_settings_component.ex:427
+#: lib/claper_web/live/event_live/manager_settings_component.ex:482
 #, elixir-autogen, elixir-format
 msgid "Enable messages"
 msgstr "Activer messages"
@@ -1198,7 +1198,7 @@ msgstr "Quand votre événement commencera-t-il ?"
 msgid "Create your next presentation with"
 msgstr "Créez votre prochaine présentation avec"
 
-#: lib/claper_web/live/event_live/manage.ex:27
+#: lib/claper_web/live/event_live/manage.ex:26
 #: lib/claper_web/live/event_live/presenter.ex:24
 #: lib/claper_web/live/event_live/show.ex:25
 #, elixir-autogen, elixir-format
@@ -1271,7 +1271,7 @@ msgstr "Mon compte"
 msgid "Your personal informations to access your account"
 msgstr "Vos informations personnelles pour accéder à votre compte"
 
-#: lib/claper_web/live/event_live/manager_settings_component.ex:534
+#: lib/claper_web/live/event_live/manager_settings_component.ex:589
 #, elixir-autogen, elixir-format, fuzzy
 msgid "Enable reactions"
 msgstr "Activer les réactions"
@@ -1347,7 +1347,7 @@ msgstr "Désactiver"
 msgid "Enable"
 msgstr "Activer"
 
-#: lib/claper_web/live/event_live/manager_settings_component.ex:444
+#: lib/claper_web/live/event_live/manager_settings_component.ex:499
 #, elixir-autogen, elixir-format, fuzzy
 msgid "Enable messages to change this option"
 msgstr "Activer les messages pour modifier cette option"
@@ -1547,12 +1547,12 @@ msgstr "Terminer"
 msgid "More options"
 msgstr "Plus d'options"
 
-#: lib/claper_web/live/event_live/manage.ex:805
+#: lib/claper_web/live/event_live/manage.ex:821
 #, elixir-autogen, elixir-format
 msgid "No"
 msgstr "Non"
 
-#: lib/claper_web/live/event_live/manage.ex:805
+#: lib/claper_web/live/event_live/manage.ex:821
 #, elixir-autogen, elixir-format
 msgid "Yes"
 msgstr "Oui"
@@ -1617,7 +1617,7 @@ msgstr "Ajouter un quiz pour tester les connaissances."
 msgid "Add answer"
 msgstr "Ajouter une réponse"
 
-#: lib/claper_web/live/event_live/manager_settings_component.ex:483
+#: lib/claper_web/live/event_live/manager_settings_component.ex:538
 #, elixir-autogen, elixir-format, fuzzy
 msgid "Allow anonymous messages"
 msgstr "Autoriser les messages anonymes"
@@ -1627,7 +1627,7 @@ msgstr "Autoriser les messages anonymes"
 msgid "Answer %{index}"
 msgstr "Réponse %{index}"
 
-#: lib/claper_web/live/event_live/manager_settings_component.ex:391
+#: lib/claper_web/live/event_live/manager_settings_component.ex:446
 #, elixir-autogen, elixir-format, fuzzy
 msgid "Attendees"
 msgstr "Participants"
@@ -1643,17 +1643,17 @@ msgstr "Score moyen"
 msgid "Current quiz"
 msgstr "Quiz actuel"
 
-#: lib/claper_web/live/event_live/manager_settings_component.ex:486
+#: lib/claper_web/live/event_live/manager_settings_component.ex:541
 #, elixir-autogen, elixir-format, fuzzy
 msgid "Deny anonymous messages"
 msgstr "Refuser les messages anonymes"
 
-#: lib/claper_web/live/event_live/manager_settings_component.ex:428
+#: lib/claper_web/live/event_live/manager_settings_component.ex:483
 #, elixir-autogen, elixir-format, fuzzy
 msgid "Disable messages"
 msgstr "Désactiver les messages"
 
-#: lib/claper_web/live/event_live/manager_settings_component.ex:537
+#: lib/claper_web/live/event_live/manager_settings_component.ex:592
 #, elixir-autogen, elixir-format, fuzzy
 msgid "Disable reactions"
 msgstr "Désactiver les réactions"
@@ -1905,3 +1905,13 @@ msgstr "Si vous n'avez pas créé de compte chez nous, veuillez ignorer ceci."
 #, elixir-autogen, elixir-format, fuzzy
 msgid "You can confirm your email change by visiting the URL below"
 msgstr "Vous pouvez modifier votre email en visitant l'URL ci-dessous"
+
+#: lib/claper_web/live/event_live/manager_settings_component.ex:416
+#, elixir-autogen, elixir-format
+msgid "Hide attendee count"
+msgstr "Masquer nombre de participants"
+
+#: lib/claper_web/live/event_live/manager_settings_component.ex:413
+#, elixir-autogen, elixir-format, fuzzy
+msgid "Show attendee count"
+msgstr "Afficher le nombre de participants"
