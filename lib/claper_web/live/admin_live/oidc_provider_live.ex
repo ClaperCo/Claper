@@ -30,11 +30,9 @@ defmodule ClaperWeb.AdminLive.OidcProviderLive do
   end
 
   defp apply_action(socket, :show, %{"id" => id}) do
-    provider = Oidc.get_provider!(id)
-
     socket
     |> assign(:page_title, gettext("Provider details"))
-    |> assign(:provider, provider)
+    |> assign(:provider, Oidc.get_provider!(id))
   end
 
   defp apply_action(socket, :new, _params) do
@@ -46,12 +44,6 @@ defmodule ClaperWeb.AdminLive.OidcProviderLive do
   defp apply_action(socket, :edit, %{"id" => id}) do
     socket
     |> assign(:page_title, gettext("Edit provider"))
-    |> assign(:provider, Oidc.get_provider!(id))
-  end
-
-  defp apply_action(socket, :show, %{"id" => id}) do
-    socket
-    |> assign(:page_title, gettext("Provider details"))
     |> assign(:provider, Oidc.get_provider!(id))
   end
 

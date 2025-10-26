@@ -50,7 +50,7 @@ defmodule Claper.Events.Event do
     ])
     |> cast_assoc(:presentation_file)
     |> cast_assoc(:leaders)
-    |> validate_required([:code, :name, :user_id])
+    |> validate_required([:name, :code, :started_at, :user_id])
   end
 
   def create_changeset(event, attrs) do
@@ -78,7 +78,7 @@ defmodule Claper.Events.Event do
     |> cast(attrs, [:name, :code, :started_at, :expired_at, :audience_peak, :user_id])
     |> cast_assoc(:presentation_file)
     |> cast_assoc(:leaders)
-    |> validate_required([:code, :started_at, :user_id])
+    |> validate_required([:name, :code, :started_at, :user_id])
     |> validate_length(:code, min: 5, max: 10)
     |> validate_length(:name, min: 5, max: 50)
     |> downcase_code

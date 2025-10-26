@@ -39,18 +39,18 @@ defmodule ClaperWeb.AdminLive.EventLive do
   defp apply_action(socket, :edit, %{"id" => id}) do
     socket
     |> assign(:page_title, gettext("Edit event"))
-    |> assign(:event, Claper.Events.get_event_by_id!(id, [:user]))
+    |> assign(:event, Claper.Events.get_event!(id, [:user]))
   end
 
   defp apply_action(socket, :show, %{"id" => id}) do
     socket
     |> assign(:page_title, gettext("Event details"))
-    |> assign(:event, Claper.Events.get_event_by_id!(id, [:user]))
+    |> assign(:event, Claper.Events.get_event!(id, [:user]))
   end
 
   @impl true
   def handle_event("delete", %{"id" => id}, socket) do
-    event = Claper.Events.get_event_by_id!(id)
+    event = Claper.Events.get_event!(id)
     {:ok, _} = Claper.Events.delete_event(event)
 
     {:noreply,
@@ -63,17 +63,6 @@ defmodule ClaperWeb.AdminLive.EventLive do
   def handle_event("search", %{"search" => search}, socket) do
     events = search_events(search)
     {:noreply, socket |> assign(:search, search) |> assign(:events, events)}
-  end
-
-  @impl true
-  def handle_info({:export_csv_requested, _params}, socket) do
-    filename = CSVExporter.generate_filename("events")
-    csv_content = CSVExporter.export_events_to_csv(socket.assigns.events)
-
-    {:noreply,
-     socket
-     |> put_flash(:info, gettext("Events exported successfully"))
-     |> push_event("download_csv", %{filename: filename, content: csv_content})}
   end
 
   @impl true
@@ -91,6 +80,17 @@ defmodule ClaperWeb.AdminLive.EventLive do
      socket
      |> assign(:events, events)
      |> assign(:current_sort, current_sort)}
+  end
+
+  @impl true
+  def handle_info({:export_csv_requested, _params}, socket) do
+    filename = CSVExporter.generate_filename("events")
+    csv_content = CSVExporter.export_events_to_csv(socket.assigns.events)
+
+    {:noreply,
+     socket
+     |> put_flash(:info, gettext("Events exported successfully"))
+     |> push_event("download_csv", %{filename: filename, content: csv_content})}
   end
 
   @impl true

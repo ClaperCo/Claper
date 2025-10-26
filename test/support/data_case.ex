@@ -28,9 +28,13 @@ defmodule Claper.DataCase do
     end
   end
 
-  setup tags do
-    pid = Ecto.Adapters.SQL.Sandbox.start_owner!(Claper.Repo, shared: not tags[:async])
-    on_exit(fn -> Ecto.Adapters.SQL.Sandbox.stop_owner(pid) end)
+  setup context do
+    # Don't check out a connection if a setup_all did so already
+    if context[:sandbox_owner_pid] == nil do
+      pid = Ecto.Adapters.SQL.Sandbox.start_owner!(Claper.Repo, shared: not context[:async])
+      on_exit(fn -> Ecto.Adapters.SQL.Sandbox.stop_owner(pid) end)
+    end
+
     :ok
   end
 

@@ -21,7 +21,7 @@ defmodule Claper.Accounts.Guardian do
     """
     def sign_in(conn, user) do
       # For tests, we'll just put the user in the conn assigns
-      Plug.Conn.assign(conn, :current_user, user)
+      Elixir.Plug.Conn.assign(conn, :current_user, user)
     end
   end
 end
