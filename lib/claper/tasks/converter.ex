@@ -4,6 +4,7 @@ defmodule Claper.Tasks.Converter do
   We use a hash to identify the presentation. A new hash is generated when the conversion is finished and the presentation is being uploaded.
   """
 
+  alias Claper.Events
   alias ExAws.S3
   alias Porcelain.Result
 
@@ -19,11 +20,7 @@ defmodule Claper.Tasks.Converter do
         "status" => "progress"
       })
 
-    Phoenix.PubSub.broadcast(
-      Claper.PubSub,
-      "events:#{user_id}",
-      {:presentation_file_process_done, presentation}
-    )
+    Events.broadcast_user_events(user_id, {:presentation_file_process_done, presentation})
 
     path =
       Path.join([
@@ -167,11 +164,7 @@ defmodule Claper.Tasks.Converter do
            }) do
       if get_presentation_storage() != "local", do: File.rm_rf!(path)
 
-      Phoenix.PubSub.broadcast(
-        Claper.PubSub,
-        "events:#{user_id}",
-        {:presentation_file_process_done, presentation}
-      )
+      Events.broadcast_user_events(user_id, {:presentation_file_process_done, presentation})
     end
   end
 
@@ -182,11 +175,7 @@ defmodule Claper.Tasks.Converter do
            }) do
       File.rm_rf!(path)
 
-      Phoenix.PubSub.broadcast(
-        Claper.PubSub,
-        "events:#{user_id}",
-        {:presentation_file_process_done, presentation}
-      )
+      Events.broadcast_user_events(user_id, {:presentation_file_process_done, presentation})
     end
   end
 

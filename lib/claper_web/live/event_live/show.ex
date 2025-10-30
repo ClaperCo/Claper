@@ -187,7 +187,7 @@ defmodule ClaperWeb.EventLive.Show do
   end
 
   @impl true
-  def handle_info({:event_terminated, _event}, socket) do
+  def handle_info({:event_terminated, _event_uuid}, socket) do
     {:noreply,
      socket
      |> put_flash(:error, gettext("This event has been terminated"))

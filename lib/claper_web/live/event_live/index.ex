@@ -22,7 +22,7 @@ defmodule ClaperWeb.EventLive.Index do
       })
 
     if connected?(socket) do
-      Phoenix.PubSub.subscribe(Claper.PubSub, "events:#{socket.assigns.current_user.id}")
+      Events.subscribe_user_events(socket.assigns.current_user.id)
     end
 
     expired_events_count = Events.count_expired_events(socket.assigns.current_user.id)
@@ -55,6 +55,12 @@ defmodule ClaperWeb.EventLive.Index do
 
     {:noreply,
      socket |> assign(:events, [event | socket.assigns.events]) |> put_flash(:info, nil)}
+  end
+
+  @impl true
+  def handle_info({type, %Events.Event{}}, socket)
+      when type in [:created, :updated, :deleted] do
+    {:noreply, refresh_events(socket)}
   end
 
   @impl true
@@ -244,5 +250,17 @@ defmodule ClaperWeb.EventLive.Index do
       :events,
       if(socket.assigns.page == 1, do: events, else: socket.assigns.events ++ events)
     )
+  end
+
+  defp refresh_events(socket) do
+    expired_events_count = Events.count_expired_events(socket.assigns.current_user.id)
+    invited_events_count = Events.count_managed_events_by(socket.assigns.current_user.email)
+
+    socket
+    |> assign(:has_expired_events, expired_events_count > 0)
+    |> assign(:has_invited_events, invited_events_count > 0)
+    |> assign(:events, [])
+    |> assign(:page, 1)
+    |> load_events()
   end
 end

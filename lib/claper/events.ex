@@ -6,11 +6,9 @@ defmodule Claper.Events do
   """
 
   import Ecto.Query, warn: false
-  alias Claper.Repo
 
-  alias Claper.Accounts.User
+  alias Claper.{Accounts, Presentations, Repo}
   alias Claper.Events.{Event, ActivityLeader}
-  alias Claper.Presentations
 
   @default_page_size 5
 
@@ -142,7 +140,7 @@ defmodule Claper.Events do
   """
   def list_managed_events_by(email, preload \\ []) do
     from(a in ActivityLeader,
-      join: u in Claper.Accounts.User,
+      join: u in Accounts.User,
       on: u.email == a.email,
       join: e in Event,
       on: e.id == a.event_id,
@@ -169,7 +167,7 @@ defmodule Claper.Events do
 
     query =
       from(a in ActivityLeader,
-        join: u in Claper.Accounts.User,
+        join: u in Accounts.User,
         on: u.email == a.email,
         join: e in Event,
         on: e.id == a.event_id,
@@ -183,7 +181,7 @@ defmodule Claper.Events do
 
   def count_managed_events_by(email) do
     from(a in ActivityLeader,
-      join: u in Claper.Accounts.User,
+      join: u in Accounts.User,
       on: u.email == a.email,
       join: e in Event,
       on: e.id == a.event_id,
@@ -264,7 +262,7 @@ defmodule Claper.Events do
       a in ActivityLeader,
       join: e in Event,
       on: e.id == a.event_id,
-      join: u in User,
+      join: u in Accounts.User,
       on: e.user_id == u.id,
       where: e.uuid == ^uuid and (u.id == ^user.id or a.email == ^user.email),
       select: e
@@ -331,7 +329,7 @@ defmodule Claper.Events do
   """
   def led_by?(email, event) do
     from(a in ActivityLeader,
-      join: u in Claper.Accounts.User,
+      join: u in Accounts.User,
       on: u.email == a.email,
       join: e in Event,
       on: e.id == a.event_id,
@@ -358,7 +356,10 @@ defmodule Claper.Events do
     |> validate_unique_event()
     |> case do
       {:ok, event} ->
-        Repo.insert(event, returning: [:uuid])
+        with {:ok, event} <- Repo.insert(event, returning: [:uuid]) do
+          broadcast_all_users({:created, event})
+          {:ok, event}
+        end
 
       {:error, changeset} ->
         {:error, %{changeset | action: :insert}}
@@ -406,7 +407,25 @@ defmodule Claper.Events do
     |> validate_unique_event()
     |> case do
       {:ok, event} ->
-        Repo.update(event, returning: [:uuid])
+        with {:ok, event} <- Repo.update(event, returning: [:uuid]) do
+          broadcast_all_users({:updated, event})
+
+          deleted_leaders =
+            attrs
+            |> Map.get("leaders", %{})
+            |> Map.values()
+            |> Enum.filter(fn
+              %{"delete" => "true"} -> true
+              _ -> false
+            end)
+
+          for %{"email" => leader_email} <- deleted_leaders do
+            leader = Accounts.get_user_by_email(leader_email)
+            broadcast_user_events(leader.id, {:updated, event})
+          end
+
+          {:ok, event}
+        end
 
       {:error, changeset} ->
         {:error, %{changeset | action: :update}}
@@ -428,7 +447,9 @@ defmodule Claper.Events do
     |> Repo.update()
     |> case do
       {:ok, event} ->
-        broadcast({:ok, event, event.uuid}, :event_terminated)
+        broadcast_all_users({:updated, event})
+        broadcast_event(event.uuid, {:event_terminated, event.uuid})
+        {:ok, event}
 
       {:error, changeset} ->
         {:error, %{changeset | action: :update}}
@@ -594,7 +615,7 @@ defmodule Claper.Events do
           |> Map.drop([:id, :inserted_at, :updated_at, :presentation_state])
           |> Map.put(:event_id, changes.event.id)
 
-        Claper.Presentations.create_presentation_file(attrs)
+        Presentations.create_presentation_file(attrs)
 
       _ ->
         {:ok, nil}
@@ -611,7 +632,7 @@ defmodule Claper.Events do
           |> Map.put(:position, 0)
           |> Map.put(:banned, [])
 
-        Claper.Presentations.create_presentation_state(attrs)
+        Presentations.create_presentation_state(attrs)
 
       _ ->
         {:ok, nil}
@@ -742,7 +763,20 @@ defmodule Claper.Events do
 
   """
   def delete_event(%Event{} = event) do
-    Repo.delete(event)
+    leaders =
+      for %{email: email} <- get_activity_leaders_for_event(event.id) do
+        Accounts.get_user_by_email(email)
+      end
+
+    with {:ok, event} <- Repo.delete(event) do
+      broadcast_user_events(event.user_id, {:deleted, event})
+
+      for leader <- leaders do
+        broadcast_user_events(leader.id, {:deleted, event})
+      end
+
+      {:ok, event}
+    end
   end
 
   @doc """
@@ -757,8 +791,6 @@ defmodule Claper.Events do
   def change_event(%Event{} = event, attrs \\ %{}) do
     Event.changeset(event, attrs)
   end
-
-  alias Claper.Events.ActivityLeader
 
   @doc """
   Creates a activity leader.
@@ -805,7 +837,7 @@ defmodule Claper.Events do
   """
   def get_activity_leaders_for_event(event_id) do
     from(a in ActivityLeader,
-      left_join: u in Claper.Accounts.User,
+      left_join: u in Accounts.User,
       on: u.email == a.email,
       where: a.event_id == ^event_id,
       select: %{a | user_id: u.id}
@@ -826,13 +858,47 @@ defmodule Claper.Events do
     ActivityLeader.changeset(activity_leader, attrs)
   end
 
-  defp broadcast({:ok, e, event_uuid}, event) do
-    Phoenix.PubSub.broadcast(
-      Claper.PubSub,
-      "event:#{event_uuid}",
-      {event, event_uuid}
-    )
+  @doc """
+  Subscribes to an event's public `Phoenix.PubSub` topic.
 
-    {:ok, e}
+  The broadcasted messages match the pattern:
+
+    * {:terminated, event_uuid}
+
+  """
+  def subscribe_event(event_uuid) when is_binary(event_uuid) do
+    Phoenix.PubSub.subscribe(Claper.PubSub, "event:#{event_uuid}")
+  end
+
+  defp broadcast_event(event_uuid, message) when is_binary(event_uuid) do
+    Phoenix.PubSub.broadcast(Claper.PubSub, "event:#{event_uuid}", message)
+  end
+
+  @doc """
+  Subscribes to a user's events private `Phoenix.PubSub` topic.
+
+  The broadcasted messages match the pattern:
+
+    * {:created, %Event{}}
+    * {:updated, %Event{}}
+    * {:deleted, %Event{}}
+
+  """
+  def subscribe_user_events(user_id) when is_integer(user_id) do
+    Phoenix.PubSub.subscribe(Claper.PubSub, "user:#{user_id}:events")
+  end
+
+  def broadcast_user_events(user_id, message) when is_integer(user_id) do
+    Phoenix.PubSub.broadcast(Claper.PubSub, "user:#{user_id}:events", message)
+  end
+
+  defp broadcast_all_users({_type, %Event{} = event} = message, _opts \\ []) do
+    event = Repo.preload(event, [:leaders])
+    broadcast_user_events(event.user_id, message)
+
+    for %{email: leader_email} <- event.leaders do
+      leader = Accounts.get_user_by_email(leader_email)
+      broadcast_user_events(leader.id, message)
+    end
   end
 end

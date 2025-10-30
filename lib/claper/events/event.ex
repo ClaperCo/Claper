@@ -91,8 +91,8 @@ defmodule Claper.Events.Event do
     change(event, expired_at: expiry)
   end
 
-  def subscribe(event_id) do
-    Phoenix.PubSub.subscribe(Claper.PubSub, "event:#{event_id}")
+  def subscribe(event_uuid) do
+    Phoenix.PubSub.subscribe(Claper.PubSub, "event:#{event_uuid}")
   end
 
   def started?(event) do
