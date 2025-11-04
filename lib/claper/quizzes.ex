@@ -312,15 +312,11 @@ defmodule Claper.Quizzes do
            )
            |> Ecto.Multi.insert(
              "insert_quiz_response_#{unique_key}",
-             fn _changes ->
-               user
-               |> Ecto.build_assoc(:quiz_responses)
-               |> QuizResponse.changeset(%{
-                 quiz_question_opt_id: opt.id,
-                 quiz_question_id: opt.quiz_question_id,
-                 quiz_id: quiz_id
-               })
-             end
+             Ecto.build_assoc(user, :quiz_responses, %{
+               quiz_question_opt_id: opt.id,
+               quiz_question_id: opt.quiz_question_id,
+               quiz_id: quiz_id
+             })
            )
          end)
          |> Repo.transact() do
