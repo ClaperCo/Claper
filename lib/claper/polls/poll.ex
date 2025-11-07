@@ -27,7 +27,11 @@ defmodule Claper.Polls.Poll do
     field :show_results, :boolean
 
     belongs_to :presentation_file, Claper.Presentations.PresentationFile
-    has_many :poll_opts, Claper.Polls.PollOpt, on_replace: :delete
+
+    has_many :poll_opts, Claper.Polls.PollOpt,
+      preload_order: [asc: :id],
+      on_replace: :delete
+
     has_many :poll_votes, Claper.Polls.PollVote, on_replace: :delete
 
     timestamps()
