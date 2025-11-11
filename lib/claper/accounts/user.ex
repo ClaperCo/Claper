@@ -33,6 +33,7 @@ defmodule Claper.Accounts.User do
     has_many :events, Claper.Events.Event
     has_one :lti_user, Lti13.Users.User
     belongs_to :role, Claper.Accounts.Role
+    has_many :quiz_responses, Claper.Quizzes.QuizResponse
 
     timestamps()
   end

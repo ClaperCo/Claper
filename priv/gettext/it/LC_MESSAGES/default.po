@@ -272,12 +272,6 @@ msgstr "Aggiorna le istruzioni via email"
 msgid "CONFIRM EMAIL"
 msgstr "CONFERMA EMAIL"
 
-#: lib/claper_web/templates/user_notifier/change.html.heex:17
-#, elixir-autogen, elixir-format
-msgid "Confirm email"
-msgstr "Conferma email"
-
-#: lib/claper_web/templates/user_notifier/change.html.heex:32
 #: lib/claper_web/templates/user_notifier/confirm.html.heex:32
 #: lib/claper_web/templates/user_notifier/magic.html.heex:32
 #: lib/claper_web/templates/user_notifier/reset.html.heex:32
@@ -470,11 +464,6 @@ msgstr "Gli aiutanti possono presentare e gestire le interazioni"
 #, elixir-autogen, elixir-format
 msgid "If you’re having trouble with the button above, copy and paste the URL below into your web browser"
 msgstr "Se riscontri problemi con il pulsante sopra, copia e incolla l'URL sottostante nel tuo browser web"
-
-#: lib/claper_web/templates/user_notifier/change.html.heex:22
-#, elixir-autogen, elixir-format
-msgid "You can change your email by visiting the URL below"
-msgstr "Puoi modificare la tua email visitando l'URL sottostante"
 
 #: lib/claper_web/live/event_live/manage.html.heex:758
 #: lib/claper_web/live/event_live/manage.html.heex:1129
@@ -788,12 +777,12 @@ msgstr "Risposte multiple"
 msgid "PDF, PPT, PPTX up to %{size} MB"
 msgstr "PDF, PPT, PPTX fino a %{size} MB"
 
-#: lib/claper_web/live/event_live/manager_settings_component.ex:426
+#: lib/claper_web/live/event_live/manager_settings_component.ex:482
 #, elixir-autogen, elixir-format
 msgid "Enable messages"
 msgstr "Abilita messaggi"
 
-#: lib/claper_web/live/event_live/manager_settings_component.ex:304
+#: lib/claper_web/live/event_live/manager_settings_component.ex:305
 #, elixir-autogen, elixir-format
 msgid "Show messages"
 msgstr "Mostra messaggi"
@@ -947,7 +936,7 @@ msgstr "Messaggi appuntati"
 msgid "Pinned messages will appear here."
 msgstr "I messaggi appuntati verranno visualizzati qui."
 
-#: lib/claper_web/live/event_live/manager_settings_component.ex:359
+#: lib/claper_web/live/event_live/manager_settings_component.ex:360
 #, elixir-autogen, elixir-format
 msgid "Show only pinned messages"
 msgstr "Mostra solo i messaggi appuntati"
@@ -1226,7 +1215,7 @@ msgstr "Quando inizierà il tuo evento?"
 msgid "Create your next presentation with"
 msgstr "Crea la tua prossima presentazione con"
 
-#: lib/claper_web/live/event_live/manage.ex:27
+#: lib/claper_web/live/event_live/manage.ex:26
 #: lib/claper_web/live/event_live/presenter.ex:24
 #: lib/claper_web/live/event_live/show.ex:25
 #, elixir-autogen, elixir-format
@@ -1300,7 +1289,7 @@ msgstr "La mia utenza"
 msgid "Your personal informations to access your account"
 msgstr "I tuoi dati personali per accedere alla tua utenza"
 
-#: lib/claper_web/live/event_live/manager_settings_component.ex:533
+#: lib/claper_web/live/event_live/manager_settings_component.ex:589
 #, elixir-autogen, elixir-format
 msgid "Enable reactions"
 msgstr "Abilita reazioni"
@@ -1376,7 +1365,7 @@ msgstr "Disabilita"
 msgid "Enable"
 msgstr "Abilita"
 
-#: lib/claper_web/live/event_live/manager_settings_component.ex:443
+#: lib/claper_web/live/event_live/manager_settings_component.ex:499
 #, elixir-autogen, elixir-format
 msgid "Enable messages to change this option"
 msgstr "Abilita i messaggi per modificare questa opzione"
@@ -1387,7 +1376,7 @@ msgstr "Abilita i messaggi per modificare questa opzione"
 msgid "Open preview"
 msgstr "Apri anteprima"
 
-#: lib/claper_web/live/event_live/manager_settings_component.ex:321
+#: lib/claper_web/live/event_live/manager_settings_component.ex:322
 #, elixir-autogen, elixir-format
 msgid "Show messages to change this option"
 msgstr "Mostra messaggi per modificare questa opzione"
@@ -1646,7 +1635,7 @@ msgstr "Aggiungi un quiz per testare le conoscenze."
 msgid "Add answer"
 msgstr "Aggiungi risposta"
 
-#: lib/claper_web/live/event_live/manager_settings_component.ex:482
+#: lib/claper_web/live/event_live/manager_settings_component.ex:538
 #, elixir-autogen, elixir-format
 msgid "Allow anonymous messages"
 msgstr "Consenti messaggi anonimi"
@@ -1656,7 +1645,7 @@ msgstr "Consenti messaggi anonimi"
 msgid "Answer %{index}"
 msgstr "Risposta %{index}"
 
-#: lib/claper_web/live/event_live/manager_settings_component.ex:390
+#: lib/claper_web/live/event_live/manager_settings_component.ex:446
 #, elixir-autogen, elixir-format, fuzzy
 msgid "Attendees"
 msgstr "Partecipanti"
@@ -1672,17 +1661,17 @@ msgstr "Punteggio medio"
 msgid "Current quiz"
 msgstr "Quiz attuale"
 
-#: lib/claper_web/live/event_live/manager_settings_component.ex:485
+#: lib/claper_web/live/event_live/manager_settings_component.ex:541
 #, elixir-autogen, elixir-format
 msgid "Deny anonymous messages"
 msgstr "Rifiuta messaggi anonimi"
 
-#: lib/claper_web/live/event_live/manager_settings_component.ex:427
+#: lib/claper_web/live/event_live/manager_settings_component.ex:483
 #, elixir-autogen, elixir-format
 msgid "Disable messages"
 msgstr "Disabilita messaggi"
 
-#: lib/claper_web/live/event_live/manager_settings_component.ex:536
+#: lib/claper_web/live/event_live/manager_settings_component.ex:592
 #, elixir-autogen, elixir-format
 msgid "Disable reactions"
 msgstr "Disabilita reazioni"
@@ -1692,12 +1681,12 @@ msgstr "Disabilita reazioni"
 msgid "Edit quiz"
 msgstr "Modifica quiz"
 
-#: lib/claper_web/live/event_live/manager_settings_component.ex:258
+#: lib/claper_web/live/event_live/manager_settings_component.ex:259
 #, elixir-autogen, elixir-format
 msgid "Hide instructions to join"
 msgstr "Nascondi istruzioni per partecipare"
 
-#: lib/claper_web/live/event_live/manager_settings_component.ex:305
+#: lib/claper_web/live/event_live/manager_settings_component.ex:306
 #, elixir-autogen, elixir-format
 msgid "Hide messages"
 msgstr "Nascondi messaggi"
@@ -1725,7 +1714,7 @@ msgstr "Interazione"
 msgid "New quiz"
 msgstr "Nuovo quiz"
 
-#: lib/claper_web/live/event_live/manager_settings_component.ex:217
+#: lib/claper_web/live/event_live/manager_settings_component.ex:218
 #, elixir-autogen, elixir-format, fuzzy
 msgid "Presentation"
 msgstr "Presentazione"
@@ -1761,12 +1750,12 @@ msgstr "Vedi quiz attuale"
 msgid "Select presentation"
 msgstr "Seleziona presentazione"
 
-#: lib/claper_web/live/event_live/manager_settings_component.ex:361
+#: lib/claper_web/live/event_live/manager_settings_component.ex:362
 #, elixir-autogen, elixir-format
 msgid "Show all messages"
 msgstr "Mostra tutti i messaggi"
 
-#: lib/claper_web/live/event_live/manager_settings_component.ex:255
+#: lib/claper_web/live/event_live/manager_settings_component.ex:256
 #, elixir-autogen, elixir-format
 msgid "Show instructions to join"
 msgstr "Mostra istruzioni per partecipare"
@@ -2658,3 +2647,25 @@ msgstr "Admin"
 #, elixir-autogen, elixir-format
 msgid "Back to app"
 msgstr "Torna all'app"
+
+#: lib/claper_web/templates/user_notifier/change.html.heex:17
+msgid "Confirm email change"
+msgstr "Conferma la modifica dell'email"
+
+#: lib/claper_web/templates/user_notifier/change.html.heex:32
+msgid "If you didn't request an email change, please ignore this."
+msgstr "Se non hai richiesto una modifica dell'indirizzo email, ignora questo messaggio."
+
+#: lib/claper_web/templates/user_notifier/change.html.heex:22
+msgid "You can confirm your email change by visiting the URL below"
+msgstr "Puoi confermare la modifica dell'indirizzo email visitando l'URL sottostante"
+
+#: lib/claper_web/live/event_live/manager_settings_component.ex:416
+#, elixir-autogen, elixir-format
+msgid "Hide attendee count"
+msgstr "Nascondi numero dei partecipanti"
+
+#: lib/claper_web/live/event_live/manager_settings_component.ex:413
+#, elixir-autogen, elixir-format, fuzzy
+msgid "Show attendee count"
+msgstr "Mostra numero dei partecipanti"

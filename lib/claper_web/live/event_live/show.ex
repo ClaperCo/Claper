@@ -693,7 +693,7 @@ defmodule ClaperWeb.EventLive.Show do
       )
       when is_map(current_user) do
     case Claper.Quizzes.submit_quiz(
-           current_user.id,
+           current_user,
            opts,
            socket.assigns.current_interaction.id
          ) do

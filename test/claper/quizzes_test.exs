@@ -113,14 +113,14 @@ defmodule Claper.QuizzesTest do
       assert length(new_question.quiz_question_opts) == 2
     end
 
-    test "submit_quiz/3 with user_id records responses and updates counts" do
+    test "submit_quiz/3 with user records responses and updates counts" do
       quiz = quiz_fixture()
       user = user_fixture()
       question = List.first(quiz.quiz_questions)
       option = List.first(question.quiz_question_opts)
 
       assert {:ok, updated_quiz} =
-               Quizzes.submit_quiz(user.id, [option], quiz.id)
+               Quizzes.submit_quiz(user, [option], quiz.id)
 
       updated_option =
         updated_quiz.quiz_questions
@@ -151,7 +151,7 @@ defmodule Claper.QuizzesTest do
       correct_option = Enum.find(question.quiz_question_opts, & &1.is_correct)
 
       # Submit correct answer
-      {:ok, _} = Quizzes.submit_quiz(user.id, [correct_option], quiz.id)
+      {:ok, _} = Quizzes.submit_quiz(user, [correct_option], quiz.id)
       assert {1, 1} = Quizzes.calculate_user_score(user.id, quiz.id)
     end
 

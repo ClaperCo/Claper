@@ -5,7 +5,6 @@ defmodule ClaperWeb.EventLive.Manage do
   alias Claper.Polls
   alias Claper.Forms
   alias Claper.Embeds
-  # Add this line
   alias Claper.Quizzes
 
   @impl true
@@ -580,6 +579,23 @@ defmodule ClaperWeb.EventLive.Manage do
         state,
         %{
           :show_only_pinned => value
+        }
+      )
+
+    {:noreply, socket |> assign(:state, new_state)}
+  end
+
+  @impl true
+  def handle_event(
+        "checked",
+        %{"key" => "show_attendee_count", "value" => value},
+        %{assigns: %{event: _event, state: state}} = socket
+      ) do
+    {:ok, new_state} =
+      Claper.Presentations.update_presentation_state(
+        state,
+        %{
+          :show_attendee_count => value
         }
       )
 

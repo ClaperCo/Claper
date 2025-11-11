@@ -259,11 +259,19 @@
                       {"English", "en"},
                       {"Español", "es"},
                       {"Français", "fr"},
+                      {"Hungarian", "hu"},
                       {"Italiano", "it"},
+                      {"Latvian", "lv"},
                       {"Nederlands", "nl"}
                     ]
                     |> Enum.filter(fn {_name, code} ->
-                      code in Application.get_env(:claper, :languages, ["en", "fr", "es"])
+                      code in Application.get_env(:claper, :languages, [
+                        "en",
+                        "fr",
+                        "es",
+                        "it",
+                        "de"
+                      ])
                     end)
                   }
                   key={:locale}

@@ -24,15 +24,15 @@ defmodule ClaperWeb.Notifiers.UserNotifier do
     |> render_body("welcome.html", %{email: email})
   end
 
-  def update_email(user, url) do
+  def update_email(new_email, url) do
     new()
-    |> to(user.email)
+    |> to(new_email)
     |> from(
       {Application.get_env(:claper, :mail) |> Keyword.get(:from_name),
        Application.get_env(:claper, :mail) |> Keyword.get(:from)}
     )
     |> subject(gettext("Update email instructions"))
-    |> render_body("change.html", %{user: user, url: url})
+    |> render_body("change.html", %{url: url})
   end
 
   def confirm(user, url) do

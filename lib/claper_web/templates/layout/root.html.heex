@@ -11,7 +11,7 @@
     <link phx-track-static rel="stylesheet" href="/assets/custom.css" />
     <script>
       window.claperConfig = {
-        supportedLocales: <%= Jason.encode!(Application.get_env(:claper, :languages, ["en", "fr", "es"])) %>
+        supportedLocales: <%= Jason.encode!(Application.get_env(:claper, :languages, ["en", "fr", "es", "it", "de"])) %>
       };
     </script>
     <script defer phx-track-static type="text/javascript" src="/assets/app.js">

@@ -52,7 +52,7 @@ defmodule Claper.Accounts.UserNotifier do
   Deliver instructions to update a user email.
   """
   def deliver_update_email_instructions(user, url) do
-    Claper.Workers.Mailers.new_update_email(user.id, url) |> Oban.insert()
+    Claper.Workers.Mailers.new_update_email(user.email, url) |> Oban.insert()
 
     {:ok, :enqueued}
   end

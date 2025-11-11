@@ -34,7 +34,7 @@ Claper has a two-sided mission:
 - The first one is to help these people presenting an idea or a message by giving them the opportunity to make their presentation unique and to have real-time feedback from their audience.
 - The second one is to help each participant to take their place, to be an actor in the presentation, in the meeting and to feel important and useful.
 
-Supported languages: 🇬🇧 English, 🇫🇷 French, 🇩🇪 German, 🇪🇸 Spanish, 🇳🇱 Dutch, 🇮🇹 Italian
+Supported languages: 🇬🇧 English, 🇫🇷 French, 🇩🇪 German, 🇪🇸 Spanish, 🇳🇱 Dutch, 🇮🇹 Italian, 🇭🇺 Hungarian, 🇱🇻 Latvian
 
 ### Built With
 
@@ -101,6 +101,3 @@ Distributed under the GPLv3 License. See `LICENSE.txt` for more information.
 [Tailwind-url]: https://tailwindcss.com/
 [Phoenix]: https://img.shields.io/badge/phoenix-f35424?style=for-the-badge&logo=&logoColor=white
 [Phoenix-url]: https://www.phoenixframework.org/
-[lmddc-logo]: /priv/static/images/partners/lmddc.png
-[pixilearn-logo]: /priv/static/images/partners/pixilearn.png
-[uccs-logo]: /priv/static/images/partners/uccs.png

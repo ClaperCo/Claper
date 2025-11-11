@@ -6,16 +6,22 @@ defmodule Claper.Workers.Mailers do
 
   @impl Oban.Worker
   def perform(%Oban.Job{args: %{"type" => type, "user_id" => user_id, "url" => url}})
-      when type in ["confirm", "reset", "update_email"] do
+      when type in ["confirm", "reset"] do
     user = Claper.Accounts.get_user!(user_id)
 
     email =
       case type do
         "confirm" -> UserNotifier.confirm(user, url)
         "reset" -> UserNotifier.reset(user, url)
-        "update_email" -> UserNotifier.update_email(user, url)
       end
 
+    Mailer.deliver(email)
+  end
+
+  def perform(%Oban.Job{
+        args: %{"type" => "update_email", "new_email" => new_email, "url" => url}
+      }) do
+    email = UserNotifier.update_email(new_email, url)
     Mailer.deliver(email)
   end
 
@@ -50,8 +56,8 @@ defmodule Claper.Workers.Mailers do
     new(%{type: "reset", user_id: user_id, url: url})
   end
 
-  def new_update_email(user_id, url) do
-    new(%{type: "update_email", user_id: user_id, url: url})
+  def new_update_email(new_email, url) do
+    new(%{type: "update_email", new_email: new_email, url: url})
   end
 
   def new_magic_link(email, url) do
