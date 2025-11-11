@@ -80,7 +80,8 @@ defmodule Claper.EmbedsTest do
 
       attrs = %{
         title: "some title",
-        content: "https://vimeo.com/123456",  # Wrong provider URL for youtube
+        # Wrong provider URL for youtube
+        content: "https://vimeo.com/123456",
         provider: "youtube",
         presentation_file_id: presentation_file.id,
         position: 0,

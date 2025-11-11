@@ -83,15 +83,18 @@ defmodule ClaperWeb.Helpers.CSVExporter do
     headers = ["Email", "Name", "Role", "Created At"]
 
     # Transform users to include role name
-    users_with_role = Enum.map(users, fn user ->
-      role_name = if user.role, do: user.role.name, else: ""
-      %{
-        email: user.email,
-        name: "",  # Users don't have a name field currently
-        role: role_name,
-        inserted_at: user.inserted_at
-      }
-    end)
+    users_with_role =
+      Enum.map(users, fn user ->
+        role_name = if user.role, do: user.role.name, else: ""
+
+        %{
+          email: user.email,
+          # Users don't have a name field currently
+          name: "",
+          role: role_name,
+          inserted_at: user.inserted_at
+        }
+      end)
 
     fields = [:email, :name, :role, :inserted_at]
 
@@ -117,21 +120,31 @@ defmodule ClaperWeb.Helpers.CSVExporter do
     ]
 
     # Transform events to include description and status
-    events_transformed = Enum.map(events, fn event ->
-      status = cond do
-        event.expired_at && NaiveDateTime.compare(event.expired_at, NaiveDateTime.utc_now()) == :lt -> "completed"
-        event.started_at && NaiveDateTime.compare(event.started_at, NaiveDateTime.utc_now()) == :gt -> "scheduled"
-        true -> "active"
-      end
+    events_transformed =
+      Enum.map(events, fn event ->
+        status =
+          cond do
+            event.expired_at &&
+                NaiveDateTime.compare(event.expired_at, NaiveDateTime.utc_now()) == :lt ->
+              "completed"
 
-      %{
-        name: event.name,
-        description: "",  # Events don't have a description field currently
-        start_date: event.started_at,
-        end_date: event.expired_at,
-        status: status
-      }
-    end)
+            event.started_at &&
+                NaiveDateTime.compare(event.started_at, NaiveDateTime.utc_now()) == :gt ->
+              "scheduled"
+
+            true ->
+              "active"
+          end
+
+        %{
+          name: event.name,
+          # Events don't have a description field currently
+          description: "",
+          start_date: event.started_at,
+          end_date: event.expired_at,
+          status: status
+        }
+      end)
 
     fields = [:name, :description, :start_date, :end_date, :status]
 
