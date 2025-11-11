@@ -21,7 +21,8 @@ defmodule Claper.Release do
     for repo <- repos() do
       {:ok, _, _} =
         Ecto.Migrator.with_repo(repo, fn _repo ->
-          Code.eval_file("priv/repo/seeds.exs")
+          seed_script = Application.app_dir(@app, "priv/repo/seeds.exs")
+          Code.eval_file(seed_script)
         end)
     end
   end
