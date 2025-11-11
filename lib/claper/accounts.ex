@@ -895,12 +895,13 @@ defmodule Claper.Accounts do
 
           user_role ->
             # Determine if we should use atom or string key based on existing keys
-            key = if is_map(attrs) and map_size(attrs) > 0 and
-                     Enum.all?(Map.keys(attrs), &is_binary/1) do
-              "role_id"
-            else
-              :role_id
-            end
+            key =
+              if is_map(attrs) and map_size(attrs) > 0 and
+                   Enum.all?(Map.keys(attrs), &is_binary/1) do
+                "role_id"
+              else
+                :role_id
+              end
 
             Map.put(attrs, key, user_role.id)
         end
