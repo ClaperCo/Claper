@@ -754,16 +754,25 @@ defmodule Claper.Accounts do
   end
 
   @doc """
-  Assigns a role to a user.
+  Assigns a role to a user by role name or role struct.
 
   ## Examples
 
       iex> assign_role(user, "admin")
       {:ok, %User{}}
 
+      iex> assign_role(user, %Role{id: 1})
+      {:ok, %User{}}
+
       iex> assign_role(user, "unknown")
       {:error, :role_not_found}
   """
+  def assign_role(%User{} = user, %Role{} = role) do
+    user
+    |> Ecto.Changeset.change(%{role_id: role.id})
+    |> Repo.update()
+  end
+
   def assign_role(%User{} = user, role_name) when is_binary(role_name) do
     case get_role_by_name(role_name) do
       nil ->

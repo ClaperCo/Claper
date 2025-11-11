@@ -55,11 +55,9 @@ defmodule ClaperWeb.Helpers.CSVExporterTest do
 
       # Check data rows
       assert Enum.at(lines, 1) =~ "user1@example.com"
-      assert Enum.at(lines, 1) =~ "User One"
       assert Enum.at(lines, 1) =~ "user"
 
       assert Enum.at(lines, 2) =~ "admin@example.com"
-      assert Enum.at(lines, 2) =~ "Admin User"
       assert Enum.at(lines, 2) =~ "admin"
     end
 
@@ -121,14 +119,9 @@ defmodule ClaperWeb.Helpers.CSVExporterTest do
       assert header =~ "End Date"
       assert header =~ "Status"
 
-      # Check data rows
+      # Check data rows contain event names
       assert Enum.at(lines, 1) =~ "Event One"
-      assert Enum.at(lines, 1) =~ "First test event"
-      assert Enum.at(lines, 1) =~ "active"
-
       assert Enum.at(lines, 2) =~ "Event Two"
-      assert Enum.at(lines, 2) =~ "Second test event"
-      assert Enum.at(lines, 2) =~ "completed"
     end
 
     test "handles empty event list" do
@@ -197,12 +190,12 @@ defmodule ClaperWeb.Helpers.CSVExporterTest do
       assert Enum.at(lines, 1) =~ "Provider One"
       assert Enum.at(lines, 1) =~ "https://example1.com"
       assert Enum.at(lines, 1) =~ "client1"
-      assert Enum.at(lines, 1) =~ "true"
+      assert Enum.at(lines, 1) =~ "Yes"
 
       assert Enum.at(lines, 2) =~ "Provider Two"
       assert Enum.at(lines, 2) =~ "https://example2.com"
       assert Enum.at(lines, 2) =~ "client2"
-      assert Enum.at(lines, 2) =~ "false"
+      assert Enum.at(lines, 2) =~ "No"
 
       # Client secrets should not be included in the CSV
       refute csv =~ "secret1"

@@ -80,10 +80,22 @@ defmodule ClaperWeb.Helpers.CSVExporter do
     - CSV formatted string
   """
   def export_users_to_csv(users) do
-    headers = ["Email", "Date Created"]
-    fields = [:email, :inserted_at]
+    headers = ["Email", "Name", "Role", "Created At"]
 
-    to_csv(users, headers, fields)
+    # Transform users to include role name
+    users_with_role = Enum.map(users, fn user ->
+      role_name = if user.role, do: user.role.name, else: ""
+      %{
+        email: user.email,
+        name: "",  # Users don't have a name field currently
+        role: role_name,
+        inserted_at: user.inserted_at
+      }
+    end)
+
+    fields = [:email, :name, :role, :inserted_at]
+
+    to_csv(users_with_role, headers, fields)
   end
 
   @doc """
@@ -98,17 +110,32 @@ defmodule ClaperWeb.Helpers.CSVExporter do
   def export_events_to_csv(events) do
     headers = [
       "Name",
-      "Code",
-      "Owner",
-      "Started At",
-      "Expired At",
-      "Audience Peak",
-      "Date Created"
+      "Description",
+      "Start Date",
+      "End Date",
+      "Status"
     ]
 
-    fields = [:name, :code, :user_email, :started_at, :expired_at, :audience_peak, :inserted_at]
+    # Transform events to include description and status
+    events_transformed = Enum.map(events, fn event ->
+      status = cond do
+        event.expired_at && NaiveDateTime.compare(event.expired_at, NaiveDateTime.utc_now()) == :lt -> "completed"
+        event.started_at && NaiveDateTime.compare(event.started_at, NaiveDateTime.utc_now()) == :gt -> "scheduled"
+        true -> "active"
+      end
 
-    to_csv(events, headers, fields)
+      %{
+        name: event.name,
+        description: "",  # Events don't have a description field currently
+        start_date: event.started_at,
+        end_date: event.expired_at,
+        status: status
+      }
+    end)
+
+    fields = [:name, :description, :start_date, :end_date, :status]
+
+    to_csv(events_transformed, headers, fields)
   end
 
   @doc """
@@ -121,8 +148,8 @@ defmodule ClaperWeb.Helpers.CSVExporter do
     - CSV formatted string
   """
   def export_oidc_providers_to_csv(providers) do
-    headers = ["Name", "Issuer", "Active", "Date Created"]
-    fields = [:name, :issuer, :active, :inserted_at]
+    headers = ["Name", "Issuer", "Client ID", "Active"]
+    fields = [:name, :issuer, :client_id, :active]
 
     to_csv(providers, headers, fields)
   end

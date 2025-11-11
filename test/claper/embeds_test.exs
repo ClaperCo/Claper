@@ -75,15 +75,16 @@ defmodule Claper.EmbedsTest do
                "https://youtu.be/dQw4w9WgXcQ?si=g1A6ZegIXzcrisSw"
     end
 
-    test "create_embed/1 with invalid data creates a youtube embed" do
+    test "create_embed/1 with invalid youtube URL returns error" do
       presentation_file = presentation_file_fixture()
 
       attrs = %{
         title: "some title",
-        content: "https://youtube.com/dQw4w9WgXcQ?si=g1A6ZegIXzcrisSw",
+        content: "https://vimeo.com/123456",  # Wrong provider URL for youtube
         provider: "youtube",
         presentation_file_id: presentation_file.id,
-        position: 0
+        position: 0,
+        attendee_visibility: false
       }
 
       assert {:error, %Ecto.Changeset{}} = Embeds.create_embed(attrs)

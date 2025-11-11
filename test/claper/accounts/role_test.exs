@@ -6,8 +6,6 @@ defmodule Claper.Accounts.RoleTest do
   alias Claper.Repo
 
   describe "roles" do
-    @valid_user_attrs %{email: "test@example.com", password: "Password123!"}
-
     setup do
       # Ensure admin and user roles exist
       {:ok, _admin_role} = Accounts.create_role(%{name: "admin"})
