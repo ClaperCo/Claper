@@ -39,9 +39,10 @@ defmodule Claper.Accounts.User do
 
   def registration_changeset(user, attrs, opts \\ []) do
     user
-    |> cast(attrs, [:email, :confirmed_at, :password, :is_randomized_password])
+    |> cast(attrs, [:email, :confirmed_at, :password, :is_randomized_password, :role_id])
     |> validate_email()
     |> validate_password(opts)
+    |> foreign_key_constraint(:role_id)
   end
 
   def preferences_changeset(user, attrs) do

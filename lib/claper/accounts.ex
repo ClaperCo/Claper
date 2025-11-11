@@ -20,6 +20,9 @@ defmodule Claper.Accounts do
       {:error, %Ecto.Changeset{}}
   """
   def create_user(attrs) do
+    # Get user role if not explicitly set
+    attrs = maybe_set_default_role(attrs)
+
     %User{}
     |> User.registration_changeset(attrs)
     |> Repo.insert(returning: [:uuid])
@@ -55,12 +58,17 @@ defmodule Claper.Accounts do
   def get_user_by_email_or_create(email) when is_binary(email) do
     case get_user_by_email(email) do
       nil ->
-        create_user(%{
+        attrs = %{
           email: email,
           confirmed_at: DateTime.utc_now(),
           is_randomized_password: true,
           password: :crypto.strong_rand_bytes(32)
-        })
+        }
+
+        # Set default role if not explicitly set
+        attrs = maybe_set_default_role(attrs)
+
+        create_user(attrs)
 
       user ->
         {:ok, user}
@@ -163,6 +171,9 @@ defmodule Claper.Accounts do
 
   """
   def register_user(attrs) do
+    # Get user role if not explicitly set
+    attrs = maybe_set_default_role(attrs)
+
     %User{}
     |> User.registration_changeset(attrs)
     |> Repo.insert(returning: [:uuid])
@@ -870,5 +881,25 @@ defmodule Claper.Accounts do
   """
   def demote_from_admin(%User{} = user) do
     assign_role(user, "user")
+  end
+
+  # Private helper to set default role if not already set
+  defp maybe_set_default_role(attrs) do
+    # Only set default role if role_id is not explicitly provided
+    case Map.get(attrs, :role_id) || Map.get(attrs, "role_id") do
+      nil ->
+        # Get the "user" role and set it as default
+        case get_role_by_name("user") do
+          nil ->
+            attrs
+
+          user_role ->
+            Map.put(attrs, :role_id, user_role.id)
+        end
+
+      _ ->
+        # Role already explicitly set, don't override
+        attrs
+    end
   end
 end
