@@ -230,7 +230,7 @@
                 {gettext("Users")}
               </.link>
             </li>
-            <li>
+            <%!-- <li>
               <.link
                 patch={~p"/admin/oidc_providers"}
                 class={"#{if @conn.path_info == ["admin", "oidc_providers"], do: "active", else: ""}"}
@@ -245,7 +245,7 @@
                 </svg>
                 {gettext("OIDC Providers")}
               </.link>
-            </li>
+            </li> --%>
 
             <div class="divider"></div>
 
