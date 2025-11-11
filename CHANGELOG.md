@@ -2,7 +2,12 @@
 
 ### Features
 
+- Add Admin Panel to manage users and presentations
+- Add user roles: user, admin
 - Add `LANGUAGES` setting to configure available languages in the app
+- Add Hungarian translation (#161)
+- Add Latvian translation (#163)
+- Add hideable presenter attendee count (#183 #155)
 
 ### Fixes and improvements
 
@@ -12,6 +17,10 @@
 - Refactor view templates to use {} instead of <%= %>
 - Fix event name validation to be required
 - Docker image is now using Ubuntu instead of Alpine for better dependencies support
+- Fix duplicate key quiz when duplicate (#182)
+- Fix email change confirmation (#172)
+- Fix scroll in settings pane (#168)
+- Fix italian translation (#179)
 
 ### v.2.3.2
 
