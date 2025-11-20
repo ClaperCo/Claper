@@ -505,12 +505,6 @@ defmodule Claper.EventsTest do
       user = user_fixture()
       event = event_fixture(%{user: user})
 
-      # TODO: this should work, IMO, but we currently need to explicitly add
-      # user_email, see below
-      #
-      # {:error, %Ecto.Changeset{}} =
-      #   Events.create_activity_leader(%{email: user.email, event_id: event.id})
-
       attrs = %{
         email: user.email,
         event_id: event.id,
