@@ -553,8 +553,12 @@ defmodule Claper.Events do
     multi =
       Ecto.Multi.new()
       |> Ecto.Multi.run(:event, fn _repo, changes -> duplicate_event_attrs(original, changes) end)
-      |> Ecto.Multi.run(:presentation_file, fn _repo, changes -> duplicate_presentation_file(original, changes) end)
-      |> Ecto.Multi.run(:presentation_state, fn _repo, changes -> duplicate_presentation_state(original, changes) end)
+      |> Ecto.Multi.run(:presentation_file, fn _repo, changes ->
+        duplicate_presentation_file(original, changes)
+      end)
+      |> Ecto.Multi.run(:presentation_state, fn _repo, changes ->
+        duplicate_presentation_state(original, changes)
+      end)
       |> Ecto.Multi.run(:polls, fn _repo, changes -> duplicate_polls(original, changes) end)
       |> Ecto.Multi.run(:forms, fn _repo, changes -> duplicate_forms(original, changes) end)
       |> Ecto.Multi.run(:embeds, fn _repo, changes -> duplicate_embeds(original, changes) end)
@@ -713,7 +717,10 @@ defmodule Claper.Events do
   defp map_quiz_question(question) do
     Map.from_struct(question)
     |> Map.drop([:id, :inserted_at, :updated_at])
-    |> Map.put(:quiz_question_opts, Enum.map(question.quiz_question_opts, &map_quiz_question_opt/1))
+    |> Map.put(
+      :quiz_question_opts,
+      Enum.map(question.quiz_question_opts, &map_quiz_question_opt/1)
+    )
   end
 
   defp map_quiz_question_opt(opt) do
