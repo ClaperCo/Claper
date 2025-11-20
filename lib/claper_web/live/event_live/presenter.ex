@@ -6,6 +6,8 @@ defmodule ClaperWeb.EventLive.Presenter do
   alias Claper.Polls.Poll
   alias Claper.Forms.Form
   alias Claper.Quizzes.Quiz
+  alias Claper.Presentations
+
   @impl true
   def mount(%{"code" => code} = params, session, socket) do
     with %{"locale" => locale} <- session do

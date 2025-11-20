@@ -669,30 +669,22 @@
         id="slides-layout"
         class="flex overflow-x-auto w-full md:h-full"
       >
-        <%= for index <- 0..max(0, @event.presentation_file.length-1) do %>
-          <button
-            id={"slide-preview-#{index}"}
-            phx-click="current-page"
-            phx-value-page={index}
-            class="h-full w-full contents"
-          >
-            <%= if Application.get_env(:claper, :presentations) |> Keyword.get(:storage) == "local" do %>
-              <img
-                class={"#{if @state.position==index, do: "border-4 border-primary-500" , else: "opacity-20" }
+        <button
+          :for={
+            {src, index} <-
+              Presentations.get_slide_urls(@event.presentation_file) |> Enum.with_index(0)
+          }
+          id={"slide-preview-#{index}"}
+          phx-click="current-page"
+          phx-value-page={index}
+          class="h-full w-full contents"
+        >
+          <img
+            src={src}
+            class={"#{if @state.position==index, do: "border-4 border-primary-500" , else: "opacity-20" }
                     transition-all object-contain"}
-                src={"/uploads/#{@event.presentation_file.hash}/#{index+1}.jpg"}
-              />
-            <% else %>
-              <img
-                class={"#{if @state.position==index, do: "border-4 border-primary-500" , else: "opacity-20" }
-                    transition-all object-contain"}
-                src={"https://#{Application.get_env(:claper, :presentations) |>
-                          Keyword.get(:aws_bucket)}.s3.#{Application.get_env(:ex_aws,
-                          :region)}.amazonaws.com/presentations/#{@event.presentation_file.hash}/#{index+1}.jpg"}
-              />
-            <% end %>
-          </button>
-        <% end %>
+          />
+        </button>
       </div>
       <div
         :if={@event.presentation_file.length > 0}

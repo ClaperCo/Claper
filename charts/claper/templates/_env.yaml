@@ -16,15 +16,15 @@
   value: claper.co
 - name: DATABASE_URL
   value: postgresql://claper:claper@10.0.0.6:6432/claper
-- name: AWS_ACCESS_KEY_ID
+- name: S3_ACCESS_KEY_ID
   value: XXX
-- name: AWS_PRES_BUCKET
+- name: S3_BUCKET
   value: XXX
 - name: POOL_SIZE
   value: "20"
-- name: AWS_REGION
+- name: S3_REGION
   value: eu-west-3
-- name: AWS_SECRET_ACCESS_KEY
+- name: S3_SECRET_ACCESS_KEY
   value: XXX
 - name: PRESENTATION_STORAGE
   value: s3

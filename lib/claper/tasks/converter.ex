@@ -5,7 +5,6 @@ defmodule Claper.Tasks.Converter do
   """
 
   alias Claper.Events
-  alias ExAws.S3
   alias Porcelain.Result
 
   @doc """
@@ -50,11 +49,11 @@ defmodule Claper.Tasks.Converter do
       )
     else
       stream =
-        ExAws.S3.list_objects(get_aws_bucket(), prefix: "presentations/#{hash}")
+        ExAws.S3.list_objects(get_s3_bucket(), prefix: "presentations/#{hash}")
         |> ExAws.stream!()
         |> Stream.map(& &1.key)
 
-      ExAws.S3.delete_all_objects(get_aws_bucket(), stream) |> ExAws.request()
+      ExAws.S3.delete_all_objects(get_s3_bucket(), stream) |> ExAws.request()
     end
   end
 
@@ -134,9 +133,9 @@ defmodule Claper.Tasks.Converter do
         IO.puts("Uploads #{f} to presentations/#{new_hash}/#{Path.basename(f)}")
 
         f
-        |> S3.Upload.stream_file()
-        |> S3.upload(
-          get_aws_bucket(),
+        |> ExAws.S3.Upload.stream_file()
+        |> ExAws.S3.upload(
+          get_s3_bucket(),
           "presentations/#{new_hash}/#{Path.basename(f)}",
           acl: "public-read"
         )
@@ -187,8 +186,8 @@ defmodule Claper.Tasks.Converter do
     Application.get_env(:claper, :storage_dir)
   end
 
-  defp get_aws_bucket do
-    Application.get_env(:claper, :presentations) |> Keyword.get(:aws_bucket)
+  defp get_s3_bucket do
+    Application.get_env(:claper, :presentations) |> Keyword.get(:s3_bucket)
   end
 
   defp get_resolution do

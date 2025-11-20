@@ -1,11 +1,8 @@
 defmodule ClaperWeb.EventLive.Manage do
   use ClaperWeb, :live_view
 
+  alias Claper.{Embeds, Forms, Polls, Presentations, Quizzes}
   alias ClaperWeb.Presence
-  alias Claper.Polls
-  alias Claper.Forms
-  alias Claper.Embeds
-  alias Claper.Quizzes
 
   @impl true
   def mount(%{"code" => code}, session, socket) do
