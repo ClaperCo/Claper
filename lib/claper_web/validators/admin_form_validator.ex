@@ -23,10 +23,10 @@ defmodule ClaperWeb.Validators.AdminFormValidator do
       end
 
     errors =
-      if !is_valid_url?(params["issuer"]) do
-        [{:issuer, "Issuer must be a valid URL"} | errors]
-      else
+      if valid_url?(params["issuer"]) do
         errors
+      else
+        [{:issuer, "Issuer must be a valid URL"} | errors]
       end
 
     errors =
@@ -91,10 +91,10 @@ defmodule ClaperWeb.Validators.AdminFormValidator do
       if String.trim(params["email"]) == "" do
         [{:email, "Email cannot be blank"} | errors]
       else
-        if !is_valid_email?(params["email"]) do
-          [{:email, "Email is not valid"} | errors]
-        else
+        if valid_email?(params["email"]) do
           errors
+        else
+          [{:email, "Email is not valid"} | errors]
         end
       end
 
@@ -107,16 +107,16 @@ defmodule ClaperWeb.Validators.AdminFormValidator do
 
   # Private helper functions
 
-  defp is_valid_url?(nil), do: false
+  defp valid_url?(nil), do: false
 
-  defp is_valid_url?(url) do
+  defp valid_url?(url) do
     uri = URI.parse(url)
     uri.scheme != nil && uri.host != nil && uri.host =~ "."
   end
 
-  defp is_valid_email?(nil), do: false
+  defp valid_email?(nil), do: false
 
-  defp is_valid_email?(email) do
+  defp valid_email?(email) do
     Regex.match?(~r/^[^\s]+@[^\s]+\.[^\s]+$/, email)
   end
 end

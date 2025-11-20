@@ -887,28 +887,33 @@ defmodule Claper.Accounts do
   defp maybe_set_default_role(attrs) do
     # Only set default role if role_id is not explicitly provided
     case Map.get(attrs, :role_id) || Map.get(attrs, "role_id") do
-      nil ->
-        # Get the "user" role and set it as default
-        case get_role_by_name("user") do
-          nil ->
-            attrs
-
-          user_role ->
-            # Determine if we should use atom or string key based on existing keys
-            key =
-              if is_map(attrs) and map_size(attrs) > 0 and
-                   Enum.all?(Map.keys(attrs), &is_binary/1) do
-                "role_id"
-              else
-                :role_id
-              end
-
-            Map.put(attrs, key, user_role.id)
-        end
-
-      _ ->
-        # Role already explicitly set, don't override
-        attrs
+      nil -> set_default_user_role(attrs)
+      _ -> attrs
     end
+  end
+
+  defp set_default_user_role(attrs) do
+    case get_role_by_name("user") do
+      nil -> attrs
+      user_role -> put_role_id(attrs, user_role.id)
+    end
+  end
+
+  defp put_role_id(attrs, role_id) do
+    key = determine_role_key(attrs)
+    Map.put(attrs, key, role_id)
+  end
+
+  defp determine_role_key(attrs) do
+    if has_string_keys?(attrs) do
+      "role_id"
+    else
+      :role_id
+    end
+  end
+
+  defp has_string_keys?(attrs) do
+    is_map(attrs) and map_size(attrs) > 0 and
+      Enum.all?(Map.keys(attrs), &is_binary/1)
   end
 end

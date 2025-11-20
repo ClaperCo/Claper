@@ -145,23 +145,23 @@ defmodule ClaperWeb.AdminLive.SearchableSelectComponent do
 
   defp update_display_value(socket) do
     current_value = get_field_value(socket.assigns.form, socket.assigns.field)
-
-    display_value =
-      if current_value do
-        case Enum.find(socket.assigns.options, fn {_label, value} ->
-               to_string(value) == to_string(current_value)
-             end) do
-          {label, _value} -> label
-          nil -> ""
-        end
-      else
-        ""
-      end
+    display_value = find_display_value(current_value, socket.assigns.options)
 
     socket
     |> assign(:selected_value, current_value)
     |> assign(:display_value, display_value)
     |> assign(:search_term, display_value)
+  end
+
+  defp find_display_value(nil, _options), do: ""
+
+  defp find_display_value(current_value, options) do
+    case Enum.find(options, fn {_label, value} ->
+           to_string(value) == to_string(current_value)
+         end) do
+      {label, _value} -> label
+      nil -> ""
+    end
   end
 
   defp get_field_value(form, field) do

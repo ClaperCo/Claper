@@ -526,73 +526,60 @@ defmodule Claper.Admin do
 
   """
   def list_all_events(params \\ %{}) do
-    search = Map.get(params, "search", "")
-    status = Map.get(params, "status", "")
-    start_date = Map.get(params, "start_date", nil)
-    end_date = Map.get(params, "end_date", nil)
-    creator_id = Map.get(params, "creator_id", nil)
+    Event
+    |> join(:left, [e], u in assoc(e, :user))
+    |> preload([e, u], user: u)
+    |> apply_event_search_filter(Map.get(params, "search", ""))
+    |> apply_event_status_filter(Map.get(params, "status", ""))
+    |> apply_event_start_date_filter(Map.get(params, "start_date", nil))
+    |> apply_event_end_date_filter(Map.get(params, "end_date", nil))
+    |> apply_event_creator_filter(Map.get(params, "creator_id", nil))
+    |> order_by([e], desc: e.started_at)
+    |> Repo.all()
+    |> Enum.map(fn event -> Map.put(event, :user_email, event.user.email) end)
+  end
 
-    query =
-      Event
-      |> join(:left, [e], u in assoc(e, :user))
-      |> preload([e, u], user: u)
+  defp apply_event_search_filter(query, ""), do: query
 
-    query =
-      if search != "" do
-        search_term = "%#{search}%"
+  defp apply_event_search_filter(query, search) do
+    search_term = "%#{search}%"
 
-        query
-        |> where(
-          [e, u],
-          ilike(e.name, ^search_term) or ilike(e.code, ^search_term) or
-            ilike(u.email, ^search_term)
-        )
-      else
-        query
-      end
+    query
+    |> where(
+      [e, u],
+      ilike(e.name, ^search_term) or ilike(e.code, ^search_term) or
+        ilike(u.email, ^search_term)
+    )
+  end
 
-    query =
-      case status do
-        "upcoming" ->
-          now = NaiveDateTime.utc_now()
-          query |> where([e], e.started_at > ^now)
+  defp apply_event_status_filter(query, "upcoming") do
+    now = NaiveDateTime.utc_now()
+    query |> where([e], e.started_at > ^now)
+  end
 
-        "past" ->
-          now = NaiveDateTime.utc_now()
-          query |> where([e], e.started_at <= ^now)
+  defp apply_event_status_filter(query, "past") do
+    now = NaiveDateTime.utc_now()
+    query |> where([e], e.started_at <= ^now)
+  end
 
-        _ ->
-          query
-      end
+  defp apply_event_status_filter(query, _), do: query
 
-    query =
-      if start_date do
-        query |> where([e], e.started_at >= ^start_date)
-      else
-        query
-      end
+  defp apply_event_start_date_filter(query, nil), do: query
 
-    query =
-      if end_date do
-        query |> where([e], e.started_at <= ^end_date)
-      else
-        query
-      end
+  defp apply_event_start_date_filter(query, start_date) do
+    query |> where([e], e.started_at >= ^start_date)
+  end
 
-    query =
-      if creator_id do
-        query |> where([e], e.user_id == ^creator_id)
-      else
-        query
-      end
+  defp apply_event_end_date_filter(query, nil), do: query
 
-    query = query |> order_by([e], desc: e.started_at)
+  defp apply_event_end_date_filter(query, end_date) do
+    query |> where([e], e.started_at <= ^end_date)
+  end
 
-    # Add a virtual field for user_email to make it accessible in CSV export
-    Repo.all(query)
-    |> Enum.map(fn event ->
-      Map.put(event, :user_email, event.user.email)
-    end)
+  defp apply_event_creator_filter(query, nil), do: query
+
+  defp apply_event_creator_filter(query, creator_id) do
+    query |> where([e], e.user_id == ^creator_id)
   end
 
   @doc """
