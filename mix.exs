@@ -103,7 +103,6 @@ defmodule Claper.MixProject do
       {:sweet_xml, "~> 0.7"},
       {:plug_cowboy, "~> 2.7"},
       {:hashids, "~> 2.1"},
-      {:mogrify, "~> 0.9"},
       {:libcluster, "~> 3.5"},
       {:porcelain, "~> 2.0"},
       {:hackney, "~> 1.24"},
