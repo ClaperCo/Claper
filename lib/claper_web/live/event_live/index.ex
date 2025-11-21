@@ -1,7 +1,7 @@
 defmodule ClaperWeb.EventLive.Index do
   use ClaperWeb, :live_view
 
-  alias Claper.Events
+  alias Claper.{Events, Presentations}
   alias Claper.Events.Event
 
   on_mount(ClaperWeb.UserLiveAuth)
@@ -50,17 +50,22 @@ defmodule ClaperWeb.EventLive.Index do
   end
 
   @impl true
-  def handle_info({:presentation_file_process_done, presentation}, socket) do
-    event = Claper.Events.get_event!(presentation.event.uuid, [:presentation_file])
-
-    {:noreply,
-     socket |> assign(:events, [event | socket.assigns.events]) |> put_flash(:info, nil)}
-  end
-
-  @impl true
   def handle_info({type, %Events.Event{}}, socket)
       when type in [:created, :updated, :deleted] do
     {:noreply, refresh_events(socket)}
+  end
+
+  @impl true
+  def handle_info({type, %Presentations.PresentationFile{}}, socket)
+      when type in [:presentation_file_process_done] do
+    {:noreply, refresh_events(socket)}
+  end
+
+  @impl true
+  def handle_info(message, socket) do
+    IO.puts("Received unknown message `#{inspect(message)}` in #{__MODULE__} #{inspect(self())}")
+
+    {:noreply, socket}
   end
 
   @impl true
