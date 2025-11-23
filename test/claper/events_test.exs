@@ -226,6 +226,12 @@ defmodule Claper.EventsTest do
       end
     end
 
+    test "get_managed_event!/3 works for the owner of an event with no leaders",
+         context do
+      event = Enum.at(context.alice_active_events, 0)
+      assert Events.get_managed_event!(context.alice, event.uuid) == event
+    end
+
     test "get_user_event!/3 gets event by owner, raises if not", context do
       event = Enum.at(context.alice_active_events, 0)
       assert Events.get_user_event!(context.alice.id, event.uuid) == event

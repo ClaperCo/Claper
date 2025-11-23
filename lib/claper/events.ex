@@ -259,11 +259,11 @@ defmodule Claper.Events do
   """
   def get_managed_event!(user, uuid, preload \\ []) do
     from(
-      a in ActivityLeader,
-      join: e in Event,
-      on: e.id == a.event_id,
+      e in Event,
       join: u in Accounts.User,
       on: e.user_id == u.id,
+      left_join: a in ActivityLeader,
+      on: e.id == a.event_id,
       where: e.uuid == ^uuid and (u.id == ^user.id or a.email == ^user.email),
       select: e
     )
