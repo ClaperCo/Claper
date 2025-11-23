@@ -34,6 +34,7 @@
             name={gettext("Type")}
             required="true"
           />
+          <ClaperWeb.Component.Input.toggle form={i} key={:required} label={gettext("Required")} />
         </div>
         <%= if i.index >= 1 do %>
           <button

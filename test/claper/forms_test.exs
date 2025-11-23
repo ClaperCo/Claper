@@ -51,13 +51,15 @@ defmodule Claper.FormsTest do
         presentation_file_id: presentation_file.id,
         position: 0,
         fields: [
-          %{name: "some option 1", type: "text"},
+          %{name: "some option 1", type: "text", required: false},
           %{name: "some option 2", type: "email"}
         ]
       }
 
       assert {:ok, %Form{} = form} = Forms.create_form(valid_attrs)
       assert form.title == "some title"
+      assert Enum.at(form.fields, 0) |> Map.fetch!(:required) == false
+      assert Enum.at(form.fields, 1) |> Map.fetch!(:required) == true
     end
 
     test "create_form/1 with invalid data returns error changeset" do

@@ -103,6 +103,23 @@ defmodule ClaperWeb.Component.Input do
     """
   end
 
+  attr :form, Phoenix.HTML.Form, required: true
+  attr :key, :atom, required: true
+  attr :label, :string, default: nil
+  attr :labelClass, :string, default: nil
+
+  def toggle(assigns) do
+    ~H"""
+    <div>
+      {@label &&
+        PhoenixHTMLHelpers.Form.label(@form, @key, @label,
+          class: ["block text-sm font-medium", @labelClass || "text-gray-700"]
+        )}
+      {PhoenixHTMLHelpers.Form.checkbox(@form, @key, class: "toggle")}
+    </div>
+    """
+  end
+
   def check(assigns) do
     assigns =
       assigns

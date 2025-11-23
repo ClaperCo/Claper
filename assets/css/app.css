@@ -4,6 +4,11 @@
 @import 'tailwindcss';
 @import './theme.css' layer(theme);
 
+@plugin "daisyui" {
+  themes: light --default;
+  include: toggle;
+}
+
 @layer base {
   *,
   ::after,

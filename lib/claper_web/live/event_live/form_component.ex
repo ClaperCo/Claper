@@ -63,7 +63,7 @@ defmodule ClaperWeb.EventLive.FormComponent do
                       fieldClass="bg-gray-700 text-white"
                       key={String.to_atom(field.name)}
                       name={field.name}
-                      required="true"
+                      required={field.required}
                       value={
                         if is_nil(assigns.current_form_submit),
                           do: ~c"",
@@ -77,7 +77,7 @@ defmodule ClaperWeb.EventLive.FormComponent do
                       fieldClass="bg-gray-700 text-white"
                       key={String.to_atom(field.name)}
                       name={field.name}
-                      required="true"
+                      required={field.required}
                       value={
                         if is_nil(assigns.current_form_submit),
                           do: ~c"",

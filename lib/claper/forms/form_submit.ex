@@ -25,6 +25,6 @@ defmodule Claper.Forms.FormSubmit do
   def changeset(form_submit, attrs) do
     form_submit
     |> cast(attrs, [:attendee_identifier, :user_id, :form_id, :response])
-    |> validate_required([:form_id])
+    |> validate_required([:form_id, :user_id, :response])
   end
 end
