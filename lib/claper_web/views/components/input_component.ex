@@ -3,6 +3,7 @@ defmodule ClaperWeb.Component.Input do
     Input component for forms
   """
   use ClaperWeb, :view_component
+  use Gettext, backend: ClaperWeb.Gettext
 
   def text(assigns) do
     assigns =
@@ -11,6 +12,10 @@ defmodule ClaperWeb.Component.Input do
       |> assign_new(:autofocus, fn -> false end)
       |> assign_new(:placeholder, fn -> false end)
       |> assign_new(:readonly, fn -> false end)
+      |> assign_new(:label, fn
+        %{required: false, name: name} -> ~s/#{name} #{gettext("(optional)")}/
+        %{name: name} -> name
+      end)
       |> assign_new(:labelClass, fn -> "text-gray-700" end)
       |> assign_new(:fieldClass, fn -> "bg-white" end)
       |> assign_new(:value, fn -> input_value(assigns.form, assigns.key) end)
@@ -19,7 +24,7 @@ defmodule ClaperWeb.Component.Input do
 
     ~H"""
     <div class="relative">
-      {label(@form, @key, @name, class: "block text-sm font-medium #{@labelClass}")}
+      {label(@form, @key, @label, class: "block text-sm font-medium #{@labelClass}")}
       <div class="mt-1">
         {text_input(@form, @key,
           required: @required,
@@ -286,13 +291,17 @@ defmodule ClaperWeb.Component.Input do
       |> assign_new(:autofocus, fn -> false end)
       |> assign_new(:readonly, fn -> false end)
       |> assign_new(:placeholder, fn -> false end)
+      |> assign_new(:label, fn
+        %{required: false, name: name} -> ~s/#{name} #{gettext("(optional)")}/
+        %{name: name} -> name
+      end)
       |> assign_new(:labelClass, fn -> "text-gray-700" end)
       |> assign_new(:fieldClass, fn -> "bg-white" end)
       |> assign_new(:value, fn -> input_value(assigns.form, assigns.key) end)
 
     ~H"""
     <div class="relative" x-data={"{input: '#{assigns.value}'}"}>
-      {label(@form, @key, @name, class: "block text-sm font-medium #{@labelClass}")}
+      {label(@form, @key, @label, class: "block text-sm font-medium #{@labelClass}")}
       <div class="mt-1">
         {email_input(@form, @key,
           required: @required,
