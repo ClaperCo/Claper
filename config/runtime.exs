@@ -76,16 +76,6 @@ email_confirmation =
 pool_size = get_int_from_path_or_env(config_dir, "POOL_SIZE", 10)
 queue_target = get_int_from_path_or_env(config_dir, "QUEUE_TARGET", 5_000)
 
-mail_transport = get_var_from_path_or_env(config_dir, "MAIL_TRANSPORT", "local")
-
-smtp_relay = get_var_from_path_or_env(config_dir, "SMTP_RELAY", nil)
-smtp_username = get_var_from_path_or_env(config_dir, "SMTP_USERNAME", nil)
-smtp_password = get_var_from_path_or_env(config_dir, "SMTP_PASSWORD", nil)
-smtp_ssl = get_var_from_path_or_env(config_dir, "SMTP_SSL", "true") |> String.to_existing_atom()
-smtp_tls = get_var_from_path_or_env(config_dir, "SMTP_TLS", "always")
-smtp_auth = get_var_from_path_or_env(config_dir, "SMTP_AUTH", "always")
-smtp_port = get_int_from_path_or_env(config_dir, "SMTP_PORT", 25)
-
 storage = get_var_from_path_or_env(config_dir, "PRESENTATION_STORAGE", "local")
 if storage not in ["local", "s3"], do: raise("Invalid PRESENTATION_STORAGE value #{storage}")
 
@@ -222,26 +212,45 @@ config :claper, ClaperWeb.MailboxGuard,
     get_var_from_path_or_env(config_dir, "ENABLE_MAILBOX_ROUTE", "false")
     |> String.to_existing_atom()
 
-case mail_transport do
+case get_var_from_path_or_env(config_dir, "MAIL_TRANSPORT", "local") do
   "smtp" ->
+    relay = get_var_from_path_or_env(config_dir, "SMTP_RELAY", nil)
+    ssl = get_var_from_path_or_env(config_dir, "SMTP_SSL", "true")
+    depth = get_int_from_path_or_env(config_dir, "SMTP_SSL_DEPTH", 2)
+
+    server =
+      get_var_from_path_or_env(config_dir, "SMTP_SSL_SERVER", relay)
+      |> to_charlist()
+
     config :claper, Claper.Mailer,
-      adapter: Swoosh.Adapters.Mua,
-      relay: smtp_relay,
-      port: smtp_port
-
-    cond do
-      smtp_username && smtp_password ->
-        config :claper, Claper.Mailer, auth: [username: smtp_username, password: smtp_password]
-
-      smtp_username || smtp_password ->
-        raise ArgumentError, """
-        Both SMTP_USERNAME and SMTP_PASSWORD must be set for SMTP authentication.
-        Please provide values for both environment variables.
-        """
-
-      true ->
-        nil
-    end
+      adapter: Swoosh.Adapters.SMTP,
+      relay: relay,
+      port: get_int_from_path_or_env(config_dir, "SMTP_PORT", 465),
+      auth: get_var_from_path_or_env(config_dir, "SMTP_AUTH", "always"),
+      username: get_var_from_path_or_env(config_dir, "SMTP_USERNAME", ""),
+      password: get_var_from_path_or_env(config_dir, "SMTP_PASSWORD", ""),
+      retries: get_int_from_path_or_env(config_dir, "SMTP_RETRIES", 1),
+      no_mx_lookups: get_var_from_path_or_env(config_dir, "SMTP_NO_MX_LOOKUPS", "false"),
+      ssl: ssl,
+      sockopts:
+        if(ssl == "true",
+          do: [
+            versions: [:"tlsv1.3", :"tlsv1.2"],
+            verify: :verify_peer,
+            cacerts: :public_key.cacerts_get(),
+            depth: depth,
+            server_name_indication: server
+          ],
+          else: []
+        ),
+      tls: get_var_from_path_or_env(config_dir, "SMTP_TLS", "if_available"),
+      tls_options: [
+        versions: [:"tlsv1.3", :"tlsv1.2"],
+        verify: :verify_peer,
+        cacerts: :public_key.cacerts_get(),
+        depth: depth,
+        server_name_indication: server
+      ]
 
     config :swoosh, :api_client, false
 
@@ -250,7 +259,7 @@ case mail_transport do
       adapter: Swoosh.Adapters.Postmark,
       api_key: get_var_from_path_or_env(config_dir, "POSTMARK_API_KEY", nil)
 
-    config :swoosh, :api_client, Swoosh.ApiClient.Hackney
+    config :swoosh, :api_client, Swoosh.ApiClient.Finch
 
   _ ->
     config :claper, Claper.Mailer, adapter: Swoosh.Adapters.Local
@@ -267,5 +276,3 @@ if s3_scheme && s3_host do
   config :ex_aws,
     s3: [scheme: s3_scheme, host: s3_host, port: s3_port]
 end
-
-config :swoosh, :api_client, Swoosh.ApiClient.Finch
