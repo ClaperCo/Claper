@@ -261,7 +261,11 @@ config :ex_aws,
   access_key_id: s3_access_key_id,
   secret_access_key: s3_secret_access_key,
   region: s3_region,
-  normalize_path: false,
-  s3: [scheme: s3_scheme, host: s3_host, port: s3_port]
+  normalize_path: false
+
+if s3_scheme && s3_host do
+  config :ex_aws,
+    s3: [scheme: s3_scheme, host: s3_host, port: s3_port]
+end
 
 config :swoosh, :api_client, Swoosh.ApiClient.Finch
