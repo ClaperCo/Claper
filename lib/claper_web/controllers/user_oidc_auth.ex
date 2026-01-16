@@ -18,23 +18,44 @@ defmodule ClaperWeb.UserOidcAuth do
     |> Base.url_encode64(padding: false)
   end
 
+  defp use_pkce? do
+    config()[:use_pkce] != false
+  end
+
   @doc false
   def new(conn, _params) do
-    # Generate PKCE verifier and store it in session
-    pkce_verifier = generate_pkce_verifier()
-    conn = put_session(conn, :pkce_verifier, pkce_verifier)
+    # Use PKCE based on configuration (secure by default)
+    use_pkce = use_pkce?()
 
-    {:ok, redirect_uri} =
-      Oidcc.create_redirect_url(
-        Claper.OidcProviderConfig,
-        client_id(),
-        client_secret(),
-        opts(pkce_verifier)
-      )
+    {conn, pkce_verifier} =
+      if use_pkce do
+        # Generate PKCE verifier and store it in session
+        verifier = generate_pkce_verifier()
+        {put_session(conn, :pkce_verifier, verifier), verifier}
+      else
+        # Ensure no verifier in session for non-PKCE flow
+        {delete_session(conn, :pkce_verifier), nil}
+      end
 
-    uri = Enum.join(redirect_uri, "")
+    case Oidcc.create_redirect_url(
+           Claper.OidcProviderConfig,
+           client_id(),
+           client_secret(),
+           opts(pkce_verifier)
+         ) do
+      {:ok, redirect_uri} ->
+        uri = Enum.join(redirect_uri, "")
+        redirect(conn, external: uri)
 
-    redirect(conn, external: uri)
+      {:error, reason} ->
+        conn
+        |> delete_session(:pkce_verifier)
+        |> put_status(:internal_server_error)
+        |> put_view(ClaperWeb.ErrorView)
+        |> render("csrf_error.html", %{
+          error: "Authentication initialization failed: #{inspect(reason)}"
+        })
+    end
   end
 
   def callback(conn, %{"code" => code} = _params) do
@@ -109,8 +130,7 @@ defmodule ClaperWeb.UserOidcAuth do
     base_opts = %{
       redirect_uri: "#{url}/users/oidc/callback",
       scopes: scopes(),
-      preferred_auth_methods: [:client_secret_basic, :client_secret_post],
-      require_pkce: true
+      preferred_auth_methods: [:client_secret_basic, :client_secret_post]
     }
 
     if pkce_verifier do

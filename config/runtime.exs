@@ -137,6 +137,10 @@ oidc_auto_redirect_login =
   get_var_from_path_or_env(config_dir, "OIDC_AUTO_REDIRECT_LOGIN", "false")
   |> String.to_existing_atom()
 
+oidc_use_pkce =
+  get_var_from_path_or_env(config_dir, "OIDC_USE_PKCE", "true")
+  |> String.to_existing_atom()
+
 oidc_property_mappings =
   get_var_from_path_or_env(config_dir, "OIDC_PROPERTY_MAPPINGS", nil)
   |> case do
@@ -172,7 +176,8 @@ config :claper, :oidc,
   provider_name: oidc_provider_name,
   logo_url: oidc_logo_url,
   property_mappings: oidc_property_mappings,
-  auto_redirect_login: oidc_auto_redirect_login
+  auto_redirect_login: oidc_auto_redirect_login,
+  use_pkce: oidc_use_pkce
 
 config :claper, Claper.Repo,
   url: database_url,
