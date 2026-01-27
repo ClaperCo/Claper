@@ -18,18 +18,46 @@ defmodule ClaperWeb.UserOidcAuth do
     |> Base.url_encode64(padding: false)
   end
 
+  defp generate_state do
+    :crypto.strong_rand_bytes(16)
+    |> Base.url_encode64(padding: false)
+  end
+
+  defp generate_nonce do
+    :crypto.strong_rand_bytes(32)
+    |> Base.url_encode64(padding: false)
+  end
+
+  defp clear_oidc_session(conn) do
+    conn
+    |> delete_session(:pkce_verifier)
+    |> delete_session(:oidc_state)
+    |> delete_session(:oidc_nonce)
+  end
+
   @doc false
   def new(conn, _params) do
-    # Generate PKCE verifier and store it in session
     pkce_verifier = generate_pkce_verifier()
-    conn = put_session(conn, :pkce_verifier, pkce_verifier)
+    state = generate_state()
+    nonce = generate_nonce()
+
+    conn =
+      conn
+      |> put_session(:pkce_verifier, pkce_verifier)
+      |> put_session(:oidc_state, state)
+      |> put_session(:oidc_nonce, nonce)
+
+    opts_with_security =
+      opts(pkce_verifier)
+      |> Map.put(:state, state)
+      |> Map.put(:nonce, nonce)
 
     {:ok, redirect_uri} =
       Oidcc.create_redirect_url(
         Claper.OidcProviderConfig,
         client_id(),
         client_secret(),
-        opts(pkce_verifier)
+        opts_with_security
       )
 
     uri = Enum.join(redirect_uri, "")
@@ -37,46 +65,76 @@ defmodule ClaperWeb.UserOidcAuth do
     redirect(conn, external: uri)
   end
 
-  def callback(conn, %{"code" => code} = _params) do
-    # Get PKCE verifier from session
+  def callback(conn, %{"code" => code, "state" => state_param} = _params) do
     pkce_verifier = get_session(conn, :pkce_verifier)
+    session_state = get_session(conn, :oidc_state)
+    session_nonce = get_session(conn, :oidc_nonce)
 
-    with {:ok,
-          %Oidcc.Token{
-            id: %Oidcc.Token.Id{token: id_token, claims: claims},
-            access: %Oidcc.Token.Access{token: access_token},
-            refresh: refresh_token
-          }} <-
-           Oidcc.retrieve_token(
-             code,
-             Claper.OidcProviderConfig,
-             client_id(),
-             client_secret(),
-             opts(pkce_verifier)
-           ),
-         {:ok, oidc_user} <- validate_user(id_token, access_token, refresh_token, claims) do
+    if is_nil(session_state) or is_nil(state_param) or
+         not Plug.Crypto.secure_compare(session_state, state_param) do
       conn
-      # Clean up the verifier
-      |> delete_session(:pkce_verifier)
-      |> UserAuth.log_in_user(oidc_user.user)
+      |> clear_oidc_session()
+      |> put_status(:unauthorized)
+      |> put_view(ClaperWeb.ErrorView)
+      |> render("csrf_error.html", %{
+        error: "Authentication failed: invalid or missing state parameter"
+      })
     else
-      {:error, reason} ->
+      with {:ok,
+            %Oidcc.Token{
+              id: %Oidcc.Token.Id{token: id_token, claims: claims},
+              access: %Oidcc.Token.Access{token: access_token},
+              refresh: refresh_token
+            }} <-
+             Oidcc.retrieve_token(
+               code,
+               Claper.OidcProviderConfig,
+               client_id(),
+               client_secret(),
+               opts(pkce_verifier)
+             ),
+           true <- validate_nonce(claims["nonce"], session_nonce),
+           {:ok, oidc_user} <- validate_user(id_token, access_token, refresh_token, claims) do
         conn
-        # Clean up the verifier even on error
-        |> delete_session(:pkce_verifier)
-        |> put_status(:unauthorized)
-        |> put_view(ClaperWeb.ErrorView)
-        |> render("csrf_error.html", %{error: "Authentication failed: #{inspect(reason)}"})
+        |> clear_oidc_session()
+        |> UserAuth.log_in_user(oidc_user.user)
+      else
+        false ->
+          conn
+          |> clear_oidc_session()
+          |> put_status(:unauthorized)
+          |> put_view(ClaperWeb.ErrorView)
+          |> render("csrf_error.html", %{error: "Authentication failed: invalid nonce"})
+
+        {:error, reason} ->
+          conn
+          |> clear_oidc_session()
+          |> put_status(:unauthorized)
+          |> put_view(ClaperWeb.ErrorView)
+          |> render("csrf_error.html", %{error: "Authentication failed: #{inspect(reason)}"})
+      end
     end
+  end
+
+  def callback(conn, %{"code" => _code} = _params) do
+    conn
+    |> clear_oidc_session()
+    |> put_status(:unauthorized)
+    |> put_view(ClaperWeb.ErrorView)
+    |> render("csrf_error.html", %{error: "Authentication failed: missing state parameter"})
   end
 
   def callback(conn, %{"error" => error} = _params) do
     conn
-    # Clean up the verifier even on error
-    |> delete_session(:pkce_verifier)
+    |> clear_oidc_session()
     |> put_status(:unauthorized)
     |> put_view(ClaperWeb.ErrorView)
     |> render("csrf_error.html", %{error: "Authentication failed: #{error}"})
+  end
+
+  defp validate_nonce(nil, _session_nonce), do: true
+  defp validate_nonce(claims_nonce, session_nonce) do
+    Plug.Crypto.secure_compare(claims_nonce, session_nonce)
   end
 
   defp config do
