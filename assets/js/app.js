@@ -14,6 +14,18 @@ import airdatepickerLocaleEs from "air-datepicker/locale/es";
 import airdatepickerLocaleNl from "air-datepicker/locale/nl";
 import airdatepickerLocaleIt from "air-datepicker/locale/it";
 import airdatepickerLocaleHu from "air-datepicker/locale/hu";
+import airdatepickerLocaleSv from "air-datepicker/locale/sv";
+import airdatepickerLocaleDa from "air-datepicker/locale/da";
+import airdatepickerLocaleNb from "air-datepicker/locale/nb";
+import airdatepickerLocaleFi from "air-datepicker/locale/fi";
+import airdatepickerLocalePl from "air-datepicker/locale/pl";
+import airdatepickerLocalePt from "air-datepicker/locale/pt";
+import airdatepickerLocaleRu from "air-datepicker/locale/ru";
+import airdatepickerLocaleUk from "air-datepicker/locale/uk";
+import airdatepickerLocaleCs from "air-datepicker/locale/cs";
+import airdatepickerLocaleJa from "air-datepicker/locale/ja";
+import airdatepickerLocaleZh from "air-datepicker/locale/zh";
+import airdatepickerLocaleKo from "air-datepicker/locale/ko";
 import "moment/locale/de";
 import "moment/locale/fr";
 import "moment/locale/es";
@@ -21,6 +33,18 @@ import "moment/locale/nl";
 import "moment/locale/it";
 import "moment/locale/hu";
 import "moment/locale/lv";
+import "moment/locale/sv";
+import "moment/locale/da";
+import "moment/locale/nb";
+import "moment/locale/fi";
+import "moment/locale/pl";
+import "moment/locale/pt";
+import "moment/locale/ru";
+import "moment/locale/uk";
+import "moment/locale/cs";
+import "moment/locale/ja";
+import "moment/locale/zh-cn";
+import "moment/locale/ko";
 import QRCodeStyling from "qr-code-styling";
 import { Presenter } from "./presenter";
 import { Manager } from "./manager";
@@ -42,15 +66,28 @@ const supportedLocales = window.claperConfig?.supportedLocales || [
   "lv",
 ];
 
-const airdatePickrSupportedLocales = window.claperConfig?.supportedLocales || [
-  "en",
-  "fr",
-  "de",
-  "es",
-  "nl",
-  "it",
-  "hu",
-];
+// Define airdatePickrLocales first so we can check locale availability
+let airdatePickrLocales = {
+  en: airdatepickerLocaleEn,
+  fr: airdatepickerLocaleFr,
+  de: airdatepickerLocaleDe,
+  es: airdatepickerLocaleEs,
+  nl: airdatepickerLocaleNl,
+  it: airdatepickerLocaleIt,
+  hu: airdatepickerLocaleHu,
+  sv: airdatepickerLocaleSv,
+  da: airdatepickerLocaleDa,
+  nb: airdatepickerLocaleNb,
+  fi: airdatepickerLocaleFi,
+  pl: airdatepickerLocalePl,
+  pt: airdatepickerLocalePt,
+  ru: airdatepickerLocaleRu,
+  uk: airdatepickerLocaleUk,
+  cs: airdatepickerLocaleCs,
+  ja: airdatepickerLocaleJa,
+  zh: airdatepickerLocaleZh,
+  ko: airdatepickerLocaleKo,
+};
 
 var locale =
   document.querySelector("html").getAttribute("lang") ||
@@ -61,7 +98,8 @@ var airdatepickrLocale = locale;
 if (!supportedLocales.includes(locale)) {
   locale = "en";
 }
-if (!airdatePickrSupportedLocales.includes(locale)) {
+// Check if locale is actually available in airdatePickrLocales, not just in supportedLocales
+if (!(airdatepickrLocale in airdatePickrLocales)) {
   airdatepickrLocale = "en";
 }
 
@@ -69,16 +107,6 @@ window.moment.locale("en");
 window.moment.locale(locale);
 window.Alpine = Alpine;
 Alpine.start();
-
-let airdatePickrLocales = {
-  en: airdatepickerLocaleEn,
-  fr: airdatepickerLocaleFr,
-  de: airdatepickerLocaleDe,
-  es: airdatepickerLocaleEs,
-  nl: airdatepickerLocaleNl,
-  it: airdatepickerLocaleIt,
-  hu: airdatepickerLocaleHu,
-};
 let csrfToken = document
   .querySelector("meta[name='csrf-token']")
   .getAttribute("content");
