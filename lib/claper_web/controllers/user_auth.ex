@@ -6,8 +6,9 @@ defmodule ClaperWeb.UserAuth do
 
   import Plug.Conn
   import Phoenix.Controller
+  import ClaperWeb.Helpers.ConnUtils, only: [get_client_ip: 1, get_user_agent: 1]
 
-  alias Claper.Accounts
+  alias Claper.{Accounts, Audit}
 
   # Make the remember me cookie valid for 60 days.
   # If you want bump or reduce this value, also change
@@ -31,6 +32,11 @@ defmodule ClaperWeb.UserAuth do
   def log_in_user(conn, user, params \\ %{}) do
     token = Accounts.generate_user_session_token(user)
     user_return_to = get_session(conn, :user_return_to)
+
+    Audit.log_action(user, "user.login", %{
+      ip_address: get_client_ip(conn),
+      user_agent: get_user_agent(conn)
+    })
 
     conn
     |> renew_session()
@@ -82,6 +88,11 @@ defmodule ClaperWeb.UserAuth do
     if live_socket_id = get_session(conn, :live_socket_id) do
       ClaperWeb.Endpoint.broadcast(live_socket_id, "disconnect", %{})
     end
+
+    Audit.log_action(conn.assigns[:current_user], "user.logout", %{
+      ip_address: get_client_ip(conn),
+      user_agent: get_user_agent(conn)
+    })
 
     conn
     |> renew_session()
