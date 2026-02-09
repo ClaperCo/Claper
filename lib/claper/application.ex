@@ -19,6 +19,8 @@ defmodule Claper.Application do
       ClaperWeb.Telemetry,
       # Start the PubSub system
       {Phoenix.PubSub, name: Claper.PubSub},
+      # Start the rate limiter before the endpoint accepts requests
+      Claper.RateLimit,
       # Start the Endpoint (http/https)
       ClaperWeb.Presence,
       ClaperWeb.Endpoint,
@@ -28,8 +30,7 @@ defmodule Claper.Application do
       {Task.Supervisor, name: Claper.TaskSupervisor},
       {Oidcc.ProviderConfiguration.Worker,
        %{issuer: oidc_config[:issuer], name: Claper.OidcProviderConfig}},
-      {Oban, Application.fetch_env!(:claper, Oban)},
-      {Claper.RateLimit, clean_period: :timer.minutes(10)}
+      {Oban, Application.fetch_env!(:claper, Oban)}
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
