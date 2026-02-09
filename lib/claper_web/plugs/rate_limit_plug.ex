@@ -20,11 +20,11 @@ defmodule ClaperWeb.Plugs.RateLimitPlug do
     ip = conn.remote_ip |> :inet.ntoa() |> to_string()
     key = "#{prefix}:#{ip}"
 
-    case Hammer.check_rate(key, interval_ms, max_requests) do
+    case Claper.RateLimit.hit(key, interval_ms, max_requests) do
       {:allow, _count} ->
         conn
 
-      {:deny, _limit} ->
+      {:deny, _retry_after} ->
         conn
         |> put_resp_content_type("text/plain")
         |> send_resp(429, "Too Many Requests")

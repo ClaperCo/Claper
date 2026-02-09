@@ -28,7 +28,8 @@ defmodule Claper.Application do
       {Task.Supervisor, name: Claper.TaskSupervisor},
       {Oidcc.ProviderConfiguration.Worker,
        %{issuer: oidc_config[:issuer], name: Claper.OidcProviderConfig}},
-      {Oban, Application.fetch_env!(:claper, Oban)}
+      {Oban, Application.fetch_env!(:claper, Oban)},
+      {Claper.RateLimit, clean_period: :timer.minutes(10)}
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
