@@ -25,6 +25,18 @@ defmodule Claper.Forms.FormSubmit do
   def changeset(form_submit, attrs) do
     form_submit
     |> cast(attrs, [:attendee_identifier, :user_id, :form_id, :response])
-    |> validate_required([:form_id, :user_id, :response])
+    |> validate_required([:form_id, :response])
+    |> validate_user_or_attendee()
+  end
+
+  defp validate_user_or_attendee(changeset) do
+    user_id = get_field(changeset, :user_id)
+    attendee_identifier = get_field(changeset, :attendee_identifier)
+
+    if is_nil(user_id) and is_nil(attendee_identifier) do
+      add_error(changeset, :user_id, "either user_id or attendee_identifier must be present")
+    else
+      changeset
+    end
   end
 end

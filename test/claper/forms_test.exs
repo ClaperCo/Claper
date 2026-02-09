@@ -126,5 +126,62 @@ defmodule Claper.FormsTest do
                  }
                )
     end
+
+    test "create_or_update_form_submit/2 with attendee_identifier creates a form_submit" do
+      presentation_file = presentation_file_fixture(%{}, [:event])
+      f = form_fixture(%{presentation_file_id: presentation_file.id})
+
+      assert {:ok, %Claper.Forms.FormSubmit{} = form_submit} =
+               Forms.create_or_update_form_submit(
+                 presentation_file.event.uuid,
+                 %{
+                   "attendee_identifier" => "test-attendee-123",
+                   "form_id" => f.id,
+                   "response" => %{"Name" => "Daniel"}
+                 }
+               )
+
+      assert form_submit.attendee_identifier == "test-attendee-123"
+      assert is_nil(form_submit.user_id)
+      assert form_submit.form_id == f.id
+    end
+
+    test "create_or_update_form_submit/2 with attendee_identifier updates existing form_submit" do
+      presentation_file = presentation_file_fixture(%{}, [:event])
+      f = form_fixture(%{presentation_file_id: presentation_file.id})
+
+      {:ok, _first_submit} =
+        Forms.create_or_update_form_submit(
+          presentation_file.event.uuid,
+          %{
+            "attendee_identifier" => "test-attendee-123",
+            "form_id" => f.id,
+            "response" => %{"Name" => "Daniel"}
+          }
+        )
+
+      assert {:ok, %Claper.Forms.FormSubmit{} = updated_submit} =
+               Forms.create_or_update_form_submit(
+                 presentation_file.event.uuid,
+                 %{
+                   "attendee_identifier" => "test-attendee-123",
+                   "form_id" => f.id,
+                   "response" => %{"Name" => "Updated Name"}
+                 }
+               )
+
+      assert updated_submit.response == %{"Name" => "Updated Name"}
+    end
+
+    test "create_or_update_form_submit/2 without user_id or attendee_identifier returns error" do
+      presentation_file = presentation_file_fixture(%{}, [:event])
+      f = form_fixture(%{presentation_file_id: presentation_file.id})
+
+      assert {:error, %Ecto.Changeset{}} =
+               Forms.create_form_submit(%{
+                 form_id: f.id,
+                 response: %{"Name" => "Daniel"}
+               })
+    end
   end
 end

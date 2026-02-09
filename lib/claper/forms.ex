@@ -324,6 +324,9 @@ defmodule Claper.Forms do
           nil -> broadcast({:ok, r, event_uuid}, :form_submit_created)
           _form_submit -> broadcast({:ok, r, event_uuid}, :form_submit_updated)
         end
+
+      {:error, changeset} ->
+        {:error, changeset}
     end
   end
 
@@ -344,6 +347,7 @@ defmodule Claper.Forms do
     |> Repo.delete()
     |> case do
       {:ok, r} -> broadcast({:ok, r, event_uuid}, :form_submit_deleted)
+      {:error, changeset} -> {:error, changeset}
     end
   end
 

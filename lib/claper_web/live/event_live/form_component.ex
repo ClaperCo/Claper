@@ -148,6 +148,9 @@ defmodule ClaperWeb.EventLive.FormComponent do
         {:noreply,
          socket
          |> assign(:current_form_submit, form_submit)}
+
+      {:error, _changeset} ->
+        {:noreply, socket}
     end
   end
 
@@ -167,6 +170,9 @@ defmodule ClaperWeb.EventLive.FormComponent do
         {:noreply,
          socket
          |> assign(:current_form_submit, form_submit)}
+
+      {:error, _changeset} ->
+        {:noreply, socket}
     end
   end
 
