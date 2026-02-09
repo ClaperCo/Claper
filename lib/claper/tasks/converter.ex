@@ -30,7 +30,14 @@ defmodule Claper.Tasks.Converter do
 
     IO.puts("Starting conversion for #{hash}... (copy: #{is_copy})")
 
-    file_to_pdf(String.to_atom(ext), path, file)
+    ext_atom =
+      case ext do
+        "ppt" -> :ppt
+        "pptx" -> :pptx
+        other -> other
+      end
+
+    file_to_pdf(ext_atom, path, file)
     |> pdf_to_jpg(path, presentation, user_id)
     |> jpg_upload(hash, path, presentation, user_id, is_copy)
   end

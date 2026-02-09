@@ -711,7 +711,16 @@ defmodule ClaperWeb.EventLive.Manage do
 
   @impl true
   def handle_event("list-tab", %{"tab" => tab}, socket) do
-    socket = assign(socket, :list_tab, String.to_atom(tab))
+    tab_atom =
+      case tab do
+        "posts" -> :posts
+        "questions" -> :questions
+        "forms" -> :forms
+        "pinned_posts" -> :pinned_posts
+        _ -> :posts
+      end
+
+    socket = assign(socket, :list_tab, tab_atom)
 
     socket =
       case tab do
@@ -945,7 +954,13 @@ defmodule ClaperWeb.EventLive.Manage do
   end
 
   defp list_all_questions(_socket, event_id, sort \\ "date") do
-    Claper.Posts.list_questions(event_id, [:event, :reactions], String.to_atom(sort))
+    sort_atom =
+      case sort do
+        "likes" -> :likes
+        _ -> :date
+      end
+
+    Claper.Posts.list_questions(event_id, [:event, :reactions], sort_atom)
     |> Enum.filter(&(ClaperWeb.Helpers.body_without_links(&1.body) =~ "?"))
   end
 

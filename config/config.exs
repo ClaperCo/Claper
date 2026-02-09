@@ -73,6 +73,9 @@ config :phoenix, :json_library, Jason
 
 config :porcelain, driver: Porcelain.Driver.Basic
 
+config :hammer,
+  backend: {Hammer.Backend.ETS, [expiry_ms: 60_000 * 60, cleanup_interval_ms: 60_000 * 10]}
+
 config :claper, :storage_dir, System.get_env("PRESENTATION_STORAGE_DIR", "priv/static")
 
 # Import environment specific config. This must remain at the bottom

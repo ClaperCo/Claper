@@ -114,6 +114,7 @@ defmodule Claper.MixProject do
       {:uuid, "~> 1.1"},
       {:oidcc, "~> 3.5"},
       {:oban, "~> 2.19"},
+      {:hammer, "~> 6.2"},
       {:tailwind, "~> 0.3", runtime: Mix.env() == :dev}
     ]
   end

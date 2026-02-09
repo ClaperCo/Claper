@@ -231,10 +231,16 @@ defmodule ClaperWeb.AdminLive.TableActionsComponent do
     action = Enum.find(socket.assigns.dropdown_actions, &(&1.key == action_key))
 
     if action do
-      send(
-        self(),
-        {:table_action, String.to_atom(action_key), socket.assigns.item, socket.assigns.item_id}
-      )
+      try do
+        action_atom = String.to_existing_atom(action_key)
+
+        send(
+          self(),
+          {:table_action, action_atom, socket.assigns.item, socket.assigns.item_id}
+        )
+      rescue
+        ArgumentError -> :ok
+      end
     end
 
     {:noreply, assign(socket, dropdown_open: false)}
