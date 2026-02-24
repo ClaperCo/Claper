@@ -12,6 +12,7 @@ config :claper,
 
 # Configures the endpoint
 config :claper, ClaperWeb.Endpoint,
+  adapter: Bandit.PhoenixAdapter,
   render_errors: [view: ClaperWeb.ErrorView, accepts: ~w(html json), layout: false],
   pubsub_server: Claper.PubSub,
   live_view: [signing_salt: "DN0vwriJgVkHG0kn3hF5JKho/DE66onv"]

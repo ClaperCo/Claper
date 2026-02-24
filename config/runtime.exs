@@ -187,11 +187,16 @@ config :claper, Claper.Repo,
 config :claper, ClaperWeb.Endpoint,
   url: [scheme: base_url.scheme, host: base_url.host, path: base_url.path, port: base_url.port],
   base_url: base_url,
-  http: [
+  http_options: [
     ip: listen_ip,
     port: port,
-    transport_options: [max_connections: :infinity],
-    protocol_options: [max_request_line_length: 8192, max_header_value_length: 8192]
+    thousand_island_options: [
+      transport_options: [max_connections: :infinity]
+    ],
+    http_1_options: [
+      max_request_line_length: 8192,
+      max_header_length: 8192
+    ]
   ],
   secret_key_base: secret_key_base,
   same_site_cookie: same_site_cookie,

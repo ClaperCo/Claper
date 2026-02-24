@@ -116,7 +116,8 @@ defmodule Claper.MixProject do
       {:oban, "~> 2.19"},
       {:mua, "~> 0.2"},
       {:mail, "~> 0.5"},
-      {:tailwind, "~> 0.3", runtime: Mix.env() == :dev}
+      {:tailwind, "~> 0.3", runtime: Mix.env() == :dev},
+      {:bandit, "~> 1.8"}
     ]
   end
 
