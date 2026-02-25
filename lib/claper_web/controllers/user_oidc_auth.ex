@@ -9,14 +9,8 @@ defmodule ClaperWeb.UserOidcAuth do
 
   require Logger
 
-  # Add PKCE-related functions
   defp generate_pkce_verifier do
     :crypto.strong_rand_bytes(32)
-    |> Base.url_encode64(padding: false)
-  end
-
-  defp generate_pkce_challenge(verifier) do
-    :crypto.hash(:sha256, verifier)
     |> Base.url_encode64(padding: false)
   end
 
@@ -32,27 +26,12 @@ defmodule ClaperWeb.UserOidcAuth do
       |> put_session(:oidc_state, state)
       |> put_session(:oidc_nonce, nonce)
 
-    {:ok, client_context} =
-      Oidcc.ClientContext.from_configuration_worker(
-        Claper.OidcProviderConfig,
-        client_id(),
-        client_secret()
-      )
-
-    # Disable request objects and PAR for compatibility with providers
-    # like Authelia that advertise support but can't validate the JWTs
-    provider_config = %{client_context.provider_configuration |
-      request_parameter_supported: false,
-      require_signed_request_object: false,
-      pushed_authorization_request_endpoint: :undefined,
-      require_pushed_authorization_requests: false
-    }
-    client_context = %{client_context | provider_configuration: provider_config}
+    client_context = patched_client_context!()
 
     {:ok, redirect_uri} =
       Oidcc.Authorization.create_redirect_url(
         client_context,
-        opts(pkce_verifier) |> Map.merge(%{state: state, nonce: nonce})
+        auth_opts(pkce_verifier) |> Map.merge(%{state: state, nonce: nonce})
       )
 
     uri = Enum.join(redirect_uri, "")
@@ -74,12 +53,7 @@ defmodule ClaperWeb.UserOidcAuth do
       |> put_view(ClaperWeb.ErrorView)
       |> render("csrf_error.html", %{error: "Authentication failed: state mismatch"})
     else
-      token_opts =
-        opts(pkce_verifier)
-        |> Map.merge(%{
-          nonce: nonce,
-          preferred_auth_methods: [:client_secret_basic, :client_secret_post]
-        })
+      client_context = patched_client_context!()
 
       with {:ok,
             %Oidcc.Token{
@@ -87,14 +61,12 @@ defmodule ClaperWeb.UserOidcAuth do
               access: %Oidcc.Token.Access{token: access_token},
               refresh: refresh_token
             } = token} <-
-             Oidcc.retrieve_token(
+             Oidcc.Token.retrieve(
                code,
-               Claper.OidcProviderConfig,
-               client_id(),
-               client_secret(),
-               token_opts
+               client_context,
+               token_opts(pkce_verifier, nonce)
              ),
-           {:ok, claims} <- maybe_enrich_claims(claims, token),
+           {:ok, claims} <- maybe_enrich_claims(claims, token, client_context),
            {:ok, oidc_user} <- validate_user(id_token, access_token, refresh_token, claims) do
         conn
         |> clear_oidc_session()
@@ -129,16 +101,14 @@ defmodule ClaperWeb.UserOidcAuth do
   end
 
   # Fetch userinfo to fill in claims missing from the ID token (e.g. email on Authelia)
-  defp maybe_enrich_claims(%{"email" => email} = claims, _token) when is_binary(email) do
+  defp maybe_enrich_claims(%{"email" => email} = claims, _token, _client_context) when is_binary(email) do
     {:ok, claims}
   end
 
-  defp maybe_enrich_claims(claims, token) do
-    case Oidcc.retrieve_userinfo(
+  defp maybe_enrich_claims(claims, token, client_context) do
+    case Oidcc.Userinfo.retrieve(
            token,
-           Claper.OidcProviderConfig,
-           client_id(),
-           client_secret(),
+           client_context,
            %{preferred_auth_methods: [:client_secret_basic, :client_secret_post]}
          ) do
       {:ok, userinfo} ->
@@ -148,6 +118,28 @@ defmodule ClaperWeb.UserOidcAuth do
         Logger.error("OIDC userinfo retrieval failed: #{inspect(reason)}")
         {:ok, claims}
     end
+  end
+
+  # Build a client context with provider config overrides for broad compatibility:
+  # - Disable request objects and PAR (Authelia compatibility)
+  # - Ensure S256 PKCE is listed as supported (Entra ID compatibility)
+  defp patched_client_context! do
+    {:ok, client_context} =
+      Oidcc.ClientContext.from_configuration_worker(
+        Claper.OidcProviderConfig,
+        client_id(),
+        client_secret()
+      )
+
+    provider_config = %{client_context.provider_configuration |
+      request_parameter_supported: false,
+      require_signed_request_object: false,
+      pushed_authorization_request_endpoint: :undefined,
+      require_pushed_authorization_requests: false,
+      code_challenge_methods_supported: ["S256"]
+    }
+
+    %{client_context | provider_configuration: provider_config}
   end
 
   defp clear_oidc_session(conn) do
@@ -181,24 +173,30 @@ defmodule ClaperWeb.UserOidcAuth do
     Application.get_env(:claper, ClaperWeb.Endpoint)[:base_url]
   end
 
-  defp opts(pkce_verifier) do
-    url = base_url()
+  defp redirect_uri do
+    "#{base_url()}/users/oidc/callback"
+  end
 
-    base_opts = %{
-      redirect_uri: "#{url}/users/oidc/callback",
+  # Options for Oidcc.Authorization.create_redirect_url/2 (uses `scopes`)
+  defp auth_opts(pkce_verifier) do
+    %{
+      redirect_uri: redirect_uri(),
       scopes: scopes(),
-      require_pkce: true
+      require_pkce: true,
+      pkce_verifier: pkce_verifier
     }
+  end
 
-    if pkce_verifier do
-      Map.merge(base_opts, %{
-        pkce_verifier: pkce_verifier,
-        code_challenge: generate_pkce_challenge(pkce_verifier),
-        code_challenge_method: "S256"
-      })
-    else
-      base_opts
-    end
+  # Options for :oidcc_token.retrieve/3 (uses `scope`)
+  defp token_opts(pkce_verifier, nonce) do
+    %{
+      redirect_uri: redirect_uri(),
+      scope: scopes(),
+      require_pkce: true,
+      pkce_verifier: pkce_verifier,
+      nonce: nonce,
+      preferred_auth_methods: [:client_secret_basic, :client_secret_post]
+    }
   end
 
   defp format_refresh_token(%Oidcc.Token.Refresh{token: token}) do
