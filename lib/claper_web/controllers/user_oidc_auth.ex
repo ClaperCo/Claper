@@ -45,7 +45,9 @@ defmodule ClaperWeb.UserOidcAuth do
     nonce = get_session(conn, :oidc_nonce)
 
     if state != saved_state do
-      Logger.error("OIDC state mismatch: received=#{inspect(state)}, saved=#{inspect(saved_state)}")
+      Logger.error(
+        "OIDC state mismatch: received=#{inspect(state)}, saved=#{inspect(saved_state)}"
+      )
 
       conn
       |> clear_oidc_session()
@@ -101,7 +103,8 @@ defmodule ClaperWeb.UserOidcAuth do
   end
 
   # Fetch userinfo to fill in claims missing from the ID token (e.g. email on Authelia)
-  defp maybe_enrich_claims(%{"email" => email} = claims, _token, _client_context) when is_binary(email) do
+  defp maybe_enrich_claims(%{"email" => email} = claims, _token, _client_context)
+       when is_binary(email) do
     {:ok, claims}
   end
 
@@ -131,12 +134,13 @@ defmodule ClaperWeb.UserOidcAuth do
         client_secret()
       )
 
-    provider_config = %{client_context.provider_configuration |
-      request_parameter_supported: false,
-      require_signed_request_object: false,
-      pushed_authorization_request_endpoint: :undefined,
-      require_pushed_authorization_requests: false,
-      code_challenge_methods_supported: ["S256"]
+    provider_config = %{
+      client_context.provider_configuration
+      | request_parameter_supported: false,
+        require_signed_request_object: false,
+        pushed_authorization_request_endpoint: :undefined,
+        require_pushed_authorization_requests: false,
+        code_challenge_methods_supported: ["S256"]
     }
 
     %{client_context | provider_configuration: provider_config}
