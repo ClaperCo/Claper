@@ -10,20 +10,27 @@ defmodule ClaperWeb.StatController do
   @doc """
   Exports form submissions as a CSV file.
   """
-  def export_form(conn, %{"form_id" => form_id}) do
-    form = Forms.get_form!(form_id, [:form_submits])
-    headers = form.fields |> Enum.map(& &1.name)
+  def export_form(%{assigns: %{current_user: current_user}} = conn, %{"form_id" => form_id}) do
+    with form <- Forms.get_form!(form_id, [:form_submits]),
+         presentation_file <-
+           Presentations.get_presentation_file!(form.presentation_file_id, [:event]),
+         event <- presentation_file.event,
+         :ok <- authorize_event_access(current_user, event) do
+      headers = form.fields |> Enum.map(& &1.name)
 
-    data =
-      form.form_submits
-      |> Enum.map(fn submit ->
-        form.fields
-        |> Enum.map(fn field ->
-          Map.get(submit.response, field.name, "")
+      data =
+        form.form_submits
+        |> Enum.map(fn submit ->
+          form.fields
+          |> Enum.map(fn field ->
+            Map.get(submit.response, field.name, "")
+          end)
         end)
-      end)
 
-    export_as_csv(conn, headers, data, "form-#{sanitize(form.title)}")
+      export_as_csv(conn, headers, data, "form-#{sanitize(form.title)}")
+    else
+      :unauthorized -> send_resp(conn, 403, "Forbidden")
+    end
   end
 
   @doc """

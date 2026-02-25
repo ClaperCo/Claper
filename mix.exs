@@ -1,7 +1,7 @@
 defmodule Claper.MixProject do
   use Mix.Project
 
-  @version "2.4.1"
+  @version "2.5.0"
 
   def project do
     [
@@ -95,6 +95,7 @@ defmodule Claper.MixProject do
       {:esbuild, "~> 0.10", runtime: Mix.env() == :dev},
       {:dart_sass, "~> 0.7", runtime: Mix.env() == :dev},
       {:swoosh, "~> 1.19"},
+      {:gen_smtp, "~> 1.3"},
       {:finch, "~> 0.19"},
       {:telemetry_metrics, "~> 1.1"},
       {:telemetry_poller, "~> 1.2"},
@@ -105,7 +106,6 @@ defmodule Claper.MixProject do
       {:hashids, "~> 2.1"},
       {:libcluster, "~> 3.5"},
       {:porcelain, "~> 2.0"},
-      {:hackney, "~> 1.24"},
       {:csv, "~> 3.2"},
       {:credo, "~> 1.7", only: [:dev, :test], runtime: false},
       {:joken, "~> 2.6"},
@@ -117,6 +117,7 @@ defmodule Claper.MixProject do
       {:mua, "~> 0.2"},
       {:mail, "~> 0.5"},
       {:tailwind, "~> 0.3", runtime: Mix.env() == :dev},
+      {:hammer, "~> 7.0"},
       {:bandit, "~> 1.8"}
     ]
   end

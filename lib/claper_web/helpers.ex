@@ -6,8 +6,10 @@ defmodule ClaperWeb.Helpers do
     |> String.split(url_regex, include_captures: true)
     |> Enum.map(fn
       "http" <> _rest = url ->
+        escaped = url |> Phoenix.HTML.html_escape() |> Phoenix.HTML.safe_to_string()
+
         Phoenix.HTML.raw(
-          ~s(<a href="#{url}" target="_blank" class="cursor-pointer text-primary-500 hover:underline font-medium">#{url}</a>)
+          ~s(<a href="#{escaped}" target="_blank" class="cursor-pointer text-primary-500 hover:underline font-medium">#{escaped}</a>)
         )
 
       text ->

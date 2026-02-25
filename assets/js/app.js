@@ -61,7 +61,7 @@ var airdatepickrLocale = locale;
 if (!supportedLocales.includes(locale)) {
   locale = "en";
 }
-if (!airdatePickrSupportedLocales.includes(locale)) {
+if (!airdatePickrSupportedLocales.includes(airdatepickrLocale)) {
   airdatepickrLocale = "en";
 }
 
@@ -407,12 +407,12 @@ Hooks.Pickr = {
         const utc = moment(date).utc().format("YYYY-MM-DDTHH:mm:ss");
         utcTime.value = utc;
       },
-      locale: airdatePickrLocales[airdatepickrLocale],
+      locale: airdatePickrLocales[airdatepickrLocale] || airdatePickrLocales["en"],
     });
   },
   updated() {},
   destroyed() {
-    this.pickr.destroy();
+    if (this.pickr) this.pickr.destroy();
   },
 };
 Hooks.UpdateAttendees = {

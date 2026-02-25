@@ -19,6 +19,8 @@ defmodule Claper.Application do
       ClaperWeb.Telemetry,
       # Start the PubSub system
       {Phoenix.PubSub, name: Claper.PubSub},
+      # Start the rate limiter before the endpoint accepts requests
+      Claper.RateLimit,
       # Start the Endpoint (http/https)
       ClaperWeb.Presence,
       ClaperWeb.Endpoint,

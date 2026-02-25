@@ -711,36 +711,42 @@ defmodule ClaperWeb.EventLive.Manage do
 
   @impl true
   def handle_event("list-tab", %{"tab" => tab}, socket) do
-    socket = assign(socket, :list_tab, String.to_atom(tab))
-
-    socket =
+    {tab_atom, socket} =
       case tab do
         "posts" ->
-          socket
-          |> stream(:posts, list_all_posts(socket, socket.assigns.event.uuid), reset: true)
+          {:posts,
+           stream(socket, :posts, list_all_posts(socket, socket.assigns.event.uuid), reset: true)}
 
         "questions" ->
-          socket
-          |> stream(:questions, list_all_questions(socket, socket.assigns.event.uuid),
-            reset: true
-          )
+          {:questions,
+           stream(socket, :questions, list_all_questions(socket, socket.assigns.event.uuid),
+             reset: true
+           )}
 
         "forms" ->
-          stream(
-            socket,
-            :form_submits,
-            list_form_submits(socket, socket.assigns.event.presentation_file.id),
-            reset: true
-          )
+          {:forms,
+           stream(
+             socket,
+             :form_submits,
+             list_form_submits(socket, socket.assigns.event.presentation_file.id),
+             reset: true
+           )}
 
         "pinned_posts" ->
-          socket
-          |> stream(:pinned_posts, list_pinned_posts(socket, socket.assigns.event.uuid),
-            reset: true
-          )
+          {:pinned_posts,
+           stream(
+             socket,
+             :pinned_posts,
+             list_pinned_posts(socket, socket.assigns.event.uuid),
+             reset: true
+           )}
+
+        _ ->
+          {:posts,
+           stream(socket, :posts, list_all_posts(socket, socket.assigns.event.uuid), reset: true)}
       end
 
-    {:noreply, socket}
+    {:noreply, assign(socket, :list_tab, tab_atom)}
   end
 
   @impl true
@@ -945,7 +951,13 @@ defmodule ClaperWeb.EventLive.Manage do
   end
 
   defp list_all_questions(_socket, event_id, sort \\ "date") do
-    Claper.Posts.list_questions(event_id, [:event, :reactions], String.to_atom(sort))
+    sort_atom =
+      case sort do
+        "likes" -> :likes
+        _ -> :date
+      end
+
+    Claper.Posts.list_questions(event_id, [:event, :reactions], sort_atom)
     |> Enum.filter(&(ClaperWeb.Helpers.body_without_links(&1.body) =~ "?"))
   end
 

@@ -69,6 +69,10 @@ defmodule Claper.Presentations do
   Returns a list of JPG slide URLs for a given presentation `hash` and
   `length`. See also `get_slide_urls/1`.
   """
+  def get_slide_urls(hash, length)
+
+  def get_slide_urls(nil, _), do: []
+
   def get_slide_urls(hash, length) when is_binary(hash) and is_integer(length) do
     config = Application.get_env(:claper, :presentations)
 

@@ -35,6 +35,13 @@ defmodule ClaperWeb.Router do
     plug(:accepts, ["json"])
   end
 
+  pipeline :rate_limit_auth do
+    plug ClaperWeb.Plugs.RateLimitPlug,
+      max_requests: 10,
+      interval_ms: 60_000,
+      prefix: "auth"
+  end
+
   # Manage attendee_identifier in requests
   pipeline :attendee_registration do
     plug(:attendee_identifier)
@@ -120,7 +127,7 @@ defmodule ClaperWeb.Router do
 
   ## Authentication routes
   scope "/", ClaperWeb do
-    pipe_through([:browser, :redirect_if_user_is_authenticated])
+    pipe_through([:browser, :redirect_if_user_is_authenticated, :rate_limit_auth])
 
     get("/users/register", UserRegistrationController, :new)
     post("/users/register", UserRegistrationController, :create)

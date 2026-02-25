@@ -7,6 +7,19 @@ defmodule ClaperWeb.EventLive.Show do
 
   on_mount(ClaperWeb.AttendeeLiveAuth)
 
+  @global_react_types %{
+    "heart" => :heart,
+    "clap" => :clap,
+    "hundred" => :hundred,
+    "raisehand" => :raisehand
+  }
+
+  @reaction_fields %{
+    like: {:like_count, :like_posts},
+    love: {:love_count, :love_posts},
+    lol: {:lol_count, :lol_posts}
+  }
+
   @impl true
   def mount(%{"code" => code}, session, socket) do
     with %{"locale" => locale} <- session do
@@ -422,13 +435,19 @@ defmodule ClaperWeb.EventLive.Show do
         %{"type" => type},
         socket
       ) do
-    Phoenix.PubSub.broadcast(
-      Claper.PubSub,
-      "event:#{socket.assigns.event.uuid}",
-      {:react, String.to_atom(type)}
-    )
+    case Map.get(@global_react_types, type) do
+      nil ->
+        {:noreply, socket}
 
-    {:noreply, socket}
+      type_atom ->
+        Phoenix.PubSub.broadcast(
+          Claper.PubSub,
+          "event:#{socket.assigns.event.uuid}",
+          {:react, type_atom}
+        )
+
+        {:noreply, socket}
+    end
   end
 
   @impl true
@@ -752,8 +771,7 @@ defmodule ClaperWeb.EventLive.Show do
   defp add_reaction(socket, post_id, params, type) do
     with post <- Posts.get_post!(post_id, [:event]),
          {:ok, _} <- Posts.create_reaction(Map.merge(params, %{post: post})) do
-      count_field = String.to_atom("#{type}_count")
-      posts_field = String.to_atom("#{type}_posts")
+      {count_field, posts_field} = @reaction_fields[type]
 
       {:ok, _} = Posts.update_post(post, %{count_field => Map.get(post, count_field) + 1})
       update(socket, posts_field, fn posts -> [post.id | posts] end)
@@ -763,8 +781,7 @@ defmodule ClaperWeb.EventLive.Show do
   defp remove_reaction(socket, post_id, params, type) do
     with post <- Posts.get_post!(post_id, [:event]),
          {:ok, _} <- Posts.delete_reaction(Map.merge(params, %{post: post})) do
-      count_field = String.to_atom("#{type}_count")
-      posts_field = String.to_atom("#{type}_posts")
+      {count_field, posts_field} = @reaction_fields[type]
 
       {:ok, _} = Posts.update_post(post, %{count_field => Map.get(post, count_field) - 1})
       update(socket, posts_field, fn posts -> List.delete(posts, post.id) end)

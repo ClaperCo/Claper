@@ -97,9 +97,62 @@ defmodule Claper.Embeds.Embed do
         |> validate_format(:content, ~r/<iframe.*?<\/iframe>/s,
           message: gettext("Please enter valid HTML content with an iframe tag")
         )
+        |> sanitize_custom_embed()
 
       _ ->
         changeset
     end
+  end
+
+  @allowed_iframe_attrs ~w(src width height frameborder allow allowfullscreen style title loading referrerpolicy sandbox)
+
+  defp sanitize_custom_embed(%{valid?: false} = changeset), do: changeset
+
+  defp sanitize_custom_embed(changeset) do
+    content = get_field(changeset, :content)
+
+    case Regex.run(~r/<iframe\s[^>]*?(?:\/>|>[\s\S]*?<\/iframe>)/i, content) do
+      [iframe_tag] ->
+        put_change(changeset, :content, sanitize_iframe_tag(iframe_tag))
+
+      _ ->
+        add_error(
+          changeset,
+          :content,
+          gettext("Please enter valid HTML content with an iframe tag")
+        )
+    end
+  end
+
+  @allowed_boolean_attrs ~w(allowfullscreen sandbox)
+
+  defp sanitize_iframe_tag(iframe_tag) do
+    # Extract key="value" attributes
+    value_attrs =
+      Regex.scan(~r/([\w-]+)\s*=\s*(?:"([^"]*?)"|'([^']*?)')/i, iframe_tag)
+      |> Enum.filter(fn [_, name | _] -> String.downcase(name) in @allowed_iframe_attrs end)
+      |> Enum.reject(fn [_, name, value | _] ->
+        String.downcase(name) == "src" and String.trim(value) =~ ~r/^javascript:/i
+      end)
+      |> Enum.map(fn [_, name, value | _rest] ->
+        ~s(#{String.downcase(name)}="#{String.replace(value, "\"", "&quot;")}")
+      end)
+
+    # Extract standalone boolean attributes (e.g., allowfullscreen)
+    value_attr_names =
+      Regex.scan(~r/([\w-]+)\s*=/i, iframe_tag)
+      |> Enum.map(fn [_, name] -> String.downcase(name) end)
+      |> MapSet.new()
+
+    boolean_attrs =
+      Regex.scan(~r/\s([\w-]+)(?=[\s>\/])/i, iframe_tag)
+      |> Enum.map(fn [_, name] -> String.downcase(name) end)
+      |> Enum.filter(&(&1 in @allowed_boolean_attrs))
+      |> Enum.reject(&MapSet.member?(value_attr_names, &1))
+      |> Enum.uniq()
+
+    all_attrs = Enum.join(value_attrs ++ boolean_attrs, " ")
+
+    if all_attrs == "", do: "<iframe></iframe>", else: "<iframe #{all_attrs}></iframe>"
   end
 end
