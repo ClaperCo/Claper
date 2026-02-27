@@ -102,7 +102,6 @@ defmodule Claper.MixProject do
       {:gettext, "~> 0.26"},
       {:jason, "~> 1.4"},
       {:sweet_xml, "~> 0.7"},
-      {:plug_cowboy, "~> 2.7"},
       {:hashids, "~> 2.1"},
       {:libcluster, "~> 3.5"},
       {:porcelain, "~> 2.0"},
@@ -114,8 +113,6 @@ defmodule Claper.MixProject do
       {:uuid, "~> 1.1"},
       {:oidcc, "~> 3.5"},
       {:oban, "~> 2.19"},
-      {:mua, "~> 0.2"},
-      {:mail, "~> 0.5"},
       {:tailwind, "~> 0.3", runtime: Mix.env() == :dev},
       {:hammer, "~> 7.0"},
       {:bandit, "~> 1.8"}
