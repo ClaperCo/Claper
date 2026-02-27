@@ -4,7 +4,24 @@ defmodule ClaperWeb.EventLive.ManageableQuizComponent do
   @impl true
   def mount(socket) do
     {:ok,
-     socket |> assign(current_question_idx: -1) |> assign_new(:current_question, fn -> nil end)}
+     socket
+     |> assign(current_question_idx: -1)
+     |> assign_new(:current_question, fn -> nil end)
+     |> assign_new(:average_score, fn -> 0 end)}
+  end
+
+  @impl true
+  def update(assigns, socket) do
+    socket = assign(socket, assigns)
+
+    socket =
+      if Map.has_key?(assigns, :quiz) do
+        assign(socket, :average_score, Claper.Quizzes.calculate_average_score(assigns.quiz.id))
+      else
+        socket
+      end
+
+    {:ok, socket}
   end
 
   @impl true
@@ -28,7 +45,7 @@ defmodule ClaperWeb.EventLive.ManageableQuizComponent do
         >
           <p class="font-semibold text-2xl">{gettext("Average score")}:</p>
           <p class="font-semibold text-7xl">
-            {Claper.Quizzes.calculate_average_score(@quiz.id)}/{length(@quiz.quiz_questions)}
+            {@average_score}/{length(@quiz.quiz_questions)}
           </p>
         </div>
 

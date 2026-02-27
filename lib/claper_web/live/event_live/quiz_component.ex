@@ -96,7 +96,7 @@ defmodule ClaperWeb.EventLive.QuizComponent do
                     <div class="bg-linear-to-r from-primary-500 to-secondary-500 h-full absolute left-0 transition-all rounded-l-3xl">
                     </div>
                     <div class="flex space-x-3 items-center z-10 text-left">
-                      <%= if Enum.member?(@selected_quiz_question_opts, opt) do %>
+                      <%= if Enum.any?(@selected_quiz_question_opts, fn x -> x.id == opt.id end) do %>
                         <span class="h-5 w-5 mt-0.5 rounded-md point-select bg-white"></span>
                       <% else %>
                         <span class="h-5 w-5 mt-0.5 rounded-md point-select border-2 border-white">

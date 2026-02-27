@@ -16,6 +16,7 @@
 - Improve SMTP config and handling (#197)
 - Fix presentation slides URL (#200)
 - Fix custom S3 endpoint (#199)
+- Fix quizz real time average score update and id duplication
 
 ### v.2.4.0
 

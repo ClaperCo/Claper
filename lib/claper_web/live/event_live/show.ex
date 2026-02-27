@@ -686,7 +686,9 @@ defmodule ClaperWeb.EventLive.Show do
     quiz_question_opt =
       Enum.find(current_quiz_question.quiz_question_opts, fn x -> x.id == opt end)
 
-    if Enum.member?(socket.assigns.selected_quiz_question_opts, quiz_question_opt) do
+    if Enum.any?(socket.assigns.selected_quiz_question_opts, fn x ->
+         x.id == quiz_question_opt.id
+       end) do
       {:noreply,
        socket
        |> assign(
@@ -713,6 +715,7 @@ defmodule ClaperWeb.EventLive.Show do
       when is_map(current_user) do
     case Claper.Quizzes.submit_quiz(
            current_user,
+           socket.assigns.event.uuid,
            opts,
            socket.assigns.current_interaction.id
          ) do
@@ -720,6 +723,7 @@ defmodule ClaperWeb.EventLive.Show do
         {:noreply,
          socket
          |> load_current_interaction(quiz, true)
+         |> assign(:selected_quiz_question_opts, [])
          |> assign(:current_quiz_question_idx, socket.assigns.current_quiz_question_idx + 1)}
     end
   end
@@ -733,6 +737,7 @@ defmodule ClaperWeb.EventLive.Show do
       ) do
     case Claper.Quizzes.submit_quiz(
            attendee_identifier,
+           socket.assigns.event.uuid,
            opts,
            socket.assigns.current_interaction.id
          ) do
@@ -740,6 +745,7 @@ defmodule ClaperWeb.EventLive.Show do
         {:noreply,
          socket
          |> load_current_interaction(quiz, true)
+         |> assign(:selected_quiz_question_opts, [])
          |> assign(:current_quiz_question_idx, socket.assigns.current_quiz_question_idx + 1)}
     end
   end
@@ -883,7 +889,7 @@ defmodule ClaperWeb.EventLive.Show do
     socket |> assign(:current_interaction, interaction) |> get_current_form_submit(interaction.id)
   end
 
-  defp load_current_interaction(socket, %Quizzes.Quiz{} = interaction, _same_interaction) do
+  defp load_current_interaction(socket, %Quizzes.Quiz{} = interaction, same_interaction) do
     quiz = Quizzes.set_percentages(interaction)
 
     socket =
@@ -891,11 +897,17 @@ defmodule ClaperWeb.EventLive.Show do
       |> assign(:current_interaction, quiz)
       |> get_current_quiz_reponses(interaction.id)
 
-    if length(socket.assigns.current_quiz_responses) > 0 do
+    if same_interaction do
       socket
-      |> assign(:current_quiz_question_idx, length(interaction.quiz_questions))
     else
-      socket
+      if length(socket.assigns.current_quiz_responses) > 0 do
+        socket
+        |> assign(:current_quiz_question_idx, length(interaction.quiz_questions))
+      else
+        socket
+        |> assign(:current_quiz_question_idx, 0)
+        |> assign(:selected_quiz_question_opts, [])
+      end
     end
   end
 
