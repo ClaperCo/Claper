@@ -4,6 +4,7 @@ defmodule Claper.Audit.Log do
 
   @derive {
     Flop.Schema,
+    max_limit: 100,
     filterable: [:action, :user_email],
     sortable: [:inserted_at, :action],
     default_order: %{
@@ -37,6 +38,8 @@ defmodule Claper.Audit.Log do
     log
     |> cast(attrs, [:action, :resource_type, :resource_id, :metadata, :user_id])
     |> validate_required([:action])
+    |> validate_length(:action, max: 255)
+    |> validate_length(:resource_type, max: 255)
     |> assoc_constraint(:user)
   end
 end
