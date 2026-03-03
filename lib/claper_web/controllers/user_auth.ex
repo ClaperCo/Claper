@@ -4,6 +4,8 @@ defmodule ClaperWeb.UserAuth do
   """
   use ClaperWeb, :controller
 
+  require Logger
+
   import Plug.Conn
   import Phoenix.Controller
   import ClaperWeb.Helpers.ConnUtils, only: [get_client_ip: 1, get_user_agent: 1]
@@ -33,7 +35,7 @@ defmodule ClaperWeb.UserAuth do
     token = Accounts.generate_user_session_token(user)
     user_return_to = get_session(conn, :user_return_to)
 
-    Audit.log_action(user, "user.login", %{
+    async_log_action(user, "user.login", %{
       ip_address: get_client_ip(conn),
       user_agent: get_user_agent(conn)
     })
@@ -89,7 +91,7 @@ defmodule ClaperWeb.UserAuth do
       ClaperWeb.Endpoint.broadcast(live_socket_id, "disconnect", %{})
     end
 
-    Audit.log_action(conn.assigns[:current_user], "user.logout", %{
+    async_log_action(conn.assigns[:current_user], "user.logout", %{
       ip_address: get_client_ip(conn),
       user_agent: get_user_agent(conn)
     })
@@ -172,4 +174,16 @@ defmodule ClaperWeb.UserAuth do
   defp maybe_store_return_to(conn), do: conn
 
   defp signed_in_path(_conn), do: "/events"
+
+  defp async_log_action(user, action, metadata) do
+    Task.async(fn ->
+      with {:error, reason} <- Audit.log_action(user, action, metadata) do
+        Logger.error(
+          "Error creating #{inspect(action)} audit log for user #{inspect(get_in(user.email))}: #{inspect(reason)}"
+        )
+
+        {:error, reason}
+      end
+    end)
+  end
 end
