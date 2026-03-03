@@ -12,9 +12,8 @@ defmodule Claper.Repo.Migrations.CreateAuditLogs do
       timestamps(updated_at: false)
     end
 
-    create index(:audit_logs, [:user_id])
-    create index(:audit_logs, [:action])
-    create index(:audit_logs, [:resource_type, :resource_id])
     create index(:audit_logs, [:inserted_at])
+    create index(:audit_logs, [:action, :inserted_at])
+    create index(:audit_logs, [:user_id, :inserted_at])
   end
 end
