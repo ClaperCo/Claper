@@ -56,30 +56,33 @@
       """,
       table_attrs: [class: "table table-zebra w-full"],
       symbol_asc: ~H"""
-      <ClaperWeb.Icons.arrow_up />
+      <span aria-hidden="true"><ClaperWeb.Icons.arrow_up /></span>
       """,
       symbol_desc: ~H"""
-      <ClaperWeb.Icons.arrow_down />
+      <span aria-hidden="true"><ClaperWeb.Icons.arrow_down /></span>
       """
     ]}
   >
-    <:col :let={log} label="Timestamp" field={:inserted_at}>{log.inserted_at}</:col>
-    <:col :let={log} label="Action" field={:action}>
+    <:col :let={log} label={gettext("ID")} field={:id}>{log.id}</:col>
+    <:col :let={log} label={gettext("Action")} field={:action}>
       <span class="badge badge-outline">{log.action}</span>
     </:col>
-    <:col :let={log} label="User" field={:user_email}>
-      {get_in(log, [Access.key!(:user), Access.key!(:email)]) || "System"}
+    <:col :let={log} label={gettext("User")} field={:user_email}>
+      {get_in(log.user.email) || "—"}
+    </:col>
+    <:col :let={log} label={gettext("Timestamp")} field={:inserted_at}>
+      {format_timestamp(log.inserted_at)}
     </:col>
     <:col
       :let={log}
-      label="Details"
+      label={gettext("Metadata")}
       field={:metadata}
       tbody_td_attrs={[class: "max-w-xs truncate text-sm text-base-content/70"]}
     >
       {format_metadata(log.metadata)}
     </:col>
     <:action :let={log} tbody_td_attrs={[class: "text-right"]}>
-      <.link patch={~p"/admin/audit_logs/#{log}"} class="btn btn-link btn-sm">
+      <.link patch={~p"/admin/audit_logs/#{log}"} class="btn btn-link btn-sm" aria-label={gettext("View details for log #%{id}", id: log.id)}>
         <ClaperWeb.Icons.eye />
       </.link>
     </:action>
@@ -106,19 +109,19 @@
         <%= if @log.user do %>
           <span class="space-x-2">
             <a href={"mailto:#{@log.user.email}"} class="link link-primary">{@log.user.email}</a>
-            <.link navigate={~p"/admin/users/#{@log.user}"} class="link link-primary *:inline">
+            <.link navigate={~p"/admin/users/#{@log.user}"} class="link link-primary *:inline" aria-label={gettext("View profile for %{email}", email: @log.user.email)}>
               <ClaperWeb.Icons.eye />
             </.link>
           </span>
         <% else %>
-          {gettext("System")}
+          —
         <% end %>
       </dd>
     </div>
     <div class="col-span-full grid grid-cols-subgrid gap-y-1 items-baseline">
       <dt class="font-medium sm:text-right">{gettext("Timestamp")}</dt>
       <dd class="bg-base-200 p-3 rounded-lg inset-shadow-sm overflow-x-auto">
-        {Calendar.strftime(@log.inserted_at, "%Y-%m-%d %H:%M:%S\u00A0UTC")}
+        {format_timestamp(@log.inserted_at)}
       </dd>
     </div>
     <%= if @log.resource_type do %>
@@ -150,7 +153,7 @@
             <% end %>
           </dl>
         <% else %>
-          <span class="italic">{gettext("No metadata")}</span>
+          —
         <% end %>
       </dd>
     </div>
