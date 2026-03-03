@@ -53,7 +53,7 @@ defmodule ClaperWeb.AdminLive.AuditLogLive do
 
   @impl Phoenix.LiveView
   def handle_event("filter-logs", unsigned_params, socket) do
-    flop = Flop.validate!(unsigned_params, for: Audit.Log)
+    flop = Flop.validate!(unsigned_params, for: Audit.Log, replace_invalid_params: true)
     to = Flop.Phoenix.build_path(~p"/admin/audit_logs", flop)
 
     {:noreply, push_patch(socket, to: to)}
