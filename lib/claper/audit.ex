@@ -66,7 +66,7 @@ defmodule Claper.Audit do
   Returns a paginated, optionally filtered and sorted, list of audit logs.
   """
   def list_logs(params \\ %{}) do
-    query = from l in Log, left_join: u in assoc(l, :user), as: :user, preload: [:user]
+    query = from l in Log, left_join: u in assoc(l, :user), as: :user, preload: [user: u]
     Flop.validate_and_run!(query, params, for: Log, replace_invalid_params: true)
   end
 
@@ -97,9 +97,9 @@ defmodule Claper.Audit do
 
   """
   def get_log!(id) do
-    Log
-    |> Repo.get!(id)
-    |> Repo.preload(:user)
+    Repo.one!(
+      from l in Log, left_join: u in assoc(l, :user), where: l.id == ^id, preload: [user: u]
+    )
   end
 
   @doc """
