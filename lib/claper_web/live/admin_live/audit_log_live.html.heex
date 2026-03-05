@@ -82,7 +82,11 @@
       {format_metadata(log.metadata)}
     </:col>
     <:action :let={log} tbody_td_attrs={[class: "text-right"]}>
-      <.link patch={~p"/admin/audit_logs/#{log}"} class="btn btn-link btn-sm" aria-label={gettext("View details for log #%{id}", id: log.id)}>
+      <.link
+        patch={~p"/admin/audit_logs/#{log}"}
+        class="btn btn-link btn-sm"
+        aria-label={gettext("View details for log #%{id}", id: log.id)}
+      >
         <ClaperWeb.Icons.eye />
       </.link>
     </:action>
@@ -109,7 +113,11 @@
         <%= if @log.user do %>
           <span class="space-x-2">
             <a href={"mailto:#{@log.user.email}"} class="link link-primary">{@log.user.email}</a>
-            <.link navigate={~p"/admin/users/#{@log.user}"} class="link link-primary *:inline" aria-label={gettext("View profile for %{email}", email: @log.user.email)}>
+            <.link
+              navigate={~p"/admin/users/#{@log.user}"}
+              class="link link-primary *:inline"
+              aria-label={gettext("View profile for %{email}", email: @log.user.email)}
+            >
               <ClaperWeb.Icons.eye />
             </.link>
           </span>
