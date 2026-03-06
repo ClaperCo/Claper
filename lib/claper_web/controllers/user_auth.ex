@@ -176,13 +176,11 @@ defmodule ClaperWeb.UserAuth do
   defp signed_in_path(_conn), do: "/events"
 
   defp async_log_action(user, action, metadata) do
-    Task.async(fn ->
+    Task.Supervisor.start_child(Claper.TaskSupervisor, fn ->
       with {:error, reason} <- Audit.log_action(user, action, metadata) do
         Logger.error(
           "Error creating #{inspect(action)} audit log for user #{inspect(get_in(user.email))}: #{inspect(reason)}"
         )
-
-        {:error, reason}
       end
     end)
   end
