@@ -2688,7 +2688,8 @@ msgstr "Obligāti aizpildāms"
 msgid "(optional)"
 msgstr "(pēc izvēles)"
 
-#: lib/claper_web/live/admin_live/audit_log_live.html.heex:98
+#: lib/claper_web/live/admin_live/audit_log_live.html.heex:67
+#: lib/claper_web/live/admin_live/audit_log_live.html.heex:105
 #, elixir-autogen, elixir-format, fuzzy
 msgid "Action"
 msgstr "Darbība"
@@ -2709,32 +2710,29 @@ msgstr "Audita žurnāla informācija"
 msgid "Audit Logs"
 msgstr "Audita žurnāli"
 
-#: lib/claper_web/live/admin_live/audit_log_live.html.heex:92
+#: lib/claper_web/live/admin_live/audit_log_live.html.heex:66
+#: lib/claper_web/live/admin_live/audit_log_live.html.heex:99
 #, elixir-autogen, elixir-format
 msgid "ID"
 msgstr "ID"
 
-#: lib/claper_web/live/admin_live/audit_log_live.html.heex:141
+#: lib/claper_web/live/admin_live/audit_log_live.html.heex:78
+#: lib/claper_web/live/admin_live/audit_log_live.html.heex:152
 #, elixir-autogen, elixir-format
 msgid "Metadata"
 msgstr "Metadati"
-
-#: lib/claper_web/live/admin_live/audit_log_live.html.heex:153
-#, elixir-autogen, elixir-format
-msgid "No metadata"
-msgstr "Nav metadatu"
 
 #: lib/claper_web/live/admin_live/audit_log_live.html.heex:55
 #, elixir-autogen, elixir-format, fuzzy
 msgid "No results."
 msgstr "Nav rezultātu."
 
-#: lib/claper_web/live/admin_live/audit_log_live.html.heex:134
+#: lib/claper_web/live/admin_live/audit_log_live.html.heex:145
 #, elixir-autogen, elixir-format
 msgid "Resource ID"
 msgstr "Resursa ID"
 
-#: lib/claper_web/live/admin_live/audit_log_live.html.heex:126
+#: lib/claper_web/live/admin_live/audit_log_live.html.heex:137
 #, elixir-autogen, elixir-format, fuzzy
 msgid "Resource Type"
 msgstr "Resursa veids"
@@ -2744,17 +2742,14 @@ msgstr "Resursa veids"
 msgid "Search by user email"
 msgstr "Meklēt pēc e-pasta"
 
-#: lib/claper_web/live/admin_live/audit_log_live.html.heex:114
-#, elixir-autogen, elixir-format
-msgid "System"
-msgstr "Sistēma"
-
-#: lib/claper_web/live/admin_live/audit_log_live.html.heex:119
+#: lib/claper_web/live/admin_live/audit_log_live.html.heex:73
+#: lib/claper_web/live/admin_live/audit_log_live.html.heex:130
 #, elixir-autogen, elixir-format
 msgid "Timestamp"
 msgstr "Laika zīmogs"
 
-#: lib/claper_web/live/admin_live/audit_log_live.html.heex:104
+#: lib/claper_web/live/admin_live/audit_log_live.html.heex:70
+#: lib/claper_web/live/admin_live/audit_log_live.html.heex:111
 #, elixir-autogen, elixir-format, fuzzy
 msgid "User"
 msgstr "Lietotājs"
@@ -2763,3 +2758,13 @@ msgstr "Lietotājs"
 #, elixir-autogen, elixir-format, fuzzy
 msgid "close"
 msgstr "aizvērt"
+
+#: lib/claper_web/live/admin_live/audit_log_live.html.heex:88
+#, elixir-autogen, elixir-format
+msgid "View details for log #%{id}"
+msgstr "Skatīt žurnāla Nr. %{id} informāciju"
+
+#: lib/claper_web/live/admin_live/audit_log_live.html.heex:119
+#, elixir-autogen, elixir-format
+msgid "View profile for %{email}"
+msgstr "Skatīt profilu %{email}"

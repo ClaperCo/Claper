@@ -2684,7 +2684,8 @@ msgstr "Kötelező"
 msgid "(optional)"
 msgstr "(opcionális)"
 
-#: lib/claper_web/live/admin_live/audit_log_live.html.heex:98
+#: lib/claper_web/live/admin_live/audit_log_live.html.heex:67
+#: lib/claper_web/live/admin_live/audit_log_live.html.heex:105
 #, elixir-autogen, elixir-format, fuzzy
 msgid "Action"
 msgstr "Művelet"
@@ -2705,32 +2706,29 @@ msgstr "Auditnapló részletei"
 msgid "Audit Logs"
 msgstr "Auditnaplók"
 
-#: lib/claper_web/live/admin_live/audit_log_live.html.heex:92
+#: lib/claper_web/live/admin_live/audit_log_live.html.heex:66
+#: lib/claper_web/live/admin_live/audit_log_live.html.heex:99
 #, elixir-autogen, elixir-format
 msgid "ID"
 msgstr "Azonosító"
 
-#: lib/claper_web/live/admin_live/audit_log_live.html.heex:141
+#: lib/claper_web/live/admin_live/audit_log_live.html.heex:78
+#: lib/claper_web/live/admin_live/audit_log_live.html.heex:152
 #, elixir-autogen, elixir-format
 msgid "Metadata"
 msgstr "Metaadatok"
-
-#: lib/claper_web/live/admin_live/audit_log_live.html.heex:153
-#, elixir-autogen, elixir-format
-msgid "No metadata"
-msgstr "Nincsenek metaadatok"
 
 #: lib/claper_web/live/admin_live/audit_log_live.html.heex:55
 #, elixir-autogen, elixir-format, fuzzy
 msgid "No results."
 msgstr "Nincsenek találatok."
 
-#: lib/claper_web/live/admin_live/audit_log_live.html.heex:134
+#: lib/claper_web/live/admin_live/audit_log_live.html.heex:145
 #, elixir-autogen, elixir-format
 msgid "Resource ID"
 msgstr "Erőforrás-azonosító"
 
-#: lib/claper_web/live/admin_live/audit_log_live.html.heex:126
+#: lib/claper_web/live/admin_live/audit_log_live.html.heex:137
 #, elixir-autogen, elixir-format, fuzzy
 msgid "Resource Type"
 msgstr "Erőforrás típusa"
@@ -2740,17 +2738,14 @@ msgstr "Erőforrás típusa"
 msgid "Search by user email"
 msgstr "Keresés e-mail cím alapján"
 
-#: lib/claper_web/live/admin_live/audit_log_live.html.heex:114
-#, elixir-autogen, elixir-format
-msgid "System"
-msgstr "Rendszer"
-
-#: lib/claper_web/live/admin_live/audit_log_live.html.heex:119
+#: lib/claper_web/live/admin_live/audit_log_live.html.heex:73
+#: lib/claper_web/live/admin_live/audit_log_live.html.heex:130
 #, elixir-autogen, elixir-format
 msgid "Timestamp"
 msgstr "Időbélyeg"
 
-#: lib/claper_web/live/admin_live/audit_log_live.html.heex:104
+#: lib/claper_web/live/admin_live/audit_log_live.html.heex:70
+#: lib/claper_web/live/admin_live/audit_log_live.html.heex:111
 #, elixir-autogen, elixir-format, fuzzy
 msgid "User"
 msgstr "Felhasználó"
@@ -2759,3 +2754,13 @@ msgstr "Felhasználó"
 #, elixir-autogen, elixir-format, fuzzy
 msgid "close"
 msgstr "bezárás"
+
+#: lib/claper_web/live/admin_live/audit_log_live.html.heex:88
+#, elixir-autogen, elixir-format
+msgid "View details for log #%{id}"
+msgstr "Az %{id}. napló részleteinek megtekintése"
+
+#: lib/claper_web/live/admin_live/audit_log_live.html.heex:119
+#, elixir-autogen, elixir-format
+msgid "View profile for %{email}"
+msgstr "Az %{email} profil megtekintése"
