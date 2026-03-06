@@ -110,6 +110,22 @@ s3_public_url =
     )
   )
 
+remote_ip_proxies =
+  get_var_from_path_or_env(config_dir, "REMOTE_IP_PROXIES", "")
+  |> String.split(",")
+  |> Enum.map(&String.trim/1)
+  |> Enum.reject(&(&1 == ""))
+
+remote_ip_headers =
+  get_var_from_path_or_env(
+    config_dir,
+    "REMOTE_IP_HEADERS",
+    "forwarded,x-forwarded-for,x-client-ip,x-real-ip"
+  )
+  |> String.split(",")
+  |> Enum.map(&String.trim/1)
+  |> Enum.reject(&(&1 == ""))
+
 same_site_cookie = get_var_from_path_or_env(config_dir, "SAME_SITE_COOKIE", "Lax")
 
 secure_cookie =
@@ -192,7 +208,9 @@ config :claper,
   email_confirmation: email_confirmation,
   allow_unlink_external_provider: allow_unlink_external_provider,
   logout_redirect_url: logout_redirect_url,
-  languages: languages
+  languages: languages,
+  remote_ip_proxies: remote_ip_proxies,
+  remote_ip_headers: remote_ip_headers
 
 config :claper, :presentations,
   max_file_size: max_file_size,
