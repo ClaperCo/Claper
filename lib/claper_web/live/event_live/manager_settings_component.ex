@@ -5,7 +5,7 @@ defmodule ClaperWeb.EventLive.ManagerSettingsComponent do
     assigns = assigns |> assign_new(:show_shortcut, fn -> true end)
 
     ~H"""
-    <div class="grid grid-cols-1 @md:grid-cols-2 @md:space-x-5 px-5 py-3 h-full mb-10">
+    <div class="grid grid-cols-1 @md:grid-cols-2 @md:space-x-5 px-5 py-3 overflow-y-auto">
       <div>
         <div class="flex items-center space-x-2 font-semibold text-lg">
           <svg

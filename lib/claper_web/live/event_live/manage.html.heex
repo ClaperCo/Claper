@@ -708,7 +708,7 @@
           data-tg-group="manage"
         >
           <!-- Interactions -->
-          <div class="h- overflow-y-auto @container">
+          <div class="h-full overflow-y-auto @container">
             <div
               :if={length(@interactions) == 0}
               class="text-center flex flex-col space-y-5 items-center justify-center text-gray-400 h-full md:pt-8"
@@ -801,6 +801,26 @@
                               />
                             </svg>
                           </a>
+                          <button
+                            class="p-2 rounded-sm text-xs font-medium text-center text-primary-500"
+                            phx-click="duplicate-interaction"
+                            phx-value-id={interaction.id}
+                            phx-value-type="poll"
+                          >
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              class="h-5 w-5"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              stroke="currentColor"
+                              stroke-width="2"
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                            >
+                              <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
+                              <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+                            </svg>
+                          </button>
                         </div>
                       <% %Claper.Forms.Form{} -> %>
                         <div class="flex items-center justify-between mb-2">
@@ -842,6 +862,26 @@
                               />
                             </svg>
                           </.link>
+                          <button
+                            class="p-2 rounded-sm text-xs font-medium text-center text-primary-500"
+                            phx-click="duplicate-interaction"
+                            phx-value-id={interaction.id}
+                            phx-value-type="form"
+                          >
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              class="h-5 w-5"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              stroke="currentColor"
+                              stroke-width="2"
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                            >
+                              <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
+                              <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+                            </svg>
+                          </button>
                         </div>
                       <% %Claper.Embeds.Embed{} -> %>
                         <div class="flex items-center justify-between mb-2">
@@ -887,6 +927,26 @@
                               />
                             </svg>
                           </a>
+                          <button
+                            class="p-2 rounded-sm text-xs font-medium text-center text-primary-500"
+                            phx-click="duplicate-interaction"
+                            phx-value-id={interaction.id}
+                            phx-value-type="embed"
+                          >
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              class="h-5 w-5"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              stroke="currentColor"
+                              stroke-width="2"
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                            >
+                              <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
+                              <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+                            </svg>
+                          </button>
                         </div>
                       <% %Claper.Quizzes.Quiz{} -> %>
                         <div class="flex items-center justify-between mb-2">
@@ -952,6 +1012,26 @@
                               />
                             </svg>
                           </a>
+                          <button
+                            class="p-2 rounded-sm text-xs font-medium text-center text-primary-500"
+                            phx-click="duplicate-interaction"
+                            phx-value-id={interaction.id}
+                            phx-value-type="quiz"
+                          >
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              class="h-5 w-5"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              stroke="currentColor"
+                              stroke-width="2"
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                            >
+                              <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
+                              <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+                            </svg>
+                          </button>
                         </div>
                       <% _ -> %>
                         <!-- Handle any other types of interactions here if needed -->

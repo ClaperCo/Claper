@@ -132,4 +132,88 @@ defmodule Claper.Interactions do
   def disable_interaction(%Quizzes.Quiz{} = interaction) do
     Quizzes.set_disabled(interaction.id)
   end
+
+  def duplicate_interaction(%Polls.Poll{} = poll) do
+    poll = Polls.get_poll!(poll.id)
+
+    attrs =
+      poll
+      |> Map.from_struct()
+      |> Map.drop([:id, :inserted_at, :updated_at, :__meta__, :__struct__])
+      |> Map.put(
+        :poll_opts,
+        poll.poll_opts
+        |> Enum.map(fn opt ->
+          opt
+          |> Map.from_struct()
+          |> Map.drop([:id, :inserted_at, :updated_at, :__meta__, :__struct__, :poll_id])
+          |> Map.put(:vote_count, 0)
+        end)
+      )
+      |> Map.put(:enabled, false)
+      |> Map.put(:title, "#{poll.title} (#{gettext("copy")})")
+
+    Polls.create_poll(attrs)
+  end
+
+  def duplicate_interaction(%Quizzes.Quiz{} = quiz) do
+    quiz = Quizzes.get_quiz!(quiz.id, [:quiz_questions, quiz_questions: :quiz_question_opts])
+
+    attrs =
+      quiz
+      |> Map.from_struct()
+      |> Map.drop([:id, :inserted_at, :updated_at, :__meta__, :__struct__])
+      |> Map.put(
+        :quiz_questions,
+        quiz.quiz_questions
+        |> Enum.map(fn q ->
+          q
+          |> Map.from_struct()
+          |> Map.drop([:id, :inserted_at, :updated_at, :__meta__, :__struct__, :quiz_id])
+          |> Map.put(
+            :quiz_question_opts,
+            q.quiz_question_opts
+            |> Enum.map(fn o ->
+              o
+              |> Map.from_struct()
+              |> Map.drop([
+                :id,
+                :inserted_at,
+                :updated_at,
+                :__meta__,
+                :__struct__,
+                :quiz_question_id
+              ])
+              |> Map.put(:response_count, 0)
+            end)
+          )
+        end)
+      )
+      |> Map.put(:enabled, false)
+      |> Map.put(:title, "#{quiz.title} (#{gettext("copy")})")
+
+    Quizzes.create_quiz(attrs)
+  end
+
+  def duplicate_interaction(%Forms.Form{} = form) do
+    attrs =
+      form
+      |> Map.from_struct()
+      |> Map.drop([:id, :inserted_at, :updated_at, :__meta__, :__struct__])
+      |> Map.put(:enabled, false)
+      |> Map.put(:title, "#{form.title} (#{gettext("copy")})")
+
+    Forms.create_form(attrs)
+  end
+
+  def duplicate_interaction(%Embeds.Embed{} = embed) do
+    attrs =
+      embed
+      |> Map.from_struct()
+      |> Map.drop([:id, :inserted_at, :updated_at, :__meta__, :__struct__])
+      |> Map.put(:enabled, false)
+      |> Map.put(:title, "#{embed.title} (#{gettext("copy")})")
+
+    Embeds.create_embed(attrs)
+  end
 end

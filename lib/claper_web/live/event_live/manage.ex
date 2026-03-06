@@ -799,6 +799,27 @@ defmodule ClaperWeb.EventLive.Manage do
     {:noreply, socket |> assign(:interaction_modal, true)}
   end
 
+  def handle_event("duplicate-interaction", %{"id" => id, "type" => type}, socket) do
+    interaction =
+      case type do
+        "poll" -> Polls.get_poll!(id)
+        "form" -> Forms.get_form!(id)
+        "embed" -> Embeds.get_embed!(id)
+        "quiz" -> Quizzes.get_quiz!(id)
+      end
+
+    case Claper.Interactions.duplicate_interaction(interaction) do
+      {:ok, _} ->
+        {:noreply,
+         socket
+         |> put_flash(:info, gettext("Interaction duplicated successfully"))
+         |> interactions_at_position(socket.assigns.state.position)}
+
+      {:error, _} ->
+        {:noreply, socket |> put_flash(:error, gettext("Failed to duplicate interaction"))}
+    end
+  end
+
   @impl true
   def handle_params(params, _url, socket) do
     {:noreply, apply_action(socket, socket.assigns.live_action, params)}

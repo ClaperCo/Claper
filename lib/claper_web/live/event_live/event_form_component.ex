@@ -307,7 +307,7 @@ defmodule ClaperWeb.EventLive.EventFormComponent do
 
       Enum.each(e.leaders, fn leader ->
         # Only send email if leader was not present before the update
-        if !Enum.member?(previous_leaders, leader) do
+        if !Enum.any?(previous_leaders, fn pl -> pl.email == leader.email end) do
           Claper.Accounts.LeaderNotifier.deliver_event_invitation(
             e.name,
             leader.email,
