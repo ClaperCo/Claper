@@ -60,6 +60,10 @@ defmodule ClaperWeb.Endpoint do
 
   plug(:runtime_session)
 
+  plug RemoteIp,
+    proxies: {Application, :get_env, [:claper, :remote_ip_proxies, []]},
+    headers: {Application, :get_env, [:claper, :remote_ip_headers, []]}
+
   plug ClaperWeb.Router
 
   def runtime_session(conn, _opts) do

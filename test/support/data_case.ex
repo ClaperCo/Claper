@@ -32,10 +32,28 @@ defmodule Claper.DataCase do
     # Don't check out a connection if a setup_all did so already
     if context[:sandbox_owner_pid] == nil do
       pid = Ecto.Adapters.SQL.Sandbox.start_owner!(Claper.Repo, shared: not context[:async])
-      on_exit(fn -> Ecto.Adapters.SQL.Sandbox.stop_owner(pid) end)
+
+      on_exit(fn ->
+        drain_task_supervisor(Claper.TaskSupervisor)
+        Ecto.Adapters.SQL.Sandbox.stop_owner(pid)
+      end)
     end
 
     :ok
+  end
+
+  defp drain_task_supervisor(supervisor) do
+    supervisor
+    |> Task.Supervisor.children()
+    |> Enum.each(fn pid ->
+      ref = Process.monitor(pid)
+
+      receive do
+        {:DOWN, ^ref, :process, ^pid, _} -> :ok
+      after
+        1_000 -> Process.demonitor(ref, [:flush])
+      end
+    end)
   end
 
   @doc """

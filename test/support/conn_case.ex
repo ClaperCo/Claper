@@ -36,8 +36,27 @@ defmodule ClaperWeb.ConnCase do
 
   setup tags do
     pid = Ecto.Adapters.SQL.Sandbox.start_owner!(Claper.Repo, shared: not tags[:async])
-    on_exit(fn -> Ecto.Adapters.SQL.Sandbox.stop_owner(pid) end)
+
+    on_exit(fn ->
+      drain_task_supervisor(Claper.TaskSupervisor)
+      Ecto.Adapters.SQL.Sandbox.stop_owner(pid)
+    end)
+
     {:ok, conn: Phoenix.ConnTest.build_conn()}
+  end
+
+  defp drain_task_supervisor(supervisor) do
+    supervisor
+    |> Task.Supervisor.children()
+    |> Enum.each(fn pid ->
+      ref = Process.monitor(pid)
+
+      receive do
+        {:DOWN, ^ref, :process, ^pid, _} -> :ok
+      after
+        1_000 -> Process.demonitor(ref, [:flush])
+      end
+    end)
   end
 
   @doc """

@@ -419,8 +419,9 @@ defmodule Claper.Events do
               _ -> false
             end)
 
-          for %{"email" => leader_email} <- deleted_leaders do
-            leader = Accounts.get_user_by_email(leader_email)
+          for %{"email" => leader_email} <- deleted_leaders,
+              leader = Accounts.get_user_by_email(leader_email),
+              not is_nil(leader) do
             broadcast_user_events(leader.id, {:updated, event})
           end
 
@@ -764,8 +765,10 @@ defmodule Claper.Events do
   """
   def delete_event(%Event{} = event) do
     leaders =
-      for %{email: email} <- get_activity_leaders_for_event(event.id) do
-        Accounts.get_user_by_email(email)
+      for %{email: email} <- get_activity_leaders_for_event(event.id),
+          leader = Accounts.get_user_by_email(email),
+          not is_nil(leader) do
+        leader
       end
 
     with {:ok, event} <- Repo.delete(event) do
@@ -896,8 +899,9 @@ defmodule Claper.Events do
     event = Repo.preload(event, [:leaders])
     broadcast_user_events(event.user_id, message)
 
-    for %{email: leader_email} <- event.leaders do
-      leader = Accounts.get_user_by_email(leader_email)
+    for %{email: leader_email} <- event.leaders,
+        leader = Accounts.get_user_by_email(leader_email),
+        not is_nil(leader) do
       broadcast_user_events(leader.id, message)
     end
   end

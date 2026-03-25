@@ -4,10 +4,13 @@ defmodule ClaperWeb.UserAuth do
   """
   use ClaperWeb, :controller
 
+  require Logger
+
   import Plug.Conn
   import Phoenix.Controller
+  import ClaperWeb.Helpers.ConnUtils, only: [get_client_ip: 1, get_user_agent: 1]
 
-  alias Claper.Accounts
+  alias Claper.{Accounts, Audit}
 
   # Make the remember me cookie valid for 60 days.
   # If you want bump or reduce this value, also change
@@ -31,6 +34,11 @@ defmodule ClaperWeb.UserAuth do
   def log_in_user(conn, user, params \\ %{}) do
     token = Accounts.generate_user_session_token(user)
     user_return_to = get_session(conn, :user_return_to)
+
+    async_log_action(user, "user.login", %{
+      ip_address: get_client_ip(conn),
+      user_agent: get_user_agent(conn)
+    })
 
     conn
     |> renew_session()
@@ -82,6 +90,11 @@ defmodule ClaperWeb.UserAuth do
     if live_socket_id = get_session(conn, :live_socket_id) do
       ClaperWeb.Endpoint.broadcast(live_socket_id, "disconnect", %{})
     end
+
+    async_log_action(conn.assigns[:current_user], "user.logout", %{
+      ip_address: get_client_ip(conn),
+      user_agent: get_user_agent(conn)
+    })
 
     conn
     |> renew_session()
@@ -161,4 +174,14 @@ defmodule ClaperWeb.UserAuth do
   defp maybe_store_return_to(conn), do: conn
 
   defp signed_in_path(_conn), do: "/events"
+
+  defp async_log_action(user, action, metadata) do
+    Task.Supervisor.start_child(Claper.TaskSupervisor, fn ->
+      with {:error, reason} <- Audit.log_action(user, action, metadata) do
+        Logger.error(
+          "Error creating #{inspect(action)} audit log for user #{inspect(get_in(user.email))}: #{inspect(reason)}"
+        )
+      end
+    end)
+  end
 end

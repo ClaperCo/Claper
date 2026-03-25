@@ -1,0 +1,169 @@
+<h1 class="text-3xl font-bold mb-24">{@page_title}</h1>
+
+<%= if @live_action == :index do %>
+  <div class="flex flex-col sm:flex-row items-stretch gap-3 @container/controls">
+    <.form
+      for={@form}
+      class="grow flex flex-col sm:flex-row gap-3 sm:[&>div]:basis-[250px]"
+      phx-change="filter-logs"
+    >
+      <Flop.Phoenix.filter_fields :let={i} form={@form} fields={@fields}>
+        <ClaperWeb.CoreComponents.input field={i.field} label={i.label} type={i.type} {i.rest} />
+      </Flop.Phoenix.filter_fields>
+    </.form>
+    <Flop.Phoenix.pagination
+      meta={@meta}
+      path={~p"/admin/audit_logs"}
+      class="flex [&>ul]:mr-3 justify-end"
+      page_list_attrs={[class: "hidden @4xl/controls:flex"]}
+      page_list_item_attrs={[
+        class:
+          "grid place-content-stretch min-h-10 min-w-10 border-t border-r border-b border-gray-300 first:border-l first:rounded-l-full last:rounded-r-full first:[&>*]:rounded-l-full last:[&>*]:rounded-r-full text-gray-500 bg-white [&>*]:grid [&>*]:place-content-center"
+      ]}
+      page_link_attrs={[
+        class: "hover:text-black hover:bg-gray-200"
+      ]}
+      current_page_link_attrs={[
+        class: "pointer-events-none font-bold text-black"
+      ]}
+    >
+      <:previous attrs={[
+        class:
+          "order-1 border border-gray-300 rounded-l-full h-10 p-5 bg-white flex items-center justify-center aria-disabled:text-gray-300 hover:not-aria-disabled:bg-gray-200"
+      ]}>
+        {gettext("Previous")}
+      </:previous>
+      <:next attrs={[
+        class:
+          "order-2 border-t border-r border-b border-gray-300 rounded-r-full h-10 p-5 bg-white flex items-center justify-center aria-disabled:text-gray-300 hover:not-aria-disabled:bg-gray-200"
+      ]}>
+        {gettext("Next")}
+      </:next>
+      <:ellipsis>
+        <span aria-hidden="true" class="text-gray-300">•••</span>
+      </:ellipsis>
+    </Flop.Phoenix.pagination>
+  </div>
+  <Flop.Phoenix.table
+    items={@logs}
+    meta={@meta}
+    path={~p"/admin/audit_logs"}
+    opts={[
+      container: true,
+      container_attrs: [class: "card bg-base-100 shadow-xl overflow-x-auto my-5"],
+      no_results_content: ~H"""
+      <p class="text-center py-10">{gettext("No results.")}</p>
+      """,
+      table_attrs: [class: "table table-zebra w-full"],
+      symbol_asc: ~H"""
+      <span aria-hidden="true"><ClaperWeb.Icons.arrow_up /></span>
+      """,
+      symbol_desc: ~H"""
+      <span aria-hidden="true"><ClaperWeb.Icons.arrow_down /></span>
+      """
+    ]}
+  >
+    <:col :let={log} label={gettext("ID")} field={:id}>{log.id}</:col>
+    <:col :let={log} label={gettext("Action")} field={:action}>
+      <span class="badge badge-outline">{log.action}</span>
+    </:col>
+    <:col :let={log} label={gettext("User")} field={:user_email}>
+      {get_in(log.user.email) || "—"}
+    </:col>
+    <:col :let={log} label={gettext("Timestamp")} field={:inserted_at}>
+      {format_timestamp(log.inserted_at)}
+    </:col>
+    <:col
+      :let={log}
+      label={gettext("Metadata")}
+      field={:metadata}
+      tbody_td_attrs={[class: "max-w-xs truncate text-sm text-base-content/70"]}
+    >
+      {format_metadata(log.metadata)}
+    </:col>
+    <:action :let={log} tbody_td_attrs={[class: "text-right"]}>
+      <.link
+        patch={~p"/admin/audit_logs/#{log}"}
+        class="btn btn-link btn-sm"
+        aria-label={gettext("View details for log #%{id}", id: log.id)}
+      >
+        <ClaperWeb.Icons.eye />
+      </.link>
+    </:action>
+  </Flop.Phoenix.table>
+<% end %>
+
+<%= if @live_action == :show do %>
+  <dl class="card card-body bg-base-100 shadow-xl grid grid-cols-1 sm:grid-cols-[auto_1fr] gap-5">
+    <div class="col-span-full grid grid-cols-subgrid gap-y-1 items-baseline">
+      <dt class="font-medium sm:text-right">{gettext("ID")}</dt>
+      <dd class="bg-base-200 p-3 rounded-lg inset-shadow-sm overflow-x-auto">
+        {@log.id}
+      </dd>
+    </div>
+    <div class="col-span-full grid grid-cols-subgrid gap-y-1 items-baseline">
+      <dt class="font-medium sm:text-right">{gettext("Action")}</dt>
+      <dd class="bg-base-200 p-3 rounded-lg inset-shadow-sm overflow-x-auto">
+        <span class="badge badge-outline">{@log.action}</span>
+      </dd>
+    </div>
+    <div class="col-span-full grid grid-cols-subgrid gap-y-1 items-baseline">
+      <dt class="font-medium sm:text-right">{gettext("User")}</dt>
+      <dd class="bg-base-200 p-3 rounded-lg inset-shadow-sm overflow-x-auto">
+        <%= if @log.user do %>
+          <span class="space-x-2">
+            <a href={"mailto:#{@log.user.email}"} class="link link-primary">{@log.user.email}</a>
+            <.link
+              navigate={~p"/admin/users/#{@log.user}"}
+              class="link link-primary *:inline"
+              aria-label={gettext("View profile for %{email}", email: @log.user.email)}
+            >
+              <ClaperWeb.Icons.eye />
+            </.link>
+          </span>
+        <% else %>
+          —
+        <% end %>
+      </dd>
+    </div>
+    <div class="col-span-full grid grid-cols-subgrid gap-y-1 items-baseline">
+      <dt class="font-medium sm:text-right">{gettext("Timestamp")}</dt>
+      <dd class="bg-base-200 p-3 rounded-lg inset-shadow-sm overflow-x-auto">
+        {format_timestamp(@log.inserted_at)}
+      </dd>
+    </div>
+    <%= if @log.resource_type do %>
+      <div class="col-span-full grid grid-cols-subgrid gap-y-1 items-baseline">
+        <dt class="font-medium sm:text-right">{gettext("Resource Type")}</dt>
+        <dd class="bg-base-200 p-3 rounded-lg inset-shadow-sm overflow-x-auto">
+          {@log.resource_type}
+        </dd>
+      </div>
+    <% end %>
+    <%= if @log.resource_id do %>
+      <div class="col-span-full grid grid-cols-subgrid gap-y-1 items-baseline">
+        <dt class="font-medium sm:text-right">{gettext("Resource ID")}</dt>
+        <dd class="bg-base-200 p-3 rounded-lg inset-shadow-sm overflow-x-auto">
+          {@log.resource_id}
+        </dd>
+      </div>
+    <% end %>
+    <div class="col-span-full grid grid-cols-subgrid gap-y-1 items-baseline">
+      <dt class="font-medium sm:text-right">{gettext("Metadata")}</dt>
+      <dd class="bg-base-200 p-3 rounded-lg inset-shadow-sm overflow-x-auto">
+        <%= if @log.metadata && map_size(@log.metadata) > 0 do %>
+          <dl class="space-y-2 min-w-min">
+            <%= for {key, value} <- @log.metadata do %>
+              <div class="ml-5 -indent-5">
+                <dt class="inline font-medium">{key}:</dt>
+                <dd class="inline">{value}</dd>
+              </div>
+            <% end %>
+          </dl>
+        <% else %>
+          —
+        <% end %>
+      </dd>
+    </div>
+  </dl>
+<% end %>
