@@ -1,8 +1,13 @@
 defmodule ClaperWeb.Notifiers.LeaderNotifier do
-  use Phoenix.Swoosh, view: ClaperWeb.LeaderNotifierView, layout: {ClaperWeb.LayoutView, :email}
+  use Phoenix.Component
+  import Swoosh.Email
+  import ClaperWeb.Notifiers.EmailLayout
   use Gettext, backend: ClaperWeb.Gettext
 
   def event_invitation(event_name, email, url) do
+    invitation_template =
+      invitation(%{event_name: event_name, leader_email: email, url: url})
+
     new()
     |> to(email)
     |> from(
@@ -10,6 +15,79 @@ defmodule ClaperWeb.Notifiers.LeaderNotifier do
        Application.get_env(:claper, :mail) |> Keyword.get(:from)}
     )
     |> subject(gettext("You have been invited to manage an event"))
-    |> render_body("invitation.html", %{event_name: event_name, leader_email: email, url: url})
+    |> html_body(invitation_template)
+  end
+
+  def invitation(assigns) do
+    assigns
+    |> invitation_template()
+    |> heex_to_html()
+  end
+
+  defp invitation_template(assigns) do
+    ~H"""
+    <.layout>
+      <tr>
+        <td>
+          <table
+            width="95%"
+            border="0"
+            align="center"
+            cellpadding="0"
+            cellspacing="0"
+            style="max-width:670px;background:#fff; border-radius:3px; text-align:center;-webkit-box-shadow:0 6px 18px 0 rgba(0,0,0,.06);-moz-box-shadow:0 6px 18px 0 rgba(0,0,0,.06);box-shadow:0 6px 18px 0 rgba(0,0,0,.06);"
+          >
+            <tr>
+              <td style="height:40px;">&nbsp;</td>
+            </tr>
+            <tr>
+              <td style="padding:0 35px;">
+                <h1 style="color:#1e1e2d; font-weight:500; margin:0;font-size:32px;font-family:'Rubik',sans-serif;">
+                  {gettext("You have been invited")}
+                </h1>
+                <span style="display:inline-block; vertical-align:middle; margin:29px 0 26px; border-bottom:1px solid #cecece; width:100px;">
+                </span>
+                <p style="color:#455056; font-size:15px;line-height:24px; margin:0;">
+                  {gettext("Someone invited you to manage the event: %{name}", name: @event_name)}
+                </p>
+                <p style="color:#455056; font-size:15px;line-height:24px; margin:0;">
+                  {gettext(
+                    "To accept the invitation, please login or create an account with this email: %{email}",
+                    email: @leader_email
+                  )}
+                </p>
+                <a
+                  href={@url}
+                  target="_blank"
+                  style="background:#8611ed;text-decoration:none !important; font-weight:500; margin-top:35px; color:#fff;text-transform:uppercase; font-size:14px;padding:10px 24px;display:inline-block;border-radius:50px;"
+                >
+                  {gettext("Login or create account")}
+                </a>
+              </td>
+            </tr>
+            <tr>
+              <td style="height:20px;">&nbsp;</td>
+            </tr>
+            <tr>
+              <td style="font-size: 0.8em; color: #6C6C6C">
+                <p class="sub">
+                  {gettext(
+                    "If you’re having trouble with the button above, copy and paste the URL below into your web browser"
+                  )}.
+                </p>
+                <p class="sub">{@url}</p>
+              </td>
+            </tr>
+            <tr>
+              <td style="height:40px;">&nbsp;</td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+      <tr>
+        <td style="height:20px;">&nbsp;</td>
+      </tr>
+    </.layout>
+    """
   end
 end

@@ -2,7 +2,8 @@ defmodule Claper.Workers.Mailers do
   use Oban.Worker, queue: :mailers
 
   alias Claper.Mailer
-  alias ClaperWeb.Notifiers.{UserNotifier, LeaderNotifier}
+  alias ClaperWeb.Notifiers.User.Notifier, as: UserNotifier
+  alias ClaperWeb.Notifiers.LeaderNotifier
 
   @impl Oban.Worker
   def perform(%Oban.Job{args: %{"type" => type, "user_id" => user_id, "url" => url}})

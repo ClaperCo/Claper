@@ -14,8 +14,6 @@ defmodule ClaperWeb.MailboxGuard do
     mailbox_enabled =
       Application.get_env(:claper, ClaperWeb.MailboxGuard) |> Keyword.get(:enabled)
 
-    IO.puts(mailbox_enabled)
-
     if mailbox_enabled do
       if mailbox_username && mailbox_password do
         Plug.BasicAuth.basic_auth(conn, username: mailbox_username, password: mailbox_password)
