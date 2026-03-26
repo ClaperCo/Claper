@@ -23,50 +23,72 @@ defmodule ClaperWeb.EventLive.Manage do
        |> put_flash(:error, gettext("Event doesn't exist"))
        |> redirect(to: "/")}
     else
-      if connected?(socket) do
-        Claper.Events.Event.subscribe(event.uuid)
-        Claper.Presentations.subscribe(event.presentation_file.id)
+      case event.presentation_file do
+        %{status: "fail"} ->
+          socket =
+            socket
+            |> put_flash(:error, gettext("Presentation file processing failed"))
+            |> redirect(to: "/events")
+
+          {:ok, socket}
+
+        %{status: "progress"} ->
+          socket =
+            socket
+            |> put_flash(
+              :warning,
+              gettext("Presentation file processing still in progress, please wait a bit")
+            )
+            |> redirect(to: "/events")
+
+          {:ok, socket}
+
+        _ ->
+          if connected?(socket) do
+            Claper.Events.Event.subscribe(event.uuid)
+            Claper.Presentations.subscribe(event.presentation_file.id)
+          end
+
+          posts = list_all_posts(socket, event.uuid)
+          pinned_posts = list_pinned_posts(socket, event.uuid)
+          questions = list_all_questions(socket, event.uuid)
+          form_submits = list_form_submits(socket, event.presentation_file.id)
+
+          socket =
+            socket
+            |> assign(:interaction_modal, false)
+            |> assign(:settings_modal, false)
+            |> assign(:attendees_nb, 1)
+            |> assign(:event, event)
+            |> assign(:sort_questions_by, "date")
+            |> assign(:state, event.presentation_file.presentation_state)
+            |> stream(:posts, posts)
+            |> stream(:questions, questions)
+            |> stream(:pinned_posts, pinned_posts)
+            |> stream(:form_submits, form_submits)
+            |> assign(:pinned_post_count, length(pinned_posts))
+            |> assign(:question_count, length(questions))
+            |> assign(:post_count, length(posts))
+            |> assign(
+              :total_interactions,
+              Claper.Interactions.get_number_total_interactions(event.presentation_file.id)
+            )
+            |> assign(
+              :form_submit_count,
+              length(form_submits)
+            )
+            |> assign(:create, nil)
+            |> assign(:list_tab, :posts)
+            |> assign(:create_action, :new)
+            |> assign(:preview, false)
+            |> push_event("page-manage", %{
+              current_page: event.presentation_file.presentation_state.position,
+              timeout: 500
+            })
+            |> interactions_at_position(event.presentation_file.presentation_state.position)
+
+          {:ok, socket}
       end
-
-      posts = list_all_posts(socket, event.uuid)
-      pinned_posts = list_pinned_posts(socket, event.uuid)
-      questions = list_all_questions(socket, event.uuid)
-      form_submits = list_form_submits(socket, event.presentation_file.id)
-
-      socket =
-        socket
-        |> assign(:interaction_modal, false)
-        |> assign(:settings_modal, false)
-        |> assign(:attendees_nb, 1)
-        |> assign(:event, event)
-        |> assign(:sort_questions_by, "date")
-        |> assign(:state, event.presentation_file.presentation_state)
-        |> stream(:posts, posts)
-        |> stream(:questions, questions)
-        |> stream(:pinned_posts, pinned_posts)
-        |> stream(:form_submits, form_submits)
-        |> assign(:pinned_post_count, length(pinned_posts))
-        |> assign(:question_count, length(questions))
-        |> assign(:post_count, length(posts))
-        |> assign(
-          :total_interactions,
-          Claper.Interactions.get_number_total_interactions(event.presentation_file.id)
-        )
-        |> assign(
-          :form_submit_count,
-          length(form_submits)
-        )
-        |> assign(:create, nil)
-        |> assign(:list_tab, :posts)
-        |> assign(:create_action, :new)
-        |> assign(:preview, false)
-        |> push_event("page-manage", %{
-          current_page: event.presentation_file.presentation_state.position,
-          timeout: 500
-        })
-        |> interactions_at_position(event.presentation_file.presentation_state.position)
-
-      {:ok, socket}
     end
   end
 
