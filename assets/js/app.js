@@ -1,5 +1,6 @@
 // Include phoenix_html to handle method=PUT/DELETE in forms and buttons.
 import "phoenix_html";
+import PresenterNotes from "./presenter_notes";
 // Establish Phoenix Socket and LiveView configuration.
 import { Socket, Presence } from "phoenix";
 import { LiveSocket } from "phoenix_live_view";
@@ -681,6 +682,8 @@ Hooks.CSVDownloader = {
     });
   }
 };
+
+Hooks.PresenterNotes = PresenterNotes;
 
 // Merge our custom hooks with the existing hooks
 Object.assign(Hooks, CustomHooks);
