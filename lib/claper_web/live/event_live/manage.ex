@@ -65,6 +65,7 @@ defmodule ClaperWeb.EventLive.Manage do
           timeout: 500
         })
         |> interactions_at_position(event.presentation_file.presentation_state.position)
+        |> note_at_position(event.presentation_file.presentation_state.position)
 
       {:ok, socket}
     end
@@ -327,7 +328,8 @@ defmodule ClaperWeb.EventLive.Manage do
     {:noreply,
      socket
      |> assign(:state, new_state)
-     |> interactions_at_position(page)}
+     |> interactions_at_position(page)
+     |> note_at_position(page)}
   end
 
   def handle_event("poll-set-active", %{"id" => id}, socket) do
@@ -1025,6 +1027,23 @@ defmodule ClaperWeb.EventLive.Manage do
     )
 
     {:noreply, socket |> assign(:state, new_state)}
+  end
+
+  def handle_event("save-note", %{"content" => content}, socket) do
+    position = socket.assigns.state.position
+
+    Claper.Presentations.upsert_note(
+      socket.assigns.event.presentation_file.id,
+      position,
+      content
+    )
+
+    {:noreply, assign(socket, :current_note, content)}
+  end
+
+  defp note_at_position(%{assigns: %{event: event}} = socket, position) do
+    content = Claper.Presentations.get_note_at_position(event.presentation_file.id, position)
+    assign(socket, :current_note, content)
   end
 
   defp interactions_at_position(

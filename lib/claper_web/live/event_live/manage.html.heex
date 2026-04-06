@@ -707,6 +707,23 @@
           data-tg-tour={"<p class='mb-3'>#{gettext("This section contains all your interactions.")}</p><p class='opacity-50 text-xs'>#{gettext("You can add interactions to your presentation slides.")}</p>"}
           data-tg-group="manage"
         >
+          <div
+            :if={@event.presentation_file.length > 0}
+            class="p-3 border-b border-gray-200 bg-white"
+          >
+            <p class="text-xs font-semibold text-gray-500 uppercase mb-1">
+              {gettext("Presenter notes")}
+            </p>
+            <form phx-change="save-note" id="presenter-note-form">
+              <textarea
+                id="presenter-note-textarea"
+                name="content"
+                phx-debounce="blur"
+                class="w-full h-24 text-sm border border-gray-300 rounded-md p-2 resize-none focus:outline-none focus:ring-1 focus:ring-primary-400"
+                placeholder={gettext("Add notes for this slide...")}
+              ><%= @current_note %></textarea>
+            </form>
+          </div>
           <!-- Interactions -->
           <div class="h- overflow-y-auto @container">
             <div

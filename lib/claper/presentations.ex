@@ -7,6 +7,7 @@ defmodule Claper.Presentations do
   alias Claper.Repo
 
   alias Claper.Presentations.PresentationFile
+  alias Claper.Presentations.PresenterNote
 
   @doc """
   Gets a single presentation_files.
@@ -171,6 +172,38 @@ defmodule Claper.Presentations do
     |> PresentationState.changeset(attrs)
     |> Repo.update()
     |> broadcast(:state_updated)
+  end
+
+  @doc """
+  Returns the content of the presenter note for a given slide position,
+  or an empty string if no note exists.
+  """
+  def get_note_at_position(presentation_file_id, position) do
+    case Repo.get_by(PresenterNote,
+           presentation_file_id: presentation_file_id,
+           slide_position: position
+         ) do
+      nil -> ""
+      note -> note.content || ""
+    end
+  end
+
+  @doc """
+  Inserts or updates the presenter note for a given slide position.
+  """
+  def upsert_note(presentation_file_id, position, content) do
+    now = NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
+
+    %PresenterNote{}
+    |> PresenterNote.changeset(%{
+      presentation_file_id: presentation_file_id,
+      slide_position: position,
+      content: content
+    })
+    |> Repo.insert(
+      on_conflict: [set: [content: content, updated_at: now]],
+      conflict_target: [:presentation_file_id, :slide_position]
+    )
   end
 
   defp broadcast({:error, _reason} = error, _state), do: error

@@ -39,7 +39,7 @@ defmodule Claper.Tasks.Converter do
 
     file_to_pdf(ext_atom, path, file)
     |> pdf_to_jpg(path, presentation, user_id)
-    |> jpg_upload(hash, path, presentation, user_id, is_copy)
+    |> jpg_upload(hash, path, presentation, user_id, is_copy, ext_atom)
   end
 
   @doc """
@@ -116,7 +116,9 @@ defmodule Claper.Tasks.Converter do
     failure(presentation, path, user_id)
   end
 
-  defp jpg_upload(%Result{status: 0}, hash, path, presentation, user_id, is_copy) do
+  defp jpg_upload(result, hash, path, presentation, user_id, is_copy, ext_atom \\ nil)
+
+  defp jpg_upload(%Result{status: 0}, hash, path, presentation, user_id, is_copy, ext_atom) do
     files = Path.wildcard("#{path}/*.jpg")
 
     # assign new hash to avoid cache issues
@@ -154,24 +156,75 @@ defmodule Claper.Tasks.Converter do
       clear(presentation.hash)
     end
 
-    success(presentation, path, new_hash, length(files), user_id)
+    success(presentation, path, new_hash, length(files), user_id, ext_atom)
   end
 
-  defp jpg_upload(_result, _hash, path, presentation, user_id, _is_copy) do
+  defp jpg_upload(_result, _hash, path, presentation, user_id, _is_copy, _ext_atom) do
     failure(presentation, path, user_id)
   end
 
-  defp success(presentation, path, hash, length, user_id) do
+  defp success(presentation, path, hash, length, user_id, ext_atom \\ nil) do
     with {:ok, presentation} <-
            Claper.Presentations.update_presentation_file(presentation, %{
              "hash" => "#{hash}",
              "length" => length,
              "status" => "done"
            }) do
+      # For local storage the directory was already renamed to the new hash,
+      # so original.pptx lives under the new hash path.
+      # For S3 storage the original directory (path) is still intact at this point.
+      pptx_path =
+        if get_presentation_storage() == "local" do
+          Path.join([get_presentation_storage_dir(), "uploads", "#{hash}", "original.pptx"])
+        else
+          "#{path}/original.pptx"
+        end
+
+      extract_and_save_notes(pptx_path, ext_atom, presentation.id, length)
+
       if get_presentation_storage() != "local", do: File.rm_rf!(path)
 
       Events.broadcast_user_events(user_id, {:presentation_file_process_done, presentation})
     end
+  end
+
+  defp extract_and_save_notes(pptx_path, :pptx, presentation_file_id, slide_count) do
+    case :zip.unzip(String.to_charlist(pptx_path), [:memory]) do
+      {:ok, files} ->
+        for i <- 1..slide_count do
+          filename = String.to_charlist("ppt/notesSlides/notesSlide#{i}.xml")
+
+          case List.keyfind(files, filename, 0) do
+            {_, content} ->
+              text = extract_notes_text(content)
+
+              if text != "" do
+                Claper.Presentations.upsert_note(presentation_file_id, i - 1, text)
+              end
+
+            nil ->
+              :ok
+          end
+        end
+
+      _ ->
+        :ok
+    end
+  end
+
+  defp extract_and_save_notes(_path, _ext, _presentation_file_id, _slide_count), do: :ok
+
+  defp extract_notes_text(xml_content) do
+    import SweetXml
+
+    xml_content
+    |> xpath(
+      ~x"//*[local-name()='sp'][.//*[local-name()='ph'][@type='body']]//*[local-name()='t']/text()"ls
+    )
+    |> Enum.join(" ")
+    |> String.trim()
+  rescue
+    _ -> ""
   end
 
   defp failure(presentation, path, user_id) do
