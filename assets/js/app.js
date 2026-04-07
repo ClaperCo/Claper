@@ -26,7 +26,6 @@ import QRCodeStyling from "qr-code-styling";
 import { Presenter } from "./presenter";
 import { Manager } from "./manager";
 import Split from "split-grid";
-import Sortable from "sortablejs";
 import CustomHooks from "./hooks";
 import { TourGuideClient } from "@sjmc11/tourguidejs/src/Tour";
 import "./admin-charts.js";
@@ -691,20 +690,52 @@ Hooks.PresenterNotes = PresenterNotes;
 
 Hooks.SortableSlides = {
   mounted() {
-    this.sortable = Sortable.create(this.el, {
-      animation: 150,
-      ghostClass: "opacity-30",
-      filter: ".add-slide-btn",
-      onEnd: (evt) => {
-        if (evt.oldIndex === evt.newIndex) return;
-        const items = this.el.querySelectorAll("[data-slide-index]");
-        const order = Array.from(items).map(el => parseInt(el.dataset.slideIndex));
-        this.pushEvent("reorder-slides", { order });
-      }
+    this.dragSrcEl = null;
+
+    this.el.addEventListener("dragstart", (e) => {
+      const item = e.target.closest("[data-slide-index]");
+      if (!item) return;
+      this.dragSrcEl = item;
+      item.style.opacity = "0.3";
+      e.dataTransfer.effectAllowed = "move";
+      e.dataTransfer.setData("text/plain", item.dataset.slideIndex);
     });
-  },
-  destroyed() {
-    if (this.sortable) this.sortable.destroy();
+
+    this.el.addEventListener("dragover", (e) => {
+      e.preventDefault();
+      e.dataTransfer.dropEffect = "move";
+    });
+
+    this.el.addEventListener("dragend", (e) => {
+      const item = e.target.closest("[data-slide-index]");
+      if (item) item.style.opacity = "";
+    });
+
+    this.el.addEventListener("drop", (e) => {
+      e.preventDefault();
+      const target = e.target.closest("[data-slide-index]");
+      if (!target || !this.dragSrcEl || target === this.dragSrcEl) return;
+
+      // Reorder DOM
+      const parent = this.dragSrcEl.parentNode;
+      const items = Array.from(parent.querySelectorAll("[data-slide-index]"));
+      const fromIdx = items.indexOf(this.dragSrcEl);
+      const toIdx = items.indexOf(target);
+
+      if (fromIdx < toIdx) {
+        parent.insertBefore(this.dragSrcEl, target.nextSibling);
+      } else {
+        parent.insertBefore(this.dragSrcEl, target);
+      }
+
+      this.dragSrcEl.style.opacity = "";
+      this.dragSrcEl = null;
+
+      // Push new order to server
+      const reordered = Array.from(parent.querySelectorAll("[data-slide-index]"));
+      const order = reordered.map(el => parseInt(el.dataset.slideIndex));
+      this.pushEvent("reorder-slides", { order });
+    });
   }
 };
 
