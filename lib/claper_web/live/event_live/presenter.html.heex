@@ -7,37 +7,6 @@
     width: 100%;
     height: 100%;
   }
-
-  /* Everything fills the full viewport height */
-  #slides-join-wrapper {
-    height: 100vh;
-    width: 100%;
-  }
-
-  #slides-join-wrapper #joinScreen,
-  #slides-join-wrapper #slides {
-    height: 100vh;
-  }
-
-  #slider, #slider > .tns-outer,
-  #slider > .tns-outer > .tns-ovh,
-  #slider > .tns-outer > .tns-ovh > .tns-inner,
-  #slider .tns-slider,
-  #slider .tns-item {
-    height: 100% !important;
-  }
-
-  #slider .tns-item {
-    display: flex !important;
-    align-items: center;
-    justify-content: center;
-  }
-
-  #slider .tns-item img {
-    max-width: 100%;
-    max-height: 100%;
-    object-fit: contain;
-  }
 </style>
 
 <div
@@ -47,7 +16,6 @@
   data-hash={@event.presentation_file.hash}
   data-current-page={@state.position}
 >
-  <%!-- JOIN SCREEN is rendered inside the slides area as a side panel --%>
   <!-- POLL -->
   <%= if @current_poll do %>
     <div
@@ -95,7 +63,7 @@
   <!-- MESSAGES -->
   <div
     id="slider-wrapper"
-    class={"w-full h-screen grid #{if (@state.chat_visible && @event.presentation_file.length > 0) || (@current_embed && @event.presentation_file.length == 0), do: "grid-cols-[1fr_10px_1fr]", else: "grid-cols-[1fr]"} items-stretch relative bg-black"}
+    class={"w-full min-h-screen grid #{if (@state.chat_visible && @event.presentation_file.length > 0) || (@current_embed && @event.presentation_file.length == 0), do: "grid-cols-[1fr_10px_1fr]", else: "grid-cols-[1fr]"} items-center justify-center relative bg-black"}
     phx-hook="Split"
     data-type="column"
     data-gutter=".gutter-1"
@@ -208,12 +176,12 @@
     >
       •••
     </div>
-    <!-- SLIDES + JOIN SCREEN -->
-    <div id="slides-join-wrapper" class="flex">
-      <!-- JOIN SCREEN PANEL -->
+    <!-- SLIDES -->
+    <div id="slides" class="relative">
+      <%!-- JOIN SCREEN OVERLAY — positioned over the left side of the slide --%>
       <div
         id="joinScreen"
-        class={"#{if @state.join_screen_visible, do: "flex", else: "hidden"} w-1/5 flex-shrink-0 bg-white text-black text-center flex-col items-center justify-center p-4 overflow-hidden"}
+        class={"#{if @state.join_screen_visible, do: "flex", else: "hidden"} absolute left-0 top-0 h-full w-1/4 z-40 bg-white/95 text-black text-center flex-col items-center justify-center p-4 overflow-hidden shadow-2xl"}
       >
         <span class="font-semibold mb-3 text-base lg:text-xl">
           {gettext("Scan to interact in real-time")}
@@ -235,25 +203,23 @@
           #{String.upcase(@event.code)}
         </span>
       </div>
-      <!-- SLIDES -->
-      <div id="slides" class="flex-1 min-w-0 overflow-hidden">
-        <%= if @current_embed do %>
-          <!-- EMBED -->
-          <div id="embed" class="w-full h-full">
-            <.live_component
-              id="embed-component"
-              module={ClaperWeb.EventLive.EmbedIframeComponent}
-              provider={@current_embed.provider}
-              content={@current_embed.content}
-            />
-          </div>
-        <% end %>
-        <div class={"#{if @current_embed, do: "hidden", else: ""}"} id="slider">
-          <img
-            :for={src <- Presentations.get_slide_urls(@event.presentation_file)}
-            src={src}
+      <%= if @current_embed do %>
+        <!-- EMBED -->
+        <div id="embed" class="max-h-screen w-full h-screen">
+          <.live_component
+            id="embed-component"
+            module={ClaperWeb.EventLive.EmbedIframeComponent}
+            provider={@current_embed.provider}
+            content={@current_embed.content}
           />
         </div>
+      <% end %>
+      <div class={"#{if @current_embed, do: "hidden", else: ""} text-center"} id="slider">
+        <img
+          :for={src <- Presentations.get_slide_urls(@event.presentation_file)}
+          src={src}
+          class="max-h-screen w-auto!"
+        />
       </div>
     </div>
   </div>
