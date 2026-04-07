@@ -8,6 +8,32 @@ export class Presenter {
     this.hash = context.el.dataset.hash;
   }
 
+  fitSlideArea() {
+    const wrapper = document.getElementById("slides-join-wrapper");
+    if (!wrapper) return;
+
+    const img = document.querySelector("#slider .tns-item img, #slider img");
+    if (!img || !img.naturalWidth || !img.naturalHeight) return;
+
+    const ratio = img.naturalWidth / img.naturalHeight;
+    const vh = window.innerHeight;
+
+    // Available width for the slide image (exclude join panel if visible)
+    const joinScreen = document.getElementById("joinScreen");
+    const joinWidth =
+      joinScreen && !joinScreen.classList.contains("hidden")
+        ? joinScreen.offsetWidth
+        : 0;
+    const slideWidth = wrapper.parentElement.clientWidth - joinWidth;
+
+    // Height that preserves the slide's aspect ratio at the available width
+    let height = slideWidth / ratio;
+    // Never exceed viewport height
+    height = Math.min(height, vh);
+
+    wrapper.style.height = height + "px";
+  }
+
   init(refresh = false) {
     this.slider = tns({
       container: "#slider",
@@ -23,6 +49,18 @@ export class Presenter {
       loop: false,
       nav: false,
     });
+
+    // Fit slide area once first image is loaded, then on every resize
+    const firstImg = document.querySelector("#slider img");
+    if (firstImg) {
+      const doFit = () => this.fitSlideArea();
+      if (firstImg.complete) {
+        doFit();
+      } else {
+        firstImg.addEventListener("load", doFit, { once: true });
+      }
+      window.addEventListener("resize", doFit);
+    }
 
     if (refresh) {
       return;
@@ -69,6 +107,7 @@ export class Presenter {
           .getElementById("pinned-post-list")
           .classList.add("animate__animated", "animate__fadeOutLeft");
       }
+      requestAnimationFrame(() => this.fitSlideArea());
     });
 
     this.context.handleEvent("poll-visible", (data) => {
@@ -99,6 +138,8 @@ export class Presenter {
         joinScreen.classList.remove("flex");
         joinScreen.classList.add("hidden");
       }
+      // Recalculate after the layout shift
+      requestAnimationFrame(() => this.fitSlideArea());
     });
 
     window.addEventListener("keyup", (e) => {
