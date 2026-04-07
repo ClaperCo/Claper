@@ -11,6 +11,7 @@
   }
 
   /* Propagate height through all tiny-slider wrappers */
+  #slide-content,
   #slider, #slider > .tns-outer,
   #slider > .tns-outer > .tns-ovh,
   #slider > .tns-outer > .tns-ovh > .tns-inner,
@@ -200,7 +201,7 @@
       •••
     </div>
     <!-- SLIDES -->
-    <div id="slides" class="flex flex-col h-full">
+    <div id="slides" class="flex flex-col h-full justify-center">
       <%!-- JOIN SCREEN — banner above the slide --%>
       <div
         id="joinScreen"
@@ -219,6 +220,9 @@
         <div class="flex flex-col items-center text-center">
           <span class="font-semibold text-base lg:text-xl mb-1">
             {gettext("Scan to interact in real-time")}
+          </span>
+          <span class="font-bold text-lg lg:text-xl text-primary-600">
+            {"#{@host}e/#{@event.code}"}
           </span>
           <span class="font-bold text-2xl lg:text-3xl">
             #{String.upcase(@event.code)}
