@@ -337,12 +337,18 @@ defmodule ClaperWeb.EventLive.Manage do
 
     uploaded_files =
       consume_uploaded_entries(socket, :slide_image, fn %{path: path}, _entry ->
-        {:ok, path}
+        # Copy to a stable temp file before Phoenix cleans up the upload
+        stable_path = Path.join(System.tmp_dir!(), "slide_upload_#{System.unique_integer([:positive])}.jpg")
+        File.cp!(path, stable_path)
+        {:ok, stable_path}
       end)
 
     case uploaded_files do
       [tmp_path] ->
-        case Presentations.insert_slide(pf, insert_position, tmp_path) do
+        result = Presentations.insert_slide(pf, insert_position, tmp_path)
+        File.rm(tmp_path)
+
+        case result do
           {:ok, updated_pf} ->
             event =
               Claper.Events.get_event_with_code(socket.assigns.event.code, [
@@ -368,12 +374,23 @@ defmodule ClaperWeb.EventLive.Manage do
                timeout: 500
              })}
 
-          {:error, _reason} ->
-            {:noreply, put_flash(socket, :error, gettext("Failed to insert slide"))}
+          {:error, reason} ->
+            require Logger
+            Logger.error("Failed to insert slide: #{inspect(reason)}")
+
+            {:noreply,
+             socket
+             |> assign(:create, nil)
+             |> assign(:interaction_modal, false)
+             |> put_flash(:error, gettext("Failed to insert slide"))}
         end
 
       _ ->
-        {:noreply, socket}
+        {:noreply,
+         socket
+         |> assign(:create, nil)
+         |> assign(:interaction_modal, false)
+         |> put_flash(:error, gettext("No file selected"))}
     end
   end
 
