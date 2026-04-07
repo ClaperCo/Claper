@@ -9,6 +9,12 @@ export class Presenter {
   }
 
   init(refresh = false) {
+    // Destroy previous slider instance to avoid ghost DOM / listeners
+    if (this.slider && typeof this.slider.destroy === "function") {
+      this.slider.destroy();
+      this.slider = null;
+    }
+
     this.slider = tns({
       container: "#slider",
       items: 1,
@@ -40,8 +46,8 @@ export class Presenter {
       }
 
       this.currentPage = parseInt(data.current_page);
-      this.slider.goTo(data.current_page);
-
+      this._lastPageEventAt = Date.now();
+      if (this.slider) this.slider.goTo(data.current_page);
     });
 
     this.context.handleEvent("chat-visible", (data) => {
@@ -133,17 +139,38 @@ export class Presenter {
     });
 
     window.addEventListener("storage", (e) => {
-      console.log(e)
       if (e.key == "slide-position") {
-        console.log("settings new value " + Date.now())
-        this.currentPage = parseInt(e.newValue);
-        this.slider.goTo(e.newValue);
-
+        // Skip if the server "page" event already handled this change recently
+        if (this._lastPageEventAt && (Date.now() - this._lastPageEventAt) < 500) {
+          return;
+        }
+        const newPage = parseInt(e.newValue);
+        if (this.currentPage === newPage) return;
+        this.currentPage = newPage;
+        if (this.slider) this.slider.goTo(newPage);
       }
     })
   }
 
   update() {
+    // Read updated values from the DOM before reinitializing
+    const newPage = parseInt(this.context.el.dataset.currentPage);
+    const newMax = parseInt(this.context.el.dataset.maxPage);
+    const newHash = this.context.el.dataset.hash;
+
+    // If only the page changed (no structural change), just goTo — no need
+    // to tear down and rebuild the entire slider.
+    if (newHash === this.hash && newMax === this.maxPage && this.slider) {
+      this.currentPage = newPage;
+      this.slider.goTo(newPage);
+      this.fitSlideHeight();
+      return;
+    }
+
+    // Structural change (slides added/removed/reordered) — rebuild slider
+    this.currentPage = newPage;
+    this.maxPage = newMax;
+    this.hash = newHash;
     this.init(true);
   }
 
