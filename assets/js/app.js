@@ -569,17 +569,25 @@ Hooks.QRCode = {
         "/e/" +
         this.el.dataset.code
       : window.location.href;
-    this.el.style.width = document.documentElement.clientWidth * 0.27 + "px";
-    this.el.style.height = document.documentElement.clientWidth * 0.27 + "px";
+
+    var qrSize;
+    if (this.el.dataset.panel) {
+      // Side panel mode: size relative to panel width
+      var panelWidth = this.el.closest("#joinScreen")?.clientWidth || 300;
+      qrSize = Math.min(panelWidth * 0.6, document.documentElement.clientHeight * 0.3);
+    } else if (this.el.dataset.dynamic) {
+      qrSize = document.documentElement.clientWidth * 0.25;
+    } else {
+      qrSize = 240;
+    }
+
+    this.el.style.width = (qrSize * 1.08) + "px";
+    this.el.style.height = (qrSize * 1.08) + "px";
 
     if (this.qrCode == null) {
       this.qrCode = new QRCodeStyling({
-        width: this.el.dataset.dynamic
-          ? document.documentElement.clientWidth * 0.25
-          : 240,
-        height: this.el.dataset.dynamic
-          ? document.documentElement.clientWidth * 0.25
-          : 240,
+        width: qrSize,
+        height: qrSize,
         margin: 0,
         data: url,
         cornersSquareOptions: {
@@ -601,12 +609,8 @@ Hooks.QRCode = {
       this.qrCode.append(this.el);
     } else {
       this.qrCode.update({
-        width: this.el.dataset.dynamic
-          ? document.documentElement.clientWidth * 0.25
-          : 240,
-        height: this.el.dataset.dynamic
-          ? document.documentElement.clientWidth * 0.25
-          : 240,
+        width: qrSize,
+        height: qrSize,
       });
     }
   },

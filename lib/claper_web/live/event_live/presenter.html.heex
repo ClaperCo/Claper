@@ -16,32 +16,7 @@
   data-hash={@event.presentation_file.hash}
   data-current-page={@state.position}
 >
-  <!-- JOIN SCREEN -->
-  <div
-    id="joinScreen"
-    class={"#{if @state.join_screen_visible, do: "opacity-100 z-40", else: "opacity-0"} h-full w-full flex flex-col justify-center bg-black absolute transition-opacity"}
-  >
-    <div class="h-full bg-white text-black text-center flex flex-col items-center justify-center">
-      <span class="font-semibold mb-10 sm:text-3xl md:text-4xl lg:text-6xl">
-        {gettext("Scan to interact in real-time")}
-      </span>
-      <div
-        phx-hook="QRCode"
-        data-code={@event.code}
-        data-dynamic="true"
-        id="qr"
-        phx-update="ignore"
-        class="rounded-lg mx-auto flex items-center justify-center mb-14"
-      >
-      </div>
-      <span class="font-semibold mb-10 sm:text-3xl md:text-4xl lg:text-6xl">
-        {gettext("Or go to %{url} and use the code:", url: @host)}
-      </span>
-      <span class="font-semibold mb-10 sm:text-5xl md:text-6xl lg:text-8xl">
-        #{String.upcase(@event.code)}
-      </span>
-    </div>
-  </div>
+  <%!-- JOIN SCREEN is rendered inside the slides area as a side panel --%>
   <!-- POLL -->
   <%= if @current_poll do %>
     <div
@@ -202,25 +177,53 @@
     >
       •••
     </div>
-    <!-- SLIDES -->
-    <div id="slides">
-      <%= if @current_embed do %>
-        <!-- EMBED -->
-        <div id="embed" class="max-h-screen w-full h-screen">
-          <.live_component
-            id="embed-component"
-            module={ClaperWeb.EventLive.EmbedIframeComponent}
-            provider={@current_embed.provider}
-            content={@current_embed.content}
+    <!-- SLIDES + JOIN SCREEN -->
+    <div id="slides-join-wrapper" class="flex h-screen w-full">
+      <!-- JOIN SCREEN PANEL -->
+      <div
+        id="joinScreen"
+        class={"#{if @state.join_screen_visible, do: "flex", else: "hidden"} w-2/5 flex-shrink-0 bg-white text-black text-center flex-col items-center justify-center p-6 overflow-hidden"}
+      >
+        <span class="font-semibold mb-6 text-xl lg:text-3xl xl:text-4xl">
+          {gettext("Scan to interact in real-time")}
+        </span>
+        <div
+          phx-hook="QRCode"
+          data-code={@event.code}
+          data-dynamic="true"
+          data-panel="true"
+          id="qr"
+          phx-update="ignore"
+          class="rounded-lg mx-auto flex items-center justify-center mb-6"
+        >
+        </div>
+        <span class="font-semibold mb-4 text-lg lg:text-2xl xl:text-3xl">
+          {gettext("Or go to %{url} and use the code:", url: @host)}
+        </span>
+        <span class="font-semibold text-2xl lg:text-4xl xl:text-5xl">
+          #{String.upcase(@event.code)}
+        </span>
+      </div>
+      <!-- SLIDES -->
+      <div id="slides" class="flex-1 min-w-0 flex items-center justify-center">
+        <%= if @current_embed do %>
+          <!-- EMBED -->
+          <div id="embed" class="max-h-screen w-full h-screen">
+            <.live_component
+              id="embed-component"
+              module={ClaperWeb.EventLive.EmbedIframeComponent}
+              provider={@current_embed.provider}
+              content={@current_embed.content}
+            />
+          </div>
+        <% end %>
+        <div class={"#{if @current_embed, do: "hidden", else: ""} text-center"} id="slider">
+          <img
+            :for={src <- Presentations.get_slide_urls(@event.presentation_file)}
+            src={src}
+            class="max-h-screen w-auto!"
           />
         </div>
-      <% end %>
-      <div class={"#{if @current_embed, do: "hidden", else: ""} text-center"} id="slider">
-        <img
-          :for={src <- Presentations.get_slide_urls(@event.presentation_file)}
-          src={src}
-          class="max-h-screen w-auto!"
-        />
       </div>
     </div>
   </div>

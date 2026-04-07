@@ -90,20 +90,14 @@ export class Presenter {
     });
 
     this.context.handleEvent("join-screen-visible", (data) => {
+      const joinScreen = document.getElementById("joinScreen");
+      if (!joinScreen) return;
       if (data.value) {
-        document
-          .getElementById("joinScreen")
-          .classList.remove("animate__animated", "animate__fadeOut");
-        document
-          .getElementById("joinScreen")
-          .classList.add("animate__animated", "animate__fadeIn");
+        joinScreen.classList.remove("hidden");
+        joinScreen.classList.add("flex");
       } else {
-        document
-          .getElementById("joinScreen")
-          .classList.remove("animate__animated", "animate__fadeIn");
-        document
-          .getElementById("joinScreen")
-          .classList.add("animate__animated", "animate__fadeOut");
+        joinScreen.classList.remove("flex");
+        joinScreen.classList.add("hidden");
       }
     });
 
