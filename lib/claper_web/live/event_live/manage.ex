@@ -1047,7 +1047,10 @@ defmodule ClaperWeb.EventLive.Manage do
 
   defp note_at_position(%{assigns: %{event: event}} = socket, position) do
     content = Claper.Presentations.get_note_at_position(event.presentation_file.id, position)
-    assign(socket, :current_note, content)
+
+    socket
+    |> assign(:current_note, content)
+    |> push_event("load-note", %{content: content})
   end
 
   defp interactions_at_position(

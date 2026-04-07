@@ -3,22 +3,16 @@
 @import 'quill/dist/quill.snow.css';
 
 /* Presenter notes – make the Quill container fill its flex/grid pane */
-#quill-root {
-  display: flex;
-  flex-direction: column;
-  min-height: 0;
-}
-#quill-root .ql-container {
-  flex: 1;
-  min-height: 0;
-  overflow-y: auto;
-  border-top: none;
-  font-size: 0.875rem;
-}
-#quill-root .ql-toolbar {
+#presenter-notes-editor .ql-toolbar {
   flex-shrink: 0;
   border-left: none;
   border-right: none;
+}
+#presenter-notes-editor .ql-container {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  font-size: 0.875rem;
 }
 
 @import 'tailwindcss';
