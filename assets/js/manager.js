@@ -17,10 +17,11 @@ export class Manager {
         setTimeout(
           () => {
             const slidesLayout = document.getElementById("slides-layout");
+            if (!slidesLayout) return;
             const layoutWidth = slidesLayout.clientWidth;
-            const elementWidth = el.children[0].scrollWidth;
+            const elementWidth = el.offsetWidth;
             const scrollPosition =
-              el.children[0].offsetLeft - layoutWidth / 2 + elementWidth / 2;
+              el.offsetLeft - layoutWidth / 2 + elementWidth / 2;
 
             slidesLayout.scrollTo({
               left: scrollPosition,
@@ -146,10 +147,11 @@ export class Manager {
     if (el) {
       setTimeout(() => {
         const slidesLayout = document.getElementById("slides-layout");
+        if (!slidesLayout) return;
         const layoutWidth = slidesLayout.clientWidth;
-        const elementWidth = el.children[0].scrollWidth;
+        const elementWidth = el.offsetWidth;
         const scrollPosition =
-          el.children[0].offsetLeft - layoutWidth / 2 + elementWidth / 2;
+          el.offsetLeft - layoutWidth / 2 + elementWidth / 2;
 
         slidesLayout.scrollTo({
           left: scrollPosition,

@@ -396,7 +396,7 @@ defmodule Claper.Presentations do
         # Rename subsequent files down by 1
         if file_index < total_length do
           for i <- (file_index + 1)..total_length do
-            File.rename!(
+            :ok = File.rename(
               Path.join(dir, "#{i}.jpg"),
               Path.join(dir, "#{i - 1}.jpg")
             )
@@ -435,7 +435,7 @@ defmodule Claper.Presentations do
 
         # Pass 1: rename all to temp names
         Enum.each(position_map, fn {old_idx, _new_idx} ->
-          File.rename!(
+          :ok = File.rename(
             Path.join(dir, "#{old_idx + 1}.jpg"),
             Path.join(dir, "tmp_#{old_idx + 1}.jpg")
           )
@@ -443,7 +443,7 @@ defmodule Claper.Presentations do
 
         # Pass 2: rename temp names to final positions
         Enum.each(position_map, fn {old_idx, new_idx} ->
-          File.rename!(
+          :ok = File.rename(
             Path.join(dir, "tmp_#{old_idx + 1}.jpg"),
             Path.join(dir, "#{new_idx + 1}.jpg")
           )
