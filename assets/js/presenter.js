@@ -24,9 +24,14 @@ export class Presenter {
       nav: false,
     });
 
+    // Size slide container from actual image aspect ratio
+    this.fitSlideHeight();
+
     if (refresh) {
       return;
     }
+
+    window.addEventListener("resize", () => this.fitSlideHeight());
 
     this.context.handleEvent("page", (data) => {
       //set current page
@@ -99,6 +104,8 @@ export class Presenter {
         joinScreen.classList.remove("flex");
         joinScreen.classList.add("hidden");
       }
+      // Recalculate slide height after join banner toggle
+      requestAnimationFrame(() => this.fitSlideHeight());
     });
 
     window.addEventListener("keyup", (e) => {
@@ -138,6 +145,32 @@ export class Presenter {
 
   update() {
     this.init(true);
+  }
+
+  fitSlideHeight() {
+    const slideContent = document.getElementById("slide-content");
+    if (!slideContent) return;
+
+    const img = document.querySelector("#slider .tns-item img");
+    if (!img) return;
+
+    const apply = () => {
+      if (!img.naturalWidth || !img.naturalHeight) return;
+      const ratio = img.naturalHeight / img.naturalWidth;
+      const width = slideContent.clientWidth;
+      const joinScreen = document.getElementById("joinScreen");
+      const bannerH = joinScreen && !joinScreen.classList.contains("hidden")
+        ? joinScreen.offsetHeight : 0;
+      const maxH = window.innerHeight - bannerH;
+      const height = Math.min(width * ratio, maxH);
+      slideContent.style.height = height + "px";
+    };
+
+    if (img.complete && img.naturalWidth) {
+      apply();
+    } else {
+      img.addEventListener("load", apply, { once: true });
+    }
   }
 
   fullscreen() {

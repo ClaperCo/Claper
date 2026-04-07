@@ -11,7 +11,6 @@
   }
 
   /* Propagate height through all tiny-slider wrappers */
-  #slide-content,
   #slider, #slider > .tns-outer,
   #slider > .tns-outer > .tns-ovh,
   #slider > .tns-outer > .tns-ovh > .tns-inner,
@@ -87,14 +86,14 @@
   <!-- MESSAGES -->
   <div
     id="slider-wrapper"
-    class={"w-full h-screen grid #{if (@state.chat_visible && @event.presentation_file.length > 0) || (@current_embed && @event.presentation_file.length == 0), do: "grid-cols-[1fr_10px_1fr]", else: "grid-cols-[1fr]"} items-stretch relative bg-gray-100 overflow-hidden"}
+    class={"w-full h-screen grid #{if (@state.chat_visible && @event.presentation_file.length > 0) || (@current_embed && @event.presentation_file.length == 0), do: "grid-cols-[1fr_10px_1fr]", else: "grid-cols-[1fr]"} content-center items-stretch relative bg-gray-100 overflow-hidden"}
     phx-hook="Split"
     data-type="column"
     data-gutter=".gutter-1"
   >
     <div
       :if={@state.chat_visible}
-      class="px-5 transition-all duration-150 flex flex-col h-screen py-5 justify-end max-h-screen bg-gray-100"
+      class="px-5 transition-all duration-150 flex flex-col py-5 justify-end overflow-y-auto bg-gray-100"
       id="post-list-wrapper"
       phx-update="replace"
     >
@@ -201,7 +200,7 @@
       •••
     </div>
     <!-- SLIDES -->
-    <div id="slides" class="flex flex-col h-full justify-center">
+    <div id="slides" class="flex flex-col">
       <%!-- JOIN SCREEN — banner above the slide --%>
       <div
         id="joinScreen"
@@ -230,7 +229,7 @@
         </div>
       </div>
       <%!-- Slide fills remaining space --%>
-      <div id="slide-content" class="flex-1 min-h-0 bg-gray-100">
+      <div id="slide-content" class="bg-gray-100">
         <%= if @current_embed do %>
           <div id="embed" class="w-full h-full">
             <.live_component
