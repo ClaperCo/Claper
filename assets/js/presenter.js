@@ -9,12 +9,6 @@ export class Presenter {
   }
 
   init(refresh = false) {
-    // Destroy previous slider instance to avoid ghost DOM / listeners
-    if (this.slider && typeof this.slider.destroy === "function") {
-      this.slider.destroy();
-      this.slider = null;
-    }
-
     this.slider = tns({
       container: "#slider",
       items: 1,
