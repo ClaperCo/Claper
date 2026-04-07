@@ -1,11 +1,35 @@
 <style>
   body {
     background: black;
+    margin: 0;
+    overflow: hidden;
   }
 
   iframe {
     width: 100%;
     height: 100%;
+  }
+
+  /* Propagate height through all tiny-slider wrappers */
+  #slide-content,
+  #slider, #slider > .tns-outer,
+  #slider > .tns-outer > .tns-ovh,
+  #slider > .tns-outer > .tns-ovh > .tns-inner,
+  #slider .tns-slider,
+  #slider .tns-item {
+    height: 100% !important;
+  }
+
+  #slider .tns-item {
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+  }
+
+  #slider .tns-item img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
   }
 </style>
 
@@ -63,7 +87,7 @@
   <!-- MESSAGES -->
   <div
     id="slider-wrapper"
-    class={"w-full min-h-screen grid #{if (@state.chat_visible && @event.presentation_file.length > 0) || (@current_embed && @event.presentation_file.length == 0), do: "grid-cols-[1fr_10px_1fr]", else: "grid-cols-[1fr]"} items-center justify-center relative bg-black"}
+    class={"w-full h-screen grid #{if (@state.chat_visible && @event.presentation_file.length > 0) || (@current_embed && @event.presentation_file.length == 0), do: "grid-cols-[1fr_10px_1fr]", else: "grid-cols-[1fr]"} items-stretch relative bg-black overflow-hidden"}
     phx-hook="Split"
     data-type="column"
     data-gutter=".gutter-1"
@@ -177,11 +201,11 @@
       •••
     </div>
     <!-- SLIDES -->
-    <div id="slides" class="relative">
-      <%!-- JOIN SCREEN — banner pinned to the top of the slide area --%>
+    <div id="slides" class="flex flex-col h-full">
+      <%!-- JOIN SCREEN — banner above the slide --%>
       <div
         id="joinScreen"
-        class={"#{if @state.join_screen_visible, do: "flex", else: "hidden"} absolute top-0 left-0 right-0 z-40 bg-white/95 text-black items-center justify-center gap-6 px-6 py-2 shadow-md"}
+        class={"#{if @state.join_screen_visible, do: "flex", else: "hidden"} flex-shrink-0 z-40 bg-white text-black items-center justify-center gap-6 px-6 py-2 shadow-md"}
       >
         <div
           phx-hook="QRCode"
@@ -202,23 +226,24 @@
           </span>
         </div>
       </div>
-      <%= if @current_embed do %>
-        <!-- EMBED -->
-        <div id="embed" class="max-h-screen w-full h-screen">
-          <.live_component
-            id="embed-component"
-            module={ClaperWeb.EventLive.EmbedIframeComponent}
-            provider={@current_embed.provider}
-            content={@current_embed.content}
+      <%!-- Slide fills remaining space --%>
+      <div id="slide-content" class="flex-1 min-h-0 bg-black">
+        <%= if @current_embed do %>
+          <div id="embed" class="w-full h-full">
+            <.live_component
+              id="embed-component"
+              module={ClaperWeb.EventLive.EmbedIframeComponent}
+              provider={@current_embed.provider}
+              content={@current_embed.content}
+            />
+          </div>
+        <% end %>
+        <div class={"#{if @current_embed, do: "hidden", else: ""} text-center"} id="slider">
+          <img
+            :for={src <- Presentations.get_slide_urls(@event.presentation_file)}
+            src={src}
           />
         </div>
-      <% end %>
-      <div class={"#{if @current_embed, do: "hidden", else: ""} text-center"} id="slider">
-        <img
-          :for={src <- Presentations.get_slide_urls(@event.presentation_file)}
-          src={src}
-          class="max-h-screen w-auto!"
-        />
       </div>
     </div>
   </div>
