@@ -771,7 +771,7 @@
     >
       <div
         :if={@event.presentation_file.length > 0}
-        class="flex w-full md:h-full items-center"
+        class="flex w-full items-center overflow-hidden min-h-0"
       >
         <div
           id="slides-layout"
@@ -794,7 +794,7 @@
             <img
               src={src}
               class={"#{if @state.position==index, do: "border-4 border-primary-500" , else: "opacity-20" }
-                      transition-all object-contain"}
+                      transition-all object-contain max-h-full"}
             />
           </button>
         </div>
