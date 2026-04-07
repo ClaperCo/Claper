@@ -267,11 +267,11 @@ defmodule Claper.Presentations do
             remap_positions(PresenterNote, :slide_position, pf.id, position_map)
           end)
           |> Ecto.Multi.run(:remap_state, fn _repo, _changes ->
-            state = Repo.get_by(PresentationState, presentation_file_id: pf.id)
+            state = Repo.get_by(Claper.Presentations.PresentationState, presentation_file_id: pf.id)
 
             if state && Map.has_key?(position_map, state.position) do
               state
-              |> PresentationState.changeset(%{position: position_map[state.position]})
+              |> Claper.Presentations.PresentationState.changeset(%{position: position_map[state.position]})
               |> Repo.update()
             else
               {:ok, state}

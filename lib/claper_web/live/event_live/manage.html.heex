@@ -771,13 +771,13 @@
     >
       <div
         :if={@event.presentation_file.length > 0}
-        class="flex overflow-x-auto w-full md:h-full items-center"
+        class="flex items-center w-full md:h-full"
       >
         <div
           id="slides-layout"
           phx-hook="SortableSlides"
           phx-update="ignore"
-          class="flex h-full items-center"
+          class="flex overflow-x-auto h-full items-center flex-1 min-w-0"
         >
           <div
             :for={
@@ -802,10 +802,10 @@
           data-phx-link="patch"
           data-phx-link-state="push"
           href={~p"/e/#{@event.code}/manage/add/slide"}
-          class="flex-shrink-0 flex items-center justify-center w-16 h-16 mx-2 rounded-lg border-2 border-dashed border-gray-300 text-gray-400 hover:border-primary-500 hover:text-primary-500 transition-colors"
+          class="flex-shrink-0 flex items-center justify-center w-10 h-10 rounded-lg border-2 border-dashed border-gray-300 text-gray-400 hover:border-primary-500 hover:text-primary-500 transition-colors ml-1"
           title={gettext("Add slide")}
         >
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-8 h-8">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6">
             <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
           </svg>
         </a>
