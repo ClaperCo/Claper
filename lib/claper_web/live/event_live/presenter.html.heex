@@ -8,13 +8,14 @@
     height: 100%;
   }
 
-  /* tiny-slider wrappers: fill parent height (set by JS) */
+  /* All elements from wrapper down to slide image fill 100vh */
+  #slides-join-wrapper,
   #slides, #slider, #slider > .tns-outer,
   #slider > .tns-outer > .tns-ovh,
   #slider > .tns-outer > .tns-ovh > .tns-inner,
   #slider .tns-slider,
   #slider .tns-item {
-    height: 100% !important;
+    height: 100vh !important;
   }
 
   #slider .tns-item {
@@ -25,7 +26,7 @@
 
   #slider .tns-item img {
     max-width: 100%;
-    max-height: 100%;
+    max-height: 100vh;
     object-fit: contain;
   }
 </style>
@@ -199,11 +200,11 @@
       •••
     </div>
     <!-- SLIDES + JOIN SCREEN -->
-    <div id="slides-join-wrapper" class="flex w-full my-auto">
+    <div id="slides-join-wrapper" class="flex w-full h-screen">
       <!-- JOIN SCREEN PANEL -->
       <div
         id="joinScreen"
-        class={"#{if @state.join_screen_visible, do: "flex", else: "hidden"} w-1/5 flex-shrink-0 bg-white text-black text-center flex-col items-center justify-center p-4 overflow-hidden"}
+        class={"#{if @state.join_screen_visible, do: "flex", else: "hidden"} w-1/5 flex-shrink-0 h-screen bg-white text-black text-center flex-col items-center justify-center p-4 overflow-hidden"}
       >
         <span class="font-semibold mb-3 text-base lg:text-xl">
           {gettext("Scan to interact in real-time")}

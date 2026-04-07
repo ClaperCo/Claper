@@ -8,29 +8,6 @@ export class Presenter {
     this.hash = context.el.dataset.hash;
   }
 
-  fitSlideArea() {
-    const wrapper = document.getElementById("slides-join-wrapper");
-    const slidesDiv = document.getElementById("slides");
-    if (!wrapper || !slidesDiv) return;
-
-    const img = document.querySelector("#slider .tns-item img, #slider img");
-    if (!img || !img.naturalWidth || !img.naturalHeight) return;
-
-    const ratio = img.naturalWidth / img.naturalHeight;
-    const vh = window.innerHeight;
-
-    // Measure the actual rendered width of the slides div (flex-1 handles
-    // all combinations of chat / join panel visibility automatically)
-    const slideWidth = slidesDiv.clientWidth;
-
-    // Height that matches the slide's aspect ratio at its actual width
-    let height = slideWidth / ratio;
-    // Cap at viewport height
-    height = Math.min(height, vh);
-
-    wrapper.style.height = height + "px";
-  }
-
   init(refresh = false) {
     this.slider = tns({
       container: "#slider",
@@ -46,18 +23,6 @@ export class Presenter {
       loop: false,
       nav: false,
     });
-
-    // Fit slide area once first image is loaded, then on every resize
-    const firstImg = document.querySelector("#slider img");
-    if (firstImg) {
-      const doFit = () => requestAnimationFrame(() => this.fitSlideArea());
-      if (firstImg.complete) {
-        doFit();
-      } else {
-        firstImg.addEventListener("load", doFit, { once: true });
-      }
-      window.addEventListener("resize", doFit);
-    }
 
     if (refresh) {
       return;
@@ -104,8 +69,6 @@ export class Presenter {
           .getElementById("pinned-post-list")
           .classList.add("animate__animated", "animate__fadeOutLeft");
       }
-      // Delay to let grid layout settle after chat panel animation
-      setTimeout(() => this.fitSlideArea(), 350);
     });
 
     this.context.handleEvent("poll-visible", (data) => {
@@ -136,8 +99,6 @@ export class Presenter {
         joinScreen.classList.remove("flex");
         joinScreen.classList.add("hidden");
       }
-      // Recalculate after the layout shift settles
-      setTimeout(() => this.fitSlideArea(), 50);
     });
 
     window.addEventListener("keyup", (e) => {
