@@ -368,6 +368,19 @@ defmodule ClaperWeb.EventLive.Presenter do
     {:noreply, socket |> assign(:current_question_idx, idx)}
   end
 
+  def handle_info({:presentation_updated, _pf}, socket) do
+    event =
+      Claper.Events.get_event_with_code(socket.assigns.event.code, [
+        :user,
+        presentation_file: [:polls, :presentation_state]
+      ])
+
+    {:noreply,
+     socket
+     |> assign(:event, event)
+     |> assign(:state, event.presentation_file.presentation_state)}
+  end
+
   @impl true
   def handle_info(_, socket) do
     {:noreply, socket}

@@ -131,6 +131,85 @@ defmodule Claper.Presentations do
     |> Repo.update()
   end
 
+  @doc """
+  Inserts a slide image at the given 0-based position.
+  Renumbers existing files, updates length, and shifts interaction positions.
+  Returns {:ok, updated_presentation_file} or {:error, reason}.
+  """
+  def insert_slide(%PresentationFile{} = pf, insert_position, image_path) do
+    storage_dir = Application.get_env(:claper, :storage_dir, "priv/static")
+    old_dir = Path.join([storage_dir, "uploads", pf.hash])
+    new_hash = "#{:erlang.phash2("#{pf.hash}-#{System.system_time(:second)}")}"
+    new_dir = Path.join([storage_dir, "uploads", new_hash])
+
+    # insert_position is 0-based: 0 means "at the beginning"
+    # file_insert_index is 1-based file naming
+    file_insert_index = insert_position + 1
+
+    File.mkdir_p!(new_dir)
+
+    try do
+      # Copy files before the insertion point
+      for i <- 1..(file_insert_index - 1), i >= 1 do
+        File.cp!(Path.join(old_dir, "#{i}.jpg"), Path.join(new_dir, "#{i}.jpg"))
+      end
+
+      # Copy the new slide image
+      File.cp!(image_path, Path.join(new_dir, "#{file_insert_index}.jpg"))
+
+      # Copy files after the insertion point (shifted by 1)
+      for i <- file_insert_index..pf.length do
+        File.cp!(Path.join(old_dir, "#{i}.jpg"), Path.join(new_dir, "#{i + 1}.jpg"))
+      end
+
+      # Atomic DB updates
+      multi =
+        Ecto.Multi.new()
+        |> Ecto.Multi.update(
+          :presentation_file,
+          PresentationFile.changeset(pf, %{hash: new_hash, length: pf.length + 1})
+        )
+        |> Ecto.Multi.run(:shift_polls, fn _repo, _changes ->
+          shift_positions(Claper.Polls.Poll, :position, pf.id, insert_position)
+        end)
+        |> Ecto.Multi.run(:shift_forms, fn _repo, _changes ->
+          shift_positions(Claper.Forms.Form, :position, pf.id, insert_position)
+        end)
+        |> Ecto.Multi.run(:shift_embeds, fn _repo, _changes ->
+          shift_positions(Claper.Embeds.Embed, :position, pf.id, insert_position)
+        end)
+        |> Ecto.Multi.run(:shift_quizzes, fn _repo, _changes ->
+          shift_positions(Claper.Quizzes.Quiz, :position, pf.id, insert_position)
+        end)
+        |> Ecto.Multi.run(:shift_notes, fn _repo, _changes ->
+          shift_positions(PresenterNote, :slide_position, pf.id, insert_position)
+        end)
+
+      case Repo.transaction(multi) do
+        {:ok, %{presentation_file: updated_pf}} ->
+          File.rm_rf!(old_dir)
+          {:ok, updated_pf}
+
+        {:error, _step, changeset, _changes} ->
+          File.rm_rf!(new_dir)
+          {:error, changeset}
+      end
+    rescue
+      e ->
+        File.rm_rf!(new_dir)
+        {:error, e}
+    end
+  end
+
+  defp shift_positions(schema, field, presentation_file_id, insert_position) do
+    from(s in schema,
+      where: s.presentation_file_id == ^presentation_file_id and field(s, ^field) >= ^insert_position
+    )
+    |> Repo.update_all(inc: [{field, 1}])
+
+    {:ok, :shifted}
+  end
+
   def subscribe(presentation_file_id) do
     Phoenix.PubSub.subscribe(Claper.PubSub, "presentation:#{presentation_file_id}")
   end

@@ -66,6 +66,11 @@ defmodule ClaperWeb.EventLive.Manage do
         })
         |> interactions_at_position(event.presentation_file.presentation_state.position)
         |> note_at_position(event.presentation_file.presentation_state.position)
+        |> allow_upload(:slide_image,
+          accept: ~w(.png .jpg .jpeg),
+          max_entries: 1,
+          max_file_size: 15_000_000
+        )
 
       {:ok, socket}
     end
@@ -304,6 +309,66 @@ defmodule ClaperWeb.EventLive.Manage do
   end
 
   @impl true
+  def handle_event("validate-slide", %{"position" => position}, socket) do
+    {:noreply, assign(socket, :slide_insert_position, String.to_integer(position))}
+  end
+
+  def handle_event("validate-slide", _params, socket) do
+    {:noreply, socket}
+  end
+
+  def handle_event("cancel-slide-upload", %{"ref" => ref}, socket) do
+    {:noreply, cancel_upload(socket, :slide_image, ref)}
+  end
+
+  def handle_event("save-slide", _params, socket) do
+    pf = socket.assigns.event.presentation_file
+    insert_position = socket.assigns.slide_insert_position
+
+    uploaded_files =
+      consume_uploaded_entries(socket, :slide_image, fn %{path: path}, _entry ->
+        {:ok, path}
+      end)
+
+    case uploaded_files do
+      [tmp_path] ->
+        case Presentations.insert_slide(pf, insert_position, tmp_path) do
+          {:ok, updated_pf} ->
+            event =
+              Claper.Events.get_event_with_code(socket.assigns.event.code, [
+                :user,
+                :lti_resource,
+                presentation_file: [:polls, :presentation_state]
+              ])
+
+            Phoenix.PubSub.broadcast(
+              Claper.PubSub,
+              "event:#{socket.assigns.event.uuid}",
+              {:presentation_updated, updated_pf}
+            )
+
+            {:noreply,
+             socket
+             |> assign(:event, event)
+             |> assign(:state, event.presentation_file.presentation_state)
+             |> push_event("page-manage", %{
+               current_page: event.presentation_file.presentation_state.position,
+               timeout: 500
+             })
+             |> push_navigate(to: ~p"/e/#{socket.assigns.event.code}/manage")}
+
+          {:error, _reason} ->
+            {:noreply,
+             socket
+             |> put_flash(:error, gettext("Failed to insert slide"))
+             |> push_navigate(to: ~p"/e/#{socket.assigns.event.code}/manage")}
+        end
+
+      _ ->
+        {:noreply, socket}
+    end
+  end
+
   def handle_event("save-note", %{"content" => content}, socket) do
     position = socket.assigns.state.position
 
@@ -1003,6 +1068,12 @@ defmodule ClaperWeb.EventLive.Manage do
         }
       ]
     })
+  end
+
+  defp apply_action(socket, :add_slide, _params) do
+    socket
+    |> assign(:create, "slide")
+    |> assign(:slide_insert_position, socket.assigns.state.position + 1)
   end
 
   defp apply_action(socket, :edit_quiz, %{"id" => id}) do
