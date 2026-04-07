@@ -18,17 +18,22 @@ export class Presenter {
     const ratio = img.naturalWidth / img.naturalHeight;
     const vh = window.innerHeight;
 
+    // Determine how much width the join panel consumes
+    const joinScreen = document.getElementById("joinScreen");
+    const joinVisible = joinScreen && !joinScreen.classList.contains("hidden");
+
     // Total width available to the wrapper (the grid cell)
     const totalWidth = wrapper.parentElement.clientWidth;
 
-    // Height if the slide used the FULL width (no join panel)
-    // This is the max height the slide would naturally be
-    const fullHeight = Math.min(totalWidth / ratio, vh);
+    // Width the slide actually gets (exclude join panel)
+    const slideWidth = joinVisible ? totalWidth * 0.8 : totalWidth;
 
-    // Always use the full-width-derived height so the slide fills the
-    // viewport the same way regardless of whether the join panel is open.
-    // The join panel simply sits beside the slide within this height.
-    wrapper.style.height = fullHeight + "px";
+    // Height that matches the slide's aspect ratio at its actual width
+    let height = slideWidth / ratio;
+    // Cap at viewport height
+    height = Math.min(height, vh);
+
+    wrapper.style.height = height + "px";
   }
 
   init(refresh = false) {
@@ -104,7 +109,8 @@ export class Presenter {
           .getElementById("pinned-post-list")
           .classList.add("animate__animated", "animate__fadeOutLeft");
       }
-      requestAnimationFrame(() => this.fitSlideArea());
+      // Delay to let grid layout settle after chat panel animation
+      setTimeout(() => this.fitSlideArea(), 350);
     });
 
     this.context.handleEvent("poll-visible", (data) => {
