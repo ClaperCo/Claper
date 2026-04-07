@@ -3,7 +3,7 @@ defmodule ClaperWeb.EventLive.EmbedIframeComponent do
 
   def render(assigns) do
     ~H"""
-    <div id={@id} class="h-full w-full">
+    <div id={@id} class="h-full w-full" style="min-height: 0;">
       <%= case @provider do %>
         <% "youtube" -> %>
           <iframe
@@ -39,7 +39,9 @@ defmodule ClaperWeb.EventLive.EmbedIframeComponent do
           >
           </iframe>
         <% "custom" -> %>
-          {raw(@content)}
+          <div class="w-full h-full" style="min-height: 300px;">
+            {raw(@content)}
+          </div>
       <% end %>
     </div>
     """
