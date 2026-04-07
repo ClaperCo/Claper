@@ -137,32 +137,25 @@ defmodule Claper.Presentations do
   Returns {:ok, updated_presentation_file} or {:error, reason}.
   """
   def insert_slide(%PresentationFile{} = pf, insert_position, image_path) do
-    storage_dir = Application.get_env(:claper, :storage_dir, "priv/static")
-    old_dir = Path.join([storage_dir, "uploads", pf.hash])
     new_hash = "#{:erlang.phash2("#{pf.hash}-#{System.system_time(:second)}")}"
-    new_dir = Path.join([storage_dir, "uploads", new_hash])
-
-    # insert_position is 0-based: 0 means "at the beginning"
-    # file_insert_index is 1-based file naming
     file_insert_index = insert_position + 1
 
-    File.mkdir_p!(new_dir)
-
     try do
-      # Copy files before the insertion point
-      for i <- 1..(file_insert_index - 1), i >= 1 do
-        File.cp!(Path.join(old_dir, "#{i}.jpg"), Path.join(new_dir, "#{i}.jpg"))
+      # Copy existing slides and insert the new one
+      copy_slide_to_new_hash(image_path, new_hash, file_insert_index)
+
+      if file_insert_index > 1 do
+        for i <- 1..(file_insert_index - 1) do
+          copy_slide_between_hashes(pf.hash, i, new_hash, i)
+        end
       end
 
-      # Copy the new slide image
-      File.cp!(image_path, Path.join(new_dir, "#{file_insert_index}.jpg"))
-
-      # Copy files after the insertion point (shifted by 1)
-      for i <- file_insert_index..pf.length do
-        File.cp!(Path.join(old_dir, "#{i}.jpg"), Path.join(new_dir, "#{i + 1}.jpg"))
+      if file_insert_index <= pf.length do
+        for i <- file_insert_index..pf.length do
+          copy_slide_between_hashes(pf.hash, i, new_hash, i + 1)
+        end
       end
 
-      # Atomic DB updates
       multi =
         Ecto.Multi.new()
         |> Ecto.Multi.update(
@@ -187,16 +180,16 @@ defmodule Claper.Presentations do
 
       case Repo.transaction(multi) do
         {:ok, %{presentation_file: updated_pf}} ->
-          File.rm_rf!(old_dir)
+          clear_slide_hash(pf.hash)
           {:ok, updated_pf}
 
         {:error, _step, changeset, _changes} ->
-          File.rm_rf!(new_dir)
+          clear_slide_hash(new_hash)
           {:error, changeset}
       end
     rescue
       e ->
-        File.rm_rf!(new_dir)
+        clear_slide_hash(new_hash)
         {:error, e}
     end
   end
@@ -221,30 +214,18 @@ defmodule Claper.Presentations do
     if Enum.sort(new_order) != expected do
       {:error, :invalid_order}
     else
-      storage_dir = Application.get_env(:claper, :storage_dir, "priv/static")
-      old_dir = Path.join([storage_dir, "uploads", pf.hash])
       new_hash = "#{:erlang.phash2("#{pf.hash}-#{System.system_time(:second)}")}"
-      new_dir = Path.join([storage_dir, "uploads", new_hash])
 
-      # Build mapping: old_position => new_position
       position_map =
         new_order
         |> Enum.with_index()
-        |> Enum.map(fn {old_idx, new_idx} -> {old_idx, new_idx} end)
         |> Map.new()
 
-      File.mkdir_p!(new_dir)
-
       try do
-        # Copy files in new order
         for {old_idx, new_idx} <- position_map do
-          File.cp!(
-            Path.join(old_dir, "#{old_idx + 1}.jpg"),
-            Path.join(new_dir, "#{new_idx + 1}.jpg")
-          )
+          copy_slide_between_hashes(pf.hash, old_idx + 1, new_hash, new_idx + 1)
         end
 
-        # Remap positions atomically
         multi =
           Ecto.Multi.new()
           |> Ecto.Multi.update(
@@ -280,23 +261,22 @@ defmodule Claper.Presentations do
 
         case Repo.transaction(multi) do
           {:ok, %{presentation_file: updated_pf}} ->
-            File.rm_rf!(old_dir)
+            clear_slide_hash(pf.hash)
             {:ok, updated_pf}
 
           {:error, _step, changeset, _changes} ->
-            File.rm_rf!(new_dir)
+            clear_slide_hash(new_hash)
             {:error, changeset}
         end
       rescue
         e ->
-          File.rm_rf!(new_dir)
+          clear_slide_hash(new_hash)
           {:error, e}
       end
     end
   end
 
   defp remap_positions(schema, field, presentation_file_id, position_map) do
-    # Pass 1: set all positions to negative temporaries to avoid collisions
     Enum.each(position_map, fn {old_pos, new_pos} ->
       from(s in schema,
         where: s.presentation_file_id == ^presentation_file_id and field(s, ^field) == ^old_pos
@@ -304,7 +284,6 @@ defmodule Claper.Presentations do
       |> Repo.update_all(set: [{field, -(new_pos + 1)}])
     end)
 
-    # Pass 2: flip all negative positions back to positive
     Enum.each(0..(map_size(position_map) - 1), fn new_pos ->
       neg_val = -(new_pos + 1)
 
@@ -315,6 +294,68 @@ defmodule Claper.Presentations do
     end)
 
     {:ok, :remapped}
+  end
+
+  # Storage-agnostic helpers for slide file operations
+
+  defp presentation_storage do
+    Application.get_env(:claper, :presentations) |> Keyword.get(:storage)
+  end
+
+  defp s3_bucket do
+    Application.get_env(:claper, :presentations) |> Keyword.get(:s3_bucket)
+  end
+
+  defp copy_slide_to_new_hash(local_image_path, new_hash, dest_index) do
+    case presentation_storage() do
+      "local" ->
+        storage_dir = Application.get_env(:claper, :storage_dir, "priv/static")
+        new_dir = Path.join([storage_dir, "uploads", new_hash])
+        File.mkdir_p!(new_dir)
+        File.cp!(local_image_path, Path.join(new_dir, "#{dest_index}.jpg"))
+
+      "s3" ->
+        local_image_path
+        |> ExAws.S3.Upload.stream_file()
+        |> ExAws.S3.upload(s3_bucket(), "presentations/#{new_hash}/#{dest_index}.jpg", acl: "public-read")
+        |> ExAws.request!()
+    end
+  end
+
+  defp copy_slide_between_hashes(old_hash, old_index, new_hash, new_index) do
+    case presentation_storage() do
+      "local" ->
+        storage_dir = Application.get_env(:claper, :storage_dir, "priv/static")
+        old_path = Path.join([storage_dir, "uploads", old_hash, "#{old_index}.jpg"])
+        new_dir = Path.join([storage_dir, "uploads", new_hash])
+        File.mkdir_p!(new_dir)
+        File.cp!(old_path, Path.join(new_dir, "#{new_index}.jpg"))
+
+      "s3" ->
+        ExAws.S3.put_object_copy(
+          s3_bucket(),
+          "presentations/#{new_hash}/#{new_index}.jpg",
+          s3_bucket(),
+          "presentations/#{old_hash}/#{old_index}.jpg"
+        )
+        |> ExAws.request!()
+    end
+  end
+
+  defp clear_slide_hash(hash) do
+    case presentation_storage() do
+      "local" ->
+        storage_dir = Application.get_env(:claper, :storage_dir, "priv/static")
+        File.rm_rf!(Path.join([storage_dir, "uploads", hash]))
+
+      "s3" ->
+        stream =
+          ExAws.S3.list_objects(s3_bucket(), prefix: "presentations/#{hash}")
+          |> ExAws.stream!()
+          |> Stream.map(& &1.key)
+
+        ExAws.S3.delete_all_objects(s3_bucket(), stream) |> ExAws.request()
+    end
   end
 
   def subscribe(presentation_file_id) do
