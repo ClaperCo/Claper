@@ -572,10 +572,8 @@ Hooks.QRCode = {
 
     var qrSize;
     if (this.el.dataset.panel) {
-      // Top banner mode: QR fits within the banner height
-      var panel = this.el.closest("#joinScreen");
-      var panelHeight = panel?.clientHeight || 80;
-      qrSize = Math.max(panelHeight - 16, 60);
+      // Top banner mode: fixed small QR code
+      qrSize = 80;
     } else if (this.el.dataset.dynamic) {
       qrSize = document.documentElement.clientWidth * 0.25;
     } else {
