@@ -771,34 +771,38 @@
     >
       <div
         :if={@event.presentation_file.length > 0}
-        id="slides-layout"
-        phx-hook="SortableSlides"
-        phx-update="ignore"
         class="flex overflow-x-auto w-full md:h-full items-center"
       >
         <div
-          :for={
-            {src, index} <-
-              Presentations.get_slide_urls(@event.presentation_file) |> Enum.with_index(0)
-          }
-          id={"slide-preview-#{index}"}
-          data-slide-index={index}
-          draggable="true"
-          phx-click="current-page"
-          phx-value-page={index}
-          class="h-full flex-shrink-0 cursor-grab"
+          id="slides-layout"
+          phx-hook="SortableSlides"
+          phx-update="ignore"
+          class="flex h-full items-center"
         >
-          <img
-            src={src}
-            class={"#{if @state.position==index, do: "border-4 border-primary-500" , else: "opacity-20" }
-                    transition-all object-contain h-full"}
-          />
+          <div
+            :for={
+              {src, index} <-
+                Presentations.get_slide_urls(@event.presentation_file) |> Enum.with_index(0)
+            }
+            id={"slide-preview-#{index}"}
+            data-slide-index={index}
+            draggable="true"
+            phx-click="current-page"
+            phx-value-page={index}
+            class="h-full flex-shrink-0 cursor-grab"
+          >
+            <img
+              src={src}
+              class={"#{if @state.position==index, do: "border-4 border-primary-500" , else: "opacity-20" }
+                      transition-all object-contain h-full"}
+            />
+          </div>
         </div>
         <a
           data-phx-link="patch"
           data-phx-link-state="push"
           href={~p"/e/#{@event.code}/manage/add/slide"}
-          class="add-slide-btn flex-shrink-0 flex items-center justify-center w-16 h-16 mx-2 rounded-lg border-2 border-dashed border-gray-300 text-gray-400 hover:border-primary-500 hover:text-primary-500 transition-colors"
+          class="flex-shrink-0 flex items-center justify-center w-16 h-16 mx-2 rounded-lg border-2 border-dashed border-gray-300 text-gray-400 hover:border-primary-500 hover:text-primary-500 transition-colors"
           title={gettext("Add slide")}
         >
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-8 h-8">
