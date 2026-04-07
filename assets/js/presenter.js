@@ -8,6 +8,39 @@ export class Presenter {
     this.hash = context.el.dataset.hash;
   }
 
+  fitSlideArea() {
+    const wrapper = document.getElementById("slides-join-wrapper");
+    if (!wrapper) return;
+
+    const img = document.querySelector("#slider .tns-item img, #slider img");
+    if (!img || !img.naturalWidth || !img.naturalHeight) return;
+
+    const R = img.naturalWidth / img.naturalHeight; // slide aspect ratio
+    const vh = window.innerHeight;
+    const availW = wrapper.parentElement.clientWidth; // grid cell width
+
+    const joinScreen = document.getElementById("joinScreen");
+    const joinVisible = joinScreen && !joinScreen.classList.contains("hidden");
+    // Slide gets this fraction of the wrapper width
+    const slideFrac = joinVisible ? 0.8 : 1.0;
+
+    // Maximize wrapper so the slide fills either the full available width
+    // or the full viewport height — whichever is the binding constraint.
+    // Constraint 1: wrapperW <= availW
+    // Constraint 2: slideH = slideFrac * wrapperW / R <= vh
+    //             → wrapperW <= vh * R / slideFrac
+    const wrapperW = Math.min(availW, vh * R / slideFrac);
+    const wrapperH = slideFrac * wrapperW / R;
+
+    wrapper.style.width = wrapperW + "px";
+    wrapper.style.height = wrapperH + "px";
+
+    // Set join panel width explicitly (proportional to wrapper)
+    if (joinScreen && joinVisible) {
+      joinScreen.style.width = (wrapperW - wrapperW * slideFrac) + "px";
+    }
+  }
+
   init(refresh = false) {
     this.slider = tns({
       container: "#slider",
@@ -24,7 +57,20 @@ export class Presenter {
       nav: false,
     });
 
+    // Fit slide area once first image is loaded, then on every resize
+    const firstImg = document.querySelector("#slider img");
+    if (firstImg) {
+      const doFit = () => this.fitSlideArea();
+      if (firstImg.complete) {
+        doFit();
+      } else {
+        firstImg.addEventListener("load", doFit, { once: true });
+      }
+      window.addEventListener("resize", doFit);
+    }
+
     if (refresh) {
+      this.fitSlideArea();
       return;
     }
 
@@ -69,6 +115,8 @@ export class Presenter {
           .getElementById("pinned-post-list")
           .classList.add("animate__animated", "animate__fadeOutLeft");
       }
+      // Grid columns change — recalculate after layout settles
+      setTimeout(() => this.fitSlideArea(), 350);
     });
 
     this.context.handleEvent("poll-visible", (data) => {
@@ -99,6 +147,8 @@ export class Presenter {
         joinScreen.classList.remove("flex");
         joinScreen.classList.add("hidden");
       }
+      // Recalculate — slide area width changes when join panel toggles
+      setTimeout(() => this.fitSlideArea(), 50);
     });
 
     window.addEventListener("keyup", (e) => {
