@@ -457,7 +457,9 @@ defmodule ClaperWeb.EventLive.Manage do
       {:error, :cannot_delete_last_slide} ->
         {:noreply, put_flash(socket, :error, gettext("Cannot delete the last slide"))}
 
-      {:error, _} ->
+      {:error, reason} ->
+        require Logger
+        Logger.error("Failed to delete slide at position #{delete_position}: #{inspect(reason)}")
         {:noreply, put_flash(socket, :error, gettext("Failed to delete slide"))}
     end
   end

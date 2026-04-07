@@ -208,7 +208,7 @@ defmodule Claper.Presentations do
   Copies remaining files to a new hash, updates length, shifts interaction positions down,
   and deletes any interactions that were on the removed slide.
   """
-  def delete_slide(%PresentationFile{} = pf, delete_position) when pf.length > 1 do
+  def delete_slide(%PresentationFile{length: length} = pf, delete_position) when length > 1 do
     new_hash = "#{:erlang.phash2("#{pf.hash}-#{System.system_time(:second)}")}"
     # 1-based file index to delete
     file_delete_index = delete_position + 1
