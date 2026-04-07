@@ -426,6 +426,42 @@ defmodule ClaperWeb.EventLive.Manage do
     end
   end
 
+  def handle_event("delete-slide", %{"index" => index_str}, socket) do
+    pf = socket.assigns.event.presentation_file
+    delete_position = String.to_integer(index_str)
+
+    case Presentations.delete_slide(pf, delete_position) do
+      {:ok, updated_pf} ->
+        event =
+          Claper.Events.get_event_with_code(socket.assigns.event.code, [
+            :user,
+            :lti_resource,
+            presentation_file: [:polls, :presentation_state]
+          ])
+
+        Phoenix.PubSub.broadcast(
+          Claper.PubSub,
+          "event:#{socket.assigns.event.uuid}",
+          {:presentation_updated, updated_pf}
+        )
+
+        {:noreply,
+         socket
+         |> assign(:event, event)
+         |> assign(:state, event.presentation_file.presentation_state)
+         |> push_event("page-manage", %{
+           current_page: event.presentation_file.presentation_state.position,
+           timeout: 500
+         })}
+
+      {:error, :cannot_delete_last_slide} ->
+        {:noreply, put_flash(socket, :error, gettext("Cannot delete the last slide"))}
+
+      {:error, _} ->
+        {:noreply, put_flash(socket, :error, gettext("Failed to delete slide"))}
+    end
+  end
+
   def handle_event("save-note", %{"content" => content}, socket) do
     position = socket.assigns.state.position
 

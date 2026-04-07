@@ -204,6 +204,121 @@ defmodule Claper.Presentations do
   end
 
   @doc """
+  Deletes a slide at the given 0-based position.
+  Copies remaining files to a new hash, updates length, shifts interaction positions down,
+  and deletes any interactions that were on the removed slide.
+  """
+  def delete_slide(%PresentationFile{} = pf, delete_position) when pf.length > 1 do
+    new_hash = "#{:erlang.phash2("#{pf.hash}-#{System.system_time(:second)}")}"
+    # 1-based file index to delete
+    file_delete_index = delete_position + 1
+
+    try do
+      # Copy files before the deleted slide
+      if file_delete_index > 1 do
+        for i <- 1..(file_delete_index - 1) do
+          copy_slide_between_hashes(pf.hash, i, new_hash, i)
+        end
+      end
+
+      # Copy files after the deleted slide, shifted down by 1
+      if file_delete_index < pf.length do
+        for i <- (file_delete_index + 1)..pf.length do
+          copy_slide_between_hashes(pf.hash, i, new_hash, i - 1)
+        end
+      end
+
+      multi =
+        Ecto.Multi.new()
+        |> Ecto.Multi.update(
+          :presentation_file,
+          PresentationFile.changeset(pf, %{hash: new_hash, length: pf.length - 1})
+        )
+        |> Ecto.Multi.run(:delete_polls, fn _repo, _changes ->
+          delete_at_position(Claper.Polls.Poll, :position, pf.id, delete_position)
+        end)
+        |> Ecto.Multi.run(:delete_forms, fn _repo, _changes ->
+          delete_at_position(Claper.Forms.Form, :position, pf.id, delete_position)
+        end)
+        |> Ecto.Multi.run(:delete_embeds, fn _repo, _changes ->
+          delete_at_position(Claper.Embeds.Embed, :position, pf.id, delete_position)
+        end)
+        |> Ecto.Multi.run(:delete_quizzes, fn _repo, _changes ->
+          delete_at_position(Claper.Quizzes.Quiz, :position, pf.id, delete_position)
+        end)
+        |> Ecto.Multi.run(:delete_notes, fn _repo, _changes ->
+          delete_at_position(PresenterNote, :slide_position, pf.id, delete_position)
+        end)
+        |> Ecto.Multi.run(:unshift_polls, fn _repo, _changes ->
+          unshift_positions(Claper.Polls.Poll, :position, pf.id, delete_position)
+        end)
+        |> Ecto.Multi.run(:unshift_forms, fn _repo, _changes ->
+          unshift_positions(Claper.Forms.Form, :position, pf.id, delete_position)
+        end)
+        |> Ecto.Multi.run(:unshift_embeds, fn _repo, _changes ->
+          unshift_positions(Claper.Embeds.Embed, :position, pf.id, delete_position)
+        end)
+        |> Ecto.Multi.run(:unshift_quizzes, fn _repo, _changes ->
+          unshift_positions(Claper.Quizzes.Quiz, :position, pf.id, delete_position)
+        end)
+        |> Ecto.Multi.run(:unshift_notes, fn _repo, _changes ->
+          unshift_positions(PresenterNote, :slide_position, pf.id, delete_position)
+        end)
+        |> Ecto.Multi.run(:fix_state, fn _repo, _changes ->
+          state = Repo.get_by(Claper.Presentations.PresentationState, presentation_file_id: pf.id)
+
+          cond do
+            is_nil(state) -> {:ok, nil}
+            state.position == delete_position && pf.length > 1 ->
+              new_pos = max(0, delete_position - 1)
+              state
+              |> Claper.Presentations.PresentationState.changeset(%{position: new_pos})
+              |> Repo.update()
+            state.position > delete_position ->
+              state
+              |> Claper.Presentations.PresentationState.changeset(%{position: state.position - 1})
+              |> Repo.update()
+            true -> {:ok, state}
+          end
+        end)
+
+      case Repo.transaction(multi) do
+        {:ok, %{presentation_file: updated_pf}} ->
+          clear_slide_hash(pf.hash)
+          {:ok, updated_pf}
+
+        {:error, _step, changeset, _changes} ->
+          clear_slide_hash(new_hash)
+          {:error, changeset}
+      end
+    rescue
+      e ->
+        clear_slide_hash(new_hash)
+        {:error, e}
+    end
+  end
+
+  def delete_slide(_pf, _position), do: {:error, :cannot_delete_last_slide}
+
+  defp delete_at_position(schema, field, presentation_file_id, position) do
+    from(s in schema,
+      where: s.presentation_file_id == ^presentation_file_id and field(s, ^field) == ^position
+    )
+    |> Repo.delete_all()
+
+    {:ok, :deleted}
+  end
+
+  defp unshift_positions(schema, field, presentation_file_id, deleted_position) do
+    from(s in schema,
+      where: s.presentation_file_id == ^presentation_file_id and field(s, ^field) > ^deleted_position
+    )
+    |> Repo.update_all(inc: [{field, -1}])
+
+    {:ok, :shifted}
+  end
+
+  @doc """
   Reorders slides according to the given order list.
   `new_order` is a list of 0-based old indices in the desired new order.
   E.g., [2, 0, 1] means: new slide 0 = old slide 2, new slide 1 = old slide 0, new slide 2 = old slide 1.

@@ -767,13 +767,24 @@
           draggable="true"
           phx-click="current-page"
           phx-value-page={index}
-          class="flex-shrink-0 h-full cursor-pointer"
+          class="group relative flex-shrink-0 h-full cursor-pointer"
         >
           <img
             src={src}
             class={"#{if @state.position==index, do: "border-4 border-primary-500" , else: "opacity-20" }
                     transition-all object-contain h-full"}
           />
+          <button
+            :if={@event.presentation_file.length > 1}
+            phx-click="delete-slide"
+            phx-value-index={index}
+            data-confirm={gettext("Delete this slide?")}
+            class="absolute top-0 right-0 hidden group-hover:flex items-center justify-center w-5 h-5 bg-red-500 text-white rounded-full text-xs leading-none"
+            title={gettext("Delete slide")}
+            type="button"
+          >
+            ×
+          </button>
         </div>
         <button
           phx-click="show-add-slide"
