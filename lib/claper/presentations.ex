@@ -137,8 +137,24 @@ defmodule Claper.Presentations do
   Returns {:ok, updated_presentation_file} or {:error, reason}.
   """
   def insert_slide(%PresentationFile{} = pf, insert_position, image_path) do
+    require Logger
     new_hash = "#{:erlang.phash2("#{pf.hash}-#{System.system_time(:second)}")}"
     file_insert_index = insert_position + 1
+
+    Logger.info("insert_slide: storage=#{presentation_storage()}, hash=#{pf.hash}, length=#{pf.length}, insert_pos=#{insert_position}, file_idx=#{file_insert_index}")
+    Logger.info("insert_slide: image_path=#{image_path}, exists=#{File.exists?(image_path)}")
+
+    case presentation_storage() do
+      "local" ->
+        storage_dir = Application.get_env(:claper, :storage_dir, "priv/static")
+        dir = Path.join([storage_dir, "uploads", pf.hash])
+        Logger.info("insert_slide: local dir=#{dir}, dir_exists=#{File.exists?(dir)}")
+        case File.ls(dir) do
+          {:ok, files} -> Logger.info("insert_slide: files in dir: #{inspect(Enum.sort(files))}")
+          {:error, reason} -> Logger.error("insert_slide: cannot list dir: #{inspect(reason)}")
+        end
+      _ -> :ok
+    end
 
     try do
       # Copy existing slides and insert the new one
