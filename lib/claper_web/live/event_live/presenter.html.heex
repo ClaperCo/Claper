@@ -11,7 +11,6 @@
   }
 
   /* Propagate height through all tiny-slider wrappers */
-  #slide-content,
   #slider, #slider > .tns-outer,
   #slider > .tns-outer > .tns-ovh,
   #slider > .tns-outer > .tns-ovh > .tns-inner,
@@ -94,7 +93,7 @@
   >
     <div
       :if={@state.chat_visible}
-      class="px-5 transition-all duration-150 flex flex-col h-screen py-5 justify-end max-h-screen bg-black"
+      class="px-5 transition-all duration-150 flex flex-col h-screen py-5 justify-end max-h-screen bg-gray-100"
       id="post-list-wrapper"
       phx-update="replace"
     >

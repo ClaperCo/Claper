@@ -447,7 +447,7 @@ Hooks.OpenPresenter = {
     window.open(
       this.el.dataset.url,
       "newwindow",
-      "width=" + window.screen.width + ",height=" + window.screen.height,
+      "width=" + window.screen.width + ",height=" + window.screen.height + ",location=no,menubar=no,toolbar=no,status=no",
     );
   },
   mounted() {
