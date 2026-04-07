@@ -1,6 +1,6 @@
 <style>
   body {
-    background: black;
+    background: #f3f4f6;
     margin: 0;
     overflow: hidden;
   }
@@ -87,7 +87,7 @@
   <!-- MESSAGES -->
   <div
     id="slider-wrapper"
-    class={"w-full h-screen grid #{if (@state.chat_visible && @event.presentation_file.length > 0) || (@current_embed && @event.presentation_file.length == 0), do: "grid-cols-[1fr_10px_1fr]", else: "grid-cols-[1fr]"} items-stretch relative bg-black overflow-hidden"}
+    class={"w-full h-screen grid #{if (@state.chat_visible && @event.presentation_file.length > 0) || (@current_embed && @event.presentation_file.length == 0), do: "grid-cols-[1fr_10px_1fr]", else: "grid-cols-[1fr]"} items-stretch relative bg-gray-100 overflow-hidden"}
     phx-hook="Split"
     data-type="column"
     data-gutter=".gutter-1"
@@ -227,7 +227,7 @@
         </div>
       </div>
       <%!-- Slide fills remaining space --%>
-      <div id="slide-content" class="flex-1 min-h-0 bg-black">
+      <div id="slide-content" class="flex-1 min-h-0 bg-gray-100">
         <%= if @current_embed do %>
           <div id="embed" class="w-full h-full">
             <.live_component
