@@ -689,6 +689,18 @@ Hooks.CSVDownloader = {
 Hooks.PresenterNotes = PresenterNotes;
 
 Hooks.SortableSlides = {
+  beforeUpdate() {
+    // Preserve scroll position before LiveView patches the DOM
+    this._scrollLeft = this.el.scrollLeft;
+  },
+  updated() {
+    // Restore scroll position after LiveView patches the DOM
+    if (this._scrollLeft !== undefined) {
+      this.el.scrollLeft = this._scrollLeft;
+    }
+    // Re-bind drag events
+    this.mounted();
+  },
   mounted() {
     this.dragSrcIdx = null;
     const container = this.el;
@@ -768,10 +780,6 @@ Hooks.SortableSlides = {
       this.dragSrcIdx = null;
       this.pushEvent("reorder-slides", { order: currentOrder });
     };
-  },
-  updated() {
-    // Re-bind after LiveView patches the DOM
-    this.mounted();
   }
 };
 
