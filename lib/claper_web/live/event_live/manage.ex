@@ -313,11 +313,7 @@ defmodule ClaperWeb.EventLive.Manage do
     {:noreply,
      socket
      |> assign(:create, "slide")
-     |> assign(:slide_insert_position, socket.assigns.state.position + 1)}
-  end
-
-  def handle_event("validate-slide", %{"position" => position}, socket) do
-    {:noreply, assign(socket, :slide_insert_position, String.to_integer(position))}
+     |> assign(:interaction_modal, true)}
   end
 
   def handle_event("validate-slide", _params, socket) do
@@ -328,9 +324,16 @@ defmodule ClaperWeb.EventLive.Manage do
     {:noreply, cancel_upload(socket, :slide_image, ref)}
   end
 
+  def handle_event("cancel-add-slide", _params, socket) do
+    {:noreply,
+     socket
+     |> assign(:create, nil)
+     |> assign(:interaction_modal, false)}
+  end
+
   def handle_event("save-slide", _params, socket) do
     pf = socket.assigns.event.presentation_file
-    insert_position = socket.assigns.slide_insert_position
+    insert_position = pf.length
 
     uploaded_files =
       consume_uploaded_entries(socket, :slide_image, fn %{path: path}, _entry ->
@@ -358,17 +361,15 @@ defmodule ClaperWeb.EventLive.Manage do
              socket
              |> assign(:event, event)
              |> assign(:state, event.presentation_file.presentation_state)
+             |> assign(:create, nil)
+             |> assign(:interaction_modal, false)
              |> push_event("page-manage", %{
                current_page: event.presentation_file.presentation_state.position,
                timeout: 500
-             })
-             |> push_navigate(to: ~p"/e/#{socket.assigns.event.code}/manage")}
+             })}
 
           {:error, _reason} ->
-            {:noreply,
-             socket
-             |> put_flash(:error, gettext("Failed to insert slide"))
-             |> push_navigate(to: ~p"/e/#{socket.assigns.event.code}/manage")}
+            {:noreply, put_flash(socket, :error, gettext("Failed to insert slide"))}
         end
 
       _ ->
@@ -401,8 +402,7 @@ defmodule ClaperWeb.EventLive.Manage do
          |> push_event("page-manage", %{
            current_page: event.presentation_file.presentation_state.position,
            timeout: 500
-         })
-         |> push_navigate(to: ~p"/e/#{socket.assigns.event.code}/manage")}
+         })}
 
       {:error, _} ->
         {:noreply, put_flash(socket, :error, gettext("Failed to reorder slides"))}
@@ -1113,7 +1113,7 @@ defmodule ClaperWeb.EventLive.Manage do
   defp apply_action(socket, :add_slide, _params) do
     socket
     |> assign(:create, "slide")
-    |> assign(:slide_insert_position, socket.assigns.state.position + 1)
+    |> assign(:interaction_modal, true)
   end
 
   defp apply_action(socket, :edit_quiz, %{"id" => id}) do

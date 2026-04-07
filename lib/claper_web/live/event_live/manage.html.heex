@@ -296,10 +296,8 @@
               </a>
             </li>
             <li :if={@event.presentation_file.length > 0} id="option-5" role="option" tabindex="-1">
-              <a
-                data-phx-link="patch"
-                data-phx-link-state="push"
-                href={~p"/e/#{@event.code}/manage/add/slide"}
+              <button
+                phx-click="show-add-slide"
                 class="group flex select-none rounded-xl p-3 w-full hover:bg-gray-200 cursor-pointer"
               >
                 <div class="flex h-12 w-12 flex-none text-white items-center justify-center rounded-lg bg-linear-to-br from-primary-500 to-secondary-500">
@@ -324,7 +322,7 @@
                     {gettext("Add a PNG or JPG image as a new slide.")}
                   </p>
                 </div>
-              </a>
+              </button>
             </li>
           </ul>
         <% end %>
@@ -417,25 +415,10 @@
             <p class="text-xl font-bold mb-3">
               {gettext("Add slide image")}
             </p>
+            <p class="text-sm text-gray-500 mb-3">
+              {gettext("The image will be added after the last slide.")}
+            </p>
             <form phx-change="validate-slide" phx-submit="save-slide" class="space-y-4">
-              <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">
-                  {gettext("Insert position")}
-                </label>
-                <select
-                  name="position"
-                  class="w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
-                >
-                  <option value="0" selected={@slide_insert_position == 0}>
-                    {gettext("At the beginning")}
-                  </option>
-                  <%= for i <- 1..@event.presentation_file.length do %>
-                    <option value={i} selected={@slide_insert_position == i}>
-                      {gettext("After slide %{n}", n: i)}
-                    </option>
-                  <% end %>
-                </select>
-              </div>
               <div>
                 <label class="block text-sm font-medium text-gray-700 mb-1">
                   {gettext("Image file")}
@@ -451,7 +434,7 @@
                     phx-value-ref={entry.ref}
                     class="absolute top-1 right-1 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs"
                   >
-                    &times;
+                    ×
                   </button>
                   <div class="mt-1 h-1 bg-gray-200 rounded">
                     <div
@@ -473,14 +456,13 @@
                 >
                   {gettext("Add slide")}
                 </button>
-                <a
-                  data-phx-link="patch"
-                  data-phx-link-state="push"
-                  href={~p"/e/#{@event.code}/manage"}
+                <button
+                  type="button"
+                  phx-click="cancel-add-slide"
                   class="bg-gray-300 text-gray-700 px-4 py-2 rounded-md text-sm font-medium"
                 >
                   {gettext("Cancel")}
-                </a>
+                </button>
               </div>
             </form>
           </div>
@@ -771,43 +753,28 @@
     >
       <div
         :if={@event.presentation_file.length > 0}
-        class="flex w-full items-center overflow-hidden min-h-0"
+        id="slides-layout"
+        phx-hook="SortableSlides"
+        class="flex overflow-x-auto overflow-y-hidden w-full min-h-0"
       >
         <div
-          id="slides-layout"
-          phx-hook="SortableSlides"
-          phx-update="ignore"
-          class="flex overflow-x-auto flex-1 min-w-0 h-full"
+          :for={
+            {src, index} <-
+              Presentations.get_slide_urls(@event.presentation_file) |> Enum.with_index(0)
+          }
+          id={"slide-preview-#{index}"}
+          data-slide-index={index}
+          draggable="true"
+          phx-click="current-page"
+          phx-value-page={index}
+          class="flex-shrink-0 h-full cursor-pointer"
         >
-          <button
-            :for={
-              {src, index} <-
-                Presentations.get_slide_urls(@event.presentation_file) |> Enum.with_index(0)
-            }
-            id={"slide-preview-#{index}"}
-            data-slide-index={index}
-            draggable="true"
-            phx-click="current-page"
-            phx-value-page={index}
-            class="h-full w-full contents"
-          >
-            <img
-              src={src}
-              class={"#{if @state.position==index, do: "border-4 border-primary-500" , else: "opacity-20" }
-                      transition-all object-contain max-h-full"}
-            />
-          </button>
+          <img
+            src={src}
+            class={"#{if @state.position==index, do: "border-4 border-primary-500" , else: "opacity-20" }
+                    transition-all object-contain h-full"}
+          />
         </div>
-        <button
-          phx-click="show-add-slide"
-          class="flex-shrink-0 flex items-center justify-center w-8 h-8 rounded border-2 border-dashed border-gray-300 text-gray-400 hover:border-primary-500 hover:text-primary-500 transition-colors mx-1"
-          title={gettext("Add slide")}
-          type="button"
-        >
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-          </svg>
-        </button>
       </div>
       <div
         :if={@event.presentation_file.length > 0}

@@ -690,52 +690,59 @@ Hooks.PresenterNotes = PresenterNotes;
 
 Hooks.SortableSlides = {
   mounted() {
+    this.setupDragAndDrop();
+  },
+  updated() {
+    this.setupDragAndDrop();
+  },
+  setupDragAndDrop() {
     this.dragSrcEl = null;
+    const container = this.el;
 
-    this.el.addEventListener("dragstart", (e) => {
+    container.ondragstart = (e) => {
       const item = e.target.closest("[data-slide-index]");
       if (!item) return;
       this.dragSrcEl = item;
       item.style.opacity = "0.3";
       e.dataTransfer.effectAllowed = "move";
       e.dataTransfer.setData("text/plain", item.dataset.slideIndex);
-    });
+    };
 
-    this.el.addEventListener("dragover", (e) => {
+    container.ondragover = (e) => {
       e.preventDefault();
       e.dataTransfer.dropEffect = "move";
-    });
+    };
 
-    this.el.addEventListener("dragend", (e) => {
+    container.ondragend = (e) => {
       const item = e.target.closest("[data-slide-index]");
       if (item) item.style.opacity = "";
-    });
+    };
 
-    this.el.addEventListener("drop", (e) => {
+    container.ondrop = (e) => {
       e.preventDefault();
       const target = e.target.closest("[data-slide-index]");
       if (!target || !this.dragSrcEl || target === this.dragSrcEl) return;
 
-      // Reorder DOM
-      const parent = this.dragSrcEl.parentNode;
-      const items = Array.from(parent.querySelectorAll("[data-slide-index]"));
+      // Build the new order from current data-slide-index attributes
+      const items = Array.from(container.querySelectorAll("[data-slide-index]"));
       const fromIdx = items.indexOf(this.dragSrcEl);
       const toIdx = items.indexOf(target);
 
+      // Reorder DOM visually
       if (fromIdx < toIdx) {
-        parent.insertBefore(this.dragSrcEl, target.nextSibling);
+        container.insertBefore(this.dragSrcEl, target.nextSibling);
       } else {
-        parent.insertBefore(this.dragSrcEl, target);
+        container.insertBefore(this.dragSrcEl, target);
       }
 
       this.dragSrcEl.style.opacity = "";
-      this.dragSrcEl = null;
 
-      // Push new order to server
-      const reordered = Array.from(parent.querySelectorAll("[data-slide-index]"));
+      // Push new order to server (original indices in new visual order)
+      const reordered = Array.from(container.querySelectorAll("[data-slide-index]"));
       const order = reordered.map(el => parseInt(el.dataset.slideIndex));
+      this.dragSrcEl = null;
       this.pushEvent("reorder-slides", { order });
-    });
+    };
   }
 };
 
