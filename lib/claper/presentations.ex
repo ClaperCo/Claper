@@ -209,30 +209,16 @@ defmodule Claper.Presentations do
   and deletes any interactions that were on the removed slide.
   """
   def delete_slide(%PresentationFile{length: length} = pf, delete_position) when length > 1 do
-    new_hash = "#{:erlang.phash2("#{pf.hash}-#{System.system_time(:second)}")}"
-    # 1-based file index to delete
     file_delete_index = delete_position + 1
 
     try do
-      # Copy files before the deleted slide
-      if file_delete_index > 1 do
-        for i <- 1..(file_delete_index - 1) do
-          copy_slide_between_hashes(pf.hash, i, new_hash, i)
-        end
-      end
-
-      # Copy files after the deleted slide, shifted down by 1
-      if file_delete_index < pf.length do
-        for i <- (file_delete_index + 1)..pf.length do
-          copy_slide_between_hashes(pf.hash, i, new_hash, i - 1)
-        end
-      end
+      delete_slide_file(pf.hash, file_delete_index, pf.length)
 
       multi =
         Ecto.Multi.new()
         |> Ecto.Multi.update(
           :presentation_file,
-          PresentationFile.changeset(pf, %{hash: new_hash, length: pf.length - 1})
+          PresentationFile.changeset(pf, %{length: pf.length - 1})
         )
         |> Ecto.Multi.run(:delete_polls, fn _repo, _changes ->
           delete_at_position(Claper.Polls.Poll, :position, pf.id, delete_position)
@@ -283,17 +269,14 @@ defmodule Claper.Presentations do
         end)
 
       case Repo.transaction(multi) do
-        {:ok, %{presentation_file: updated_pf}} ->
-          clear_slide_hash(pf.hash)
-          {:ok, updated_pf}
+        {:ok, _} ->
+          {:ok, Repo.get!(PresentationFile, pf.id)}
 
         {:error, _step, changeset, _changes} ->
-          clear_slide_hash(new_hash)
           {:error, changeset}
       end
     rescue
       e ->
-        clear_slide_hash(new_hash)
         {:error, e}
     end
   end
@@ -329,24 +312,16 @@ defmodule Claper.Presentations do
     if Enum.sort(new_order) != expected do
       {:error, :invalid_order}
     else
-      new_hash = "#{:erlang.phash2("#{pf.hash}-#{System.system_time(:second)}")}"
-
       position_map =
         new_order
         |> Enum.with_index()
         |> Map.new()
 
       try do
-        for {old_idx, new_idx} <- position_map do
-          copy_slide_between_hashes(pf.hash, old_idx + 1, new_hash, new_idx + 1)
-        end
+        reorder_slide_files(pf.hash, position_map)
 
         multi =
           Ecto.Multi.new()
-          |> Ecto.Multi.update(
-            :presentation_file,
-            PresentationFile.changeset(pf, %{hash: new_hash})
-          )
           |> Ecto.Multi.run(:remap_polls, fn _repo, _changes ->
             remap_positions(Claper.Polls.Poll, :position, pf.id, position_map)
           end)
@@ -375,17 +350,14 @@ defmodule Claper.Presentations do
           end)
 
         case Repo.transaction(multi) do
-          {:ok, %{presentation_file: updated_pf}} ->
-            clear_slide_hash(pf.hash)
-            {:ok, updated_pf}
+          {:ok, _} ->
+            {:ok, Repo.get!(PresentationFile, pf.id)}
 
           {:error, _step, changeset, _changes} ->
-            clear_slide_hash(new_hash)
             {:error, changeset}
         end
       rescue
         e ->
-          clear_slide_hash(new_hash)
           {:error, e}
       end
     end
@@ -409,6 +381,106 @@ defmodule Claper.Presentations do
     end)
 
     {:ok, :remapped}
+  end
+
+  # Delete a file and shift subsequent files down in-place (no hash change needed)
+  defp delete_slide_file(hash, file_index, total_length) do
+    case presentation_storage() do
+      "local" ->
+        storage_dir = Application.get_env(:claper, :storage_dir, "priv/static")
+        dir = Path.join([storage_dir, "uploads", hash])
+
+        # Delete the target file
+        File.rm!(Path.join(dir, "#{file_index}.jpg"))
+
+        # Rename subsequent files down by 1
+        if file_index < total_length do
+          for i <- (file_index + 1)..total_length do
+            File.rename!(
+              Path.join(dir, "#{i}.jpg"),
+              Path.join(dir, "#{i - 1}.jpg")
+            )
+          end
+        end
+
+      "s3" ->
+        bucket = s3_bucket()
+
+        ExAws.S3.delete_object(bucket, "presentations/#{hash}/#{file_index}.jpg")
+        |> ExAws.request!()
+
+        if file_index < total_length do
+          for i <- (file_index + 1)..total_length do
+            ExAws.S3.put_object_copy(
+              bucket,
+              "presentations/#{hash}/#{i - 1}.jpg",
+              bucket,
+              "presentations/#{hash}/#{i}.jpg"
+            )
+            |> ExAws.request!()
+
+            ExAws.S3.delete_object(bucket, "presentations/#{hash}/#{i}.jpg")
+            |> ExAws.request!()
+          end
+        end
+    end
+  end
+
+  # Reorder files in-place using temp names to avoid collisions (no hash change needed)
+  defp reorder_slide_files(hash, position_map) do
+    case presentation_storage() do
+      "local" ->
+        storage_dir = Application.get_env(:claper, :storage_dir, "priv/static")
+        dir = Path.join([storage_dir, "uploads", hash])
+
+        # Pass 1: rename all to temp names
+        Enum.each(position_map, fn {old_idx, _new_idx} ->
+          File.rename!(
+            Path.join(dir, "#{old_idx + 1}.jpg"),
+            Path.join(dir, "tmp_#{old_idx + 1}.jpg")
+          )
+        end)
+
+        # Pass 2: rename temp names to final positions
+        Enum.each(position_map, fn {old_idx, new_idx} ->
+          File.rename!(
+            Path.join(dir, "tmp_#{old_idx + 1}.jpg"),
+            Path.join(dir, "#{new_idx + 1}.jpg")
+          )
+        end)
+
+      "s3" ->
+        # S3 requires copy + delete (no rename), use a temp prefix
+        bucket = s3_bucket()
+
+        # Copy all to temp keys
+        Enum.each(position_map, fn {old_idx, new_idx} ->
+          ExAws.S3.put_object_copy(
+            bucket,
+            "presentations/#{hash}/tmp_#{new_idx + 1}.jpg",
+            bucket,
+            "presentations/#{hash}/#{old_idx + 1}.jpg"
+          )
+          |> ExAws.request!()
+        end)
+
+        # Delete originals and rename temps
+        Enum.each(0..(map_size(position_map) - 1), fn idx ->
+          ExAws.S3.delete_object(bucket, "presentations/#{hash}/#{idx + 1}.jpg")
+          |> ExAws.request!()
+
+          ExAws.S3.put_object_copy(
+            bucket,
+            "presentations/#{hash}/#{idx + 1}.jpg",
+            bucket,
+            "presentations/#{hash}/tmp_#{idx + 1}.jpg"
+          )
+          |> ExAws.request!()
+
+          ExAws.S3.delete_object(bucket, "presentations/#{hash}/tmp_#{idx + 1}.jpg")
+          |> ExAws.request!()
+        end)
+    end
   end
 
   # Storage-agnostic helpers for slide file operations

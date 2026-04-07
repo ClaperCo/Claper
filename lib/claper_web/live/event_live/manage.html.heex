@@ -770,7 +770,7 @@
           class="group relative flex-shrink-0 h-full cursor-pointer"
         >
           <img
-            src={src}
+            src={"#{src}?v=#{NaiveDateTime.to_gregorian_seconds(@event.presentation_file.updated_at) |> elem(0)}"}
             class={"#{if @state.position==index, do: "border-4 border-primary-500" , else: "opacity-20" }
                     transition-all object-contain h-full"}
           />
