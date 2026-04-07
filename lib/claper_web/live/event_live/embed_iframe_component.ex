@@ -4,6 +4,13 @@ defmodule ClaperWeb.EventLive.EmbedIframeComponent do
   def render(assigns) do
     ~H"""
     <div id={@id} class="h-full w-full" style="min-height: 0;">
+      <style>
+        #<%= @id %> iframe {
+          width: 100%;
+          height: 100%;
+          border: none;
+        }
+      </style>
       <%= case @provider do %>
         <% "youtube" -> %>
           <iframe
