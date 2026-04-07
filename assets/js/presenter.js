@@ -101,13 +101,6 @@ export class Presenter {
       }
     });
 
-    // Auto-enter fullscreen on first click (browsers require user gesture)
-    const autoFullscreen = () => {
-      this.fullscreen();
-      window.removeEventListener("click", autoFullscreen);
-    };
-    window.addEventListener("click", autoFullscreen);
-
     window.addEventListener("keyup", (e) => {
       if (e.target.tagName.toLowerCase() != "input") {
 
