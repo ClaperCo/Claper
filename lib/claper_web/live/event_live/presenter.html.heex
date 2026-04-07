@@ -201,34 +201,7 @@
       •••
     </div>
     <!-- SLIDES -->
-    <div id="slides" class="flex flex-col">
-      <%!-- JOIN SCREEN — banner above the slide --%>
-      <div
-        id="joinScreen"
-        class={"#{if @state.join_screen_visible, do: "flex", else: "hidden"} flex-shrink-0 z-40 bg-white text-black items-center justify-center gap-6 px-6 py-2 shadow-md"}
-      >
-        <div
-          phx-hook="QRCode"
-          data-code={@event.code}
-          data-dynamic="true"
-          data-panel="true"
-          id="qr"
-          phx-update="ignore"
-          class="flex-shrink-0 flex items-center justify-center"
-        >
-        </div>
-        <div class="flex flex-col items-center text-center">
-          <span class="font-semibold text-base lg:text-xl mb-1">
-            {gettext("Scan to interact in real-time")}
-          </span>
-          <span class="font-bold text-lg lg:text-xl text-primary-600">
-            {"#{@host}e/#{@event.code}"}
-          </span>
-          <span class="font-bold text-2xl lg:text-3xl">
-            #{String.upcase(@event.code)}
-          </span>
-        </div>
-      </div>
+    <div id="slides" class="flex flex-col relative">
       <%!-- Slide fills remaining space --%>
       <div id="slide-content" class="bg-gray-100">
         <%= if @current_embed do %>
@@ -262,6 +235,33 @@
       <img src="/images/icons/online-users.svg" class="h-12 mr-2" />
       <span id="counter" phx-hook="UpdateAttendees" phx-update="ignore">
         {@attendees_nb}
+      </span>
+    </div>
+  </div>
+  <%!-- JOIN INFO — floating top-left panel, above interaction overlays --%>
+  <div
+    id="joinScreen"
+    class={"#{if @state.join_screen_visible, do: "flex", else: "hidden"} absolute z-50 top-3 left-3 bg-white/95 text-black items-center gap-3 px-4 py-2 rounded-lg shadow-lg backdrop-blur-sm"}
+  >
+    <div
+      phx-hook="QRCode"
+      data-code={@event.code}
+      data-dynamic="true"
+      data-panel="true"
+      id="qr"
+      phx-update="ignore"
+      class="flex-shrink-0 flex items-center justify-center"
+    >
+    </div>
+    <div class="flex flex-col text-left">
+      <span class="font-semibold text-sm">
+        {gettext("Scan to interact")}
+      </span>
+      <span class="font-bold text-sm text-primary-600">
+        {"#{@host}e/#{@event.code}"}
+      </span>
+      <span class="font-bold text-lg">
+        #{String.upcase(@event.code)}
       </span>
     </div>
   </div>
