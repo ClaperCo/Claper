@@ -84,9 +84,10 @@
     />
   <% end %>
   <!-- MESSAGES -->
+  <div class="h-screen flex items-center bg-gray-100">
   <div
     id="slider-wrapper"
-    class={"w-full h-screen grid #{if (@state.chat_visible && @event.presentation_file.length > 0) || (@current_embed && @event.presentation_file.length == 0), do: "grid-cols-[1fr_10px_1fr]", else: "grid-cols-[1fr]"} content-center items-stretch relative bg-gray-100 overflow-hidden"}
+    class={"w-full grid #{if (@state.chat_visible && @event.presentation_file.length > 0) || (@current_embed && @event.presentation_file.length == 0), do: "grid-cols-[1fr_10px_1fr]", else: "grid-cols-[1fr]"} items-stretch relative bg-gray-100 overflow-hidden"}
     phx-hook="Split"
     data-type="column"
     data-gutter=".gutter-1"
@@ -248,6 +249,7 @@
         </div>
       </div>
     </div>
+  </div>
   </div>
   <!-- ONLINE BADGE -->
   <div
