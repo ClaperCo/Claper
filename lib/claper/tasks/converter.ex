@@ -196,10 +196,10 @@ defmodule Claper.Tasks.Converter do
 
           case List.keyfind(files, filename, 0) do
             {_, content} ->
-              text = extract_notes_text(content)
+              html = extract_notes_html(content)
 
-              if text != "" do
-                Claper.Presentations.upsert_note(presentation_file_id, i - 1, text)
+              if html != "" do
+                Claper.Presentations.upsert_note(presentation_file_id, i - 1, html)
               end
 
             nil ->
@@ -214,17 +214,40 @@ defmodule Claper.Tasks.Converter do
 
   defp extract_and_save_notes(_path, _ext, _presentation_file_id, _slide_count), do: :ok
 
-  defp extract_notes_text(xml_content) do
+  # Extracts the notes body from a notesSlide XML and converts it to
+  # an HTML string suitable for Quill. Each PPTX paragraph becomes a
+  # <p> element, preserving line breaks and paragraph structure.
+  defp extract_notes_html(xml_content) do
     import SweetXml
 
-    xml_content
-    |> xpath(
-      ~x"//*[local-name()='sp'][.//*[local-name()='ph'][@type='body']]//*[local-name()='t']/text()"ls
-    )
-    |> Enum.join(" ")
-    |> String.trim()
+    paragraphs =
+      xpath(
+        xml_content,
+        ~x"//*[local-name()='sp'][.//*[local-name()='ph'][@type='body']]//*[local-name()='txBody']/*[local-name()='p']"l
+      )
+
+    html =
+      Enum.map_join(paragraphs, "", fn para ->
+        runs = xpath(para, ~x".//*[local-name()='t']/text()"ls)
+        text = Enum.join(runs, "")
+
+        if String.trim(text) == "" do
+          "<p><br></p>"
+        else
+          "<p>#{escape_html(text)}</p>"
+        end
+      end)
+
+    if html == "", do: "", else: html
   rescue
     _ -> ""
+  end
+
+  defp escape_html(text) do
+    text
+    |> String.replace("&", "&amp;")
+    |> String.replace("<", "&lt;")
+    |> String.replace(">", "&gt;")
   end
 
   defp failure(presentation, path, user_id) do
