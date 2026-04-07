@@ -690,19 +690,13 @@ Hooks.PresenterNotes = PresenterNotes;
 
 Hooks.SortableSlides = {
   mounted() {
-    this.setupDragAndDrop();
-  },
-  updated() {
-    this.setupDragAndDrop();
-  },
-  setupDragAndDrop() {
-    this.dragSrcEl = null;
+    this.dragSrcIdx = null;
     const container = this.el;
 
     container.ondragstart = (e) => {
       const item = e.target.closest("[data-slide-index]");
       if (!item) return;
-      this.dragSrcEl = item;
+      this.dragSrcIdx = parseInt(item.dataset.slideIndex);
       item.style.opacity = "0.3";
       e.dataTransfer.effectAllowed = "move";
       e.dataTransfer.setData("text/plain", item.dataset.slideIndex);
@@ -711,38 +705,73 @@ Hooks.SortableSlides = {
     container.ondragover = (e) => {
       e.preventDefault();
       e.dataTransfer.dropEffect = "move";
+      // Highlight drop target
+      const target = e.target.closest("[data-slide-index]");
+      container.querySelectorAll("[data-slide-index]").forEach(el => {
+        el.style.borderLeft = "";
+        el.style.borderRight = "";
+      });
+      if (target && parseInt(target.dataset.slideIndex) !== this.dragSrcIdx) {
+        const items = Array.from(container.querySelectorAll("[data-slide-index]"));
+        const srcPos = items.findIndex(el => parseInt(el.dataset.slideIndex) === this.dragSrcIdx);
+        const tgtPos = items.indexOf(target);
+        if (tgtPos > srcPos) {
+          target.style.borderRight = "3px solid #7c3aed";
+        } else {
+          target.style.borderLeft = "3px solid #7c3aed";
+        }
+      }
+    };
+
+    container.ondragleave = (e) => {
+      const target = e.target.closest("[data-slide-index]");
+      if (target) {
+        target.style.borderLeft = "";
+        target.style.borderRight = "";
+      }
     };
 
     container.ondragend = (e) => {
-      const item = e.target.closest("[data-slide-index]");
-      if (item) item.style.opacity = "";
+      // Clear all visual indicators
+      container.querySelectorAll("[data-slide-index]").forEach(el => {
+        el.style.opacity = "";
+        el.style.borderLeft = "";
+        el.style.borderRight = "";
+      });
+      this.dragSrcIdx = null;
     };
 
     container.ondrop = (e) => {
       e.preventDefault();
       const target = e.target.closest("[data-slide-index]");
-      if (!target || !this.dragSrcEl || target === this.dragSrcEl) return;
+      if (!target || this.dragSrcIdx === null) return;
+      const targetIdx = parseInt(target.dataset.slideIndex);
+      if (targetIdx === this.dragSrcIdx) return;
 
-      // Build the new order from current data-slide-index attributes
+      // Build new order: take current order, move dragSrc to target position
       const items = Array.from(container.querySelectorAll("[data-slide-index]"));
-      const fromIdx = items.indexOf(this.dragSrcEl);
-      const toIdx = items.indexOf(target);
+      const currentOrder = items.map(el => parseInt(el.dataset.slideIndex));
+      const fromPos = currentOrder.indexOf(this.dragSrcIdx);
+      const toPos = currentOrder.indexOf(targetIdx);
 
-      // Reorder DOM visually
-      if (fromIdx < toIdx) {
-        container.insertBefore(this.dragSrcEl, target.nextSibling);
-      } else {
-        container.insertBefore(this.dragSrcEl, target);
-      }
+      // Remove from old position, insert at new position
+      currentOrder.splice(fromPos, 1);
+      currentOrder.splice(toPos, 0, this.dragSrcIdx);
 
-      this.dragSrcEl.style.opacity = "";
+      // Clear visuals
+      container.querySelectorAll("[data-slide-index]").forEach(el => {
+        el.style.opacity = "";
+        el.style.borderLeft = "";
+        el.style.borderRight = "";
+      });
 
-      // Push new order to server (original indices in new visual order)
-      const reordered = Array.from(container.querySelectorAll("[data-slide-index]"));
-      const order = reordered.map(el => parseInt(el.dataset.slideIndex));
-      this.dragSrcEl = null;
-      this.pushEvent("reorder-slides", { order });
+      this.dragSrcIdx = null;
+      this.pushEvent("reorder-slides", { order: currentOrder });
     };
+  },
+  updated() {
+    // Re-bind after LiveView patches the DOM
+    this.mounted();
   }
 };
 
