@@ -153,24 +153,12 @@ export class Presenter {
   }
 
   update() {
-    // Read updated values from the DOM before reinitializing
-    const newPage = parseInt(this.context.el.dataset.currentPage);
-    const newMax = parseInt(this.context.el.dataset.maxPage);
-    const newHash = this.context.el.dataset.hash;
-
-    // If only the page changed (no structural change), just goTo — no need
-    // to tear down and rebuild the entire slider.
-    if (newHash === this.hash && newMax === this.maxPage && this.slider) {
-      this.currentPage = newPage;
-      this.slider.goTo(newPage);
-      this.fitSlideHeight();
-      return;
-    }
-
-    // Structural change (slides added/removed/reordered) — rebuild slider
-    this.currentPage = newPage;
-    this.maxPage = newMax;
-    this.hash = newHash;
+    // Always read updated values from the DOM before reinitializing.
+    // LiveView DOM-patching can corrupt tns's internal wrapper elements,
+    // so we must rebuild the slider on every update (not just goTo).
+    this.currentPage = parseInt(this.context.el.dataset.currentPage);
+    this.maxPage = parseInt(this.context.el.dataset.maxPage);
+    this.hash = this.context.el.dataset.hash;
     this.init(true);
   }
 
