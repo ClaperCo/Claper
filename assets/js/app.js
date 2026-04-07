@@ -26,6 +26,7 @@ import QRCodeStyling from "qr-code-styling";
 import { Presenter } from "./presenter";
 import { Manager } from "./manager";
 import Split from "split-grid";
+import Sortable from "sortablejs";
 import CustomHooks from "./hooks";
 import { TourGuideClient } from "@sjmc11/tourguidejs/src/Tour";
 import "./admin-charts.js";
@@ -687,6 +688,25 @@ Hooks.CSVDownloader = {
 };
 
 Hooks.PresenterNotes = PresenterNotes;
+
+Hooks.SortableSlides = {
+  mounted() {
+    this.sortable = Sortable.create(this.el, {
+      animation: 150,
+      ghostClass: "opacity-30",
+      filter: ".add-slide-btn",
+      onEnd: (evt) => {
+        if (evt.oldIndex === evt.newIndex) return;
+        const items = this.el.querySelectorAll("[data-slide-index]");
+        const order = Array.from(items).map(el => parseInt(el.dataset.slideIndex));
+        this.pushEvent("reorder-slides", { order });
+      }
+    });
+  },
+  destroyed() {
+    if (this.sortable) this.sortable.destroy();
+  }
+};
 
 // Merge our custom hooks with the existing hooks
 Object.assign(Hooks, CustomHooks);

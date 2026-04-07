@@ -369,6 +369,39 @@ defmodule ClaperWeb.EventLive.Manage do
     end
   end
 
+  def handle_event("reorder-slides", %{"order" => order}, socket) do
+    pf = socket.assigns.event.presentation_file
+
+    case Presentations.reorder_slides(pf, order) do
+      {:ok, updated_pf} ->
+        event =
+          Claper.Events.get_event_with_code(socket.assigns.event.code, [
+            :user,
+            :lti_resource,
+            presentation_file: [:polls, :presentation_state]
+          ])
+
+        Phoenix.PubSub.broadcast(
+          Claper.PubSub,
+          "event:#{socket.assigns.event.uuid}",
+          {:presentation_updated, updated_pf}
+        )
+
+        {:noreply,
+         socket
+         |> assign(:event, event)
+         |> assign(:state, event.presentation_file.presentation_state)
+         |> push_event("page-manage", %{
+           current_page: event.presentation_file.presentation_state.position,
+           timeout: 500
+         })
+         |> push_navigate(to: ~p"/e/#{socket.assigns.event.code}/manage")}
+
+      {:error, _} ->
+        {:noreply, put_flash(socket, :error, gettext("Failed to reorder slides"))}
+    end
+  end
+
   def handle_event("save-note", %{"content" => content}, socket) do
     position = socket.assigns.state.position
 

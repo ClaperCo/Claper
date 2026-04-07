@@ -210,6 +210,113 @@ defmodule Claper.Presentations do
     {:ok, :shifted}
   end
 
+  @doc """
+  Reorders slides according to the given order list.
+  `new_order` is a list of 0-based old indices in the desired new order.
+  E.g., [2, 0, 1] means: new slide 0 = old slide 2, new slide 1 = old slide 0, new slide 2 = old slide 1.
+  """
+  def reorder_slides(%PresentationFile{} = pf, new_order) when is_list(new_order) do
+    expected = Enum.sort(0..(pf.length - 1) |> Enum.to_list())
+
+    if Enum.sort(new_order) != expected do
+      {:error, :invalid_order}
+    else
+      storage_dir = Application.get_env(:claper, :storage_dir, "priv/static")
+      old_dir = Path.join([storage_dir, "uploads", pf.hash])
+      new_hash = "#{:erlang.phash2("#{pf.hash}-#{System.system_time(:second)}")}"
+      new_dir = Path.join([storage_dir, "uploads", new_hash])
+
+      # Build mapping: old_position => new_position
+      position_map =
+        new_order
+        |> Enum.with_index()
+        |> Enum.map(fn {old_idx, new_idx} -> {old_idx, new_idx} end)
+        |> Map.new()
+
+      File.mkdir_p!(new_dir)
+
+      try do
+        # Copy files in new order
+        for {old_idx, new_idx} <- position_map do
+          File.cp!(
+            Path.join(old_dir, "#{old_idx + 1}.jpg"),
+            Path.join(new_dir, "#{new_idx + 1}.jpg")
+          )
+        end
+
+        # Remap positions atomically
+        multi =
+          Ecto.Multi.new()
+          |> Ecto.Multi.update(
+            :presentation_file,
+            PresentationFile.changeset(pf, %{hash: new_hash})
+          )
+          |> Ecto.Multi.run(:remap_polls, fn _repo, _changes ->
+            remap_positions(Claper.Polls.Poll, :position, pf.id, position_map)
+          end)
+          |> Ecto.Multi.run(:remap_forms, fn _repo, _changes ->
+            remap_positions(Claper.Forms.Form, :position, pf.id, position_map)
+          end)
+          |> Ecto.Multi.run(:remap_embeds, fn _repo, _changes ->
+            remap_positions(Claper.Embeds.Embed, :position, pf.id, position_map)
+          end)
+          |> Ecto.Multi.run(:remap_quizzes, fn _repo, _changes ->
+            remap_positions(Claper.Quizzes.Quiz, :position, pf.id, position_map)
+          end)
+          |> Ecto.Multi.run(:remap_notes, fn _repo, _changes ->
+            remap_positions(PresenterNote, :slide_position, pf.id, position_map)
+          end)
+          |> Ecto.Multi.run(:remap_state, fn _repo, _changes ->
+            state = Repo.get_by(PresentationState, presentation_file_id: pf.id)
+
+            if state && Map.has_key?(position_map, state.position) do
+              state
+              |> PresentationState.changeset(%{position: position_map[state.position]})
+              |> Repo.update()
+            else
+              {:ok, state}
+            end
+          end)
+
+        case Repo.transaction(multi) do
+          {:ok, %{presentation_file: updated_pf}} ->
+            File.rm_rf!(old_dir)
+            {:ok, updated_pf}
+
+          {:error, _step, changeset, _changes} ->
+            File.rm_rf!(new_dir)
+            {:error, changeset}
+        end
+      rescue
+        e ->
+          File.rm_rf!(new_dir)
+          {:error, e}
+      end
+    end
+  end
+
+  defp remap_positions(schema, field, presentation_file_id, position_map) do
+    # Pass 1: set all positions to negative temporaries to avoid collisions
+    Enum.each(position_map, fn {old_pos, new_pos} ->
+      from(s in schema,
+        where: s.presentation_file_id == ^presentation_file_id and field(s, ^field) == ^old_pos
+      )
+      |> Repo.update_all(set: [{field, -(new_pos + 1)}])
+    end)
+
+    # Pass 2: flip all negative positions back to positive
+    Enum.each(0..(map_size(position_map) - 1), fn new_pos ->
+      neg_val = -(new_pos + 1)
+
+      from(s in schema,
+        where: s.presentation_file_id == ^presentation_file_id and field(s, ^field) == ^neg_val
+      )
+      |> Repo.update_all(set: [{field, new_pos}])
+    end)
+
+    {:ok, :remapped}
+  end
+
   def subscribe(presentation_file_id) do
     Phoenix.PubSub.subscribe(Claper.PubSub, "presentation:#{presentation_file_id}")
   end
