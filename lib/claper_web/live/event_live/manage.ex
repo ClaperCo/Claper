@@ -304,6 +304,22 @@ defmodule ClaperWeb.EventLive.Manage do
   end
 
   @impl true
+  def handle_event("save-note", %{"content" => content}, socket) do
+    position = socket.assigns.state.position
+
+    Claper.Presentations.upsert_note(
+      socket.assigns.event.presentation_file.id,
+      position,
+      content
+    )
+
+    # Do NOT update @current_note here. The content is already in the
+    # Quill editor on the client. Pushing it back would re-render the
+    # <script> carrier, trigger updated(), and reset the editor mid-typing.
+    {:noreply, socket}
+  end
+
+  @impl true
   def handle_event(
         "current-page",
         %{"page" => page},
@@ -1027,21 +1043,6 @@ defmodule ClaperWeb.EventLive.Manage do
     )
 
     {:noreply, socket |> assign(:state, new_state)}
-  end
-
-  def handle_event("save-note", %{"content" => content}, socket) do
-    position = socket.assigns.state.position
-
-    Claper.Presentations.upsert_note(
-      socket.assigns.event.presentation_file.id,
-      position,
-      content
-    )
-
-    # Do NOT update @current_note here. The content is already in the
-    # Quill editor on the client. Pushing it back would re-render the
-    # <script> carrier, trigger updated(), and reset the editor mid-typing.
-    {:noreply, socket}
   end
 
   defp note_at_position(%{assigns: %{event: event}} = socket, position) do

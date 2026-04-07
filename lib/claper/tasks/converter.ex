@@ -116,8 +116,6 @@ defmodule Claper.Tasks.Converter do
     failure(presentation, path, user_id)
   end
 
-  defp jpg_upload(result, hash, path, presentation, user_id, is_copy, ext_atom \\ nil)
-
   defp jpg_upload(%Result{status: 0}, hash, path, presentation, user_id, is_copy, ext_atom) do
     files = Path.wildcard("#{path}/*.jpg")
 
@@ -163,7 +161,7 @@ defmodule Claper.Tasks.Converter do
     failure(presentation, path, user_id)
   end
 
-  defp success(presentation, path, hash, length, user_id, ext_atom \\ nil) do
+  defp success(presentation, path, hash, length, user_id, ext_atom) do
     with {:ok, presentation} <-
            Claper.Presentations.update_presentation_file(presentation, %{
              "hash" => "#{hash}",

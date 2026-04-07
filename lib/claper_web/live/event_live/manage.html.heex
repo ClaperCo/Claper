@@ -724,11 +724,11 @@
               data-placeholder={gettext("Add notes for this slide...")}
               class="flex-1 flex flex-col min-h-0 overflow-hidden"
             >
-              <%# Content carrier: LiveView updates this freely; no HTML-in-attribute encoding issues %>
+              <%!-- Content carrier: LiveView updates this freely; no HTML-in-attribute encoding issues --%>
               <script type="application/json" id="presenter-note-content">
                 <%= Jason.encode!(@current_note) %>
               </script>
-              <%# Everything Quill touches is inside phx-update="ignore" so LiveView never patches it away %>
+              <%!-- Everything Quill touches is inside phx-update="ignore" so LiveView never patches it away --%>
               <div
                 phx-update="ignore"
                 id="quill-root"
