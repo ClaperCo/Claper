@@ -33,18 +33,23 @@ export class Manager {
     });
 
     window.addEventListener("keydown", (e) => {
-      if ((e.target.tagName || "").toLowerCase() != "input") {
+      const tag = (e.target.tagName || "").toLowerCase();
+      // Don't navigate slides when focus is in an input, textarea,
+      // contenteditable element (e.g. Quill presenter notes), or select.
+      if (tag === "input" || tag === "textarea" || tag === "select" ||
+          e.target.isContentEditable || e.target.closest(".ql-editor")) {
+        return;
+      }
 
-        switch (e.key) {
-          case "ArrowLeft":
-            e.preventDefault();
-            this.prevPage();
-            break;
-          case "ArrowRight":
-            e.preventDefault();
-            this.nextPage();
-            break;
-        }
+      switch (e.key) {
+        case "ArrowLeft":
+          e.preventDefault();
+          this.prevPage();
+          break;
+        case "ArrowRight":
+          e.preventDefault();
+          this.nextPage();
+          break;
       }
     });
 
