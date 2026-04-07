@@ -18,20 +18,17 @@ export class Presenter {
     const ratio = img.naturalWidth / img.naturalHeight;
     const vh = window.innerHeight;
 
-    // Available width for the slide image (exclude join panel if visible)
-    const joinScreen = document.getElementById("joinScreen");
-    const joinWidth =
-      joinScreen && !joinScreen.classList.contains("hidden")
-        ? joinScreen.offsetWidth
-        : 0;
-    const slideWidth = wrapper.parentElement.clientWidth - joinWidth;
+    // Total width available to the wrapper (the grid cell)
+    const totalWidth = wrapper.parentElement.clientWidth;
 
-    // Height that preserves the slide's aspect ratio at the available width
-    let height = slideWidth / ratio;
-    // Never exceed viewport height
-    height = Math.min(height, vh);
+    // Height if the slide used the FULL width (no join panel)
+    // This is the max height the slide would naturally be
+    const fullHeight = Math.min(totalWidth / ratio, vh);
 
-    wrapper.style.height = height + "px";
+    // Always use the full-width-derived height so the slide fills the
+    // viewport the same way regardless of whether the join panel is open.
+    // The join panel simply sits beside the slide within this height.
+    wrapper.style.height = fullHeight + "px";
   }
 
   init(refresh = false) {

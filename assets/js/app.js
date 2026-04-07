@@ -572,9 +572,12 @@ Hooks.QRCode = {
 
     var qrSize;
     if (this.el.dataset.panel) {
-      // Side panel mode: size relative to panel width
-      var panelWidth = this.el.closest("#joinScreen")?.clientWidth || 200;
-      qrSize = Math.min(panelWidth * 0.75, document.documentElement.clientHeight * 0.25);
+      // Side panel mode: size relative to panel dimensions
+      var panel = this.el.closest("#joinScreen");
+      var panelWidth = panel?.clientWidth || 200;
+      var panelHeight = panel?.clientHeight || 400;
+      // QR should leave room for text above and below it
+      qrSize = Math.min(panelWidth * 0.7, panelHeight * 0.4);
     } else if (this.el.dataset.dynamic) {
       qrSize = document.documentElement.clientWidth * 0.25;
     } else {
