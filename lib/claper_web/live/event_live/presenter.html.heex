@@ -7,6 +7,27 @@
     width: 100%;
     height: 100%;
   }
+
+  /* tiny-slider wrappers fill the available height */
+  #slider, #slider > .tns-outer,
+  #slider > .tns-outer > .tns-ovh,
+  #slider > .tns-outer > .tns-ovh > .tns-inner,
+  #slider .tns-slider,
+  #slider .tns-item {
+    height: 100% !important;
+  }
+
+  #slider .tns-item {
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+  }
+
+  #slider .tns-item img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+  }
 </style>
 
 <div
@@ -63,7 +84,7 @@
   <!-- MESSAGES -->
   <div
     id="slider-wrapper"
-    class={"w-full min-h-screen grid #{if (@state.chat_visible && @event.presentation_file.length > 0) || (@current_embed && @event.presentation_file.length == 0), do: "grid-cols-[1fr_10px_1fr]", else: "grid-cols-[1fr]"} items-center justify-center relative bg-black"}
+    class={"w-full h-screen grid #{if (@state.chat_visible && @event.presentation_file.length > 0) || (@current_embed && @event.presentation_file.length == 0), do: "grid-cols-[1fr_10px_1fr]", else: "grid-cols-[1fr]"} items-stretch relative bg-black"}
     phx-hook="Split"
     data-type="column"
     data-gutter=".gutter-1"
@@ -177,15 +198,12 @@
       •••
     </div>
     <!-- SLIDES -->
-    <div id="slides" class="relative">
-      <%!-- JOIN SCREEN OVERLAY — positioned over the left side of the slide --%>
+    <div id="slides" class="flex flex-col h-screen">
+      <%!-- JOIN SCREEN — horizontal banner at the top --%>
       <div
         id="joinScreen"
-        class={"#{if @state.join_screen_visible, do: "flex", else: "hidden"} absolute left-0 top-0 h-full w-1/4 z-40 bg-white/95 text-black text-center flex-col items-center justify-center p-4 overflow-hidden shadow-2xl"}
+        class={"#{if @state.join_screen_visible, do: "flex", else: "hidden"} flex-shrink-0 z-40 bg-white text-black items-center justify-center gap-6 px-6 py-3 shadow-md"}
       >
-        <span class="font-semibold mb-3 text-base lg:text-xl">
-          {gettext("Scan to interact in real-time")}
-        </span>
         <div
           phx-hook="QRCode"
           data-code={@event.code}
@@ -193,33 +211,40 @@
           data-panel="true"
           id="qr"
           phx-update="ignore"
-          class="rounded-lg mx-auto flex items-center justify-center mb-3"
+          class="flex-shrink-0 flex items-center justify-center"
         >
         </div>
-        <span class="font-semibold mb-2 text-sm lg:text-base">
-          {gettext("Or go to %{url} and use the code:", url: @host)}
-        </span>
-        <span class="font-semibold text-xl lg:text-2xl">
-          #{String.upcase(@event.code)}
-        </span>
+        <div class="flex flex-col items-center text-center">
+          <span class="font-semibold text-base lg:text-xl mb-1">
+            {gettext("Scan to interact in real-time")}
+          </span>
+          <span class="text-sm lg:text-base">
+            {gettext("Or go to %{url} and use the code:", url: @host)}
+          </span>
+          <span class="font-bold text-2xl lg:text-3xl mt-1">
+            #{String.upcase(@event.code)}
+          </span>
+        </div>
       </div>
-      <%= if @current_embed do %>
-        <!-- EMBED -->
-        <div id="embed" class="max-h-screen w-full h-screen">
-          <.live_component
-            id="embed-component"
-            module={ClaperWeb.EventLive.EmbedIframeComponent}
-            provider={@current_embed.provider}
-            content={@current_embed.content}
+      <%!-- Slide area fills remaining height --%>
+      <div class="flex-1 min-h-0 flex items-center justify-center bg-black overflow-hidden">
+        <%= if @current_embed do %>
+          <div id="embed" class="w-full h-full">
+            <.live_component
+              id="embed-component"
+              module={ClaperWeb.EventLive.EmbedIframeComponent}
+              provider={@current_embed.provider}
+              content={@current_embed.content}
+            />
+          </div>
+        <% end %>
+        <div class={"#{if @current_embed, do: "hidden", else: ""} text-center h-full w-full flex items-center justify-center"} id="slider">
+          <img
+            :for={src <- Presentations.get_slide_urls(@event.presentation_file)}
+            src={src}
+            class="max-h-full max-w-full object-contain"
           />
         </div>
-      <% end %>
-      <div class={"#{if @current_embed, do: "hidden", else: ""} text-center"} id="slider">
-        <img
-          :for={src <- Presentations.get_slide_urls(@event.presentation_file)}
-          src={src}
-          class="max-h-screen w-auto!"
-        />
       </div>
     </div>
   </div>
