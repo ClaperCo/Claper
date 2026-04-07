@@ -146,23 +146,29 @@ export class Manager {
   }
 
   update() {
+    const prevPage = this.currentPage;
     this.currentPage = parseInt(this.context.el.dataset.currentPage);
-    var el = document.getElementById("slide-preview-" + this.currentPage);
 
-    if (el) {
-      setTimeout(() => {
-        const slidesLayout = document.getElementById("slides-layout");
-        if (!slidesLayout) return;
-        const layoutWidth = slidesLayout.clientWidth;
-        const elementWidth = el.offsetWidth;
-        const scrollPosition =
-          el.offsetLeft - layoutWidth / 2 + elementWidth / 2;
+    // Only scroll thumbnails when the slide actually changed,
+    // not on every LiveView re-render (e.g. opening a modal).
+    if (this.currentPage !== prevPage) {
+      var el = document.getElementById("slide-preview-" + this.currentPage);
 
-        slidesLayout.scrollTo({
-          left: scrollPosition,
-          behavior: "smooth",
-        });
-      }, 50);
+      if (el) {
+        setTimeout(() => {
+          const slidesLayout = document.getElementById("slides-layout");
+          if (!slidesLayout) return;
+          const layoutWidth = slidesLayout.clientWidth;
+          const elementWidth = el.offsetWidth;
+          const scrollPosition =
+            el.offsetLeft - layoutWidth / 2 + elementWidth / 2;
+
+          slidesLayout.scrollTo({
+            left: scrollPosition,
+            behavior: "smooth",
+          });
+        }, 50);
+      }
     }
 
     this.initPreview();
