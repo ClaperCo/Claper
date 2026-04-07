@@ -201,9 +201,9 @@
       •••
     </div>
     <!-- SLIDES -->
-    <div id="slides" class="flex flex-col relative">
+    <div id="slides" class="flex flex-col relative h-full">
       <%!-- Slide fills remaining space --%>
-      <div id="slide-content" class="bg-gray-100">
+      <div id="slide-content" class="bg-gray-100 flex-1 min-h-0">
         <%= if @current_embed do %>
           <div id="embed" class="w-full h-full">
             <.live_component
