@@ -1038,7 +1038,10 @@ defmodule ClaperWeb.EventLive.Manage do
       content
     )
 
-    {:noreply, assign(socket, :current_note, content)}
+    # Do NOT update @current_note here. The content is already in the
+    # Quill editor on the client. Pushing it back would re-render the
+    # <script> carrier, trigger updated(), and reset the editor mid-typing.
+    {:noreply, socket}
   end
 
   defp note_at_position(%{assigns: %{event: event}} = socket, position) do

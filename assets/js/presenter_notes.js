@@ -13,19 +13,22 @@ const EMPTY_HTML = "<p><br></p>";
 
 export default {
   mounted() {
+    // Remember which slide we're on so updated() can detect slide changes.
+    this._position = this._readPosition();
     this._initQuill();
   },
 
   updated() {
-    // LiveView updated the <script> content carrier (slide changed).
-    // Only push to Quill when the content actually differs so we don't
-    // disrupt the cursor while the user is actively typing.
-    const incoming = this._readContent();
-    const current  = this._getEditorHtml();
+    const newPosition = this._readPosition();
 
-    if (current !== (incoming || EMPTY_HTML)) {
+    if (newPosition !== this._position) {
+      // Slide changed — load the new slide's note into the editor.
+      this._position = newPosition;
+      const incoming = this._readContent();
       this.quill.clipboard.dangerouslyPasteHTML(incoming || "");
     }
+    // Same slide: the user may be actively typing. Never touch the editor
+    // content here — the save is already in flight via pushEvent.
   },
 
   destroyed() {
@@ -35,10 +38,10 @@ export default {
   // ── private ───────────────────────────────────────────────────────────────
 
   _initQuill() {
-    const toolbarEl    = this.el.querySelector("[data-quill-toolbar]");
-    const editorEl     = this.el.querySelector("[data-quill-editor]");
-    const placeholder  = this.el.dataset.placeholder || "";
-    const initialContent = this._readContent();
+    const toolbarEl       = this.el.querySelector("[data-quill-toolbar]");
+    const editorEl        = this.el.querySelector("[data-quill-editor]");
+    const placeholder     = this.el.dataset.placeholder || "";
+    const initialContent  = this._readContent();
 
     this.quill = new Quill(editorEl, {
       theme: "snow",
@@ -47,12 +50,10 @@ export default {
         // Point Quill at the pre-rendered container so the toolbar always
         // lives inside the phx-update="ignore" boundary.
         toolbar: { container: toolbarEl },
-        // Quill 2.x ships with CMD/Ctrl + B/I/U/Z built-in.
-        // No need to override; adding custom bindings here would break them.
+        // Quill 2.x ships with CMD/Ctrl+B/I/U/Z built-in — no overrides needed.
       },
     });
 
-    // Populate editor with the current slide's note.
     if (initialContent) {
       this.quill.clipboard.dangerouslyPasteHTML(initialContent);
     }
@@ -70,10 +71,14 @@ export default {
     });
   },
 
+  // Current slide position from the hook element attribute.
+  _readPosition() {
+    return parseInt(this.el.dataset.position ?? "-1", 10);
+  },
+
   // Read the note content from the JSON carrier <script> element.
-  // Using a <script type="application/json"> avoids all HTML-attribute
-  // encoding issues — the browser never evaluates it and textContent
-  // returns the raw string without any entity decoding.
+  // <script type="application/json"> is never evaluated by the browser;
+  // textContent returns the raw string without any entity decoding.
   _readContent() {
     const el = this.el.querySelector("#presenter-note-content");
     if (!el) return "";
