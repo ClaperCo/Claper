@@ -417,7 +417,9 @@ defmodule ClaperWeb.EventLive.Manage do
          |> assign(:event, event)
          |> assign(:state, event.presentation_file.presentation_state)}
 
-      {:error, _} ->
+      {:error, reason} ->
+        require Logger
+        Logger.error("Failed to reorder slides: #{inspect(reason)}, order=#{inspect(order)}, pf.length=#{pf.length}, pf.hash=#{pf.hash}")
         {:noreply, put_flash(socket, :error, gettext("Failed to reorder slides"))}
     end
   end
