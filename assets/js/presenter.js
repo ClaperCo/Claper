@@ -10,7 +10,8 @@ export class Presenter {
 
   fitSlideArea() {
     const wrapper = document.getElementById("slides-join-wrapper");
-    if (!wrapper) return;
+    const slidesDiv = document.getElementById("slides");
+    if (!wrapper || !slidesDiv) return;
 
     const img = document.querySelector("#slider .tns-item img, #slider img");
     if (!img || !img.naturalWidth || !img.naturalHeight) return;
@@ -18,15 +19,9 @@ export class Presenter {
     const ratio = img.naturalWidth / img.naturalHeight;
     const vh = window.innerHeight;
 
-    // Determine how much width the join panel consumes
-    const joinScreen = document.getElementById("joinScreen");
-    const joinVisible = joinScreen && !joinScreen.classList.contains("hidden");
-
-    // Total width available to the wrapper (the grid cell)
-    const totalWidth = wrapper.parentElement.clientWidth;
-
-    // Width the slide actually gets (exclude join panel)
-    const slideWidth = joinVisible ? totalWidth * 0.8 : totalWidth;
+    // Measure the actual rendered width of the slides div (flex-1 handles
+    // all combinations of chat / join panel visibility automatically)
+    const slideWidth = slidesDiv.clientWidth;
 
     // Height that matches the slide's aspect ratio at its actual width
     let height = slideWidth / ratio;
@@ -55,7 +50,7 @@ export class Presenter {
     // Fit slide area once first image is loaded, then on every resize
     const firstImg = document.querySelector("#slider img");
     if (firstImg) {
-      const doFit = () => this.fitSlideArea();
+      const doFit = () => requestAnimationFrame(() => this.fitSlideArea());
       if (firstImg.complete) {
         doFit();
       } else {
@@ -141,8 +136,8 @@ export class Presenter {
         joinScreen.classList.remove("flex");
         joinScreen.classList.add("hidden");
       }
-      // Recalculate after the layout shift
-      requestAnimationFrame(() => this.fitSlideArea());
+      // Recalculate after the layout shift settles
+      setTimeout(() => this.fitSlideArea(), 50);
     });
 
     window.addEventListener("keyup", (e) => {
