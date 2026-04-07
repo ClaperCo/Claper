@@ -182,9 +182,9 @@
       <!-- JOIN SCREEN PANEL -->
       <div
         id="joinScreen"
-        class={"#{if @state.join_screen_visible, do: "flex", else: "hidden"} w-2/5 flex-shrink-0 bg-white text-black text-center flex-col items-center justify-center p-6 overflow-hidden"}
+        class={"#{if @state.join_screen_visible, do: "flex", else: "hidden"} w-1/5 flex-shrink-0 bg-white text-black text-center flex-col items-center justify-center p-4 overflow-hidden"}
       >
-        <span class="font-semibold mb-6 text-xl lg:text-3xl xl:text-4xl">
+        <span class="font-semibold mb-3 text-base lg:text-xl">
           {gettext("Scan to interact in real-time")}
         </span>
         <div
@@ -194,21 +194,21 @@
           data-panel="true"
           id="qr"
           phx-update="ignore"
-          class="rounded-lg mx-auto flex items-center justify-center mb-6"
+          class="rounded-lg mx-auto flex items-center justify-center mb-3"
         >
         </div>
-        <span class="font-semibold mb-4 text-lg lg:text-2xl xl:text-3xl">
+        <span class="font-semibold mb-2 text-sm lg:text-base">
           {gettext("Or go to %{url} and use the code:", url: @host)}
         </span>
-        <span class="font-semibold text-2xl lg:text-4xl xl:text-5xl">
+        <span class="font-semibold text-xl lg:text-2xl">
           #{String.upcase(@event.code)}
         </span>
       </div>
       <!-- SLIDES -->
-      <div id="slides" class="flex-1 min-w-0 flex items-center justify-center">
+      <div id="slides" class="flex-1 min-w-0 h-screen">
         <%= if @current_embed do %>
           <!-- EMBED -->
-          <div id="embed" class="max-h-screen w-full h-screen">
+          <div id="embed" class="w-full h-full">
             <.live_component
               id="embed-component"
               module={ClaperWeb.EventLive.EmbedIframeComponent}
@@ -217,11 +217,11 @@
             />
           </div>
         <% end %>
-        <div class={"#{if @current_embed, do: "hidden", else: ""} text-center"} id="slider">
+        <div class={"#{if @current_embed, do: "hidden", else: ""} text-center h-full flex items-center justify-center"} id="slider">
           <img
             :for={src <- Presentations.get_slide_urls(@event.presentation_file)}
             src={src}
-            class="max-h-screen w-auto!"
+            class="max-h-screen max-w-full object-contain"
           />
         </div>
       </div>
