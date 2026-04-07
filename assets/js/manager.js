@@ -37,7 +37,7 @@ export class Manager {
       // Don't navigate slides when focus is in an input, textarea,
       // contenteditable element (e.g. Quill presenter notes), or select.
       if (tag === "input" || tag === "textarea" || tag === "select" ||
-          e.target.isContentEditable || e.target.closest(".ql-editor")) {
+          e.target.isContentEditable || (e.target.closest && e.target.closest(".ql-editor"))) {
         return;
       }
 
