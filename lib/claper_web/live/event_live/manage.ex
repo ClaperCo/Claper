@@ -309,6 +309,13 @@ defmodule ClaperWeb.EventLive.Manage do
   end
 
   @impl true
+  def handle_event("show-add-slide", _params, socket) do
+    {:noreply,
+     socket
+     |> assign(:create, "slide")
+     |> assign(:slide_insert_position, socket.assigns.state.position + 1)}
+  end
+
   def handle_event("validate-slide", %{"position" => position}, socket) do
     {:noreply, assign(socket, :slide_insert_position, String.to_integer(position))}
   end
