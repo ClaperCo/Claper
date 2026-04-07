@@ -33,7 +33,7 @@ defmodule ClaperWeb.EventLive.EmbedComponent do
           </div>
         </div>
       </div>
-      <div id="extended-embed" class="bg-black w-full py-3 px-6 text-black shadow-lg rounded-md">
+      <div id="extended-embed" class="bg-black w-full h-full py-3 px-6 text-black shadow-lg rounded-md flex flex-col">
         <div
           class="block w-full h-full cursor-pointer"
           phx-click={toggle_embed()}
@@ -55,7 +55,7 @@ defmodule ClaperWeb.EventLive.EmbedComponent do
           <p class="text-xs text-gray-500 my-1">{gettext("Current web content")}</p>
           <p class="text-white text-lg font-semibold mb-4">{@embed.title}</p>
         </div>
-        <div class="flex flex-col space-y-3">
+        <div class="flex flex-col space-y-3 flex-1 min-h-0">
           <.live_component
             id="embed-component"
             module={ClaperWeb.EventLive.EmbedIframeComponent}
