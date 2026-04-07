@@ -141,23 +141,14 @@ export class Presenter {
   }
 
   fullscreen() {
-    var docEl = document.getElementById("presenter");
+    var docEl = document.documentElement;
 
-    try {
-      docEl
-        .webkitRequestFullscreen()
-        .then(function () {})
-        .catch(function (error) {});
-    } catch (e) {
-      docEl
-        .requestFullscreen()
-        .then(function () {})
-        .catch(function (error) {});
-
-      docEl
-        .mozRequestFullScreen()
-        .then(function () {})
-        .catch(function (error) {});
+    if (docEl.requestFullscreen) {
+      docEl.requestFullscreen();
+    } else if (docEl.webkitRequestFullscreen) {
+      docEl.webkitRequestFullscreen();
+    } else if (docEl.mozRequestFullScreen) {
+      docEl.mozRequestFullScreen();
     }
   }
 }
