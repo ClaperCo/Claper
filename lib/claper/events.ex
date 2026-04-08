@@ -585,6 +585,9 @@ defmodule Claper.Events do
       |> Ecto.Multi.run(:forms, fn _repo, changes -> duplicate_forms(original, changes) end)
       |> Ecto.Multi.run(:embeds, fn _repo, changes -> duplicate_embeds(original, changes) end)
       |> Ecto.Multi.run(:quizzes, fn _repo, changes -> duplicate_quizzes(original, changes) end)
+      |> Ecto.Multi.run(:presenter_notes, fn _repo, changes ->
+        duplicate_presenter_notes(original, changes)
+      end)
 
     case Repo.transaction(multi) do
       {:ok, %{event: event}} -> {:ok, event}
@@ -749,6 +752,34 @@ defmodule Claper.Events do
     Map.from_struct(opt)
     |> Map.drop([:id, :inserted_at, :updated_at])
     |> Map.put(:response_count, 0)
+  end
+
+  defp duplicate_presenter_notes(original, changes) do
+    import Ecto.Query
+
+    notes =
+      Repo.all(
+        from n in Presentations.PresenterNote,
+          where: n.presentation_file_id == ^original.presentation_file.id
+      )
+
+    new_notes =
+      for note <- notes do
+        attrs = %{
+          slide_position: note.slide_position,
+          content: note.content,
+          presentation_file_id: changes.presentation_file.id
+        }
+
+        {:ok, new_note} =
+          %Presentations.PresenterNote{}
+          |> Presentations.PresenterNote.changeset(attrs)
+          |> Repo.insert()
+
+        new_note
+      end
+
+    {:ok, new_notes}
   end
 
   @doc """
