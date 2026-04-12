@@ -755,8 +755,6 @@ defmodule Claper.Events do
   end
 
   defp duplicate_presenter_notes(original, changes) do
-    import Ecto.Query
-
     notes =
       Repo.all(
         from n in Presentations.PresenterNote,
