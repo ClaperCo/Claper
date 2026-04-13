@@ -172,9 +172,9 @@ defmodule ClaperWeb.Component.Input do
       disabled={@disabled}
       phx-value-key={@key}
       type="button"
-      class={"py-2 px-2 rounded-sm #{if @checked, do: "bg-primary-500 hover:bg-primary-600 text-white", else: "bg-gray-200 hover:bg-gray-300 text-gray-600"} flex justify-between items-center w-full gap-x-2 disabled:opacity-50 disabled:cursor-not-allowed transition ease-in-out duration-300"}
+      class={"py-2 px-2 rounded-sm #{if @checked, do: "bg-primary-500 hover:bg-primary-600 text-white", else: "bg-gray-200 hover:bg-gray-300 text-gray-600"} flex justify-between items-center w-full gap-x-2 text-left disabled:opacity-50 disabled:cursor-not-allowed transition ease-in-out duration-300"}
       role="switch"
-      aria-checked="false"
+      aria-checked={@checked}
       phx-key={@shortcut}
       phx-window-keydown={if @shortcut && not @disabled, do: checked(@checked, @key)}
     >

@@ -58,12 +58,14 @@ defmodule ClaperWeb.EventLive.ManagerSettingsComponent do
                   <path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M3 4l18 0" /><path d="M4 4v10a2 2 0 0 0 2 2h12a2 2 0 0 0 2 -2v-10" /><path d="M12 16l0 4" /><path d="M9 20l6 0" /><path d="M8 12l3 -3l2 2l3 -3" />
                 </svg>
 
-                <span :if={@state.poll_visible}>
-                  {gettext("Hide results on presentation")}
-                </span>
-                <span :if={!@state.poll_visible}>
-                  {gettext("Show results on presentation")}
-                </span>
+                <.setting_copy
+                  label={gettext("Results on presentation")}
+                  active={@state.poll_visible}
+                  on_state={gettext("Visible")}
+                  off_state={gettext("Hidden")}
+                  on_hint={gettext("Click to hide the results on the presentation")}
+                  off_hint={gettext("Click to show the results on the presentation")}
+                />
                 <code
                   :if={@show_shortcut}
                   class="px-2 py-1.5 text-xs font-semibold text-gray-800 bg-gray-100 border border-gray-200 rounded-lg"
@@ -108,12 +110,14 @@ defmodule ClaperWeb.EventLive.ManagerSettingsComponent do
                   <path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M3 4l18 0" /><path d="M4 4v10a2 2 0 0 0 2 2h12a2 2 0 0 0 2 -2v-10" /><path d="M12 16l0 4" /><path d="M9 20l6 0" /><path d="M8 12l3 -3l2 2l3 -3" />
                 </svg>
 
-                <span :if={@current_interaction.show_results}>
-                  {gettext("Hide results on presentation")}
-                </span>
-                <span :if={!@current_interaction.show_results}>
-                  {gettext("Show results on presentation")}
-                </span>
+                <.setting_copy
+                  label={gettext("Results on presentation")}
+                  active={@current_interaction.show_results}
+                  on_state={gettext("Visible")}
+                  off_state={gettext("Hidden")}
+                  on_hint={gettext("Click to hide the results on the presentation")}
+                  off_hint={gettext("Click to show the results on the presentation")}
+                />
                 <code
                   :if={@show_shortcut}
                   class="px-2 py-1.5 text-xs font-semibold text-gray-800 bg-gray-100 border border-gray-200 rounded-lg"
@@ -251,14 +255,14 @@ defmodule ClaperWeb.EventLive.ManagerSettingsComponent do
                 >
                   <path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M8 4h1a1 1 0 0 1 1 1v1m-.297 3.711a1 1 0 0 1 -.703 .289h-4a1 1 0 0 1 -1 -1v-4c0 -.275 .11 -.524 .29 -.705" /><path d="M7 17v.01" /><path d="M14 4m0 1a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v4a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1z" /><path d="M7 7v.01" /><path d="M4 14m0 1a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v4a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1z" /><path d="M17 7v.01" /><path d="M20 14v.01" /><path d="M14 14v3" /><path d="M14 20h3" /><path d="M3 3l18 18" />
                 </svg>
-                <div>
-                  <span :if={!@state.join_screen_visible}>
-                    {gettext("Show instructions to join")}
-                  </span>
-                  <span :if={@state.join_screen_visible}>
-                    {gettext("Hide instructions to join")}
-                  </span>
-                </div>
+                <.setting_copy
+                  label={gettext("Join instructions")}
+                  active={@state.join_screen_visible}
+                  on_state={gettext("Visible")}
+                  off_state={gettext("Hidden")}
+                  on_hint={gettext("Click to hide the join instructions on the presentation")}
+                  off_hint={gettext("Click to show the join instructions on the presentation")}
+                />
                 <code
                   :if={@show_shortcut}
                   class="px-2 py-1.5 text-xs font-semibold text-gray-800 bg-gray-100 border border-gray-200 rounded-lg"
@@ -301,10 +305,14 @@ defmodule ClaperWeb.EventLive.ManagerSettingsComponent do
                 >
                   <path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M8 9h1m4 0h3" /><path d="M8 13h5" /><path d="M8 4h10a3 3 0 0 1 3 3v8c0 .577 -.163 1.116 -.445 1.573m-2.555 1.427h-5l-5 3v-3h-2a3 3 0 0 1 -3 -3v-8c0 -1.085 .576 -2.036 1.439 -2.562" /><path d="M3 3l18 18" />
                 </svg>
-                <div>
-                  <span :if={!@state.chat_visible}>{gettext("Show messages")}</span>
-                  <span :if={@state.chat_visible}>{gettext("Hide messages")}</span>
-                </div>
+                <.setting_copy
+                  label={gettext("Messages on presentation")}
+                  active={@state.chat_visible}
+                  on_state={gettext("Visible")}
+                  off_state={gettext("Hidden")}
+                  on_hint={gettext("Click to hide messages on the presentation")}
+                  off_hint={gettext("Click to show messages on the presentation")}
+                />
                 <code
                   :if={@show_shortcut}
                   class="px-2 py-1.5 text-xs font-semibold text-gray-800 bg-gray-100 border border-gray-200 rounded-lg"
@@ -319,7 +327,7 @@ defmodule ClaperWeb.EventLive.ManagerSettingsComponent do
               class={"#{if !@state.chat_visible, do: "opacity-50"} flex space-x-2 items-center"}
               title={
                 if !@state.chat_visible,
-                  do: gettext("Show messages to change this option"),
+                  do: gettext("Messages must be visible on the presentation first"),
                   else: nil
               }
             >
@@ -355,12 +363,16 @@ defmodule ClaperWeb.EventLive.ManagerSettingsComponent do
                 >
                   <path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M8 9h8" /><path d="M8 13h6" /><path d="M18 4a3 3 0 0 1 3 3v8a3 3 0 0 1 -3 3h-5l-5 3v-3h-2a3 3 0 0 1 -3 -3v-8a3 3 0 0 1 3 -3h12z" />
                 </svg>
-                <div>
-                  <span :if={!@state.show_only_pinned}>
-                    {gettext("Show only pinned messages")}
-                  </span>
-                  <span :if={@state.show_only_pinned}>{gettext("Show all messages")}</span>
-                </div>
+                <.setting_copy
+                  label={gettext("Pinned-only mode")}
+                  active={@state.show_only_pinned}
+                  on_state={gettext("On")}
+                  off_state={gettext("Off")}
+                  on_hint={gettext("Click to show all messages on the presentation")}
+                  off_hint={gettext("Click to show only pinned messages on the presentation")}
+                  blocked={!@state.chat_visible}
+                  blocked_hint={gettext("Show messages on the presentation first")}
+                />
                 <code
                   :if={@show_shortcut}
                   class="px-2 py-1.5 text-xs font-semibold text-gray-800 bg-gray-100 border border-gray-200 rounded-lg"
@@ -408,14 +420,14 @@ defmodule ClaperWeb.EventLive.ManagerSettingsComponent do
                     d="M12 4a4 4 0 0 1 4 4c0 1.95-1.4 3.58-3.25 3.93L8.07 7.25A4.004 4.004 0 0 1 12 4m.28 10l6 6L20 21.72L18.73 23l-3-3H4v-2c0-1.84 2.5-3.39 5.87-3.86L2.78 7.05l1.27-1.27zM20 18v1.18l-4.86-4.86C18 14.93 20 16.35 20 18"
                   />
                 </svg>
-                <div>
-                  <span :if={!@state.show_attendee_count}>
-                    {gettext("Show attendee count")}
-                  </span>
-                  <span :if={@state.show_attendee_count}>
-                    {gettext("Hide attendee count")}
-                  </span>
-                </div>
+                <.setting_copy
+                  label={gettext("Attendee count")}
+                  active={@state.show_attendee_count}
+                  on_state={gettext("Visible")}
+                  off_state={gettext("Hidden")}
+                  on_hint={gettext("Click to hide the attendee count on the presentation")}
+                  off_hint={gettext("Click to show the attendee count on the presentation")}
+                />
                 <code
                   :if={@show_shortcut}
                   class="px-2 py-1.5 text-xs font-semibold text-gray-800 bg-gray-100 border border-gray-200 rounded-lg"
@@ -478,10 +490,14 @@ defmodule ClaperWeb.EventLive.ManagerSettingsComponent do
                 >
                   <path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M8 9h1m4 0h3" /><path d="M8 13h5" /><path d="M8 4h10a3 3 0 0 1 3 3v8c0 .577 -.163 1.116 -.445 1.573m-2.555 1.427h-5l-5 3v-3h-2a3 3 0 0 1 -3 -3v-8c0 -1.085 .576 -2.036 1.439 -2.562" /><path d="M3 3l18 18" />
                 </svg>
-                <div>
-                  <span :if={!@state.chat_enabled}>{gettext("Enable messages")}</span>
-                  <span :if={@state.chat_enabled}>{gettext("Disable messages")}</span>
-                </div>
+                <.setting_copy
+                  label={gettext("Attendee messages")}
+                  active={@state.chat_enabled}
+                  on_state={gettext("Enabled")}
+                  off_state={gettext("Disabled")}
+                  on_hint={gettext("Click to stop attendees from sending messages")}
+                  off_hint={gettext("Click to let attendees send messages")}
+                />
                 <code
                   :if={@show_shortcut}
                   class="px-2 py-1.5 text-xs font-semibold text-gray-800 bg-gray-100 border border-gray-200 rounded-lg"
@@ -496,7 +512,7 @@ defmodule ClaperWeb.EventLive.ManagerSettingsComponent do
               class={"#{if !@state.chat_enabled, do: "opacity-50"} flex space-x-2 items-center"}
               title={
                 if !@state.chat_enabled,
-                  do: gettext("Enable messages to change this option"),
+                  do: gettext("Attendee messages must be enabled first"),
                   else: nil
               }
             >
@@ -533,14 +549,16 @@ defmodule ClaperWeb.EventLive.ManagerSettingsComponent do
                   <path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M3 11h8m4 0h6" /><path d="M5 11v-4c0 -.571 .16 -1.105 .437 -1.56m2.563 -1.44h8a3 3 0 0 1 3 3v4" /><path d="M7 17m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0" /><path d="M14.88 14.877a3 3 0 1 0 4.239 4.247m.59 -3.414a3.012 3.012 0 0 0 -1.425 -1.422" /><path d="M10 17h4" /><path d="M3 3l18 18" />
                 </svg>
 
-                <div>
-                  <span :if={!@state.anonymous_chat_enabled}>
-                    {gettext("Allow anonymous messages")}
-                  </span>
-                  <span :if={@state.anonymous_chat_enabled}>
-                    {gettext("Deny anonymous messages")}
-                  </span>
-                </div>
+                <.setting_copy
+                  label={gettext("Anonymous messages")}
+                  active={@state.anonymous_chat_enabled}
+                  on_state={gettext("Allowed")}
+                  off_state={gettext("Blocked")}
+                  on_hint={gettext("Click to require names on new messages")}
+                  off_hint={gettext("Click to allow anonymous messages")}
+                  blocked={!@state.chat_enabled}
+                  blocked_hint={gettext("Enable attendee messages first")}
+                />
                 <code
                   :if={@show_shortcut}
                   class="px-2 py-1.5 text-xs font-semibold text-gray-800 bg-gray-100 border border-gray-200 rounded-lg"
@@ -584,14 +602,14 @@ defmodule ClaperWeb.EventLive.ManagerSettingsComponent do
                   <path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M3 3l18 18" /><path d="M19.5 12.572l-1.5 1.428m-2 2l-4 4l-7.5 -7.428a5 5 0 0 1 -1.288 -5.068a4.976 4.976 0 0 1 1.788 -2.504m3 -1c1.56 0 3.05 .727 4 2a5 5 0 1 1 7.5 6.572" />
                 </svg>
 
-                <div>
-                  <span :if={!@state.message_reaction_enabled}>
-                    {gettext("Enable reactions")}
-                  </span>
-                  <span :if={@state.message_reaction_enabled}>
-                    {gettext("Disable reactions")}
-                  </span>
-                </div>
+                <.setting_copy
+                  label={gettext("Message reactions")}
+                  active={@state.message_reaction_enabled}
+                  on_state={gettext("Enabled")}
+                  off_state={gettext("Disabled")}
+                  on_hint={gettext("Click to disable reactions on attendee messages")}
+                  off_hint={gettext("Click to enable reactions on attendee messages")}
+                />
                 <code
                   :if={@show_shortcut}
                   class="px-2 py-1.5 text-xs font-semibold text-gray-800 bg-gray-100 border border-gray-200 rounded-lg"
@@ -604,6 +622,52 @@ defmodule ClaperWeb.EventLive.ManagerSettingsComponent do
           </div>
         </div>
       </div>
+    </div>
+    """
+  end
+
+  attr :label, :string, required: true
+  attr :active, :boolean, required: true
+  attr :on_state, :string, required: true
+  attr :off_state, :string, required: true
+  attr :on_hint, :string, required: true
+  attr :off_hint, :string, required: true
+  attr :blocked, :boolean, default: false
+  attr :blocked_hint, :string, default: nil
+
+  defp setting_copy(assigns) do
+    assigns =
+      assigns
+      |> assign(:state_text, if(assigns.active, do: assigns.on_state, else: assigns.off_state))
+      |> assign(
+        :hint_text,
+        cond do
+          assigns.blocked && assigns.blocked_hint -> assigns.blocked_hint
+          assigns.active -> assigns.on_hint
+          true -> assigns.off_hint
+        end
+      )
+
+    ~H"""
+    <div class="min-w-0 flex-1">
+      <div class="flex flex-wrap items-center gap-2">
+        <span class="font-medium leading-5">{@label}</span>
+        <span class={[
+          "inline-flex items-center rounded-full border px-2 py-0.5 text-[11px] font-semibold uppercase tracking-wide",
+          if(@active,
+            do: "border-white/30 bg-white/15 text-white",
+            else: "border-gray-300 bg-white text-gray-600"
+          )
+        ]}>
+          {@state_text}
+        </span>
+      </div>
+      <p class={[
+        "mt-0.5 text-xs leading-4",
+        if(@active, do: "text-white/80", else: "text-gray-500")
+      ]}>
+        {@hint_text}
+      </p>
     </div>
     """
   end
