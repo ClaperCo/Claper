@@ -26,7 +26,7 @@ defmodule Claper.Presentations do
     do: Repo.get!(PresentationFile, id) |> Repo.preload(preload)
 
   def get_presentation_files_by_hash(hash) when is_binary(hash),
-    do: Repo.all(from p in PresentationFile, where: p.hash == ^hash)
+    do: Repo.all(from(p in PresentationFile, where: p.hash == ^hash))
 
   def get_presentation_files_by_hash(hash) when is_nil(hash),
     do: []
@@ -71,7 +71,9 @@ defmodule Claper.Presentations do
   """
   def get_slide_urls(hash, length)
 
-  def get_slide_urls(nil, _), do: []
+  def get_slide_urls(nil, _length), do: []
+
+  def get_slide_urls(_hash, length) when is_integer(length) and length <= 0, do: []
 
   def get_slide_urls(hash, length) when is_binary(hash) and is_integer(length) do
     config = Application.get_env(:claper, :presentations)

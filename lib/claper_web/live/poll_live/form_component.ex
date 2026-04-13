@@ -5,7 +5,7 @@ defmodule ClaperWeb.PollLive.FormComponent do
 
   @impl true
   def update(%{poll: poll} = assigns, socket) do
-    changeset = Polls.change_poll(poll)
+    changeset = build_changeset(assigns, poll)
 
     {:ok,
      socket
@@ -30,8 +30,8 @@ defmodule ClaperWeb.PollLive.FormComponent do
   @impl true
   def handle_event("validate", %{"poll" => poll_params}, socket) do
     changeset =
-      socket.assigns.poll
-      |> Polls.change_poll(poll_params)
+      socket
+      |> build_poll_changeset(poll_params)
       |> Map.put(:action, :validate)
 
     {:noreply, socket |> assign(:changeset, changeset)}
@@ -55,9 +55,7 @@ defmodule ClaperWeb.PollLive.FormComponent do
       ) do
     {opt, _} = Integer.parse(opt)
 
-    poll_opt = Enum.at(Ecto.Changeset.get_field(changeset, :poll_opts), opt)
-
-    {:noreply, assign(socket, :changeset, changeset |> Polls.remove_poll_opt(poll_opt))}
+    {:noreply, assign(socket, :changeset, changeset |> Polls.remove_poll_opt(opt))}
   end
 
   defp save_poll(socket, :edit, poll_params) do
@@ -107,6 +105,43 @@ defmodule ClaperWeb.PollLive.FormComponent do
   end
 
   defp maybe_change_current_poll(socket, _), do: socket
+
+  defp build_changeset(
+         %{live_action: :new, presentation_file: presentation_file, position: position},
+         _poll
+       ) do
+    %Polls.Poll{}
+    |> Polls.change_poll(%{
+      "enabled" => false,
+      "presentation_file_id" => presentation_file.id,
+      "position" => position,
+      "poll_opts" => [
+        %{"content" => gettext("Yes"), "vote_count" => 0},
+        %{"content" => gettext("No"), "vote_count" => 0}
+      ]
+    })
+  end
+
+  defp build_changeset(_assigns, poll), do: Polls.change_poll(poll)
+
+  defp build_poll_changeset(
+         %{
+           assigns: %{live_action: :new, presentation_file: presentation_file, position: position}
+         },
+         poll_params
+       ) do
+    %Polls.Poll{}
+    |> Polls.change_poll(
+      poll_params
+      |> Map.put("enabled", false)
+      |> Map.put("presentation_file_id", presentation_file.id)
+      |> Map.put("position", position)
+    )
+  end
+
+  defp build_poll_changeset(%{assigns: %{poll: poll}}, poll_params) do
+    Polls.change_poll(poll, poll_params)
+  end
 
   defp list_polls(assigns) do
     Polls.list_polls(assigns.presentation_file.id)

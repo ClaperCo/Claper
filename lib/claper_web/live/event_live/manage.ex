@@ -847,6 +847,38 @@ defmodule ClaperWeb.EventLive.Manage do
   end
 
   @impl true
+  def handle_event("duplicate-poll", %{"id" => id}, socket) do
+    poll = Polls.get_poll!(id)
+    {:ok, _} = Claper.Interactions.duplicate_interaction(poll)
+
+    {:noreply, put_flash(socket, :info, gettext("Interaction duplicated"))}
+  end
+
+  @impl true
+  def handle_event("duplicate-form", %{"id" => id}, socket) do
+    form = Forms.get_form!(id)
+    {:ok, _} = Claper.Interactions.duplicate_interaction(form)
+
+    {:noreply, put_flash(socket, :info, gettext("Interaction duplicated"))}
+  end
+
+  @impl true
+  def handle_event("duplicate-embed", %{"id" => id}, socket) do
+    embed = Embeds.get_embed!(id)
+    {:ok, _} = Claper.Interactions.duplicate_interaction(embed)
+
+    {:noreply, put_flash(socket, :info, gettext("Interaction duplicated"))}
+  end
+
+  @impl true
+  def handle_event("duplicate-quiz", %{"id" => id}, socket) do
+    quiz = Quizzes.get_quiz!(id)
+    {:ok, _} = Claper.Interactions.duplicate_interaction(quiz)
+
+    {:noreply, put_flash(socket, :info, gettext("Interaction duplicated"))}
+  end
+
+  @impl true
   def handle_event("toggle-preview", _params, %{assigns: %{preview: preview}} = socket) do
     {:noreply, socket |> assign(:preview, !preview)}
   end
@@ -890,9 +922,7 @@ defmodule ClaperWeb.EventLive.Manage do
   defp apply_action(socket, :add_poll, _params) do
     socket
     |> assign(:create, "poll")
-    |> assign(:poll, %Polls.Poll{
-      poll_opts: [%Polls.PollOpt{content: gettext("Yes")}, %Polls.PollOpt{content: gettext("No")}]
-    })
+    |> assign(:poll, %Polls.Poll{})
   end
 
   defp apply_action(socket, :edit_poll, %{"id" => id}) do

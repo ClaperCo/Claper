@@ -40,6 +40,11 @@ defmodule Claper.PresentationsTest do
       assert presentation_file.hash == "4567"
       assert presentation_file.length == 43
     end
+
+    test "get_slide_urls returns an empty list for missing presentation hashes" do
+      assert Presentations.get_slide_urls(nil, 0) == []
+      assert Presentations.get_slide_urls(%PresentationFile{hash: nil, length: 0}) == []
+    end
   end
 
   describe "presentation_states" do

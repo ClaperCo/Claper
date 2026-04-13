@@ -240,21 +240,44 @@ defmodule Claper.Polls do
   """
   def add_poll_opt(changeset) do
     changeset
-    |> Ecto.Changeset.put_assoc(
-      :poll_opts,
-      Ecto.Changeset.get_field(changeset, :poll_opts) ++ [%PollOpt{}]
-    )
+    |> rebuild_poll_changeset(fn poll_opts ->
+      poll_opts ++ [%{"content" => nil, "vote_count" => 0}]
+    end)
   end
 
   @doc """
   Remove a poll opt from a poll changeset.
   """
-  def remove_poll_opt(changeset, poll_opt) do
+  def remove_poll_opt(changeset, index) when is_integer(index) and index >= 0 do
     changeset
-    |> Ecto.Changeset.put_assoc(
-      :poll_opts,
-      Ecto.Changeset.get_field(changeset, :poll_opts) -- [poll_opt]
-    )
+    |> rebuild_poll_changeset(fn poll_opts ->
+      List.delete_at(poll_opts, index)
+    end)
+  end
+
+  def remove_poll_opt(changeset, index) when is_integer(index), do: changeset
+
+  def remove_poll_opt(changeset, %PollOpt{id: id}) when not is_nil(id) do
+    changeset
+    |> rebuild_poll_changeset(fn poll_opts ->
+      Enum.reject(poll_opts, &(&1["id"] == id))
+    end)
+  end
+
+  def remove_poll_opt(changeset, poll_opt) do
+    poll_opts = poll_opt_params(changeset)
+
+    index =
+      Enum.find_index(poll_opts, fn opt ->
+        opt["content"] == Map.get(poll_opt, :content) and
+          opt["vote_count"] == Map.get(poll_opt, :vote_count)
+      end)
+
+    if is_nil(index) do
+      changeset
+    else
+      remove_poll_opt(changeset, index)
+    end
   end
 
   def vote(user_id, event_uuid, poll_opts, poll_id)
@@ -331,6 +354,58 @@ defmodule Claper.Polls do
     )
 
     {:ok, poll}
+  end
+
+  defp rebuild_poll_changeset(changeset, update_fun) do
+    params =
+      changeset
+      |> poll_params()
+      |> Map.update!("poll_opts", update_fun)
+
+    changeset.data
+    |> Poll.changeset(params)
+    |> Map.put(:action, changeset.action)
+  end
+
+  defp poll_params(changeset) do
+    %{
+      "title" => Ecto.Changeset.get_field(changeset, :title),
+      "presentation_file_id" => Ecto.Changeset.get_field(changeset, :presentation_file_id),
+      "position" => Ecto.Changeset.get_field(changeset, :position),
+      "enabled" => Ecto.Changeset.get_field(changeset, :enabled),
+      "total" => Ecto.Changeset.get_field(changeset, :total),
+      "multiple" => Ecto.Changeset.get_field(changeset, :multiple),
+      "show_results" => Ecto.Changeset.get_field(changeset, :show_results),
+      "poll_opts" => poll_opt_params(changeset)
+    }
+  end
+
+  defp poll_opt_params(changeset) do
+    changeset
+    |> Ecto.Changeset.get_field(:poll_opts, [])
+    |> Enum.map(&poll_opt_to_params/1)
+  end
+
+  defp poll_opt_to_params(%Ecto.Changeset{} = poll_opt_changeset) do
+    %{
+      "id" => Ecto.Changeset.get_field(poll_opt_changeset, :id),
+      "content" => Ecto.Changeset.get_field(poll_opt_changeset, :content),
+      "vote_count" => Ecto.Changeset.get_field(poll_opt_changeset, :vote_count),
+      "poll_id" => Ecto.Changeset.get_field(poll_opt_changeset, :poll_id)
+    }
+    |> Enum.reject(fn {_key, value} -> is_nil(value) end)
+    |> Map.new()
+  end
+
+  defp poll_opt_to_params(%PollOpt{} = poll_opt) do
+    %{
+      "id" => poll_opt.id,
+      "content" => poll_opt.content,
+      "vote_count" => poll_opt.vote_count,
+      "poll_id" => poll_opt.poll_id
+    }
+    |> Enum.reject(fn {_key, value} -> is_nil(value) end)
+    |> Map.new()
   end
 
   @doc """

@@ -7,7 +7,7 @@ defmodule Claper.Interactions do
   alias Claper.Quizzes
   import Ecto.Query, warn: false
 
-  @type interaction :: Polls.Poll | Forms.Form | Embeds.Embed
+  @type interaction :: Polls.Poll | Forms.Form | Embeds.Embed | Quizzes.Quiz
 
   def get_number_total_interactions(presentation_file_id) do
     from(p in Polls.Poll,
@@ -132,4 +132,90 @@ defmodule Claper.Interactions do
   def disable_interaction(%Quizzes.Quiz{} = interaction) do
     Quizzes.set_disabled(interaction.id)
   end
+
+  def duplicate_interaction(%Polls.Poll{} = poll) do
+    poll = Polls.get_poll!(poll.id)
+
+    Polls.create_poll(%{
+      title: duplicate_title(poll.title),
+      position: poll.position,
+      enabled: false,
+      multiple: poll.multiple,
+      show_results: poll.show_results,
+      presentation_file_id: poll.presentation_file_id,
+      poll_opts:
+        Enum.map(poll.poll_opts, fn opt ->
+          %{
+            content: opt.content,
+            vote_count: 0
+          }
+        end)
+    })
+  end
+
+  def duplicate_interaction(%Forms.Form{} = form) do
+    form = Forms.get_form!(form.id)
+
+    Forms.create_form(%{
+      title: duplicate_title(form.title),
+      position: form.position,
+      enabled: false,
+      presentation_file_id: form.presentation_file_id,
+      fields:
+        Enum.map(form.fields, fn field ->
+          %{
+            name: field.name,
+            type: field.type,
+            required: field.required
+          }
+        end)
+    })
+  end
+
+  def duplicate_interaction(%Embeds.Embed{} = embed) do
+    embed = Embeds.get_embed!(embed.id)
+
+    Embeds.create_embed(%{
+      title: duplicate_title(embed.title),
+      content: embed.content,
+      provider: embed.provider,
+      enabled: false,
+      position: embed.position,
+      attendee_visibility: embed.attendee_visibility,
+      presentation_file_id: embed.presentation_file_id
+    })
+  end
+
+  def duplicate_interaction(%Quizzes.Quiz{} = quiz) do
+    quiz = Quizzes.get_quiz!(quiz.id, [:quiz_questions, quiz_questions: :quiz_question_opts])
+
+    Quizzes.create_quiz(%{
+      title: duplicate_title(quiz.title),
+      position: quiz.position,
+      enabled: false,
+      show_results: quiz.show_results,
+      allow_anonymous: quiz.allow_anonymous,
+      presentation_file_id: quiz.presentation_file_id,
+      lti_resource_id: quiz.lti_resource_id,
+      lti_line_item_url: quiz.lti_line_item_url,
+      quiz_questions:
+        Enum.map(quiz.quiz_questions, fn question ->
+          %{
+            content: question.content,
+            type: question.type,
+            quiz_question_opts:
+              Enum.map(question.quiz_question_opts, fn opt ->
+                %{
+                  content: opt.content,
+                  is_correct: opt.is_correct,
+                  response_count: 0
+                }
+              end)
+          }
+        end)
+    })
+  end
+
+  defp duplicate_title(nil), do: nil
+  defp duplicate_title(title), do: "#{title} (Copy)"
 end

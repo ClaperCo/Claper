@@ -779,28 +779,51 @@
                             </div>
                             <span class="font-semibold">{gettext("Poll")}</span>
                           </div>
-
-                          <a
-                            class="p-2 rounded-sm text-xs font-medium text-center text-primary-500"
-                            data-phx-link="patch"
-                            data-phx-link-state="push"
-                            href={~p"/e/#{@event.code}/manage/edit/poll/#{interaction.id}"}
-                          >
-                            <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              class="h-5 w-5"
-                              fill="none"
-                              viewBox="0 0 24 24"
-                              stroke="currentColor"
-                              stroke-width="2"
+                          <div class="flex items-center gap-1">
+                            <button
+                              type="button"
+                              phx-click="duplicate-poll"
+                              phx-value-id={interaction.id}
+                              class="p-2 rounded-sm text-xs font-medium text-center text-primary-500"
+                              title={gettext("Duplicate")}
                             >
-                              <path
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
-                              />
-                            </svg>
-                          </a>
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                class="h-5 w-5"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke="currentColor"
+                                stroke-width="2"
+                              >
+                                <path
+                                  stroke-linecap="round"
+                                  stroke-linejoin="round"
+                                  d="M9 12.75 11.25 15 15 9.75M9 12H4.5A2.25 2.25 0 0 1 2.25 9.75v-4.5A2.25 2.25 0 0 1 4.5 3h4.5a2.25 2.25 0 0 1 2.25 2.25V12Zm0 0h4.75A2.25 2.25 0 0 1 16 14.25v4.5A2.25 2.25 0 0 1 13.75 21h-4.5A2.25 2.25 0 0 1 7 18.75V14.5A2.5 2.5 0 0 1 9.5 12Z"
+                                />
+                              </svg>
+                            </button>
+                            <a
+                              class="p-2 rounded-sm text-xs font-medium text-center text-primary-500"
+                              data-phx-link="patch"
+                              data-phx-link-state="push"
+                              href={~p"/e/#{@event.code}/manage/edit/poll/#{interaction.id}"}
+                            >
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                class="h-5 w-5"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke="currentColor"
+                                stroke-width="2"
+                              >
+                                <path
+                                  stroke-linecap="round"
+                                  stroke-linejoin="round"
+                                  d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+                                />
+                              </svg>
+                            </a>
+                          </div>
                         </div>
                       <% %Claper.Forms.Form{} -> %>
                         <div class="flex items-center justify-between mb-2">
@@ -823,25 +846,49 @@
                             </div>
                             <span class="font-semibold">{gettext("Form")}</span>
                           </div>
-                          <.link
-                            class="p-2 rounded-sm text-xs font-medium text-center text-primary-500"
-                            patch={~p"/e/#{@event.code}/manage/edit/form/#{interaction.id}"}
-                          >
-                            <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              class="h-5 w-5"
-                              fill="none"
-                              viewBox="0 0 24 24"
-                              stroke="currentColor"
-                              stroke-width="2"
+                          <div class="flex items-center gap-1">
+                            <button
+                              type="button"
+                              phx-click="duplicate-form"
+                              phx-value-id={interaction.id}
+                              class="p-2 rounded-sm text-xs font-medium text-center text-primary-500"
+                              title={gettext("Duplicate")}
                             >
-                              <path
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
-                              />
-                            </svg>
-                          </.link>
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                class="h-5 w-5"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke="currentColor"
+                                stroke-width="2"
+                              >
+                                <path
+                                  stroke-linecap="round"
+                                  stroke-linejoin="round"
+                                  d="M9 12.75 11.25 15 15 9.75M9 12H4.5A2.25 2.25 0 0 1 2.25 9.75v-4.5A2.25 2.25 0 0 1 4.5 3h4.5a2.25 2.25 0 0 1 2.25 2.25V12Zm0 0h4.75A2.25 2.25 0 0 1 16 14.25v4.5A2.25 2.25 0 0 1 13.75 21h-4.5A2.25 2.25 0 0 1 7 18.75V14.5A2.5 2.5 0 0 1 9.5 12Z"
+                                />
+                              </svg>
+                            </button>
+                            <.link
+                              class="p-2 rounded-sm text-xs font-medium text-center text-primary-500"
+                              patch={~p"/e/#{@event.code}/manage/edit/form/#{interaction.id}"}
+                            >
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                class="h-5 w-5"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke="currentColor"
+                                stroke-width="2"
+                              >
+                                <path
+                                  stroke-linecap="round"
+                                  stroke-linejoin="round"
+                                  d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+                                />
+                              </svg>
+                            </.link>
+                          </div>
                         </div>
                       <% %Claper.Embeds.Embed{} -> %>
                         <div class="flex items-center justify-between mb-2">
@@ -866,27 +913,51 @@
                               {gettext("Web content")}
                             </span>
                           </div>
-                          <a
-                            class="p-2 rounded-sm text-xs font-medium text-center text-primary-500"
-                            data-phx-link="patch"
-                            data-phx-link-state="push"
-                            href={~p"/e/#{@event.code}/manage/edit/embed/#{interaction.id}"}
-                          >
-                            <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              class="h-5 w-5"
-                              fill="none"
-                              viewBox="0 0 24 24"
-                              stroke="currentColor"
-                              stroke-width="2"
+                          <div class="flex items-center gap-1">
+                            <button
+                              type="button"
+                              phx-click="duplicate-embed"
+                              phx-value-id={interaction.id}
+                              class="p-2 rounded-sm text-xs font-medium text-center text-primary-500"
+                              title={gettext("Duplicate")}
                             >
-                              <path
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
-                              />
-                            </svg>
-                          </a>
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                class="h-5 w-5"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke="currentColor"
+                                stroke-width="2"
+                              >
+                                <path
+                                  stroke-linecap="round"
+                                  stroke-linejoin="round"
+                                  d="M9 12.75 11.25 15 15 9.75M9 12H4.5A2.25 2.25 0 0 1 2.25 9.75v-4.5A2.25 2.25 0 0 1 4.5 3h4.5a2.25 2.25 0 0 1 2.25 2.25V12Zm0 0h4.75A2.25 2.25 0 0 1 16 14.25v4.5A2.25 2.25 0 0 1 13.75 21h-4.5A2.25 2.25 0 0 1 7 18.75V14.5A2.5 2.5 0 0 1 9.5 12Z"
+                                />
+                              </svg>
+                            </button>
+                            <a
+                              class="p-2 rounded-sm text-xs font-medium text-center text-primary-500"
+                              data-phx-link="patch"
+                              data-phx-link-state="push"
+                              href={~p"/e/#{@event.code}/manage/edit/embed/#{interaction.id}"}
+                            >
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                class="h-5 w-5"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke="currentColor"
+                                stroke-width="2"
+                              >
+                                <path
+                                  stroke-linecap="round"
+                                  stroke-linejoin="round"
+                                  d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+                                />
+                              </svg>
+                            </a>
+                          </div>
                         </div>
                       <% %Claper.Quizzes.Quiz{} -> %>
                         <div class="flex items-center justify-between mb-2">
@@ -931,27 +1002,51 @@
                               <span>LTI AGS</span>
                             </p>
                           </div>
-                          <a
-                            class="p-2 rounded-sm text-xs font-medium text-center text-primary-500"
-                            data-phx-link="patch"
-                            data-phx-link-state="push"
-                            href={~p"/e/#{@event.code}/manage/edit/quiz/#{interaction.id}"}
-                          >
-                            <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              class="h-5 w-5"
-                              fill="none"
-                              viewBox="0 0 24 24"
-                              stroke="currentColor"
-                              stroke-width="2"
+                          <div class="flex items-center gap-1">
+                            <button
+                              type="button"
+                              phx-click="duplicate-quiz"
+                              phx-value-id={interaction.id}
+                              class="p-2 rounded-sm text-xs font-medium text-center text-primary-500"
+                              title={gettext("Duplicate")}
                             >
-                              <path
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
-                              />
-                            </svg>
-                          </a>
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                class="h-5 w-5"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke="currentColor"
+                                stroke-width="2"
+                              >
+                                <path
+                                  stroke-linecap="round"
+                                  stroke-linejoin="round"
+                                  d="M9 12.75 11.25 15 15 9.75M9 12H4.5A2.25 2.25 0 0 1 2.25 9.75v-4.5A2.25 2.25 0 0 1 4.5 3h4.5a2.25 2.25 0 0 1 2.25 2.25V12Zm0 0h4.75A2.25 2.25 0 0 1 16 14.25v4.5A2.25 2.25 0 0 1 13.75 21h-4.5A2.25 2.25 0 0 1 7 18.75V14.5A2.5 2.5 0 0 1 9.5 12Z"
+                                />
+                              </svg>
+                            </button>
+                            <a
+                              class="p-2 rounded-sm text-xs font-medium text-center text-primary-500"
+                              data-phx-link="patch"
+                              data-phx-link-state="push"
+                              href={~p"/e/#{@event.code}/manage/edit/quiz/#{interaction.id}"}
+                            >
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                class="h-5 w-5"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke="currentColor"
+                                stroke-width="2"
+                              >
+                                <path
+                                  stroke-linecap="round"
+                                  stroke-linejoin="round"
+                                  d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+                                />
+                              </svg>
+                            </a>
+                          </div>
                         </div>
                       <% _ -> %>
                         <!-- Handle any other types of interactions here if needed -->
