@@ -338,7 +338,9 @@ defmodule ClaperWeb.EventLive.Manage do
     uploaded_files =
       consume_uploaded_entries(socket, :slide_image, fn %{path: path}, _entry ->
         # Copy to a stable temp file before Phoenix cleans up the upload
-        stable_path = Path.join(System.tmp_dir!(), "slide_upload_#{System.unique_integer([:positive])}.jpg")
+        stable_path =
+          Path.join(System.tmp_dir!(), "slide_upload_#{System.unique_integer([:positive])}.jpg")
+
         File.cp!(path, stable_path)
         {:ok, stable_path}
       end)
@@ -419,7 +421,11 @@ defmodule ClaperWeb.EventLive.Manage do
 
       {:error, reason} ->
         require Logger
-        Logger.error("Failed to reorder slides: #{inspect(reason)}, order=#{inspect(order)}, pf.length=#{pf.length}, pf.hash=#{pf.hash}")
+
+        Logger.error(
+          "Failed to reorder slides: #{inspect(reason)}, order=#{inspect(order)}, pf.length=#{pf.length}, pf.hash=#{pf.hash}"
+        )
+
         {:noreply, put_flash(socket, :error, gettext("Failed to reorder slides"))}
     end
   end

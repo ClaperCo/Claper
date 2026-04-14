@@ -196,7 +196,8 @@ defmodule Claper.Presentations do
 
   defp shift_positions(schema, field, presentation_file_id, insert_position) do
     from(s in schema,
-      where: s.presentation_file_id == ^presentation_file_id and field(s, ^field) >= ^insert_position
+      where:
+        s.presentation_file_id == ^presentation_file_id and field(s, ^field) >= ^insert_position
     )
     |> Repo.update_all(inc: [{field, 1}])
 
@@ -267,17 +268,23 @@ defmodule Claper.Presentations do
           state = Repo.get_by(Claper.Presentations.PresentationState, presentation_file_id: pf.id)
 
           cond do
-            is_nil(state) -> {:ok, nil}
+            is_nil(state) ->
+              {:ok, nil}
+
             state.position == delete_position && pf.length > 1 ->
               new_pos = max(0, delete_position - 1)
+
               state
               |> Claper.Presentations.PresentationState.changeset(%{position: new_pos})
               |> Repo.update()
+
             state.position > delete_position ->
               state
               |> Claper.Presentations.PresentationState.changeset(%{position: state.position - 1})
               |> Repo.update()
-            true -> {:ok, state}
+
+            true ->
+              {:ok, state}
           end
         end)
 
@@ -310,7 +317,8 @@ defmodule Claper.Presentations do
 
   defp unshift_positions(schema, field, presentation_file_id, deleted_position) do
     from(s in schema,
-      where: s.presentation_file_id == ^presentation_file_id and field(s, ^field) > ^deleted_position
+      where:
+        s.presentation_file_id == ^presentation_file_id and field(s, ^field) > ^deleted_position
     )
     |> Repo.update_all(inc: [{field, -1}])
 
@@ -362,11 +370,14 @@ defmodule Claper.Presentations do
             remap_positions(PresenterNote, :slide_position, pf.id, position_map)
           end)
           |> Ecto.Multi.run(:remap_state, fn _repo, _changes ->
-            state = Repo.get_by(Claper.Presentations.PresentationState, presentation_file_id: pf.id)
+            state =
+              Repo.get_by(Claper.Presentations.PresentationState, presentation_file_id: pf.id)
 
             if state && Map.has_key?(position_map, state.position) do
               state
-              |> Claper.Presentations.PresentationState.changeset(%{position: position_map[state.position]})
+              |> Claper.Presentations.PresentationState.changeset(%{
+                position: position_map[state.position]
+              })
               |> Repo.update()
             else
               {:ok, state}
@@ -431,7 +442,9 @@ defmodule Claper.Presentations do
       "s3" ->
         local_image_path
         |> ExAws.S3.Upload.stream_file()
-        |> ExAws.S3.upload(s3_bucket(), "presentations/#{new_hash}/#{dest_index}.jpg", acl: "public-read")
+        |> ExAws.S3.upload(s3_bucket(), "presentations/#{new_hash}/#{dest_index}.jpg",
+          acl: "public-read"
+        )
         |> ExAws.request!()
     end
   end

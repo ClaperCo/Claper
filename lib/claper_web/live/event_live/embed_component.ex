@@ -9,11 +9,7 @@ defmodule ClaperWeb.EventLive.EmbedComponent do
         id="collapsed-embed"
         class="bg-black py-3 px-6 text-black shadow-lg mx-auto rounded-full w-max hidden"
       >
-        <div
-          class="block w-full cursor-pointer"
-          phx-click={toggle_embed()}
-          phx-target={@myself}
-        >
+        <div class="block w-full cursor-pointer" phx-click={toggle_embed()} phx-target={@myself}>
           <div class="text-white flex space-x-2 items-center">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -33,7 +29,10 @@ defmodule ClaperWeb.EventLive.EmbedComponent do
           </div>
         </div>
       </div>
-      <div id="extended-embed" class="bg-black w-full py-3 px-6 text-black shadow-lg rounded-md flex flex-col flex-1 min-h-0 h-full">
+      <div
+        id="extended-embed"
+        class="bg-black w-full py-3 px-6 text-black shadow-lg rounded-md flex flex-col flex-1 min-h-0 h-full"
+      >
         <div
           class="block w-full cursor-pointer flex-shrink-0"
           phx-click={toggle_embed()}

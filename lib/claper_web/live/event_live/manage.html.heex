@@ -295,7 +295,12 @@
                 </div>
               </a>
             </li>
-            <li :if={@event.presentation_file.length > 0} id="option-5" role="option" tabindex="-1">
+            <li
+              :if={@event.presentation_file.length > 0}
+              id="option-5"
+              role="option"
+              tabindex="-1"
+            >
               <button
                 phx-click="show-add-slide"
                 class="group flex select-none rounded-xl p-3 w-full hover:bg-gray-200 cursor-pointer"
@@ -437,10 +442,7 @@
                     ×
                   </button>
                   <div class="mt-1 h-1 bg-gray-200 rounded">
-                    <div
-                      class="h-1 bg-primary-500 rounded"
-                      style={"width: #{entry.progress}%"}
-                    >
+                    <div class="h-1 bg-primary-500 rounded" style={"width: #{entry.progress}%"}>
                     </div>
                   </div>
                 </div>
@@ -792,7 +794,14 @@
           class="flex-shrink-0 flex items-center justify-center w-16 h-full border-2 border-dashed border-gray-300 text-gray-400 hover:border-primary-500 hover:text-primary-500 transition-colors mx-1 rounded"
           title={gettext("Add slide")}
         >
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="2"
+            stroke="currentColor"
+            class="w-6 h-6"
+          >
             <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
           </svg>
         </button>
@@ -821,10 +830,7 @@
           data-tg-tour={"<p class='mb-3'>#{gettext("This section contains all your interactions.")}</p><p class='opacity-50 text-xs'>#{gettext("You can add interactions to your presentation slides.")}</p>"}
           data-tg-group="manage"
         >
-          <div
-            :if={@event.presentation_file.length > 0}
-            class="flex flex-col bg-white min-h-0"
-          >
+          <div :if={@event.presentation_file.length > 0} class="flex flex-col bg-white min-h-0">
             <p class="text-xs font-semibold text-gray-500 uppercase px-3 pt-3 pb-1 shrink-0">
               {gettext("Presenter notes")}
             </p>
