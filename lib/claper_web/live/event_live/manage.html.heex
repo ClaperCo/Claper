@@ -708,7 +708,7 @@
           data-tg-group="manage"
         >
           <!-- Interactions -->
-          <div class="h- overflow-y-auto @container">
+          <div class="h-full flex flex-col min-h-0 overflow-y-auto @container">
             <div
               :if={length(@interactions) == 0}
               class="text-center flex flex-col space-y-5 items-center justify-center text-gray-400 h-full md:pt-8"
@@ -751,8 +751,7 @@
               </button>
             </div>
             <div
-              class="grid grid-cols-1 @sm:grid-cols-2 @lg:grid-cols-3 gap-4 p-4 overflow-y-auto"
-              style="max-height: calc(100vh - 80px);"
+              class="grid grid-cols-1 @sm:grid-cols-2 @lg:grid-cols-3 gap-4 p-4 flex-1 overflow-y-auto min-h-0"
             >
               <%= for interaction <- @interactions do %>
                 <div class="bg-white rounded-lg p-3 shadow-base transition-all flex flex-col justify-between relative">
