@@ -36,10 +36,12 @@ export class Manager {
 
         switch (e.key) {
           case "ArrowLeft":
+          case "PageUp":
             e.preventDefault();
             this.prevPage();
             break;
           case "ArrowRight":
+          case "PageDown":
             e.preventDefault();
             this.nextPage();
             break;

@@ -116,12 +116,14 @@ export class Presenter {
             this.fullscreen();
             break;
           case "ArrowLeft":
+          case "PageUp":
             e.preventDefault();
             window.opener.dispatchEvent(
               new KeyboardEvent("keydown", { key: "ArrowLeft" })
             );
             break;
           case "ArrowRight":
+          case "PageDown":
             e.preventDefault();
             window.opener.dispatchEvent(
               new KeyboardEvent("keydown", { key: "ArrowRight" })
