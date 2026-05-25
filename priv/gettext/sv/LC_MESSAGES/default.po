@@ -1,0 +1,2919 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Claper\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-05-25 13:12+0000\n"
+"PO-Revision-Date: 2026-05-25 13:24+0000\n"
+"Last-Translator: \n"
+"Language-Team: Swedish\n"
+"Language: sv\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Loco-Source-Locale: sv\n"
+"X-Generator: Loco https://localise.biz/\n"
+"X-Loco-Parser: loco_parse_po"
+
+#: lib/claper_web/live/event_live/manage.html.heex:1449 
+#: lib/claper_web/live/event_live/manage.html.heex:1455 
+#: lib/claper_web/live/user_settings_live/show.ex:77
+#, elixir-format
+msgid "Settings"
+msgstr "Inställningar"
+
+#: lib/claper_web/live/admin_live/user_live.html.heex:74 
+#: lib/claper_web/live/admin_live/user_live.html.heex:254 
+#: lib/claper_web/live/admin_live/user_live/form_component.ex:18 
+#: lib/claper_web/live/event_live/manage.ex:844 
+#: lib/claper_web/live/form_live/form_component.html.heex:32 
+#: lib/claper_web/live/user_settings_live/show.html.heex:34 
+#: lib/claper_web/templates/user_registration/new.html.heex:29 
+#: lib/claper_web/templates/user_reset_password/new.html.heex:28 
+#: lib/claper_web/templates/user_session/new.html.heex:42
+#, elixir-format
+msgid "Email"
+msgstr "E-post"
+
+#: lib/claper_web/templates/user_registration/new.html.heex:12
+#, elixir-format
+msgid "Join the Claper experience"
+msgstr "Gå med i Claper-upplevelsen"
+
+#: lib/claper_web/templates/user_registration/new.html.heex:19 
+#: lib/claper_web/templates/user_reset_password/edit.html.heex:25 
+#: lib/claper_web/templates/user_reset_password/new.html.heex:19
+#, elixir-format
+msgid "Oops, check that all fields are filled in correctly."
+msgstr "Hoppsan! Kontrollera att alla fält är korrekt ifyllda."
+
+#: lib/claper_web/live/user_settings_live/show.html.heex:155 
+#: lib/claper_web/live/user_settings_live/show.html.heex:170
+#, elixir-format
+msgid "Change"
+msgstr "Ändra"
+
+#: lib/claper_web/live/admin_live/dashboard_live.html.heex:107 
+#: lib/claper_web/live/admin_live/event_live.html.heex:83 
+#: lib/claper_web/live/admin_live/event_live/form_component.ex:32 
+#: lib/claper_web/live/event_live/event_form_component.html.heex:309
+#, elixir-format
+msgid "Code"
+msgstr "Kod"
+
+#: lib/claper_web/live/user_settings_live/show.html.heex:146 
+#: lib/claper_web/templates/user_session/new.html.heex:40
+#, elixir-format
+msgid "Email address"
+msgstr "E-postadress"
+
+#: lib/claper_web/templates/layout/_user_menu.html.heex:23
+#, elixir-format
+msgid "Logout"
+msgstr "Logga ut"
+
+#: lib/claper_web/live/user_settings_live/show.html.heex:136
+#, elixir-format
+msgid "Personal informations"
+msgstr "Personlig information"
+
+#: lib/claper_web/templates/user_registration/confirm.html.heex:13
+#, elixir-format
+msgid "We already sent you an email to login, please retry in 5 minutes."
+msgstr "Vi har redan skickat ett e-postmeddelande för att logga in dig, försök igen om 5 minuter."
+
+#: lib/claper_web/templates/user_registration/confirm.html.heex:16
+#, elixir-format
+msgid "We sent you an email at"
+msgstr "Vi skickade ett e-postmeddelande till dig"
+
+#: lib/claper_web/live/event_live/show.html.heex:437
+#, elixir-format
+msgid "days"
+msgstr "dagar"
+
+#: lib/claper_web/live/event_live/show.html.heex:443
+#, elixir-format
+msgid "hours"
+msgstr "timmar"
+
+#: lib/claper_web/live/event_live/show.html.heex:449
+#, elixir-format
+msgid "minutes"
+msgstr "minuter"
+
+#: lib/claper_web/live/event_live/show.html.heex:165
+#, elixir-format
+msgid "Be the first to react !"
+msgstr "Var den första att reagera!"
+
+#: lib/claper_web/live/event_live/event_card_component.ex:111 
+#: lib/claper_web/live/event_live/join.ex:41 
+#: lib/claper_web/live/event_live/join.html.heex:94 
+#: lib/claper_web/live/event_live/manage.html.heex:492 
+#: lib/claper_web/live/event_live/show.html.heex:286
+#, elixir-format
+msgid "Join"
+msgstr "Gå med"
+
+#: lib/claper_web/live/admin_live/dashboard_live.ex:22 
+#: lib/claper_web/live/admin_live/dashboard_live.html.heex:3 
+#: lib/claper_web/live/event_live/index.ex:223 
+#: lib/claper_web/live/event_live/join.html.heex:31 
+#: lib/claper_web/live/event_live/join.html.heex:54 
+#: lib/claper_web/templates/layout/admin.html.heex:198
+#, elixir-format
+msgid "Dashboard"
+msgstr "Instrumentpanel"
+
+#: lib/claper_web/live/event_live/post_component.ex:33 
+#: lib/claper_web/live/event_live/post_component.ex:112
+#, elixir-format
+msgid "Host"
+msgstr "Värd"
+
+#: lib/claper_web/live/event_live/show.html.heex:455
+#, elixir-format
+msgid "seconds"
+msgstr "sekunder"
+
+#: lib/claper_web/live/event_live/event_card_component.ex:60 
+#: lib/claper_web/live/event_live/index.html.heex:187
+#, elixir-format
+msgid "Finished"
+msgstr "Avslutad"
+
+#: lib/claper_web/live/event_live/event_card_component.ex:90
+#, elixir-format
+msgid "Finished on"
+msgstr "Avslutades"
+
+#: lib/claper_web/live/event_live/event_card_component.ex:55
+#, elixir-format
+msgid "Incoming"
+msgstr "Inkommande"
+
+#: lib/claper_web/live/event_live/show.html.heex:26
+#, elixir-format
+msgid "Leave"
+msgstr "Lämna"
+
+#: lib/claper_web/live/event_live/presenter.html.heex:26 
+#: lib/claper_web/live/event_live/show.html.heex:464
+#, elixir-format
+msgid "Scan to interact in real-time"
+msgstr "Skanna för att interagera i realtid"
+
+#: lib/claper_web/live/event_live/event_card_component.ex:86
+#, elixir-format
+msgid "Starting on"
+msgstr "Startar den"
+
+#: lib/claper_web/live/event_live/event_form_component.ex:268
+#, elixir-format
+msgid "Updated successfully"
+msgstr "Uppdaterades"
+
+#: lib/claper_web/templates/user_session/new.html.heex:22
+#, elixir-format
+msgid "It's time to empower your presentations."
+msgstr "Det är dags att boosta dina presentationer."
+
+#: lib/claper_web/templates/error/404.html.heex:36 
+#: lib/claper_web/templates/error/500.html.heex:37
+#, elixir-format
+msgid "Return to home"
+msgstr "Tillbaka till start"
+
+#: lib/claper_web/live/event_live/event_form_component.ex:212 
+#: lib/claper_web/live/event_live/event_form_component.ex:248
+#, elixir-format
+msgid "Created successfully"
+msgstr "Skapades"
+
+#: lib/claper_web/live/admin_live/event_live.html.heex:259 
+#: lib/claper_web/live/admin_live/oidc_provider_live.html.heex:240 
+#: lib/claper_web/live/admin_live/user_live.html.heex:240 
+#: lib/claper_web/live/event_live/event_card_component.ex:250 
+#: lib/claper_web/live/event_live/event_card_component.ex:330 
+#: lib/claper_web/live/event_live/form_component.ex:97 
+#: lib/claper_web/live/event_live/index.ex:204
+#, elixir-format
+msgid "Edit"
+msgstr "Redigera"
+
+#: lib/claper_web/live/embed_live/form_component.html.heex:63 
+#: lib/claper_web/live/event_live/event_form_component.html.heex:55 
+#: lib/claper_web/live/event_live/event_form_component.html.heex:62 
+#: lib/claper_web/live/event_live/index.ex:213 
+#: lib/claper_web/live/event_live/index.html.heex:94 
+#: lib/claper_web/live/form_live/form_component.html.heex:93 
+#: lib/claper_web/live/poll_live/form_component.html.heex:102 
+#: lib/claper_web/live/quiz_live/quiz_component.html.heex:187
+#, elixir-format
+msgid "Create"
+msgstr "Skapa"
+
+#: lib/claper_web/live/embed_live/form_component.html.heex:68 
+#: lib/claper_web/live/event_live/event_card_component.ex:444 
+#: lib/claper_web/live/event_live/event_form_component.html.heex:67 
+#: lib/claper_web/live/event_live/manage.html.heex:1397 
+#: lib/claper_web/live/event_live/manageable_post_component.ex:92 
+#: lib/claper_web/live/event_live/post_component.ex:70 
+#: lib/claper_web/live/event_live/post_component.ex:142 
+#: lib/claper_web/live/form_live/form_component.html.heex:98 
+#: lib/claper_web/live/poll_live/form_component.html.heex:107 
+#: lib/claper_web/live/quiz_live/quiz_component.html.heex:123 
+#: lib/claper_web/live/quiz_live/quiz_component.html.heex:193
+#, elixir-format
+msgid "Delete"
+msgstr "Ta bort"
+
+#: lib/claper_web/live/embed_live/form_component.html.heex:64 
+#: lib/claper_web/live/event_live/event_form_component.html.heex:54 
+#: lib/claper_web/live/event_live/event_form_component.html.heex:61 
+#: lib/claper_web/live/form_live/form_component.html.heex:94 
+#: lib/claper_web/live/poll_live/form_component.html.heex:103 
+#: lib/claper_web/live/quiz_live/quiz_component.html.heex:188 
+#: lib/claper_web/live/user_settings_live/show.html.heex:38 
+#: lib/claper_web/live/user_settings_live/show.html.heex:80 
+#: lib/claper_web/live/user_settings_live/show.html.heex:123
+#, elixir-format
+msgid "Save"
+msgstr "Spara"
+
+#: lib/claper_web/live/user_settings_live/show.ex:137
+#, elixir-format
+msgid "A link to confirm your email change has been sent to the new address."
+msgstr "En länk för att bekräfta din ändrade e-postadress har skickats till den nya adressen."
+
+#: lib/claper_web/live/user_settings_live/show.ex:53
+#, elixir-format
+msgid "Change the email address you want associated with your account."
+msgstr "Ändra den e-postadress du vill koppla till ditt konto."
+
+#: lib/claper_web/live/user_settings_live/show.ex:50
+#, elixir-format
+msgid "Update your email"
+msgstr "Uppdatera din e-postadress"
+
+#: lib/claper_web/notifiers/user_notifier.ex:12 
+#: lib/claper_web/templates/user_notifier/magic.html.heex:17
+#, elixir-format
+msgid "Connect to Claper"
+msgstr "Anslut till Claper"
+
+#: lib/claper_web/templates/user_notifier/magic.html.heex:29
+#, elixir-format
+msgid "ACCESS TO MY ACCOUNT"
+msgstr "ÅTKOMST TILL MITT KONTO"
+
+#: lib/claper_web/notifiers/user_notifier.ex:34
+#, elixir-format
+msgid "Update email instructions"
+msgstr "Instruktioner för att uppdatera e-postadress"
+
+#: lib/claper_web/templates/user_notifier/change.html.heex:29
+#, elixir-format
+msgid "CONFIRM EMAIL"
+msgstr "BEKRÄFTA E-POSTADRESS"
+
+#: lib/claper_web/templates/user_notifier/confirm.html.heex:32 
+#: lib/claper_web/templates/user_notifier/magic.html.heex:32 
+#: lib/claper_web/templates/user_notifier/reset.html.heex:32
+#, elixir-format
+msgid "If you didn't create an account with us, please ignore this."
+msgstr "Om du inte skapade ett konto hos oss, vänligen ignorera detta."
+
+#: lib/claper_web/templates/user_notifier/magic.html.heex:22
+#, elixir-format
+msgid "You can log into your account by clicking here."
+msgstr "Du kan logga in på ditt konto genom att klicka här."
+
+#: lib/claper_web/live/event_live/event_form_component.html.heex:71 
+#: lib/claper_web/live/event_live/post_component.ex:75 
+#: lib/claper_web/live/event_live/post_component.ex:147
+#, elixir-format
+msgid "Are you sure?"
+msgstr "Är du säker?"
+
+#: lib/claper_web/live/event_live/event_form_component.html.heex:192
+#, elixir-format
+msgid "Presentation attached"
+msgstr "Presentation bifogad"
+
+#: lib/claper_web/live/event_live/event_form_component.html.heex:152
+#, elixir-format
+msgid "Presentation uploaded"
+msgstr "Presentation uppladdad"
+
+#: lib/claper_web/live/event_live/event_form_component.html.heex:163 
+#: lib/claper_web/live/event_live/event_form_component.html.heex:261 
+#: lib/claper_web/live/event_live/event_form_component.html.heex:391 
+#: lib/claper_web/live/event_live/event_form_component.html.heex:415
+#, elixir-format
+msgid "Remove"
+msgstr "Ta bort"
+
+#: lib/claper_web/live/event_live/event_form_component.html.heex:173
+#, elixir-format
+msgid "Select your presentation"
+msgstr "Välj din presentation"
+
+#: lib/claper_web/live/event_live/event_form_component.html.heex:115
+#, elixir-format
+msgid "Upload a file"
+msgstr "Ladda upp en fil"
+
+#: lib/claper_web/live/event_live/event_form_component.html.heex:119
+#, elixir-format
+msgid "or drag and drop"
+msgstr "eller dra och släpp"
+
+#: lib/claper_web/live/event_live/event_form_component.ex:322
+#, elixir-format
+msgid "You have selected an incorrect file type"
+msgstr "Du har valt en felaktig filtyp"
+
+#: lib/claper_web/live/event_live/event_form_component.ex:321
+#, elixir-format
+msgid "Your file is too large"
+msgstr "Din fil är för stor"
+
+#: lib/claper_web/live/event_live/event_form_component.html.heex:202
+#, elixir-format
+msgid "Change file"
+msgstr "Byt fil"
+
+#: lib/claper_web/live/event_live/event_form_component.html.heex:238
+#, elixir-format
+msgid "Presentation replaced"
+msgstr "Presentation ersatt"
+
+#: lib/claper_web/live/event_live/manage.html.heex:305
+#, elixir-format
+msgid "Edit poll"
+msgstr "Redigera omröstning"
+
+#: lib/claper_web/live/event_live/manage.html.heex:304
+#, elixir-format
+msgid "New poll"
+msgstr "Ny omröstning"
+
+#: lib/claper_web/live/poll_live/form_component.html.heex:14
+#, elixir-format
+msgid "Title of your poll"
+msgstr "Titel på din omröstning"
+
+#: lib/claper_web/live/event_live/event_form_component.ex:323
+#, elixir-format
+msgid "Upload failed"
+msgstr "Uppladdningen misslyckades"
+
+#: lib/claper_web/live/event_live/manage.html.heex:197
+#, elixir-format
+msgid "Add poll to know opinion of your public."
+msgstr "Lägg till en omröstning för att veta publikens åsikt."
+
+#: lib/claper_web/live/event_live/manage.html.heex:194 
+#: lib/claper_web/live/event_live/manage.html.heex:780
+#, elixir-format
+msgid "Poll"
+msgstr "Omröstning"
+
+#: lib/claper_web/live/poll_live/form_component.html.heex:26
+#, elixir-format
+msgid "Choice %{count}"
+msgid_plural "Choice %{count}"
+msgstr[0] "Val %{count}"
+msgstr[1] "Val %{count}"
+
+#: lib/claper_web/live/event_live/poll_component.ex:47
+#, elixir-format
+msgid "Current poll"
+msgstr "Nuvarande omröstning"
+
+#: lib/claper_web/live/event_live/poll_component.ex:28
+#, elixir-format
+msgid "See current poll"
+msgstr "Se nuvarande omröstning"
+
+#: lib/claper_web/live/event_live/poll_component.ex:127 
+#: lib/claper_web/live/event_live/poll_component.ex:135
+#, elixir-format
+msgid "Vote"
+msgstr "Rösta"
+
+#: lib/claper_web/live/event_live/event_form_component.html.heex:380 
+#: lib/claper_web/live/event_live/event_form_component.html.heex:398
+#, elixir-format
+msgid "User email address"
+msgstr "Användarens e-postadress"
+
+#: lib/claper_web/live/event_live/event_form_component.html.heex:217
+#, elixir-format
+msgid ""
+"Changing your file will remove all interaction elements like polls "
+"associated."
+msgstr ""
+"Att byta fil kommer att ta bort alla interaktionselement såsom "
+"associerade omröstningar."
+
+#: lib/claper_web/live/event_live/manage.html.heex:1213
+#, elixir-format
+msgid "Messages from attendees will appear here."
+msgstr "Meddelanden från deltagare kommer att visas här."
+
+#: lib/claper_web/live/event_live/event_card_component.ex:344
+#, elixir-format
+msgid "Processing your file..."
+msgstr "Bearbetar din fil..."
+
+#: lib/claper_web/live/poll_live/form_component.html.heex:114
+#, elixir-format
+msgid ""
+"This will delete all responses associated and the poll itself, are you sure?"
+msgstr ""
+"Detta kommer att radera alla svar som är kopplade och själva omröstningen, är du säker?"
+
+#: lib/claper_web/live/event_live/show.html.heex:345
+#, elixir-format
+msgid "Ask, comment..."
+msgstr "Fråga, kommentera..."
+
+#: lib/claper_web/live/event_live/manage.html.heex:1159 
+#: lib/claper_web/live/stat_live/index.html.heex:102 
+#: lib/claper_web/live/stat_live/index.html.heex:180
+#, elixir-format
+msgid "Messages"
+msgstr "Meddelanden"
+
+#: lib/claper_web/live/event_live/event_form_component.html.heex:363
+#, elixir-format
+msgid "Add facilitator"
+msgstr "Lägg till facilitator"
+
+#: lib/claper_web/templates/error/404.html.heex:31
+#, elixir-format
+msgid "Oops, page doesn't exist."
+msgstr "Hoppsan! Sidan finns inte."
+
+#: lib/claper_web/templates/error/500.html.heex:31
+#, elixir-format
+msgid "The site is under maintenance, we'll be back very soon!"
+msgstr "Webbplatsen underhålls just nu. Vi är snart tillbaka!"
+
+#: lib/claper_web/live/event_live/event_form_component.html.heex:342
+#, elixir-format
+msgid "Facilitators can present and manage interactions"
+msgstr "Facilitatorer kan presentera och hantera interaktioner"
+
+#: lib/claper_web/templates/leader_notifier/invitation.html.heex:45 
+#: lib/claper_web/templates/user_notifier/change.html.heex:42 
+#: lib/claper_web/templates/user_notifier/confirm.html.heex:42 
+#: lib/claper_web/templates/user_notifier/magic.html.heex:42 
+#: lib/claper_web/templates/user_notifier/reset.html.heex:42
+#, elixir-format
+msgid ""
+"If you’re having trouble with the button above, copy and paste the URL below "
+"into your web browser"
+msgstr ""
+"Om du har problem med knappen ovan, kopiera och klistra in URL:en nedan i din webbläsare"
+
+#: lib/claper_web/live/event_live/manage.html.heex:750 
+#: lib/claper_web/live/event_live/manage.html.heex:1124
+#, elixir-format
+msgid "Add interaction"
+msgstr "Lägg till interaktion"
+
+#: lib/claper_web/live/event_live/manageable_post_component.ex:54 
+#: lib/claper_web/live/event_live/manageable_post_component.ex:83
+#, elixir-format
+msgid ""
+"Blocking this user will delete all his messages and he will not be able to "
+"join again, confirm ?"
+msgstr ""
+"Om du blockerar denna användare kommer detta att radera alla hens meddelanden "
+"och hen kommer inte att kunna gå med igen. Är du säker?"
+
+#: lib/claper_web/live/event_live/show.ex:64 
+#: lib/claper_web/live/event_live/show.ex:219 
+#: lib/claper_web/live/event_live/show.ex:234
+#, elixir-format
+msgid "You have been banned from this event"
+msgstr "Du har blivit avstängd från detta evenemang"
+
+#: lib/claper_web/live/event_live/manageable_post_component.ex:48 
+#: lib/claper_web/live/event_live/manageable_post_component.ex:77
+#, elixir-format
+msgid "Ban"
+msgstr "Blockera"
+
+#: lib/claper_web/templates/user_registration/confirm.html.heex:18
+#, elixir-format
+msgid ", click on the provided link to connect (check your spam !)"
+msgstr ", klicka på den bifogade länken för att ansluta (kolla din skräppost!)"
+
+#: lib/claper_web/templates/user_notifier/welcome.html.heex:29
+#, elixir-format
+msgid ""
+"<span style='font-weight: 700'>Export your current presentation</span> to "
+"PDF from your favorite slide presentation software (PowerPoint, etc)"
+msgstr ""
+"<span style='font-weight: 700'>Exportera din nuvarande presentation</span> till " 
+"PDF från din favoritprogramvara för bildpresentation (PowerPoint, etc)"
+
+#: lib/claper_web/templates/user_notifier/welcome.html.heex:50
+#, elixir-format
+msgid ""
+"<span style='font-weight: 700'>Wait few minutes</span> for your file to be "
+"processed"
+msgstr ""
+"<span style='font-weight: 700'>Vänta några minuter</span> för att din fil ska "
+"bearbetas"
+
+#: lib/claper_web/templates/user_notifier/welcome.html.heex:43
+#, elixir-format
+msgid ""
+"Choose <span style='font-weight: 700'>a name</span> for your event, <span "
+"style='font-weight: 700'>a code</span> for your attendees to join and <span "
+"style='font-weight: 700'>dates when your attendees could start "
+"interacting</span>"
+msgstr ""
+"Välj <span style='font-weight: 700'>ett namn</span> för ditt evenemang, <span "
+"style='font-weight: 700'>en kod</span> för dina deltagare att gå med och <span "
+"style='font-weight: 700'>datum när dina deltagare kan börja "
+"interagera</span>"
+
+#: lib/claper_web/templates/user_notifier/welcome.html.heex:64
+#, elixir-format
+msgid ""
+"Click <span style='font-weight: 700'>Start</span> to open your presentation "
+"and move the window on the big screen"
+msgstr ""
+"Klicka på <span style='font-weight: 700'>Start</span> för att öppna din presentation "
+"och flytta fönstret till den stora skärmen"
+
+#: lib/claper_web/templates/user_notifier/welcome.html.heex:57
+#, elixir-format
+msgid ""
+"Click on <span style='font-weight: 700'>Present/Customize</span> to add "
+"interaction on your slides"
+msgstr ""
+"Klicka på <span style='font-weight: 700'>Presentera/Anpassa</span> för att lägga till "
+"interaktion i dina bilder"
+
+#: lib/claper_web/templates/user_notifier/welcome.html.heex:22
+#, elixir-format
+msgid ""
+"Congrats! You've taken the first step to improving your presentations. Here "
+"are the next steps to create step up your presentations with Claper:"
+msgstr ""
+"Grattis! Du har tagit det första steget för att förbättra dina presentationer. Här "
+"är nästa steg för att ta dina presentationer till nästa nivå med Claper:"
+
+#: lib/claper_web/templates/user_notifier/welcome.html.heex:69
+#, elixir-format
+msgid "Enjoy ! ✨"
+msgstr "Mycket nöje! ✨"
+
+#: lib/claper_web/templates/user_registration/confirm.html.heex:20
+#, elixir-format
+msgid ""
+"We sent you an email, click on the provided link to connect (check your spam "
+"!)"
+msgstr ""
+"Vi har skickat ett e-postmeddelande till dig, klicka på den bifogade länken "
+"för att ansluta (kolla din skräppost!)"
+
+#: lib/claper_web/templates/user_notifier/welcome.html.heex:17
+#, elixir-format
+msgid "Welcome !"
+msgstr "Välkommen !"
+
+#: lib/claper_web/templates/user_notifier/welcome.html.heex:36
+#, elixir-format
+msgid ""
+"Click on the <span style='font-weight: 700'>create button</span> on your "
+"dashboard"
+msgstr ""
+"Klicka på <span style='font-weight: 700'>skapa-knappen</span> på din "
+"instrumentpanel"
+
+#: lib/claper_web/notifiers/user_notifier.ex:23
+#, elixir-format
+msgid "Next steps to boost your presentations"
+msgstr "Nästa steg för att förbättra dina presentationer"
+
+#: lib/claper_web/live/stat_live/index.html.heex:109
+#, elixir-format
+msgid "from %{count} people"
+msgid_plural "from %{count} peoples"
+msgstr[0] "från %{count} person"
+msgstr[1] "från %{count} personer"
+
+#: lib/claper_web/live/stat_live/index.html.heex:15
+#, elixir-format
+msgid "Event"
+msgstr "Evenemang"
+
+#: lib/claper_web/live/stat_live/index.html.heex:386
+#, elixir-format
+msgid "No messages has been sent"
+msgstr "Inga meddelanden har skickats"
+
+#: lib/claper_web/live/event_live/event_card_component.ex:426
+#, elixir-format
+msgid ""
+"This will delete all data related to your event, this cannot be undone. "
+"Confirm ?"
+msgstr ""
+"Detta kommer att radera all data relaterad till ditt evenemang, detta kan inte "
+"återställas. Är du säker?"
+
+#: lib/claper_web/live/stat_live/index.html.heex:45 
+#: lib/claper_web/live/stat_live/index.html.heex:77
+#, elixir-format
+msgid "attendee"
+msgid_plural "attendees"
+msgstr[0] "deltagare"
+msgstr[1] "deltagare"
+
+#: lib/claper_web/live/stat_live/index.html.heex:38
+#, elixir-format
+msgid "Audience peak"
+msgstr "Publikrekord"
+
+#: lib/claper_web/live/stat_live/index.html.heex:139
+#, elixir-format
+msgid "Engagement rate"
+msgstr "Engagemangsgrad"
+
+#: lib/claper_web/live/event_live/event_card_component.ex:282
+#, elixir-format
+msgid "Error when processing the file"
+msgstr "Fel vid bearbetning av filen"
+
+#: lib/claper_web/live/event_live/join.html.heex:24 
+#: lib/claper_web/live/event_live/join.html.heex:47
+#, elixir-format
+msgid "About"
+msgstr "Om"
+
+#: lib/claper_web/live/event_live/join.html.heex:38 
+#: lib/claper_web/live/event_live/join.html.heex:61 
+#: lib/claper_web/templates/user_session/new.html.heex:62
+#, elixir-format
+msgid "Login"
+msgstr "Logga in"
+
+#: lib/claper_web/templates/user_session/new.html.heex:25
+#, elixir-format
+msgid "Connect to your account"
+msgstr "Anslut till ditt konto"
+
+#: lib/claper_web/live/event_live/show.html.heex:473
+#, elixir-format
+msgid "Or use the code:"
+msgstr "Eller använd koden:"
+
+#: lib/claper_web/templates/user_registration/new.html.heex:46 
+#: lib/claper_web/templates/user_session/new.html.heex:84
+#, elixir-format
+msgid "Create account"
+msgstr "Skapa konto"
+
+#: lib/claper_web/live/admin_live/user_live/form_component.ex:32 
+#: lib/claper_web/live/user_settings_live/show.html.heex:161 
+#: lib/claper_web/templates/user_registration/new.html.heex:37 
+#: lib/claper_web/templates/user_reset_password/edit.html.heex:34 
+#: lib/claper_web/templates/user_session/new.html.heex:50 
+#: lib/claper_web/templates/user_session/new.html.heex:52
+#, elixir-format
+msgid "Password"
+msgstr "Lösenord"
+
+#: lib/claper_web/live/user_settings_live/show.ex:62
+#, elixir-format
+msgid "Change the password used to access your account."
+msgstr "Byt lösenordet som används för att komma åt ditt konto."
+
+#: lib/claper_web/live/user_settings_live/show.html.heex:70
+#, elixir-format
+msgid "Current password"
+msgstr "Nuvarande lösenord"
+
+#: lib/claper_web/live/user_settings_live/show.html.heex:76 
+#: lib/claper_web/live/user_settings_live/show.html.heex:112
+#, elixir-format
+msgid "New password"
+msgstr "Nytt lösenord"
+
+#: lib/claper_web/live/user_settings_live/show.ex:59
+#, elixir-format
+msgid "Update your password"
+msgstr "Uppdatera ditt lösenord"
+
+#: lib/claper_web/live/user_settings_live/show.ex:159
+#, elixir-format
+msgid "Your password has been updated."
+msgstr "Ditt lösenord har uppdaterats."
+
+#: lib/claper_web/live/form_live/form_component.html.heex:26
+#, elixir-format
+msgid "Field %{count}"
+msgid_plural "Field %{count}"
+msgstr[0] "Fält %{count}"
+msgstr[1] "Fält %{count}"
+
+#: lib/claper_web/live/event_live/manage.html.heex:230
+#, elixir-format
+msgid "Add form to collect data from your public."
+msgstr "Lägg till ett formulär för att samla in data från din publik."
+
+#: lib/claper_web/live/event_live/form_component.ex:51
+#, elixir-format
+msgid "Current form"
+msgstr "Nuvarande formulär"
+
+#: lib/claper_web/live/event_live/manage.html.heex:326
+#, elixir-format
+msgid "Edit form"
+msgstr "Redigera formulär"
+
+#: lib/claper_web/live/event_live/manage.html.heex:227 
+#: lib/claper_web/live/event_live/manage.html.heex:824 
+#: lib/claper_web/live/event_live/manage.html.heex:1409
+#, elixir-format
+msgid "Form"
+msgstr "Formulär"
+
+#: lib/claper_web/live/event_live/manage.html.heex:1183
+#, elixir-format
+msgid "Form submissions"
+msgstr "Formulärsvar"
+
+#: lib/claper_web/live/event_live/manage.html.heex:1382
+#, elixir-format
+msgid "Form submissions from attendees will appear here."
+msgstr "Formulärsvar från deltagare kommer att visas här."
+
+#: lib/claper_web/live/admin_live/dashboard_live.html.heex:106 
+#: lib/claper_web/live/admin_live/event_live.html.heex:74 
+#: lib/claper_web/live/admin_live/event_live.html.heex:273 
+#: lib/claper_web/live/admin_live/event_live/form_component.ex:19 
+#: lib/claper_web/live/admin_live/oidc_provider_live.html.heex:74 
+#: lib/claper_web/live/admin_live/oidc_provider_live.html.heex:254 
+#: lib/claper_web/live/admin_live/oidc_provider_live/form_component.ex:24 
+#: lib/claper_web/live/event_live/manage.ex:843
+#, elixir-format
+msgid "Name"
+msgstr "Namn"
+
+#: lib/claper_web/live/event_live/manage.html.heex:325
+#, elixir-format
+msgid "New form"
+msgstr "Nytt formulär"
+
+#: lib/claper_web/live/stat_live/index.html.heex:305
+#, elixir-format
+msgid "No form submission has been sent"
+msgstr "Inga formulärsvar har skickats"
+
+#: lib/claper_web/live/event_live/form_component.ex:32
+#, elixir-format
+msgid "See current form"
+msgstr "Se nuvarande formulär"
+
+#: lib/claper_web/live/event_live/form_component.ex:97 
+#: lib/claper_web/live/event_live/quiz_component.ex:183
+#, elixir-format
+msgid "Submit"
+msgstr "Skicka in"
+
+#: lib/claper_web/live/form_live/form_component.html.heex:32
+#, elixir-format
+msgid "Text"
+msgstr "Text"
+
+#: lib/claper_web/live/event_live/manage.html.heex:1402
+#, elixir-format
+msgid "This cannot be undone, confirm ?"
+msgstr "Detta kan inte ångras, bekräfta?"
+
+#: lib/claper_web/live/form_live/form_component.html.heex:105
+#, elixir-format
+msgid ""
+"This will delete all responses associated and the form itself, are you sure?"
+msgstr ""
+"Detta kommer att radera alla svar som är kopplade och själva formuläret, är du säker?"
+
+#: lib/claper_web/live/form_live/form_component.html.heex:14
+#, elixir-format
+msgid "Title of your form"
+msgstr "Titel på ditt formulär"
+
+#: lib/claper_web/live/form_live/form_component.html.heex:34
+#, elixir-format
+msgid "Type"
+msgstr "Typ"
+
+#: lib/claper_web/live/event_live/poll_component.ex:52
+#, elixir-format
+msgid "Select one option"
+msgstr "Ange ett alternativ"
+
+#: lib/claper_web/live/event_live/poll_component.ex:50
+#, elixir-format
+msgid "Select one or multiple options"
+msgstr "Ange ett eller flera alternativ"
+
+#: lib/claper_web/live/poll_live/form_component.html.heex:92
+#, elixir-format
+msgid "Multiple answers"
+msgstr "Flera svar"
+
+#: lib/claper_web/live/event_live/event_form_component.html.heex:122
+#, elixir-format
+msgid "PDF, PPT, PPTX up to %{size} MB"
+msgstr "PDF, PPT, PPTX upp till %{size} MB"
+
+#: lib/claper_web/live/event_live/manager_settings_component.ex:482
+#, elixir-format
+msgid "Enable messages"
+msgstr "Aktivera meddelanden"
+
+#: lib/claper_web/live/event_live/manager_settings_component.ex:305
+#, elixir-format
+msgid "Show messages"
+msgstr "Visa meddelanden"
+
+#: lib/claper_web/live/event_live/show.html.heex:365
+#, elixir-format
+msgid "Messages deactivated"
+msgstr "Meddelanden inaktiverade"
+
+#: lib/claper_web/live/event_live/show.html.heex:208 
+#: lib/claper_web/live/event_live/show.html.heex:229 
+#: lib/claper_web/live/event_live/show.html.heex:329
+#, elixir-format
+msgid "Anonymous"
+msgstr "Anonym"
+
+#: lib/claper_web/live/event_live/show.html.heex:255 
+#: lib/claper_web/templates/lti/launch/error.html.heex:17
+#, elixir-format
+msgid "Close"
+msgstr "Stäng"
+
+#: lib/claper_web/live/event_live/show.html.heex:236 
+#: lib/claper_web/live/event_live/show.html.heex:281
+#, elixir-format
+msgid "Enter your name"
+msgstr "Ange ditt namn"
+
+#: lib/claper_web/live/event_live/presenter.html.heex:38
+#, elixir-format
+msgid "Or go to %{url} and use the code:"
+msgstr "Eller gå till %{url} och använd koden:"
+
+#: lib/claper_web/live/event_live/show.html.heex:249
+#, elixir-format
+msgid "Use your name"
+msgstr "Använd ditt namn"
+
+#: lib/claper_web/live/event_live/show.html.heex:229
+#, elixir-format
+msgid "disabled"
+msgstr "inaktiverade"
+
+#: lib/claper_web/controllers/user_registration_controller.ex:14
+#, elixir-format
+msgid "Account creation is disabled"
+msgstr "Kontoskapande är inaktiverat"
+
+#: lib/claper_web/live/event_live/manage.html.heex:261
+#, elixir-format
+msgid "Add a Youtube video or any web content."
+msgstr "Lägg till en Youtube-video eller annat webbinnehåll."
+
+#: lib/claper_web/templates/user_reset_password/edit.html.heex:51
+#, elixir-format
+msgid "Confirm new password"
+msgstr "Bekräfta nytt lösenord"
+
+#: lib/claper_web/templates/user_session/new.html.heex:79
+#, elixir-format
+msgid "Forgot your password?"
+msgstr "Glömt ditt lösenord?"
+
+#: lib/claper_web/controllers/user_reset_password_controller.ex:26
+#, elixir-format
+msgid ""
+"If your email is in our system, you'll receive instructions to reset your "
+"password shortly."
+msgstr ""
+"Om din e-post finns i vårt system, kommer du att få instruktioner för att "
+"återställa ditt lösenord inom kort."
+
+#: lib/claper_web/templates/user_reset_password/edit.html.heex:42
+#, elixir-format
+msgid "Password confirmation"
+msgstr "Bekräfta lösenord"
+
+#: lib/claper_web/controllers/user_reset_password_controller.ex:44
+#, elixir-format
+msgid "Password updated successfully."
+msgstr "Lösenordet har uppdaterats"
+
+#: lib/claper_web/controllers/user_reset_password_controller.ex:59
+#, elixir-format
+msgid "Reset password link is invalid or it has expired."
+msgstr "Återställningslänken är ogiltig eller har gått ut."
+
+#: lib/claper_web/templates/user_reset_password/edit.html.heex:12 
+#: lib/claper_web/templates/user_reset_password/new.html.heex:12
+#, elixir-format
+msgid "Reset your password"
+msgstr "Återställ ditt lösenord"
+
+#: lib/claper_web/templates/user_reset_password/new.html.heex:36
+#, elixir-format
+msgid "Send link to reset password"
+msgstr "Skicka länk för att återställa lösenord"
+
+#: lib/claper_web/live/event_live/embed_component.ex:55
+#, elixir-format
+msgid "Current web content"
+msgstr "Nuvarande webbinnehåll"
+
+#: lib/claper_web/live/event_live/manage.html.heex:347
+#, elixir-format
+msgid "Edit web content"
+msgstr "Redigera webbinnehåll"
+
+#: lib/claper_web/live/event_live/manage.html.heex:346
+#, elixir-format
+msgid "New web content"
+msgstr "Nytt webbinnehåll"
+
+#: lib/claper_web/live/event_live/embed_component.ex:32
+#, elixir-format
+msgid "See current web content"
+msgstr "Se nuvarande webbinnehåll"
+
+#: lib/claper_web/live/embed_live/form_component.html.heex:74
+#, elixir-format
+msgid "This will delete the web content, are you sure?"
+msgstr "Detta kommer att radera webbinnehållet, är du säker?"
+
+#: lib/claper_web/live/embed_live/form_component.html.heex:14 
+#: lib/claper_web/live/quiz_live/quiz_component.html.heex:14
+#, elixir-format
+msgid "Title"
+msgstr "Titel"
+
+#: lib/claper_web/live/event_live/manage.html.heex:259 
+#: lib/claper_web/live/event_live/manage.html.heex:866
+#, elixir-format
+msgid "Web content"
+msgstr "Webbinnehåll"
+
+#: lib/claper_web/live/event_live/manageable_post_component.ex:38 
+#: lib/claper_web/live/event_live/manageable_post_component.ex:67
+#, elixir-format
+msgid "Pin"
+msgstr "Fäst"
+
+#: lib/claper_web/live/event_live/post_component.ex:59 
+#: lib/claper_web/live/event_live/post_component.ex:175
+#, elixir-format
+msgid "Pinned"
+msgstr "Fäst"
+
+#: lib/claper_web/live/event_live/manage.html.heex:1175
+#, elixir-format
+msgid "Pinned messages"
+msgstr "Fästa meddelanden"
+
+#: lib/claper_web/live/event_live/manage.html.heex:1336
+#, elixir-format
+msgid "Pinned messages will appear here."
+msgstr "Fästa meddelanden kommer att visas här."
+
+#: lib/claper_web/live/event_live/manager_settings_component.ex:360
+#, elixir-format
+msgid "Show only pinned messages"
+msgstr "Visa endast fästa meddelanden"
+
+#: lib/claper_web/live/event_live/manageable_post_component.ex:36 
+#: lib/claper_web/live/event_live/manageable_post_component.ex:65
+#, elixir-format
+msgid "Unpin"
+msgstr "Ta bort"
+
+#: lib/claper_web/templates/leader_notifier/invitation.html.heex:35
+#, elixir-format
+msgid "Login or create account"
+msgstr "Logga in eller skapa konto"
+
+#: lib/claper_web/templates/leader_notifier/invitation.html.heex:22
+#, elixir-format
+msgid "Someone invited you to manage the event: %{name}"
+msgstr "Någon har bjudit in dig att hantera evenemanget: %{name}"
+
+#: lib/claper_web/templates/leader_notifier/invitation.html.heex:25
+#, elixir-format
+msgid ""
+"To accept the invitation, please login or create an account with this email: "
+"%{email}"
+msgstr "För att acceptera inbjudan, vänligen logga in eller skapa ett konto med denna e-post: %{email}"
+
+#: lib/claper_web/templates/leader_notifier/invitation.html.heex:17
+#, elixir-format
+msgid "You have been invited"
+msgstr "Du har blivit inbjuden"
+
+#: lib/claper_web/notifiers/leader_notifier.ex:12
+#, elixir-format
+msgid "You have been invited to manage an event"
+msgstr "Du har blivit inbjuden att hantera ett evenemang"
+
+#: lib/claper_web/live/event_live/form_component.ex:114
+#, fuzzy
+#, elixir-format
+msgid "Saved"
+msgstr "Sparad"
+
+#: lib/claper_web/live/user_settings_live/show.html.heex:301
+#, elixir-format
+msgid "All your events and files will be permanently deleted, are you sure?"
+msgstr "Alla dina evenemang och filer kommer att raderas permanent! Är du säker?"
+
+#: lib/claper_web/live/event_live/event_card_component.ex:183
+#, elixir-format
+msgid ""
+"Are you sure you want to terminate this event? This action cannot be undone."
+msgstr "Är du säker på att du vill avsluta detta evenemang? Denna åtgärd kan inte ångras."
+
+#: lib/claper_web/live/event_live/event_card_component.ex:175
+#, elixir-format
+msgid "Attendees room"
+msgstr "Deltagarens rum"
+
+#: lib/claper_web/live/user_settings_live/show.html.heex:291
+#, elixir-format
+msgid "Be careful, these actions are irreversible"
+msgstr "Var försiktig, dessa åtgärder kan inte ångras"
+
+#: lib/claper_web/live/user_settings_live/show.html.heex:288
+#, elixir-format
+msgid "Danger zone"
+msgstr "Farozon"
+
+#: lib/claper_web/live/user_settings_live/show.html.heex:297
+#, elixir-format
+msgid "Delete account"
+msgstr "Radera konto"
+
+#: lib/claper_web/live/event_live/manage.html.heex:565
+#, elixir-format
+msgid "Open presentation"
+msgstr "Öppna presentation"
+
+#: lib/claper_web/live/event_live/event_card_component.ex:370
+#, elixir-format
+msgid "View report"
+msgstr "Visa rapport"
+
+#: lib/claper_web/controllers/user_registration_controller.ex:50
+#, elixir-format
+msgid "Your account has been deleted."
+msgstr "Ditt konto har raderats."
+
+#: lib/claper_web/live/event_live/event_form_component.html.heex:301
+#, elixir-format
+msgid "Access code"
+msgstr "Åtkomstkod"
+
+#: lib/claper_web/live/event_live/event_form_component.html.heex:84
+#, elixir-format
+msgid ""
+"Animations in PPT/PPTX files are not supported, which is why we recommend "
+"exporting your presentation to PDF to ensure it displays correctly."
+msgstr "Animationer i PPT/PPTX-filer stöds inte, därför rekommenderar vi att du exporterar din presentation till PDF för att säkerställa att den visas korrekt."
+
+#: lib/claper_web/live/event_live/manage.html.heex:1147
+#, elixir-format
+msgid "Attendees interactions"
+msgstr "Deltagarinteraktioner"
+
+#: lib/claper_web/live/event_live/event_form_component.html.heex:6 
+#: lib/claper_web/live/event_live/index.html.heex:107 
+#: lib/claper_web/live/event_live/manage.html.heex:428 
+#: lib/claper_web/live/event_live/quiz_component.ex:151 
+#: lib/claper_web/live/event_live/quiz_component.ex:198
+#, elixir-format
+msgid "Back"
+msgstr "Tillbaka"
+
+#: lib/claper_web/live/event_live/event_form_component.html.heex:336
+#, elixir-format
+msgid "Facilitators"
+msgstr "Facilitatorer"
+
+#: lib/claper_web/live/event_live/event_form_component.html.heex:7 
+#: lib/claper_web/live/event_live/index.html.heex:108 
+#: lib/claper_web/live/event_live/manage.html.heex:429 
+#: lib/claper_web/templates/lti/registration/success.html.heex:26
+#, elixir-format
+msgid "Finish"
+msgstr "Slutför"
+
+#: lib/claper_web/live/event_live/manage.html.heex:1149
+#, elixir-format
+msgid ""
+"Here you'll find all interactions from your attendees. You can manage "
+"messages, pinned messages, and submitted forms."
+msgstr ""
+"Här hittar du alla interaktioner från dina deltagare. Du kan hantera "
+"meddelanden, fästa meddelanden och inskickade formulär."
+
+
+#: lib/claper_web/live/event_live/manage.html.heex:1149
+#, elixir-format
+msgid "Identify users by their unique avatars."
+msgstr "Identifiera användare via deras unika avatarer."
+
+#: lib/claper_web/live/admin_live/audit_log_live.html.heex:40 
+#: lib/claper_web/live/event_live/event_form_component.html.heex:5 
+#: lib/claper_web/live/event_live/index.html.heex:106 
+#: lib/claper_web/live/event_live/manage.html.heex:427 
+#: lib/claper_web/live/event_live/manager_settings_component.ex:176 
+#: lib/claper_web/live/event_live/quiz_component.ex:161 
+#: lib/claper_web/live/event_live/quiz_component.ex:209
+#, fuzzy
+#, elixir-format
+msgid "Next"
+msgstr "Nästa"
+
+#: lib/claper_web/live/event_live/event_form_component.html.heex:84
+#, elixir-format
+msgid ""
+"Select your presentation file. Accepted formats are PDF, PPT, or PPTX. "
+"Ensure the file size does not exceed the maximum limit."
+msgstr "Välj din presentationsfil. Accepterade format är PDF, PPT eller PPTX. "
+"Se till att filstorleken inte överstiger den maximala storleken."
+
+#: lib/claper_web/live/event_live/manage.html.heex:545
+#, fuzzy
+#, elixir-format
+msgid "Time to launch your presentation!"
+msgstr "Dags att starta din presentation!"
+
+#: lib/claper_web/live/event_live/manage.html.heex:1451
+#, elixir-format
+msgid ""
+"Use the associated keyboard shortcuts for quick toggling of these settings."
+msgstr ""
+"Använd de associerade kortkommandona för att snabbt växla mellan dessa inställningar."
+
+#: lib/claper_web/live/event_live/manage.html.heex:1451
+#, elixir-format
+msgid ""
+"You can control each setting for the presentation (showing on the big screen)"
+" and on the attendee's room."
+msgstr ""
+"Du kan kontrollera varje inställning för presentationen (visning på den stora skärmen) "
+"och i deltagarens rum."
+
+#: lib/claper_web/live/event_live/index.html.heex:149
+#, elixir-format
+msgid "Your first steps with Claper"
+msgstr "Dina första steg med Claper"
+
+#: lib/claper_web/live/event_live/event_form_component.html.heex:317
+#, elixir-format
+msgid ""
+"Attendees attempting to access the event prior to this date will be directed "
+"to a waiting room."
+msgstr ""
+"Deltagare som försöker ansluta till evenemanget före detta datum kommer att "
+"hänvisas till ett väntrum."
+
+#: lib/claper_web/live/event_live/index.html.heex:167
+#, elixir-format
+msgid "Create event"
+msgstr "Skapa evenemang"
+
+#: lib/claper_web/live/event_live/index.html.heex:225
+#, elixir-format
+msgid "Create your first event"
+msgstr "Skapa ditt första evenemang"
+
+#: lib/claper_web/live/event_live/event_form_component.html.heex:316
+#, elixir-format
+msgid "Event start date"
+msgstr "Evenemangets startdatum"
+
+#: lib/claper_web/live/event_live/index.html.heex:119
+#, elixir-format
+msgid ""
+"If you don't have time and just want interactions without a presentation "
+"file, you can create a new event here."
+msgstr ""
+"Om du inte har tid och bara vill ha interaktioner utan en presentationsfil "
+"kan du skapa ett nytt evenemang här."
+
+#: lib/claper_web/live/event_live/event_form_component.html.heex:337
+#, fuzzy
+#, elixir-format
+msgid ""
+"If you require assistance in managing your event, you can grant access to "
+"others. Simply enter their email addresses; once they register an account "
+"with these emails, they will be able to manage the event."
+msgstr ""
+"Om du behöver hjälp med att hantera ditt evenemang kan du ge andra åtkomst. "
+"Ange bara deras e-postadresser; när de registrerar ett konto med dessa e-postadresser "
+"kommer de att kunna hantera evenemanget."
+
+#: lib/claper_web/live/event_live/index.html.heex:124
+#, elixir-format
+msgid "In a hurry ?"
+msgstr "Bråttom ?"
+
+#: lib/claper_web/live/event_live/event_card_component.ex:50
+#, elixir-format
+msgid "Live"
+msgstr "Live"
+
+#: lib/claper_web/live/event_live/index.html.heex:112
+#, elixir-format
+msgid "My events"
+msgstr "Mina evenemang"
+
+#: lib/claper_web/live/event_live/event_form_component.html.heex:291 
+#: lib/claper_web/live/event_live/index.html.heex:83
+#, fuzzy
+#, elixir-format
+msgid "Name of your event"
+msgstr "Namn på ditt evenemang"
+
+#: lib/claper_web/live/event_live/event_form_component.html.heex:337
+#, fuzzy
+#, elixir-format
+msgid "Note: Facilitators do not have the ability to delete your event."
+msgstr "OBS! Facilitatorer har inte möjlighet att radera ditt evenemang."
+
+#: lib/claper_web/live/event_live/event_form_component.html.heex:85
+#, fuzzy
+#, elixir-format
+msgid "Presentation file (optional)"
+msgstr "Presentationsfil (valfritt)"
+
+#: lib/claper_web/live/event_live/index.html.heex:142
+#, elixir-format
+msgid "Quick event"
+msgstr "Snabb-evenemang"
+
+#: lib/claper_web/live/event_live/index.ex:102
+#, elixir-format
+msgid "Quick event created successfully"
+msgstr "Snabb-evenemanget skapades"
+
+#: lib/claper_web/live/event_live/join.html.heex:104
+#, fuzzy
+#, elixir-format
+msgid "Return to your last event"
+msgstr "Återgå till ditt senaste evenemang"
+
+#: lib/claper_web/live/event_live/event_form_component.html.heex:317
+#, fuzzy
+#, elixir-format
+msgid "Select the start date for your event. Future dates are permissible."
+msgstr "Välj startdatum för ditt evenemang. Framtida datum är tillåtna."
+
+#: lib/claper_web/live/event_live/event_form_component.html.heex:88
+#, fuzzy
+#, elixir-format
+msgid "Select your presentation (optional)"
+msgstr "Välj din presentation (valfritt)"
+
+#: lib/claper_web/live/event_live/event_form_component.html.heex:302
+#, fuzzy
+#, elixir-format
+msgid ""
+"This code will be used by your attendees to access the event. You have the "
+"option to create a custom code."
+msgstr ""
+"Denna kod kommer att användas av dina deltagare för att få tillgång "
+"till evenemanget. Du har möjlighet att skapa en anpassad kod."
+
+#: lib/claper_web/live/event_live/show.ex:206
+#, elixir-format
+msgid "This event has been terminated"
+msgstr "Detta evenemang har avslutats"
+
+#: lib/claper_web/live/event_live/index.html.heex:148
+#, fuzzy
+#, elixir-format
+msgid "Welcome to Claper! You can create a new event here."
+msgstr "Välkommen till Claper! Du kan skapa ett nytt evenemang här."
+
+#: lib/claper_web/live/event_live/event_form_component.html.heex:326
+#, fuzzy
+#, elixir-format
+msgid "When your event will start?"
+msgstr "När kommer ditt evenemang att starta?"
+
+#: lib/claper_web/live/event_live/show.html.heex:38
+#, elixir-format
+msgid "Create your next presentation with"
+msgstr "Skapa din nästa presentation med"
+
+#: lib/claper_web/live/event_live/manage.ex:23 
+#: lib/claper_web/live/event_live/presenter.ex:26 
+#: lib/claper_web/live/event_live/show.ex:38
+#, elixir-format
+msgid "Event doesn't exist"
+msgstr "Evenemanget finns inte"
+
+#: lib/claper_web/live/user_settings_live/show.html.heex:244
+#, elixir-format
+msgid "Customize your account"
+msgstr "Anpassa ditt konto"
+
+#: lib/claper_web/live/user_settings_live/show.html.heex:278
+#, elixir-format
+msgid "Language"
+msgstr "Språk"
+
+#: lib/claper_web/live/user_settings_live/show.html.heex:241
+#, elixir-format
+msgid "Preferences"
+msgstr "Inställningar"
+
+#: lib/claper_web/live/user_settings_live/show.ex:180
+#, elixir-format
+msgid "Your preferences have been updated."
+msgstr "Dina inställningar har uppdaterats."
+
+#: lib/claper_web/live/event_live/manageable_post_component.ex:29
+#, elixir-format
+msgid "Question"
+msgstr "Fråga"
+
+#: lib/claper_web/live/event_live/manage.html.heex:1167
+#, elixir-format
+msgid "Questions"
+msgstr "Frågor"
+
+#: lib/claper_web/live/event_live/manage.html.heex:1254
+#, elixir-format
+msgid "Questions will appear here."
+msgstr "Frågor kommer att visas här."
+
+#: lib/claper_web/live/event_live/manage.html.heex:1296
+#, elixir-format
+msgid "Sort by date"
+msgstr "Sortera efter datum"
+
+#: lib/claper_web/live/event_live/manage.html.heex:1275
+#, elixir-format
+msgid "Sort by popularity"
+msgstr "Sortera efter popularitet"
+
+#: lib/claper_web/live/event_live/event_card_component.ex:152
+#, elixir-format
+msgid "Event manager"
+msgstr "Evenemangsansvarig"
+
+#: lib/claper_web/templates/layout/_user_menu.html.heex:19 
+#: lib/claper_web/templates/layout/admin.html.heex:278
+#, elixir-format
+msgid "Documentation"
+msgstr "Dokumentation"
+
+#: lib/claper_web/live/user_settings_live/show.html.heex:5 
+#: lib/claper_web/templates/layout/_user_menu.html.heex:6
+#, elixir-format
+msgid "My account"
+msgstr "Mitt konto"
+
+#: lib/claper_web/live/user_settings_live/show.html.heex:139
+#, fuzzy
+#, elixir-format
+msgid "Your personal informations to access your account"
+msgstr "Din personliga information för att få tillgång till ditt konto"
+
+#: lib/claper_web/live/event_live/manager_settings_component.ex:589
+#, elixir-format
+msgid "Enable reactions"
+msgstr "Aktivera reaktioner"
+
+#: lib/claper_web/templates/lti/registration/success.html.heex:14
+#, elixir-format
+msgid "Activate the tool in your LMS"
+msgstr "Aktivera verktyget i ditt LMS"
+
+#: lib/claper_web/templates/lti/registration/new.html.heex:24
+#, elixir-format
+msgid "Bring Claper to your LMS"
+msgstr "Ta Claper till ditt LMS"
+
+#: lib/claper_web/templates/lti/registration/success.html.heex:17
+#, elixir-format
+msgid "Check the permissions to share name and email of users"
+msgstr "Kontrollera behörigheterna för att dela namn och e-postadress för användare"
+
+#: lib/claper_web/templates/lti/registration/success.html.heex:15
+#, elixir-format
+msgid "Configure it to be opened in a new window"
+msgstr "Konfigurera det för att öppnas i ett nytt fönster"
+
+#: lib/claper_web/templates/lti/launch/error.html.heex:5
+#, elixir-format
+msgid "Oops"
+msgstr "Hoppsan"
+
+#: lib/claper_web/templates/lti/registration/new.html.heex:27
+#, elixir-format
+msgid "Register your platform"
+msgstr "Registrera din plattform"
+
+#: lib/claper_web/templates/lti/registration/success.html.heex:5
+#, elixir-format
+msgid "Registration completed"
+msgstr "Registrering slutförd"
+
+#: lib/claper_web/templates/lti/launch/error.html.heex:9
+#, elixir-format
+msgid "You cannot perform this action"
+msgstr "Du kan inte utföra denna åtgärd"
+
+#: lib/claper_web/templates/lti/registration/success.html.heex:10
+#, elixir-format
+msgid "Your next steps"
+msgstr "Dina nästa steg"
+
+#: lib/claper_web/templates/lti/registration/new.html.heex:40
+#, elixir-format
+msgid "Add Claper"
+msgstr "Lägg till Claper"
+
+#: lib/claper_web/live/event_live/manage.html.heex:123 
+#: lib/claper_web/live/event_live/manage.html.heex:538
+#, elixir-format
+msgid "Close preview"
+msgstr "Stäng förhandsvisning"
+
+#: lib/claper_web/live/event_live/manage.html.heex:734
+#, elixir-format
+msgid "Create your first interaction."
+msgstr "Skapa din första interaktion."
+
+#: lib/claper_web/live/event_live/manage.html.heex:1093
+#, elixir-format
+msgid "Disable"
+msgstr "Inaktivera"
+
+#: lib/claper_web/live/event_live/manage.html.heex:1110
+#, elixir-format
+msgid "Enable"
+msgstr "Aktivera"
+
+#: lib/claper_web/live/event_live/manager_settings_component.ex:499
+#, elixir-format
+msgid "Enable messages to change this option"
+msgstr "Aktivera meddelanden för att ändra detta alternativ"
+
+#: lib/claper_web/live/event_live/manage.html.heex:122 
+#: lib/claper_web/live/event_live/manage.html.heex:537
+#, elixir-format
+msgid "Open preview"
+msgstr "Öppna förhandsvisning"
+
+#: lib/claper_web/live/event_live/manager_settings_component.ex:322
+#, elixir-format
+msgid "Show messages to change this option"
+msgstr "Visa meddelanden för att ändra detta alternativ"
+
+#: lib/claper_web/live/event_live/manage.html.heex:731
+#, elixir-format
+msgid "This slide does not have any interactions."
+msgstr "Denna bild har inga interaktioner."
+
+#: lib/claper_web/live/user_settings_live/show.html.heex:176
+#, elixir-format
+msgid "Accounts linked"
+msgstr "Kopplade konton"
+
+#: lib/claper_web/live/user_settings_live/show.html.heex:208 
+#: lib/claper_web/live/user_settings_live/show.html.heex:226
+#, elixir-format
+msgid "Are you sure you want to unlink this account?"
+msgstr "Är du säker på att du vill koppla bort detta konto?"
+
+#: lib/claper_web/templates/user_session/new.html.heex:74
+#, elixir-format
+msgid "Login with %{provider}"
+msgstr "Logga in med %{provider}"
+
+#: lib/claper_web/live/user_settings_live/show.ex:101 
+#: lib/claper_web/live/user_settings_live/show.ex:115
+#, elixir-format
+msgid "The account has been unlinked."
+msgstr "Kontot har kopplats bort."
+
+#: lib/claper_web/live/event_live/manage.html.heex:707
+#, elixir-format
+msgid "This section contains all your interactions."
+msgstr "Denna sektion innehåller alla dina interaktioner."
+
+#: lib/claper_web/live/user_settings_live/show.html.heex:211 
+#: lib/claper_web/live/user_settings_live/show.html.heex:229
+#, fuzzy
+#, elixir-format
+msgid "Unlink"
+msgstr "Koppla bort"
+
+#: lib/claper_web/live/event_live/manage.html.heex:707
+#, elixir-format
+msgid "You can add interactions to your presentation slides."
+msgstr "Du kan lägga till interaktioner i dina presentationsbilder."
+
+#: lib/claper_web/live/event_live/manage.html.heex:706
+#, elixir-format
+msgid "Your interactions"
+msgstr "Dina interaktioner"
+
+#: lib/claper_web/live/user_settings_live/show.html.heex:119
+#, elixir-format
+msgid "Confirm password"
+msgstr "Bekräfta lösenord"
+
+#: lib/claper_web/live/user_settings_live/show.ex:68
+#, elixir-format
+msgid "Set a new password"
+msgstr "Ställ in ett nytt lösenord"
+
+#: lib/claper_web/live/user_settings_live/show.ex:71
+#, elixir-format
+msgid "Set a new password for your account before unlinking it."
+msgstr "Ställ in ett nytt lösenord för ditt konto innan du kopplar bort det."
+
+#: lib/claper_web/live/user_settings_live/show.ex:204
+#, elixir-format
+msgid "Your password has been set, you can now unlink your account."
+msgstr "Ditt lösenord har ställts in, du kan nu koppla bort ditt konto."
+
+#: lib/claper_web/live/embed_live/form_component.html.heex:34
+#, elixir-format
+msgid "Iframe code"
+msgstr "Iframe-kod"
+
+#: lib/claper_web/live/embed_live/form_component.html.heex:35
+#, elixir-format
+msgid "Link to the content"
+msgstr "Länk till innehållet"
+
+#: lib/claper/embeds/embed.ex:65 lib/claper/embeds/embed.ex:74 
+#: lib/claper/embeds/embed.ex:83 lib/claper/embeds/embed.ex:92
+#, elixir-format
+msgid "Please enter a valid %{provider} link"
+msgstr "Vänligen ange en giltig %{provider}-länk"
+
+#: lib/claper/embeds/embed.ex:62 lib/claper/embeds/embed.ex:71 
+#: lib/claper/embeds/embed.ex:80 lib/claper/embeds/embed.ex:89
+#, elixir-format
+msgid "Please enter a valid link starting with http:// or https://"
+msgstr "Vänligen ange en giltig länk som börjar med http:// eller https://"
+
+#: lib/claper/embeds/embed.ex:98 lib/claper/embeds/embed.ex:122
+#, elixir-format
+msgid "Please enter valid HTML content with an iframe tag"
+msgstr "Vänligen ange giltigt HTML-innehåll med en iframe-tagg"
+
+#: lib/claper_web/live/embed_live/form_component.html.heex:23
+#, elixir-format
+msgid "Provider"
+msgstr "Leverantör"
+
+#: lib/claper_web/live/poll_live/form_component.html.heex:85
+#, elixir-format
+msgid "Attendees can see the results on their device"
+msgstr "Deltagare kan se resultaten på sin enhet."
+
+#: lib/claper_web/live/embed_live/form_component.html.heex:50
+#, elixir-format
+msgid "Attendees can view the web content on their device"
+msgstr "Deltagare kan visa webbinnehållet på sin enhet."
+
+#: lib/claper_web/live/embed_live/form_component.html.heex:43 
+#: lib/claper_web/live/poll_live/form_component.html.heex:78 
+#: lib/claper_web/live/quiz_live/quiz_component.html.heex:166
+#, elixir-format
+msgid "Options"
+msgstr "Alternativ"
+
+#: lib/claper_web/live/event_live/event_card_component.ex:268 
+#: lib/claper_web/live/event_live/event_card_component.ex:418
+#, elixir-format
+msgid "Duplicate"
+msgstr "Duplicera"
+
+#: lib/claper_web/templates/error/csrf_error.html.heex:8
+#, elixir-format
+msgid "A required security token was not found or was invalid."
+msgstr "Det saknades en nödvändig säkerhetstoken eller så var den ogiltig."
+
+#: lib/claper_web/templates/error/csrf_error.html.heex:26
+#, elixir-format
+msgid "Back to Login"
+msgstr "Tillbaka till inloggning"
+
+#: lib/claper_web/templates/error/csrf_error.html.heex:5
+#, elixir-format
+msgid "CSRF Verification Failed"
+msgstr "CSRF-verifiering misslyckades"
+
+#: lib/claper_web/templates/error/csrf_error.html.heex:17
+#, elixir-format
+msgid "Clear cookies (at least for Claper domain)"
+msgstr "Rensa cookies (åtminstone för Claper-domänen)"
+
+#: lib/claper_web/templates/error/csrf_error.html.heex:20
+#, elixir-format
+msgid "Ensure the URL does not contain an extra \"/\" anywhere"
+msgstr "Se till att URL:en inte innehåller en extra \"/\" någonstans"
+
+#: lib/claper_web/templates/error/csrf_error.html.heex:23
+#, elixir-format
+msgid "If the problem persists, please contact support."
+msgstr "Om problemet kvarstår, vänligen kontakta supporten."
+
+#: lib/claper_web/templates/error/csrf_error.html.heex:14
+#, elixir-format
+msgid "If you're continually seeing this issue, try the following:"
+msgstr "Om detta är ett återkommande problem, prova följande:"
+
+#: lib/claper_web/templates/error/csrf_error.html.heex:18
+#, elixir-format
+msgid "Reload the page you're trying to access (don't re-submit data)"
+msgstr "Ladda om sidan du försöker komma åt (skicka inte om data)"
+
+#: lib/claper_web/templates/error/csrf_error.html.heex:19
+#, elixir-format
+msgid "Try logging in again"
+msgstr "Försök logga in igen"
+
+#: lib/claper_web/live/event_live/event_card_component.ex:201
+#, elixir-format
+msgid "End"
+msgstr "Slut"
+
+#: lib/claper_web/live/event_live/event_card_component.ex:212 
+#: lib/claper_web/live/event_live/event_card_component.ex:292 
+#: lib/claper_web/live/event_live/event_card_component.ex:381
+#, elixir-format
+msgid "More options"
+msgstr "Ytterligare alternativ"
+
+#: lib/claper_web/live/event_live/manage.ex:824
+#, elixir-format
+msgid "No"
+msgstr "Nej"
+
+#: lib/claper_web/live/event_live/manage.ex:824
+#, elixir-format
+msgid "Yes"
+msgstr "Ja"
+
+#: lib/claper_web/templates/user_notifier/confirm.html.heex:29
+#, elixir-format
+msgid "CONFIRM ACCOUNT"
+msgstr "BEKRÄFTA KONTO"
+
+#: lib/claper_web/templates/user_notifier/confirm.html.heex:17
+#, elixir-format
+msgid "Confirm account"
+msgstr "Bekräfta konto"
+
+#: lib/claper_web/notifiers/user_notifier.ex:45
+#, elixir-format
+msgid "Confirmation instructions"
+msgstr "Instruktioner för att bekräfta"
+
+#: lib/claper_web/templates/user_notifier/reset.html.heex:29
+#, elixir-format
+msgid "RESET PASSWORD"
+msgstr "ÅTERSTÄLL LÖSENORD"
+
+#: lib/claper_web/templates/user_notifier/reset.html.heex:17
+#, fuzzy
+#, elixir-format
+msgid "Reset password"
+msgstr "Återställ lösenord"
+
+#: lib/claper_web/notifiers/user_notifier.ex:56
+#, elixir-format
+msgid "Reset password instructions"
+msgstr "Instruktioner för att återställa lösenord"
+
+#: lib/claper_web/templates/user_notifier/confirm.html.heex:22
+#, fuzzy
+#, elixir-format
+msgid "You can confirm your account by visiting the URL below"
+msgstr "Bekräfta ditt konto genom att gå till URL:en nedan"
+
+#: lib/claper_web/templates/user_notifier/reset.html.heex:22
+#, elixir-format
+msgid "You can reset your password by visiting the URL below"
+msgstr "Du kan återställa ditt lösenord genom att gå till URL:en nedan"
+
+#: lib/claper_web/templates/user_registration/confirm.html.heex:29
+#, elixir-format
+msgid "back to the home page"
+msgstr "Tillbaka till startsidan"
+
+#: lib/claper_web/live/quiz_live/quiz_component.html.heex:44
+#, elixir-format
+msgid "Add Question"
+msgstr "Lägg till fråga"
+
+#: lib/claper_web/live/event_live/manage.html.heex:293
+#, elixir-format
+msgid "Add a quiz to test knowledge."
+msgstr "Lägg till en quiz för att testa kunskap."
+
+#: lib/claper_web/live/quiz_live/quiz_component.html.heex:146
+#, elixir-format
+msgid "Add answer"
+msgstr "Lägg till svar"
+
+#: lib/claper_web/live/event_live/manager_settings_component.ex:538
+#, elixir-format
+msgid "Allow anonymous messages"
+msgstr "Tillåt anonyma meddelanden"
+
+#: lib/claper_web/live/quiz_live/quiz_component.html.heex:78
+#, elixir-format
+msgid "Answer %{index}"
+msgstr "Svar %{index}"
+
+#: lib/claper_web/live/event_live/manager_settings_component.ex:446
+#, elixir-format
+msgid "Attendees"
+msgstr "Deltagare"
+
+#: lib/claper_web/live/event_live/manageable_quiz_component.ex:29 
+#: lib/claper_web/live/stat_live/index.html.heex:426
+#, elixir-format
+msgid "Average score"
+msgstr "Genomsnittspoäng"
+
+#: lib/claper_web/live/event_live/quiz_component.ex:60
+#, elixir-format
+msgid "Current quiz"
+msgstr "Nuvarande quiz"
+
+#: lib/claper_web/live/event_live/manager_settings_component.ex:541
+#, elixir-format
+msgid "Deny anonymous messages"
+msgstr "Neka anonyma meddelanden"
+
+#: lib/claper_web/live/event_live/manager_settings_component.ex:483
+#, elixir-format
+msgid "Disable messages"
+msgstr "Inaktivera meddelanden"
+
+#: lib/claper_web/live/event_live/manager_settings_component.ex:592
+#, elixir-format
+msgid "Disable reactions"
+msgstr "Inaktivera reaktioner"
+
+#: lib/claper_web/live/event_live/manage.html.heex:368
+#, elixir-format
+msgid "Edit quiz"
+msgstr "Redigera quiz"
+
+#: lib/claper_web/live/event_live/manager_settings_component.ex:259
+#, elixir-format
+msgid "Hide instructions to join"
+msgstr "Dölj instruktioner för att ansluta"
+
+#: lib/claper_web/live/event_live/manager_settings_component.ex:306
+#, elixir-format
+msgid "Hide messages"
+msgstr "Dölj meddelanden"
+
+#: lib/claper_web/live/event_live/manager_settings_component.ex:62 
+#: lib/claper_web/live/event_live/manager_settings_component.ex:112
+#, elixir-format
+msgid "Hide results on presentation"
+msgstr "Dölj svar i presentationen"
+
+#: lib/claper_web/live/event_live/event_form_component.html.heex:36 
+#: lib/claper_web/live/event_live/index.html.heex:28 
+#: lib/claper_web/live/event_live/manage.html.heex:35
+#, elixir-format
+msgid "How it works ?"
+msgstr "Hur fungerar det ?"
+
+#: lib/claper_web/live/event_live/manager_settings_component.ex:22
+#, fuzzy
+#, elixir-format
+msgid "Interaction"
+msgstr "Interaktion"
+
+#: lib/claper_web/live/event_live/manage.html.heex:367
+#, elixir-format
+msgid "New quiz"
+msgstr "Nytt quiz"
+
+#: lib/claper_web/live/event_live/manager_settings_component.ex:218
+#, fuzzy
+#, elixir-format
+msgid "Presentation"
+msgstr "Presentation"
+
+#: lib/claper_web/live/admin_live/audit_log_live.html.heex:34 
+#: lib/claper_web/live/event_live/manager_settings_component.ex:168
+#, elixir-format
+msgid "Previous"
+msgstr "Föregående"
+
+#: lib/claper_web/live/event_live/manage.html.heex:291 
+#: lib/claper_web/live/event_live/manage.html.heex:912
+#, elixir-format
+msgid "Quiz"
+msgstr "Quiz"
+
+#: lib/claper_web/live/quiz_live/quiz_component.html.heex:152
+#, elixir-format
+msgid "Remove question"
+msgstr "Ta bort fråga"
+
+#: lib/claper_web/live/event_live/manager_settings_component.ex:144
+#, elixir-format
+msgid "Review questions"
+msgstr "Granska frågor"
+
+#: lib/claper_web/live/event_live/quiz_component.ex:41
+#, fuzzy
+#, elixir-format
+msgid "See current quiz"
+msgstr "Visa nuvarande quiz"
+
+#: lib/claper_web/live/event_live/manage.html.heex:387
+#, fuzzy
+#, elixir-format
+msgid "Select presentation"
+msgstr "Välj presentation"
+
+#: lib/claper_web/live/event_live/manager_settings_component.ex:362
+#, fuzzy
+#, elixir-format
+msgid "Show all messages"
+msgstr "Visa alla meddelanden"
+
+#: lib/claper_web/live/event_live/manager_settings_component.ex:256
+#, fuzzy
+#, elixir-format
+msgid "Show instructions to join"
+msgstr "Visa instruktioner för att ansluta"
+
+#: lib/claper_web/live/event_live/quiz_component.ex:121
+#, elixir-format
+msgid "Show results"
+msgstr "Visa resultat"
+
+#: lib/claper_web/live/event_live/manager_settings_component.ex:65 
+#: lib/claper_web/live/event_live/manager_settings_component.ex:115
+#, fuzzy
+#, elixir-format
+msgid "Show results on presentation"
+msgstr "Visa resultat i presentationen"
+
+#: lib/claper_web/live/quiz_live/quiz_component.html.heex:200
+#, fuzzy
+#, elixir-format
+msgid ""
+"This will delete all responses associated and the quiz itself, are you sure?"
+msgstr ""
+"Detta kommer att radera alla svar som är kopplade till quizzen och själva quizzen, är du säker?"
+
+#: lib/claper_web/live/event_live/quiz_component.ex:124
+#, elixir-format
+msgid "Waiting for results..."
+msgstr "Väntar på resultat..."
+
+#: lib/claper_web/live/quiz_live/quiz_component.html.heex:58
+#, elixir-format
+msgid "Your question"
+msgstr "Din fråga"
+
+#: lib/claper_web/live/event_live/quiz_component.ex:113
+#, elixir-format
+msgid "Your score"
+msgstr "Ditt resultat"
+
+#: lib/claper_web/live/stat_live/index.html.heex:236 
+#: lib/claper_web/live/stat_live/index.html.heex:298 
+#: lib/claper_web/live/stat_live/index.html.heex:380 
+#: lib/claper_web/live/stat_live/index.html.heex:422
+#, elixir-format
+msgid "Export"
+msgstr "Exportera"
+
+#: lib/claper_web/live/quiz_live/quiz_component.html.heex:212
+#, elixir-format
+msgid "Export to QTI (XML)"
+msgstr "Exportera till QTI (XML)"
+
+#: lib/claper_web/live/stat_live/index.html.heex:194
+#, elixir-format
+msgid "Forms"
+msgstr "Formulär"
+
+#: lib/claper_web/live/stat_live/index.html.heex:170
+#, fuzzy
+#, elixir-format
+msgid "Interactions"
+msgstr "Interaktioner"
+
+#: lib/claper_web/live/stat_live/index.html.heex:338
+#, elixir-format
+msgid "No form has been created"
+msgstr "Inget formulär har skapats"
+
+#: lib/claper_web/live/stat_live/index.html.heex:272
+#, elixir-format
+msgid "No poll has been created"
+msgstr "Ingen omröstning har skapats"
+
+#: lib/claper_web/live/stat_live/index.html.heex:476
+#, elixir-format
+msgid "No quiz has been created"
+msgstr "Inget quiz har skapats"
+
+#: lib/claper_web/live/stat_live/index.html.heex:359
+#, elixir-format
+msgid "No web content has been created"
+msgstr "Inget webbinnehåll har skapats"
+
+#: lib/claper_web/live/stat_live/index.html.heex:187
+#, fuzzy
+#, elixir-format
+msgid "Polls"
+msgstr "Omröstningar"
+
+#: lib/claper_web/live/stat_live/index.html.heex:208
+#, fuzzy
+#, elixir-format
+msgid "Quizzes"
+msgstr "Quiz"
+
+#: lib/claper_web/live/stat_live/index.ex:62
+#, elixir-format
+msgid "Report"
+msgstr "Rapport"
+
+#: lib/claper_web/live/stat_live/index.html.heex:70
+#, elixir-format
+msgid "Unique attendees"
+msgstr "Unika deltagare"
+
+#: lib/claper_web/live/stat_live/index.html.heex:201
+#, fuzzy
+#, elixir-format
+msgid "Web Content"
+msgstr "Webbinnehåll"
+
+#: lib/claper_web/live/admin_live/dashboard_live.html.heex:127 
+#: lib/claper_web/live/admin_live/oidc_provider_live.html.heex:131 
+#: lib/claper_web/live/admin_live/oidc_provider_live.html.heex:286 
+#: lib/claper_web/live/admin_live/oidc_provider_live/form_component.ex:135 
+#: lib/claper_web/live/event_live/index.html.heex:179
+#, elixir-format
+msgid "Active"
+msgstr "Aktiv"
+
+#: lib/claper_web/live/event_live/index.html.heex:218
+#, elixir-format
+msgid "Load more"
+msgstr "Ladda mer"
+
+#: lib/claper_web/live/event_live/index.html.heex:195
+#, elixir-format
+msgid "Shared with you"
+msgstr "Delat med dig"
+
+#: lib/claper_web/templates/lti/registration/new.html.heex:43
+#, elixir-format
+msgid "You must login to continue"
+msgstr "Du måste logga in för att fortsätta"
+
+#: lib/claper/quizzes/quiz_question.ex:51
+#, elixir-format
+msgid "must have at least one correct answer"
+msgstr "måste ha minst ett korrekt svar"
+
+#: lib/claper_web/live/event_live/manage.html.heex:547
+#, elixir-format
+msgid ""
+"Click here to open the presentation window. Press <strong>F</strong> in the "
+"presentation window to enable fullscreen."
+msgstr ""
+"Klicka här för att öppna presentationsfönstret. Tryck <strong>F</strong> i "
+"presentationsfönstret för att aktivera helskärm."
+
+#: lib/claper_web/live/quiz_live/quiz_component.html.heex:173
+#, elixir-format
+msgid "Allow anonymous submissions"
+msgstr "Tillåt anonyma svar"
+
+#: lib/claper_web/live/event_live/quiz_component.ex:167
+#, elixir-format
+msgid "Please sign in to submit your answers"
+msgstr "Vänligen logga in för att skicka dina svar"
+
+#: lib/claper_web/live/event_live/quiz_component.ex:170
+#, elixir-format
+msgid "Sign in"
+msgstr "Logga in"
+
+#: lib/claper_web/live/stat_live/index.html.heex:435
+#, elixir-format
+msgid "Total submissions"
+msgstr "Totalt antal svar"
+
+#: lib/claper_web/live/admin_live/event_live/form_component.ex:37
+#, elixir-format
+msgid "A unique code for participants to join this event"
+msgstr "En unik kod för deltagare att gå med i detta evenemang"
+
+#: lib/claper_web/live/admin_live/event_live/form_component.ex:23
+#, elixir-format
+msgid "A unique name for this event"
+msgstr "Ett unikt namn för detta evenemang"
+
+#: lib/claper_web/live/admin_live/oidc_provider_live/form_component.ex:28
+#, elixir-format
+msgid "A unique name to identify this OIDC provider"
+msgstr "Ett unikt namn för att identifiera denna OIDC-leverantör"
+
+#: lib/claper_web/live/admin_live/user_live/form_component.ex:63
+#, elixir-format
+msgid "Account is confirmed and active"
+msgstr "Kontot är bekräftat och aktivt"
+
+#: lib/claper_web/components/core_components.ex:368 
+#: lib/claper_web/live/admin_live/event_live.html.heex:126 
+#: lib/claper_web/live/admin_live/oidc_provider_live.html.heex:108 
+#: lib/claper_web/live/admin_live/user_live.html.heex:111
+#, elixir-format
+msgid "Actions"
+msgstr "Åtgärder"
+
+#: lib/claper_web/live/admin_live/dashboard_live.html.heex:55
+#, elixir-format
+msgid "Active Events"
+msgstr "Pågående evenemang"
+
+#: lib/claper_web/live/admin_live/event_live.html.heex:216
+#, elixir-format
+msgid "Are you sure you want to delete this event?"
+msgstr "Är du säker på att du vill ta bort detta evenemang?"
+
+#: lib/claper_web/live/admin_live/oidc_provider_live.html.heex:194
+#, elixir-format
+msgid "Are you sure you want to delete this provider?"
+msgstr "Är du säker på att du vill ta bort denna utfärdare?"
+
+#: lib/claper_web/live/admin_live/user_live.html.heex:197
+#, elixir-format
+msgid "Are you sure you want to delete this user?"
+msgstr "Är du säker på att du vill ta bort denna användare?"
+
+#: lib/claper_web/live/admin_live/event_live/form_component.ex:68
+#, elixir-format
+msgid "Assigned User"
+msgstr "Tilldelad användare"
+
+#: lib/claper_web/live/admin_live/dashboard_live.html.heex:110 
+#: lib/claper_web/live/admin_live/event_live.html.heex:119 
+#: lib/claper_web/live/admin_live/event_live.html.heex:299
+#, elixir-format
+msgid "Audience Peak"
+msgstr "Publikrekord"
+
+#: lib/claper_web/live/admin_live/oidc_provider_live/form_component.ex:103
+#, elixir-format
+msgid "Authorization Code"
+msgstr "Auktorisationskod"
+
+#: lib/claper_web/live/admin_live/event_live/form_component.ex:80 
+#: lib/claper_web/live/admin_live/oidc_provider_live/form_component.ex:147 
+#: lib/claper_web/live/admin_live/user_live/form_component.ex:72
+#, elixir-format
+msgid "Cancel"
+msgstr ""
+
+#: lib/claper_web/live/admin_live/form_field_component.ex:112
+#, elixir-format
+msgid "Choose file"
+msgstr "Välj fil"
+
+#: lib/claper_web/live/admin_live/oidc_provider_live.html.heex:264 
+#: lib/claper_web/live/admin_live/oidc_provider_live/form_component.ex:50
+#, elixir-format
+msgid "Client ID"
+msgstr "Klient-ID"
+
+#: lib/claper_web/live/admin_live/oidc_provider_live/form_component.ex:62
+#, elixir-format
+msgid "Client Secret"
+msgstr "Klienthemlighet"
+
+#: lib/claper_web/live/admin_live/dashboard_live.html.heex:121
+#, elixir-format
+msgid "Completed"
+msgstr "Slutförd"
+
+#: lib/claper_web/live/admin_live/user_live.html.heex:134 
+#: lib/claper_web/live/admin_live/user_live.html.heex:268
+#, elixir-format
+msgid "Confirmed"
+msgstr "Bekräftad"
+
+#: lib/claper_web/live/admin_live/user_live.html.heex:291
+#, elixir-format
+msgid "Confirmed At"
+msgstr "Bekräftad"
+
+#: lib/claper_web/live/admin_live/event_live/form_component.ex:83
+#, elixir-format
+msgid "Create Event"
+msgstr "Skapa Evenemang"
+
+#: lib/claper_web/live/admin_live/oidc_provider_live/form_component.ex:150
+#, elixir-format
+msgid "Create Provider"
+msgstr ""
+
+#: lib/claper_web/live/admin_live/user_live/form_component.ex:75
+#, elixir-format
+msgid "Create User"
+msgstr "Skapa Användare"
+
+#: lib/claper_web/live/admin_live/oidc_provider_live.html.heex:101 
+#: lib/claper_web/live/admin_live/user_live.html.heex:104
+#, elixir-format
+msgid "Created"
+msgstr "Skapad"
+
+#: lib/claper_web/live/admin_live/event_live.html.heex:305 
+#: lib/claper_web/live/admin_live/oidc_provider_live.html.heex:296 
+#: lib/claper_web/live/admin_live/user_live.html.heex:278
+#, elixir-format
+msgid "Created At"
+msgstr "Skapad"
+
+#: lib/claper_web/live/admin_live/dashboard_live.html.heex:57
+#, elixir-format
+msgid "Currently running"
+msgstr "Körs just nu"
+
+#: lib/claper_web/live/admin_live/event_live.html.heex:219
+#, elixir-format
+msgid "Delete event"
+msgstr "Radera evenemang"
+
+#: lib/claper_web/live/admin_live/oidc_provider_live.html.heex:197
+#, elixir-format
+msgid "Delete provider"
+msgstr "Radera utfärdare"
+
+#: lib/claper_web/live/admin_live/user_live.html.heex:200
+#, elixir-format
+msgid "Delete user"
+msgstr "Radera användare"
+
+#: lib/claper_web/live/admin_live/oidc_provider_live.html.heex:339
+#, elixir-format
+msgid "Edit OIDC Provider"
+msgstr "Redigera OIDC-leverantör"
+
+#: lib/claper_web/live/admin_live/dashboard_live.html.heex:176 
+#: lib/claper_web/live/admin_live/event_live.ex:41 
+#: lib/claper_web/live/admin_live/event_live.html.heex:194 
+#: lib/claper_web/live/admin_live/event_live.html.heex:348 
+#: lib/claper_web/live/admin_live/event_live.html.heex:358
+#, elixir-format
+msgid "Edit event"
+msgstr "Redigera evenemang"
+
+#: lib/claper_web/live/admin_live/oidc_provider_live.ex:46 
+#: lib/claper_web/live/admin_live/oidc_provider_live.html.heex:172 
+#: lib/claper_web/live/admin_live/oidc_provider_live.html.heex:349
+#, elixir-format
+msgid "Edit provider"
+msgstr "Redigera utfärdare"
+
+#: lib/claper_web/live/admin_live/user_live.ex:42 
+#: lib/claper_web/live/admin_live/user_live.html.heex:175 
+#: lib/claper_web/live/admin_live/user_live.html.heex:329 
+#: lib/claper_web/live/admin_live/user_live.html.heex:339
+#, elixir-format
+msgid "Edit user"
+msgstr "Redigera användare"
+
+#: lib/claper_web/live/admin_live/oidc_provider_live/form_component.ex:136
+#, elixir-format
+msgid "Enable this OIDC provider"
+msgstr "Aktivera denna OIDC-leverantör"
+
+#: lib/claper_web/live/admin_live/oidc_provider_live/form_component.ex:51
+#, elixir-format
+msgid "Enter client ID"
+msgstr "Ange klient-ID"
+
+#: lib/claper_web/live/admin_live/oidc_provider_live/form_component.ex:63
+#, elixir-format
+msgid "Enter client secret"
+msgstr "Ange klienthemlighet"
+
+#: lib/claper_web/live/admin_live/event_live/form_component.ex:33
+#, elixir-format
+msgid "Enter event code"
+msgstr "Ange evenemangskod"
+
+#: lib/claper_web/live/admin_live/event_live/form_component.ex:20
+#, elixir-format
+msgid "Enter event name"
+msgstr "Ange evenemangsnamn"
+
+#: lib/claper_web/live/admin_live/user_live/form_component.ex:33
+#, elixir-format
+msgid "Enter password"
+msgstr "Ange lösenord"
+
+#: lib/claper_web/live/admin_live/oidc_provider_live/form_component.ex:25
+#, elixir-format
+msgid "Enter provider name"
+msgstr "Ange leverantörsnamn"
+
+#: lib/claper_web/live/admin_live/user_live/form_component.ex:19
+#, elixir-format
+msgid "Enter user email"
+msgstr "Ange användarens e-post"
+
+#: lib/claper_web/live/admin_live/dashboard_live.html.heex:81
+#, elixir-format
+msgid "Event Creation"
+msgstr "Evenemang"
+
+#: lib/claper_web/live/admin_live/event_live/form_component.ex:147
+#, elixir-format
+msgid "Event created successfully"
+msgstr "Evenemanget skapades"
+
+#: lib/claper_web/live/admin_live/event_live.ex:58 
+#: lib/claper_web/live/admin_live/event_live.ex:110
+#, elixir-format
+msgid "Event deleted successfully"
+msgstr "Evenemanget raderades"
+
+#: lib/claper_web/live/admin_live/event_live.ex:47 
+#: lib/claper_web/live/admin_live/event_live.html.heex:253
+#, elixir-format
+msgid "Event details"
+msgstr "Evenemangsdetaljer"
+
+#: lib/claper_web/live/admin_live/event_live/form_component.ex:132
+#, elixir-format
+msgid "Event updated successfully"
+msgstr "Evenemanget uppdaterades"
+
+#: lib/claper_web/live/admin_live/event_live.ex:16 
+#: lib/claper_web/live/admin_live/event_live.html.heex:6 
+#: lib/claper_web/templates/layout/admin.html.heex:214
+#, elixir-format
+msgid "Events"
+msgstr "Evenemang"
+
+#: lib/claper_web/live/admin_live/event_live.ex:92
+#, elixir-format
+msgid "Events exported successfully"
+msgstr "Evenemangen exporterades"
+
+#: lib/claper_web/live/admin_live/event_live.html.heex:107 
+#: lib/claper_web/live/admin_live/event_live.html.heex:291 
+#: lib/claper_web/live/admin_live/event_live/form_component.ex:57
+#, elixir-format
+msgid "Expired At"
+msgstr "Upphörde"
+
+#: lib/claper_web/live/admin_live/form_field_component.ex:177
+#, elixir-format
+msgid "File selected"
+msgstr "Vald fil"
+
+#: lib/claper_web/live/admin_live/oidc_provider_live/form_component.ex:121
+#, elixir-format
+msgid "Form Post"
+msgstr "Inskickat Formulär"
+
+#: lib/claper_web/live/admin_live/oidc_provider_live/form_component.ex:120
+#, elixir-format
+msgid "Fragment"
+msgstr "Fragment"
+
+#: lib/claper_web/live/admin_live/oidc_provider_live/form_component.ex:125
+#, elixir-format
+msgid "How the authorization response should be returned (defaults to 'query')"
+msgstr "Hur auktoriseringssvaret ska returneras (standard är 'query')"
+
+#: lib/claper_web/live/admin_live/oidc_provider_live/form_component.ex:105
+#, elixir-format
+msgid "Hybrid"
+msgstr "Hybrid"
+
+#: lib/claper_web/live/admin_live/oidc_provider_live/form_component.ex:104
+#, elixir-format
+msgid "Implicit"
+msgstr "Implicit"
+
+#: lib/claper_web/live/admin_live/oidc_provider_live.html.heex:135 
+#: lib/claper_web/live/admin_live/oidc_provider_live.html.heex:290
+#, fuzzy
+#, elixir-format
+msgid "Inactive"
+msgstr "Inaktiv"
+
+#: lib/claper_web/live/admin_live/user_live/form_component.ex:36
+#, elixir-format
+msgid "Initial password for the user"
+msgstr "Initialt lösenord för användaren"
+
+#: lib/claper_web/live/admin_live/oidc_provider_live.html.heex:83 
+#: lib/claper_web/live/admin_live/oidc_provider_live.html.heex:258
+#, elixir-format
+msgid "Issuer"
+msgstr "Utfärdare"
+
+#: lib/claper_web/live/admin_live/oidc_provider_live/form_component.ex:37
+#, elixir-format
+msgid "Issuer URL"
+msgstr "Utfärdarens URL"
+
+#: lib/claper_web/live/admin_live/dashboard_live.html.heex:66 
+#: lib/claper_web/live/admin_live/dashboard_live.html.heex:82
+#, elixir-format
+msgid "Last 30 days"
+msgstr "Senaste 30 dagarna"
+
+#: lib/claper_web/live/admin_live/event_live.html.heex:311 
+#: lib/claper_web/live/admin_live/oidc_provider_live.html.heex:302 
+#: lib/claper_web/live/admin_live/user_live.html.heex:284
+#, elixir-format
+msgid "Last Updated"
+msgstr "Uppdaterades senast"
+
+#: lib/claper_web/live/admin_live/event_live.ex:35 
+#: lib/claper_web/live/admin_live/event_live.html.heex:325 
+#: lib/claper_web/live/admin_live/event_live.html.heex:335
+#, elixir-format
+msgid "New event"
+msgstr "Nytt evenemang"
+
+#: lib/claper_web/live/admin_live/dashboard_live.html.heex:201 
+#: lib/claper_web/live/admin_live/event_live.html.heex:134
+#, elixir-format
+msgid "No events found"
+msgstr "Inga evenemang hittades"
+
+#: lib/claper_web/live/admin_live/form_field_component.ex:125
+#, elixir-format
+msgid "No file chosen"
+msgstr "Ingen fil vald"
+
+#: lib/claper_web/live/admin_live/event_live.html.heex:147 
+#: lib/claper_web/live/admin_live/event_live.html.heex:279
+#, elixir-format
+msgid "No owner"
+msgstr "Ingen ägare"
+
+#: lib/claper_web/live/admin_live/user_live.html.heex:129 
+#: lib/claper_web/live/admin_live/user_live.html.heex:260
+#, elixir-format
+msgid "No role"
+msgstr "Ingen roll"
+
+#: lib/claper_web/live/admin_live/user_live.html.heex:119
+#, elixir-format
+msgid "No users found"
+msgstr "Inga användare hittades"
+
+#: lib/claper_web/live/admin_live/event_live.html.heex:157 
+#: lib/claper_web/live/admin_live/event_live.html.heex:295
+#, elixir-format
+msgid "Not expired"
+msgstr "Inte upphört"
+
+#: lib/claper_web/live/admin_live/event_live.html.heex:152 
+#: lib/claper_web/live/admin_live/event_live.html.heex:287
+#, elixir-format
+msgid "Not started"
+msgstr "Inte påbörjat"
+
+#: lib/claper_web/live/admin_live/oidc_provider_live/form_component.ex:108
+#, elixir-format
+msgid "OAuth 2.0 response type (defaults to 'code')"
+msgstr "OAuth 2.0-svarstyp (standard är 'code')"
+
+#: lib/claper_web/live/admin_live/oidc_provider_live.html.heex:250
+#, fuzzy
+#, elixir-format
+msgid "OIDC Provider"
+msgstr "OIDC-leverantör"
+
+#: lib/claper_web/live/admin_live/oidc_provider_live.html.heex:231
+#, elixir-format
+msgid "OIDC Provider details"
+msgstr "Detaljer om OIDC-leverantör"
+
+#: lib/claper_web/live/admin_live/oidc_provider_live.ex:15 
+#: lib/claper_web/live/admin_live/oidc_provider_live.html.heex:6
+#, fuzzy
+#, elixir-format
+msgid "OIDC Providers"
+msgstr "OIDC-leverantörer"
+
+#: lib/claper_web/live/admin_live/oidc_provider_live/form_component.ex:92
+#, elixir-format
+msgid "OIDC scopes to request (defaults to 'openid email profile')"
+msgstr "OIDC-omfång att begära (standard är 'openid email profile')"
+
+#: lib/claper_web/live/admin_live/dashboard_live.html.heex:108 
+#: lib/claper_web/live/admin_live/event_live.html.heex:87 
+#: lib/claper_web/live/admin_live/event_live.html.heex:277
+#, elixir-format
+msgid "Owner"
+msgstr "Ägare"
+
+#: lib/claper_web/live/admin_live/oidc_provider_live/form_component.ex:209
+#, elixir-format
+msgid "Provider created successfully"
+msgstr "Leverantören skapades"
+
+#: lib/claper_web/live/admin_live/oidc_provider_live/form_component.ex:194
+#, fuzzy
+#, elixir-format
+msgid "Provider updated successfully"
+msgstr "Leverantören uppdaterades"
+
+#: lib/claper_web/live/admin_live/oidc_provider_live/form_component.ex:119
+#, elixir-format
+msgid "Query"
+msgstr "Fråga"
+
+#: lib/claper_web/live/admin_live/dashboard_live.html.heex:100
+#, elixir-format
+msgid "Recent Events"
+msgstr "Senaste evenemang"
+
+#: lib/claper_web/live/admin_live/oidc_provider_live/form_component.ex:74
+#, elixir-format
+msgid "Redirect URI"
+msgstr "Omdirigerings-URI"
+
+#: lib/claper_web/live/admin_live/oidc_provider_live/form_component.ex:117
+#, elixir-format
+msgid "Response Mode"
+msgstr "Svarsläge"
+
+#: lib/claper_web/live/admin_live/oidc_provider_live.html.heex:270 
+#: lib/claper_web/live/admin_live/oidc_provider_live/form_component.ex:101
+#, elixir-format
+msgid "Response Type"
+msgstr "Svarstyp"
+
+#: lib/claper_web/live/admin_live/user_live.html.heex:83 
+#: lib/claper_web/live/admin_live/user_live.html.heex:258 
+#: lib/claper_web/live/admin_live/user_live/form_component.ex:46
+#, elixir-format
+msgid "Role"
+msgstr "Roll"
+
+#: lib/claper_web/live/admin_live/event_live/form_component.ex:82 
+#: lib/claper_web/live/admin_live/oidc_provider_live/form_component.ex:149 
+#: lib/claper_web/live/admin_live/user_live/form_component.ex:74
+#, elixir-format
+msgid "Saving..."
+msgstr "Sparar..."
+
+#: lib/claper_web/live/admin_live/dashboard_live.html.heex:124
+#, elixir-format
+msgid "Scheduled"
+msgstr "Schemalagt"
+
+#: lib/claper_web/live/admin_live/oidc_provider_live.html.heex:276 
+#: lib/claper_web/live/admin_live/oidc_provider_live/form_component.ex:89
+#, elixir-format
+msgid "Scope"
+msgstr "Omfång"
+
+#: lib/claper_web/live/admin_live/event_live.html.heex:55
+#, elixir-format
+msgid "Search events..."
+msgstr "Sök evenemang..."
+
+#: lib/claper_web/live/admin_live/event_live/form_component.ex:70
+#, elixir-format
+msgid "Search for a user..."
+msgstr "Sök efter en användare..."
+
+#: lib/claper_web/live/admin_live/oidc_provider_live.html.heex:55
+#, elixir-format
+msgid "Search providers..."
+msgstr "Sök leverantörer..."
+
+#: lib/claper_web/live/admin_live/user_live.html.heex:55
+#, elixir-format
+msgid "Search users..."
+msgstr "Sök användare..."
+
+#: lib/claper_web/live/admin_live/form_field_component.ex:71
+#, fuzzy
+#, elixir-format
+msgid "Select an option"
+msgstr "Välj ett alternativ"
+
+#: lib/claper_web/live/admin_live/searchable_select_component.ex:85
+#, elixir-format
+msgid "Select..."
+msgstr "Välj..."
+
+#: lib/claper_web/live/admin_live/dashboard_live.html.heex:109
+#, elixir-format
+msgid "Start Date"
+msgstr "Startdatum"
+
+#: lib/claper_web/live/admin_live/event_live.html.heex:95 
+#: lib/claper_web/live/admin_live/event_live.html.heex:283 
+#: lib/claper_web/live/admin_live/event_live/form_component.ex:46
+#, elixir-format
+msgid "Started At"
+msgstr "Startade"
+
+#: lib/claper_web/live/admin_live/dashboard_live.html.heex:111 
+#: lib/claper_web/live/admin_live/oidc_provider_live.html.heex:92 
+#: lib/claper_web/live/admin_live/oidc_provider_live.html.heex:282 
+#: lib/claper_web/live/admin_live/user_live.html.heex:92 
+#: lib/claper_web/live/admin_live/user_live.html.heex:264
+#, elixir-format
+msgid "Status"
+msgstr "Status"
+
+#: lib/claper_web/live/admin_live/oidc_provider_live/form_component.ex:41
+#, elixir-format
+msgid "The OIDC issuer URL (must start with http:// or https://)"
+msgstr "OIDC-utfärdarens URL (måste börja med http:// eller https://)"
+
+#: lib/claper_web/live/admin_live/oidc_provider_live/form_component.ex:79
+#, elixir-format
+msgid ""
+"The callback URL for your application (must start with http:// or https://)"
+msgstr "Callback-URL för din applikation (måste börja med http:// eller https://)"
+
+#: lib/claper_web/live/admin_live/event_live/form_component.ex:73
+#, elixir-format
+msgid "The user who owns this event (required)"
+msgstr "Användaren som äger detta evenemang (obligatoriskt)"
+
+#: lib/claper_web/live/admin_live/dashboard_live.html.heex:33
+#, elixir-format
+msgid "Total Events"
+msgstr "Antal evenemang"
+
+#: lib/claper_web/live/admin_live/dashboard_live.html.heex:11
+#, elixir-format
+msgid "Total Users"
+msgstr "Antal användare"
+
+#: lib/claper_web/live/admin_live/user_live.html.heex:138 
+#: lib/claper_web/live/admin_live/user_live.html.heex:272
+#, elixir-format
+msgid "Unconfirmed"
+msgstr "Ej bekräftad"
+
+#: lib/claper_web/live/admin_live/event_live/form_component.ex:83
+#, elixir-format
+msgid "Update Event"
+msgstr "Uppdatera evenemang"
+
+#: lib/claper_web/live/admin_live/oidc_provider_live/form_component.ex:150
+#, elixir-format
+msgid "Update Provider"
+msgstr "Uppdatera leverantör"
+
+#: lib/claper_web/live/admin_live/user_live/form_component.ex:75
+#, elixir-format
+msgid "Update User"
+msgstr "Uppdatera användare"
+
+#: lib/claper_web/live/admin_live/user_live.html.heex:250
+#, elixir-format
+msgid "User Account"
+msgstr "Användarkonto"
+
+#: lib/claper_web/live/admin_live/dashboard_live.html.heex:65
+#, elixir-format
+msgid "User Growth"
+msgstr "Användartillväxt"
+
+#: lib/claper_web/live/admin_live/user_live/form_component.ex:165
+#, elixir-format
+msgid "User created successfully"
+msgstr "Användare skapad"
+
+#: lib/claper_web/live/admin_live/user_live.ex:59 
+#: lib/claper_web/live/admin_live/user_live.ex:127
+#, elixir-format
+msgid "User deleted successfully"
+msgstr "Användare raderad"
+
+#: lib/claper_web/live/admin_live/user_live.ex:48 
+#: lib/claper_web/live/admin_live/user_live.html.heex:234
+#, elixir-format
+msgid "User details"
+msgstr "Användardetaljer"
+
+#: lib/claper_web/live/admin_live/user_live/form_component.ex:150
+#, fuzzy
+#, elixir-format
+msgid "User updated successfully"
+msgstr "Användare uppdaterad"
+
+#: lib/claper_web/live/admin_live/user_live/form_component.ex:50
+#, elixir-format
+msgid "User's access level"
+msgstr "Användarens åtkomstnivå"
+
+#: lib/claper_web/live/admin_live/user_live/form_component.ex:22
+#, elixir-format
+msgid "User's email address (must be unique)"
+msgstr "Användarens e-postadress (måste vara unik)"
+
+#: lib/claper_web/live/admin_live/user_live.ex:17 
+#: lib/claper_web/live/admin_live/user_live.html.heex:6 
+#: lib/claper_web/templates/layout/admin.html.heex:230
+#, elixir-format
+msgid "Users"
+msgstr "Användare"
+
+#: lib/claper_web/live/admin_live/user_live.ex:97
+#, elixir-format
+msgid "Users exported successfully"
+msgstr "Användare exporterades"
+
+#: lib/claper_web/live/admin_live/dashboard_live.html.heex:151 
+#: lib/claper_web/live/admin_live/event_live.html.heex:169
+#, elixir-format
+msgid "View event"
+msgstr "Visa evenemang"
+
+#: lib/claper_web/live/admin_live/oidc_provider_live.html.heex:147
+#, fuzzy
+#, elixir-format
+msgid "View provider"
+msgstr "Visa leverantör"
+
+#: lib/claper_web/live/admin_live/user_live.html.heex:150
+#, elixir-format
+msgid "View user"
+msgstr "Visa användare"
+
+#: lib/claper_web/live/admin_live/event_live/form_component.ex:60
+#, elixir-format
+msgid "When this event expires (optional)"
+msgstr "När detta evenemang upphör (valfritt)"
+
+#: lib/claper_web/live/admin_live/oidc_provider_live/form_component.ex:139
+#, elixir-format
+msgid ""
+"Whether this provider is currently active and available for authentication"
+msgstr ""
+"Om denna utfärdare är aktiv och tillgänglig för autentisering"
+
+#: lib/claper_web/live/admin_live/event_live.html.heex:301
+#, elixir-format
+msgid "attendees"
+msgstr "deltagare"
+
+#: lib/claper_web/live/admin_live/oidc_provider_live/form_component.ex:38
+#, elixir-format
+msgid "https://example.com"
+msgstr "https://example.com"
+
+#: lib/claper_web/live/admin_live/oidc_provider_live/form_component.ex:75
+#, elixir-format
+msgid "https://yourapp.com/auth/callback"
+msgstr "https://yourapp.com/auth/callback"
+
+#: lib/claper_web/live/admin_live/oidc_provider_live/form_component.ex:90
+#, elixir-format
+msgid "openid email profile"
+msgstr "openid email profile"
+
+#: lib/claper_web/live/admin_live/dashboard_live.html.heex:28 
+#: lib/claper_web/live/admin_live/dashboard_live.html.heex:50
+#, elixir-format
+msgid "vs last month"
+msgstr "jämfört med förra månaden"
+
+#: lib/claper_web/live/admin_live/event_live.html.heex:256
+#, elixir-format
+msgid "Back to events"
+msgstr "Tillbaka till evenemang"
+
+#: lib/claper_web/live/admin_live/oidc_provider_live.html.heex:234
+#, elixir-format
+msgid "Back to providers"
+msgstr "Tillbaka till utfärdare"
+
+#: lib/claper_web/live/admin_live/user_live.html.heex:237
+#, elixir-format
+msgid "Back to users"
+msgstr "Tillbaka till användare"
+
+#: lib/claper_web/live/admin_live/oidc_provider_live.ex:40 
+#: lib/claper_web/live/admin_live/oidc_provider_live.html.heex:23 
+#: lib/claper_web/live/admin_live/oidc_provider_live.html.heex:316 
+#: lib/claper_web/live/admin_live/oidc_provider_live.html.heex:326
+#, fuzzy
+#, elixir-format
+msgid "New provider"
+msgstr "Ny utfärdare"
+
+#: lib/claper_web/live/admin_live/user_live.ex:36 
+#: lib/claper_web/live/admin_live/user_live.html.heex:306 
+#: lib/claper_web/live/admin_live/user_live.html.heex:316
+#, fuzzy
+#, elixir-format
+msgid "New user"
+msgstr "Ny användare"
+
+#: lib/claper_web/live/admin_live/oidc_provider_live.html.heex:116
+#, fuzzy
+#, elixir-format
+msgid "No providers found"
+msgstr "Hittade inga utfärdare"
+
+#: lib/claper_web/live/admin_live/oidc_provider_live.ex:57
+#, fuzzy
+#, elixir-format
+msgid "Provider deleted successfully"
+msgstr "Utfärdare raderad"
+
+#: lib/claper_web/live/admin_live/oidc_provider_live.ex:34
+#, fuzzy
+#, elixir-format
+msgid "Provider details"
+msgstr "Utfärdardetaljer"
+
+#: lib/claper_web/templates/layout/_user_menu.html.heex:13 
+#: lib/claper_web/templates/layout/admin.html.heex:44 
+#: lib/claper_web/templates/layout/admin.html.heex:182
+#, elixir-format
+msgid "Admin"
+msgstr "Admin"
+
+#: lib/claper_web/templates/layout/admin.html.heex:301
+#, elixir-format
+msgid "Back to app"
+msgstr "Tillbaka till appen"
+
+#: lib/claper_web/templates/user_notifier/change.html.heex:17
+#, elixir-format
+msgid "Confirm email change"
+msgstr "Bekräfta ändring av e-postadress"
+
+#: lib/claper_web/templates/user_notifier/change.html.heex:32
+#, elixir-format
+msgid "If you didn't request an email change, please ignore this."
+msgstr "Om du inte begärde en ändring av e-postadressen, vänligen ignorera detta."
+
+#: lib/claper_web/templates/user_notifier/change.html.heex:22
+#, fuzzy
+#, elixir-format
+msgid "You can confirm your email change by visiting the URL below"
+msgstr "Du kan bekräfta ändringen av din e-postadress genom att besöka URL:en nedan"
+
+#: lib/claper_web/live/event_live/manager_settings_component.ex:416
+#, elixir-format
+msgid "Hide attendee count"
+msgstr "Dölj antal deltagare"
+
+#: lib/claper_web/live/event_live/manager_settings_component.ex:413
+#, fuzzy
+#, elixir-format
+msgid "Show attendee count"
+msgstr "Visa antal deltagare"
+
+#: lib/claper_web/live/form_live/form_component.html.heex:37
+#, elixir-format
+msgid "Required"
+msgstr "Obligatoriskt"
+
+#: lib/claper_web/views/components/input_component.ex:16 
+#: lib/claper_web/views/components/input_component.ex:295
+#, elixir-format
+msgid "(optional)"
+msgstr "(valfritt)"
+
+#: lib/claper_web/live/admin_live/audit_log_live.html.heex:67 
+#: lib/claper_web/live/admin_live/audit_log_live.html.heex:105
+#, elixir-format
+msgid "Action"
+msgstr "Åtgärd"
+
+#: lib/claper_web/live/admin_live/audit_log_live.ex:39
+#, elixir-format
+msgid "All actions"
+msgstr "Alla åtgärder"
+
+#: lib/claper_web/live/admin_live/audit_log_live.ex:50
+#, elixir-format
+msgid "Audit Log Details"
+msgstr "Loggdetaljer"
+
+#: lib/claper_web/live/admin_live/audit_log_live.ex:24 
+#: lib/claper_web/templates/layout/admin.html.heex:246
+#, elixir-format
+msgid "Audit Logs"
+msgstr "Auditloggar"
+
+#: lib/claper_web/live/admin_live/audit_log_live.html.heex:66 
+#: lib/claper_web/live/admin_live/audit_log_live.html.heex:99
+#, elixir-format
+msgid "ID"
+msgstr "ID"
+
+#: lib/claper_web/live/admin_live/audit_log_live.html.heex:78 
+#: lib/claper_web/live/admin_live/audit_log_live.html.heex:152
+#, elixir-format
+msgid "Metadata"
+msgstr "Metadata"
+
+#: lib/claper_web/live/admin_live/audit_log_live.html.heex:55
+#, fuzzy
+#, elixir-format
+msgid "No results."
+msgstr "Inga resultat."
+
+#: lib/claper_web/live/admin_live/audit_log_live.html.heex:145
+#, elixir-format
+msgid "Resource ID"
+msgstr "Resurs-ID"
+
+#: lib/claper_web/live/admin_live/audit_log_live.html.heex:137
+#, fuzzy
+#, elixir-format
+msgid "Resource Type"
+msgstr "Resurstyp"
+
+#: lib/claper_web/live/admin_live/audit_log_live.ex:33
+#, elixir-format
+msgid "Search by user email"
+msgstr "Sök via användarens e-post"
+
+#: lib/claper_web/live/admin_live/audit_log_live.html.heex:73 
+#: lib/claper_web/live/admin_live/audit_log_live.html.heex:130
+#, elixir-format
+msgid "Timestamp"
+msgstr "Tidsstämpel"
+
+#: lib/claper_web/live/admin_live/audit_log_live.html.heex:70 
+#: lib/claper_web/live/admin_live/audit_log_live.html.heex:111
+#, fuzzy
+#, elixir-format
+msgid "User"
+msgstr "Användare"
+
+#: lib/claper_web/components/core_components.ex:74
+#, elixir-format
+msgid "close"
+msgstr "stäng"
+
+#: lib/claper_web/live/admin_live/audit_log_live.html.heex:88
+#, elixir-format
+msgid "View details for log #%{id}"
+msgstr "Visa loggdetaljer för #%{id}"
+
+#: lib/claper_web/live/admin_live/audit_log_live.html.heex:119
+#, elixir-format
+msgid "View profile for %{email}"
+msgstr "Visa profil för %{email}"
