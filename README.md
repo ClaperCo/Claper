@@ -42,10 +42,6 @@ Claper is proudly powered by Phoenix and Elixir.
 
 [![Phoenix][Phoenix]][Phoenix-url] [![Elixir][Elixir]][Elixir-url] [![Tailwind][Tailwind]][Tailwind-url]
 
-### Our partners and sponsors
-
-<a href="https://www.lmddc.lu/"><img src="priv/static/images/partners/lmddc.png" alt="LMDDC" height="50"></a>
-
 ## Documentation
 
 You can find all the instructions and configuration in [the documentation](https://docs.claper.co/).
