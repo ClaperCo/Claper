@@ -723,6 +723,26 @@ defmodule ClaperWeb.EventLive.Manage do
   end
 
   @impl true
+  def handle_event("reply", %{"id" => id, "reply_body" => reply_body}, socket) do
+    case String.trim(reply_body) do
+      "" ->
+        {:noreply, socket}
+
+      trimmed_body ->
+        case Claper.Posts.get_post_for_event(id, event_id(socket), [:event]) do
+          nil ->
+            {:noreply, socket}
+
+          post ->
+            case Claper.Posts.reply_to_post(post, trimmed_body) do
+              {:ok, _updated_post} -> {:noreply, socket}
+              {:error, _changeset} -> {:noreply, socket}
+            end
+        end
+    end
+  end
+
+  @impl true
   def handle_event(
         "ban",
         %{"user_id" => user_id},

@@ -177,6 +177,25 @@ defmodule Claper.Posts do
   end
 
   @doc """
+  Adds (or replaces) a moderator reply to a post.
+
+  ## Examples
+
+      iex> reply_to_post(post, "Thanks for the question!")
+      {:ok, %Post{}}
+
+      iex> reply_to_post(post, "")
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def reply_to_post(%Post{} = post, reply_body) do
+    post
+    |> Post.reply_changeset(%{reply_body: reply_body})
+    |> Repo.update()
+    |> broadcast(:post_updated)
+  end
+
+  @doc """
   Pins or unpins a post based on its current state.
 
   ## Examples

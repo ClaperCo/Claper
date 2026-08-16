@@ -17,9 +17,9 @@ defmodule ClaperWeb.EventLive.ManageablePostComponent do
     <div
       id={"#{@id}"}
       class="flex items-end gap-2 group"
-      x-data="{ actionsOpen: false }"
+      x-data="{ actionsOpen: false, replying: false }"
       @click="actionsOpen = true"
-      @click.outside="actionsOpen = false"
+      @click.outside="actionsOpen = false; replying = false"
     >
       <!-- Left: time + avatar -->
       <div class="flex flex-col items-center gap-2 shrink-0">
@@ -47,6 +47,30 @@ defmodule ClaperWeb.EventLive.ManageablePostComponent do
             class="relative z-20 ml-auto flex items-center divide-x divide-gray-200 border border-gray-200 rounded-lg group-hover:opacity-100 transition-opacity shrink-0"
             x-bind:class="actionsOpen ? 'opacity-100' : 'opacity-0'"
           >
+            <div class="tooltip tooltip-bottom" data-tip={gettext("Reply")}>
+              <button
+                type="button"
+                class="flex items-center justify-center w-8 h-6"
+                @click.stop="replying = !replying"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="icon icon-tabler icons-tabler-outline icon-tabler-arrow-back-up size-4 text-gray-500"
+                >
+                  <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                  <path d="M9 13l-4 -4l4 -4" />
+                  <path d="M5 9h7a4 4 0 1 1 0 8h-1" />
+                </svg>
+              </button>
+            </div>
             <div
               class="tooltip tooltip-bottom"
               data-tip={if @post.pinned, do: gettext("Unpin"), else: gettext("Pin")}
@@ -253,6 +277,35 @@ defmodule ClaperWeb.EventLive.ManageablePostComponent do
             <% end %>
           </div>
         </div>
+
+        <div :if={@post.reply_body} class="mt-1 ml-2 rounded-lg bg-gray-100 px-2.5 py-1.5 text-sm">
+          <p class="mb-0.5 text-[10px] font-bold uppercase tracking-wide text-gray-500">
+            {gettext("Your reply")}
+          </p>
+          <p class="break-words leading-5 text-gray-700">
+            {ClaperWeb.Helpers.format_body(@post.reply_body)}
+          </p>
+        </div>
+
+        <form
+          x-show="replying"
+          x-cloak
+          phx-submit="reply"
+          phx-value-id={@post.uuid}
+          class="mt-1 ml-2 flex items-center gap-2"
+        >
+          <input
+            type="text"
+            name="reply_body"
+            placeholder={gettext("Write a reply...")}
+            autocomplete="off"
+            class="input input-sm flex-1"
+            value={@post.reply_body}
+          />
+          <button type="submit" class="btn btn-sm btn-primary">
+            {gettext("Send")}
+          </button>
+        </form>
       </div>
     </div>
     """

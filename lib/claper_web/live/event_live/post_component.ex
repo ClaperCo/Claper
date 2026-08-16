@@ -186,6 +186,26 @@ defmodule ClaperWeb.EventLive.PostComponent do
       <p class="break-words text-sm leading-5">{ClaperWeb.Helpers.format_body(@post.body)}</p>
 
       <div
+        :if={@post.reply_body}
+        class={[
+          "mt-2 rounded-lg border-l-2 px-2.5 py-1.5 text-sm",
+          @host_message && "border-supporting-yellow-500 bg-supporting-yellow-100/60",
+          !@host_message && @own_message && "border-white/30 bg-white/10",
+          !@host_message && !@own_message && "border-gray-300 bg-gray-50"
+        ]}
+      >
+        <p class={[
+          "mb-0.5 text-[10px] font-bold uppercase tracking-wide",
+          @host_message && "text-supporting-yellow-900",
+          !@host_message && @own_message && "text-gray-300",
+          !@host_message && !@own_message && "text-gray-500"
+        ]}>
+          {gettext("Moderator reply")}
+        </p>
+        <p class="break-words leading-5">{ClaperWeb.Helpers.format_body(@post.reply_body)}</p>
+      </div>
+
+      <div
         :if={
           @reaction_enabled &&
             (@post.like_count > 0 || @post.love_count > 0 || @post.lol_count > 0)

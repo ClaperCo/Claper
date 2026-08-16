@@ -13,6 +13,8 @@ defmodule Claper.Posts.Post do
           attendee_identifier: String.t() | nil,
           position: integer() | nil,
           pinned: boolean() | nil,
+          reply_body: String.t() | nil,
+          replied_at: NaiveDateTime.t() | nil,
           event_id: integer() | nil,
           user_id: integer() | nil,
           reactions: [Claper.Posts.Reaction.t()] | nil,
@@ -30,6 +32,8 @@ defmodule Claper.Posts.Post do
     field :attendee_identifier, :string
     field :position, :integer, default: 0
     field :pinned, :boolean, default: false
+    field :reply_body, :string
+    field :replied_at, :naive_datetime
 
     belongs_to :event, Claper.Events.Event
     belongs_to :user, Claper.Accounts.User
@@ -61,5 +65,13 @@ defmodule Claper.Posts.Post do
     |> cast(attrs, [:name])
     |> validate_required([:name])
     |> validate_length(:name, min: 2, max: 20)
+  end
+
+  def reply_changeset(post, attrs) do
+    post
+    |> cast(attrs, [:reply_body])
+    |> validate_required([:reply_body])
+    |> validate_length(:reply_body, min: 1, max: 255)
+    |> put_change(:replied_at, NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second))
   end
 end
