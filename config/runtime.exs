@@ -158,6 +158,21 @@ oidc_property_mappings =
 oidc_enabled =
   !is_nil(oidc_client_id) and !is_nil(oidc_client_secret)
 
+disable_password_login_requested =
+  get_var_from_path_or_env(config_dir, "DISABLE_PASSWORD_LOGIN", "false")
+  |> String.to_existing_atom()
+
+# Only takes effect when OIDC is actually configured -- otherwise every account
+# (including the seeded default admin) would be permanently unable to log in.
+disable_password_login = disable_password_login_requested and oidc_enabled
+
+if disable_password_login_requested and not oidc_enabled do
+  IO.warn(
+    "DISABLE_PASSWORD_LOGIN=true has no effect because OIDC is not configured " <>
+      "(OIDC_CLIENT_ID / OIDC_CLIENT_SECRET are not set). Password login stays enabled."
+  )
+end
+
 allow_unlink_external_provider =
   get_var_from_path_or_env(config_dir, "ALLOW_UNLINK_EXTERNAL_PROVIDER", "true")
   |> String.to_existing_atom()
@@ -203,7 +218,8 @@ config :claper, :oidc,
   provider_name: oidc_provider_name,
   logo_url: oidc_logo_url,
   property_mappings: oidc_property_mappings,
-  auto_redirect_login: oidc_auto_redirect_login
+  auto_redirect_login: oidc_auto_redirect_login,
+  disable_password_login: disable_password_login
 
 config :claper, Claper.Repo,
   url: database_url,
