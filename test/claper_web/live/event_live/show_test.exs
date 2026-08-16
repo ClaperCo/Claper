@@ -20,7 +20,7 @@ defmodule ClaperWeb.EventLive.ShowTest do
     assert "h-[100dvh]" in classes(document, "#attendee-room")
     assert "grid-rows-[auto_auto_minmax(0,1fr)]" in classes(document, "#attendee-room")
     assert "z-[60]" in classes(document, "#side-menu")
-    assert "h-[40dvh]" in classes(document, "#focus-slot")
+    assert "h-[40svh]" in classes(document, "#focus-slot")
     assert Floki.find(document, "#focus-media img") != []
     assert Floki.find(document, "[data-focus-collapse]") != []
     assert Floki.find(document, "[data-focus-show]") != []
