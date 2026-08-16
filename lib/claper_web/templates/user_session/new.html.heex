@@ -45,8 +45,8 @@
             </div>
 
             <.form
-              :if={!@password_login_disabled}
               :let={f}
+              :if={!@password_login_disabled}
               for={@conn}
               action={~p"/users/log_in"}
               as={:user}
@@ -102,7 +102,10 @@
               <% end %>
             </div>
 
-            <div :if={!@password_login_disabled} class="space-y-4 border-t border-white/10 pt-6 text-center md:text-left">
+            <div
+              :if={!@password_login_disabled}
+              class="space-y-4 border-t border-white/10 pt-6 text-center md:text-left"
+            >
               <p class="text-sm text-gray-300">
                 {link(gettext("Forgot your password?"),
                   to: ~p"/users/reset_password",

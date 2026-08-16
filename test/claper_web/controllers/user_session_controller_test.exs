@@ -44,7 +44,9 @@ defmodule ClaperWeb.UserSessionControllerTest do
       refute response =~ "type=\"password\""
     end
 
-    test "still shows the password form when OIDC is not enabled, even if requested", %{conn: conn} do
+    test "still shows the password form when OIDC is not enabled, even if requested", %{
+      conn: conn
+    } do
       Application.put_env(
         :claper,
         :oidc,
