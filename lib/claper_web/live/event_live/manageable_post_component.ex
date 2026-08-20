@@ -279,15 +279,21 @@ defmodule ClaperWeb.EventLive.ManageablePostComponent do
         </div>
 
         <div :if={@post.reply_body} class="mt-1 ml-2 rounded-lg bg-gray-100 px-2.5 py-1.5 text-sm">
-          <p class="mb-0.5 text-[10px] font-bold uppercase tracking-wide text-gray-500">
-            {gettext("Your reply")}
-          </p>
+          <div class="mb-0.5 flex items-center gap-2">
+            <p class="text-[10px] font-bold uppercase tracking-wide text-gray-500">
+              {gettext("Moderator reply")}
+            </p>
+            <span :if={@post.replied_at} class="text-[10px] leading-4 text-gray-400">
+              {Calendar.strftime(@post.replied_at, "%H:%M")}
+            </span>
+          </div>
           <p class="break-words leading-5 text-gray-700">
             {ClaperWeb.Helpers.format_body(@post.reply_body)}
           </p>
         </div>
 
         <form
+          :if={!@readonly}
           x-show="replying"
           x-cloak
           phx-submit="reply"
