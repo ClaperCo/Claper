@@ -725,8 +725,11 @@ defmodule ClaperWeb.EventLive.Manage do
   @impl true
   def handle_event("reply", %{"id" => id, "reply_body" => reply_body}, socket) do
     case String.trim(reply_body) do
-      "" -> {:noreply, socket}
-      trimmed_body -> reply(id, trimmed_body, socket)
+      "" ->
+        {:noreply, socket |> put_flash(:error, gettext("A reply cannot be empty"))}
+
+      trimmed_body ->
+        reply(id, trimmed_body, socket)
     end
   end
 
@@ -1309,12 +1312,15 @@ defmodule ClaperWeb.EventLive.Manage do
   defp reply(post_id, reply_body, socket) do
     case Claper.Posts.get_post_for_event(post_id, event_id(socket), [:event]) do
       nil ->
-        {:noreply, socket}
+        {:noreply, socket |> put_flash(:error, gettext("Resource not found"))}
 
       post ->
         case Claper.Posts.reply_to_post(post, reply_body) do
-          {:ok, _updated_post} -> {:noreply, socket}
-          {:error, _changeset} -> {:noreply, socket}
+          {:ok, _updated_post} ->
+            {:noreply, socket}
+
+          {:error, _changeset} ->
+            {:noreply, socket |> put_flash(:error, gettext("Could not send the reply"))}
         end
     end
   end
