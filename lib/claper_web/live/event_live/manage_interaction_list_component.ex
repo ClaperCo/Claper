@@ -2,17 +2,21 @@ defmodule ClaperWeb.EventLive.ManageInteractionListComponent do
   use ClaperWeb, :live_component
 
   @per_page 6
+  @max_per_page 20
+  @fixed_content_height 200
+  @interaction_row_height 64
 
   def update(assigns, socket) do
     page = Map.get(socket.assigns, :page, 0)
+    per_page = Map.get(socket.assigns, :per_page, @per_page)
     total = length(assigns.interactions)
-    max_page = max(0, ceil(total / @per_page) - 1)
+    max_page = max_page(total, per_page)
     page = min(page, max_page)
 
     {:ok,
      socket
      |> assign(assigns)
-     |> assign(page: page, per_page: @per_page)}
+     |> assign(page: page, per_page: per_page)}
   end
 
   def handle_event("prev-page", _, socket) do
@@ -20,8 +24,28 @@ defmodule ClaperWeb.EventLive.ManageInteractionListComponent do
   end
 
   def handle_event("next-page", _, socket) do
-    max_page = max(0, ceil(length(socket.assigns.interactions) / @per_page) - 1)
+    max_page = max_page(length(socket.assigns.interactions), socket.assigns.per_page)
     {:noreply, assign(socket, page: min(max_page, socket.assigns.page + 1))}
+  end
+
+  def handle_event("interaction-list-resized", %{"height" => height}, socket)
+      when is_integer(height) do
+    per_page =
+      height
+      |> Kernel.-(@fixed_content_height)
+      |> div(@interaction_row_height)
+      |> max(@per_page)
+      |> min(@max_per_page)
+
+    first_interaction = socket.assigns.page * socket.assigns.per_page
+
+    page =
+      min(
+        div(first_interaction, per_page),
+        max_page(length(socket.assigns.interactions), per_page)
+      )
+
+    {:noreply, assign(socket, page: page, per_page: per_page)}
   end
 
   defp paginated_interactions(interactions, page, per_page) do
@@ -29,6 +53,8 @@ defmodule ClaperWeb.EventLive.ManageInteractionListComponent do
     |> Enum.drop(page * per_page)
     |> Enum.take(per_page)
   end
+
+  defp max_page(total, per_page), do: max(0, ceil(total / per_page) - 1)
 
   def render(assigns) do
     assigns =
@@ -41,7 +67,8 @@ defmodule ClaperWeb.EventLive.ManageInteractionListComponent do
     <div
       id="interaction-drag-list"
       phx-hook="InteractionDrag"
-      class="relative flex flex-col gap-2 border border-gray-200 rounded-2xl p-2"
+      phx-target={@myself}
+      class="relative flex flex-col gap-2 border border-gray-200 rounded-2xl p-2 lg:flex-1 lg:min-h-0 lg:overflow-y-auto"
     >
       <div class="flex items-center gap-2">
         <svg

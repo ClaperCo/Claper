@@ -2,7 +2,7 @@ defmodule ClaperWeb.EventLiveTest do
   use ClaperWeb.ConnCase
 
   import Phoenix.LiveViewTest
-  import Claper.{FormsFixtures, PresentationsFixtures}
+  import Claper.{FormsFixtures, PollsFixtures, PresentationsFixtures}
 
   @update_attrs %{name: "some updated name"}
 
@@ -193,6 +193,79 @@ defmodule ClaperWeb.EventLiveTest do
 
   describe "Manage" do
     setup [:register_and_log_in_user, :create_event]
+
+    test "keeps interaction pagination reachable on short screens", %{
+      conn: conn,
+      presentation_file: presentation_file
+    } do
+      for index <- 1..7 do
+        poll_fixture(%{
+          presentation_file_id: presentation_file.id,
+          title: "Poll #{index}"
+        })
+      end
+
+      {:ok, manage_live, html} = live(conn, ~p"/e/#{presentation_file.event.code}/manage")
+      document = Floki.parse_document!(html)
+
+      interaction_pane_classes =
+        document
+        |> Floki.attribute("#interactions-pane", "class")
+        |> List.first()
+        |> String.split()
+
+      interaction_list_classes =
+        document
+        |> Floki.attribute("#interaction-drag-list", "class")
+        |> List.first()
+        |> String.split()
+
+      assert "lg:flex" in interaction_pane_classes
+      assert "lg:min-h-0" in interaction_pane_classes
+      assert "lg:overflow-hidden" in interaction_pane_classes
+      assert "lg:flex-1" in interaction_list_classes
+      assert "lg:overflow-y-auto" in interaction_list_classes
+      assert has_element?(manage_live, ~s(#interaction-drag-list button[phx-click="next-page"]))
+
+      manage_live
+      |> element(~s(#interaction-drag-list button[phx-click="next-page"]))
+      |> render_click()
+
+      assert render(manage_live) =~ "2 / 2"
+    end
+
+    test "shows more interactions when the panel is taller", %{
+      conn: conn,
+      presentation_file: presentation_file
+    } do
+      for index <- 1..13 do
+        poll_fixture(%{
+          presentation_file_id: presentation_file.id,
+          title: "Poll #{index}"
+        })
+      end
+
+      {:ok, manage_live, _html} = live(conn, ~p"/e/#{presentation_file.event.code}/manage")
+
+      assert manage_live
+             |> render()
+             |> Floki.parse_document!()
+             |> Floki.find("[data-interaction-id]")
+             |> length() == 6
+
+      manage_live
+      |> element("#interaction-drag-list")
+      |> render_hook("interaction-list-resized", %{"height" => 900})
+
+      html = render(manage_live)
+
+      assert html
+             |> Floki.parse_document!()
+             |> Floki.find("[data-interaction-id]")
+             |> length() == 10
+
+      assert html =~ "1 / 2"
+    end
 
     test "prompts to regenerate missing thumbnails and starts regeneration", %{
       conn: conn,

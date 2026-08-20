@@ -4,6 +4,7 @@
 
 - Fix datetime being reset at every changes
 - Fix account creation with a soft-deleted email
+- Fix interaction list paging on resize
 
 ## v.3.0.0
 

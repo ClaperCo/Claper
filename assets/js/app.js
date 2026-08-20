@@ -515,6 +515,18 @@ Hooks.SlideSortable = {
 };
 Hooks.InteractionDrag = {
   mounted() {
+    this.lastInteractionListHeight = null;
+    this.interactionListResizeObserver = new ResizeObserver(([entry]) => {
+      const height = window.matchMedia("(min-width: 1024px)").matches
+        ? Math.round(entry.contentRect.height)
+        : 0;
+
+      if (height === this.lastInteractionListHeight) return;
+      this.lastInteractionListHeight = height;
+      this.pushEventTo(this.el, "interaction-list-resized", { height });
+    });
+    this.interactionListResizeObserver.observe(this.el);
+
     this.el.addEventListener("dragstart", (e) => {
       const item = e.target.closest("[data-interaction-id]");
       if (!item) return;
@@ -545,6 +557,9 @@ Hooks.InteractionDrag = {
         .querySelectorAll("[data-interaction-id]")
         .forEach((n) => n.classList.remove("opacity-40"));
     });
+  },
+  destroyed() {
+    this.interactionListResizeObserver.disconnect();
   },
 };
 Hooks.OpenPresenter = {
