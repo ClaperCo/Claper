@@ -113,6 +113,18 @@
                 <% end %>
                 <p class={"#{if @iframe, do: "text-xl", else: "text-3xl"}"}>{post.body}</p>
 
+                <div
+                  :if={post.reply_body}
+                  class={"#{if @iframe, do: "mt-2 px-2 py-1", else: "mt-4 px-4 py-2"} border-l-4 border-primary-500 bg-gray-100 rounded-r-lg"}
+                >
+                  <p class={"#{if @iframe, do: "text-xs", else: "text-base"} text-gray-500 font-semibold uppercase tracking-wide mb-1"}>
+                    {gettext("Moderator reply")}
+                  </p>
+                  <p class={"#{if @iframe, do: "text-lg", else: "text-2xl"}"}>
+                    {post.reply_body}
+                  </p>
+                </div>
+
                 <%= if post.like_count > 0 || post.love_count > 0 || post.lol_count > 0 do %>
                   <div class="flex h-6 space-x-2 text-lg text-gray-500 pb-3 items-center mt-5">
                     <div class="flex items-center">
@@ -159,6 +171,18 @@
                   </p>
                 <% end %>
                 <p class={"#{if @iframe, do: "text-xl", else: "text-3xl"}"}>{post.body}</p>
+
+                <div
+                  :if={post.reply_body}
+                  class={"#{if @iframe, do: "mt-2 px-2 py-1", else: "mt-4 px-4 py-2"} border-l-4 border-primary-500 bg-gray-100 rounded-r-lg"}
+                >
+                  <p class={"#{if @iframe, do: "text-xs", else: "text-base"} text-gray-500 font-semibold uppercase tracking-wide mb-1"}>
+                    {gettext("Moderator reply")}
+                  </p>
+                  <p class={"#{if @iframe, do: "text-lg", else: "text-2xl"}"}>
+                    {post.reply_body}
+                  </p>
+                </div>
 
                 <%= if post.like_count > 0 || post.love_count > 0 || post.lol_count > 0 do %>
                   <div class="flex h-6 space-x-2 text-lg text-gray-500 pb-3 items-center mt-5">
