@@ -47,6 +47,31 @@ defmodule Claper.PostsTest do
       assert post == Posts.get_post!(post.uuid, [:event])
     end
 
+    test "reply_to_post/2 with valid data stores the reply and stamps replied_at" do
+      post = post_fixture()
+
+      assert {:ok, %Post{} = replied_post} =
+               Posts.reply_to_post(post, "Thanks for the question!")
+
+      assert replied_post.reply_body == "Thanks for the question!"
+      assert replied_post.replied_at != nil
+    end
+
+    test "reply_to_post/2 with a blank reply returns error changeset" do
+      post = post_fixture(%{}, [:event])
+
+      assert {:error, %Ecto.Changeset{}} = Posts.reply_to_post(post, "")
+      assert post == Posts.get_post!(post.uuid, [:event])
+    end
+
+    test "reply_to_post/2 leaves the original body untouched" do
+      post = post_fixture()
+
+      assert {:ok, %Post{} = replied_post} = Posts.reply_to_post(post, "Answered offline")
+
+      assert replied_post.body == post.body
+    end
+
     test "delete_post/1 deletes the post" do
       post = post_fixture()
       assert {:ok, %Post{}} = Posts.delete_post(post)

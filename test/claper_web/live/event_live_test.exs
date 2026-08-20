@@ -211,6 +211,55 @@ defmodule ClaperWeb.EventLiveTest do
         assert render(manage_live) =~ "Thumbnail regeneration started"
       end)
     end
+
+    test "stores a moderator reply and shows it in the panel", %{
+      conn: conn,
+      presentation_file: presentation_file
+    } do
+      post = Claper.PostsFixtures.post_fixture(%{event: presentation_file.event})
+
+      {:ok, manage_live, _html} = live(conn, ~p"/e/#{presentation_file.event.code}/manage")
+
+      render_submit(manage_live, "reply", %{
+        "id" => post.uuid,
+        "reply_body" => "Thanks for the question!"
+      })
+
+      assert Claper.Posts.get_post!(post.uuid).reply_body == "Thanks for the question!"
+      assert render(manage_live) =~ "Thanks for the question!"
+    end
+
+    test "flashes an error instead of silently dropping a blank reply", %{
+      conn: conn,
+      presentation_file: presentation_file
+    } do
+      post = Claper.PostsFixtures.post_fixture(%{event: presentation_file.event})
+
+      {:ok, manage_live, _html} = live(conn, ~p"/e/#{presentation_file.event.code}/manage")
+
+      render_submit(manage_live, "reply", %{"id" => post.uuid, "reply_body" => "   "})
+
+      assert render(manage_live) =~ "A reply cannot be empty"
+      assert Claper.Posts.get_post!(post.uuid).reply_body == nil
+    end
+  end
+
+  describe "Presenter" do
+    setup [:register_and_log_in_user]
+
+    test "renders a moderator reply on the projected display", %{conn: conn, user: user} do
+      presentation_file = presentation_file_fixture(%{user: user}, [:event])
+      presentation_state_fixture(%{presentation_file: presentation_file, chat_visible: true})
+
+      post = Claper.PostsFixtures.post_fixture(%{event: presentation_file.event})
+      {:ok, _replied} = Claper.Posts.reply_to_post(post, "Answered during the break")
+
+      {:ok, _presenter_live, html} =
+        live(conn, ~p"/e/#{presentation_file.event.code}/presenter")
+
+      assert html =~ "Moderator reply"
+      assert html =~ "Answered during the break"
+    end
   end
 
   describe "Stats" do
