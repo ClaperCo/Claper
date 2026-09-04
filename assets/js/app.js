@@ -683,6 +683,44 @@ Hooks.AttendeeCaptions = {
   },
 };
 
+// The chat panel is the flexible row of #attendee-room, so collapsing it has to
+// hand that role to the focus slot. That is a sibling, which CSS cannot reach
+// from the panel, so the class goes on the room and the stylesheet resizes both.
+Hooks.AttendeeChat = {
+  mounted() {
+    this.collapseKey = this.el.dataset.collapseKey;
+    this.room = this.el.closest("#attendee-room");
+    this.onClick = (event) => {
+      if (event.target.closest("[data-chat-collapse]")) {
+        localStorage.setItem(this.collapseKey, "collapsed");
+        this.restoreCollapse();
+        return;
+      }
+
+      if (event.target.closest("[data-chat-show]")) {
+        localStorage.setItem(this.collapseKey, "expanded");
+        this.restoreCollapse();
+      }
+    };
+    this.el.addEventListener("click", this.onClick);
+    this.restoreCollapse();
+  },
+  updated() {
+    this.restoreCollapse();
+  },
+  destroyed() {
+    this.el.removeEventListener("click", this.onClick);
+    // The presenter can hide the panel while an attendee has it collapsed. The
+    // class lives on the room, which survives, so it has to be cleared here or
+    // it would keep shrinking a panel that is no longer there.
+    this.room?.classList.remove("chat-collapsed");
+  },
+  restoreCollapse() {
+    const collapsed = localStorage.getItem(this.collapseKey) === "collapsed";
+    this.room?.classList.toggle("chat-collapsed", collapsed);
+  },
+};
+
 Hooks.RoomReactionFab = {
   mounted() {
     this.trigger = this.el.querySelector("[data-reaction-trigger]");

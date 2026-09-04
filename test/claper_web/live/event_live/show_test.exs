@@ -18,7 +18,9 @@ defmodule ClaperWeb.EventLive.ShowTest do
     document = Floki.parse_document!(html)
 
     assert "h-[100dvh]" in classes(document, "#attendee-room")
-    assert "grid-rows-[auto_auto_minmax(0,1fr)]" in classes(document, "#attendee-room")
+    assert "flex-col" in classes(document, "#attendee-room")
+    assert "shrink-0" in classes(document, "#focus-slot")
+    assert "flex-1" in classes(document, "#chat-panel")
     assert "z-[60]" in classes(document, "#side-menu")
     assert "h-[40dvh]" in classes(document, "#focus-slot")
     assert Floki.find(document, "#focus-media img") != []
@@ -71,7 +73,8 @@ defmodule ClaperWeb.EventLive.ShowTest do
     document = Floki.parse_document!(html)
 
     assert Floki.find(document, "#focus-slot") == []
-    assert "grid-rows-[auto_minmax(0,1fr)]" in classes(document, "#attendee-room")
+    assert "flex-col" in classes(document, "#attendee-room")
+    assert "flex-1" in classes(document, "#chat-panel")
     refute html =~ "Waiting for content"
   end
 
@@ -93,7 +96,8 @@ defmodule ClaperWeb.EventLive.ShowTest do
 
     document = Floki.parse_document!(html)
 
-    assert "grid-rows-[auto_auto_auto_minmax(0,1fr)]" in classes(document, "#attendee-room")
+    assert "flex-col" in classes(document, "#attendee-room")
+    assert "shrink-0" in classes(document, "#caption-panel")
     assert Floki.attribute(document, "#caption-panel", "phx-hook") == ["AttendeeCaptions"]
     assert Floki.find(document, "[data-caption-collapse]") != []
     assert Floki.find(document, "[data-caption-show]") != []
@@ -107,6 +111,77 @@ defmodule ClaperWeb.EventLive.ShowTest do
            |> Floki.parse_document!()
            |> Floki.find("[data-caption-text]")
            |> Floki.text() =~ "Live caption text"
+  end
+
+  test "renders the chat panel as a collapsible panel by default", %{conn: conn, user: user} do
+    presentation_file = presentation_file_fixture(%{user: user}, [:event])
+    presentation_state_fixture(%{presentation_file: presentation_file})
+
+    {:ok, _view, html} = live(conn, ~p"/e/#{presentation_file.event.code}")
+
+    document = Floki.parse_document!(html)
+
+    assert Floki.attribute(document, "#chat-panel", "phx-hook") == ["AttendeeChat"]
+    assert Floki.find(document, "[data-chat-collapse]") != []
+    assert Floki.find(document, "[data-chat-show]") != []
+    assert document |> Floki.find("[data-chat-show]") |> Floki.text() =~ "Show messages"
+  end
+
+  test "hides the chat panel and composer when the presenter turns the panel off", %{
+    conn: conn,
+    user: user
+  } do
+    presentation_file = presentation_file_fixture(%{user: user}, [:event])
+
+    presentation_state_fixture(%{
+      presentation_file: presentation_file,
+      chat_panel_visible: false
+    })
+
+    {:ok, _view, html} = live(conn, ~p"/e/#{presentation_file.event.code}")
+
+    document = Floki.parse_document!(html)
+
+    assert Floki.find(document, "#chat-panel") == []
+    assert Floki.find(document, "#room-composer") == []
+
+    # With no chat panel the focus slot takes the flexible row, so a poll
+    # question and its answers use the viewport the panel would have held.
+    assert "flex-1" in classes(document, "#focus-slot")
+    refute "h-[40dvh]" in classes(document, "#focus-slot")
+  end
+
+  test "keeps the chat panel when messages are only deactivated", %{conn: conn, user: user} do
+    presentation_file = presentation_file_fixture(%{user: user}, [:event])
+
+    presentation_state_fixture(%{
+      presentation_file: presentation_file,
+      chat_enabled: false
+    })
+
+    {:ok, _view, html} = live(conn, ~p"/e/#{presentation_file.event.code}")
+
+    document = Floki.parse_document!(html)
+
+    assert Floki.find(document, "#chat-panel") != []
+    assert Floki.find(document, "#post-form") == []
+    assert html =~ "Messages deactivated"
+  end
+
+  test "toggles the attendee chat panel live when the presenter switches it", %{
+    conn: conn,
+    user: user
+  } do
+    presentation_file = presentation_file_fixture(%{user: user}, [:event])
+    state = presentation_state_fixture(%{presentation_file: presentation_file})
+
+    {:ok, view, html} = live(conn, ~p"/e/#{presentation_file.event.code}")
+
+    assert html =~ "chat-panel"
+
+    send(view.pid, {:state_updated, %{state | chat_panel_visible: false}})
+
+    refute render(view) =~ ~s(id="chat-panel")
   end
 
   defp classes(document, selector) do

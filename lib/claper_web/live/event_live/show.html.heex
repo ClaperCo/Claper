@@ -16,13 +16,7 @@
   <div class="h-[100dvh] overflow-hidden bg-black lg:bg-primary-700">
     <main
       id="attendee-room"
-      class={[
-        "relative mx-auto grid h-[100dvh] w-full max-w-lg overflow-hidden bg-black font-display shadow-2xl",
-        focus_content? && captions_visible? &&
-          "grid-rows-[auto_auto_auto_minmax(0,1fr)]",
-        focus_content? != captions_visible? && "grid-rows-[auto_auto_minmax(0,1fr)]",
-        !focus_content? && !captions_visible? && "grid-rows-[auto_minmax(0,1fr)]"
-      ]}
+      class="relative mx-auto flex h-[100dvh] w-full max-w-lg flex-col overflow-hidden bg-black font-display shadow-2xl"
     >
       <div
         id="side-menu-shadow"
@@ -107,7 +101,7 @@
 
       <header
         id="room-topbar"
-        class="relative z-30 bg-black px-4 pb-3 pt-[max(0.75rem,env(safe-area-inset-top))]"
+        class="relative z-30 shrink-0 bg-black px-4 pb-3 pt-[max(0.75rem,env(safe-area-inset-top))]"
       >
         <div id="banner" class="hidden w-full pb-2 text-center" phx-hook="EmbeddedBanner">
           <a href="https://claper.co" target="_blank" class="text-xs text-gray-400">
@@ -142,8 +136,10 @@
         data-interaction-mode={to_string(interaction_mode?)}
         class={[
           "relative z-10 min-h-0 overflow-hidden border-y border-white/10 bg-gray-950 transition-[height] duration-300",
-          interaction_mode? && "h-auto max-h-[40dvh]",
-          !interaction_mode? && "h-[40dvh] min-h-40 max-h-[26rem]"
+          @state.chat_panel_visible && interaction_mode? && "h-auto max-h-[40dvh] shrink-0",
+          @state.chat_panel_visible && !interaction_mode? &&
+            "h-[40dvh] min-h-40 max-h-[26rem] shrink-0",
+          !@state.chat_panel_visible && "flex-1"
         ]}
       >
         <div
@@ -286,7 +282,7 @@
         id="caption-panel"
         phx-hook="AttendeeCaptions"
         data-collapse-key={"caption-panel:#{@event.uuid}"}
-        class="relative z-10 min-h-12 max-h-32 overflow-hidden border-b border-white/10 bg-gray-950 transition-[height] duration-300"
+        class="relative z-10 min-h-12 max-h-32 shrink-0 overflow-hidden border-b border-white/10 bg-gray-950 transition-[height] duration-300"
       >
         <div
           data-caption-content
@@ -343,7 +339,13 @@
         </div>
       </section>
 
-      <section id="chat-panel" class="relative min-h-0 overflow-visible bg-black">
+      <section
+        :if={@state.chat_panel_visible}
+        id="chat-panel"
+        phx-hook="AttendeeChat"
+        data-collapse-key={"chat-panel:#{@event.uuid}"}
+        class="relative min-h-0 flex-1 overflow-visible bg-black"
+      >
         <div
           id="chat-feed"
           class={[
@@ -376,10 +378,28 @@
 
         <div
           :if={@post_count == 0 && @state.chat_enabled}
+          data-chat-empty
           class="pointer-events-none absolute inset-0 flex items-center justify-center px-8 text-center text-sm text-gray-500"
         >
           {gettext("Be the first to ask a question or share a thought.")}
         </div>
+
+        <button
+          type="button"
+          data-chat-collapse
+          aria-label={gettext("Hide messages")}
+          class="absolute right-3 top-2 z-30 grid h-10 w-10 place-items-center rounded-full bg-black/65 text-white backdrop-blur"
+        >
+          <svg
+            class="h-5 w-5"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <path stroke-linecap="round" stroke-linejoin="round" d="m6 9 6 6 6-6" />
+          </svg>
+        </button>
 
         <button
           id="new-messages-chip"
@@ -478,9 +498,29 @@
             />
           </button>
         </div>
+
+        <div data-chat-collapsed-bar class="hidden h-full items-center px-4">
+          <button
+            type="button"
+            data-chat-show
+            class="flex min-h-11 w-full items-center justify-between text-sm font-semibold text-white"
+          >
+            <span>{gettext("Show messages")}</span>
+            <svg
+              class="h-5 w-5"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path stroke-linecap="round" stroke-linejoin="round" d="m6 15 6-6 6 6" />
+            </svg>
+          </button>
+        </div>
       </section>
 
       <footer
+        :if={@state.chat_panel_visible}
         id="room-composer"
         class="absolute inset-x-0 bottom-0 z-30 bg-transparent px-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] pt-2"
       >

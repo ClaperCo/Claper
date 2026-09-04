@@ -137,6 +137,36 @@
   display: flex;
 }
 
+/* Attendee chat, collapsed from the phone. #chat-panel is the flexible child of
+   #attendee-room, so shrinking it to the bar alone would leave the freed space
+   black. Handing flex:1 to the focus slot instead lets a poll question and its
+   answers use the whole viewport, which is the point of collapsing. */
+#attendee-room.chat-collapsed #chat-panel {
+  flex: 0 0 3rem;
+  height: 3rem;
+}
+
+#attendee-room.chat-collapsed #focus-slot {
+  flex: 1 1 0%;
+  height: auto;
+  min-height: 0;
+  max-height: none;
+}
+
+#attendee-room.chat-collapsed #chat-feed,
+#attendee-room.chat-collapsed #new-messages-chip,
+#attendee-room.chat-collapsed #reacts,
+#attendee-room.chat-collapsed #room-reaction-fab,
+#attendee-room.chat-collapsed #room-composer,
+#attendee-room.chat-collapsed [data-chat-empty],
+#attendee-room.chat-collapsed [data-chat-collapse] {
+  display: none;
+}
+
+#attendee-room.chat-collapsed [data-chat-collapsed-bar] {
+  display: flex;
+}
+
 #focus-slot:fullscreen #focus-media {
   height: 100%;
 }

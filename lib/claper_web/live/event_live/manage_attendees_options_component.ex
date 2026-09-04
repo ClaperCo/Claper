@@ -107,6 +107,32 @@ defmodule ClaperWeb.EventLive.ManageAttendeesOptionsComponent do
             </svg>
           </:icon>
         </.toggle_row>
+        <.toggle_row
+          label={
+            if @state.chat_panel_visible,
+              do: gettext("Hide chat panel"),
+              else: gettext("Show chat panel")
+          }
+          checked={@state.chat_panel_visible}
+          key={:chat_panel_visible}
+          shortcut={if @create == nil, do: "F", else: nil}
+          show_shortcut={@show_shortcut}
+        >
+          <:icon>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+              class="w-5 h-5"
+            >
+              <path
+                fill-rule="evenodd"
+                d="M4.25 2A2.25 2.25 0 0 0 2 4.25v11.5A2.25 2.25 0 0 0 4.25 18h11.5A2.25 2.25 0 0 0 18 15.75V4.25A2.25 2.25 0 0 0 15.75 2H4.25ZM16.5 13.5V4.25a.75.75 0 0 0-.75-.75H4.25a.75.75 0 0 0-.75.75v9.25h13Z"
+                clip-rule="evenodd"
+              />
+            </svg>
+          </:icon>
+        </.toggle_row>
       </div>
     </div>
     """
