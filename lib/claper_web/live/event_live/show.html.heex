@@ -519,6 +519,14 @@
         </div>
       </section>
 
+      <div
+        :if={!focus_content? && !@state.chat_panel_visible}
+        id="empty-room"
+        class="flex flex-1 items-center justify-center px-8 text-center text-sm text-gray-500"
+      >
+        {gettext("Waiting for the presenter")}
+      </div>
+
       <footer
         :if={@state.chat_panel_visible}
         id="room-composer"

@@ -170,6 +170,28 @@ defmodule ClaperWeb.EventLive.ShowTest do
     refute "h-[40dvh]" in classes(document, "#focus-slot")
   end
 
+  test "tells attendees to wait when the presenter hides the chat panel with no content", %{
+    conn: conn,
+    user: user
+  } do
+    presentation_file = presentation_file_fixture(%{user: user, length: 0}, [:event])
+
+    presentation_state_fixture(%{
+      presentation_file: presentation_file,
+      chat_panel_visible: false
+    })
+
+    {:ok, _view, html} = live(conn, ~p"/e/#{presentation_file.event.code}")
+
+    document = Floki.parse_document!(html)
+
+    # Hiding the panel with nothing on screen would otherwise leave the room
+    # blank, with no sign the event is still running.
+    assert Floki.find(document, "#focus-slot") == []
+    assert Floki.find(document, "#chat-panel") == []
+    assert document |> Floki.find("#empty-room") |> Floki.text() =~ "Waiting for the presenter"
+  end
+
   test "keeps the chat panel when messages are only deactivated", %{conn: conn, user: user} do
     presentation_file = presentation_file_fixture(%{user: user}, [:event])
 
