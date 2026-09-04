@@ -135,7 +135,7 @@
         data-collapse-key={"focus-slot:#{@event.uuid}"}
         data-interaction-mode={to_string(interaction_mode?)}
         class={[
-          "relative z-10 min-h-0 overflow-hidden border-y border-white/10 bg-gray-950 transition-[height] duration-300",
+          "relative z-10 flex min-h-0 flex-col overflow-hidden border-y border-white/10 bg-gray-950 transition-[height] duration-300",
           @state.chat_panel_visible && interaction_mode? && "h-auto max-h-[40dvh] shrink-0",
           @state.chat_panel_visible && !interaction_mode? &&
             "h-[40dvh] min-h-40 max-h-[26rem] shrink-0",
@@ -151,7 +151,7 @@
 
         <%= case @current_interaction do %>
           <% %Claper.Polls.Poll{} -> %>
-            <div class="max-h-[40dvh] overflow-y-auto overscroll-contain p-3">
+            <div class="min-h-0 flex-auto overflow-y-auto overscroll-contain p-3">
               <.live_component
                 module={ClaperWeb.EventLive.PollComponent}
                 id={"#{@current_interaction.id}-poll"}
@@ -166,7 +166,7 @@
               />
             </div>
           <% %Claper.Forms.Form{} -> %>
-            <div class="max-h-[40dvh] overflow-y-auto overscroll-contain p-3">
+            <div class="min-h-0 flex-auto overflow-y-auto overscroll-contain p-3">
               <.live_component
                 module={ClaperWeb.EventLive.FormComponent}
                 id={"#{@current_interaction.id}-form"}
@@ -179,7 +179,7 @@
               />
             </div>
           <% %Claper.Quizzes.Quiz{} -> %>
-            <div class="max-h-[40dvh] overflow-y-auto overscroll-contain p-3">
+            <div class="min-h-0 flex-auto overflow-y-auto overscroll-contain p-3">
               <.live_component
                 module={ClaperWeb.EventLive.QuizComponent}
                 id={"#{@current_interaction.id}-quiz"}
@@ -195,7 +195,7 @@
               />
             </div>
           <% %Claper.Embeds.Embed{attendee_visibility: true} -> %>
-            <div class="max-h-[40dvh] overflow-y-auto overscroll-contain p-3">
+            <div class="min-h-0 flex-auto overflow-y-auto overscroll-contain p-3">
               <.live_component
                 id={"#{@current_interaction.id}-embed"}
                 module={ClaperWeb.EventLive.EmbedComponent}

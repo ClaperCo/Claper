@@ -2,7 +2,7 @@ defmodule ClaperWeb.EventLive.ShowTest do
   use ClaperWeb.ConnCase
 
   import Phoenix.LiveViewTest
-  import Claper.{AccountsFixtures, PostsFixtures, PresentationsFixtures}
+  import Claper.{AccountsFixtures, PollsFixtures, PostsFixtures, PresentationsFixtures}
 
   setup [:register_and_log_in_user]
 
@@ -125,6 +125,25 @@ defmodule ClaperWeb.EventLive.ShowTest do
     assert Floki.find(document, "[data-chat-collapse]") != []
     assert Floki.find(document, "[data-chat-show]") != []
     assert document |> Floki.find("[data-chat-show]") |> Floki.text() =~ "Show messages"
+  end
+
+  test "lets a poll follow the height of the focus slot", %{conn: conn, user: user} do
+    presentation_file = presentation_file_fixture(%{user: user}, [:event])
+    poll_fixture(%{presentation_file_id: presentation_file.id, position: 0})
+    presentation_state_fixture(%{presentation_file: presentation_file})
+
+    {:ok, _view, html} = live(conn, ~p"/e/#{presentation_file.event.code}")
+
+    document = Floki.parse_document!(html)
+    scroller = Floki.find(document, "#focus-slot > .overflow-y-auto")
+
+    assert "flex-col" in classes(document, "#focus-slot")
+
+    # A fixed cap here would keep the poll at 40dvh once the attendee collapses
+    # the chat panel or the presenter hides it, leaving the freed space empty.
+    assert "flex-auto" in classes(scroller, "div")
+    assert "min-h-0" in classes(scroller, "div")
+    refute "max-h-[40dvh]" in classes(scroller, "div")
   end
 
   test "hides the chat panel and composer when the presenter turns the panel off", %{
