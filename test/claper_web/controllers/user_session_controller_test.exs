@@ -1,5 +1,5 @@
 defmodule ClaperWeb.UserSessionControllerTest do
-  use ClaperWeb.ConnCase, async: true
+  use ClaperWeb.ConnCase, async: false
 
   import Claper.AccountsFixtures
 
@@ -42,9 +42,12 @@ defmodule ClaperWeb.UserSessionControllerTest do
       conn = get(conn, ~p"/users/log_in")
       response = html_response(conn, 200)
       refute response =~ "type=\"password\""
+      refute response =~ "href=\"/users/reset_password\""
+      refute response =~ "href=\"/users/register\""
+      assert response =~ "href=\"/users/oidc\""
     end
 
-    test "still shows the password form when OIDC is not enabled, even if requested", %{
+    test "shows the password form when password login is enabled", %{
       conn: conn
     } do
       Application.put_env(

@@ -156,7 +156,9 @@ oidc_property_mappings =
   end
 
 oidc_enabled =
-  !is_nil(oidc_client_id) and !is_nil(oidc_client_secret)
+  Enum.all?([oidc_client_id, oidc_client_secret], fn value ->
+    is_binary(value) and String.trim(value) != ""
+  end)
 
 disable_password_login_requested =
   get_var_from_path_or_env(config_dir, "DISABLE_PASSWORD_LOGIN", "false")
@@ -169,7 +171,7 @@ disable_password_login = disable_password_login_requested and oidc_enabled
 if disable_password_login_requested and not oidc_enabled do
   IO.warn(
     "DISABLE_PASSWORD_LOGIN=true has no effect because OIDC is not configured " <>
-      "(OIDC_CLIENT_ID / OIDC_CLIENT_SECRET are not set). Password login stays enabled."
+      "(OIDC_CLIENT_ID / OIDC_CLIENT_SECRET are missing or blank). Password login stays enabled."
   )
 end
 
