@@ -5,7 +5,7 @@ defmodule Claper.PostsTest do
 
   import Claper.{PostsFixtures, AccountsFixtures, EventsFixtures}
 
-  alias Claper.Posts.Post
+  alias Claper.Posts.{Post, PostReply}
 
   describe "posts" do
     @invalid_attrs %{body: "a"}
@@ -47,29 +47,132 @@ defmodule Claper.PostsTest do
       assert post == Posts.get_post!(post.uuid, [:event])
     end
 
-    test "reply_to_post/2 with valid data stores the reply and stamps replied_at" do
-      post = post_fixture()
+    test "create_post_reply/4 appends multiple host replies in order" do
+      host = user_fixture()
+      event = event_fixture(%{user: host})
+      post = post_fixture(%{event: event})
+      actor = {:user, host, nil}
 
-      assert {:ok, %Post{} = replied_post} =
-               Posts.reply_to_post(post, "Thanks for the question!")
+      assert {:ok, %PostReply{body: "First answer", author_role: :host}} =
+               Posts.create_post_reply(event, post.uuid, actor, "First answer")
 
-      assert replied_post.reply_body == "Thanks for the question!"
-      assert replied_post.replied_at != nil
+      assert {:ok, %PostReply{body: "Second answer", author_role: :host}} =
+               Posts.create_post_reply(event, post.uuid, actor, "Second answer")
+
+      replied_post = Posts.get_post!(post.uuid, [:replies])
+      assert Enum.map(replied_post.replies, & &1.body) == ["First answer", "Second answer"]
     end
 
-    test "reply_to_post/2 with a blank reply returns error changeset" do
-      post = post_fixture(%{}, [:event])
+    test "create_post_reply/4 lets the anonymous root author reply" do
+      event = event_fixture()
 
-      assert {:error, %Ecto.Changeset{}} = Posts.reply_to_post(post, "")
-      assert post == Posts.get_post!(post.uuid, [:event])
+      post =
+        post_fixture(%{
+          event: event,
+          user_id: nil,
+          attendee_identifier: "attendee-1",
+          name: "Ada"
+        })
+
+      assert {:ok, %PostReply{} = reply} =
+               Posts.create_post_reply(
+                 event,
+                 post.uuid,
+                 {:attendee, "attendee-1", "Ada"},
+                 "Follow-up"
+               )
+
+      assert reply.author_role == :attendee
+      assert reply.author_name == "Ada"
+      assert reply.attendee_identifier == "attendee-1"
     end
 
-    test "reply_to_post/2 leaves the original body untouched" do
-      post = post_fixture()
+    test "create_post_reply/4 rejects other attendees" do
+      event = event_fixture()
+      post = post_fixture(%{event: event, user_id: nil, attendee_identifier: "attendee-1"})
 
-      assert {:ok, %Post{} = replied_post} = Posts.reply_to_post(post, "Answered offline")
+      assert {:error, :forbidden} =
+               Posts.create_post_reply(
+                 event,
+                 post.uuid,
+                 {:attendee, "attendee-2", "Grace"},
+                 "Not my thread"
+               )
+    end
 
-      assert replied_post.body == post.body
+    test "create_post_reply/4 returns an error changeset for a blank reply" do
+      host = user_fixture()
+      event = event_fixture(%{user: host})
+      post = post_fixture(%{event: event})
+
+      assert {:error, %Ecto.Changeset{}} =
+               Posts.create_post_reply(event, post.uuid, {:user, host, nil}, "   ")
+    end
+
+    test "delete_post_reply/3 permits the reply author" do
+      event = event_fixture()
+
+      post =
+        post_fixture(%{
+          event: event,
+          user_id: nil,
+          attendee_identifier: "attendee-1",
+          name: "Ada"
+        })
+
+      actor = {:attendee, "attendee-1", "Ada"}
+      {:ok, reply} = Posts.create_post_reply(event, post.uuid, actor, "Remove me")
+
+      assert {:ok, %PostReply{}} = Posts.delete_post_reply(event, reply.uuid, actor)
+      assert Posts.get_post!(post.uuid, [:replies]).replies == []
+    end
+
+    test "facilitators can create and delete replies" do
+      owner = user_fixture()
+      facilitator = user_fixture()
+      event = event_fixture(%{user: owner})
+      activity_leader_fixture(%{event: event, user: facilitator})
+      post = post_fixture(%{event: event})
+      actor = {:user, facilitator, nil}
+
+      assert {:ok, %PostReply{author_role: :host} = reply} =
+               Posts.create_post_reply(event, post.uuid, actor, "Facilitator answer")
+
+      assert {:ok, %PostReply{}} = Posts.delete_post_reply(event, reply.uuid, actor)
+      assert Posts.get_post!(post.uuid, [:replies]).replies == []
+    end
+
+    test "delete_post_reply/3 rejects other attendees and scopes replies to the event" do
+      event = event_fixture()
+      other_event = event_fixture()
+
+      post =
+        post_fixture(%{
+          event: event,
+          user_id: nil,
+          attendee_identifier: "attendee-1"
+        })
+
+      {:ok, reply} =
+        Posts.create_post_reply(
+          event,
+          post.uuid,
+          {:attendee, "attendee-1", "Ada"},
+          "Keep me"
+        )
+
+      assert {:error, :forbidden} =
+               Posts.delete_post_reply(event, reply.uuid, {:attendee, "attendee-2", "Grace"})
+
+      assert {:error, :not_found} =
+               Posts.delete_post_reply(
+                 other_event,
+                 reply.uuid,
+                 {:attendee, "attendee-1", "Ada"}
+               )
+
+      assert [%PostReply{uuid: reply_uuid}] = Posts.get_post!(post.uuid, [:replies]).replies
+      assert reply_uuid == reply.uuid
     end
 
     test "delete_post/1 deletes the post" do

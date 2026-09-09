@@ -6,7 +6,7 @@ defmodule Claper.Posts do
   import Ecto.Query, warn: false
   alias Claper.Repo
 
-  alias Claper.Posts.Post
+  alias Claper.Posts.{Post, PostReply}
 
   @doc """
   Get event posts
@@ -22,6 +22,7 @@ defmodule Claper.Posts do
     )
     |> Repo.all()
     |> Repo.preload(preload)
+    |> Repo.preload(replies: :user)
   end
 
   @doc """
@@ -44,6 +45,7 @@ defmodule Claper.Posts do
     query
     |> Repo.all()
     |> Repo.preload(preload)
+    |> Repo.preload(replies: :user)
   end
 
   @doc """
@@ -60,6 +62,7 @@ defmodule Claper.Posts do
     )
     |> Repo.all()
     |> Repo.preload(preload)
+    |> Repo.preload(replies: :user)
   end
 
   @doc """
@@ -76,6 +79,7 @@ defmodule Claper.Posts do
     )
     |> Repo.all()
     |> Repo.preload(preload)
+    |> Repo.preload(replies: :user)
   end
 
   def reacted_posts(event_id, user_id, icon) when is_number(user_id) do
@@ -118,7 +122,12 @@ defmodule Claper.Posts do
       ** (Ecto.NoResultsError)
 
   """
-  def get_post!(id, preload \\ []), do: Repo.get_by!(Post, uuid: id) |> Repo.preload(preload)
+  def get_post!(id, preload \\ []) do
+    Post
+    |> Repo.get_by!(uuid: id)
+    |> Repo.preload(preload)
+    |> Repo.preload(replies: :user)
+  end
 
   @doc """
   Gets a single post scoped to the given event.
@@ -132,7 +141,7 @@ defmodule Claper.Posts do
     |> Repo.one()
     |> case do
       nil -> nil
-      post -> Repo.preload(post, preload)
+      post -> post |> Repo.preload(preload) |> Repo.preload(replies: :user)
     end
   end
 
@@ -177,22 +186,42 @@ defmodule Claper.Posts do
   end
 
   @doc """
-  Adds (or replaces) a moderator reply to a post.
-
-  ## Examples
-
-      iex> reply_to_post(post, "Thanks for the question!")
-      {:ok, %Post{}}
-
-      iex> reply_to_post(post, "")
-      {:error, %Ecto.Changeset{}}
-
+  Adds a reply when the actor is an event host or the original post author.
   """
-  def reply_to_post(%Post{} = post, reply_body) do
-    post
-    |> Post.reply_changeset(%{reply_body: reply_body})
-    |> Repo.update()
-    |> broadcast(:post_updated)
+  def create_post_reply(event, post_uuid, actor, body) do
+    with %Post{} = post <- get_post_for_event(post_uuid, event.id, [:event]),
+         {:ok, author_attrs} <- reply_author_attrs(event, post, actor),
+         attrs <-
+           Map.merge(author_attrs, %{
+             body: normalize_reply_body(body),
+             post_id: post.id
+           }),
+         {:ok, reply} <-
+           %PostReply{}
+           |> PostReply.changeset(attrs)
+           |> Repo.insert(returning: [:uuid]) do
+      broadcast_post(post, :post_updated)
+      {:ok, reply}
+    else
+      nil -> {:error, :not_found}
+      error -> error
+    end
+  end
+
+  @doc """
+  Deletes a reply when the actor authored it or is an event host.
+  """
+  def delete_post_reply(event, reply_uuid, actor) do
+    with %PostReply{} = reply <- get_post_reply_for_event(reply_uuid, event.id),
+         true <- can_delete_reply?(event, reply, actor),
+         {:ok, deleted_reply} <- Repo.delete(reply) do
+      broadcast_post(reply.post, :post_updated)
+      {:ok, deleted_reply}
+    else
+      nil -> {:error, :not_found}
+      false -> {:error, :forbidden}
+      error -> error
+    end
   end
 
   @doc """
@@ -267,7 +296,7 @@ defmodule Claper.Posts do
     end
   end
 
-  alias Claper.Posts.{Reaction, Post}
+  alias Claper.Posts.Reaction
 
   @doc """
   Gets a single reaction.
@@ -347,9 +376,75 @@ defmodule Claper.Posts do
     end
   end
 
+  defp get_post_reply_for_event(uuid, event_id) do
+    from(reply in PostReply,
+      join: post in assoc(reply, :post),
+      where: reply.uuid == ^uuid and post.event_id == ^event_id
+    )
+    |> Repo.one()
+    |> case do
+      nil -> nil
+      reply -> Repo.preload(reply, post: :event)
+    end
+  end
+
+  defp reply_author_attrs(event, _post, {:user, user, _name})
+       when event.user_id == user.id do
+    {:ok, %{author_role: :host, user_id: user.id}}
+  end
+
+  defp reply_author_attrs(event, post, {:user, user, name}) do
+    cond do
+      Claper.Events.led_by?(user.email, event) ->
+        {:ok, %{author_role: :host, user_id: user.id}}
+
+      post.user_id == user.id ->
+        {:ok,
+         %{author_role: :attendee, user_id: user.id, author_name: normalize_author_name(name)}}
+
+      true ->
+        {:error, :forbidden}
+    end
+  end
+
+  defp reply_author_attrs(_event, post, {:attendee, attendee_identifier, name}) do
+    if post.attendee_identifier == attendee_identifier and not is_nil(attendee_identifier) do
+      {:ok,
+       %{
+         author_role: :attendee,
+         attendee_identifier: attendee_identifier,
+         author_name: normalize_author_name(name)
+       }}
+    else
+      {:error, :forbidden}
+    end
+  end
+
+  defp can_delete_reply?(event, reply, {:user, user, _name}) do
+    event.user_id == user.id || Claper.Events.led_by?(user.email, event) ||
+      reply.user_id == user.id
+  end
+
+  defp can_delete_reply?(_event, reply, {:attendee, attendee_identifier, _name}) do
+    not is_nil(attendee_identifier) && reply.attendee_identifier == attendee_identifier
+  end
+
+  defp normalize_reply_body(body) when is_binary(body), do: String.trim(body)
+  defp normalize_reply_body(body), do: body
+
+  defp normalize_author_name(name) when name in [nil, ""], do: nil
+  defp normalize_author_name(name), do: name
+
+  defp broadcast_post(post, event) do
+    post
+    |> Repo.preload([:event, replies: :user], force: true)
+    |> then(&Phoenix.PubSub.broadcast(Claper.PubSub, "event:#{&1.event.uuid}", {event, &1}))
+  end
+
   defp broadcast({:error, _reason} = error, _event), do: error
 
   defp broadcast({:ok, post}, event) do
+    post = Repo.preload(post, [:event, replies: :user], force: true)
     Phoenix.PubSub.broadcast(Claper.PubSub, "event:#{post.event.uuid}", {event, post})
     {:ok, post}
   end

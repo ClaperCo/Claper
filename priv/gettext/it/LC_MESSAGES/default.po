@@ -20,7 +20,7 @@ msgstr "Impostazioni"
 #: lib/claper_web/live/admin_live/user_live.html.heex:41
 #: lib/claper_web/live/admin_live/user_live.html.heex:116
 #: lib/claper_web/live/admin_live/user_live/form_component.ex:42
-#: lib/claper_web/live/event_live/manage.ex:1172
+#: lib/claper_web/live/event_live/manage.ex:1197
 #: lib/claper_web/live/form_live/form_component.html.heex:39
 #: lib/claper_web/live/user_settings_live/show.html.heex:68
 #: lib/claper_web/templates/user_registration/new.html.heex:86
@@ -109,7 +109,9 @@ msgstr "Partecipa"
 msgid "Dashboard"
 msgstr "Cruscotto"
 
+#: lib/claper_web/live/event_live/manageable_post_component.ex:374
 #: lib/claper_web/live/event_live/post_component.ex:49
+#: lib/claper_web/live/event_live/post_component.ex:353
 #, elixir-autogen, elixir-format
 msgid "Host"
 msgstr "Host"
@@ -183,8 +185,8 @@ msgstr "Modifica"
 #: lib/claper_web/live/event_live/event_card_component.ex:837
 #: lib/claper_web/live/event_live/manage_audience_responses_component.ex:263
 #: lib/claper_web/live/event_live/manage_audience_responses_component.ex:269
-#: lib/claper_web/live/event_live/manageable_post_component.ex:164
-#: lib/claper_web/live/event_live/post_component.ex:176
+#: lib/claper_web/live/event_live/manageable_post_component.ex:168
+#: lib/claper_web/live/event_live/post_component.ex:189
 #: lib/claper_web/live/form_live/form_component.html.heex:109
 #: lib/claper_web/live/poll_live/form_component.html.heex:102
 #: lib/claper_web/live/quiz_live/quiz_component.html.heex:224
@@ -254,7 +256,9 @@ msgstr "Se non hai creato un'utenza con noi, ignora questo messaggio."
 msgid "You can log into your account by clicking here."
 msgstr "Puoi accedere alla tua utenza cliccando qui."
 
-#: lib/claper_web/live/event_live/post_component.ex:182
+#: lib/claper_web/live/event_live/manageable_post_component.ex:302
+#: lib/claper_web/live/event_live/post_component.ex:195
+#: lib/claper_web/live/event_live/post_component.ex:231
 #, elixir-autogen, elixir-format
 msgid "Are you sure?"
 msgstr "Sei sicuro?"
@@ -362,8 +366,8 @@ msgstr "Il sito è in manutenzione, torneremo presto!"
 msgid "If you’re having trouble with the button above, copy and paste the URL below into your web browser"
 msgstr "Se riscontri problemi con il pulsante sopra, copia e incolla l'URL sottostante nel tuo browser web"
 
-#: lib/claper_web/live/event_live/manageable_post_component.ex:110
-#: lib/claper_web/live/event_live/manageable_post_component.ex:140
+#: lib/claper_web/live/event_live/manageable_post_component.ex:114
+#: lib/claper_web/live/event_live/manageable_post_component.ex:144
 #, elixir-autogen, elixir-format
 msgid "Blocking this user will delete all his messages and he will not be able to join again, confirm ?"
 msgstr "Bloccando questo utente verranno eliminati tutti i suoi messaggi e non potrà più unirsi all'evento. Confermi?"
@@ -375,8 +379,8 @@ msgstr "Bloccando questo utente verranno eliminati tutti i suoi messaggi e non p
 msgid "You have been banned from this event"
 msgstr "Sei stato bandito da questo evento"
 
-#: lib/claper_web/live/event_live/manageable_post_component.ex:104
-#: lib/claper_web/live/event_live/manageable_post_component.ex:134
+#: lib/claper_web/live/event_live/manageable_post_component.ex:108
+#: lib/claper_web/live/event_live/manageable_post_component.ex:138
 #, elixir-autogen, elixir-format
 msgid "Ban"
 msgstr "Bandisci"
@@ -581,7 +585,7 @@ msgstr "Modulo"
 #: lib/claper_web/live/admin_live/oidc_provider_live.html.heex:74
 #: lib/claper_web/live/admin_live/oidc_provider_live.html.heex:234
 #: lib/claper_web/live/admin_live/oidc_provider_live/form_component.ex:24
-#: lib/claper_web/live/event_live/manage.ex:1171
+#: lib/claper_web/live/event_live/manage.ex:1196
 #, elixir-autogen, elixir-format
 msgid "Name"
 msgstr "Nome"
@@ -657,7 +661,9 @@ msgstr "Mostra messaggi"
 msgid "Messages deactivated"
 msgstr "Messaggi disattivati"
 
-#: lib/claper_web/live/event_live/post_component.ex:275
+#: lib/claper_web/live/event_live/manageable_post_component.ex:378
+#: lib/claper_web/live/event_live/post_component.ex:351
+#: lib/claper_web/live/event_live/post_component.ex:357
 #: lib/claper_web/live/event_live/show.html.heex:75
 #: lib/claper_web/live/event_live/show.html.heex:84
 #, elixir-autogen, elixir-format
@@ -775,7 +781,7 @@ msgstr "Titolo"
 msgid "Web content"
 msgstr "Contenuto web"
 
-#: lib/claper_web/live/event_live/manageable_post_component.ex:76
+#: lib/claper_web/live/event_live/manageable_post_component.ex:80
 #, elixir-autogen, elixir-format
 msgid "Pin"
 msgstr "Appunta"
@@ -796,7 +802,7 @@ msgstr "I messaggi appuntati verranno visualizzati qui."
 msgid "Show only pinned messages"
 msgstr "Mostra solo i messaggi appuntati"
 
-#: lib/claper_web/live/event_live/manageable_post_component.ex:76
+#: lib/claper_web/live/event_live/manageable_post_component.ex:80
 #, elixir-autogen, elixir-format
 msgid "Unpin"
 msgstr "Sblocca"
@@ -1171,12 +1177,12 @@ msgstr "Ricarica la pagina che stai cercando di accedere (non reinviare i dati)"
 msgid "Try logging in again"
 msgstr "Prova ad accedere di nuovo"
 
-#: lib/claper_web/live/event_live/manage.ex:1144
+#: lib/claper_web/live/event_live/manage.ex:1169
 #, elixir-autogen, elixir-format
 msgid "No"
 msgstr "No"
 
-#: lib/claper_web/live/event_live/manage.ex:1144
+#: lib/claper_web/live/event_live/manage.ex:1169
 #, elixir-autogen, elixir-format
 msgid "Yes"
 msgstr "Sì"
@@ -2423,11 +2429,13 @@ msgstr "ID risorsa"
 msgid "Resource Type"
 msgstr "Tipo di risorsa"
 
-#: lib/claper_web/live/event_live/manage.ex:1152
-#: lib/claper_web/live/event_live/manage.ex:1195
-#: lib/claper_web/live/event_live/manage.ex:1211
-#: lib/claper_web/live/event_live/manage.ex:1253
-#: lib/claper_web/live/event_live/manage.ex:1315
+#: lib/claper_web/live/event_live/manage.ex:751
+#: lib/claper_web/live/event_live/manage.ex:754
+#: lib/claper_web/live/event_live/manage.ex:1177
+#: lib/claper_web/live/event_live/manage.ex:1220
+#: lib/claper_web/live/event_live/manage.ex:1236
+#: lib/claper_web/live/event_live/manage.ex:1278
+#: lib/claper_web/live/event_live/manage.ex:1345
 #, elixir-autogen, elixir-format
 msgid "Resource not found"
 msgstr "Risorsa non trovata"
@@ -2657,12 +2665,12 @@ msgstr "Usa almeno 6 caratteri e inserisci la stessa password due volte."
 msgid "Sign in to launch or manage your interactive sessions."
 msgstr "Accedi per avviare o gestire le tue sessioni interattive."
 
-#: lib/claper_web/live/event_live/manage.ex:385
+#: lib/claper_web/live/event_live/manage.ex:391
 #, elixir-autogen, elixir-format
 msgid "Could not regenerate thumbnails"
 msgstr "Impossibile rigenerare le miniature"
 
-#: lib/claper_web/live/event_live/manage.ex:530
+#: lib/claper_web/live/event_live/manage.ex:536
 #, elixir-autogen, elixir-format
 msgid "Could not start thumbnail regeneration"
 msgstr "Impossibile avviare la rigenerazione delle miniature"
@@ -2692,12 +2700,12 @@ msgstr "Rigenera miniature"
 msgid "Regenerating..."
 msgstr "Rigenerazione in corso..."
 
-#: lib/claper_web/live/event_live/manage.ex:527
+#: lib/claper_web/live/event_live/manage.ex:533
 #, elixir-autogen, elixir-format
 msgid "Thumbnail regeneration started"
 msgstr "Rigenerazione delle miniature avviata"
 
-#: lib/claper_web/live/event_live/manage.ex:374
+#: lib/claper_web/live/event_live/manage.ex:380
 #, elixir-autogen, elixir-format
 msgid "Thumbnails regenerated successfully"
 msgstr "Miniature rigenerate con successo"
@@ -3000,7 +3008,7 @@ msgstr "Impostazioni di trascrizione"
 msgid "Transcription deleted"
 msgstr "Trascrizione eliminata"
 
-#: lib/claper_web/live/event_live/manage.ex:906
+#: lib/claper_web/live/event_live/manage.ex:931
 #, elixir-autogen, elixir-format
 msgid "Transcription has been disabled by the administrator"
 msgstr "La trascrizione è stata disabilitata dall'amministratore"
@@ -3066,12 +3074,12 @@ msgstr "Illimitato"
 msgid "Powered by"
 msgstr "Funziona con"
 
-#: lib/claper_web/live/event_live/manage.ex:468
+#: lib/claper_web/live/event_live/manage.ex:474
 #, elixir-autogen, elixir-format
 msgid "Could not reorder slides"
 msgstr "Impossibile riordinare le diapositive"
 
-#: lib/claper_web/live/event_live/manage.ex:495
+#: lib/claper_web/live/event_live/manage.ex:501
 #, elixir-autogen, elixir-format
 msgid "Could not move interaction"
 msgstr "Impossibile spostare l'interazione"
@@ -3343,7 +3351,6 @@ msgid "Voted"
 msgstr "Votato"
 
 #: lib/claper_web/live/event_live/form_component.ex:123
-#: lib/claper_web/live/event_live/manageable_post_component.ex:312
 #, elixir-autogen, elixir-format
 msgid "Send"
 msgstr "Invia"
@@ -3596,30 +3603,59 @@ msgstr "La presentazione è allegata e pronta per l'uso."
 msgid "name@example.com"
 msgstr "name@example.com"
 
-#: lib/claper_web/live/event_live/manage.ex:729
+#: lib/claper_web/live/event_live/manage.ex:735
 #, elixir-autogen, elixir-format
 msgid "A reply cannot be empty"
 msgstr ""
 
-#: lib/claper_web/live/event_live/manage.ex:1323
+#: lib/claper_web/live/event_live/manage.ex:1348
+#: lib/claper_web/live/event_live/show.ex:429
 #, elixir-autogen, elixir-format
 msgid "Could not send the reply"
 msgstr ""
 
-#: lib/claper_web/live/event_live/manageable_post_component.ex:284
-#: lib/claper_web/live/event_live/post_component.ex:203
-#: lib/claper_web/live/event_live/presenter.html.heex:121
-#: lib/claper_web/live/event_live/presenter.html.heex:180
-#, elixir-autogen, elixir-format
-msgid "Moderator reply"
-msgstr ""
-
 #: lib/claper_web/live/event_live/manageable_post_component.ex:50
+#: lib/claper_web/live/event_live/manageable_post_component.ex:54
+#: lib/claper_web/live/event_live/manageable_post_component.ex:352
+#: lib/claper_web/live/event_live/post_component.ex:187
+#: lib/claper_web/live/event_live/post_component.ex:280
 #, elixir-autogen, elixir-format
 msgid "Reply"
 msgstr ""
 
-#: lib/claper_web/live/event_live/manageable_post_component.ex:306
+#: lib/claper_web/live/event_live/manageable_post_component.ex:338
+#: lib/claper_web/live/event_live/manageable_post_component.ex:344
+#: lib/claper_web/live/event_live/post_component.ex:266
+#: lib/claper_web/live/event_live/post_component.ex:272
 #, elixir-autogen, elixir-format
 msgid "Write a reply..."
 msgstr ""
+
+#: lib/claper_web/live/event_live/manage.ex:757
+#: lib/claper_web/live/event_live/show.ex:443
+#, elixir-autogen, elixir-format, fuzzy
+msgid "Could not delete reply"
+msgstr ""
+
+#: lib/claper_web/live/event_live/manageable_post_component.ex:303
+#: lib/claper_web/live/event_live/post_component.ex:232
+#, elixir-autogen, elixir-format, fuzzy
+msgid "Delete reply"
+msgstr "Elimina"
+
+#: lib/claper_web/live/event_live/show.ex:440
+#, elixir-autogen, elixir-format
+msgid "You cannot delete this reply"
+msgstr ""
+
+#: lib/claper_web/live/event_live/show.ex:426
+#, elixir-autogen, elixir-format
+msgid "You cannot reply to this message"
+msgstr ""
+
+#: lib/claper_web/live/event_live/presenter.ex:86
+#, elixir-autogen, elixir-format
+msgid "%{count} reply"
+msgid_plural "%{count} replies"
+msgstr[0] ""
+msgstr[1] ""
