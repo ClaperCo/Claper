@@ -3,7 +3,7 @@ defmodule Claper.PostsTest do
 
   alias Claper.Posts
 
-  import Claper.{PostsFixtures, AccountsFixtures, EventsFixtures}
+  import Claper.{PostsFixtures, AccountsFixtures, EventsFixtures, PresentationsFixtures}
 
   alias Claper.Posts.{Post, PostReply}
 
@@ -31,6 +31,85 @@ defmodule Claper.PostsTest do
 
     test "create_post/1 with invalid data returns error changeset" do
       assert {:error, %Ecto.Changeset{}} = Posts.create_post(%{}, @invalid_attrs)
+    end
+
+    test "create_attendee_post/3 refuses an anonymous attendee when the event requires a login" do
+      presentation_file = presentation_file_fixture(%{}, [:event])
+
+      presentation_state_fixture(%{
+        presentation_file: presentation_file,
+        chat_enabled: true,
+        anonymous_chat_enabled: true,
+        authenticated_chat_only: true
+      })
+
+      assert {:error, :login_required} =
+               Posts.create_attendee_post(
+                 presentation_file.event,
+                 {:attendee, "anon-1", "Troll"},
+                 %{"body" => "posted straight through the context"}
+               )
+
+      assert Posts.list_posts(presentation_file.event.uuid) == []
+    end
+
+    test "create_attendee_post/3 refuses an author named in the params when the event requires a login" do
+      user = user_fixture()
+      presentation_file = presentation_file_fixture(%{}, [:event])
+
+      presentation_state_fixture(%{
+        presentation_file: presentation_file,
+        chat_enabled: true,
+        anonymous_chat_enabled: true,
+        authenticated_chat_only: true
+      })
+
+      assert {:error, :login_required} =
+               Posts.create_attendee_post(
+                 presentation_file.event,
+                 {:attendee, "anon-1", nil},
+                 %{"body" => "posted under a stolen name", "user_id" => user.id}
+               )
+
+      assert Posts.list_posts(presentation_file.event.uuid) == []
+    end
+
+    test "create_attendee_post/3 accepts a signed in attendee when the event requires a login" do
+      user = user_fixture()
+      presentation_file = presentation_file_fixture(%{}, [:event])
+
+      presentation_state_fixture(%{
+        presentation_file: presentation_file,
+        chat_enabled: true,
+        authenticated_chat_only: true
+      })
+
+      assert {:ok, %Post{}} =
+               Posts.create_attendee_post(
+                 presentation_file.event,
+                 {:user, user, "Ada"},
+                 %{"body" => "a legitimate question"}
+               )
+
+      assert [%Post{body: "a legitimate question"}] =
+               Posts.list_posts(presentation_file.event.uuid)
+    end
+
+    test "create_attendee_post/3 accepts an anonymous attendee while the event does not require a login" do
+      presentation_file = presentation_file_fixture(%{}, [:event])
+
+      presentation_state_fixture(%{
+        presentation_file: presentation_file,
+        chat_enabled: true,
+        anonymous_chat_enabled: true
+      })
+
+      assert {:ok, %Post{}} =
+               Posts.create_attendee_post(
+                 presentation_file.event,
+                 {:attendee, "anon-1", nil},
+                 %{"body" => "an anonymous question"}
+               )
     end
 
     test "update_post/2 with valid data updates the post" do
