@@ -2,6 +2,7 @@ defmodule ClaperWeb.PollLive.FormComponent do
   use ClaperWeb, :live_component
 
   alias Claper.Polls
+  alias Phoenix.HTML.Form
 
   @impl true
   def update(%{poll: poll} = assigns, socket) do
@@ -111,4 +112,28 @@ defmodule ClaperWeb.PollLive.FormComponent do
   defp list_polls(assigns) do
     Polls.list_polls(assigns.presentation_file.id)
   end
+
+  # `input_value/2` hands back whatever the form currently holds: the atom stored
+  # on the poll while nothing has changed, but the raw string from the params
+  # after any phx-change -- and a change event that re-submits the type a saved
+  # poll already has produces no changeset change to fall back on. Compare the
+  # two on one shape, or an edited word cloud starts rendering as a choice poll.
+  defp word_cloud?(form) do
+    to_string(Form.input_value(form, :type)) == "word_cloud"
+  end
+
+  # A choice poll needs its options, and that requirement sits on the association
+  # itself, which has no input of its own to hang the message on while the list
+  # is empty -- the state a word cloud turned back into a choice poll starts in.
+  # Without this the save just appears to do nothing.
+  #
+  # Only once the changeset has an action, the same rule `error_tag/2` follows
+  # for every other field: an untouched changeset carries the errors of a poll as
+  # it stands, and a saved choice poll whose last option was removed elsewhere
+  # would otherwise open the form already showing the message in red.
+  defp poll_opts_missing?(%{source: %Ecto.Changeset{action: action, errors: errors}})
+       when not is_nil(action),
+       do: Keyword.has_key?(errors, :poll_opts)
+
+  defp poll_opts_missing?(_form), do: false
 end

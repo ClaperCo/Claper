@@ -434,6 +434,31 @@ defmodule Claper.EventsTest do
       assert duplicate_embed.title == embed.title
     end
 
+    test "duplicate_event/2 keeps the poll type and starts the word cloud empty" do
+      original = event_fixture()
+      presentation_file = presentation_file_fixture(%{event: original})
+      presentation_state_fixture(%{presentation_file: presentation_file})
+
+      poll_fixture(%{
+        presentation_file_id: presentation_file.id,
+        title: "How do you feel?",
+        type: :word_cloud,
+        poll_opts: [
+          %{content: "tired", vote_count: 3},
+          %{content: "excited", vote_count: 1}
+        ]
+      })
+
+      {:ok, duplicate} = Events.duplicate_event(original.user_id, original.uuid)
+
+      duplicate = Repo.preload(duplicate, presentation_file: [polls: [:poll_opts]])
+      [duplicate_poll] = duplicate.presentation_file.polls
+
+      assert duplicate_poll.title == "How do you feel?"
+      assert duplicate_poll.type == :word_cloud
+      assert duplicate_poll.poll_opts == []
+    end
+
     test "duplicate_event/2 raises when an invalid user-event is supplied", context do
       original = Enum.at(context.alice_active_events, 0)
 
@@ -572,6 +597,57 @@ defmodule Claper.EventsTest do
                Claper.Presentations.get_presentation_file!(to_presentation_file.id, [:polls]).polls,
                0
              ).title == from_poll.title
+    end
+
+    test "import/3 keeps the poll type and starts the word cloud empty" do
+      user = user_fixture()
+      from_event = event_fixture(%{user: user, name: "from event"})
+      to_event = event_fixture(%{user: user, name: "to event"})
+      from_presentation_file = presentation_file_fixture(%{event: from_event})
+
+      poll_fixture(%{
+        presentation_file_id: from_presentation_file.id,
+        title: "How do you feel?",
+        type: :word_cloud,
+        poll_opts: [
+          %{content: "tired", vote_count: 3},
+          %{content: "excited", vote_count: 1}
+        ]
+      })
+
+      to_presentation_file = presentation_file_fixture(%{event: to_event, hash: "444444"})
+
+      assert {:ok, %Event{}} = Events.import(user.id, from_event.uuid, to_event.uuid)
+
+      [imported_poll] =
+        Claper.Presentations.get_presentation_file!(to_presentation_file.id,
+          polls: [:poll_opts]
+        ).polls
+
+      assert imported_poll.title == "How do you feel?"
+      assert imported_poll.type == :word_cloud
+      assert imported_poll.poll_opts == []
+    end
+
+    test "import/3 keeps the options of a choice poll" do
+      user = user_fixture()
+      from_event = event_fixture(%{user: user, name: "from event"})
+      to_event = event_fixture(%{user: user, name: "to event"})
+      from_presentation_file = presentation_file_fixture(%{event: from_event})
+
+      poll_fixture(%{presentation_file_id: from_presentation_file.id, type: :choice})
+
+      to_presentation_file = presentation_file_fixture(%{event: to_event, hash: "444444"})
+
+      assert {:ok, %Event{}} = Events.import(user.id, from_event.uuid, to_event.uuid)
+
+      [imported_poll] =
+        Claper.Presentations.get_presentation_file!(to_presentation_file.id,
+          polls: [:poll_opts]
+        ).polls
+
+      assert imported_poll.type == :choice
+      assert Enum.map(imported_poll.poll_opts, & &1.content) == ["some option 1", "some option 2"]
     end
 
     test "import/3 fail with different user" do

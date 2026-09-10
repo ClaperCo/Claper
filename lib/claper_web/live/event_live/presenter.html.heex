@@ -54,7 +54,23 @@
           {@current_poll.title}
         </p>
 
-        <div class={"#{if @iframe, do: "space-y-5", else: "space-y-8"} flex flex-col"}>
+        <div
+          :if={@current_poll.type == :word_cloud}
+          class="flex flex-wrap items-baseline justify-center gap-x-6 gap-y-3 py-6"
+        >
+          <span
+            :for={opt <- @current_poll.poll_opts}
+            class="font-bold text-white"
+            style={"font-size: #{ClaperWeb.Helpers.word_size(opt.percentage, if(@iframe, do: 16, else: 24), if(@iframe, do: 44, else: 64))}px"}
+          >
+            {opt.content}
+          </span>
+        </div>
+
+        <div
+          :if={@current_poll.type != :word_cloud}
+          class={"#{if @iframe, do: "space-y-5", else: "space-y-8"} flex flex-col"}
+        >
           <%= if (length @current_poll.poll_opts) > 0 do %>
             <%= for opt <- @current_poll.poll_opts do %>
               <div class={"#{if @iframe, do: "py-1", else: "py-4"} bg-gray-500 px-6 rounded-3xl flex justify-between items-center relative text-white"}>
