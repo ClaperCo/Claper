@@ -69,13 +69,24 @@ defmodule ClaperWeb.EventLive.PollComponent do
 
           <p class="mb-1 text-xs font-semibold text-gray-400">{gettext("Current poll")}</p>
           <p class="mb-1 text-lg font-bold leading-snug text-white">{@poll.title}</p>
-          <%= if @poll.multiple do %>
-            <p class="mb-4 text-sm text-gray-400">{gettext("Select one or multiple options")}</p>
-          <% else %>
-            <p class="mb-4 text-sm text-gray-400">{gettext("Select one option")}</p>
+          <%= cond do %>
+            <% @poll.type == :slider -> %>
+              <p class="mb-4 text-sm text-gray-400">{gettext("Drag the slider to rate")}</p>
+            <% @poll.multiple -> %>
+              <p class="mb-4 text-sm text-gray-400">{gettext("Select one or multiple options")}</p>
+            <% true -> %>
+              <p class="mb-4 text-sm text-gray-400">{gettext("Select one option")}</p>
           <% end %>
         </div>
-        <div>
+        <div :if={@poll.type == :slider}>
+          <.slider_body
+            poll={@poll}
+            current_poll_vote={@current_poll_vote}
+            selected_rating={@selected_rating}
+            show_results={@show_results}
+          />
+        </div>
+        <div :if={@poll.type != :slider}>
           <div id="poll-options" class="flex flex-col gap-2">
             <%= if (length @poll.poll_opts) > 0 do %>
               <%= for {opt, idx} <- Enum.with_index(@poll.poll_opts) do %>
@@ -209,6 +220,60 @@ defmodule ClaperWeb.EventLive.PollComponent do
             <% end %>
           <% end %>
         </div>
+      </div>
+    </div>
+    """
+  end
+
+  attr :poll, :map, required: true
+  attr :current_poll_vote, :list, required: true
+  attr :selected_rating, :any, required: true
+  attr :show_results, :boolean, required: true
+
+  defp slider_body(assigns) do
+    assigns =
+      assigns
+      |> assign(:already_voted, length(assigns.current_poll_vote) > 0)
+      |> assign(:rating, assigns.selected_rating || Claper.Polls.default_rating(assigns.poll))
+      |> assign(:average, Claper.Polls.average_rating(assigns.poll))
+
+    ~H"""
+    <div>
+      <form :if={!@already_voted} phx-change="select-rating" phx-submit="submit-rating">
+        <p class="mb-2 text-center text-3xl font-bold text-primary-300">{@rating}</p>
+
+        <input
+          type="range"
+          name="value"
+          min={@poll.min_value}
+          max={@poll.max_value}
+          step="1"
+          value={@rating}
+          aria-label={@poll.title}
+          class="range range-primary w-full"
+        />
+
+        <div class="mt-1 flex justify-between text-xs text-gray-400">
+          <span>{@poll.min_label || @poll.min_value}</span>
+          <span>{@poll.max_label || @poll.max_value}</span>
+        </div>
+
+        <button
+          type="submit"
+          phx-disable-with="..."
+          class="btn-gradient mt-4 w-full rounded-lg px-3 py-2 text-sm font-bold"
+        >
+          {gettext("Vote")}
+        </button>
+      </form>
+
+      <div :if={@already_voted && !@show_results} class="text-sm text-gray-400">
+        {gettext("Thanks! Your rating has been recorded.")}
+      </div>
+
+      <div :if={@show_results && @average} class="py-2 text-center">
+        <p class="text-4xl font-bold text-white">{@average}</p>
+        <p class="text-xs font-semibold text-gray-400">{gettext("Average rating")}</p>
       </div>
     </div>
     """

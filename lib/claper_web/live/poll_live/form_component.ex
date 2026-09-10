@@ -31,6 +31,7 @@ defmodule ClaperWeb.PollLive.FormComponent do
   def handle_event("validate", %{"poll" => poll_params}, socket) do
     changeset =
       socket.assigns.poll
+      |> for_selected_type(poll_params)
       |> Polls.change_poll(poll_params)
       |> Map.put(:action, :validate)
 
@@ -111,4 +112,24 @@ defmodule ClaperWeb.PollLive.FormComponent do
   defp list_polls(assigns) do
     Polls.list_polls(assigns.presentation_file.id)
   end
+
+  # `input_value/2` answers with the atom from the changeset on the first render
+  # and with the raw param string on every following phx-change, so the type is
+  # compared on its string form -- otherwise editing a saved slider poll flips
+  # the form to the choice branch on the first keystroke.
+  defp slider_selected?(form), do: to_string(input_value(form, :type)) == "slider"
+
+  # The options on screen belong to the type that is selected: while the
+  # presenter switches a saved poll over, the rows kept for the other type (the
+  # author's choices, or the attendees' rating buckets) must not be offered as
+  # the new type's options.
+  defp for_selected_type(%Polls.Poll{} = poll, %{"type" => selected}) do
+    cond do
+      to_string(poll.type) == selected -> poll
+      selected == "slider" -> %{poll | poll_opts: []}
+      true -> %{poll | poll_opts: [%Polls.PollOpt{}, %Polls.PollOpt{}]}
+    end
+  end
+
+  defp for_selected_type(poll, _poll_params), do: poll
 end
