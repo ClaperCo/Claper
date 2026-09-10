@@ -24,9 +24,9 @@ defmodule Claper.PostsFixtures do
           body: "some body",
           like_count: 42,
           position: 0,
-          uuid: Ecto.UUID.generate(),
-          user_id: assoc.user.id
-        })
+          uuid: Ecto.UUID.generate()
+        }),
+        assoc.user
       )
 
     Claper.UtilFixture.merge_preload(post, preload, assoc)

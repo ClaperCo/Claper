@@ -10,6 +10,8 @@
       match?(%Claper.Forms.Form{}, @current_interaction) ||
       match?(%Claper.Quizzes.Quiz{}, @current_interaction) ||
       match?(%Claper.Embeds.Embed{attendee_visibility: true}, @current_interaction) %>
+  <% composer_open? =
+    @state.chat_enabled && !(@state.authenticated_chat_only && is_nil(@current_user)) %>
   <% captions_visible? =
     @transcription_config && @transcription_config.enabled &&
       @transcription_config.visibility in ["both", "attendee"] %>
@@ -54,6 +56,7 @@
       </div>
 
       <div
+        :if={composer_open?}
         id="identity-menu"
         phx-click-away={JS.hide(to: "#identity-menu")}
         class="absolute bottom-16 left-2 z-40 hidden w-64 rounded-2xl border border-white/10 bg-gray-900 p-2 text-white shadow-2xl"
@@ -484,55 +487,69 @@
         id="room-composer"
         class="absolute inset-x-0 bottom-0 z-30 bg-transparent px-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] pt-2"
       >
-        <%= if @state.chat_enabled do %>
-          <.form
-            :let={f}
-            for={@post_changeset}
-            id="post-form"
-            class="attendee-composer flex items-center gap-1.5 rounded-2xl border border-white/20 px-1.5 py-1 shadow-2xl"
-            phx-hook="PostForm"
-            data-nickname={@nickname}
-            data-storage-key={"post-draft:#{@event.uuid}"}
-            phx-submit="save"
-          >
-            <button
-              id="composer-identity-button"
-              type="button"
-              aria-label={gettext("Choose identity")}
-              phx-click={JS.toggle(to: "#identity-menu")}
-              class="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-black/60 text-xs font-bold text-white"
+        <%= cond do %>
+          <% !@state.chat_enabled -> %>
+            <div class="attendee-composer flex min-h-10 items-center rounded-2xl border border-white/20 px-3 text-sm text-white/60 shadow-2xl">
+              {gettext("Messages deactivated")}
+            </div>
+          <% !composer_open? -> %>
+            <div
+              id="login-required-composer"
+              class="attendee-composer flex min-h-10 items-center justify-between gap-3 rounded-2xl border border-white/20 px-3 py-1.5 text-sm text-white/60 shadow-2xl"
             >
-              {if @nickname in [nil, ""], do: "A", else: String.first(@nickname)}
-            </button>
-
-            {textarea(f, :body,
-              id: "postFormTA",
-              disabled: !@state.anonymous_chat_enabled && @nickname in [nil, ""],
-              rows: 1,
-              maxlength: 255,
-              class:
-                "min-h-9 max-h-16 min-w-0 flex-1 resize-none border-0 bg-transparent px-2 py-2 text-base leading-5 text-white outline-hidden placeholder:text-white/70 focus:ring-0 disabled:cursor-not-allowed disabled:opacity-50",
-              placeholder:
-                if(!@state.anonymous_chat_enabled && @nickname in [nil, ""],
-                  do: gettext("Set your nickname to participate"),
-                  else: gettext("Ask, comment...")
-                )
-            )}
-
-            <button
-              type="submit"
-              id="submitBtn"
-              disabled
-              aria-label={gettext("Send message")}
-              class="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-black/20 text-white opacity-50 transition disabled:cursor-not-allowed"
+              <span>{gettext("Log in to post a message")}</span>
+              <a
+                href={~p"/users/log_in?#{[return_to: "/e/#{@event.code}"]}"}
+                class="shrink-0 rounded-full bg-primary-500 px-3 py-1.5 text-xs font-bold text-white"
+              >
+                {gettext("Log in")}
+              </a>
+            </div>
+          <% true -> %>
+            <.form
+              :let={f}
+              for={@post_changeset}
+              id="post-form"
+              class="attendee-composer flex items-center gap-1.5 rounded-2xl border border-white/20 px-1.5 py-1 shadow-2xl"
+              phx-hook="PostForm"
+              data-nickname={@nickname}
+              data-storage-key={"post-draft:#{@event.uuid}"}
+              phx-submit="save"
             >
-              <img src="/images/icons/send.svg" class="h-5 w-5" />
-            </button>
-          </.form>
-        <% else %>
-          <div class="attendee-composer flex min-h-10 items-center rounded-2xl border border-white/20 px-3 text-sm text-white/60 shadow-2xl">
-            {gettext("Messages deactivated")}
-          </div>
+              <button
+                id="composer-identity-button"
+                type="button"
+                aria-label={gettext("Choose identity")}
+                phx-click={JS.toggle(to: "#identity-menu")}
+                class="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-black/60 text-xs font-bold text-white"
+              >
+                {if @nickname in [nil, ""], do: "A", else: String.first(@nickname)}
+              </button>
+
+              {textarea(f, :body,
+                id: "postFormTA",
+                disabled: !@state.anonymous_chat_enabled && @nickname in [nil, ""],
+                rows: 1,
+                maxlength: 255,
+                class:
+                  "min-h-9 max-h-16 min-w-0 flex-1 resize-none border-0 bg-transparent px-2 py-2 text-base leading-5 text-white outline-hidden placeholder:text-white/70 focus:ring-0 disabled:cursor-not-allowed disabled:opacity-50",
+                placeholder:
+                  if(!@state.anonymous_chat_enabled && @nickname in [nil, ""],
+                    do: gettext("Set your nickname to participate"),
+                    else: gettext("Ask, comment...")
+                  )
+              )}
+
+              <button
+                type="submit"
+                id="submitBtn"
+                disabled
+                aria-label={gettext("Send message")}
+                class="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-black/20 text-white opacity-50 transition disabled:cursor-not-allowed"
+              >
+                <img src="/images/icons/send.svg" class="h-5 w-5" />
+              </button>
+            </.form>
         <% end %>
       </footer>
     </main>
