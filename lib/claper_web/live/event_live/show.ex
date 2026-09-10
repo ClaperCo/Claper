@@ -490,6 +490,17 @@ defmodule ClaperWeb.EventLive.Show do
   end
 
   @impl true
+  def handle_event(
+        "save",
+        _params,
+        %{assigns: %{state: %{authenticated_chat_only: true}, current_user: current_user}} =
+          socket
+      )
+      when not is_map(current_user) do
+    {:noreply, socket |> put_flash(:error, gettext("You must be logged in to post a message"))}
+  end
+
+  @impl true
   def handle_event("save", %{"post" => post_params}, socket) do
     if is_map(post_params) &&
          Enum.any?(@protected_post_fields, &Map.has_key?(post_params, &1)) do
@@ -511,6 +522,9 @@ defmodule ClaperWeb.EventLive.Show do
       {:error, :chat_disabled} ->
         SecurityAudit.observe(socket, "message", nil, "chat_disabled")
         {:noreply, socket}
+
+      {:error, :login_required} ->
+        {:noreply, put_flash(socket, :error, gettext("You must be logged in to post a message"))}
 
       {:error, _reason} ->
         {:noreply, socket}

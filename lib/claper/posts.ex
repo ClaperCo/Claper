@@ -187,7 +187,7 @@ defmodule Claper.Posts do
 
     with %Claper.Presentations.PresentationState{} <- state,
          {:ok, author_attrs} <- post_author_attrs(actor),
-         :ok <- attendee_chat_allowed(state, author_attrs.name) do
+         :ok <- attendee_chat_allowed(state, author_attrs) do
       Post
       |> struct(Map.merge(author_attrs, %{event: event, position: state.position}))
       |> Post.attendee_changeset(attrs)
@@ -422,12 +422,15 @@ defmodule Claper.Posts do
 
   defp post_author_attrs(_actor), do: {:error, :forbidden}
 
-  defp attendee_chat_allowed(state, name) do
+  defp attendee_chat_allowed(state, author_attrs) do
     cond do
       state.chat_enabled == false ->
         {:error, :chat_disabled}
 
-      state.anonymous_chat_enabled == false and name in [nil, ""] ->
+      state.authenticated_chat_only == true and not Map.has_key?(author_attrs, :user_id) ->
+        {:error, :login_required}
+
+      state.anonymous_chat_enabled == false and author_attrs.name in [nil, ""] ->
         {:error, :nickname_required}
 
       true ->
