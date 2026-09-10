@@ -2359,6 +2359,7 @@ msgid "Join 6,000+ speakers"
 msgstr "Rejoignez plus de 6 000 intervenants"
 
 #: lib/claper_web/live/event_live/join.html.heex
+#: lib/claper_web/live/event_live/show.html.heex
 #: lib/claper_web/templates/user_registration/new.html.heex
 #: lib/claper_web/templates/user_session/new.html.heex
 #, elixir-autogen, elixir-format
@@ -3562,3 +3563,28 @@ msgstr "Vous devez être administrateur pour accéder à cette page."
 #, elixir-autogen, elixir-format
 msgid "You must log in to access this page."
 msgstr "Vous devez vous connecter pour accéder à cette page."
+
+#: lib/claper_web/live/event_live/manage_attendees_options_component.ex
+#, elixir-autogen, elixir-format
+msgid "Allow messages without login"
+msgstr ""
+
+#: lib/claper_web/live/event_live/show.html.heex
+#, elixir-autogen, elixir-format
+msgid "Log in to post a message"
+msgstr ""
+
+#: lib/claper_web/live/event_live/manage_attendees_options_component.ex
+#, elixir-autogen, elixir-format
+msgid "Require login to post"
+msgstr ""
+
+#: lib/claper_web/live/event_live/manage.ex
+#, elixir-autogen, elixir-format
+msgid "Turn messages on before changing who can post"
+msgstr ""
+
+#: lib/claper_web/live/event_live/show.ex
+#, elixir-autogen, elixir-format
+msgid "You must be logged in to post a message"
+msgstr ""
