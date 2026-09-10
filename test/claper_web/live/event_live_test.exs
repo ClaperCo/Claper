@@ -515,6 +515,98 @@ defmodule ClaperWeb.EventLiveTest do
       assert render(manage_live) =~ "Resource not found"
       assert Claper.Posts.get_post!(other_post.uuid).replies == []
     end
+
+    test "toggles requiring a login to post", %{
+      conn: conn,
+      presentation_file: presentation_file
+    } do
+      {:ok, manage_live, html} = live(conn, ~p"/e/#{presentation_file.event.code}/manage")
+
+      assert html =~ "Require login to post"
+      refute Claper.Presentations.authenticated_chat_only?(presentation_file.event_id)
+
+      render_click(manage_live, "checked", %{"key" => "authenticated_chat_only", "value" => true})
+
+      assert Claper.Presentations.authenticated_chat_only?(presentation_file.event_id)
+      assert render(manage_live) =~ "Allow messages without login"
+    end
+
+    test "does not require a login to post while messages are disabled", %{
+      conn: conn,
+      presentation_file: presentation_file
+    } do
+      {:ok, manage_live, _html} = live(conn, ~p"/e/#{presentation_file.event.code}/manage")
+
+      render_click(manage_live, "checked", %{"key" => "chat_enabled", "value" => false})
+
+      assert has_element?(
+               manage_live,
+               ~s{[phx-value-key="authenticated_chat_only"][disabled]}
+             )
+
+      render_click(manage_live, "checked", %{"key" => "authenticated_chat_only", "value" => true})
+
+      refute Claper.Presentations.authenticated_chat_only?(presentation_file.event_id)
+
+      render_click(manage_live, "checked", %{"key" => "chat_enabled", "value" => true})
+      render_click(manage_live, "checked", %{"key" => "authenticated_chat_only", "value" => true})
+
+      assert Claper.Presentations.authenticated_chat_only?(presentation_file.event_id)
+    end
+
+    test "says why a refused chat setting did not take", %{
+      conn: conn,
+      presentation_file: presentation_file
+    } do
+      {:ok, manage_live, _html} = live(conn, ~p"/e/#{presentation_file.event.code}/manage")
+
+      render_click(manage_live, "checked", %{"key" => "chat_enabled", "value" => false})
+
+      html =
+        render_click(manage_live, "checked", %{
+          "key" => "authenticated_chat_only",
+          "value" => true
+        })
+
+      assert html =~ "Turn messages on before changing who can post"
+    end
+
+    test "does not change the anonymous chat while messages are disabled", %{
+      conn: conn,
+      presentation_file: presentation_file
+    } do
+      state =
+        Claper.Repo.get_by!(Claper.Presentations.PresentationState,
+          presentation_file_id: presentation_file.id
+        )
+
+      {:ok, manage_live, _html} = live(conn, ~p"/e/#{presentation_file.event.code}/manage")
+
+      render_click(manage_live, "checked", %{"key" => "chat_enabled", "value" => false})
+
+      assert has_element?(
+               manage_live,
+               ~s{[phx-value-key="anonymous_chat_enabled"][disabled]}
+             )
+
+      html =
+        render_click(manage_live, "checked", %{
+          "key" => "anonymous_chat_enabled",
+          "value" => false
+        })
+
+      assert html =~ "Turn messages on before changing who can post"
+      assert Claper.Repo.reload!(state).anonymous_chat_enabled
+
+      render_click(manage_live, "checked", %{"key" => "chat_enabled", "value" => true})
+
+      render_click(manage_live, "checked", %{
+        "key" => "anonymous_chat_enabled",
+        "value" => false
+      })
+
+      refute Claper.Repo.reload!(state).anonymous_chat_enabled
+    end
   end
 
   describe "Presenter" do

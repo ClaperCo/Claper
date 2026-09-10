@@ -254,8 +254,74 @@ defmodule Claper.Presentations do
   def update_presentation_state(%PresentationState{} = presentation_state, attrs) do
     presentation_state
     |> PresentationState.changeset(attrs)
+    |> validate_chat_settings_while_chat_off(presentation_state)
     |> Repo.update()
     |> broadcast(:state_updated)
+  end
+
+  # Who may write a message only means something while messages are on at all,
+  # which is why the moderator's screen renders both toggles disabled then. The
+  # same rule belongs here, so a push that skips the rendered control is refused
+  # with an error instead of quietly rewriting the setting.
+  @chat_audience_settings [:anonymous_chat_enabled, :authenticated_chat_only]
+
+  defp validate_chat_settings_while_chat_off(changeset, presentation_state) do
+    if chat_enabled?(changeset, presentation_state) do
+      changeset
+    else
+      Enum.reduce(@chat_audience_settings, changeset, &refuse_change_while_chat_off/2)
+    end
+  end
+
+  defp refuse_change_while_chat_off(field, changeset) do
+    case Ecto.Changeset.fetch_change(changeset, field) do
+      {:ok, _value} ->
+        Ecto.Changeset.add_error(
+          changeset,
+          field,
+          "can only be changed while messages are enabled"
+        )
+
+      :error ->
+        changeset
+    end
+  end
+
+  # The stored row decides, not the struct the caller happens to hold, unless
+  # the very same update switches messages on.
+  defp chat_enabled?(changeset, presentation_state) do
+    case Ecto.Changeset.fetch_change(changeset, :chat_enabled) do
+      {:ok, chat_enabled} ->
+        chat_enabled
+
+      :error ->
+        from(ps in PresentationState,
+          where: ps.id == ^presentation_state.id and ps.chat_enabled == true
+        )
+        |> Repo.exists?()
+    end
+  end
+
+  @doc """
+  Returns true when the event only accepts messages from authenticated users.
+
+  Always reads the current state from the database, so a caller holding a
+  presentation state loaded earlier cannot accept a message with a stale value
+  after the moderator turned the setting on.
+
+  ## Examples
+
+      iex> authenticated_chat_only?(event_id)
+      false
+
+  """
+  def authenticated_chat_only?(event_id) do
+    from(ps in PresentationState,
+      join: pf in PresentationFile,
+      on: ps.presentation_file_id == pf.id,
+      where: pf.event_id == ^event_id and ps.authenticated_chat_only == true
+    )
+    |> Repo.exists?()
   end
 
   @interaction_schemas [

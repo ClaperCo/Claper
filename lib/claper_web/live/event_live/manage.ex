@@ -823,18 +823,25 @@ defmodule ClaperWeb.EventLive.Manage do
   @impl true
   def handle_event(
         "checked",
-        %{"key" => "anonymous_chat_enabled", "value" => value},
+        %{"key" => key, "value" => value},
         %{assigns: %{state: state}} = socket
-      ) do
-    {:ok, new_state} =
-      Claper.Presentations.update_presentation_state(
-        state,
-        %{
-          :anonymous_chat_enabled => value
-        }
       )
+      when key in ["anonymous_chat_enabled", "authenticated_chat_only"] do
+    # Both toggles are rendered disabled while messages are off, and the context
+    # refuses the change as well. A push that arrives anyway is answered rather
+    # than swallowed.
+    case Claper.Presentations.update_presentation_state(
+           state,
+           %{String.to_existing_atom(key) => value}
+         ) do
+      {:ok, new_state} ->
+        {:noreply, socket |> assign(:state, new_state)}
 
-    {:noreply, socket |> assign(:state, new_state)}
+      {:error, %Ecto.Changeset{}} ->
+        {:noreply,
+         socket
+         |> put_flash(:error, gettext("Turn messages on before changing who can post"))}
+    end
   end
 
   @impl true

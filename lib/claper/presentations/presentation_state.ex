@@ -10,6 +10,7 @@ defmodule Claper.Presentations.PresentationState do
           join_screen_visible: boolean() | nil,
           chat_enabled: boolean() | nil,
           anonymous_chat_enabled: boolean() | nil,
+          authenticated_chat_only: boolean() | nil,
           message_reaction_enabled: boolean() | nil,
           banned: [String.t()] | nil,
           show_only_pinned: boolean() | nil,
@@ -26,6 +27,7 @@ defmodule Claper.Presentations.PresentationState do
     field :join_screen_visible, :boolean
     field :chat_enabled, :boolean
     field :anonymous_chat_enabled, :boolean
+    field :authenticated_chat_only, :boolean, default: false
     field :message_reaction_enabled, :boolean, default: true
     field :banned, {:array, :string}, default: []
     field :show_only_pinned, :boolean, default: false
@@ -48,6 +50,7 @@ defmodule Claper.Presentations.PresentationState do
       :presentation_file_id,
       :chat_enabled,
       :anonymous_chat_enabled,
+      :authenticated_chat_only,
       :show_only_pinned,
       :show_attendee_count,
       :message_reaction_enabled
