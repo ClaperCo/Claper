@@ -172,7 +172,13 @@ defmodule ClaperWeb.EventLive.Manage do
 
        stream(socket, :questions, sorted_questions, reset: true)
      end)
-     |> stream_insert(:pinned_posts, updated_post)}
+     |> then(fn socket ->
+       if updated_post.pinned do
+         stream_insert(socket, :pinned_posts, updated_post)
+       else
+         stream_delete(socket, :pinned_posts, updated_post)
+       end
+     end)}
   end
 
   @impl true
@@ -719,6 +725,36 @@ defmodule ClaperWeb.EventLive.Manage do
     case Claper.Posts.get_post_for_event(id, event_id(socket), [:event]) do
       nil -> {:noreply, socket}
       post -> pin(post, socket)
+    end
+  end
+
+  @impl true
+  def handle_event("reply", %{"id" => id, "reply_body" => reply_body}, socket) do
+    case String.trim(reply_body) do
+      "" ->
+        {:noreply, socket |> put_flash(:error, gettext("A reply cannot be empty"))}
+
+      trimmed_body ->
+        reply(id, trimmed_body, socket)
+    end
+  end
+
+  @impl true
+  def handle_event("delete-reply", %{"id" => id}, socket) do
+    actor = {:user, socket.assigns.current_user, nil}
+
+    case Claper.Posts.delete_post_reply(socket.assigns.event, id, actor) do
+      {:ok, _reply} ->
+        {:noreply, socket}
+
+      {:error, :not_found} ->
+        {:noreply, put_flash(socket, :error, gettext("Resource not found"))}
+
+      {:error, :forbidden} ->
+        {:noreply, put_flash(socket, :error, gettext("Resource not found"))}
+
+      {:error, _changeset} ->
+        {:noreply, put_flash(socket, :error, gettext("Could not delete reply"))}
     end
   end
 
@@ -1296,6 +1332,21 @@ defmodule ClaperWeb.EventLive.Manage do
     {:ok, _updated_post} = Claper.Posts.toggle_pin_post(post)
 
     {:noreply, socket}
+  end
+
+  defp reply(post_id, reply_body, socket) do
+    actor = {:user, socket.assigns.current_user, nil}
+
+    case Claper.Posts.create_post_reply(socket.assigns.event, post_id, actor, reply_body) do
+      {:ok, _reply} ->
+        {:noreply, socket}
+
+      {:error, reason} when reason in [:not_found, :forbidden] ->
+        {:noreply, socket |> put_flash(:error, gettext("Resource not found"))}
+
+      {:error, _changeset} ->
+        {:noreply, socket |> put_flash(:error, gettext("Could not send the reply"))}
+    end
   end
 
   defp ban(user, %{assigns: %{event: event, state: state}} = socket) do

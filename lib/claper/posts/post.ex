@@ -16,6 +16,7 @@ defmodule Claper.Posts.Post do
           event_id: integer() | nil,
           user_id: integer() | nil,
           reactions: [Claper.Posts.Reaction.t()] | nil,
+          replies: [Claper.Posts.PostReply.t()] | nil,
           inserted_at: NaiveDateTime.t(),
           updated_at: NaiveDateTime.t()
         }
@@ -34,6 +35,7 @@ defmodule Claper.Posts.Post do
     belongs_to :event, Claper.Events.Event
     belongs_to :user, Claper.Accounts.User
     has_many :reactions, Claper.Posts.Reaction
+    has_many :replies, Claper.Posts.PostReply, preload_order: [asc: :id]
 
     timestamps()
   end

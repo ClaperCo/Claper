@@ -77,6 +77,17 @@ defmodule ClaperWeb.EventLive.Presenter do
     end)
   end
 
+  defp presenter_reply_count(assigns) do
+    ~H"""
+    <p class={[
+      "font-semibold text-gray-500",
+      if(@iframe, do: "mt-2 text-xs", else: "mt-4 text-base")
+    ]}>
+      {ngettext("%{count} reply", "%{count} replies", @count)}
+    </p>
+    """
+  end
+
   defp leader?(%{assigns: %{current_user: current_user}} = _socket, event) do
     Claper.Events.led_by?(current_user.email, event) || event.user.id == current_user.id
   end

@@ -113,6 +113,12 @@
                 <% end %>
                 <p class={"#{if @iframe, do: "text-xl", else: "text-3xl"}"}>{post.body}</p>
 
+                <.presenter_reply_count
+                  :if={post.replies != []}
+                  count={length(post.replies)}
+                  iframe={@iframe}
+                />
+
                 <%= if post.like_count > 0 || post.love_count > 0 || post.lol_count > 0 do %>
                   <div class="flex h-6 space-x-2 text-lg text-gray-500 pb-3 items-center mt-5">
                     <div class="flex items-center">
@@ -159,6 +165,12 @@
                   </p>
                 <% end %>
                 <p class={"#{if @iframe, do: "text-xl", else: "text-3xl"}"}>{post.body}</p>
+
+                <.presenter_reply_count
+                  :if={post.replies != []}
+                  count={length(post.replies)}
+                  iframe={@iframe}
+                />
 
                 <%= if post.like_count > 0 || post.love_count > 0 || post.lol_count > 0 do %>
                   <div class="flex h-6 space-x-2 text-lg text-gray-500 pb-3 items-center mt-5">

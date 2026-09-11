@@ -413,6 +413,38 @@ defmodule ClaperWeb.EventLive.Show do
   end
 
   @impl true
+  def handle_event("reply", _params, %{assigns: %{state: %{chat_enabled: false}}} = socket) do
+    {:noreply, socket}
+  end
+
+  def handle_event("reply", %{"id" => id, "reply_body" => body}, socket) do
+    case Posts.create_post_reply(socket.assigns.event, id, reply_actor(socket), body) do
+      {:ok, _reply} ->
+        {:noreply, socket}
+
+      {:error, reason} when reason in [:not_found, :forbidden] ->
+        {:noreply, put_flash(socket, :error, gettext("You cannot reply to this message"))}
+
+      {:error, _changeset} ->
+        {:noreply, put_flash(socket, :error, gettext("Could not send the reply"))}
+    end
+  end
+
+  @impl true
+  def handle_event("delete-reply", %{"id" => id}, socket) do
+    case Posts.delete_post_reply(socket.assigns.event, id, reply_actor(socket)) do
+      {:ok, _reply} ->
+        {:noreply, socket}
+
+      {:error, reason} when reason in [:not_found, :forbidden] ->
+        {:noreply, put_flash(socket, :error, gettext("You cannot delete this reply"))}
+
+      {:error, _changeset} ->
+        {:noreply, put_flash(socket, :error, gettext("Could not delete reply"))}
+    end
+  end
+
+  @impl true
   def handle_event("save", _params, %{assigns: %{state: %{chat_enabled: false}}} = socket) do
     {:noreply, socket}
   end
@@ -868,6 +900,13 @@ defmodule ClaperWeb.EventLive.Show do
        do: true
 
   defp can_delete_post?(_socket, _post), do: false
+
+  defp reply_actor(%{assigns: %{current_user: current_user, nickname: nickname}})
+       when is_map(current_user),
+       do: {:user, current_user, nickname}
+
+  defp reply_actor(%{assigns: %{attendee_identifier: attendee_identifier, nickname: nickname}}),
+    do: {:attendee, attendee_identifier, nickname}
 
   defp own_post?(%{assigns: %{current_user: %{id: user_id}}}, %{user_id: user_id}), do: true
 
