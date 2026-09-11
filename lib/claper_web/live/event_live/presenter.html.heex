@@ -54,7 +54,43 @@
           {@current_poll.title}
         </p>
 
-        <div class={"#{if @iframe, do: "space-y-5", else: "space-y-8"} flex flex-col"}>
+        <div :if={@current_poll.type == :slider} class="flex flex-col items-center text-white">
+          <p class={"#{if @iframe, do: "text-6xl", else: "text-9xl"} font-bold leading-none"}>
+            {Claper.Polls.average_rating(@current_poll) || "-"}
+          </p>
+          <p class={"#{if @iframe, do: "text-sm mt-1", else: "text-2xl mt-3"} font-bold text-gray-400"}>
+            {gettext("Average rating")}
+          </p>
+
+          <div class={"#{if @iframe, do: "h-24 mt-6", else: "h-48 mt-12"} flex w-full items-end justify-center gap-2"}>
+            <div
+              :for={bucket <- Claper.Polls.rating_distribution(@current_poll)}
+              class="flex h-full flex-1 flex-col items-center justify-end"
+            >
+              <div
+                style={"height: #{bucket.percentage}%;"}
+                class="w-full rounded-t-lg bg-primary transition-all"
+              >
+              </div>
+              <span class={"#{if @iframe, do: "text-xs", else: "text-lg"} mt-2 font-bold"}>
+                {bucket.value}
+              </span>
+            </div>
+          </div>
+
+          <div
+            :if={@current_poll.min_label || @current_poll.max_label}
+            class={"#{if @iframe, do: "text-xs", else: "text-xl"} mt-2 flex w-full justify-between text-gray-400"}
+          >
+            <span>{@current_poll.min_label}</span>
+            <span>{@current_poll.max_label}</span>
+          </div>
+        </div>
+
+        <div
+          :if={@current_poll.type != :slider}
+          class={"#{if @iframe, do: "space-y-5", else: "space-y-8"} flex flex-col"}
+        >
           <%= if (length @current_poll.poll_opts) > 0 do %>
             <%= for opt <- @current_poll.poll_opts do %>
               <div class={"#{if @iframe, do: "py-1", else: "py-4"} bg-gray-500 px-6 rounded-3xl flex justify-between items-center relative text-white"}>

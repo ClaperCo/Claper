@@ -99,6 +99,7 @@ defmodule ClaperWeb.EventLive.Show do
       |> assign(:love_posts, reacted_posts(socket, event.id, "❤️"))
       |> assign(:lol_posts, reacted_posts(socket, event.id, "😂"))
       |> assign(:selected_poll_opt, [])
+      |> assign(:selected_rating, nil)
       |> assign(:selected_quiz_question_opts, [])
       |> assign(:current_quiz_question_idx, 0)
       |> assign(:event, event)
@@ -685,6 +686,11 @@ defmodule ClaperWeb.EventLive.Show do
   end
 
   @impl true
+  def handle_event("select-rating", %{"value" => value}, socket) do
+    {:noreply, socket |> assign(:selected_rating, value)}
+  end
+
+  @impl true
   def handle_event(
         "vote",
         _params,
@@ -704,6 +710,11 @@ defmodule ClaperWeb.EventLive.Show do
          ) do
       {:ok, poll} ->
         {:noreply, socket |> get_current_vote(poll.id)}
+
+      # a vote pushed at something that takes no votes (a slider poll, an option
+      # that is not on this poll): nothing to record, nothing to say
+      {:error, _reason} ->
+        {:noreply, socket}
     end
   end
 
@@ -726,6 +737,58 @@ defmodule ClaperWeb.EventLive.Show do
          ) do
       {:ok, poll} ->
         {:noreply, socket |> get_current_vote(poll.id)}
+
+      {:error, _reason} ->
+        {:noreply, socket}
+    end
+  end
+
+  @impl true
+  def handle_event(
+        "submit-rating",
+        %{"value" => value},
+        %{assigns: %{current_user: current_user}} = socket
+      )
+      when is_map(current_user) do
+    case Claper.Polls.submit_rating(
+           current_user.id,
+           socket.assigns.event.uuid,
+           socket.assigns.current_interaction.id,
+           value
+         ) do
+      {:ok, poll} ->
+        {:noreply, socket |> get_current_vote(poll.id)}
+
+      # this view was showing a form for a rating that is already in: catch it
+      # up instead of leaving the form on screen
+      {:error, :already_voted} ->
+        {:noreply, socket |> get_current_vote(socket.assigns.current_interaction.id)}
+
+      {:error, _reason} ->
+        {:noreply, socket}
+    end
+  end
+
+  @impl true
+  def handle_event(
+        "submit-rating",
+        %{"value" => value},
+        %{assigns: %{attendee_identifier: attendee_identifier}} = socket
+      ) do
+    case Claper.Polls.submit_rating(
+           attendee_identifier,
+           socket.assigns.event.uuid,
+           socket.assigns.current_interaction.id,
+           value
+         ) do
+      {:ok, poll} ->
+        {:noreply, socket |> get_current_vote(poll.id)}
+
+      {:error, :already_voted} ->
+        {:noreply, socket |> get_current_vote(socket.assigns.current_interaction.id)}
+
+      {:error, _reason} ->
+        {:noreply, socket}
     end
   end
 
@@ -1074,7 +1137,7 @@ defmodule ClaperWeb.EventLive.Show do
   end
 
   defp maybe_reset_selected_poll_opt(socket, _same_interaction) do
-    socket |> assign(:selected_poll_opt, [])
+    socket |> assign(:selected_poll_opt, []) |> assign(:selected_rating, nil)
   end
 
   defp update_stats(%{assigns: %{current_user: current_user}}, event) when is_map(current_user) do

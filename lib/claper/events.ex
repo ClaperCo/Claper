@@ -523,8 +523,13 @@ defmodule Claper.Events do
                   position: poll.position,
                   enabled: poll.enabled,
                   multiple: poll.multiple,
+                  type: poll.type,
+                  min_value: poll.min_value,
+                  max_value: poll.max_value,
+                  min_label: poll.min_label,
+                  max_label: poll.max_label,
                   poll_opts:
-                    Enum.map(poll.poll_opts, fn opt ->
+                    Enum.map(copied_poll_opts(poll), fn opt ->
                       %{content: opt.content, vote_count: 0}
                     end),
                   presentation_file_id: to_event.presentation_file.id
@@ -672,6 +677,12 @@ defmodule Claper.Events do
     end
   end
 
+  # The options of a slider poll are the buckets of the previous audience's
+  # ratings, not answers its author wrote down, so a copy of that poll starts
+  # without any: it gets its options back the moment someone rates it.
+  defp copied_poll_opts(%Claper.Polls.Poll{type: :slider}), do: []
+  defp copied_poll_opts(%Claper.Polls.Poll{poll_opts: poll_opts}), do: poll_opts
+
   defp duplicate_polls(original, changes) do
     case get_in(original.presentation_file.polls) do
       polls when is_list(polls) ->
@@ -683,9 +694,9 @@ defmodule Claper.Events do
               |> Map.put(:presentation_file_id, changes.presentation_file.id)
               |> Map.put(
                 :poll_opts,
-                Enum.map(poll.poll_opts, fn opt ->
+                Enum.map(copied_poll_opts(poll), fn opt ->
                   Map.from_struct(opt)
-                  |> Map.drop([:id, :inserted_at, :updated_at, :vote_count])
+                  |> Map.drop([:id, :inserted_at, :updated_at, :vote_count, :rating_value])
                 end)
               )
 

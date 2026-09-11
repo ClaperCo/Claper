@@ -19,60 +19,118 @@
         autofocus
       />
 
-      <%= inputs_for f, :poll_opts, fn i -> %>
-        <.text_field
-          form={i}
-          key={:content}
-          label={ngettext("Choice %{count}", "Choice %{count}", i.index + 1)}
-          autocomplete="off"
-          required
-        >
-          <:trailing :if={i.index >= 2}>
-            <button
-              type="button"
-              phx-click="remove_opt"
-              phx-value-opt={i.index}
-              phx-target={@myself}
-              aria-label={gettext("Remove choice")}
-              class="btn btn-circle btn-error !size-12 shrink-0"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke-width="2"
-                stroke="currentColor"
-                class="h-5 w-5"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  d="M4 7h16M10 11v6M14 11v6M5 7l1 13a2 2 0 002 2h8a2 2 0 002-2l1-13M9 7V4a1 1 0 011-1h4a1 1 0 011 1v3"
-                />
-              </svg>
-            </button>
-          </:trailing>
-        </.text_field>
+      <.select_field
+        form={f}
+        key={:type}
+        label={gettext("Poll type")}
+        options={[
+          {gettext("Choice"), :choice},
+          {gettext("Slider"), :slider}
+        ]}
+      />
+
+      <%= if slider_selected?(f) do %>
+        <p class="text-sm text-base-content/70">
+          {gettext(
+            "Attendees rate on a scale instead of picking a choice. Set the range below and, if you like, name both ends."
+          )}
+        </p>
+
+        <div class="grid grid-cols-2 gap-4">
+          <.text_field
+            form={f}
+            key={:min_value}
+            type="number"
+            label={gettext("Lowest value")}
+            required
+          />
+
+          <.text_field
+            form={f}
+            key={:max_value}
+            type="number"
+            label={gettext("Highest value")}
+            required
+          />
+        </div>
+
+        <div class="grid grid-cols-2 gap-4">
+          <.text_field
+            form={f}
+            key={:min_label}
+            label={gettext("Label for the lowest value")}
+            placeholder={gettext("Poor")}
+            autocomplete="off"
+            maxlength="60"
+          />
+
+          <.text_field
+            form={f}
+            key={:max_label}
+            label={gettext("Label for the highest value")}
+            placeholder={gettext("Excellent")}
+            autocomplete="off"
+            maxlength="60"
+          />
+        </div>
       <% end %>
 
-      <button
-        type="button"
-        phx-click="add_opt"
-        phx-target={@myself}
-        class="btn btn-sm bg-base-200 text-base-content border-none hover:bg-base-300 gap-1.5 self-start !h-9"
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke-width="2"
-          stroke="currentColor"
-          class="h-4 w-4"
+      <%= if !slider_selected?(f) do %>
+        <%= inputs_for f, :poll_opts, fn i -> %>
+          <.text_field
+            form={i}
+            key={:content}
+            label={ngettext("Choice %{count}", "Choice %{count}", i.index + 1)}
+            autocomplete="off"
+            required
+          >
+            <:trailing :if={i.index >= 2}>
+              <button
+                type="button"
+                phx-click="remove_opt"
+                phx-value-opt={i.index}
+                phx-target={@myself}
+                aria-label={gettext("Remove choice")}
+                class="btn btn-circle btn-error !size-12 shrink-0"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke-width="2"
+                  stroke="currentColor"
+                  class="h-5 w-5"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M4 7h16M10 11v6M14 11v6M5 7l1 13a2 2 0 002 2h8a2 2 0 002-2l1-13M9 7V4a1 1 0 011-1h4a1 1 0 011 1v3"
+                  />
+                </svg>
+              </button>
+            </:trailing>
+          </.text_field>
+        <% end %>
+
+        <button
+          type="button"
+          phx-click="add_opt"
+          phx-target={@myself}
+          class="btn btn-sm bg-base-200 text-base-content border-none hover:bg-base-300 gap-1.5 self-start !h-9"
         >
-          <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-        </svg>
-        {gettext("Add")}
-      </button>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="2"
+            stroke="currentColor"
+            class="h-4 w-4"
+          >
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+          </svg>
+          {gettext("Add")}
+        </button>
+      <% end %>
     </div>
 
     <div class="flex flex-col gap-1">
@@ -84,7 +142,12 @@
         label={gettext("Attendees can see the results on their device")}
       />
 
-      <.checkbox form={f} key={:multiple} label={gettext("Multiple answers")} />
+      <.checkbox
+        :if={!slider_selected?(f)}
+        form={f}
+        key={:multiple}
+        label={gettext("Multiple answers")}
+      />
     </div>
 
     <div class="flex flex-col gap-2">
