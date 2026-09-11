@@ -6,7 +6,7 @@ defmodule ClaperWeb.UserRegistrationController do
   alias ClaperWeb.UserAuth
 
   def new(conn, _params) do
-    if Application.get_env(:claper, :enable_account_creation) do
+    if account_creation_allowed?() do
       changeset = Accounts.change_user_registration(%User{})
       render(conn, "new.html", changeset: changeset)
     else
@@ -21,6 +21,16 @@ defmodule ClaperWeb.UserRegistrationController do
   end
 
   def create(conn, %{"user" => user_params}) do
+    if account_creation_allowed?() do
+      do_create(conn, user_params)
+    else
+      conn
+      |> put_flash(:error, gettext("Account creation is disabled"))
+      |> redirect(to: "/")
+    end
+  end
+
+  defp do_create(conn, user_params) do
     case Accounts.register_user(user_params(user_params)) do
       {:ok, user} ->
         if Application.get_env(:claper, :email_confirmation) do
@@ -41,6 +51,14 @@ defmodule ClaperWeb.UserRegistrationController do
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "new.html", changeset: changeset)
     end
+  end
+
+  # Registering a new local password account is pointless once password login
+  # itself is disabled (OIDC-only), so that flag blocks account creation too,
+  # regardless of ENABLE_ACCOUNT_CREATION.
+  defp account_creation_allowed? do
+    Application.get_env(:claper, :enable_account_creation) and
+      !Application.get_env(:claper, :oidc)[:disable_password_login]
   end
 
   def delete(conn, _params) do
