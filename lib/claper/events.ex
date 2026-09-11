@@ -523,8 +523,9 @@ defmodule Claper.Events do
                   position: poll.position,
                   enabled: poll.enabled,
                   multiple: poll.multiple,
+                  type: poll.type,
                   poll_opts:
-                    Enum.map(poll.poll_opts, fn opt ->
+                    Enum.map(copied_poll_opts(poll), fn opt ->
                       %{content: opt.content, vote_count: 0}
                     end),
                   presentation_file_id: to_event.presentation_file.id
@@ -683,9 +684,9 @@ defmodule Claper.Events do
               |> Map.put(:presentation_file_id, changes.presentation_file.id)
               |> Map.put(
                 :poll_opts,
-                Enum.map(poll.poll_opts, fn opt ->
+                Enum.map(copied_poll_opts(poll), fn opt ->
                   Map.from_struct(opt)
-                  |> Map.drop([:id, :inserted_at, :updated_at, :vote_count])
+                  |> Map.drop([:id, :inserted_at, :updated_at, :vote_count, :normalized_content])
                 end)
               )
 
@@ -699,6 +700,12 @@ defmodule Claper.Events do
         {:ok, nil}
     end
   end
+
+  # The options of a word cloud are the words its audience typed, not something
+  # the presenter set up, so a copied word cloud starts empty and collects the
+  # new room's answers instead of showing the previous one's.
+  defp copied_poll_opts(%{type: :word_cloud}), do: []
+  defp copied_poll_opts(poll), do: poll.poll_opts
 
   defp duplicate_forms(original, changes) do
     case get_in(original.presentation_file.forms) do

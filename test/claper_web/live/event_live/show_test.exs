@@ -2,7 +2,14 @@ defmodule ClaperWeb.EventLive.ShowTest do
   use ClaperWeb.ConnCase
 
   import Phoenix.LiveViewTest
-  import Claper.{AccountsFixtures, PostsFixtures, PresentationsFixtures}
+
+  import Claper.{
+    AccountsFixtures,
+    FormsFixtures,
+    PollsFixtures,
+    PostsFixtures,
+    PresentationsFixtures
+  }
 
   setup [:register_and_log_in_user]
 
@@ -107,6 +114,111 @@ defmodule ClaperWeb.EventLive.ShowTest do
            |> Floki.parse_document!()
            |> Floki.find("[data-caption-text]")
            |> Floki.text() =~ "Live caption text"
+  end
+
+  describe "submit-word" do
+    test "adds the word when the current interaction is an enabled word cloud poll", %{
+      conn: conn,
+      user: user
+    } do
+      presentation_file = presentation_file_fixture(%{user: user}, [:event])
+      presentation_state_fixture(%{presentation_file: presentation_file})
+
+      poll =
+        poll_fixture(%{
+          presentation_file_id: presentation_file.id,
+          position: 0,
+          enabled: true,
+          type: :word_cloud,
+          poll_opts: []
+        })
+
+      {:ok, view, _html} = live(conn, ~p"/e/#{presentation_file.event.code}")
+
+      render_hook(view, "submit-word", %{"word" => "inspiring"})
+
+      assert [%{content: "inspiring", vote_count: 1}] = Claper.Polls.get_poll!(poll.id).poll_opts
+    end
+
+    test "is ignored when the current interaction is a choice poll", %{conn: conn, user: user} do
+      presentation_file = presentation_file_fixture(%{user: user}, [:event])
+      presentation_state_fixture(%{presentation_file: presentation_file})
+
+      poll =
+        poll_fixture(%{
+          presentation_file_id: presentation_file.id,
+          position: 0,
+          enabled: true,
+          type: :choice
+        })
+
+      {:ok, view, _html} = live(conn, ~p"/e/#{presentation_file.event.code}")
+
+      render_hook(view, "submit-word", %{"word" => "injected"})
+
+      contents = Enum.map(Claper.Polls.get_poll!(poll.id).poll_opts, & &1.content)
+
+      assert contents == ["some option 1", "some option 2"]
+      refute "injected" in contents
+    end
+
+    test "is ignored, without crashing, when the current interaction is a form", %{
+      conn: conn,
+      user: user
+    } do
+      presentation_file = presentation_file_fixture(%{user: user}, [:event])
+      presentation_state_fixture(%{presentation_file: presentation_file})
+
+      form_fixture(%{presentation_file_id: presentation_file.id, position: 0, enabled: true})
+
+      {:ok, view, _html} = live(conn, ~p"/e/#{presentation_file.event.code}")
+
+      render_hook(view, "submit-word", %{"word" => "injected"})
+
+      assert render(view) =~ "some title"
+      assert Claper.Repo.aggregate(Claper.Polls.PollOpt, :count) == 0
+    end
+
+    test "tells the attendee when their word was rejected", %{conn: conn, user: user} do
+      presentation_file = presentation_file_fixture(%{user: user}, [:event])
+      presentation_state_fixture(%{presentation_file: presentation_file})
+
+      poll =
+        poll_fixture(%{
+          presentation_file_id: presentation_file.id,
+          position: 0,
+          enabled: true,
+          type: :word_cloud,
+          poll_opts: []
+        })
+
+      {:ok, view, _html} = live(conn, ~p"/e/#{presentation_file.event.code}")
+
+      html = render_hook(view, "submit-word", %{"word" => "   "})
+
+      assert Claper.Polls.get_poll!(poll.id).poll_opts == []
+      assert html =~ "Your word could not be added"
+    end
+
+    test "is ignored when the word cloud poll is disabled", %{conn: conn, user: user} do
+      presentation_file = presentation_file_fixture(%{user: user}, [:event])
+      presentation_state_fixture(%{presentation_file: presentation_file})
+
+      poll =
+        poll_fixture(%{
+          presentation_file_id: presentation_file.id,
+          position: 0,
+          enabled: false,
+          type: :word_cloud,
+          poll_opts: []
+        })
+
+      {:ok, view, _html} = live(conn, ~p"/e/#{presentation_file.event.code}")
+
+      render_hook(view, "submit-word", %{"word" => "injected"})
+
+      assert Claper.Polls.get_poll!(poll.id).poll_opts == []
+    end
   end
 
   defp classes(document, selector) do

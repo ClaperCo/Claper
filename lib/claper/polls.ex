@@ -195,6 +195,7 @@ defmodule Claper.Polls do
   def update_poll(event_uuid, %Poll{} = poll, attrs) do
     poll
     |> Poll.changeset(attrs)
+    |> refuse_type_change_that_discards_answers(poll)
     |> Repo.update()
     |> case do
       {:ok, poll} ->
@@ -203,6 +204,39 @@ defmodule Claper.Polls do
       {:error, changeset} ->
         {:error, %{changeset | action: :update}}
     end
+  end
+
+  # Switching the type throws away what has already been collected. On the way to
+  # a word cloud that is the list of choices -- and, because poll_votes reference
+  # poll_opts with `on_delete: :delete_all`, every vote cast on them. On the way
+  # back it is the words the audience typed, which would otherwise survive as the
+  # choices of a poll nobody wrote, vote counts and all. Deleting a poll asks
+  # first; this did the same damage silently and in both directions, so refuse it
+  # here, where the change is made, rather than in the form that happens to offer
+  # the select. A presenter who really means it deletes the poll.
+  defp refuse_type_change_that_discards_answers(changeset, %Poll{id: nil}), do: changeset
+
+  defp refuse_type_change_that_discards_answers(changeset, poll) do
+    if Ecto.Changeset.get_change(changeset, :type) && answers_collected?(poll) do
+      Ecto.Changeset.add_error(
+        changeset,
+        :type,
+        "cannot be changed once this poll has been answered, delete the poll to start over"
+      )
+    else
+      changeset
+    end
+  end
+
+  # A word cloud only ever has the options its audience typed, so one option is
+  # one answer. A choice poll's options are the presenter's own, so its answers
+  # are the votes cast on them.
+  defp answers_collected?(%Poll{type: :word_cloud, id: id}),
+    do: Repo.exists?(from(o in PollOpt, where: o.poll_id == ^id))
+
+  defp answers_collected?(%Poll{id: id}) do
+    Repo.exists?(from(v in PollVote, where: v.poll_id == ^id)) ||
+      Repo.exists?(from(o in PollOpt, where: o.poll_id == ^id and o.vote_count > 0))
   end
 
   @doc """
@@ -232,7 +266,9 @@ defmodule Claper.Polls do
 
   """
   def change_poll(%Poll{} = poll, attrs \\ %{}) do
-    Poll.changeset(poll, attrs)
+    poll
+    |> Poll.changeset(attrs)
+    |> refuse_type_change_that_discards_answers(poll)
   end
 
   @doc """
@@ -303,6 +339,93 @@ defmodule Claper.Polls do
         broadcast({:ok, poll, event_uuid}, :poll_updated)
     end
   end
+
+  @doc """
+  Submits a word for a word-cloud poll: matches it (case-insensitively,
+  trimmed) against an existing poll_opt on this poll and increments its
+  vote_count, or creates a new poll_opt if no match exists. Also records a
+  PollVote the same way a regular choice vote does, so "have I already
+  voted" (Polls.get_poll_vote/2) works identically for both poll types.
+
+  Only an enabled word cloud takes words. The poll id arrives from a
+  client-triggered event, so the type and the state are checked here rather
+  than only in the LiveView that happens to send it: writing a word onto a
+  choice poll would add an option nobody offered, enrol that choice poll in the
+  partial unique index behind a word cloud's one-row-per-word rule, and record
+  a vote for it.
+
+  ## Examples
+
+      iex> submit_word(attendee_identifier, event_uuid, poll_id, "great")
+      {:ok, %Poll{}}
+
+      iex> submit_word(attendee_identifier, event_uuid, poll_id, "")
+      {:error, %Ecto.Changeset{}}
+
+      iex> submit_word(attendee_identifier, event_uuid, choice_poll_id, "great")
+      {:error, :not_an_open_word_cloud}
+
+  """
+  def submit_word(identifier, event_uuid, poll_id, word) do
+    case Repo.get(Poll, poll_id) do
+      %Poll{type: :word_cloud, enabled: true} ->
+        add_word_to_cloud(identifier, event_uuid, poll_id, word)
+
+      _other ->
+        {:error, :not_an_open_word_cloud}
+    end
+  end
+
+  defp add_word_to_cloud(identifier, event_uuid, poll_id, word) do
+    Repo.transaction(fn ->
+      with {:ok, poll_opt} <- upsert_word_poll_opt(poll_id, word),
+           {:ok, _vote} <- create_word_poll_vote(identifier, poll_id, poll_opt) do
+        poll_opt
+      else
+        {:error, changeset} -> Repo.rollback(changeset)
+      end
+    end)
+    |> case do
+      {:ok, _poll_opt} ->
+        poll = get_poll!(poll_id)
+        broadcast({:ok, poll, event_uuid}, :poll_updated)
+
+      {:error, changeset} ->
+        {:error, changeset}
+    end
+  end
+
+  # One row per word per poll, decided by the database instead of by a lookup
+  # followed by an insert: two attendees submitting the same word at the same
+  # moment both hit the unique index on (poll_id, normalized_content), and the
+  # one that arrives second increments the row the first one wrote rather than
+  # adding a second row for the same word.
+  defp upsert_word_poll_opt(poll_id, word) do
+    %PollOpt{}
+    |> PollOpt.word_changeset(%{content: word, vote_count: 1, poll_id: poll_id})
+    |> Repo.insert(
+      on_conflict: [inc: [vote_count: 1]],
+      conflict_target:
+        {:unsafe_fragment, "(poll_id, normalized_content) WHERE normalized_content IS NOT NULL"},
+      returning: true
+    )
+  end
+
+  defp create_word_poll_vote(identifier, poll_id, poll_opt) do
+    %PollVote{}
+    |> PollVote.changeset(word_poll_vote_attrs(identifier, poll_id, poll_opt))
+    |> Repo.insert()
+  end
+
+  defp word_poll_vote_attrs(user_id, poll_id, poll_opt) when is_number(user_id),
+    do: %{poll_opt_id: poll_opt.id, poll_id: poll_id, user_id: user_id}
+
+  defp word_poll_vote_attrs(attendee_identifier, poll_id, poll_opt),
+    do: %{
+      poll_opt_id: poll_opt.id,
+      poll_id: poll_id,
+      attendee_identifier: attendee_identifier
+    }
 
   def disable_all(presentation_file_id, position) do
     from(p in Poll,

@@ -63,6 +63,51 @@ defmodule ClaperWeb.EventLive.InteractionComponentsTest do
     assert_submitted_button(submitted_document, "Voted")
   end
 
+  test "word cloud reveals the cloud only when results are shared" do
+    poll = %Poll{
+      title: "One word for today?",
+      type: :word_cloud,
+      multiple: false,
+      poll_opts: [
+        %PollOpt{id: 1, content: "inspiring", percentage: 75.0, vote_count: 3},
+        %PollOpt{id: 2, content: "dense", percentage: 25.0, vote_count: 1}
+      ]
+    }
+
+    hidden =
+      render_word_cloud(poll, "word-cloud-hidden", current_poll_vote: [%{poll_opt_id: 1}])
+
+    assert hidden =~ "Thanks! Your word has been added to the cloud."
+    refute hidden =~ "inspiring"
+    refute hidden =~ "dense"
+
+    shared =
+      render_word_cloud(poll, "word-cloud-shared",
+        current_poll_vote: [%{poll_opt_id: 1}],
+        show_results: true
+      )
+
+    refute shared =~ "Thanks! Your word has been added to the cloud."
+    assert shared =~ "inspiring"
+    assert shared =~ "dense"
+  end
+
+  test "word cloud keeps the submit form until the attendee has submitted" do
+    poll = %Poll{title: "One word for today?", type: :word_cloud, multiple: false, poll_opts: []}
+
+    document =
+      poll |> render_word_cloud("word-cloud-open") |> Floki.parse_document!()
+
+    assert Floki.attribute(document, "form", "phx-submit") == ["submit-word"]
+
+    submitted =
+      poll
+      |> render_word_cloud("word-cloud-done", current_poll_vote: [%{poll_opt_id: 1}])
+      |> Floki.parse_document!()
+
+    assert Floki.find(submitted, "form") == []
+  end
+
   test "form uses the feature preview card and field styling" do
     form = %Form{
       title: "Tell us what you think",
@@ -324,6 +369,25 @@ defmodule ClaperWeb.EventLive.InteractionComponentsTest do
     assert "overflow-x-auto" in frame_classes
     refute "aspect-video" in frame_classes
     refute "overflow-hidden" in frame_classes
+  end
+
+  defp render_word_cloud(poll, id, overrides \\ []) do
+    render_component(
+      PollComponent,
+      Keyword.merge(
+        [
+          id: id,
+          poll: poll,
+          current_user: nil,
+          attendee_identifier: "attendee",
+          event: %{},
+          selected_poll_opt: [],
+          current_poll_vote: [],
+          show_results: false
+        ],
+        overrides
+      )
+    )
   end
 
   defp assert_card_shell(document, card_selector, close_selector) do
