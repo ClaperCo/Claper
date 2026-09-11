@@ -40,13 +40,18 @@ defmodule Claper.Posts.Post do
     timestamps()
   end
 
-  @doc false
+  @doc """
+  Builds a post from submitted attributes.
+
+  `:user_id` is deliberately not cast: the author is not something the sender of
+  the message gets to name. `Claper.Posts.create_post/3` puts it on the
+  changeset from the account the caller is authenticated as.
+  """
   def changeset(post, attrs) do
     post
     |> cast(attrs, [
       :body,
       :attendee_identifier,
-      :user_id,
       :like_count,
       :love_count,
       :lol_count,
