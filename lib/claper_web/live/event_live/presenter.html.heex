@@ -102,7 +102,7 @@
         <span
           :for={word <- @word_cloud_words}
           class="font-bold text-white transition-all"
-          style={"font-size: #{if @iframe, do: ClaperWeb.Helpers.word_size(word.percentage, 16, 44), else: ClaperWeb.Helpers.word_size(word.percentage, 24, 72)}px"}
+          style={"font-size: #{if @iframe, do: ClaperWeb.Helpers.word_size(word.weight, 16, 44), else: ClaperWeb.Helpers.word_size(word.weight, 24, 72)}px"}
         >
           {word.text}
         </span>

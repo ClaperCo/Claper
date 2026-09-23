@@ -337,7 +337,7 @@ defmodule ClaperWeb.EventLive.InteractionComponentsTest do
   test "word cloud offers an input until the attendee has sent all their words" do
     word_cloud = %WordCloud{id: 7, title: "One word", max_entries: 2, show_results: true}
     entry = %Entry{content: "Elixir", normalized_content: "elixir"}
-    words = [%{key: "elixir", text: "Elixir", count: 1, percentage: 100.0}]
+    words = [%{key: "elixir", text: "Elixir", count: 1, percentage: 100.0, weight: 100.0}]
 
     document =
       WordCloudComponent
@@ -398,7 +398,7 @@ defmodule ClaperWeb.EventLive.InteractionComponentsTest do
           %Entry{content: "Rude", normalized_content: "rude"},
           %Entry{content: "Kind", normalized_content: "kind"}
         ],
-        words: [%{key: "kind", text: "Kind", count: 1, percentage: 100.0}]
+        words: [%{key: "kind", text: "Kind", count: 1, percentage: 100.0, weight: 100.0}]
       )
 
     assert html =~ "Kind"
