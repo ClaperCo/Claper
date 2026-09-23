@@ -87,6 +87,28 @@
       iframe={@iframe}
     />
   <% end %>
+  <!-- WORD CLOUD -->
+  <div
+    :if={@current_word_cloud}
+    id="word-cloud"
+    class="h-full w-full flex flex-col justify-center bg-black/90 absolute z-30 left-1/2 top-1/2 transform -translate-y-1/2 -translate-x-1/2 p-10"
+  >
+    <div class="w-full md:w-2/3 mx-auto h-full flex flex-col justify-center">
+      <p class={"#{if @iframe, do: "text-xl mb-8", else: "text-5xl mb-16"} text-white font-bold text-center"}>
+        {@current_word_cloud.title}
+      </p>
+
+      <div class={"#{if @iframe, do: "gap-x-4 gap-y-2", else: "gap-x-8 gap-y-4"} flex flex-wrap items-baseline justify-center"}>
+        <span
+          :for={word <- @word_cloud_words}
+          class="font-bold text-white transition-all"
+          style={"font-size: #{if @iframe, do: ClaperWeb.Helpers.word_size(word.percentage, 16, 44), else: ClaperWeb.Helpers.word_size(word.percentage, 24, 72)}px"}
+        >
+          {word.text}
+        </span>
+      </div>
+    </div>
+  </div>
   <!-- MESSAGES -->
   <div
     id="slider-wrapper"

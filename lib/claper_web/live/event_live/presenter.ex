@@ -6,6 +6,7 @@ defmodule ClaperWeb.EventLive.Presenter do
   alias Claper.Polls.Poll
   alias Claper.Forms.Form
   alias Claper.Quizzes.Quiz
+  alias Claper.WordClouds.WordCloud
   alias Claper.Presentations
   alias Claper.Transcriptions
 
@@ -66,6 +67,7 @@ defmodule ClaperWeb.EventLive.Presenter do
         |> form_at_position
         |> embed_at_position
         |> quiz_at_position
+        |> word_cloud_at_position
 
       {:ok, socket, temporary_assigns: []}
     end
@@ -131,7 +133,8 @@ defmodule ClaperWeb.EventLive.Presenter do
      |> push_event("page", %{current_page: state.position})
      |> push_event("reset-global-react", %{})
      |> poll_at_position
-     |> embed_at_position}
+     |> embed_at_position
+     |> word_cloud_at_position}
   end
 
   @impl true
@@ -228,6 +231,26 @@ defmodule ClaperWeb.EventLive.Presenter do
      |> update(:current_quiz, fn _current_quiz -> nil end)}
   end
 
+  # The message may be about another cloud, or carry a struct read before a word
+  # was hidden, so the projected cloud is read again for the current slide.
+  @impl true
+  def handle_info({:word_cloud_updated, _word_cloud}, socket) do
+    {:noreply, word_cloud_at_position(socket)}
+  end
+
+  @impl true
+  def handle_info({:word_cloud_deleted, _word_cloud}, socket) do
+    {:noreply, word_cloud_at_position(socket)}
+  end
+
+  @impl true
+  def handle_info(
+        {:word_cloud_entry_added, %WordCloud{id: id} = word_cloud},
+        %{assigns: %{current_word_cloud: %WordCloud{id: id}}} = socket
+      ) do
+    {:noreply, assign_word_cloud(socket, word_cloud)}
+  end
+
   @impl true
   def handle_info({:chat_visible, value}, socket) do
     {:noreply,
@@ -277,7 +300,8 @@ defmodule ClaperWeb.EventLive.Presenter do
      |> assign(:current_poll, interaction)
      |> assign(:current_embed, nil)
      |> assign(:current_form, nil)
-     |> assign(:current_quiz, nil)}
+     |> assign(:current_quiz, nil)
+     |> assign(:current_word_cloud, nil)}
   end
 
   @impl true
@@ -290,7 +314,8 @@ defmodule ClaperWeb.EventLive.Presenter do
      |> assign(:current_embed, interaction)
      |> assign(:current_poll, nil)
      |> assign(:current_form, nil)
-     |> assign(:current_quiz, nil)}
+     |> assign(:current_quiz, nil)
+     |> assign(:current_word_cloud, nil)}
   end
 
   @impl true
@@ -303,7 +328,8 @@ defmodule ClaperWeb.EventLive.Presenter do
      |> assign(:current_form, interaction)
      |> assign(:current_poll, nil)
      |> assign(:current_embed, nil)
-     |> assign(:current_quiz, nil)}
+     |> assign(:current_quiz, nil)
+     |> assign(:current_word_cloud, nil)}
   end
 
   @impl true
@@ -316,7 +342,22 @@ defmodule ClaperWeb.EventLive.Presenter do
      |> assign(:current_quiz, interaction)
      |> assign(:current_poll, nil)
      |> assign(:current_embed, nil)
-     |> assign(:current_form, nil)}
+     |> assign(:current_form, nil)
+     |> assign(:current_word_cloud, nil)}
+  end
+
+  @impl true
+  def handle_info(
+        {:current_interaction, %WordCloud{} = interaction},
+        socket
+      ) do
+    {:noreply,
+     socket
+     |> assign_word_cloud(interaction)
+     |> assign(:current_poll, nil)
+     |> assign(:current_embed, nil)
+     |> assign(:current_form, nil)
+     |> assign(:current_quiz, nil)}
   end
 
   @impl true
@@ -329,7 +370,8 @@ defmodule ClaperWeb.EventLive.Presenter do
      |> assign(:current_poll, nil)
      |> assign(:current_embed, nil)
      |> assign(:current_form, nil)
-     |> assign(:current_quiz, nil)}
+     |> assign(:current_quiz, nil)
+     |> assign(:current_word_cloud, nil)}
   end
 
   @impl true
@@ -457,6 +499,28 @@ defmodule ClaperWeb.EventLive.Presenter do
            ) do
       socket |> assign(:current_quiz, quiz) |> assign(:current_question_idx, 0)
     end
+  end
+
+  defp word_cloud_at_position(%{assigns: %{event: event, state: state}} = socket) do
+    word_cloud =
+      Claper.WordClouds.get_word_cloud_current_position(
+        event.presentation_file.id,
+        state.position
+      )
+
+    assign_word_cloud(socket, word_cloud)
+  end
+
+  defp assign_word_cloud(socket, %WordCloud{} = word_cloud) do
+    socket
+    |> assign(:current_word_cloud, word_cloud)
+    |> assign(:word_cloud_words, Claper.WordClouds.list_words(word_cloud))
+  end
+
+  defp assign_word_cloud(socket, nil) do
+    socket
+    |> assign(:current_word_cloud, nil)
+    |> assign(:word_cloud_words, [])
   end
 
   defp list_posts(_socket, event_id) do
