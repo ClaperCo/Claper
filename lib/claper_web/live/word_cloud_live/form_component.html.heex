@@ -1,0 +1,71 @@
+<div>
+  <.form
+    :let={f}
+    for={@changeset}
+    id="word-cloud-form"
+    phx-target={@myself}
+    phx-change="validate"
+    phx-submit="save"
+    class="flex flex-col gap-6"
+  >
+    <div class="flex flex-col gap-4">
+      <.text_field
+        form={f}
+        key={:title}
+        label={gettext("Question")}
+        placeholder={gettext("What comes to mind when you hear...")}
+        autocomplete="off"
+        required
+        autofocus
+      />
+
+      <div class="w-44">
+        <.select_field
+          form={f}
+          key={:max_entries}
+          label={gettext("Words per attendee")}
+          options={Enum.to_list(1..5)}
+          required
+        />
+      </div>
+    </div>
+
+    <div class="flex flex-col gap-1">
+      <p class="text-sm font-bold text-base-content">{gettext("Options")}</p>
+
+      <.checkbox
+        form={f}
+        key={:show_results}
+        label={gettext("Attendees can see the word cloud on their device")}
+      />
+    </div>
+
+    <div class="flex flex-col gap-2">
+      <button
+        type="submit"
+        phx-disable-with={gettext("Loading...")}
+        class="btn btn-primary w-full"
+      >
+        {case @live_action do
+          :new -> gettext("Create word cloud")
+          :edit -> gettext("Save")
+        end}
+      </button>
+      <%= if @live_action == :edit do %>
+        {link(gettext("Delete"),
+          to: "#",
+          phx_click: "delete",
+          phx_target: @myself,
+          phx_value_id: @word_cloud.id,
+          data: [
+            confirm:
+              gettext(
+                "This will delete all words submitted and the word cloud itself, are you sure?"
+              )
+          ],
+          class: "btn btn-outline btn-error w-full"
+        )}
+      <% end %>
+    </div>
+  </.form>
+</div>

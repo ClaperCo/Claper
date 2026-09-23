@@ -213,6 +213,14 @@
           {gettext("Quizzes")}
         </button>
         <button
+          :if={:word_clouds in @available_tabs}
+          phx-click="change_tab"
+          phx-value-tab="word_clouds"
+          class={"whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm #{if @current_tab == :word_clouds, do: "border-primary-500 text-primary-600", else: "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"}"}
+        >
+          {gettext("Word Clouds")}
+        </button>
+        <button
           :if={:transcriptions in @available_tabs}
           phx-click="change_tab"
           phx-value-tab="transcriptions"
@@ -346,6 +354,72 @@
               <% end %>
             <% else %>
               <p class="italic text-gray-500">{gettext("No form has been created")}</p>
+            <% end %>
+          </div>
+        <% :word_clouds -> %>
+          <div>
+            <%= if length(@word_cloud_reports) > 0 do %>
+              <%= for report <- @word_cloud_reports do %>
+                <div
+                  id={"word-cloud-report-#{report.word_cloud.id}"}
+                  class="bg-gray-900 w-full p-6 my-5 text-black shadow-lg rounded-md"
+                >
+                  <div class="w-full h-full flex items-center justify-between mb-4">
+                    <div>
+                      <p class="text-white text-xl font-semibold">{report.word_cloud.title}</p>
+                      <p class="text-sm text-gray-400">
+                        {ngettext(
+                          "%{count} participant",
+                          "%{count} participants",
+                          report.participants
+                        )}
+                      </p>
+                    </div>
+                    <%= if report.participants > 0 do %>
+                      <%= link to: ~p"/export/word_clouds/#{report.word_cloud.id}", class: "text-sm text-white bg-primary-500 hover:bg-primary-600 rounded-md px-3 py-1 flex items-center gap-1", method: :post, target: "_blank" do %>
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          class="w-5 h-5"
+                        >
+                          <path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M14 3v4a1 1 0 0 0 1 1h4" /><path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z" /><path d="M9 15h6" /><path d="M12.5 17.5l2.5 -2.5l-2.5 -2.5" />
+                        </svg>
+                        <span>{gettext("Export")} (CSV)</span>
+                      <% end %>
+                    <% end %>
+                  </div>
+
+                  <%= if report.words == [] do %>
+                    <p class="italic text-gray-400">{gettext("No words have been sent")}</p>
+                  <% else %>
+                    <div class="flex flex-wrap items-baseline justify-center gap-x-4 gap-y-2 py-4">
+                      <span
+                        :for={word <- report.words}
+                        class="font-bold text-white"
+                        style={"font-size: #{ClaperWeb.Helpers.word_size(word.percentage)}px"}
+                      >
+                        {word.text}
+                      </span>
+                    </div>
+                    <div class="flex flex-col space-y-2 mt-4">
+                      <div
+                        :for={word <- report.words}
+                        class="bg-gray-500 px-3 py-2 rounded-lg flex justify-between items-center text-white"
+                      >
+                        <span class="flex-1 pr-2">{word.text}</span>
+                        <span class="text-sm">{word.count}</span>
+                      </div>
+                    </div>
+                  <% end %>
+                </div>
+              <% end %>
+            <% else %>
+              <p class="italic text-gray-500">{gettext("No word cloud has been created")}</p>
             <% end %>
           </div>
         <% :web_content -> %>

@@ -13,6 +13,7 @@ defmodule Claper.Presentations.PresentationFile do
           forms: [Claper.Forms.Form.t()] | nil,
           embeds: [Claper.Embeds.Embed.t()] | nil,
           quizzes: [Claper.Quizzes.Quiz.t()] | nil,
+          word_clouds: [Claper.WordClouds.WordCloud.t()] | nil,
           presentation_state: Claper.Presentations.PresentationState.t(),
           inserted_at: NaiveDateTime.t(),
           updated_at: NaiveDateTime.t()
@@ -29,6 +30,7 @@ defmodule Claper.Presentations.PresentationFile do
     has_many :forms, Claper.Forms.Form
     has_many :embeds, Claper.Embeds.Embed
     has_many :quizzes, Claper.Quizzes.Quiz
+    has_many :word_clouds, Claper.WordClouds.WordCloud
     has_many :transcriptions, Claper.Transcriptions.Transcription
     has_one :transcription_config, Claper.Transcriptions.TranscriptionConfig
     has_one :presentation_state, Claper.Presentations.PresentationState, on_replace: :delete

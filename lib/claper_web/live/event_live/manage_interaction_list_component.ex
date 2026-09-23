@@ -250,6 +250,26 @@ defmodule ClaperWeb.EventLive.ManageInteractionListComponent do
               </svg>
             </.popup_item>
             <.popup_item
+              patch={~p"/e/#{@event_code}/manage/add/word_cloud"}
+              title={gettext("Word Cloud")}
+              description={gettext("Let your audience answer in their own words.")}
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-5 w-5"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="2"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M2.25 15a4.5 4.5 0 0 0 4.5 4.5H18a3.75 3.75 0 0 0 1.332-7.257 3 3 0 0 0-3.758-3.848 5.25 5.25 0 0 0-10.233 2.33A4.502 4.502 0 0 0 2.25 15Z"
+                />
+              </svg>
+            </.popup_item>
+            <.popup_item
               :if={@transcription_globally_enabled}
               patch={transcription_patch(@event_code, @transcription_config)}
               disabled={transcription_persisted?(@transcription_config)}
@@ -457,6 +477,21 @@ defmodule ClaperWeb.EventLive.ManageInteractionListComponent do
                     d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
                   />
                 </svg>
+              <% %Claper.WordClouds.WordCloud{} -> %>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke-width="2"
+                  stroke="currentColor"
+                  class="h-5 w-5 text-gray-700"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M2.25 15a4.5 4.5 0 0 0 4.5 4.5H18a3.75 3.75 0 0 0 1.332-7.257 3 3 0 0 0-3.758-3.848 5.25 5.25 0 0 0-10.233 2.33A4.502 4.502 0 0 0 2.25 15Z"
+                  />
+                </svg>
               <% _ -> %>
             <% end %>
           </div>
@@ -549,12 +584,14 @@ defmodule ClaperWeb.EventLive.ManageInteractionListComponent do
   defp type_key(%Claper.Forms.Form{}), do: "form"
   defp type_key(%Claper.Embeds.Embed{}), do: "embed"
   defp type_key(%Claper.Quizzes.Quiz{}), do: "quiz"
+  defp type_key(%Claper.WordClouds.WordCloud{}), do: "word_cloud"
   defp type_key(_), do: nil
 
   defp type_label(%Claper.Polls.Poll{}), do: gettext("Poll")
   defp type_label(%Claper.Forms.Form{}), do: gettext("Form")
   defp type_label(%Claper.Embeds.Embed{}), do: gettext("Web content")
   defp type_label(%Claper.Quizzes.Quiz{}), do: gettext("Quiz")
+  defp type_label(%Claper.WordClouds.WordCloud{}), do: gettext("Word Cloud")
   defp type_label(_), do: ""
 
   defp edit_path(event_code, %Claper.Polls.Poll{id: id}),
@@ -569,6 +606,9 @@ defmodule ClaperWeb.EventLive.ManageInteractionListComponent do
   defp edit_path(event_code, %Claper.Quizzes.Quiz{id: id}),
     do: ~p"/e/#{event_code}/manage/edit/quiz/#{id}"
 
+  defp edit_path(event_code, %Claper.WordClouds.WordCloud{id: id}),
+    do: ~p"/e/#{event_code}/manage/edit/word_cloud/#{id}"
+
   defp edit_path(event_code, _), do: ~p"/e/#{event_code}/manage"
 
   defp toggle_event(%Claper.Polls.Poll{enabled: true}), do: "poll-set-inactive"
@@ -579,6 +619,8 @@ defmodule ClaperWeb.EventLive.ManageInteractionListComponent do
   defp toggle_event(%Claper.Embeds.Embed{enabled: false}), do: "embed-set-active"
   defp toggle_event(%Claper.Quizzes.Quiz{enabled: true}), do: "quiz-set-inactive"
   defp toggle_event(%Claper.Quizzes.Quiz{enabled: false}), do: "quiz-set-active"
+  defp toggle_event(%Claper.WordClouds.WordCloud{enabled: true}), do: "word-cloud-set-inactive"
+  defp toggle_event(%Claper.WordClouds.WordCloud{enabled: false}), do: "word-cloud-set-active"
   defp toggle_event(_), do: ""
 
   defp transcription_patch(event_code, %Claper.Transcriptions.TranscriptionConfig{id: id})
