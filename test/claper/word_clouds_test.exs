@@ -145,9 +145,11 @@ defmodule Claper.WordCloudsTest do
       assert {:ok, _} = WordClouds.submit_entry(event_uuid, word_cloud, "d", "Phoenix")
 
       assert [
-               %{key: "elixir", text: "Elixir", count: 3, percentage: 75.0},
-               %{key: "phoenix", text: "Phoenix", count: 1, percentage: 25.0}
+               %{key: "elixir", text: "Elixir", count: 3, percentage: 75.0, weight: 100.0},
+               %{key: "phoenix", text: "Phoenix", count: 1, percentage: 25.0, weight: weight}
              ] = WordClouds.list_words(word_cloud)
+
+      assert_in_delta weight, 100 / 3, 0.001
     end
 
     test "non-ASCII words are grouped regardless of case" do

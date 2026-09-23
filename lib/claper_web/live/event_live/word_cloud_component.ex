@@ -73,7 +73,7 @@ defmodule ClaperWeb.EventLive.WordCloudComponent do
           <span
             :for={word <- @words}
             class="font-bold text-primary-300"
-            style={"font-size: #{ClaperWeb.Helpers.word_size(word.percentage)}px"}
+            style={"font-size: #{ClaperWeb.Helpers.word_size(word.weight)}px"}
           >
             {word.text}
           </span>

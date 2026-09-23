@@ -200,14 +200,15 @@ defmodule Claper.WordClouds do
   Returns the words of a word cloud, one per match key, leaving out the hidden
   ones.
 
-  Each word carries the text of its earliest submission, how often it was sent
-  and its share of all visible submissions in percent. The most frequent word
-  comes first.
+  Each word carries the text of its earliest submission, how often it was sent,
+  its share of all visible submissions in percent and its weight, which is its
+  count relative to the most frequent word (100 for that word). The most
+  frequent word comes first.
 
   ## Examples
 
       iex> list_words(word_cloud)
-      [%{key: "elixir", text: "Elixir", count: 3, percentage: 75.0}, ...]
+      [%{key: "elixir", text: "Elixir", count: 3, percentage: 75.0, weight: 100.0}, ...]
 
   """
   def list_words(%WordCloud{id: id, hidden_words: hidden_words}) do
@@ -223,10 +224,14 @@ defmodule Claper.WordClouds do
       )
       |> Repo.all()
 
-    total = words |> Enum.map(& &1.count) |> Enum.sum()
+    counts = Enum.map(words, & &1.count)
+    total = Enum.sum(counts)
+    most = Enum.max(counts, fn -> 0 end)
 
     words
-    |> Enum.map(&Map.put(&1, :percentage, &1.count / total * 100))
+    |> Enum.map(
+      &Map.merge(&1, %{percentage: &1.count / total * 100, weight: &1.count / most * 100})
+    )
     |> Enum.sort_by(&{-&1.count, &1.key})
   end
 
