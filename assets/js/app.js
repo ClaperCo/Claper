@@ -1177,6 +1177,30 @@ Hooks.MicSelector = {
 // Merge our custom hooks with the existing hooks
 Object.assign(Hooks, CustomHooks);
 
+// Alpine 3.14+ tags every element it initializes with an `_x_marker` property and
+// skips marked elements in later `initTree` calls (lifecycle.js, undoing it the way
+// destroyTree does). The patch hook below calls Alpine.clone(from, to), and clone
+// initializes the new tree in cloning mode: state only, listeners skipped. The
+// markers it leaves must be cleared before the real `initTree`, otherwise the
+// freshly patched elements keep their directives unhandled until a reload. Only
+// the markers clone added are cleared, so elements that were already initialized
+// before the patch keep theirs and are not initialized a second time.
+function initializedElements(root) {
+  const elements = new Set();
+  if (root._x_marker) elements.add(root);
+  root.querySelectorAll("*").forEach((el) => {
+    if (el._x_marker) elements.add(el);
+  });
+  return elements;
+}
+
+function clearCloneMarkers(root, initialized) {
+  if (!initialized.has(root)) delete root._x_marker;
+  root.querySelectorAll("*").forEach((el) => {
+    if (!initialized.has(el)) delete el._x_marker;
+  });
+}
+
 let liveSocket = new LiveSocket("/live", Socket, {
   params: {
     _csrf_token: csrfToken,
@@ -1187,7 +1211,9 @@ let liveSocket = new LiveSocket("/live", Socket, {
   dom: {
     onBeforeElUpdated(from, to) {
       if (from._x_dataStack) {
+        const initialized = initializedElements(to);
         window.Alpine.clone(from, to);
+        clearCloneMarkers(to, initialized);
         window.Alpine.initTree(to);
       }
     },
