@@ -60,7 +60,9 @@ defmodule ClaperWeb.EventLive.EventFormComponent do
         socket
       ) do
     existing_leaders =
-      Map.get(socket.assigns.changeset.changes, :leaders, socket.assigns.event.leaders)
+      socket.assigns.changeset.changes
+      |> Map.get(:leaders, socket.assigns.event.leaders)
+      |> drop_replaced_leaders()
 
     leaders =
       existing_leaders
@@ -84,10 +86,13 @@ defmodule ClaperWeb.EventLive.EventFormComponent do
         socket
       ) do
     leaders =
-      socket.assigns.changeset.changes.leaders
-      |> Enum.reject(fn %{data: leader} ->
-        leader.temp_id == remove_id
+      socket.assigns.changeset.changes
+      |> Map.get(:leaders, socket.assigns.event.leaders)
+      |> Enum.reject(fn
+        %Ecto.Changeset{data: %{temp_id: temp_id}} -> temp_id == remove_id
+        _ -> false
       end)
+      |> drop_replaced_leaders()
 
     changeset =
       socket.assigns.changeset
@@ -110,6 +115,17 @@ defmodule ClaperWeb.EventLive.EventFormComponent do
   end
 
   defp get_temp_id, do: :crypto.strong_rand_bytes(5) |> Base.url_encode64() |> binary_part(0, 5)
+
+  # `cast_assoc/3` and `put_assoc/4` keep the entries they are about to delete in
+  # the change list, with `action: :replace`, and Ecto refuses to take such an
+  # entry back ("cannot replace related ...", Ecto.Changeset.Relation.check_action!/2).
+  # Dropping them here lets this `put_assoc/4` recompute the deletions on its own.
+  defp drop_replaced_leaders(leaders) do
+    Enum.reject(leaders, fn
+      %Ecto.Changeset{action: :replace} -> true
+      _ -> false
+    end)
+  end
 
   defp save_file(socket, %{"code" => code, "name" => name} = event_params, after_save) do
     hash = :erlang.phash2("#{code}-#{name}")
