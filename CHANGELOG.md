@@ -1,4 +1,8 @@
-## v.3.0.1
+## v.3.1.0
+
+### Features
+
+- Add replies to messages (#241)
 
 ### Fixes and improvements
 
