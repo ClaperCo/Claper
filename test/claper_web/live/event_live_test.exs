@@ -18,44 +18,10 @@ defmodule ClaperWeb.EventLiveTest do
     |> render_click()
   end
 
-  # The remove button of a stored facilitator only ticks its hidden :delete input,
-  # so this is what the form posts when it is clicked.
   defp mark_facilitator_for_removal(index_live, leader) do
     index_live
-    |> form("#event-form",
-      event: %{"leaders" => %{"0" => %{"id" => "#{leader.id}", "delete" => "true"}}}
-    )
-    |> render_change()
-  end
-
-  defp remove_facilitator(index_live) do
-    index_live
-    |> element(~s(button[phx-click="remove-leader"]))
+    |> element(~s|button[phx-click="remove-stored-leader"][phx-value-remove="#{leader.id}"]|)
     |> render_click()
-  end
-
-  # A stored facilitator that went through a validation renders with an empty
-  # temp_id, so its row exposes a server side remove button.
-  defp remove_stored_facilitator(index_live) do
-    index_live
-    |> element(~s|div[id="facilitator-"] button[phx-click="remove-leader"]|)
-    |> render_click()
-  end
-
-  defp remove_facilitator(index_live, row_id) do
-    index_live
-    |> element(~s|##{row_id} button[phx-click="remove-leader"]|)
-    |> render_click()
-  end
-
-  defp facilitator_row_ids(index_live) do
-    ~r/id="(facilitator-[^"]*)"/
-    |> Regex.scan(render(index_live), capture: :all_but_first)
-    |> List.flatten()
-  end
-
-  defp unsaved_facilitator_row_ids(index_live) do
-    index_live |> facilitator_row_ids() |> Enum.filter(&(String.length(&1) == 17))
   end
 
   describe "Index" do
@@ -147,54 +113,37 @@ defmodule ClaperWeb.EventLiveTest do
       assert has_element?(index_live, "#facilitators-empty-state")
     end
 
-    test "adds a facilitator after a stored one is marked for removal", %{
+    test "deletes a stored facilitator when saving a replacement", %{
       conn: conn,
       presentation_file: presentation_file
     } do
       leader = Claper.EventsFixtures.activity_leader_fixture(%{event: presentation_file.event})
-
-      {:ok, index_live, _html} = live(conn, ~p"/events/#{presentation_file.event.uuid}/edit")
-
-      mark_facilitator_for_removal(index_live, leader)
-
-      # The row comes back with a server side remove button, because the cast sets
-      # its `temp_id` to an empty string.
-      remove_facilitator(index_live)
-
-      assert facilitator_row_ids(index_live) == []
-
-      # Ecto keeps the removed leader in the change list with `action: :replace`,
-      # and `put_assoc/4` refuses to take that changeset back.
-      add_facilitator(index_live)
-
-      assert length(facilitator_row_ids(index_live)) == 1
-    end
-
-    test "removes an unsaved facilitator while a stored one is pending deletion", %{
-      conn: conn,
-      presentation_file: presentation_file
-    } do
-      leader = Claper.EventsFixtures.activity_leader_fixture(%{event: presentation_file.event})
+      replacement_email = "replacement@example.com"
 
       {:ok, index_live, _html} = live(conn, ~p"/events/#{presentation_file.event.uuid}/edit")
 
       mark_facilitator_for_removal(index_live, leader)
       add_facilitator(index_live)
-      add_facilitator(index_live)
 
-      # Removing one of the two new rows keeps the stored leader in the change list.
-      [first | _] = unsaved_facilitator_row_ids(index_live)
-      remove_facilitator(index_live, first)
+      index_live
+      |> form("#event-form",
+        event: %{"leaders" => %{"1" => %{"email" => replacement_email}}}
+      )
+      |> render_change()
 
-      # Removing the stored leader then leaves a pending `action: :replace` entry,
-      # while the other new row still renders a remove button.
-      remove_stored_facilitator(index_live)
+      refute has_element?(
+               index_live,
+               ~s|#facilitators-section div[id^="facilitator-"]:not(.hidden) input[type="email"][value="#{leader.email}"]|
+             )
 
-      # Removing that row hands the replaced changeset back to `put_assoc/4`.
-      [remaining] = unsaved_facilitator_row_ids(index_live)
-      remove_facilitator(index_live, remaining)
+      index_live
+      |> form("#event-form")
+      |> render_submit()
 
-      assert facilitator_row_ids(index_live) == []
+      updated_event =
+        Claper.Events.get_event!(presentation_file.event.uuid, [:leaders])
+
+      assert Enum.map(updated_event.leaders, & &1.email) == [replacement_email]
     end
 
     test "disables save when event details are invalid", %{

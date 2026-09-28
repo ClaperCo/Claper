@@ -14,6 +14,7 @@ defmodule ClaperWeb.EventLive.EventFormComponent do
      socket
      |> assign(assigns)
      |> assign_new(:container, fn -> :page end)
+     |> assign_new(:removed_leader_ids, fn -> MapSet.new() end)
      |> assign(:changeset, changeset)
      |> assign(:max_file_size, max_file_size)
      |> allow_upload(:presentation_file,
@@ -62,7 +63,7 @@ defmodule ClaperWeb.EventLive.EventFormComponent do
     existing_leaders =
       socket.assigns.changeset.changes
       |> Map.get(:leaders, socket.assigns.event.leaders)
-      |> drop_replaced_leaders()
+      |> drop_removed_leaders()
 
     leaders =
       existing_leaders
@@ -81,6 +82,17 @@ defmodule ClaperWeb.EventLive.EventFormComponent do
 
   @impl true
   def handle_event(
+        "remove-stored-leader",
+        %{"remove" => remove_id},
+        socket
+      ) do
+    removed_leader_ids = MapSet.put(socket.assigns.removed_leader_ids, remove_id)
+
+    {:noreply, assign(socket, :removed_leader_ids, removed_leader_ids)}
+  end
+
+  @impl true
+  def handle_event(
         "remove-leader",
         %{"remove" => remove_id},
         socket
@@ -92,7 +104,7 @@ defmodule ClaperWeb.EventLive.EventFormComponent do
         %Ecto.Changeset{data: %{temp_id: temp_id}} -> temp_id == remove_id
         _ -> false
       end)
-      |> drop_replaced_leaders()
+      |> drop_removed_leaders()
 
     changeset =
       socket.assigns.changeset
@@ -116,13 +128,12 @@ defmodule ClaperWeb.EventLive.EventFormComponent do
 
   defp get_temp_id, do: :crypto.strong_rand_bytes(5) |> Base.url_encode64() |> binary_part(0, 5)
 
-  # `cast_assoc/3` and `put_assoc/4` keep the entries they are about to delete in
-  # the change list, with `action: :replace`, and Ecto refuses to take such an
-  # entry back ("cannot replace related ...", Ecto.Changeset.Relation.check_action!/2).
-  # Dropping them here lets this `put_assoc/4` recompute the deletions on its own.
-  defp drop_replaced_leaders(leaders) do
+  # Association changesets already marked for deletion cannot be handed back to
+  # `put_assoc/4`. Omitting them lets it recompute the deletion from the remaining
+  # association entries.
+  defp drop_removed_leaders(leaders) do
     Enum.reject(leaders, fn
-      %Ecto.Changeset{action: :replace} -> true
+      %Ecto.Changeset{action: action} when action in [:delete, :replace] -> true
       _ -> false
     end)
   end
