@@ -30,7 +30,7 @@ defmodule Claper.Events.ActivityLeader do
   @doc false
   def changeset(leader, attrs) do
     leader
-    |> Map.put(:temp_id, leader.temp_id || attrs["temp_id"])
+    |> Map.put(:temp_id, leader.temp_id || normalize_temp_id(attrs["temp_id"]))
     |> cast(attrs, [
       :email,
       :event_id,
@@ -45,6 +45,9 @@ defmodule Claper.Events.ActivityLeader do
     |> unsafe_validate_unique([:event_id, :email], Claper.Repo)
     |> maybe_mark_for_deletion
   end
+
+  defp normalize_temp_id(""), do: nil
+  defp normalize_temp_id(temp_id), do: temp_id
 
   defp maybe_mark_for_deletion(%{data: %{id: nil}} = changeset), do: changeset
 

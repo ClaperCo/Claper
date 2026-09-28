@@ -12,6 +12,18 @@ defmodule ClaperWeb.EventLiveTest do
     params |> Map.put(:presentation_file, presentation_file)
   end
 
+  defp add_facilitator(index_live) do
+    index_live
+    |> element(~s(button[phx-click="add-leader"]))
+    |> render_click()
+  end
+
+  defp mark_facilitator_for_removal(index_live, leader) do
+    index_live
+    |> element(~s|button[phx-click="remove-stored-leader"][phx-value-remove="#{leader.id}"]|)
+    |> render_click()
+  end
+
   describe "Index" do
     setup [:register_and_log_in_user, :create_event]
 
@@ -99,6 +111,39 @@ defmodule ClaperWeb.EventLiveTest do
       |> render_click()
 
       assert has_element?(index_live, "#facilitators-empty-state")
+    end
+
+    test "deletes a stored facilitator when saving a replacement", %{
+      conn: conn,
+      presentation_file: presentation_file
+    } do
+      leader = Claper.EventsFixtures.activity_leader_fixture(%{event: presentation_file.event})
+      replacement_email = "replacement@example.com"
+
+      {:ok, index_live, _html} = live(conn, ~p"/events/#{presentation_file.event.uuid}/edit")
+
+      mark_facilitator_for_removal(index_live, leader)
+      add_facilitator(index_live)
+
+      index_live
+      |> form("#event-form",
+        event: %{"leaders" => %{"1" => %{"email" => replacement_email}}}
+      )
+      |> render_change()
+
+      refute has_element?(
+               index_live,
+               ~s|#facilitators-section div[id^="facilitator-"]:not(.hidden) input[type="email"][value="#{leader.email}"]|
+             )
+
+      index_live
+      |> form("#event-form")
+      |> render_submit()
+
+      updated_event =
+        Claper.Events.get_event!(presentation_file.event.uuid, [:leaders])
+
+      assert Enum.map(updated_event.leaders, & &1.email) == [replacement_email]
     end
 
     test "disables save when event details are invalid", %{
