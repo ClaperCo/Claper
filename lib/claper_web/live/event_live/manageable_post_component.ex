@@ -14,13 +14,7 @@ defmodule ClaperWeb.EventLive.ManageablePostComponent do
       |> assign(:avatar_emoji, avatar_emoji(assigns.post))
 
     ~H"""
-    <div
-      id={"#{@id}"}
-      class="flex items-end gap-2 group"
-      x-data="{ actionsOpen: false, replying: false }"
-      @click="actionsOpen = true"
-      @click.outside="actionsOpen = false; replying = false"
-    >
+    <div id={"#{@id}"} class="flex items-end gap-2 group">
       <!-- Left: time + avatar -->
       <div class="flex flex-col items-center gap-2 shrink-0">
         <span class="text-xs text-gray-400 leading-4">
@@ -44,8 +38,7 @@ defmodule ClaperWeb.EventLive.ManageablePostComponent do
     <!-- Actions (visible on hover) -->
           <div
             :if={!@readonly}
-            class="relative z-20 ml-auto flex items-center divide-x divide-gray-200 border border-gray-200 rounded-lg group-hover:opacity-100 group-focus-within:opacity-100 transition-opacity shrink-0"
-            x-bind:class="actionsOpen ? 'opacity-100' : 'opacity-0'"
+            class="relative z-20 ml-auto flex items-center divide-x divide-gray-200 border border-gray-200 rounded-lg opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 transition-opacity shrink-0"
           >
             <div class="tooltip tooltip-bottom" data-tip={gettext("Reply")}>
               <button
@@ -53,9 +46,10 @@ defmodule ClaperWeb.EventLive.ManageablePostComponent do
                 class="flex items-center justify-center w-8 h-6"
                 aria-label={gettext("Reply")}
                 aria-controls={"reply-form-#{@post.uuid}"}
-                aria-expanded="false"
-                x-bind:aria-expanded="replying"
-                @click.stop="replying = !replying"
+                phx-click={
+                  JS.show(to: "#reply-form-#{@post.uuid}", display: "flex")
+                  |> JS.focus(to: "#reply-input-#{@post.uuid}")
+                }
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -328,11 +322,9 @@ defmodule ClaperWeb.EventLive.ManageablePostComponent do
         <form
           :if={!@readonly}
           id={"reply-form-#{@post.uuid}"}
-          x-show="replying"
-          x-cloak
-          phx-submit="reply"
+          phx-submit={JS.push("reply") |> JS.hide(to: "#reply-form-#{@post.uuid}")}
           phx-value-id={@post.uuid}
-          class="mt-2 ml-2 flex min-w-0 items-center gap-2"
+          class="mt-2 ml-2 hidden min-w-0 items-center gap-2"
         >
           <label for={"reply-input-#{@post.uuid}"} class="sr-only">
             {gettext("Write a reply...")}

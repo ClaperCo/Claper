@@ -444,11 +444,12 @@ defmodule ClaperWeb.EventLiveTest do
       end)
     end
 
-    test "appends moderator replies and lets the moderator delete one", %{
+    test "appends replies to the moderator's own post and lets the moderator delete one", %{
       conn: conn,
-      presentation_file: presentation_file
+      presentation_file: presentation_file,
+      user: user
     } do
-      post = Claper.PostsFixtures.post_fixture(%{event: presentation_file.event})
+      post = Claper.PostsFixtures.post_fixture(%{event: presentation_file.event, user: user})
 
       {:ok, manage_live, _html} = live(conn, ~p"/e/#{presentation_file.event.code}/manage")
 
