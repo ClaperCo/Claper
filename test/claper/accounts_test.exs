@@ -506,6 +506,21 @@ defmodule Claper.AccountsTest do
       assert Repo.get!(Quizzes.QuizQuestionOpt, quiz_opt.id).response_count == 1
     end
 
+    test "keeps the user's slider answers in other events under the deleted identity" do
+      user = user_fixture()
+      other_file = presentation_file_fixture()
+      other_event = Claper.Events.get_event!(other_file.event_id)
+      scale = Claper.ScalesFixtures.scale_fixture(%{presentation_file: other_file})
+      {:ok, response} = Claper.Scales.submit_response(other_event.uuid, scale, user.id, "4")
+
+      assert {:ok, _} = Accounts.hard_delete_user(user)
+
+      kept = Repo.get!(Claper.Scales.ScaleResponse, response.id)
+      assert is_nil(kept.user_id)
+      assert "deleted-user-" <> _ = kept.attendee_identifier
+      assert kept.value == 4
+    end
+
     test "deletes the user's audit logs but keeps other users' logs" do
       user = user_fixture()
       other_user = user_fixture()
