@@ -1,7 +1,5 @@
 <div
   id="manager"
-  x-data={"{date:
-  moment.utc('#{@event.expired_at}').local().format('lll')}"}
   phx-hook="Manager"
   data-max-page={@event.presentation_file.length}
   data-current-page={@state.position}

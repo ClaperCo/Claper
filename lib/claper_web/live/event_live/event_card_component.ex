@@ -26,13 +26,34 @@ defmodule ClaperWeb.EventLive.EventCardComponent do
     "#{component_id}-#{suffix}"
   end
 
+  defp toggle_join_menu(id) do
+    JS.toggle(
+      to: "##{dom_id(id, "join-menu")}",
+      in: {"transition ease-out duration-100", "opacity-0 scale-95", "opacity-100 scale-100"},
+      out: {"transition ease-in duration-75", "opacity-100 scale-100", "opacity-0 scale-95"},
+      time: 100
+    )
+    |> JS.toggle_class("rotate-180", to: "##{dom_id(id, "join-arrow")}")
+    |> JS.toggle_attribute({"aria-expanded", "true", "false"},
+      to: "##{dom_id(id, "join-button")}"
+    )
+  end
+
+  defp close_join_menu(id) do
+    JS.hide(
+      to: "##{dom_id(id, "join-menu")}",
+      transition: "transition ease-in duration-75",
+      time: 75
+    )
+    |> JS.remove_class("rotate-180", to: "##{dom_id(id, "join-arrow")}")
+    |> JS.set_attribute({"aria-expanded", "false"}, to: "##{dom_id(id, "join-button")}")
+  end
+
   defp render_grid_card(assigns) do
     ~H"""
     <div
       id={dom_id(@id, "card")}
       class="group relative bg-white border border-gray-200 rounded-2xl overflow-hidden hover:shadow-lg transition-shadow duration-200 h-96"
-      x-data="{showJoinMenu: false}"
-      @mouseleave="showJoinMenu = false"
     >
       <!-- Full-height Thumbnail Area -->
       <div class="absolute inset-0">
@@ -144,8 +165,11 @@ defmodule ClaperWeb.EventLive.EventCardComponent do
           <!-- Join Button with Dropdown -->
           <div class="relative flex-1">
             <button
-              @click="showJoinMenu = !showJoinMenu"
-              @click.away="showJoinMenu = false"
+              id={dom_id(@id, "join-button")}
+              type="button"
+              aria-expanded="false"
+              aria-controls={dom_id(@id, "join-menu")}
+              phx-click={toggle_join_menu(@id)}
               class="btn btn-primary w-full"
             >
               <svg
@@ -162,9 +186,9 @@ defmodule ClaperWeb.EventLive.EventCardComponent do
               </svg>
               {gettext("Join")}
               <svg
+                id={dom_id(@id, "join-arrow")}
                 xmlns="http://www.w3.org/2000/svg"
                 class="h-4 w-4 transition-transform"
-                x-bind:class="showJoinMenu ? 'rotate-180' : ''"
                 viewBox="0 0 20 20"
                 fill="currentColor"
               >
@@ -177,15 +201,9 @@ defmodule ClaperWeb.EventLive.EventCardComponent do
             </button>
             <!-- Dropdown Menu -->
             <div
-              x-cloak
-              x-show="showJoinMenu"
-              x-transition:enter="transition ease-out duration-100"
-              x-transition:enter-start="opacity-0 scale-95"
-              x-transition:enter-end="opacity-100 scale-100"
-              x-transition:leave="transition ease-in duration-75"
-              x-transition:leave-start="opacity-100 scale-100"
-              x-transition:leave-end="opacity-0 scale-95"
-              class="absolute bottom-full left-0 right-0 mb-2 bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden"
+              id={dom_id(@id, "join-menu")}
+              phx-click-away={close_join_menu(@id)}
+              class="hidden absolute bottom-full left-0 right-0 mb-2 bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden"
             >
               <a
                 href={~p"/e/#{@event.code}/manage"}
@@ -277,7 +295,7 @@ defmodule ClaperWeb.EventLive.EventCardComponent do
 
   defp render_list_card(assigns) do
     ~H"""
-    <div class="w-full" id={dom_id(@id, "card")} x-data="{showJoinMenu: false}">
+    <div class="w-full" id={dom_id(@id, "card")}>
       <div class="bg-white rounded-2xl border border-gray-200 hover:shadow-lg transition-shadow duration-200">
         <div class="p-4 flex items-center gap-4">
           <!-- Thumbnail -->
@@ -342,14 +360,29 @@ defmodule ClaperWeb.EventLive.EventCardComponent do
               <span
                 :if={!Event.finished?(@event) && !Event.started?(@event)}
                 id={dom_id(@id, "event-date")}
-                phx-update="ignore"
               >
                 {gettext("Starting on")}
-                <span x-text={"moment.utc('#{@event.started_at}').local().format('lll')"}></span>
+                <time
+                  id={dom_id(@id, "local-start")}
+                  phx-hook="LocalDate"
+                  datetime={"#{NaiveDateTime.to_iso8601(@event.started_at)}Z"}
+                  data-utc={NaiveDateTime.to_iso8601(@event.started_at)}
+                  data-format="lll"
+                >
+                  {@event.started_at} UTC
+                </time>
               </span>
-              <span :if={Event.finished?(@event)} id={dom_id(@id, "event-date")} phx-update="ignore">
+              <span :if={Event.finished?(@event)} id={dom_id(@id, "event-date")}>
                 {gettext("Finished on")}
-                <span x-text={"moment.utc('#{@event.expired_at}').local().format('lll')"}></span>
+                <time
+                  id={dom_id(@id, "local-end")}
+                  phx-hook="LocalDate"
+                  datetime={"#{NaiveDateTime.to_iso8601(@event.expired_at)}Z"}
+                  data-utc={NaiveDateTime.to_iso8601(@event.expired_at)}
+                  data-format="lll"
+                >
+                  {@event.expired_at} UTC
+                </time>
               </span>
             </div>
           </div>
@@ -360,8 +393,11 @@ defmodule ClaperWeb.EventLive.EventCardComponent do
               <!-- Join Button with Dropdown -->
               <div class="relative">
                 <button
-                  @click="showJoinMenu = !showJoinMenu"
-                  @click.away="showJoinMenu = false"
+                  id={dom_id(@id, "join-button")}
+                  type="button"
+                  aria-expanded="false"
+                  aria-controls={dom_id(@id, "join-menu")}
+                  phx-click={toggle_join_menu(@id)}
                   class="btn btn-primary"
                 >
                   <svg
@@ -378,9 +414,9 @@ defmodule ClaperWeb.EventLive.EventCardComponent do
                   </svg>
                   {gettext("Join")}
                   <svg
+                    id={dom_id(@id, "join-arrow")}
                     xmlns="http://www.w3.org/2000/svg"
                     class="h-4 w-4 transition-transform"
-                    x-bind:class="showJoinMenu ? 'rotate-180' : ''"
                     viewBox="0 0 20 20"
                     fill="currentColor"
                   >
@@ -393,15 +429,9 @@ defmodule ClaperWeb.EventLive.EventCardComponent do
                 </button>
                 <!-- Dropdown Menu -->
                 <div
-                  x-cloak
-                  x-show="showJoinMenu"
-                  x-transition:enter="transition ease-out duration-100"
-                  x-transition:enter-start="opacity-0 scale-95"
-                  x-transition:enter-end="opacity-100 scale-100"
-                  x-transition:leave="transition ease-in duration-75"
-                  x-transition:leave-start="opacity-100 scale-100"
-                  x-transition:leave-end="opacity-0 scale-95"
-                  class="absolute top-full right-0 mt-2 bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden z-30"
+                  id={dom_id(@id, "join-menu")}
+                  phx-click-away={close_join_menu(@id)}
+                  class="hidden absolute top-full right-0 mt-2 bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden z-30"
                 >
                   <a
                     href={~p"/e/#{@event.code}/manage"}
@@ -528,7 +558,7 @@ defmodule ClaperWeb.EventLive.EventCardComponent do
 
   defp render_mobile_card(assigns) do
     ~H"""
-    <div class="w-full" id={dom_id(@id, "card")} x-data="{showJoinMenu: false}">
+    <div class="w-full" id={dom_id(@id, "card")}>
       <div class="bg-white rounded-3xl border border-gray-200 p-2">
         <div class="flex flex-col gap-2">
           <!-- Top Row: Thumbnail + Info + Menu -->
@@ -613,8 +643,11 @@ defmodule ClaperWeb.EventLive.EventCardComponent do
               <!-- Join Button with Dropdown -->
               <div class="relative flex-1">
                 <button
-                  @click="showJoinMenu = !showJoinMenu"
-                  @click.away="showJoinMenu = false"
+                  id={dom_id(@id, "join-button")}
+                  type="button"
+                  aria-expanded="false"
+                  aria-controls={dom_id(@id, "join-menu")}
+                  phx-click={toggle_join_menu(@id)}
                   class="btn btn-primary w-full"
                 >
                   <svg
@@ -631,9 +664,9 @@ defmodule ClaperWeb.EventLive.EventCardComponent do
                   </svg>
                   {gettext("Join")}
                   <svg
+                    id={dom_id(@id, "join-arrow")}
                     xmlns="http://www.w3.org/2000/svg"
                     class="h-4 w-4 transition-transform"
-                    x-bind:class="showJoinMenu ? 'rotate-180' : ''"
                     viewBox="0 0 20 20"
                     fill="currentColor"
                   >
@@ -646,15 +679,9 @@ defmodule ClaperWeb.EventLive.EventCardComponent do
                 </button>
                 <!-- Dropdown Menu -->
                 <div
-                  x-cloak
-                  x-show="showJoinMenu"
-                  x-transition:enter="transition ease-out duration-100"
-                  x-transition:enter-start="opacity-0 scale-95"
-                  x-transition:enter-end="opacity-100 scale-100"
-                  x-transition:leave="transition ease-in duration-75"
-                  x-transition:leave-start="opacity-100 scale-100"
-                  x-transition:leave-end="opacity-0 scale-95"
-                  class="absolute bottom-full left-0 right-0 mb-2 bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden z-30"
+                  id={dom_id(@id, "join-menu")}
+                  phx-click-away={close_join_menu(@id)}
+                  class="hidden absolute bottom-full left-0 right-0 mb-2 bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden z-30"
                 >
                   <a
                     href={~p"/e/#{@event.code}/manage"}

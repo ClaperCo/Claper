@@ -142,9 +142,9 @@ defmodule ClaperWeb.EventLive.ManageInteractionListComponent do
           </svg>
         </.action_button>
 
-        <div class="static" x-data="{ open: false }" @click.outside="open = false">
+        <div class="static">
           <button
-            @click="open = !open"
+            phx-click={JS.toggle(to: "#interaction-more-menu")}
             class="flex flex-col items-center justify-center gap-0.5 py-2 rounded-xl text-gray-600 transition-colors hover:bg-primary-50 hover:text-primary-600 w-full"
           >
             <svg
@@ -165,15 +165,9 @@ defmodule ClaperWeb.EventLive.ManageInteractionListComponent do
           </button>
 
           <div
-            x-show="open"
-            x-transition:enter="transition ease-out duration-150"
-            x-transition:enter-start="opacity-0 scale-95"
-            x-transition:enter-end="opacity-100 scale-100"
-            x-transition:leave="transition ease-in duration-100"
-            x-transition:leave-start="opacity-100 scale-100"
-            x-transition:leave-end="opacity-0 scale-95"
-            class="absolute left-0 right-0 mt-1 bg-white border border-gray-100 rounded-2xl p-2 shadow-lg z-50"
-            x-cloak
+            id="interaction-more-menu"
+            phx-click-away={JS.hide(to: "#interaction-more-menu")}
+            class="hidden absolute left-0 right-0 mt-1 bg-white border border-gray-100 rounded-2xl p-2 shadow-lg z-50"
           >
             <.popup_item
               patch={~p"/e/#{@event_code}/manage/add/poll"}

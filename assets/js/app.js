@@ -4,7 +4,6 @@ import "phoenix_html";
 import { Socket, Presence } from "phoenix";
 import { LiveSocket } from "phoenix_live_view";
 import topbar from "../vendor/topbar";
-import Alpine from "alpinejs";
 import moment from "moment-timezone";
 import "moment/locale/de";
 import "moment/locale/fr";
@@ -21,7 +20,6 @@ import DateTimeLocal from "./date_time_local.mjs";
 import Split from "split-grid";
 import CustomHooks from "./hooks";
 import "./admin-charts.js";
-window.moment = moment;
 
 // Get supported locales from backend configuration or fallback to default list
 const supportedLocales = window.claperConfig?.supportedLocales || [
@@ -43,15 +41,28 @@ if (!supportedLocales.includes(locale)) {
   locale = "en";
 }
 
-window.moment.locale("en");
-window.moment.locale(locale);
-window.Alpine = Alpine;
-Alpine.start();
+moment.locale("en");
+moment.locale(locale);
 
 let csrfToken = document
   .querySelector("meta[name='csrf-token']")
   .getAttribute("content");
 let Hooks = {};
+// Format UTC server timestamps in the viewer's timezone after LiveView mounts.
+Hooks.LocalDate = {
+  mounted() {
+    this.formatDate();
+  },
+  updated() {
+    this.formatDate();
+  },
+  formatDate() {
+    const value = moment.utc(this.el.dataset.utc).local().format(this.el.dataset.format);
+    this.el.textContent = this.el.dataset.capitalize === "true"
+      ? value.charAt(0).toUpperCase() + value.slice(1)
+      : value;
+  },
+};
 
 Hooks.EmbeddedBanner = {
   mounted() {
@@ -1177,30 +1188,6 @@ Hooks.MicSelector = {
 // Merge our custom hooks with the existing hooks
 Object.assign(Hooks, CustomHooks);
 
-// Alpine 3.14+ tags every element it initializes with an `_x_marker` property and
-// skips marked elements in later `initTree` calls (lifecycle.js, undoing it the way
-// destroyTree does). The patch hook below calls Alpine.clone(from, to), and clone
-// initializes the new tree in cloning mode: state only, listeners skipped. The
-// markers it leaves must be cleared before the real `initTree`, otherwise the
-// freshly patched elements keep their directives unhandled until a reload. Only
-// the markers clone added are cleared, so elements that were already initialized
-// before the patch keep theirs and are not initialized a second time.
-function initializedElements(root) {
-  const elements = new Set();
-  if (root._x_marker) elements.add(root);
-  root.querySelectorAll("*").forEach((el) => {
-    if (el._x_marker) elements.add(el);
-  });
-  return elements;
-}
-
-function clearCloneMarkers(root, initialized) {
-  if (!initialized.has(root)) delete root._x_marker;
-  root.querySelectorAll("*").forEach((el) => {
-    if (!initialized.has(el)) delete el._x_marker;
-  });
-}
-
 let liveSocket = new LiveSocket("/live", Socket, {
   params: {
     _csrf_token: csrfToken,
@@ -1208,16 +1195,6 @@ let liveSocket = new LiveSocket("/live", Socket, {
     host: window.location.host,
   },
   hooks: Hooks,
-  dom: {
-    onBeforeElUpdated(from, to) {
-      if (from._x_dataStack) {
-        const initialized = initializedElements(to);
-        window.Alpine.clone(from, to);
-        clearCloneMarkers(to, initialized);
-        window.Alpine.initTree(to);
-      }
-    },
-  },
 });
 
 // Show progress bar on live navigation and form submits

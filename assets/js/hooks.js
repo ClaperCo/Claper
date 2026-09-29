@@ -1,5 +1,66 @@
 // LiveView hooks for client-side functionality
 
+// Flash alerts also appear in plain HTTP layouts, outside the LiveView hook lifecycle.
+const alertSelector = "[data-auto-dismiss-alert]";
+const alertTimers = new WeakMap();
+
+function updateAlert(alert) {
+  window.clearTimeout(alertTimers.get(alert));
+  alert.style.removeProperty("display");
+
+  if (alert.hasAttribute("data-auto-dismiss-alert")) {
+    alertTimers.set(alert, window.setTimeout(() => {
+      if (alert.isConnected && alert.hasAttribute("data-auto-dismiss-alert")) {
+        alert.style.display = "none";
+      }
+    }, 4000));
+  }
+}
+
+function initializeAlerts() {
+  document.querySelectorAll(alertSelector).forEach(updateAlert);
+
+  new MutationObserver((mutations) => {
+    const changedAlerts = new Set();
+
+    for (const mutation of mutations) {
+      if (mutation.type === "attributes") {
+        changedAlerts.add(mutation.target);
+      } else if (mutation.type === "characterData") {
+        const alert = mutation.target.parentElement?.closest(alertSelector);
+        if (alert) changedAlerts.add(alert);
+      } else {
+        if (mutation.addedNodes.length) {
+          const alert = mutation.target.closest?.(alertSelector);
+          if (alert) changedAlerts.add(alert);
+        }
+
+        for (const node of mutation.addedNodes) {
+          if (node.nodeType !== 1) continue;
+          if (node.matches(alertSelector)) changedAlerts.add(node);
+          node.querySelectorAll(alertSelector).forEach((alert) => changedAlerts.add(alert));
+        }
+      }
+    }
+
+    for (const alert of changedAlerts) {
+      if (alert.isConnected) updateAlert(alert);
+    }
+  }).observe(document.body, {
+    childList: true,
+    characterData: true,
+    attributes: true,
+    attributeFilter: ["data-auto-dismiss-alert"],
+    subtree: true,
+  });
+}
+
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", initializeAlerts, { once: true });
+} else {
+  initializeAlerts();
+}
+
 const Hooks = {
   // Hook for handling CSV downloads from LiveView
   CSVDownloader: {
