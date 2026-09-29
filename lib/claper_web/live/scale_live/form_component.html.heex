@@ -1,0 +1,108 @@
+<div>
+  <.form
+    :let={f}
+    for={@changeset}
+    id="scale-form"
+    phx-target={@myself}
+    phx-change="validate"
+    phx-submit="save"
+    class="flex flex-col gap-6"
+  >
+    <div class="flex flex-col gap-4">
+      <.text_field
+        form={f}
+        key={:title}
+        label={gettext("Question")}
+        placeholder={gettext("How confident do you feel about...")}
+        autocomplete="off"
+        required
+        autofocus
+      />
+
+      <div class="grid grid-cols-3 gap-4">
+        <.text_field
+          form={f}
+          key={:min_value}
+          type="number"
+          label={gettext("Lowest value")}
+          required
+          disabled={@answered}
+        />
+        <.text_field
+          form={f}
+          key={:max_value}
+          type="number"
+          label={gettext("Highest value")}
+          required
+          disabled={@answered}
+        />
+        <.text_field
+          form={f}
+          key={:step}
+          type="number"
+          label={gettext("Step")}
+          required
+          disabled={@answered}
+        />
+      </div>
+
+      <p :if={@answered} data-range-locked class="text-sm text-base-content/70">
+        {gettext("Attendees have already answered, so the range can no longer be changed.")}
+      </p>
+
+      <div class="grid grid-cols-2 gap-4">
+        <.text_field
+          form={f}
+          key={:min_label}
+          label={gettext("Label for the lowest value")}
+          placeholder={gettext("Not at all")}
+          autocomplete="off"
+          maxlength="60"
+        />
+        <.text_field
+          form={f}
+          key={:max_label}
+          label={gettext("Label for the highest value")}
+          placeholder={gettext("Completely")}
+          autocomplete="off"
+          maxlength="60"
+        />
+      </div>
+    </div>
+
+    <div class="flex flex-col gap-1">
+      <p class="text-sm font-bold text-base-content">{gettext("Options")}</p>
+
+      <.checkbox
+        form={f}
+        key={:show_results}
+        label={gettext("Attendees can see the results on their device")}
+      />
+    </div>
+
+    <div class="flex flex-col gap-2">
+      <button
+        type="submit"
+        phx-disable-with={gettext("Loading...")}
+        class="btn btn-primary w-full"
+      >
+        {case @live_action do
+          :new -> gettext("Create slider")
+          :edit -> gettext("Save")
+        end}
+      </button>
+      <%= if @live_action == :edit do %>
+        {link(gettext("Delete"),
+          to: "#",
+          phx_click: "delete",
+          phx_target: @myself,
+          phx_value_id: @scale.id,
+          data: [
+            confirm: gettext("This will delete all answers and the slider itself, are you sure?")
+          ],
+          class: "btn btn-outline btn-error w-full"
+        )}
+      <% end %>
+    </div>
+  </.form>
+</div>

@@ -11,6 +11,7 @@ defmodule Claper.Stats do
   alias Claper.Presentations.PresentationFile
   alias Claper.Quizzes.Quiz
   alias Claper.Repo
+  alias Claper.Scales.Scale
   alias Claper.Stats.Stat
   alias Claper.WordClouds.WordCloud
 
@@ -116,6 +117,16 @@ defmodule Claper.Stats do
     |> Enum.sum()
   end
 
+  # The unique indexes allow one response per attendee and scale, so each row is
+  # a distinct participant.
+  def get_distinct_scale_responses(scale_ids) do
+    from(r in Claper.Scales.ScaleResponse,
+      where: r.scale_id in ^scale_ids,
+      select: count(r.id)
+    )
+    |> Repo.one()
+  end
+
   def distinct_poster_count(event_id) do
     from(posts in Claper.Posts.Post,
       where: posts.event_id == ^event_id,
@@ -155,18 +166,15 @@ defmodule Claper.Stats do
 
   @doc """
   Returns the engagement rate of an event, in percent: the share of its unique attendees
-  who took part in messages, polls, quizzes, forms and word clouds, averaged over the five.
+  who took part in messages, polls and sliders, quizzes, forms and word clouds, averaged over
+  the five.
   """
   def engagement_rate(_event_id, _presentation_file_id, 0), do: 0
 
   def engagement_rate(event_id, presentation_file_id, unique_attendees) do
     shares = [
       distinct_poster_count(event_id) / unique_attendees,
-      participation(
-        &get_distinct_poll_votes/1,
-        interaction_ids(Poll, presentation_file_id),
-        unique_attendees
-      ),
+      poll_participation(presentation_file_id, unique_attendees),
       participation(
         &get_distinct_quiz_responses/1,
         interaction_ids(Quiz, presentation_file_id),
@@ -185,6 +193,21 @@ defmodule Claper.Stats do
     ]
 
     round(Enum.sum(shares) / length(shares) * 100)
+  end
+
+  # A slider is answered like a poll, so it counts towards the same share.
+  defp poll_participation(presentation_file_id, unique_attendees) do
+    poll_ids = interaction_ids(Poll, presentation_file_id)
+    scale_ids = interaction_ids(Scale, presentation_file_id)
+
+    case length(poll_ids) + length(scale_ids) do
+      0 ->
+        0
+
+      count ->
+        (get_distinct_poll_votes(poll_ids) + get_distinct_scale_responses(scale_ids)) /
+          (count * unique_attendees)
+    end
   end
 
   defp participation(_count_participants, [], _unique_attendees), do: 0

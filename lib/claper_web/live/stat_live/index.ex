@@ -24,7 +24,8 @@ defmodule ClaperWeb.StatLive.Index do
           forms: [:form_submits],
           embeds: [],
           quizzes: [:quiz_questions, quiz_questions: :quiz_question_opts],
-          word_clouds: []
+          word_clouds: [],
+          scales: []
         ]
       )
 
@@ -63,6 +64,7 @@ defmodule ClaperWeb.StatLive.Index do
      )
      |> assign(:posts, posts)
      |> assign(:word_cloud_reports, word_cloud_reports)
+     |> assign(:scale_reports, scale_reports(event))
      |> assign(:current_tab, :messages)}
   end
 
@@ -103,6 +105,7 @@ defmodule ClaperWeb.StatLive.Index do
   defp tab_to_atom("web_content"), do: :web_content
   defp tab_to_atom("quizzes"), do: :quizzes
   defp tab_to_atom("word_clouds"), do: :word_clouds
+  defp tab_to_atom("sliders"), do: :sliders
   defp tab_to_atom("transcriptions"), do: :transcriptions
   defp tab_to_atom(_), do: :messages
 
@@ -114,6 +117,7 @@ defmodule ClaperWeb.StatLive.Index do
       {:web_content, event.presentation_file.embeds},
       {:quizzes, event.presentation_file.quizzes},
       {:word_clouds, event.presentation_file.word_clouds},
+      {:sliders, event.presentation_file.scales},
       {:transcriptions, has_transcriptions?}
     ]
     |> Enum.filter(fn
@@ -163,6 +167,12 @@ defmodule ClaperWeb.StatLive.Index do
         words: Claper.WordClouds.list_words(word_cloud),
         participants: Claper.Stats.get_distinct_word_cloud_entries([word_cloud.id])
       }
+    end
+  end
+
+  defp scale_reports(event) do
+    for scale <- event.presentation_file.scales do
+      %{scale: scale, results: Claper.Scales.results(scale)}
     end
   end
 

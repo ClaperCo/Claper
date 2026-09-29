@@ -217,7 +217,7 @@ defmodule Claper.Accounts do
   # swapped for an attendee identifier rather than just nilified.
   @interaction_tables ~w(posts post_replies reactions poll_ballots poll_votes
                          quiz_question_submissions quiz_responses form_submits
-                         word_cloud_entries stats)
+                         word_cloud_entries scale_responses stats)
 
   defp anonymize_interactions(%User{id: user_id}) do
     identifier = "deleted-user-" <> Ecto.UUID.generate()

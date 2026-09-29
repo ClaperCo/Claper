@@ -40,6 +40,16 @@ defmodule ClaperWeb.EventLive.ManageInteractionOptionsComponent do
         <%= case @current_interaction do %>
           <% %Claper.Polls.Poll{} -> %>
             <.presentation_visibility state={@state} create={@create} show_shortcut={@show_shortcut} />
+          <% %Claper.Scales.Scale{} -> %>
+            <div class="space-y-2">
+              <.presentation_visibility
+                state={@state}
+                create={@create}
+                show_shortcut={@show_shortcut}
+              />
+
+              <.scale_results_preview scale={@current_interaction} results={@scale_results} />
+            </div>
           <% %Claper.Quizzes.Quiz{} -> %>
             <div class="space-y-2">
               <.toggle_row
@@ -244,6 +254,53 @@ defmodule ClaperWeb.EventLive.ManageInteractionOptionsComponent do
         </svg>
       </:icon>
     </.toggle_row>
+    """
+  end
+
+  attr :scale, Claper.Scales.Scale, required: true
+  attr :results, :map, required: true
+
+  defp scale_results_preview(assigns) do
+    ~H"""
+    <div class="rounded-2xl border border-gray-200 p-3">
+      <p class="mb-2 text-xs font-semibold text-gray-500">{gettext("Results")}</p>
+      <p :if={@results.count == 0} class="text-gray-400 italic text-sm">
+        {gettext("No answers yet")}
+      </p>
+      <div :if={@results.count > 0}>
+        <dl class="grid grid-cols-3 gap-2 text-center">
+          <div>
+            <dt class="text-[10px] text-gray-500">{gettext("Answers")}</dt>
+            <dd class="text-lg font-bold text-primary-600">{@results.count}</dd>
+          </div>
+          <div>
+            <dt class="text-[10px] text-gray-500">{gettext("Average")}</dt>
+            <dd class="text-lg font-bold text-primary-600">
+              {ClaperWeb.Helpers.format_number(@results.average)}
+            </dd>
+          </div>
+          <div>
+            <dt class="text-[10px] text-gray-500">{gettext("Median")}</dt>
+            <dd class="text-lg font-bold text-primary-600">
+              {ClaperWeb.Helpers.format_number(@results.median)}
+            </dd>
+          </div>
+        </dl>
+        <div class="mt-3 flex h-16 items-end gap-px">
+          <div
+            :for={point <- @results.distribution}
+            title={"#{point.value}: #{point.count}"}
+            class="flex-1 rounded-t bg-primary-400"
+            style={"height: #{max(point.weight, 2)}%"}
+          >
+          </div>
+        </div>
+        <div class="mt-1 flex justify-between text-[10px] text-gray-500">
+          <span>{@scale.min_label || @scale.min_value}</span>
+          <span>{@scale.max_label || @scale.max_value}</span>
+        </div>
+      </div>
+    </div>
     """
   end
 

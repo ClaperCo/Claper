@@ -9,6 +9,7 @@ defmodule ClaperWeb.EventLive.ManagerSettingsComponent do
       <ClaperWeb.EventLive.ManageInteractionOptionsComponent.render
         current_interaction={@current_interaction}
         word_cloud_words={@word_cloud_words}
+        scale_results={@scale_results}
         state={@state}
         create={@create}
         show_shortcut={@show_shortcut}

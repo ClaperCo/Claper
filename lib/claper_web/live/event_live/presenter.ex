@@ -7,6 +7,7 @@ defmodule ClaperWeb.EventLive.Presenter do
   alias Claper.Forms.Form
   alias Claper.Quizzes.Quiz
   alias Claper.WordClouds.WordCloud
+  alias Claper.Scales.Scale
   alias Claper.Presentations
   alias Claper.Transcriptions
 
@@ -69,6 +70,7 @@ defmodule ClaperWeb.EventLive.Presenter do
         |> embed_at_position
         |> quiz_at_position
         |> word_cloud_at_position
+        |> scale_at_position
 
       {:ok, socket, temporary_assigns: []}
     end
@@ -135,7 +137,8 @@ defmodule ClaperWeb.EventLive.Presenter do
      |> push_event("reset-global-react", %{})
      |> poll_at_position
      |> embed_at_position
-     |> word_cloud_at_position}
+     |> word_cloud_at_position
+     |> scale_at_position}
   end
 
   @impl true
@@ -252,6 +255,26 @@ defmodule ClaperWeb.EventLive.Presenter do
     {:noreply, word_cloud_at_position(socket)}
   end
 
+  # The message may be about another slider on the slide, so the projected one
+  # is read again for the current slide.
+  @impl true
+  def handle_info({:scale_updated, _scale}, socket) do
+    {:noreply, scale_at_position(socket)}
+  end
+
+  @impl true
+  def handle_info({:scale_deleted, _scale}, socket) do
+    {:noreply, scale_at_position(socket)}
+  end
+
+  @impl true
+  def handle_info(
+        {:scale_response_added, %Scale{id: id} = scale},
+        %{assigns: %{current_scale: %Scale{id: id}}} = socket
+      ) do
+    {:noreply, assign_scale(socket, scale)}
+  end
+
   @impl true
   def handle_info({:chat_visible, value}, socket) do
     {:noreply,
@@ -302,7 +325,8 @@ defmodule ClaperWeb.EventLive.Presenter do
      |> assign(:current_embed, nil)
      |> assign(:current_form, nil)
      |> assign(:current_quiz, nil)
-     |> assign(:current_word_cloud, nil)}
+     |> assign(:current_word_cloud, nil)
+     |> assign(:current_scale, nil)}
   end
 
   @impl true
@@ -316,7 +340,8 @@ defmodule ClaperWeb.EventLive.Presenter do
      |> assign(:current_poll, nil)
      |> assign(:current_form, nil)
      |> assign(:current_quiz, nil)
-     |> assign(:current_word_cloud, nil)}
+     |> assign(:current_word_cloud, nil)
+     |> assign(:current_scale, nil)}
   end
 
   @impl true
@@ -330,7 +355,8 @@ defmodule ClaperWeb.EventLive.Presenter do
      |> assign(:current_poll, nil)
      |> assign(:current_embed, nil)
      |> assign(:current_quiz, nil)
-     |> assign(:current_word_cloud, nil)}
+     |> assign(:current_word_cloud, nil)
+     |> assign(:current_scale, nil)}
   end
 
   @impl true
@@ -344,7 +370,8 @@ defmodule ClaperWeb.EventLive.Presenter do
      |> assign(:current_poll, nil)
      |> assign(:current_embed, nil)
      |> assign(:current_form, nil)
-     |> assign(:current_word_cloud, nil)}
+     |> assign(:current_word_cloud, nil)
+     |> assign(:current_scale, nil)}
   end
 
   @impl true
@@ -355,6 +382,22 @@ defmodule ClaperWeb.EventLive.Presenter do
     {:noreply,
      socket
      |> word_cloud_at_position()
+     |> assign(:current_scale, nil)
+     |> assign(:current_poll, nil)
+     |> assign(:current_embed, nil)
+     |> assign(:current_form, nil)
+     |> assign(:current_quiz, nil)}
+  end
+
+  @impl true
+  def handle_info(
+        {:current_interaction, %Scale{} = interaction},
+        socket
+      ) do
+    {:noreply,
+     socket
+     |> assign_scale(interaction)
+     |> assign(:current_word_cloud, nil)
      |> assign(:current_poll, nil)
      |> assign(:current_embed, nil)
      |> assign(:current_form, nil)
@@ -372,7 +415,8 @@ defmodule ClaperWeb.EventLive.Presenter do
      |> assign(:current_embed, nil)
      |> assign(:current_form, nil)
      |> assign(:current_quiz, nil)
-     |> assign(:current_word_cloud, nil)}
+     |> assign(:current_word_cloud, nil)
+     |> assign(:current_scale, nil)}
   end
 
   @impl true
@@ -522,6 +566,28 @@ defmodule ClaperWeb.EventLive.Presenter do
     socket
     |> assign(:current_word_cloud, nil)
     |> assign(:word_cloud_words, [])
+  end
+
+  defp scale_at_position(%{assigns: %{event: event, state: state}} = socket) do
+    scale =
+      Claper.Scales.get_scale_current_position(
+        event.presentation_file.id,
+        state.position
+      )
+
+    assign_scale(socket, scale)
+  end
+
+  defp assign_scale(socket, %Scale{} = scale) do
+    socket
+    |> assign(:current_scale, scale)
+    |> assign(:scale_results, Claper.Scales.results(scale))
+  end
+
+  defp assign_scale(socket, nil) do
+    socket
+    |> assign(:current_scale, nil)
+    |> assign(:scale_results, nil)
   end
 
   defp list_posts(_socket, event_id) do
