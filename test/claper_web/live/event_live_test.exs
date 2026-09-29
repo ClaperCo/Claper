@@ -2,7 +2,7 @@ defmodule ClaperWeb.EventLiveTest do
   use ClaperWeb.ConnCase
 
   import Phoenix.LiveViewTest
-  import Claper.{FormsFixtures, PollsFixtures, PresentationsFixtures}
+  import Claper.{FormsFixtures, PollsFixtures, PresentationsFixtures, ScalesFixtures}
 
   @update_attrs %{name: "some updated name"}
 
@@ -563,8 +563,323 @@ defmodule ClaperWeb.EventLiveTest do
     end
   end
 
+  describe "Manage sliders" do
+    setup [:register_and_log_in_user, :create_event]
+
+    test "creates a slider on the current slide, closed", %{
+      conn: conn,
+      presentation_file: presentation_file
+    } do
+      {:ok, manage_live, _html} =
+        live(conn, ~p"/e/#{presentation_file.event.code}/manage/add/scale")
+
+      assert has_element?(manage_live, "#scale-form")
+
+      manage_live
+      |> form("#scale-form",
+        scale: %{
+          title: "How confident are you?",
+          min_value: "0",
+          max_value: "100",
+          step: "10",
+          min_label: "Lost",
+          max_label: "Ready",
+          show_results: "false"
+        }
+      )
+      |> render_submit()
+
+      assert_redirect(manage_live, ~p"/e/#{presentation_file.event.code}/manage")
+
+      assert [scale] = Claper.Scales.list_scales(presentation_file.id)
+      assert scale.title == "How confident are you?"
+      assert {scale.min_value, scale.max_value, scale.step} == {0, 100, 10}
+      assert {scale.min_label, scale.max_label} == {"Lost", "Ready"}
+      refute scale.show_results
+      refute scale.enabled
+      assert scale.position == 0
+    end
+
+    test "refuses a range whose highest value is not above the lowest", %{
+      conn: conn,
+      presentation_file: presentation_file
+    } do
+      {:ok, manage_live, _html} =
+        live(conn, ~p"/e/#{presentation_file.event.code}/manage/add/scale")
+
+      html =
+        manage_live
+        |> form("#scale-form", scale: %{title: "Mood", min_value: "5", max_value: "5"})
+        |> render_submit()
+
+      assert html =~ "must be greater than the lowest value"
+      assert Claper.Scales.list_scales(presentation_file.id) == []
+    end
+
+    test "edits a slider", %{conn: conn, presentation_file: presentation_file} do
+      scale = scale_fixture(%{presentation_file: presentation_file})
+
+      {:ok, manage_live, _html} =
+        live(conn, ~p"/e/#{presentation_file.event.code}/manage/edit/scale/#{scale.id}")
+
+      refute has_element?(manage_live, "[data-range-locked]")
+
+      manage_live
+      |> form("#scale-form", scale: %{title: "Renamed", max_value: "5"})
+      |> render_submit()
+
+      assert %{title: "Renamed", max_value: 5} = Claper.Scales.get_scale!(scale.id)
+    end
+
+    test "locks the range in the editor once attendees have answered", %{
+      conn: conn,
+      presentation_file: presentation_file
+    } do
+      scale = scale_fixture(%{presentation_file: presentation_file})
+      {:ok, _} = Claper.Scales.submit_response(presentation_file.event.uuid, scale, "a", "7")
+
+      {:ok, manage_live, _html} =
+        live(conn, ~p"/e/#{presentation_file.event.code}/manage/edit/scale/#{scale.id}")
+
+      assert has_element?(manage_live, "[data-range-locked]")
+      assert has_element?(manage_live, ~s(#scale-form input[name="scale[min_value]"][disabled]))
+      assert has_element?(manage_live, ~s(#scale-form input[name="scale[step]"][disabled]))
+
+      html =
+        manage_live
+        |> element("#scale-form")
+        |> render_submit(%{"scale" => %{"title" => "Renamed", "min_value" => "0"}})
+
+      assert html =~ "cannot be changed once attendees have answered"
+      assert %{title: "some title", min_value: 1} = Claper.Scales.get_scale!(scale.id)
+
+      manage_live
+      |> element("#scale-form")
+      |> render_submit(%{"scale" => %{"title" => "Renamed", "max_label" => "Sure"}})
+
+      assert %{title: "Renamed", max_label: "Sure", min_value: 1} =
+               Claper.Scales.get_scale!(scale.id)
+    end
+
+    test "keeps the slide, file and state of a slider when it is edited", %{
+      conn: conn,
+      presentation_file: presentation_file
+    } do
+      scale = scale_fixture(%{presentation_file: presentation_file, enabled: false})
+      other_presentation_file = presentation_file_fixture()
+
+      {:ok, manage_live, _html} =
+        live(conn, ~p"/e/#{presentation_file.event.code}/manage/edit/scale/#{scale.id}")
+
+      manage_live
+      |> element("#scale-form")
+      |> render_submit(%{
+        "scale" => %{
+          "title" => "Renamed",
+          "position" => "7",
+          "enabled" => "true",
+          "presentation_file_id" => other_presentation_file.id
+        }
+      })
+
+      edited = Claper.Scales.get_scale!(scale.id)
+      assert edited.title == "Renamed"
+      assert edited.position == 0
+      refute edited.enabled
+      assert edited.presentation_file_id == presentation_file.id
+    end
+
+    test "deletes a slider with its answers", %{conn: conn, presentation_file: presentation_file} do
+      scale = scale_fixture(%{presentation_file: presentation_file})
+      scale_response_fixture(%{scale: scale})
+
+      {:ok, manage_live, _html} =
+        live(conn, ~p"/e/#{presentation_file.event.code}/manage/edit/scale/#{scale.id}")
+
+      manage_live |> element(~s(#scale-form a[phx-click="delete"])) |> render_click()
+
+      assert Claper.Scales.list_scales(presentation_file.id) == []
+      assert Claper.Scales.list_responses(scale.id) == []
+    end
+
+    test "sends to the list when the slider belongs to another event", %{
+      conn: conn,
+      presentation_file: presentation_file
+    } do
+      foreign = scale_fixture()
+
+      assert {:error, {:live_redirect, %{to: to}}} =
+               live(conn, ~p"/e/#{presentation_file.event.code}/manage/edit/scale/#{foreign.id}")
+
+      assert to == ~p"/e/#{presentation_file.event.code}/manage"
+    end
+
+    test "lists a slider and switches it on and off", %{
+      conn: conn,
+      presentation_file: presentation_file
+    } do
+      scale =
+        scale_fixture(%{presentation_file: presentation_file, enabled: false, title: "Mood"})
+
+      {:ok, manage_live, _html} = live(conn, ~p"/e/#{presentation_file.event.code}/manage")
+
+      assert has_element?(
+               manage_live,
+               ~s([data-interaction-type="scale"][data-interaction-id="#{scale.id}"]),
+               "Mood"
+             )
+
+      manage_live
+      |> element(~s(input[phx-click="scale-set-active"][phx-value-id="#{scale.id}"]))
+      |> render_click()
+
+      assert Claper.Scales.get_scale!(scale.id).enabled
+
+      manage_live
+      |> element(~s(input[phx-click="scale-set-inactive"][phx-value-id="#{scale.id}"]))
+      |> render_click()
+
+      refute Claper.Scales.get_scale!(scale.id).enabled
+    end
+
+    test "switches no slider of another event on or off", %{
+      conn: conn,
+      presentation_file: presentation_file
+    } do
+      closed = scale_fixture(%{enabled: false})
+      open = scale_fixture(%{enabled: true})
+
+      {:ok, manage_live, _html} = live(conn, ~p"/e/#{presentation_file.event.code}/manage")
+
+      render_hook(manage_live, "scale-set-active", %{"id" => closed.id})
+      render_hook(manage_live, "scale-set-inactive", %{"id" => open.id})
+
+      refute Claper.Scales.get_scale!(closed.id).enabled
+      assert Claper.Scales.get_scale!(open.id).enabled
+    end
+
+    test "moves a slider to another slide", %{conn: conn, presentation_file: presentation_file} do
+      scale = scale_fixture(%{presentation_file: presentation_file})
+      foreign = scale_fixture()
+
+      {:ok, manage_live, _html} = live(conn, ~p"/e/#{presentation_file.event.code}/manage")
+
+      for id <- [scale.id, foreign.id] do
+        render_hook(manage_live, "move-interaction", %{"id" => id, "type" => "scale", "to" => 4})
+      end
+
+      assert %{position: 4, enabled: false} = Claper.Scales.get_scale!(scale.id)
+      assert %{position: 0, enabled: true} = Claper.Scales.get_scale!(foreign.id)
+    end
+
+    test "shows the results of the current slider and follows new answers", %{
+      conn: conn,
+      presentation_file: presentation_file
+    } do
+      event = presentation_file.event
+      scale = scale_fixture(%{presentation_file: presentation_file})
+
+      {:ok, manage_live, _html} = live(conn, ~p"/e/#{event.code}/manage")
+
+      assert has_element?(manage_live, "#settings-modal-content", "No answers yet")
+
+      {:ok, _} = Claper.Scales.submit_response(event.uuid, scale, "a", "3")
+      {:ok, _} = Claper.Scales.submit_response(event.uuid, scale, "b", "8")
+
+      assert has_element?(manage_live, "#settings-modal-content dd", "5.5")
+      assert has_element?(manage_live, "#settings-modal-content dd", "2")
+    end
+  end
+
   describe "Presenter" do
     setup [:register_and_log_in_user]
+
+    test "projects the enabled slider and follows new answers", %{conn: conn, user: user} do
+      presentation_file = presentation_file_fixture(%{user: user}, [:event])
+      presentation_state_fixture(%{presentation_file: presentation_file})
+      event = presentation_file.event
+
+      scale =
+        scale_fixture(%{
+          presentation_file: presentation_file,
+          title: "Mood",
+          max_label: "Great"
+        })
+
+      {:ok, presenter_live, _html} = live(conn, ~p"/e/#{event.code}/presenter")
+
+      assert has_element?(presenter_live, "#scale", "Mood")
+      assert has_element?(presenter_live, "#scale", "Great")
+      assert has_element?(presenter_live, "#scale-count", "0")
+      assert has_element?(presenter_live, "#scale-average", "-")
+
+      {:ok, _} = Claper.Scales.submit_response(event.uuid, scale, "a", "7")
+      {:ok, _} = Claper.Scales.submit_response(event.uuid, scale, "b", "10")
+
+      assert has_element?(presenter_live, "#scale-count", "2")
+      assert has_element?(presenter_live, "#scale-average", "8.5")
+      assert has_element?(presenter_live, "#scale-median", "8.5")
+
+      send(presenter_live.pid, {:current_interaction, nil})
+      refute has_element?(presenter_live, "#scale")
+
+      send(presenter_live.pid, {:current_interaction, scale})
+      assert has_element?(presenter_live, "#scale-count", "2")
+    end
+
+    test "updates the slider in the preview embedded in the manager", %{conn: conn, user: user} do
+      presentation_file = presentation_file_fixture(%{user: user}, [:event])
+      presentation_state_fixture(%{presentation_file: presentation_file})
+      event = presentation_file.event
+      scale = scale_fixture(%{presentation_file: presentation_file})
+
+      {:ok, preview_live, _html} = live(conn, ~p"/e/#{event.code}/presenter?iframe=1")
+
+      {:ok, _} = Claper.Scales.submit_response(event.uuid, scale, "a", "4")
+
+      assert has_element?(preview_live, "#scale-count", "1")
+      assert has_element?(preview_live, "#scale-average", "4")
+    end
+
+    test "shows the slider results only while results are shown on the presentation", %{
+      conn: conn,
+      user: user
+    } do
+      presentation_file = presentation_file_fixture(%{user: user}, [:event])
+      state = presentation_state_fixture(%{presentation_file: presentation_file})
+      scale_fixture(%{presentation_file: presentation_file})
+
+      {:ok, presenter_live, _html} =
+        live(conn, ~p"/e/#{presentation_file.event.code}/presenter")
+
+      assert has_element?(presenter_live, "#scale.opacity-0")
+
+      {:ok, _} = Claper.Presentations.update_presentation_state(state, %{poll_visible: true})
+
+      assert has_element?(presenter_live, "#scale.opacity-100")
+    end
+
+    test "keeps the projected slider when another slider on the slide changes or goes", %{
+      conn: conn,
+      user: user
+    } do
+      presentation_file = presentation_file_fixture(%{user: user}, [:event])
+      presentation_state_fixture(%{presentation_file: presentation_file})
+      event = presentation_file.event
+
+      scale_fixture(%{presentation_file: presentation_file, title: "Mood"})
+
+      other =
+        scale_fixture(%{presentation_file: presentation_file, title: "Other", enabled: false})
+
+      {:ok, presenter_live, _html} = live(conn, ~p"/e/#{event.code}/presenter")
+
+      {:ok, other} = Claper.Scales.update_scale(event.uuid, other, %{title: "Renamed"})
+      assert has_element?(presenter_live, "#scale", "Mood")
+
+      {:ok, _} = Claper.Scales.delete_scale(event.uuid, other)
+      assert has_element?(presenter_live, "#scale", "Mood")
+    end
 
     test "renders only the reply count on the projected display", %{conn: conn, user: user} do
       presentation_file = presentation_file_fixture(%{user: user}, [:event])
@@ -617,6 +932,67 @@ defmodule ClaperWeb.EventLiveTest do
       refute html =~ ~s(phx-value-tab="web_content")
       refute html =~ ~s(phx-value-tab="quizzes")
       refute html =~ ~s(phx-value-tab="transcriptions")
+      refute html =~ ~s(phx-value-tab="sliders")
+    end
+
+    test "reports each slider with its results and an export", %{
+      conn: conn,
+      presentation_file: presentation_file
+    } do
+      event = presentation_file.event
+
+      scale =
+        scale_fixture(%{
+          presentation_file: presentation_file,
+          title: "Mood",
+          min_value: 1,
+          max_value: 5,
+          max_label: "Great"
+        })
+
+      unanswered = scale_fixture(%{presentation_file: presentation_file, title: "Energy"})
+
+      for {identity, value} <- [{"a", 2}, {"b", 4}, {"c", 4}] do
+        {:ok, _} = Claper.Scales.submit_response(event.uuid, scale, identity, value)
+      end
+
+      {:ok, stats_live, _html} = live(conn, ~p"/events/#{event.uuid}/stats")
+
+      html =
+        stats_live
+        |> element(~s{button[phx-value-tab="sliders"]})
+        |> render_click()
+
+      report = "#scale-report-#{scale.id}"
+
+      assert has_element?(stats_live, report, "Mood")
+      assert has_element?(stats_live, report, "3 answers")
+      assert has_element?(stats_live, "#{report} dd", "3.3")
+      assert has_element?(stats_live, "#{report} dd", "4")
+      assert has_element?(stats_live, report, "(Great)")
+      assert has_element?(stats_live, report, "67% (2)")
+      assert html =~ ~p"/export/scales/#{scale.id}"
+
+      assert has_element?(stats_live, "#scale-report-#{unanswered.id}", "No answers yet")
+      refute html =~ ~p"/export/scales/#{unanswered.id}"
+    end
+
+    test "counts slider answers towards the engagement rate", %{
+      conn: conn,
+      presentation_file: presentation_file
+    } do
+      event = presentation_file.event
+      scale = scale_fixture(%{presentation_file: presentation_file})
+      Claper.Stats.create_stat(event, %{attendee_identifier: "a"})
+      Claper.Stats.create_stat(event, %{attendee_identifier: "b"})
+
+      {:ok, stats_live, _html} = live(conn, ~p"/events/#{event.uuid}/stats")
+      assert has_element?(stats_live, "dd p", ~r/^\s*0%\s*$/)
+
+      {:ok, _} = Claper.Scales.submit_response(event.uuid, scale, "a", "5")
+
+      {:ok, stats_live, _html} = live(conn, ~p"/events/#{event.uuid}/stats")
+      assert has_element?(stats_live, "dd p", ~r/^\s*13%\s*$/)
     end
 
     test "displays transcriptions in report", %{conn: conn, presentation_file: presentation_file} do

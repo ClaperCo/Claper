@@ -1,7 +1,7 @@
 defmodule ClaperWeb.EventLive.Manage do
   use ClaperWeb, :live_view
 
-  alias Claper.{Embeds, Events, Forms, Polls, Presentations, Quizzes, Transcriptions}
+  alias Claper.{Embeds, Events, Forms, Polls, Presentations, Quizzes, Scales, Transcriptions}
   alias Claper.Transcriptions.TranscriptionConfig
   alias Claper.Workers.PresentationThumbnails
   alias ClaperWeb.Presence
@@ -134,6 +134,9 @@ defmodule ClaperWeb.EventLive.Manage do
 
   defp get_interaction_for_event("quiz", id, socket),
     do: Quizzes.get_quiz_for_event(id, event_id(socket))
+
+  defp get_interaction_for_event("scale", id, socket),
+    do: Scales.get_scale_for_event(id, event_id(socket))
 
   @impl true
   def handle_info(%{event: "presence_diff"}, %{assigns: %{event: event}} = socket) do
@@ -279,6 +282,13 @@ defmodule ClaperWeb.EventLive.Manage do
   end
 
   @impl true
+  def handle_info({:scale_created, scale}, socket) do
+    {:noreply,
+     socket
+     |> interactions_at_position(scale.position)}
+  end
+
+  @impl true
   def handle_info({:poll_updated, _poll}, socket) do
     {:noreply,
      socket
@@ -307,6 +317,23 @@ defmodule ClaperWeb.EventLive.Manage do
   end
 
   @impl true
+  def handle_info({:scale_updated, _scale}, socket) do
+    {:noreply,
+     socket
+     |> interactions_at_position(socket.assigns.state.position)}
+  end
+
+  # Fired for every answer, so only the results are refreshed instead of the
+  # whole interaction list.
+  @impl true
+  def handle_info(
+        {:scale_response_added, %{id: id} = scale},
+        %{assigns: %{current_interaction: %Scales.Scale{id: id}}} = socket
+      ) do
+    {:noreply, assign(socket, :scale_results, Scales.results(scale))}
+  end
+
+  @impl true
   def handle_info({:poll_deleted, poll}, socket) do
     {:noreply,
      socket
@@ -332,6 +359,13 @@ defmodule ClaperWeb.EventLive.Manage do
     {:noreply,
      socket
      |> interactions_at_position(quiz.position)}
+  end
+
+  @impl true
+  def handle_info({:scale_deleted, scale}, socket) do
+    {:noreply,
+     socket
+     |> interactions_at_position(scale.position)}
   end
 
   @impl true
@@ -481,7 +515,8 @@ defmodule ClaperWeb.EventLive.Manage do
         %{"id" => id, "type" => type, "to" => to},
         %{assigns: %{event: event, state: state}} = socket
       )
-      when is_integer(id) and is_integer(to) and type in ["poll", "form", "embed", "quiz"] do
+      when is_integer(id) and is_integer(to) and
+             type in ["poll", "form", "embed", "quiz", "scale"] do
     with interaction when not is_nil(interaction) <- get_interaction_for_event(type, id, socket),
          {:ok, _moved} <- Claper.Interactions.move_interaction(event, interaction, to) do
       if interaction.enabled do
@@ -600,6 +635,27 @@ defmodule ClaperWeb.EventLive.Manage do
     end
   end
 
+  def handle_event("scale-set-active", %{"id" => id}, socket) do
+    case Scales.get_scale_for_event(id, event_id(socket)) do
+      nil ->
+        {:noreply, socket}
+
+      scale ->
+        with :ok <- Claper.Interactions.enable_interaction(scale) do
+          Phoenix.PubSub.broadcast(
+            Claper.PubSub,
+            "event:#{socket.assigns.event.uuid}",
+            {:current_interaction, scale}
+          )
+
+          {:noreply,
+           socket
+           |> assign(:current_interaction, scale)
+           |> interactions_at_position(socket.assigns.state.position)}
+        end
+    end
+  end
+
   def handle_event("poll-set-inactive", %{"id" => id}, socket) do
     case Polls.get_poll_for_event(id, event_id(socket)) do
       nil ->
@@ -649,6 +705,27 @@ defmodule ClaperWeb.EventLive.Manage do
 
       embed ->
         with {:ok, _} <- Claper.Interactions.disable_interaction(embed) do
+          Phoenix.PubSub.broadcast(
+            Claper.PubSub,
+            "event:#{socket.assigns.event.uuid}",
+            {:current_interaction, nil}
+          )
+        end
+
+        {:noreply,
+         socket
+         |> assign(:current_interaction, nil)
+         |> interactions_at_position(socket.assigns.state.position)}
+    end
+  end
+
+  def handle_event("scale-set-inactive", %{"id" => id}, socket) do
+    case Scales.get_scale_for_event(id, event_id(socket)) do
+      nil ->
+        {:noreply, socket}
+
+      scale ->
+        with {:ok, _} <- Claper.Interactions.disable_interaction(scale) do
           Phoenix.PubSub.broadcast(
             Claper.PubSub,
             "event:#{socket.assigns.event.uuid}",
@@ -1287,6 +1364,30 @@ defmodule ClaperWeb.EventLive.Manage do
     end
   end
 
+  defp apply_action(socket, :add_scale, _params) do
+    socket
+    |> assign(:create, "scale")
+    |> assign(:interaction_modal, true)
+    |> assign(:create_action, :new)
+    |> assign(:scale, %Scales.Scale{})
+  end
+
+  defp apply_action(socket, :edit_scale, %{"id" => id}) do
+    case Scales.get_scale_for_event(id, event_id(socket)) do
+      nil ->
+        socket
+        |> put_flash(:error, gettext("Resource not found"))
+        |> push_navigate(to: ~p"/e/#{socket.assigns.event.code}/manage")
+
+      scale ->
+        socket
+        |> assign(:create, "scale")
+        |> assign(:interaction_modal, true)
+        |> assign(:create_action, :edit)
+        |> assign(:scale, scale)
+    end
+  end
+
   defp apply_action(socket, :add_transcription, _params) do
     existing = socket.assigns.transcription_config
 
@@ -1372,9 +1473,16 @@ defmodule ClaperWeb.EventLive.Manage do
     with {:ok, interactions} <-
            Claper.Interactions.get_interactions_at_position(event, position, broadcast) do
       active = interactions |> Enum.find(& &1.enabled)
-      socket |> assign(:interactions, interactions) |> assign(:current_interaction, active)
+
+      socket
+      |> assign(:interactions, interactions)
+      |> assign(:current_interaction, active)
+      |> assign(:scale_results, scale_results(active))
     end
   end
+
+  defp scale_results(%Scales.Scale{} = scale), do: Scales.results(scale)
+  defp scale_results(_interaction), do: nil
 
   defp list_pinned_posts(_socket, event_id) do
     Claper.Posts.list_pinned_posts(event_id, [:event, :reactions])

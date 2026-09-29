@@ -1,11 +1,11 @@
 defmodule ClaperWeb.StatController do
   @moduledoc """
   Controller responsible for exporting various statistics and data in CSV format.
-  Handles form submissions, messages, and poll results exports.
+  Handles form submissions, messages, poll results and slider responses exports.
   """
   use ClaperWeb, :controller
 
-  alias Claper.{Forms, Events, Polls, Presentations, Quizzes, Transcriptions}
+  alias Claper.{Forms, Events, Polls, Presentations, Quizzes, Scales, Transcriptions}
 
   @doc """
   Exports form submissions as a CSV file.
@@ -102,6 +102,33 @@ defmodule ClaperWeb.StatController do
           Enum.map(poll.poll_opts, & &1.vote_count)
 
       export_as_csv(conn, headers, [content], "poll-#{sanitize(poll.title)}")
+    else
+      :unauthorized -> send_resp(conn, 403, "Forbidden")
+    end
+  end
+
+  @doc """
+  Exports the responses to a slider as a CSV file, one row per response.
+  Requires user to be either an event leader or the event owner.
+  """
+  def export_scale(%{assigns: %{current_user: current_user}} = conn, %{"scale_id" => scale_id}) do
+    with scale <- Scales.get_scale!(scale_id, presentation_file: :event),
+         :ok <- authorize_event_access(current_user, scale.presentation_file.event) do
+      headers = ["Attendee identifier", "User email", "Value", "Answered at (UTC)"]
+
+      data =
+        scale.id
+        |> Scales.list_responses([:user])
+        |> Enum.map(fn response ->
+          [
+            format_attendee_identifier(response.attendee_identifier),
+            format_user_email(response.user),
+            response.value,
+            response.inserted_at
+          ]
+        end)
+
+      export_as_csv(conn, headers, data, "slider-#{sanitize(scale.title)}")
     else
       :unauthorized -> send_resp(conn, 403, "Forbidden")
     end

@@ -177,6 +177,7 @@ msgstr "Modifica"
 #: lib/claper_web/live/form_live/form_component.html.heex
 #: lib/claper_web/live/poll_live/form_component.html.heex
 #: lib/claper_web/live/quiz_live/quiz_component.html.heex
+#: lib/claper_web/live/scale_live/form_component.html.heex
 #: lib/claper_web/live/transcription_live/form_component.html.heex
 #, elixir-autogen, elixir-format
 msgid "Delete"
@@ -186,6 +187,7 @@ msgstr "Elimina"
 #: lib/claper_web/live/form_live/form_component.html.heex
 #: lib/claper_web/live/poll_live/form_component.html.heex
 #: lib/claper_web/live/quiz_live/quiz_component.html.heex
+#: lib/claper_web/live/scale_live/form_component.html.heex
 #: lib/claper_web/live/transcription_live/form_component.html.heex
 #: lib/claper_web/live/user_settings_live/show.html.heex
 #, elixir-autogen, elixir-format
@@ -1057,6 +1059,7 @@ msgid "Provider"
 msgstr "Provider"
 
 #: lib/claper_web/live/poll_live/form_component.html.heex
+#: lib/claper_web/live/scale_live/form_component.html.heex
 #, elixir-autogen, elixir-format
 msgid "Attendees can see the results on their device"
 msgstr "I partecipanti possono vedere i risultati sul loro dispositivo"
@@ -1069,6 +1072,7 @@ msgstr "I partecipanti possono visualizzare il contenuto web sul proprio disposi
 #: lib/claper_web/live/embed_live/form_component.html.heex
 #: lib/claper_web/live/poll_live/form_component.html.heex
 #: lib/claper_web/live/quiz_live/quiz_component.html.heex
+#: lib/claper_web/live/scale_live/form_component.html.heex
 #: lib/claper_web/live/transcription_live/form_component.html.heex
 #, elixir-autogen, elixir-format
 msgid "Options"
@@ -3034,6 +3038,7 @@ msgstr "Titolo del modulo"
 #: lib/claper_web/live/form_live/form_component.html.heex
 #: lib/claper_web/live/poll_live/form_component.html.heex
 #: lib/claper_web/live/quiz_live/quiz_component.html.heex
+#: lib/claper_web/live/scale_live/form_component.html.heex
 #: lib/claper_web/live/transcription_live/form_component.html.heex
 #, elixir-autogen, elixir-format
 msgid "Loading..."
@@ -3191,6 +3196,7 @@ msgid "Voted"
 msgstr "Votato"
 
 #: lib/claper_web/live/event_live/form_component.ex
+#: lib/claper_web/live/event_live/scale_component.ex
 #, elixir-autogen, elixir-format
 msgid "Send"
 msgstr "Invia"
@@ -3558,3 +3564,183 @@ msgstr "Devi essere un amministratore per accedere a questa pagina."
 #, elixir-autogen, elixir-format
 msgid "You must log in to access this page."
 msgstr "Devi accedere per visualizzare questa pagina."
+
+#: lib/claper_web/live/stat_live/index.html.heex
+#, elixir-autogen, elixir-format
+msgid "%{count} answer"
+msgid_plural "%{count} answers"
+msgstr[0] "%{count} risposta"
+msgstr[1] "%{count} risposte"
+
+#: lib/claper_web/live/event_live/manage_interaction_options_component.ex
+#: lib/claper_web/live/event_live/presenter.html.heex
+#: lib/claper_web/live/event_live/scale_component.ex
+#, elixir-autogen, elixir-format
+msgid "Answers"
+msgstr "Risposte"
+
+#: lib/claper_web/live/scale_live/form_component.html.heex
+#, elixir-autogen, elixir-format
+msgid "Attendees have already answered, so the range can no longer be changed."
+msgstr "I partecipanti hanno già risposto, quindi l'intervallo non può più essere modificato."
+
+#: lib/claper_web/live/event_live/manage_interaction_options_component.ex
+#: lib/claper_web/live/event_live/presenter.html.heex
+#: lib/claper_web/live/event_live/scale_component.ex
+#: lib/claper_web/live/stat_live/index.html.heex
+#, elixir-autogen, elixir-format
+msgid "Average"
+msgstr "Media"
+
+#: lib/claper_web/live/scale_live/form_component.html.heex
+#, elixir-autogen, elixir-format
+msgid "Completely"
+msgstr "Completamente"
+
+#: lib/claper_web/live/scale_live/form_component.html.heex
+#, elixir-autogen, elixir-format
+msgid "Create slider"
+msgstr "Crea cursore"
+
+#: lib/claper_web/live/event_live/scale_component.ex
+#, elixir-autogen, elixir-format
+msgid "Current slider"
+msgstr "Cursore attuale"
+
+#: lib/claper_web/live/event_live/manage.html.heex
+#, elixir-autogen, elixir-format
+msgid "Edit slider"
+msgstr "Modifica cursore"
+
+#: lib/claper_web/live/scale_live/form_component.html.heex
+#, elixir-autogen, elixir-format
+msgid "Highest value"
+msgstr "Valore massimo"
+
+#: lib/claper_web/live/scale_live/form_component.html.heex
+#, elixir-autogen, elixir-format
+msgid "How confident do you feel about..."
+msgstr "Quanto ti senti sicuro riguardo a..."
+
+#: lib/claper_web/live/scale_live/form_component.html.heex
+#, elixir-autogen, elixir-format
+msgid "Label for the highest value"
+msgstr "Etichetta del valore massimo"
+
+#: lib/claper_web/live/scale_live/form_component.html.heex
+#, elixir-autogen, elixir-format
+msgid "Label for the lowest value"
+msgstr "Etichetta del valore minimo"
+
+#: lib/claper_web/live/event_live/manage.html.heex
+#: lib/claper_web/live/event_live/manage_floating_action_bar.ex
+#: lib/claper_web/live/event_live/manage_interaction_list_component.ex
+#, elixir-autogen, elixir-format
+msgid "Let your audience answer on a scale."
+msgstr "Fai rispondere il tuo pubblico su una scala."
+
+#: lib/claper_web/live/scale_live/form_component.html.heex
+#, elixir-autogen, elixir-format
+msgid "Lowest value"
+msgstr "Valore minimo"
+
+#: lib/claper_web/live/event_live/manage_interaction_options_component.ex
+#: lib/claper_web/live/event_live/presenter.html.heex
+#: lib/claper_web/live/event_live/scale_component.ex
+#: lib/claper_web/live/stat_live/index.html.heex
+#, elixir-autogen, elixir-format
+msgid "Median"
+msgstr "Mediana"
+
+#: lib/claper_web/live/event_live/scale_component.ex
+#, elixir-autogen, elixir-format
+msgid "Move the slider and send your answer"
+msgstr "Sposta il cursore e invia la tua risposta"
+
+#: lib/claper_web/live/event_live/manage.html.heex
+#, elixir-autogen, elixir-format
+msgid "New slider"
+msgstr "Nuovo cursore"
+
+#: lib/claper_web/live/event_live/manage_interaction_options_component.ex
+#: lib/claper_web/live/stat_live/index.html.heex
+#, elixir-autogen, elixir-format
+msgid "No answers yet"
+msgstr "Ancora nessuna risposta"
+
+#: lib/claper_web/live/scale_live/form_component.html.heex
+#, elixir-autogen, elixir-format
+msgid "Not at all"
+msgstr "Per niente"
+
+#: lib/claper_web/live/event_live/show.ex
+#, elixir-autogen, elixir-format
+msgid "Please pick a value on the slider."
+msgstr "Scegli un valore sul cursore."
+
+#: lib/claper_web/live/scale_live/form_component.html.heex
+#, elixir-autogen, elixir-format
+msgid "Question"
+msgstr "Domanda"
+
+#: lib/claper_web/live/event_live/manage_interaction_options_component.ex
+#, elixir-autogen, elixir-format
+msgid "Results"
+msgstr "Risultati"
+
+#: lib/claper_web/live/event_live/manage.html.heex
+#: lib/claper_web/live/event_live/manage_floating_action_bar.ex
+#: lib/claper_web/live/event_live/manage_interaction_list_component.ex
+#, elixir-autogen, elixir-format
+msgid "Slider"
+msgstr "Cursore"
+
+#: lib/claper_web/live/stat_live/index.html.heex
+#, elixir-autogen, elixir-format
+msgid "Sliders"
+msgstr "Cursori"
+
+#: lib/claper_web/live/scale_live/form_component.html.heex
+#, elixir-autogen, elixir-format
+msgid "Step"
+msgstr "Passo"
+
+#: lib/claper_web/live/event_live/scale_component.ex
+#, elixir-autogen, elixir-format
+msgid "Thanks! Your answer has been recorded."
+msgstr "Grazie! La tua risposta è stata registrata."
+
+#: lib/claper_web/live/scale_live/form_component.html.heex
+#, elixir-autogen, elixir-format
+msgid "This will delete all answers and the slider itself, are you sure?"
+msgstr "Questo eliminerà tutte le risposte e il cursore stesso, sei sicuro?"
+
+#: lib/claper_web/live/event_live/show.ex
+#, elixir-autogen, elixir-format
+msgid "You have already answered."
+msgstr "Hai già risposto."
+
+#: lib/claper_web/live/event_live/scale_component.ex
+#, elixir-autogen, elixir-format
+msgid "Your answer"
+msgstr "La tua risposta"
+
+#: lib/claper/scales/scale.ex
+#, elixir-autogen, elixir-format
+msgid "cannot be changed once attendees have answered"
+msgstr "non può essere modificato dopo che i partecipanti hanno risposto"
+
+#: lib/claper/scales/scale.ex
+#, elixir-autogen, elixir-format
+msgid "is too small, a slider can have at most %{count} values"
+msgstr "è troppo piccolo, un cursore può avere al massimo %{count} valori"
+
+#: lib/claper/scales/scale.ex
+#, elixir-autogen, elixir-format
+msgid "must be greater than the lowest value"
+msgstr "deve essere maggiore del valore minimo"
+
+#: lib/claper/scales/scale.ex
+#, elixir-autogen, elixir-format
+msgid "must divide the range evenly"
+msgstr "deve dividere l'intervallo in parti uguali"

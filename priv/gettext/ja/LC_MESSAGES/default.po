@@ -179,6 +179,7 @@ msgstr "編集"
 #: lib/claper_web/live/form_live/form_component.html.heex
 #: lib/claper_web/live/poll_live/form_component.html.heex
 #: lib/claper_web/live/quiz_live/quiz_component.html.heex
+#: lib/claper_web/live/scale_live/form_component.html.heex
 #: lib/claper_web/live/transcription_live/form_component.html.heex
 #, elixir-autogen, elixir-format
 msgid "Delete"
@@ -188,6 +189,7 @@ msgstr "削除"
 #: lib/claper_web/live/form_live/form_component.html.heex
 #: lib/claper_web/live/poll_live/form_component.html.heex
 #: lib/claper_web/live/quiz_live/quiz_component.html.heex
+#: lib/claper_web/live/scale_live/form_component.html.heex
 #: lib/claper_web/live/transcription_live/form_component.html.heex
 #: lib/claper_web/live/user_settings_live/show.html.heex
 #, elixir-autogen, elixir-format
@@ -1055,6 +1057,7 @@ msgid "Provider"
 msgstr "提供元"
 
 #: lib/claper_web/live/poll_live/form_component.html.heex
+#: lib/claper_web/live/scale_live/form_component.html.heex
 #, elixir-autogen, elixir-format
 msgid "Attendees can see the results on their device"
 msgstr "参加者が自分の端末で結果を確認できるようにする"
@@ -1067,6 +1070,7 @@ msgstr "参加者が自分の端末でWebコンテンツを表示できるよう
 #: lib/claper_web/live/embed_live/form_component.html.heex
 #: lib/claper_web/live/poll_live/form_component.html.heex
 #: lib/claper_web/live/quiz_live/quiz_component.html.heex
+#: lib/claper_web/live/scale_live/form_component.html.heex
 #: lib/claper_web/live/transcription_live/form_component.html.heex
 #, elixir-autogen, elixir-format
 msgid "Options"
@@ -3032,6 +3036,7 @@ msgstr "フォームのタイトル"
 #: lib/claper_web/live/form_live/form_component.html.heex
 #: lib/claper_web/live/poll_live/form_component.html.heex
 #: lib/claper_web/live/quiz_live/quiz_component.html.heex
+#: lib/claper_web/live/scale_live/form_component.html.heex
 #: lib/claper_web/live/transcription_live/form_component.html.heex
 #, elixir-autogen, elixir-format
 msgid "Loading..."
@@ -3189,6 +3194,7 @@ msgid "Voted"
 msgstr "投票済み"
 
 #: lib/claper_web/live/event_live/form_component.ex
+#: lib/claper_web/live/event_live/scale_component.ex
 #, elixir-autogen, elixir-format
 msgid "Send"
 msgstr "送信"
@@ -3555,3 +3561,182 @@ msgstr "このページにアクセスするには管理者権限が必要です
 #, elixir-autogen, elixir-format
 msgid "You must log in to access this page."
 msgstr "このページにアクセスするにはログインが必要です。"
+
+#: lib/claper_web/live/stat_live/index.html.heex
+#, elixir-autogen, elixir-format
+msgid "%{count} answer"
+msgid_plural "%{count} answers"
+msgstr[0] "%{count}件の回答"
+
+#: lib/claper_web/live/event_live/manage_interaction_options_component.ex
+#: lib/claper_web/live/event_live/presenter.html.heex
+#: lib/claper_web/live/event_live/scale_component.ex
+#, elixir-autogen, elixir-format
+msgid "Answers"
+msgstr "回答"
+
+#: lib/claper_web/live/scale_live/form_component.html.heex
+#, elixir-autogen, elixir-format
+msgid "Attendees have already answered, so the range can no longer be changed."
+msgstr "参加者がすでに回答しているため、範囲は変更できません。"
+
+#: lib/claper_web/live/event_live/manage_interaction_options_component.ex
+#: lib/claper_web/live/event_live/presenter.html.heex
+#: lib/claper_web/live/event_live/scale_component.ex
+#: lib/claper_web/live/stat_live/index.html.heex
+#, elixir-autogen, elixir-format
+msgid "Average"
+msgstr "平均"
+
+#: lib/claper_web/live/scale_live/form_component.html.heex
+#, elixir-autogen, elixir-format
+msgid "Completely"
+msgstr "とてもある"
+
+#: lib/claper_web/live/scale_live/form_component.html.heex
+#, elixir-autogen, elixir-format
+msgid "Create slider"
+msgstr "スライダーを作成"
+
+#: lib/claper_web/live/event_live/scale_component.ex
+#, elixir-autogen, elixir-format
+msgid "Current slider"
+msgstr "現在のスライダー"
+
+#: lib/claper_web/live/event_live/manage.html.heex
+#, elixir-autogen, elixir-format
+msgid "Edit slider"
+msgstr "スライダーを編集"
+
+#: lib/claper_web/live/scale_live/form_component.html.heex
+#, elixir-autogen, elixir-format
+msgid "Highest value"
+msgstr "最大値"
+
+#: lib/claper_web/live/scale_live/form_component.html.heex
+#, elixir-autogen, elixir-format
+msgid "How confident do you feel about..."
+msgstr "…にどのくらい自信がありますか？"
+
+#: lib/claper_web/live/scale_live/form_component.html.heex
+#, elixir-autogen, elixir-format
+msgid "Label for the highest value"
+msgstr "最大値のラベル"
+
+#: lib/claper_web/live/scale_live/form_component.html.heex
+#, elixir-autogen, elixir-format
+msgid "Label for the lowest value"
+msgstr "最小値のラベル"
+
+#: lib/claper_web/live/event_live/manage.html.heex
+#: lib/claper_web/live/event_live/manage_floating_action_bar.ex
+#: lib/claper_web/live/event_live/manage_interaction_list_component.ex
+#, elixir-autogen, elixir-format
+msgid "Let your audience answer on a scale."
+msgstr "スケールで参加者に回答してもらいましょう。"
+
+#: lib/claper_web/live/scale_live/form_component.html.heex
+#, elixir-autogen, elixir-format
+msgid "Lowest value"
+msgstr "最小値"
+
+#: lib/claper_web/live/event_live/manage_interaction_options_component.ex
+#: lib/claper_web/live/event_live/presenter.html.heex
+#: lib/claper_web/live/event_live/scale_component.ex
+#: lib/claper_web/live/stat_live/index.html.heex
+#, elixir-autogen, elixir-format
+msgid "Median"
+msgstr "中央値"
+
+#: lib/claper_web/live/event_live/scale_component.ex
+#, elixir-autogen, elixir-format
+msgid "Move the slider and send your answer"
+msgstr "スライダーを動かして回答を送信してください"
+
+#: lib/claper_web/live/event_live/manage.html.heex
+#, elixir-autogen, elixir-format
+msgid "New slider"
+msgstr "新しいスライダー"
+
+#: lib/claper_web/live/event_live/manage_interaction_options_component.ex
+#: lib/claper_web/live/stat_live/index.html.heex
+#, elixir-autogen, elixir-format
+msgid "No answers yet"
+msgstr "まだ回答はありません"
+
+#: lib/claper_web/live/scale_live/form_component.html.heex
+#, elixir-autogen, elixir-format
+msgid "Not at all"
+msgstr "まったくない"
+
+#: lib/claper_web/live/event_live/show.ex
+#, elixir-autogen, elixir-format
+msgid "Please pick a value on the slider."
+msgstr "スライダーで値を選んでください。"
+
+#: lib/claper_web/live/scale_live/form_component.html.heex
+#, elixir-autogen, elixir-format
+msgid "Question"
+msgstr "質問"
+
+#: lib/claper_web/live/event_live/manage_interaction_options_component.ex
+#, elixir-autogen, elixir-format
+msgid "Results"
+msgstr "結果"
+
+#: lib/claper_web/live/event_live/manage.html.heex
+#: lib/claper_web/live/event_live/manage_floating_action_bar.ex
+#: lib/claper_web/live/event_live/manage_interaction_list_component.ex
+#, elixir-autogen, elixir-format
+msgid "Slider"
+msgstr "スライダー"
+
+#: lib/claper_web/live/stat_live/index.html.heex
+#, elixir-autogen, elixir-format
+msgid "Sliders"
+msgstr "スライダー"
+
+#: lib/claper_web/live/scale_live/form_component.html.heex
+#, elixir-autogen, elixir-format
+msgid "Step"
+msgstr "刻み幅"
+
+#: lib/claper_web/live/event_live/scale_component.ex
+#, elixir-autogen, elixir-format
+msgid "Thanks! Your answer has been recorded."
+msgstr "ありがとうございます！回答を受け付けました。"
+
+#: lib/claper_web/live/scale_live/form_component.html.heex
+#, elixir-autogen, elixir-format
+msgid "This will delete all answers and the slider itself, are you sure?"
+msgstr "このスライダーとすべての回答が削除されます。よろしいですか？"
+
+#: lib/claper_web/live/event_live/show.ex
+#, elixir-autogen, elixir-format
+msgid "You have already answered."
+msgstr "すでに回答済みです。"
+
+#: lib/claper_web/live/event_live/scale_component.ex
+#, elixir-autogen, elixir-format
+msgid "Your answer"
+msgstr "あなたの回答"
+
+#: lib/claper/scales/scale.ex
+#, elixir-autogen, elixir-format
+msgid "cannot be changed once attendees have answered"
+msgstr "参加者が回答した後は変更できません"
+
+#: lib/claper/scales/scale.ex
+#, elixir-autogen, elixir-format
+msgid "is too small, a slider can have at most %{count} values"
+msgstr "小さすぎます。スライダーの値は最大%{count}個までです"
+
+#: lib/claper/scales/scale.ex
+#, elixir-autogen, elixir-format
+msgid "must be greater than the lowest value"
+msgstr "最小値より大きい値を入力してください"
+
+#: lib/claper/scales/scale.ex
+#, elixir-autogen, elixir-format
+msgid "must divide the range evenly"
+msgstr "範囲を割り切れる値を入力してください"
