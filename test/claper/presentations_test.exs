@@ -144,6 +144,19 @@ defmodule Claper.PresentationsTest do
       assert Claper.Polls.get_poll!(poll_at_3.id).position == 3
     end
 
+    test "reorder_slides/3 moves a slider with its slide" do
+      presentation_file = presentation_file_fixture(%{length: 5})
+      presentation_state_fixture(%{presentation_file: presentation_file, position: 0})
+
+      scale =
+        Claper.ScalesFixtures.scale_fixture(%{presentation_file: presentation_file, position: 3})
+
+      assert {:ok, _presentation_file, _state} =
+               Presentations.reorder_slides(presentation_file, 3, 0)
+
+      assert Claper.Scales.get_scale!(scale.id).position == 0
+    end
+
     test "reorder_slides/3 rejects invalid positions" do
       presentation_file = presentation_file_fixture(%{length: 5})
 

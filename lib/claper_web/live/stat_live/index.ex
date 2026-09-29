@@ -23,7 +23,8 @@ defmodule ClaperWeb.StatLive.Index do
           polls: [:poll_opts],
           forms: [:form_submits],
           embeds: [],
-          quizzes: [:quiz_questions, quiz_questions: :quiz_question_opts]
+          quizzes: [:quiz_questions, quiz_questions: :quiz_question_opts],
+          scales: []
         ]
       )
 
@@ -56,6 +57,7 @@ defmodule ClaperWeb.StatLive.Index do
        calculate_engagement_rate(event, distinct_attendee_count)
      )
      |> assign(:posts, posts)
+     |> assign(:scale_reports, scale_reports(event))
      |> assign(:current_tab, :messages)}
   end
 
@@ -95,6 +97,7 @@ defmodule ClaperWeb.StatLive.Index do
   defp tab_to_atom("forms"), do: :forms
   defp tab_to_atom("web_content"), do: :web_content
   defp tab_to_atom("quizzes"), do: :quizzes
+  defp tab_to_atom("sliders"), do: :sliders
   defp tab_to_atom("transcriptions"), do: :transcriptions
   defp tab_to_atom(_), do: :messages
 
@@ -105,6 +108,7 @@ defmodule ClaperWeb.StatLive.Index do
       {:forms, event.presentation_file.forms},
       {:web_content, event.presentation_file.embeds},
       {:quizzes, event.presentation_file.quizzes},
+      {:sliders, event.presentation_file.scales},
       {:transcriptions, has_transcriptions?}
     ]
     |> Enum.filter(fn
@@ -167,16 +171,21 @@ defmodule ClaperWeb.StatLive.Index do
 
   defp average_polls(_event, 0), do: 0
 
+  # A slider is answered like a poll, so it counts towards the same share.
   defp average_polls(event, unique_attendees) do
     poll_ids = Claper.Polls.list_polls(event.presentation_file.id) |> Enum.map(& &1.id)
+    scale_ids = Claper.Scales.list_scales(event.presentation_file.id) |> Enum.map(& &1.id)
 
-    case poll_ids do
-      [] ->
+    case Enum.count(poll_ids) + Enum.count(scale_ids) do
+      0 ->
         0
 
-      poll_ids ->
-        distinct_votes = Claper.Stats.get_distinct_poll_votes(poll_ids)
-        distinct_votes / (Enum.count(poll_ids) * unique_attendees)
+      count ->
+        distinct_votes =
+          Claper.Stats.get_distinct_poll_votes(poll_ids) +
+            Claper.Stats.get_distinct_scale_responses(scale_ids)
+
+        distinct_votes / (count * unique_attendees)
     end
   end
 
@@ -207,6 +216,12 @@ defmodule ClaperWeb.StatLive.Index do
       form_ids ->
         distinct_submits = Claper.Stats.get_distinct_form_submits(form_ids)
         distinct_submits / (Enum.count(form_ids) * unique_attendees)
+    end
+  end
+
+  defp scale_reports(event) do
+    for scale <- event.presentation_file.scales do
+      %{scale: scale, results: Claper.Scales.results(scale)}
     end
   end
 

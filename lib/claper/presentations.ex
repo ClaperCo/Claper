@@ -262,7 +262,8 @@ defmodule Claper.Presentations do
     Claper.Polls.Poll,
     Claper.Forms.Form,
     Claper.Embeds.Embed,
-    Claper.Quizzes.Quiz
+    Claper.Quizzes.Quiz,
+    Claper.Scales.Scale
   ]
 
   @doc """
@@ -271,8 +272,9 @@ defmodule Claper.Presentations do
 
   Slide files are never renamed (a hash directory can be shared by duplicated
   events); instead the per-presentation `slide_order` permutation is updated.
-  Interactions (polls, forms, embeds, quizzes) and the current presentation
-  state position are remapped so they stay attached to their slide content.
+  Interactions (polls, forms, embeds, quizzes, sliders) and the current
+  presentation state position are remapped so they stay attached to their slide
+  content.
 
   Returns `{:ok, presentation_file, presentation_state}` or
   `{:error, :invalid_position}`.

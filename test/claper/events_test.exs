@@ -10,7 +10,8 @@ defmodule Claper.EventsTest do
     PresentationsFixtures,
     PollsFixtures,
     FormsFixtures,
-    EmbedsFixtures
+    EmbedsFixtures,
+    ScalesFixtures
   }
 
   setup_all do
@@ -434,6 +435,39 @@ defmodule Claper.EventsTest do
       assert duplicate_embed.title == embed.title
     end
 
+    test "duplicate_event/2 copies the settings of a slider and starts it unanswered" do
+      original = event_fixture()
+      presentation_file = presentation_file_fixture(%{event: original})
+
+      scale =
+        scale_fixture(%{
+          presentation_file: presentation_file,
+          title: "Confidence",
+          min_value: 0,
+          max_value: 100,
+          step: 10,
+          min_label: "Lost",
+          max_label: "Ready",
+          position: 2,
+          show_results: false
+        })
+
+      {:ok, _} = Claper.Scales.submit_response(original.uuid, scale, "a", "70")
+
+      {:ok, duplicate} = Events.duplicate_event(original.user_id, original.uuid)
+      duplicate = Repo.preload(duplicate, presentation_file: [scales: [:responses]])
+
+      assert [copy] = duplicate.presentation_file.scales
+      assert copy.id != scale.id
+      assert copy.title == "Confidence"
+      assert {copy.min_value, copy.max_value, copy.step} == {0, 100, 10}
+      assert {copy.min_label, copy.max_label} == {"Lost", "Ready"}
+      assert copy.position == 2
+      refute copy.show_results
+      assert copy.responses == []
+      assert length(Claper.Scales.list_responses(scale.id)) == 1
+    end
+
     test "duplicate_event/2 raises when an invalid user-event is supplied", context do
       original = Enum.at(context.alice_active_events, 0)
 
@@ -572,6 +606,31 @@ defmodule Claper.EventsTest do
                Claper.Presentations.get_presentation_file!(to_presentation_file.id, [:polls]).polls,
                0
              ).title == from_poll.title
+    end
+
+    test "import/3 copies sliders without their answers" do
+      user = user_fixture()
+      from_event = event_fixture(%{user: user, name: "from event"})
+      to_event = event_fixture(%{user: user, name: "to event"})
+      from_presentation_file = presentation_file_fixture(%{event: from_event})
+      to_presentation_file = presentation_file_fixture(%{event: to_event, hash: "444444"})
+
+      scale =
+        scale_fixture(%{
+          presentation_file: from_presentation_file,
+          min_value: -3,
+          max_value: 3,
+          max_label: "Agree"
+        })
+
+      {:ok, _} = Claper.Scales.submit_response(from_event.uuid, scale, "a", "2")
+
+      assert {:ok, %Event{}} = Events.import(user.id, from_event.uuid, to_event.uuid)
+
+      assert [imported] = Claper.Scales.list_scales(to_presentation_file.id)
+      assert imported.title == scale.title
+      assert {imported.min_value, imported.max_value, imported.max_label} == {-3, 3, "Agree"}
+      assert Claper.Scales.list_responses(imported.id) == []
     end
 
     test "import/3 fail with different user" do

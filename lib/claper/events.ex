@@ -508,12 +508,14 @@ defmodule Claper.Events do
          |> Ecto.Multi.run(:from_event, fn _repo, _changes ->
            {:ok,
             get_user_event!(user_id, from_event_uuid,
-              presentation_file: [polls: [:poll_opts], forms: [], embeds: []]
+              presentation_file: [polls: [:poll_opts], forms: [], embeds: [], scales: []]
             )}
          end)
          |> Ecto.Multi.run(:to_event, fn _repo, _changes ->
            {:ok,
-            get_user_event!(user_id, to_event_uuid, presentation_file: [:polls, :forms, :embeds])}
+            get_user_event!(user_id, to_event_uuid,
+              presentation_file: [:polls, :forms, :embeds, :scales]
+            )}
          end)
          |> Ecto.Multi.run(:polls, fn _repo, %{from_event: from_event, to_event: to_event} ->
            {:ok,
@@ -571,6 +573,26 @@ defmodule Claper.Events do
               end
             end)}
          end)
+         |> Ecto.Multi.run(:scales, fn _repo, %{from_event: from_event, to_event: to_event} ->
+           {:ok,
+            from_event.presentation_file.scales
+            |> Enum.each(fn scale ->
+              if scale.position < to_event.presentation_file.length do
+                Claper.Scales.create_scale(%{
+                  title: scale.title,
+                  min_value: scale.min_value,
+                  max_value: scale.max_value,
+                  step: scale.step,
+                  min_label: scale.min_label,
+                  max_label: scale.max_label,
+                  position: scale.position,
+                  enabled: scale.enabled,
+                  show_results: scale.show_results,
+                  presentation_file_id: to_event.presentation_file.id
+                })
+              end
+            end)}
+         end)
          |> Repo.transaction() do
       {:ok, %{to_event: to_event}} -> {:ok, to_event}
     end
@@ -602,7 +624,8 @@ defmodule Claper.Events do
           polls: [:poll_opts],
           forms: [],
           embeds: [],
-          quizzes: [quiz_questions: [:quiz_question_opts]]
+          quizzes: [quiz_questions: [:quiz_question_opts]],
+          scales: []
         ]
       )
 
@@ -619,6 +642,7 @@ defmodule Claper.Events do
       |> Ecto.Multi.run(:forms, fn _repo, changes -> duplicate_forms(original, changes) end)
       |> Ecto.Multi.run(:embeds, fn _repo, changes -> duplicate_embeds(original, changes) end)
       |> Ecto.Multi.run(:quizzes, fn _repo, changes -> duplicate_quizzes(original, changes) end)
+      |> Ecto.Multi.run(:scales, fn _repo, changes -> duplicate_scales(original, changes) end)
 
     case Repo.transaction(multi) do
       {:ok, %{event: event}} -> {:ok, event}
@@ -763,6 +787,27 @@ defmodule Claper.Events do
           end
 
         {:ok, quizzes}
+
+      _ ->
+        {:ok, nil}
+    end
+  end
+
+  defp duplicate_scales(original, changes) do
+    case get_in(original.presentation_file.scales) do
+      scales when is_list(scales) ->
+        scales =
+          for scale <- scales do
+            attrs =
+              Map.from_struct(scale)
+              |> Map.drop([:id, :inserted_at, :updated_at, :responses])
+              |> Map.put(:presentation_file_id, changes.presentation_file.id)
+
+            {:ok, scale} = Claper.Scales.create_scale(attrs)
+            scale
+          end
+
+        {:ok, scales}
 
       _ ->
         {:ok, nil}
