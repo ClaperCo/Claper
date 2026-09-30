@@ -10,7 +10,7 @@
 - Fix account creation with a soft-deleted email
 - Fix interaction list paging on resize
 - Fix removed facilitators being restored when adding a replacement
-- Replace Alpine.js menus with LiveView JS and keep localized dates and dismissible alerts with small browser helpers
+- Remove Alpine.js (#262)
 
 ## v.3.0.0
 
