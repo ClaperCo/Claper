@@ -7,7 +7,7 @@ defmodule Claper.MixProject do
     [
       app: :claper,
       version: @version,
-      elixir: "~> 1.12",
+      elixir: "~> 1.16",
       elixirc_paths: elixirc_paths(Mix.env()),
       start_permanent: Mix.env() == :prod,
       aliases: aliases(),
@@ -83,7 +83,7 @@ defmodule Claper.MixProject do
       {:phoenix, "~> 1.7.24"},
       {:phoenix_ecto, "~> 4.6"},
       {:ecto_sql, "~> 3.13"},
-      {:postgrex, "~> 0.22.2"},
+      {:postgrex, "~> 0.22.4"},
       {:phoenix_html, "~> 4.2"},
       {:phoenix_html_helpers, "~> 1.0"},
       {:phoenix_live_reload, "~> 1.6", only: :dev},
@@ -103,12 +103,10 @@ defmodule Claper.MixProject do
       {:jason, "~> 1.4"},
       {:sweet_xml, "~> 0.7"},
       {:plug_cowboy, "~> 2.8.1"},
-      # Floors for published advisories. cowboy, plug and mint are pulled in
-      # transitively, so a floor here is what keeps resolution off the
-      # vulnerable versions.
-      {:cowboy, "~> 2.18"},
+      {:cowboy, "~> 2.19"},
       {:plug, "~> 1.18.5"},
-      {:mint, "~> 1.9"},
+      {:mint, "~> 1.9.3"},
+      {:hpax, "~> 1.0.4"},
       {:hashids, "~> 2.1"},
       {:libcluster, "~> 3.5"},
       {:porcelain, "~> 2.0"},
