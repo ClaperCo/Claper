@@ -65,19 +65,13 @@ defmodule ClaperWeb.EventLive.WordCloudComponent do
           </span>
         </div>
 
-        <div
+        <ClaperWeb.Component.WordCloud.cloud
           :if={@word_cloud.show_results and @entries != [] and @words != []}
           id={"#{@id}-cloud"}
-          class="mt-4 flex flex-wrap items-baseline justify-center gap-x-3 gap-y-1 py-2"
-        >
-          <span
-            :for={word <- @words}
-            class="font-bold text-primary-300"
-            style={"font-size: #{ClaperWeb.Helpers.word_size(word.weight)}px"}
-          >
-            {word.text}
-          </span>
-        </div>
+          words={@words}
+          text_color="var(--color-primary-300)"
+          class="mt-4 py-2"
+        />
       </div>
     </div>
     """

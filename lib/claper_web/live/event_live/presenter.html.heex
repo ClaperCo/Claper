@@ -98,15 +98,12 @@
         {@current_word_cloud.title}
       </p>
 
-      <div class={"#{if @iframe, do: "gap-x-4 gap-y-2", else: "gap-x-8 gap-y-4"} flex flex-wrap items-baseline justify-center"}>
-        <span
-          :for={word <- @word_cloud_words}
-          class="font-bold text-white transition-all"
-          style={"font-size: #{if @iframe, do: ClaperWeb.Helpers.word_size(word.weight, 16, 44), else: ClaperWeb.Helpers.word_size(word.weight, 24, 72)}px"}
-        >
-          {word.text}
-        </span>
-      </div>
+      <ClaperWeb.Component.WordCloud.cloud
+        id={"word-cloud-#{@current_word_cloud.id}-words"}
+        words={@word_cloud_words}
+        text_color="white"
+        class="w-full"
+      />
     </div>
   </div>
   <!-- MESSAGES -->

@@ -1,5 +1,7 @@
 // LiveView hooks for client-side functionality
 
+import WordCloud from "./word_cloud.mjs";
+
 // Flash alerts also appear in plain HTTP layouts, outside the LiveView hook lifecycle.
 const alertSelector = "[data-auto-dismiss-alert]";
 const alertTimers = new WeakMap();
@@ -266,7 +268,9 @@ const Hooks = {
         this.chart.destroy();
       }
     }
-  }
+  },
+
+  WordCloud,
 };
 
 export default Hooks;

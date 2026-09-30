@@ -803,12 +803,20 @@ defmodule ClaperWeb.EventLiveTest do
       {:ok, _} = Claper.WordClouds.submit_entry(event.uuid, word_cloud, "a", "Elixir")
 
       {:ok, presenter_live, _html} = live(conn, ~p"/e/#{event.code}/presenter")
+      cloud = element(presenter_live, "#word-cloud-#{word_cloud.id}-words")
 
       assert has_element?(presenter_live, "#word-cloud", "Mood")
-      assert has_element?(presenter_live, "#word-cloud span", "Elixir")
+
+      assert [%{"id" => "elixir", "name" => "Elixir", "count" => 1}] =
+               cloud |> render() |> word_cloud_words()
 
       {:ok, _} = Claper.WordClouds.submit_entry(event.uuid, word_cloud, "b", "Grumpfwort")
-      assert has_element?(presenter_live, "#word-cloud span", "Grumpfwort")
+      {:ok, _} = Claper.WordClouds.submit_entry(event.uuid, word_cloud, "c", "ELIXIR")
+
+      assert [
+               %{"id" => "elixir", "name" => "Elixir", "count" => 2},
+               %{"id" => "grumpfwort", "name" => "Grumpfwort", "count" => 1}
+             ] = cloud |> render() |> word_cloud_words()
 
       {:ok, _} = Claper.WordClouds.hide_word(event.uuid, word_cloud, "grumpfwort")
       refute render(presenter_live) =~ "Grumpfwort"
@@ -861,7 +869,12 @@ defmodule ClaperWeb.EventLiveTest do
       {:ok, _} = Claper.WordClouds.update_word_cloud(event.uuid, word_cloud, %{title: "Renamed"})
 
       assert has_element?(presenter_live, "#word-cloud", "Renamed")
-      assert has_element?(presenter_live, "#word-cloud span", "Elixir")
+
+      assert presenter_live
+             |> element("#word-cloud-#{word_cloud.id}-words")
+             |> render()
+             |> word_cloud_names() == ["Elixir"]
+
       refute render(presenter_live) =~ "Grumpfwort"
     end
 
@@ -941,7 +954,10 @@ defmodule ClaperWeb.EventLiveTest do
 
       assert has_element?(stats_live, report, "Mood")
       assert has_element?(stats_live, report, "3 participants")
-      assert has_element?(stats_live, "#{report} div > span", "Elixir")
+
+      assert [%{"id" => "elixir", "name" => "Elixir", "count" => 2}] =
+               stats_live |> element(report) |> render() |> word_cloud_words()
+
       assert html =~ ~p"/export/word_clouds/#{word_cloud.id}"
       refute html =~ "Grumpfwort"
     end

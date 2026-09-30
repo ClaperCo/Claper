@@ -21,13 +21,4 @@ defmodule ClaperWeb.Helpers do
     url_regex = ~r/(https?:\/\/[^\s]+)/
     String.replace(text, url_regex, "")
   end
-
-  @doc """
-  Font size in pixels for a word cloud word of the given weight, from `base` at
-  0 up to `base + range` for the most frequent word at 100. The defaults fit
-  the attendee view and the report; the manage preview and the projected
-  screen pass their own values.
-  """
-  def word_size(weight, base \\ 14, range \\ 34) when is_number(weight),
-    do: base + round(weight / 100 * range)
 end

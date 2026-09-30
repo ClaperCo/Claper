@@ -397,15 +397,12 @@
                   <%= if report.words == [] do %>
                     <p class="italic text-gray-400">{gettext("No words have been sent")}</p>
                   <% else %>
-                    <div class="flex flex-wrap items-baseline justify-center gap-x-4 gap-y-2 py-4">
-                      <span
-                        :for={word <- report.words}
-                        class="font-bold text-white"
-                        style={"font-size: #{ClaperWeb.Helpers.word_size(word.weight)}px"}
-                      >
-                        {word.text}
-                      </span>
-                    </div>
+                    <ClaperWeb.Component.WordCloud.cloud
+                      id={"word-cloud-report-#{report.word_cloud.id}-words"}
+                      words={report.words}
+                      text_color="white"
+                      class="py-4"
+                    />
                     <div class="flex flex-col space-y-2 mt-4">
                       <div
                         :for={word <- report.words}

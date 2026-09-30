@@ -200,38 +200,26 @@ defmodule Claper.WordClouds do
   Returns the words of a word cloud, one per match key, leaving out the hidden
   ones.
 
-  Each word carries the text of its earliest submission, how often it was sent,
-  its share of all visible submissions in percent and its weight, which is its
-  count relative to the most frequent word (100 for that word). The most
-  frequent word comes first.
+  Each word carries the text of its earliest submission and how often it was
+  sent. The most frequent word comes first.
 
   ## Examples
 
       iex> list_words(word_cloud)
-      [%{key: "elixir", text: "Elixir", count: 3, percentage: 75.0, weight: 100.0}, ...]
+      [%{key: "elixir", text: "Elixir", count: 3}, ...]
 
   """
   def list_words(%WordCloud{id: id, hidden_words: hidden_words}) do
-    words =
-      from(e in Entry,
-        where: e.word_cloud_id == ^id and e.normalized_content not in ^hidden_words,
-        group_by: e.normalized_content,
-        select: %{
-          key: e.normalized_content,
-          text: fragment("(array_agg(? ORDER BY ?))[1]", e.content, e.id),
-          count: count(e.id)
-        }
-      )
-      |> Repo.all()
-
-    counts = Enum.map(words, & &1.count)
-    total = Enum.sum(counts)
-    most = Enum.max(counts, fn -> 0 end)
-
-    words
-    |> Enum.map(
-      &Map.merge(&1, %{percentage: &1.count / total * 100, weight: &1.count / most * 100})
+    from(e in Entry,
+      where: e.word_cloud_id == ^id and e.normalized_content not in ^hidden_words,
+      group_by: e.normalized_content,
+      select: %{
+        key: e.normalized_content,
+        text: fragment("(array_agg(? ORDER BY ?))[1]", e.content, e.id),
+        count: count(e.id)
+      }
     )
+    |> Repo.all()
     |> Enum.sort_by(&{-&1.count, &1.key})
   end
 

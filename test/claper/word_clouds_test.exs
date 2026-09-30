@@ -144,12 +144,10 @@ defmodule Claper.WordCloudsTest do
       assert {:ok, _} = WordClouds.submit_entry(event_uuid, word_cloud, "c", "ELIXIR")
       assert {:ok, _} = WordClouds.submit_entry(event_uuid, word_cloud, "d", "Phoenix")
 
-      assert [
-               %{key: "elixir", text: "Elixir", count: 3, percentage: 75.0, weight: 100.0},
-               %{key: "phoenix", text: "Phoenix", count: 1, percentage: 25.0, weight: weight}
-             ] = WordClouds.list_words(word_cloud)
-
-      assert_in_delta weight, 100 / 3, 0.001
+      assert WordClouds.list_words(word_cloud) == [
+               %{key: "elixir", text: "Elixir", count: 3},
+               %{key: "phoenix", text: "Phoenix", count: 1}
+             ]
     end
 
     test "non-ASCII words are grouped regardless of case" do
@@ -189,6 +187,29 @@ defmodule Claper.WordCloudsTest do
       assert [%{key: "\u00E4rger", count: 2}] = WordClouds.list_words(word_cloud)
     end
 
+    test "full-width letters and a final sigma fold as they do in the browser cloud" do
+      {word_cloud, event_uuid} = open_word_cloud()
+
+      assert {:ok, _} = WordClouds.submit_entry(event_uuid, word_cloud, "a", "design")
+
+      assert {:ok, _} =
+               WordClouds.submit_entry(
+                 event_uuid,
+                 word_cloud,
+                 "b",
+                 "\uFF24\uFF25\uFF33\uFF29\uFF27\uFF2E"
+               )
+
+      assert {:ok, _} =
+               WordClouds.submit_entry(event_uuid, word_cloud, "c", "\u03BF\u03B4\u03BF\u03C2")
+
+      assert {:ok, _} =
+               WordClouds.submit_entry(event_uuid, word_cloud, "d", "\u039F\u0394\u039F\u03A3")
+
+      assert [%{key: "design", count: 2}, %{key: "\u03BF\u03B4\u03BF\u03C2", count: 2}] =
+               WordClouds.list_words(word_cloud)
+    end
+
     test "a long entry is cut to 60 characters" do
       {word_cloud, event_uuid} = open_word_cloud()
       long = String.duplicate("a", 80)
@@ -203,6 +224,15 @@ defmodule Claper.WordCloudsTest do
 
       assert {:error, changeset} = WordClouds.submit_entry(event_uuid, word_cloud, "a", word)
       assert %{content: [_]} = errors_on(changeset)
+      assert WordClouds.list_entries(word_cloud.id) == []
+    end
+
+    test "a short word whose key outgrows its column is refused as too long" do
+      {word_cloud, event_uuid} = open_word_cloud()
+      word = String.duplicate("\uFDFA", 15)
+
+      assert {:error, changeset} = WordClouds.submit_entry(event_uuid, word_cloud, "a", word)
+      assert errors_on(changeset) == %{content: ["should be at most 255 character(s)"]}
       assert WordClouds.list_entries(word_cloud.id) == []
     end
 
@@ -316,7 +346,7 @@ defmodule Claper.WordCloudsTest do
       assert word_cloud.hidden_words == ["elixir"]
       assert_received {:word_cloud_updated, %WordCloud{hidden_words: ["elixir"]}}
 
-      assert [%{key: "phoenix", percentage: 100.0}] = WordClouds.list_words(word_cloud)
+      assert [%{key: "phoenix"}] = WordClouds.list_words(word_cloud)
       assert length(WordClouds.list_entries(word_cloud.id)) == 2
     end
 
