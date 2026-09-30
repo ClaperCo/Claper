@@ -136,8 +136,7 @@ defmodule ClaperWeb.EventLive.ShowTest do
 
       refute has_element?(view, ~s(form[phx-submit="submit-word"]))
       assert has_element?(view, "[data-submitted]")
-      assert has_element?(view, "##{word_cloud.id}-word-cloud-cloud", "Elixir")
-      assert has_element?(view, "##{word_cloud.id}-word-cloud-cloud", "Quokka")
+      assert attendee_cloud(view, word_cloud) == ["Elixir", "Quokka"]
 
       assert [_quokka, %{content: "Elixir", attendee_identifier: identifier, user_id: nil}] =
                Claper.WordClouds.list_entries(word_cloud.id)
@@ -199,7 +198,7 @@ defmodule ClaperWeb.EventLive.ShowTest do
         |> form(~s(form[phx-submit="submit-word"]), %{word: "Kind"})
         |> render_submit()
 
-      assert has_element?(view, "##{word_cloud.id}-word-cloud-cloud", "Kind")
+      assert attendee_cloud(view, word_cloud) == ["Kind"]
       refute html =~ "Grumpfwort"
     end
 
@@ -216,7 +215,7 @@ defmodule ClaperWeb.EventLive.ShowTest do
 
       {:ok, _} = Claper.WordClouds.submit_entry(event.uuid, word_cloud, "someone else", "Erlang")
 
-      assert has_element?(view, "##{word_cloud.id}-word-cloud-cloud", "Erlang")
+      assert attendee_cloud(view, word_cloud) == ["Elixir", "Erlang"]
     end
 
     test "an attendee can send as many words as the cloud allows", %{
@@ -279,6 +278,19 @@ defmodule ClaperWeb.EventLive.ShowTest do
       assert Claper.WordClouds.list_entries(word_cloud.id) == []
     end
 
+    test "a short word whose key outgrows its column is refused with a message", %{
+      presentation_file: presentation_file,
+      event: event
+    } do
+      word_cloud = open_word_cloud(presentation_file)
+      {:ok, view, _html} = live(build_conn(), ~p"/e/#{event.code}")
+
+      assert render_hook(view, "submit-word", %{"word" => String.duplicate("\uFDFA", 15)}) =~
+               "Your word could not be added. Please type a word or a short phrase."
+
+      assert Claper.WordClouds.list_entries(word_cloud.id) == []
+    end
+
     test "a word cloud that was closed meanwhile takes no words", %{
       presentation_file: presentation_file,
       event: event
@@ -298,6 +310,13 @@ defmodule ClaperWeb.EventLive.ShowTest do
     word_cloud_fixture(
       Map.merge(%{presentation_file: presentation_file, title: "One word"}, attrs)
     )
+  end
+
+  defp attendee_cloud(view, word_cloud) do
+    view
+    |> element("##{word_cloud.id}-word-cloud-cloud")
+    |> render()
+    |> word_cloud_names()
   end
 
   defp classes(document, selector) do

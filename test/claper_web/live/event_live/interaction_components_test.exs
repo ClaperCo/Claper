@@ -337,7 +337,7 @@ defmodule ClaperWeb.EventLive.InteractionComponentsTest do
   test "word cloud offers an input until the attendee has sent all their words" do
     word_cloud = %WordCloud{id: 7, title: "One word", max_entries: 2, show_results: true}
     entry = %Entry{content: "Elixir", normalized_content: "elixir"}
-    words = [%{key: "elixir", text: "Elixir", count: 1, percentage: 100.0, weight: 100.0}]
+    words = [%{key: "elixir", text: "Elixir", count: 1}]
 
     document =
       WordCloudComponent
@@ -365,7 +365,17 @@ defmodule ClaperWeb.EventLive.InteractionComponentsTest do
       |> Floki.parse_document!()
 
     assert Floki.find(one_sent_document, ~s(input[name="word"])) != []
-    assert Floki.find(one_sent_document, "#one-sent-word-cloud-component-cloud") != []
+
+    assert one_sent_document |> Floki.raw_html() |> word_cloud_words() == [
+             %{"id" => "elixir", "name" => "Elixir", "count" => 1}
+           ]
+
+    assert Floki.attribute(
+             one_sent_document,
+             "#one-sent-word-cloud-component-cloud",
+             "phx-update"
+           ) ==
+             ["ignore"]
 
     done_document =
       WordCloudComponent
@@ -398,7 +408,7 @@ defmodule ClaperWeb.EventLive.InteractionComponentsTest do
           %Entry{content: "Rude", normalized_content: "rude"},
           %Entry{content: "Kind", normalized_content: "kind"}
         ],
-        words: [%{key: "kind", text: "Kind", count: 1, percentage: 100.0, weight: 100.0}]
+        words: [%{key: "kind", text: "Kind", count: 1}]
       )
 
     assert html =~ "Kind"

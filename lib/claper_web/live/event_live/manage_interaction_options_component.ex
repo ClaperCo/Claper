@@ -301,8 +301,7 @@ defmodule ClaperWeb.EventLive.ManageInteractionOptionsComponent do
           phx-value-id={@word_cloud.id}
           phx-value-key={word.key}
           title={gettext("Hide this word")}
-          class="font-bold text-primary-600 hover:text-gray-400 hover:line-through"
-          style={"font-size: #{ClaperWeb.Helpers.word_size(word.weight, 12, 16)}px"}
+          class="text-sm font-bold text-primary-600 hover:text-gray-400 hover:line-through"
         >
           {word.text}<sup class="ml-0.5 text-[10px] font-normal text-gray-400">{word.count}</sup>
         </button>

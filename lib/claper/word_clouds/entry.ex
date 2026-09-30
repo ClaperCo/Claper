@@ -58,11 +58,20 @@ defmodule Claper.WordClouds.Entry do
   strips only ASCII spaces: the two would agree with `String.downcase/1` and
   `String.trim/1` on `hello` and disagree on `ÄRGER`, and the same word would
   then land in two groups.
+
+  The browser cloud merges names by NFKC and `toLowerCase()`, so the key uses
+  NFKC too and lowercases a final sigma the way the browser does in a Greek
+  word. Otherwise two keys could show as one word that can only be hidden in
+  part.
   """
   def normalize(nil), do: nil
 
-  def normalize(content) when is_binary(content),
-    do: content |> word() |> String.downcase()
+  def normalize(content) when is_binary(content) do
+    content
+    |> word()
+    |> :unicode.characters_to_nfkc_binary()
+    |> String.downcase(:greek)
+  end
 
   @doc false
   def changeset(entry, attrs) do
@@ -74,7 +83,7 @@ defmodule Claper.WordClouds.Entry do
     # The cut above counts graphemes and the columns count code points, and one
     # grapheme can carry any number of combining marks.
     |> validate_length(:content, max: 255, count: :codepoints)
-    |> validate_length(:normalized_content, max: 255, count: :codepoints)
+    |> validate_key_length()
     |> validate_user_or_attendee()
     |> unique_constraint(:content, name: :word_cloud_entries_attendee_word_index)
     |> unique_constraint(:content, name: :word_cloud_entries_user_word_index)
@@ -84,6 +93,24 @@ defmodule Claper.WordClouds.Entry do
     case get_field(changeset, :content) do
       nil -> changeset
       content -> put_change(changeset, :normalized_content, normalize(content))
+    end
+  end
+
+  # NFKC turns some single code points into as many as eighteen, so a short word
+  # can have a key its column cannot hold. The attendee typed the word, not the
+  # key, so the word is refused as too long.
+  defp validate_key_length(changeset) do
+    key = get_field(changeset, :normalized_content)
+
+    if key && is_nil(changeset.errors[:content]) && length(String.codepoints(key)) > 255 do
+      add_error(changeset, :content, "should be at most %{count} character(s)",
+        count: 255,
+        validation: :length,
+        kind: :max,
+        type: :string
+      )
+    else
+      changeset
     end
   end
 
