@@ -11,6 +11,11 @@
 - Fix interaction list paging on resize
 - Fix removed facilitators being restored when adding a replacement
 - Remove Alpine.js (#262)
+- Update to Elixir 1.16 version and others dependencies (new Oban schema v14)
+
+### Security
+
+- Raise Cowboy, Mint, HPAX and Postgrex floors to exclude versions affected by CVE.
 
 ## v.3.0.0
 
