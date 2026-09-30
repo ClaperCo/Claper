@@ -318,7 +318,7 @@ defmodule ClaperWeb.Component.Input do
       |> assign_new(:value, fn -> input_value(assigns.form, assigns.key) end)
 
     ~H"""
-    <div class="relative" x-data={"{input: '#{assigns.value}'}"}>
+    <div class="relative">
       {label(@form, @key, @label, class: "block text-sm font-medium #{@labelClass}")}
       <div class="mt-1">
         {email_input(@form, @key,
@@ -329,9 +329,7 @@ defmodule ClaperWeb.Component.Input do
           autocomplete: @key,
           value: @value,
           class:
-            "#{@fieldClass} read-only:opacity-50 shadow-base block w-full text-lg focus:ring-primary-500 focus:ring-2 outline-hidden rounded-md py-2 px-3",
-          "x-model": "input",
-          "x-ref": "input"
+            "#{@fieldClass} read-only:opacity-50 shadow-base block w-full text-lg focus:ring-primary-500 focus:ring-2 outline-hidden rounded-md py-2 px-3"
         )}
       </div>
       <%= if Keyword.has_key?(@form.errors, @key) do %>
@@ -349,10 +347,9 @@ defmodule ClaperWeb.Component.Input do
       |> assign_new(:placeholder, fn -> false end)
       |> assign_new(:labelClass, fn -> "text-gray-700" end)
       |> assign_new(:fieldClass, fn -> "bg-white" end)
-      |> assign_new(:value, fn -> Map.get(assigns.form.data, assigns.key, "") end)
 
     ~H"""
-    <div class="relative" x-data={"{input: '#{assigns.value}'}"}>
+    <div class="relative">
       {label(@form, @key, @name, class: "block text-sm font-medium #{@labelClass}")}
       <div class="mt-1">
         {password_input(@form, @key,
@@ -360,9 +357,7 @@ defmodule ClaperWeb.Component.Input do
           autofocus: @autofocus,
           placeholder: @placeholder,
           class:
-            "#{@fieldClass} shadow-base block w-full text-lg focus:ring-primary-500 focus:ring-2 outline-hidden rounded-md py-2 px-3",
-          "x-model": "input",
-          "x-ref": "input"
+            "#{@fieldClass} shadow-base block w-full text-lg focus:ring-primary-500 focus:ring-2 outline-hidden rounded-md py-2 px-3"
         )}
       </div>
       <%= if Keyword.has_key?(@form.errors, @key) do %>

@@ -19,10 +19,7 @@ defmodule ClaperWeb.Component.Alert do
         @kind == :info && "alert-success text-white",
         @kind == :error && "alert-error"
       ]}
-      x-data="{ open: true }"
-      x-show={if @stick, do: "true", else: "open"}
-      x-init={if @stick, do: nil, else: "setTimeout(() => { open = false }, 4000)"}
-      x-transition.opacity
+      data-auto-dismiss-alert={if @stick, do: nil, else: "true"}
       role="alert"
     >
       <div class="flex items-center gap-3">

@@ -551,10 +551,14 @@
         <h1 class="event-title">{@event.name}</h1>
 
         <p
+          id="waiting-event-date"
           class="event-date"
-          x-data={"{date: moment.utc('#{@event.started_at}').local().format('LLLL')}"}
-          x-text="date.charAt(0).toUpperCase() + date.slice(1)"
+          phx-hook="LocalDate"
+          data-utc={NaiveDateTime.to_iso8601(@event.started_at)}
+          data-format="LLLL"
+          data-capitalize="true"
         >
+          {Calendar.strftime(@event.started_at, "%B %d, %Y %H:%M")}
         </p>
 
         <div class="cd-row">
