@@ -4,7 +4,6 @@ import "phoenix_html";
 import { Socket, Presence } from "phoenix";
 import { LiveSocket } from "phoenix_live_view";
 import topbar from "../vendor/topbar";
-import Alpine from "alpinejs";
 import moment from "moment-timezone";
 import "moment/locale/de";
 import "moment/locale/fr";
@@ -21,7 +20,6 @@ import DateTimeLocal from "./date_time_local.mjs";
 import Split from "split-grid";
 import CustomHooks from "./hooks";
 import "./admin-charts.js";
-window.moment = moment;
 
 // Get supported locales from backend configuration or fallback to default list
 const supportedLocales = window.claperConfig?.supportedLocales || [
@@ -43,15 +41,28 @@ if (!supportedLocales.includes(locale)) {
   locale = "en";
 }
 
-window.moment.locale("en");
-window.moment.locale(locale);
-window.Alpine = Alpine;
-Alpine.start();
+moment.locale("en");
+moment.locale(locale);
 
 let csrfToken = document
   .querySelector("meta[name='csrf-token']")
   .getAttribute("content");
 let Hooks = {};
+// Format UTC server timestamps in the viewer's timezone after LiveView mounts.
+Hooks.LocalDate = {
+  mounted() {
+    this.formatDate();
+  },
+  updated() {
+    this.formatDate();
+  },
+  formatDate() {
+    const value = moment.utc(this.el.dataset.utc).local().format(this.el.dataset.format);
+    this.el.textContent = this.el.dataset.capitalize === "true"
+      ? value.charAt(0).toUpperCase() + value.slice(1)
+      : value;
+  },
+};
 
 Hooks.EmbeddedBanner = {
   mounted() {
@@ -515,6 +526,18 @@ Hooks.SlideSortable = {
 };
 Hooks.InteractionDrag = {
   mounted() {
+    this.lastInteractionListHeight = null;
+    this.interactionListResizeObserver = new ResizeObserver(([entry]) => {
+      const height = window.matchMedia("(min-width: 1024px)").matches
+        ? Math.round(entry.contentRect.height)
+        : 0;
+
+      if (height === this.lastInteractionListHeight) return;
+      this.lastInteractionListHeight = height;
+      this.pushEventTo(this.el, "interaction-list-resized", { height });
+    });
+    this.interactionListResizeObserver.observe(this.el);
+
     this.el.addEventListener("dragstart", (e) => {
       const item = e.target.closest("[data-interaction-id]");
       if (!item) return;
@@ -545,6 +568,9 @@ Hooks.InteractionDrag = {
         .querySelectorAll("[data-interaction-id]")
         .forEach((n) => n.classList.remove("opacity-40"));
     });
+  },
+  destroyed() {
+    this.interactionListResizeObserver.disconnect();
   },
 };
 Hooks.OpenPresenter = {
@@ -1169,14 +1195,6 @@ let liveSocket = new LiveSocket("/live", Socket, {
     host: window.location.host,
   },
   hooks: Hooks,
-  dom: {
-    onBeforeElUpdated(from, to) {
-      if (from._x_dataStack) {
-        window.Alpine.clone(from, to);
-        window.Alpine.initTree(to);
-      }
-    },
-  },
 });
 
 // Show progress bar on live navigation and form submits

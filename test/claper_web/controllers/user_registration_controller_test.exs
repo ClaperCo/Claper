@@ -10,12 +10,16 @@ defmodule ClaperWeb.UserRegistrationControllerTest do
     email_confirmation = Application.get_env(:claper, :email_confirmation)
     terms_url = Application.get_env(:claper, :terms_url)
     privacy_url = Application.get_env(:claper, :privacy_url)
+    oidc = Application.get_env(:claper, :oidc)
+
+    Application.put_env(:claper, :oidc, Keyword.put(oidc, :disable_password_login, false))
 
     on_exit(fn ->
       Application.put_env(:claper, :enable_account_creation, enable_account_creation)
       Application.put_env(:claper, :email_confirmation, email_confirmation)
       Application.put_env(:claper, :terms_url, terms_url)
       Application.put_env(:claper, :privacy_url, privacy_url)
+      Application.put_env(:claper, :oidc, oidc)
     end)
 
     :ok
@@ -107,6 +111,45 @@ defmodule ClaperWeb.UserRegistrationControllerTest do
   end
 
   describe "POST /users/register" do
+    for {account_creation, password_login_disabled} <- [{false, false}, {true, true}] do
+      test "rejects registration with account creation #{account_creation} and password login disabled #{password_login_disabled}",
+           %{conn: conn} do
+        Application.put_env(:claper, :enable_account_creation, unquote(account_creation))
+        Application.put_env(:claper, :email_confirmation, false)
+
+        Application.put_env(
+          :claper,
+          :oidc,
+          Keyword.merge(Application.get_env(:claper, :oidc),
+            enabled: true,
+            disable_password_login: unquote(password_login_disabled)
+          )
+        )
+
+        get_conn = get(conn, ~p"/users/register")
+        assert redirected_to(get_conn) == "/"
+        assert Phoenix.Flash.get(get_conn.assigns.flash, :error) =~ "Account creation is disabled"
+
+        email = unique_user_email()
+
+        conn =
+          post(conn, ~p"/users/register", %{
+            "user" => %{
+              "first_name" => "Jane",
+              "last_name" => "Doe",
+              "email" => email,
+              "password" => valid_user_password(),
+              "password_confirmation" => valid_user_password()
+            }
+          })
+
+        assert redirected_to(conn) == "/"
+        assert Phoenix.Flash.get(conn.assigns.flash, :error) =~ "Account creation is disabled"
+        refute get_session(conn, :user_token)
+        refute Accounts.get_user_by_email(email)
+      end
+    end
+
     test "re-renders the page with errors for invalid data", %{conn: conn} do
       Application.put_env(:claper, :enable_account_creation, true)
 

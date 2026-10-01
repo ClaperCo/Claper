@@ -6,14 +6,18 @@ defmodule ClaperWeb.EventLive.QuizComponent do
     assigns =
       assigns
       |> assign_new(:focus_mode, fn -> false end)
-      |> assign(:is_submitted, length(assigns.current_quiz_responses) > 0)
+      |> assign(:is_submitted, assigns.current_quiz_responses != [])
       |> assign(
         :current_question,
         check_current_question(assigns)
       )
       |> assign(
         :has_selection,
-        length(assigns.selected_quiz_question_opts) > 0
+        assigns.selected_quiz_question_opts != []
+      )
+      |> assign(
+        :response_opt_ids,
+        Enum.map(assigns.current_quiz_responses, & &1.quiz_question_opt_id)
       )
       |> assign(
         :response_opt_ids,
@@ -307,7 +311,7 @@ defmodule ClaperWeb.EventLive.QuizComponent do
   end
 
   defp check_current_question(assigns) do
-    if length(assigns.current_quiz_responses) > 0 && not assigns.quiz.show_results do
+    if assigns.current_quiz_responses != [] && not assigns.quiz.show_results do
       nil
     else
       Enum.at(assigns.quiz.quiz_questions, assigns.current_quiz_question_idx)

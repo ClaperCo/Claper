@@ -18,6 +18,8 @@ services:
       POSTGRES_PASSWORD: claper
       POSTGRES_USER: claper
       POSTGRES_DB: claper
+    ports:
+      - 5432:5432
     networks:
       - claper-dev
   app:

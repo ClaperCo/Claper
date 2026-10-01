@@ -2,17 +2,21 @@ defmodule ClaperWeb.EventLive.ManageInteractionListComponent do
   use ClaperWeb, :live_component
 
   @per_page 6
+  @max_per_page 20
+  @fixed_content_height 200
+  @interaction_row_height 64
 
   def update(assigns, socket) do
     page = Map.get(socket.assigns, :page, 0)
+    per_page = Map.get(socket.assigns, :per_page, @per_page)
     total = length(assigns.interactions)
-    max_page = max(0, ceil(total / @per_page) - 1)
+    max_page = max_page(total, per_page)
     page = min(page, max_page)
 
     {:ok,
      socket
      |> assign(assigns)
-     |> assign(page: page, per_page: @per_page)}
+     |> assign(page: page, per_page: per_page)}
   end
 
   def handle_event("prev-page", _, socket) do
@@ -20,8 +24,28 @@ defmodule ClaperWeb.EventLive.ManageInteractionListComponent do
   end
 
   def handle_event("next-page", _, socket) do
-    max_page = max(0, ceil(length(socket.assigns.interactions) / @per_page) - 1)
+    max_page = max_page(length(socket.assigns.interactions), socket.assigns.per_page)
     {:noreply, assign(socket, page: min(max_page, socket.assigns.page + 1))}
+  end
+
+  def handle_event("interaction-list-resized", %{"height" => height}, socket)
+      when is_integer(height) do
+    per_page =
+      height
+      |> Kernel.-(@fixed_content_height)
+      |> div(@interaction_row_height)
+      |> max(@per_page)
+      |> min(@max_per_page)
+
+    first_interaction = socket.assigns.page * socket.assigns.per_page
+
+    page =
+      min(
+        div(first_interaction, per_page),
+        max_page(length(socket.assigns.interactions), per_page)
+      )
+
+    {:noreply, assign(socket, page: page, per_page: per_page)}
   end
 
   defp paginated_interactions(interactions, page, per_page) do
@@ -29,6 +53,8 @@ defmodule ClaperWeb.EventLive.ManageInteractionListComponent do
     |> Enum.drop(page * per_page)
     |> Enum.take(per_page)
   end
+
+  defp max_page(total, per_page), do: max(0, ceil(total / per_page) - 1)
 
   def render(assigns) do
     assigns =
@@ -41,7 +67,8 @@ defmodule ClaperWeb.EventLive.ManageInteractionListComponent do
     <div
       id="interaction-drag-list"
       phx-hook="InteractionDrag"
-      class="relative flex flex-col gap-2 border border-gray-200 rounded-2xl p-2"
+      phx-target={@myself}
+      class="relative flex flex-col gap-2 border border-gray-200 rounded-2xl p-2 lg:flex-1 lg:min-h-0 lg:overflow-y-auto"
     >
       <div class="flex items-center gap-2">
         <svg
@@ -115,9 +142,9 @@ defmodule ClaperWeb.EventLive.ManageInteractionListComponent do
           </svg>
         </.action_button>
 
-        <div class="static" x-data="{ open: false }" @click.outside="open = false">
+        <div class="static">
           <button
-            @click="open = !open"
+            phx-click={JS.toggle(to: "#interaction-more-menu")}
             class="flex flex-col items-center justify-center gap-0.5 py-2 rounded-xl text-gray-600 transition-colors hover:bg-primary-50 hover:text-primary-600 w-full"
           >
             <svg
@@ -138,15 +165,9 @@ defmodule ClaperWeb.EventLive.ManageInteractionListComponent do
           </button>
 
           <div
-            x-show="open"
-            x-transition:enter="transition ease-out duration-150"
-            x-transition:enter-start="opacity-0 scale-95"
-            x-transition:enter-end="opacity-100 scale-100"
-            x-transition:leave="transition ease-in duration-100"
-            x-transition:leave-start="opacity-100 scale-100"
-            x-transition:leave-end="opacity-0 scale-95"
-            class="absolute left-0 right-0 mt-1 bg-white border border-gray-100 rounded-2xl p-2 shadow-lg z-50"
-            x-cloak
+            id="interaction-more-menu"
+            phx-click-away={JS.hide(to: "#interaction-more-menu")}
+            class="hidden absolute left-0 right-0 mt-1 bg-white border border-gray-100 rounded-2xl p-2 shadow-lg z-50"
           >
             <.popup_item
               patch={~p"/e/#{@event_code}/manage/add/poll"}

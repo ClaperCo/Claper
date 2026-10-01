@@ -21,10 +21,7 @@ defmodule ClaperWeb.StatController do
       data =
         form.form_submits
         |> Enum.map(fn submit ->
-          form.fields
-          |> Enum.map(fn field ->
-            Map.get(submit.response, field.name, "")
-          end)
+          Enum.map(form.fields, &Map.get(submit.response, &1.name, ""))
         end)
 
       export_as_csv(conn, headers, data, "form-#{sanitize(form.title)}")

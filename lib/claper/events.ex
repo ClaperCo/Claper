@@ -441,21 +441,7 @@ defmodule Claper.Events do
       {:ok, event} ->
         with {:ok, event} <- Repo.update(event, returning: [:uuid]) do
           broadcast_all_users({:updated, event})
-
-          deleted_leaders =
-            attrs
-            |> Map.get("leaders", %{})
-            |> Map.values()
-            |> Enum.filter(fn
-              %{"delete" => "true"} -> true
-              _ -> false
-            end)
-
-          for %{"email" => leader_email} <- deleted_leaders,
-              leader = Accounts.get_user_by_email(leader_email),
-              not is_nil(leader) do
-            broadcast_user_events(leader.id, {:updated, event})
-          end
+          broadcast_deleted_leaders(attrs, event)
 
           {:ok, event}
         end
@@ -463,6 +449,22 @@ defmodule Claper.Events do
       {:error, changeset} ->
         {:error, %{changeset | action: :update}}
     end
+  end
+
+  defp broadcast_deleted_leaders(attrs, event) do
+    attrs
+    |> Map.get("leaders", %{})
+    |> Map.values()
+    |> Enum.each(fn
+      %{"delete" => "true", "email" => email} ->
+        case Accounts.get_user_by_email(email) do
+          nil -> :ok
+          leader -> broadcast_user_events(leader.id, {:updated, event})
+        end
+
+      _ ->
+        :ok
+    end)
   end
 
   @doc """
@@ -681,13 +683,7 @@ defmodule Claper.Events do
               Map.from_struct(poll)
               |> Map.drop([:id, :inserted_at, :updated_at])
               |> Map.put(:presentation_file_id, changes.presentation_file.id)
-              |> Map.put(
-                :poll_opts,
-                Enum.map(poll.poll_opts, fn opt ->
-                  Map.from_struct(opt)
-                  |> Map.drop([:id, :inserted_at, :updated_at, :vote_count])
-                end)
-              )
+              |> Map.put(:poll_opts, Enum.map(poll.poll_opts, &duplicate_poll_opt_attrs/1))
 
             {:ok, poll} = Claper.Polls.create_poll(attrs)
             poll
@@ -698,6 +694,11 @@ defmodule Claper.Events do
       _ ->
         {:ok, nil}
     end
+  end
+
+  defp duplicate_poll_opt_attrs(opt) do
+    Map.from_struct(opt)
+    |> Map.drop([:id, :inserted_at, :updated_at, :vote_count])
   end
 
   defp duplicate_forms(original, changes) do

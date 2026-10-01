@@ -1,3 +1,22 @@
+## v.3.1.0
+
+### Features
+
+- Add replies to messages (#241)
+
+### Fixes and improvements
+
+- Fix datetime being reset at every changes
+- Fix account creation with a soft-deleted email
+- Fix interaction list paging on resize
+- Fix removed facilitators being restored when adding a replacement
+- Remove Alpine.js (#262)
+- Update to Elixir 1.16 version and others dependencies (new Oban schema v14)
+
+### Security
+
+- Raise Cowboy, Mint, HPAX and Postgrex floors to exclude versions affected by CVE.
+
 ## v.3.0.0
 
 ### Features

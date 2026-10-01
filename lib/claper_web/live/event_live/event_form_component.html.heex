@@ -323,8 +323,14 @@
 
           <div class="flex flex-col gap-3">
             <%= inputs_for f, :leaders, fn l -> %>
+              <% removed? =
+                not is_nil(l.data.id) &&
+                  MapSet.member?(@removed_leader_ids, Integer.to_string(l.data.id)) %>
               <div
-                class="flex min-w-0 items-end gap-2"
+                class={[
+                  "flex min-w-0 items-end gap-2",
+                  (removed? || input_value(l, :delete) in [true, "true"]) && "hidden"
+                ]}
                 id={"facilitator-#{l.data.temp_id || l.id}"}
               >
                 <div class="avatar avatar-placeholder hidden shrink-0 pb-1 sm:flex">
@@ -352,13 +358,15 @@
                 {hidden_input(l, :user_email, value: @current_user.email)}
 
                 <%= if is_nil(l.data.temp_id) do %>
-                  {checkbox(l, :delete, class: "hidden")}
+                  {checkbox(l, :delete,
+                    class: "hidden",
+                    checked: removed? || input_value(l, :delete) in [true, "true"]
+                  )}
                   <button
                     type="button"
-                    phx-click={
-                      JS.set_attribute({"checked", "checked"}, to: "##{input_id(l, :delete)}")
-                      |> JS.hide(to: "#facilitator-#{l.id}")
-                    }
+                    phx-click="remove-stored-leader"
+                    phx-value-remove={l.data.id}
+                    phx-target={@myself}
                     aria-label={gettext("Remove facilitator")}
                     class="btn btn-circle btn-error !size-12 shrink-0"
                   >

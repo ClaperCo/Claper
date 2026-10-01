@@ -171,11 +171,24 @@ defmodule ClaperWeb.EventLive.PostComponent do
 
       <div
         id={"post-menu-#{@post.id}"}
-        class="absolute right-3 top-12 z-20 hidden rounded-xl bg-gray-950 px-4 py-3 text-sm shadow-2xl animate__faster"
+        class="absolute right-3 top-12 z-20 hidden space-y-2 rounded-xl bg-gray-950 px-4 py-3 text-sm shadow-2xl animate__faster"
       >
+        <button
+          type="button"
+          class="block font-semibold text-white"
+          data-reply-trigger
+          aria-controls={"reply-form-#{@post.uuid}"}
+          phx-click={
+            JS.hide(to: "#post-menu-#{@post.id}")
+            |> JS.show(to: "#reply-form-#{@post.uuid}", display: "flex")
+            |> JS.focus(to: "#reply-input-#{@post.uuid}")
+          }
+        >
+          {gettext("Reply")}
+        </button>
         {link(gettext("Delete"),
           to: "#",
-          class: "font-semibold text-supporting-red-400",
+          class: "block font-semibold text-supporting-red-400",
           phx_click: "delete",
           phx_value_id: @post.uuid,
           phx_value_event_id: @event.uuid,
@@ -184,6 +197,89 @@ defmodule ClaperWeb.EventLive.PostComponent do
       </div>
 
       <p class="break-words text-sm leading-5">{ClaperWeb.Helpers.format_body(@post.body)}</p>
+
+      <div :if={@post.replies != []} class="mt-2 space-y-1.5">
+        <div
+          :for={reply <- @post.replies}
+          id={"reply-#{reply.uuid}"}
+          class={[
+            "group/reply border-l-2 py-1 pl-3 pr-2 text-sm",
+            @own_message && !@host_message && "border-primary-300 text-white",
+            (!@own_message || @host_message) && "border-primary-400 text-gray-800"
+          ]}
+        >
+          <div class="mb-0.5 flex min-h-5 items-center gap-2">
+            <p class={[
+              "text-[10px] font-bold uppercase tracking-wide",
+              @own_message && !@host_message && "text-gray-300",
+              (!@own_message || @host_message) && "text-gray-500"
+            ]}>
+              {reply_author_name(reply)}
+            </p>
+            <span class={[
+              "text-[10px]",
+              @own_message && !@host_message && "text-gray-300",
+              (!@own_message || @host_message) && "text-gray-400"
+            ]}>
+              {Calendar.strftime(reply.inserted_at, "%H:%M")}
+            </span>
+            <button
+              :if={can_delete_reply?(reply, @is_leader, @current_user, @attendee_identifier)}
+              type="button"
+              phx-click="delete-reply"
+              phx-value-id={reply.uuid}
+              data-confirm={gettext("Are you sure?")}
+              aria-label={gettext("Delete reply")}
+              class="btn btn-ghost btn-circle ml-auto !size-7 min-h-0 opacity-0 group-hover/reply:opacity-100 group-focus-within/reply:opacity-100"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="size-4 text-error"
+                aria-hidden="true"
+              >
+                <path d="M4 7h16" />
+                <path d="M10 11v6" />
+                <path d="M14 11v6" />
+                <path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2l1-12" />
+                <path d="M9 7V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v3" />
+              </svg>
+            </button>
+          </div>
+          <p class="break-words leading-5">{ClaperWeb.Helpers.format_body(reply.body)}</p>
+        </div>
+      </div>
+
+      <form
+        :if={@show_actions}
+        id={"reply-form-#{@post.uuid}"}
+        phx-submit={JS.push("reply") |> JS.hide(to: "#reply-form-#{@post.uuid}")}
+        phx-value-id={@post.uuid}
+        class="mt-2 hidden min-w-0 items-center gap-2"
+      >
+        <label for={"reply-input-#{@post.uuid}"} class="sr-only">
+          {gettext("Write a reply...")}
+        </label>
+        <input
+          id={"reply-input-#{@post.uuid}"}
+          type="text"
+          name="reply_body"
+          placeholder={gettext("Write a reply...")}
+          autocomplete="off"
+          maxlength="255"
+          class="input input-sm !h-9 !min-h-9 min-w-0 flex-1 bg-base-100 text-base-content"
+          @keydown.stop
+        />
+        <button type="submit" class="btn btn-primary btn-sm !h-9 !min-h-9 shrink-0 gap-1.5">
+          <img src="/images/icons/send.svg" class="h-5 w-5" alt="" />
+          {gettext("Reply")}
+        </button>
+      </form>
 
       <div
         :if={
@@ -253,6 +349,28 @@ defmodule ClaperWeb.EventLive.PostComponent do
 
   defp author_name(%{name: name}) when is_binary(name) and name != "", do: name
   defp author_name(_post), do: gettext("Anonymous")
+
+  defp reply_author_name(%{author_role: :host}), do: gettext("Host")
+
+  defp reply_author_name(%{author_name: name}) when is_binary(name) and name != "", do: name
+
+  defp reply_author_name(_reply), do: gettext("Anonymous")
+
+  defp can_delete_reply?(_reply, true, _current_user, _attendee_identifier), do: true
+
+  defp can_delete_reply?(%{user_id: user_id}, _is_leader, %{id: user_id}, _attendee_identifier),
+    do: true
+
+  defp can_delete_reply?(
+         %{attendee_identifier: attendee_identifier},
+         _is_leader,
+         _current_user,
+         attendee_identifier
+       )
+       when not is_nil(attendee_identifier),
+       do: true
+
+  defp can_delete_reply?(_reply, _is_leader, _current_user, _attendee_identifier), do: false
 
   defp reaction_chip_classes(selected, dark_message) do
     [

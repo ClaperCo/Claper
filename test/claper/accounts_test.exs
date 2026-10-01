@@ -186,6 +186,20 @@ defmodule Claper.AccountsTest do
       assert oidc_user.user.first_name == "Local"
       assert oidc_user.user.last_name == "Name"
     end
+
+    test "creates a new account when the previous account with that email was deleted" do
+      deleted_user = user_fixture()
+      assert {:ok, deleted_user} = Accounts.delete_user(deleted_user)
+
+      assert {:ok, oidc_user} =
+               Accounts.get_or_create_user_with_oidc(
+                 oidc_user_attrs(%{email: deleted_user.email})
+               )
+
+      refute oidc_user.user.id == deleted_user.id
+      refute Accounts.deleted?(oidc_user.user)
+      assert Accounts.get_user_by_email(deleted_user.email).id == oidc_user.user.id
+    end
   end
 
   describe "change_user_email/2" do

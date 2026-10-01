@@ -17,7 +17,7 @@ const DateTimeLocal = {
   },
   syncLocalTime() {
     if (!this.utcTime.value) {
-      this.localTime.value = "";
+      this.setValue(this.localTime, "");
       return;
     }
 
@@ -26,21 +26,33 @@ const DateTimeLocal = {
 
     if (!Number.isNaN(date.getTime())) {
       const pad = (part) => String(part).padStart(2, "0");
-      this.localTime.value =
+      this.setValue(
+        this.localTime,
         `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}` +
-        `T${pad(date.getHours())}:${pad(date.getMinutes())}`;
+          `T${pad(date.getHours())}:${pad(date.getMinutes())}`,
+      );
     }
   },
   syncUtcTime() {
     if (!this.localTime.value) {
-      this.utcTime.value = "";
+      this.setValue(this.utcTime, "");
       return;
     }
 
     const date = new Date(this.localTime.value);
 
     if (!Number.isNaN(date.getTime())) {
-      this.utcTime.value = date.toISOString().slice(0, 19);
+      this.setValue(this.utcTime, date.toISOString().slice(0, 19));
+      this.setValue(this.localTime, this.localTime.value);
+    }
+  },
+
+  setValue(input, value) {
+    input.value = value;
+    if (value) {
+      input.setAttribute("value", value);
+    } else {
+      input.removeAttribute("value");
     }
   },
   destroyed() {

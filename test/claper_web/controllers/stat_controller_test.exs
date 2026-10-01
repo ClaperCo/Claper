@@ -78,9 +78,6 @@ defmodule ClaperWeb.StatControllerTest do
       assert header_line =~ "First Name"
       assert header_line =~ "Email Address"
 
-      # The CSV row must contain the values, proving header→response key
-      # alignment works for space-containing field names. Regression: when
-      # submissions were saved under a wrong key, the CSV row was empty.
       assert data_line =~ "Ada"
       assert data_line =~ "ada@example.com"
     end
