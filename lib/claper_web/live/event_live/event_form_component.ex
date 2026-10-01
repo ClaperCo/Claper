@@ -228,15 +228,8 @@ defmodule ClaperWeb.EventLive.EventFormComponent do
            })
          ) do
       {:ok, event} ->
-        with e <- Events.get_event!(event.uuid, [:leaders]) do
-          Enum.each(e.leaders, fn leader ->
-            Claper.Accounts.LeaderNotifier.deliver_event_invitation(
-              e.name,
-              leader.email,
-              url(~p"/events")
-            )
-          end)
-        end
+        e = Events.get_event!(event.uuid, [:leaders])
+        Enum.each(e.leaders, &deliver_invitation(e, &1))
 
         {:noreply,
          socket
@@ -254,25 +247,19 @@ defmodule ClaperWeb.EventLive.EventFormComponent do
            |> Map.put("user_id", socket.assigns.current_user.id)
          ) do
       {:ok, event} ->
-        with e <- Events.get_event!(event.uuid, [:presentation_file, :leaders]) do
-          Task.Supervisor.async_nolink(Claper.TaskSupervisor, fn ->
-            Claper.Tasks.Converter.convert(
-              socket.assigns.current_user.id,
-              "original.#{ext}",
-              hash,
-              ext,
-              e.presentation_file.id
-            )
-          end)
+        e = Events.get_event!(event.uuid, [:presentation_file, :leaders])
 
-          Enum.each(e.leaders, fn leader ->
-            Claper.Accounts.LeaderNotifier.deliver_event_invitation(
-              e.name,
-              leader.email,
-              url(~p"/events")
-            )
-          end)
-        end
+        Task.Supervisor.async_nolink(Claper.TaskSupervisor, fn ->
+          Claper.Tasks.Converter.convert(
+            socket.assigns.current_user.id,
+            "original.#{ext}",
+            hash,
+            ext,
+            e.presentation_file.id
+          )
+        end)
+
+        Enum.each(e.leaders, &deliver_invitation(e, &1))
 
         {:noreply,
          socket
@@ -332,21 +319,24 @@ defmodule ClaperWeb.EventLive.EventFormComponent do
   end
 
   defp send_email_to_leaders(socket, event) do
-    with e <- Events.get_event!(event.uuid, [:leaders]) do
-      # Get the leaders before the update
-      previous_leaders = socket.assigns.event.leaders
+    e = Events.get_event!(event.uuid, [:leaders])
+    # Get the leaders before the update
+    previous_leaders = socket.assigns.event.leaders
 
-      Enum.each(e.leaders, fn leader ->
-        # Only send email if leader was not present before the update
-        if !Enum.member?(previous_leaders, leader) do
-          Claper.Accounts.LeaderNotifier.deliver_event_invitation(
-            e.name,
-            leader.email,
-            url(~p"/events")
-          )
-        end
-      end)
-    end
+    Enum.each(e.leaders, fn leader ->
+      # Only send email if leader was not present before the update
+      if !Enum.member?(previous_leaders, leader) do
+        deliver_invitation(e, leader)
+      end
+    end)
+  end
+
+  defp deliver_invitation(event, leader) do
+    Claper.Accounts.LeaderNotifier.deliver_event_invitation(
+      event.name,
+      leader.email,
+      url(~p"/events")
+    )
   end
 
   def error_to_string(:too_large), do: gettext("Your file is too large")

@@ -108,7 +108,7 @@ defmodule ClaperWeb.StatLive.Index do
       {:transcriptions, has_transcriptions?}
     ]
     |> Enum.filter(fn
-      {_tab, entries} when is_list(entries) -> length(entries) > 0
+      {_tab, entries} when is_list(entries) -> entries != []
       {_tab, has_entries?} -> has_entries?
     end)
     |> Enum.map(fn {tab, _entries} -> tab end)

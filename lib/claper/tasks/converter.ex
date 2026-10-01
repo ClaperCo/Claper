@@ -163,22 +163,7 @@ defmodule Claper.Tasks.Converter do
          {:ok, imagemagick_command} <- get_imagemagick_command() do
       result =
         Enum.reduce_while(files, :ok, fn file, _acc ->
-          thumb_path = Path.join(thumbs_dir, Path.basename(file))
-
-          case Porcelain.exec(
-                 imagemagick_command,
-                 [
-                   file,
-                   "-resize",
-                   "200x",
-                   "-quality",
-                   "80",
-                   thumb_path
-                 ]
-               ) do
-            %Porcelain.Result{status: 0} -> {:cont, :ok}
-            error -> {:halt, {:error, error}}
-          end
+          generate_thumbnail(file, thumbs_dir, imagemagick_command)
         end)
 
       if result == :ok do
@@ -189,6 +174,25 @@ defmodule Claper.Tasks.Converter do
     else
       [] -> {:error, :missing_slides}
       {:error, _reason} = error -> error
+    end
+  end
+
+  defp generate_thumbnail(file, thumbs_dir, imagemagick_command) do
+    thumb_path = Path.join(thumbs_dir, Path.basename(file))
+
+    case Porcelain.exec(
+           imagemagick_command,
+           [
+             file,
+             "-resize",
+             "200x",
+             "-quality",
+             "80",
+             thumb_path
+           ]
+         ) do
+      %Porcelain.Result{status: 0} -> {:cont, :ok}
+      error -> {:halt, {:error, error}}
     end
   end
 

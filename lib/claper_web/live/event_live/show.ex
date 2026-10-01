@@ -1054,7 +1054,7 @@ defmodule ClaperWeb.EventLive.Show do
     if same_interaction do
       socket
     else
-      if length(socket.assigns.current_quiz_responses) > 0 do
+      if socket.assigns.current_quiz_responses != [] do
         socket
         |> assign(:current_quiz_question_idx, length(interaction.quiz_questions))
       else
