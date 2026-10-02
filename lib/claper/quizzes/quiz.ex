@@ -8,6 +8,7 @@ defmodule Claper.Quizzes.Quiz do
           position: integer() | nil,
           enabled: boolean(),
           show_results: boolean(),
+          reveal_answers: boolean(),
           allow_anonymous: boolean(),
           lti_line_item_url: String.t() | nil,
           lti_resource: Lti13.Resources.Resource.t() | nil,
@@ -23,6 +24,7 @@ defmodule Claper.Quizzes.Quiz do
     field :position, :integer, default: 0
     field :enabled, :boolean, default: false
     field :show_results, :boolean, default: true
+    field :reveal_answers, :boolean, default: true
     field :allow_anonymous, :boolean, default: false
     field :lti_line_item_url, :string
 
@@ -47,6 +49,7 @@ defmodule Claper.Quizzes.Quiz do
       :presentation_file_id,
       :enabled,
       :show_results,
+      :reveal_answers,
       :allow_anonymous,
       :lti_resource_id,
       :lti_line_item_url
@@ -65,4 +68,10 @@ defmodule Claper.Quizzes.Quiz do
     |> cast(attrs, [:lti_line_item_url])
     |> validate_required([:lti_line_item_url])
   end
+
+  @doc """
+  Returns true when the quiz is shown to the room, with its distribution,
+  its correct answers or both.
+  """
+  def on_screen?(%__MODULE__{} = quiz), do: quiz.show_results || quiz.reveal_answers
 end
