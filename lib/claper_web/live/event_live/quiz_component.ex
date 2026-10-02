@@ -7,6 +7,7 @@ defmodule ClaperWeb.EventLive.QuizComponent do
       assigns
       |> assign_new(:focus_mode, fn -> false end)
       |> assign(:is_submitted, assigns.current_quiz_responses != [])
+      |> assign(:results_visible, Claper.Quizzes.Quiz.on_screen?(assigns.quiz))
       |> assign(
         :current_question,
         check_current_question(assigns)
@@ -100,28 +101,31 @@ defmodule ClaperWeb.EventLive.QuizComponent do
               <%= for {opt, _idx} <- Enum.with_index(@current_question.quiz_question_opts) do %>
                 <%= if @is_submitted do %>
                   <% selected = Enum.member?(@response_opt_ids, opt.id) %>
+                  <% tone = review_tone(opt, selected, @quiz.reveal_answers) %>
                   <div class={[
                     "relative flex items-center justify-between rounded-xl border px-3 py-2 text-sm font-semibold transition-colors",
-                    opt.is_correct &&
+                    tone == :correct &&
                       "border-supporting-green-500 bg-supporting-green-900/40 text-supporting-green-200",
-                    !opt.is_correct && selected &&
+                    tone == :wrong &&
                       "border-supporting-red-400 bg-supporting-red-900/40 text-supporting-red-200",
-                    !opt.is_correct && !selected &&
-                      "border-gray-700 bg-gray-800 text-gray-300 opacity-60"
+                    tone == :picked && "border-primary-400 bg-primary-900/40 text-white",
+                    tone == :other && "border-gray-700 bg-gray-800 text-gray-300 opacity-60"
                   ]}>
                     <div class="flex min-w-0 items-center gap-3 text-left">
                       <span class={[
                         "grid h-4 w-4 shrink-0 place-items-center rounded border-2",
-                        opt.is_correct && "border-supporting-green-500",
-                        !opt.is_correct && selected && "border-supporting-red-400",
-                        !opt.is_correct && !selected && "border-gray-500"
+                        tone == :correct && "border-supporting-green-500",
+                        tone == :wrong && "border-supporting-red-400",
+                        tone == :picked && "border-primary-300",
+                        tone == :other && "border-gray-500"
                       ]}>
                         <span
                           :if={selected}
                           class={[
                             "h-1.5 w-1.5 rounded-sm",
-                            opt.is_correct && "bg-supporting-green-500",
-                            !opt.is_correct && "bg-supporting-red-400"
+                            tone == :correct && "bg-supporting-green-500",
+                            tone == :wrong && "bg-supporting-red-400",
+                            tone == :picked && "bg-primary-300"
                           ]}
                         >
                         </span>
@@ -129,7 +133,7 @@ defmodule ClaperWeb.EventLive.QuizComponent do
                       <span class="min-w-0 flex-1 pr-2">{opt.content}</span>
                     </div>
 
-                    <span class="shrink-0 text-xs font-bold">
+                    <span :if={@quiz.show_results} class="shrink-0 text-xs font-bold">
                       {opt.percentage}% ({opt.response_count})
                     </span>
                   </div>
@@ -169,14 +173,16 @@ defmodule ClaperWeb.EventLive.QuizComponent do
               <% end %>
             <% else %>
               <div class="mt-4 flex flex-col items-center justify-center text-center font-semibold text-white">
-                <%= if @quiz.show_results do %>
-                  <p class="text-sm text-gray-400">{gettext("Your score")}</p>
-                  <p class="mt-2 text-5xl font-bold">
-                    {elem(@quiz_score, 0)}/{elem(@quiz_score, 1)}
-                  </p>
+                <%= if @results_visible do %>
+                  <%= if @quiz.reveal_answers do %>
+                    <p class="text-sm text-gray-400">{gettext("Your score")}</p>
+                    <p class="mt-2 mb-6 text-5xl font-bold">
+                      {elem(@quiz_score, 0)}/{elem(@quiz_score, 1)}
+                    </p>
+                  <% end %>
                   <button
                     phx-click="show-quiz-results"
-                    class="btn-gradient mt-6 w-full rounded-lg px-3 py-2 text-sm font-bold"
+                    class="btn-gradient w-full rounded-lg px-3 py-2 text-sm font-bold"
                   >
                     {gettext("Show results")}
                   </button>
@@ -262,7 +268,7 @@ defmodule ClaperWeb.EventLive.QuizComponent do
 
           <div
             :if={
-              @is_submitted && @quiz.show_results &&
+              @is_submitted && @results_visible &&
                 @current_quiz_question_idx <= length(@quiz.quiz_questions) - 1
             }
             id="quiz-review-actions"
@@ -306,8 +312,13 @@ defmodule ClaperWeb.EventLive.QuizComponent do
     )
   end
 
+  defp review_tone(%{is_correct: true}, _selected, true), do: :correct
+  defp review_tone(_opt, true, true), do: :wrong
+  defp review_tone(_opt, true, _revealed), do: :picked
+  defp review_tone(_opt, false, _revealed), do: :other
+
   defp check_current_question(assigns) do
-    if assigns.current_quiz_responses != [] && not assigns.quiz.show_results do
+    if assigns.current_quiz_responses != [] && not Claper.Quizzes.Quiz.on_screen?(assigns.quiz) do
       nil
     else
       Enum.at(assigns.quiz.quiz_questions, assigns.current_quiz_question_idx)

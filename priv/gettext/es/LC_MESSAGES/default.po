@@ -1419,6 +1419,7 @@ msgstr "Por favor, inicia sesión para enviar tus respuestas"
 msgid "Sign in"
 msgstr "Iniciar sesión"
 
+#: lib/claper_web/live/event_live/manageable_quiz_component.ex
 #: lib/claper_web/live/stat_live/index.html.heex
 #, elixir-autogen, elixir-format
 msgid "Total submissions"
@@ -3557,3 +3558,13 @@ msgstr "Debes ser administrador para acceder a esta página."
 #, elixir-autogen, elixir-format
 msgid "You must log in to access this page."
 msgstr "Debes iniciar sesión para acceder a esta página."
+
+#: lib/claper_web/live/event_live/manage_interaction_options_component.ex
+#, elixir-autogen, elixir-format
+msgid "Hide correct answers"
+msgstr "Ocultar las respuestas correctas"
+
+#: lib/claper_web/live/event_live/manage_interaction_options_component.ex
+#, elixir-autogen, elixir-format
+msgid "Reveal correct answers"
+msgstr "Revelar las respuestas correctas"

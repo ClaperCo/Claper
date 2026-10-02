@@ -1419,6 +1419,7 @@ msgstr "Log in om je antwoorden in te dienen"
 msgid "Sign in"
 msgstr "Inloggen"
 
+#: lib/claper_web/live/event_live/manageable_quiz_component.ex
 #: lib/claper_web/live/stat_live/index.html.heex
 #, elixir-autogen, elixir-format
 msgid "Total submissions"
@@ -3559,3 +3560,13 @@ msgstr "Je moet beheerder zijn om deze pagina te bekijken."
 #, elixir-autogen, elixir-format
 msgid "You must log in to access this page."
 msgstr "Je moet inloggen om deze pagina te bekijken."
+
+#: lib/claper_web/live/event_live/manage_interaction_options_component.ex
+#, elixir-autogen, elixir-format
+msgid "Hide correct answers"
+msgstr "Juiste antwoorden verbergen"
+
+#: lib/claper_web/live/event_live/manage_interaction_options_component.ex
+#, elixir-autogen, elixir-format
+msgid "Reveal correct answers"
+msgstr "Juiste antwoorden onthullen"

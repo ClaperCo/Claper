@@ -87,6 +87,46 @@ defmodule Claper.QuizzesTest do
       assert updated_quiz.title == "Updated Title"
     end
 
+    test "create_quiz/1 shows results and reveals answers by default" do
+      presentation_file = presentation_file_fixture()
+
+      assert {:ok, quiz} =
+               Quizzes.create_quiz(%{
+                 title: "Defaults",
+                 position: 0,
+                 presentation_file_id: presentation_file.id,
+                 quiz_questions: [
+                   %{
+                     content: "Question",
+                     type: "qcm",
+                     quiz_question_opts: [%{content: "Yes", is_correct: true}]
+                   }
+                 ]
+               })
+
+      assert quiz.show_results
+      assert quiz.reveal_answers
+    end
+
+    test "update_quiz/3 reveals answers independently of the results" do
+      quiz = quiz_fixture()
+
+      assert {:ok, revealed} =
+               Quizzes.update_quiz(Ecto.UUID.generate(), quiz, %{reveal_answers: true})
+
+      refute revealed.show_results
+      assert Quizzes.get_quiz!(quiz.id).reveal_answers
+
+      assert {:ok, shown} =
+               Quizzes.update_quiz(Ecto.UUID.generate(), revealed, %{
+                 show_results: true,
+                 reveal_answers: false
+               })
+
+      assert shown.show_results
+      refute Quizzes.get_quiz!(quiz.id).reveal_answers
+    end
+
     test "delete_quiz/2 deletes the quiz" do
       quiz = quiz_fixture()
       event_uuid = Ecto.UUID.generate()

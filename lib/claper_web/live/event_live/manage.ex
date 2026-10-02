@@ -969,6 +969,24 @@ defmodule ClaperWeb.EventLive.Manage do
   end
 
   @impl true
+  def handle_event(
+        "checked",
+        %{"key" => "quiz_reveal_answers", "value" => value},
+        %{assigns: %{current_interaction: interaction}} = socket
+      ) do
+    {:ok, new_interaction} =
+      Claper.Quizzes.update_quiz(
+        socket.assigns.event.uuid,
+        interaction,
+        %{
+          :reveal_answers => value
+        }
+      )
+
+    {:noreply, socket |> assign(:current_interaction, new_interaction)}
+  end
+
+  @impl true
   def handle_event("checked", %{"key" => "review_quiz_questions"}, socket) do
     Phoenix.PubSub.broadcast(
       Claper.PubSub,

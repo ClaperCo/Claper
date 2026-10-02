@@ -1454,6 +1454,7 @@ msgstr "Vänligen logga in för att skicka dina svar"
 msgid "Sign in"
 msgstr "Logga in"
 
+#: lib/claper_web/live/event_live/manageable_quiz_component.ex
 #: lib/claper_web/live/stat_live/index.html.heex
 #, elixir-autogen, elixir-format
 msgid "Total submissions"
@@ -3593,3 +3594,13 @@ msgstr "Du måste vara administratör för att komma åt den här sidan."
 #, elixir-autogen, elixir-format
 msgid "You must log in to access this page."
 msgstr "Du måste logga in för att komma åt den här sidan."
+
+#: lib/claper_web/live/event_live/manage_interaction_options_component.ex
+#, elixir-autogen, elixir-format
+msgid "Hide correct answers"
+msgstr "Dölj rätta svar"
+
+#: lib/claper_web/live/event_live/manage_interaction_options_component.ex
+#, elixir-autogen, elixir-format
+msgid "Reveal correct answers"
+msgstr "Visa rätta svar"
