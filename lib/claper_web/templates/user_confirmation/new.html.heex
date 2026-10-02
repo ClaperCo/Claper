@@ -1,16 +1,93 @@
-<h1>Resend confirmation instructions</h1>
+<div>
+  <div class="relative min-h-screen grid bg-black">
+    <div class="flex min-h-screen flex-col md:flex-row items-stretch">
+      <div
+        class="hidden md:flex md:w-1/2 xl:w-3/5 flex-auto items-end justify-start overflow-hidden bg-cover bg-center p-10 text-white relative"
+        style="background-image: url(/images/client-login.jpg);"
+      >
+        <div class="absolute inset-0 bg-gradient-to-br from-black via-black/55 to-primary-900/70">
+        </div>
+        <div class="relative z-10 max-w-2xl space-y-8">
+          <img src="/images/logo-white.svg" class="w-auto h-16 lg:h-20" />
 
-<%= form_for :user, ~p"/users/confirm", fn f -> %>
-  {label(f, :email)}
-  {email_input(f, :email, required: true)}
+          <div class="space-y-4">
+            <p class="text-sm font-semibold uppercase tracking-[0.3em] text-primary-200">
+              {gettext("Your audience is waiting")}
+            </p>
+            <h1 class="text-4xl font-bold leading-tight text-white lg:text-6xl">
+              {gettext("Run live polls, Q&A, and reactions right from your slides.")}
+            </h1>
+            <p class="max-w-xl text-lg leading-8 text-gray-100/90 lg:text-xl">
+              {gettext(
+                "Open your dashboard, launch a session, and let your audience interact in real time."
+              )}
+            </p>
+          </div>
+        </div>
+      </div>
 
-  <div>
-    {submit("Resend confirmation instructions")}
+      <div class="flex w-full items-center justify-center p-8 md:w-1/2 md:p-10 lg:p-14 xl:w-2/5">
+        <div class="w-full max-w-xl">
+          <div class="space-y-6">
+            <div class="text-center md:text-left">
+              <a href="/" class="inline-flex items-center">
+                <img src="/images/logo.svg" class="h-10 w-auto" />
+              </a>
+
+              <p class="mt-8 text-sm font-semibold uppercase tracking-[0.3em] text-primary-300">
+                {gettext("Confirm account")}
+              </p>
+              <h2 class="mt-4 text-4xl font-bold text-white lg:text-5xl">
+                {gettext("Confirm your account")}
+              </h2>
+              <p class="mt-4 text-base leading-7 text-gray-300">
+                {gettext("Enter your email address and we'll send you a new confirmation link.")}
+              </p>
+            </div>
+
+            <.form :let={f} for={@conn} action={~p"/users/confirm"} as={:user} class="space-y-5">
+              <ClaperWeb.Component.Input.email
+                form={f}
+                key={:email}
+                labelClass="text-white"
+                fieldClass="bg-gray-900/80 text-white border border-white/10"
+                name={gettext("Email")}
+                placeholder={gettext("you@example.com")}
+                autofocus="true"
+                required="true"
+              />
+
+              <div class="pt-3">
+                <button type="submit" class="btn btn-primary w-full">
+                  {gettext("Resend confirmation instructions")}
+                </button>
+              </div>
+            </.form>
+
+            <div class="space-y-4 border-t border-white/10 pt-6 text-center md:text-left">
+              <p class="text-sm text-gray-300">
+                {gettext("Already confirmed?")}
+                {" "}
+                {link(gettext("Back to log in"),
+                  to: ~p"/users/log_in",
+                  class: "font-semibold text-primary-300 transition hover:text-primary-200"
+                )}
+              </p>
+
+              <%= if Application.get_env(:claper, :enable_account_creation) do %>
+                <p class="text-sm text-gray-300">
+                  {gettext("Still new here?")}
+                  {" "}
+                  {link(gettext("Create account"),
+                    to: ~p"/users/register",
+                    class: "font-semibold text-primary-300 transition hover:text-primary-200"
+                  )}
+                </p>
+              <% end %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
-<% end %>
-
-<p>
-  {link("Register", to: ~p"/users/register")} | {link("Log in",
-    to: ~p"/users/log_in"
-  )}
-</p>
+</div>

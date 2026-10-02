@@ -24,7 +24,7 @@ defmodule ClaperWeb.UserSettingsController do
         conn
         |> put_flash(
           :info,
-          "A link to confirm your email change has been sent to the new address."
+          gettext("A link to confirm your email change has been sent to the new address.")
         )
         |> redirect(to: ~p"/users/settings")
 
@@ -37,12 +37,12 @@ defmodule ClaperWeb.UserSettingsController do
     case Accounts.update_user_email(conn.assigns.current_user, token) do
       :ok ->
         conn
-        |> put_flash(:info, "Email changed successfully.")
+        |> put_flash(:info, gettext("Email changed successfully."))
         |> redirect(to: ~p"/users/settings")
 
       :error ->
         conn
-        |> put_flash(:error, "Email change link is invalid or it has expired.")
+        |> put_flash(:error, gettext("Email change link is invalid or it has expired."))
         |> redirect(to: ~p"/users/settings")
     end
   end

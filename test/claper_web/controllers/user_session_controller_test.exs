@@ -96,6 +96,45 @@ defmodule ClaperWeb.UserSessionControllerTest do
     end
   end
 
+  describe "POST /users/log_in" do
+    setup do
+      email_confirmation = Application.get_env(:claper, :email_confirmation)
+      on_exit(fn -> Application.put_env(:claper, :email_confirmation, email_confirmation) end)
+      :ok
+    end
+
+    test "shows the invalid credentials error in the visitor's language", %{
+      conn: conn,
+      user: user
+    } do
+      conn =
+        conn
+        |> put_req_header("accept-language", "de")
+        |> post(~p"/users/log_in", %{
+          "user" => %{"email" => user.email, "password" => "wrong password"}
+        })
+
+      assert html_response(conn, 200) =~ "Ungültige E-Mail-Adresse oder ungültiges Passwort"
+    end
+
+    test "asks unconfirmed users to confirm their account in their language", %{
+      conn: conn,
+      user: user
+    } do
+      Application.put_env(:claper, :email_confirmation, true)
+
+      conn =
+        conn
+        |> put_req_header("accept-language", "de")
+        |> post(~p"/users/log_in", %{
+          "user" => %{"email" => user.email, "password" => valid_user_password()}
+        })
+
+      assert html_response(conn, 200) =~ "Sie müssen Ihr Konto bestätigen"
+      refute get_session(conn, :user_token)
+    end
+  end
+
   describe "DELETE /users/log_out" do
     test "logs the user out", %{conn: conn, user: user} do
       conn = conn |> log_in_user(user) |> delete(~p"/users/log_out")

@@ -57,7 +57,9 @@ defmodule ClaperWeb.UserSessionController do
       if Application.get_env(:claper, :email_confirmation) and !user.confirmed_at do
         render(conn, "new.html",
           error_message:
-            "You need to confirm your account before logging in. Please check your email for confirmation instructions.",
+            gettext(
+              "You need to confirm your account before logging in. Please check your email for confirmation instructions."
+            ),
           oidc_provider_name: oidc_provider_name,
           oidc_logo_url: oidc_logo_url,
           oidc_enabled: oidc_enabled,
@@ -68,7 +70,7 @@ defmodule ClaperWeb.UserSessionController do
       end
     else
       render(conn, "new.html",
-        error_message: "Invalid email or password",
+        error_message: gettext("Invalid email or password"),
         oidc_provider_name: oidc_provider_name,
         oidc_logo_url: oidc_logo_url,
         oidc_enabled: oidc_enabled,

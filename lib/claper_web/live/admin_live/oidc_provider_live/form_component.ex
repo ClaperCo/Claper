@@ -100,9 +100,9 @@ defmodule ClaperWeb.AdminLive.OidcProviderLive.FormComponent do
             type="select"
             label={gettext("Response Type")}
             select_options={[
-              {"Authorization Code", "code"},
-              {"Implicit", "token"},
-              {"Hybrid", "code token"}
+              {gettext("Authorization Code"), "code"},
+              {gettext("Implicit"), "token"},
+              {gettext("Hybrid"), "code token"}
             ]}
             width_class="sm:col-span-3"
             description={gettext("OAuth 2.0 response type (defaults to 'code')")}
@@ -114,11 +114,11 @@ defmodule ClaperWeb.AdminLive.OidcProviderLive.FormComponent do
             form={@form}
             field={:response_mode}
             type="select"
-            label="Response Mode"
+            label={gettext("Response Mode")}
             select_options={[
-              {"Query", "query"},
-              {"Fragment", "fragment"},
-              {"Form Post", "form_post"}
+              {gettext("Query"), "query"},
+              {gettext("Fragment"), "fragment"},
+              {gettext("Form Post"), "form_post"}
             ]}
             width_class="sm:col-span-3"
             description={

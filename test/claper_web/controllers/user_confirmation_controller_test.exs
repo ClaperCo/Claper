@@ -9,7 +9,41 @@ defmodule ClaperWeb.UserConfirmationControllerTest do
     %{user: user_fixture()}
   end
 
+  describe "GET /users/confirm" do
+    test "renders the resend confirmation page", %{conn: conn} do
+      response = conn |> get(~p"/users/confirm") |> html_response(200)
+
+      assert response =~ "Confirm your account"
+      assert response =~ "Resend confirmation instructions"
+    end
+
+    test "renders the resend confirmation page in the visitor's language", %{conn: conn} do
+      response =
+        conn
+        |> put_req_header("accept-language", "de")
+        |> get(~p"/users/confirm")
+        |> html_response(200)
+
+      assert response =~ "Bestätigen Sie Ihr Konto"
+      assert response =~ "Bestätigungsanweisungen erneut senden"
+    end
+  end
+
   describe "POST /users/confirm" do
+    @tag :capture_log
+    test "tells the visitor in their language that instructions are on the way", %{
+      conn: conn,
+      user: user
+    } do
+      conn =
+        conn
+        |> put_req_header("accept-language", "de")
+        |> post(~p"/users/confirm", %{"user" => %{"email" => user.email}})
+
+      assert Phoenix.Flash.get(conn.assigns.flash, :info) =~
+               "Wenn sich Ihre E-Mail-Adresse in unserem System befindet"
+    end
+
     @tag :capture_log
     test "sends a new confirmation token", %{conn: conn, user: user} do
       conn =
@@ -92,6 +126,42 @@ defmodule ClaperWeb.UserConfirmationControllerTest do
                "User confirmation link is invalid or it has expired"
 
       refute Accounts.get_user!(user.id).confirmed_at
+    end
+
+    test "reports an invalid token in the visitor's language", %{conn: conn} do
+      conn =
+        conn
+        |> put_req_header("accept-language", "de")
+        |> get(~p"/users/confirm/#{"oops"}")
+
+      assert Phoenix.Flash.get(conn.assigns.flash, :error) ==
+               "Der Bestätigungslink ist ungültig oder abgelaufen."
+    end
+
+    test "confirms the account in the visitor's language", %{conn: conn, user: user} do
+      {:ok, token} =
+        Accounts.deliver_user_confirmation_instructions(user, &"/users/confirm/#{&1}")
+
+      conn =
+        conn
+        |> put_req_header("accept-language", "de")
+        |> get(~p"/users/confirm/#{token}")
+
+      assert Phoenix.Flash.get(conn.assigns.flash, :info) == "Benutzer erfolgreich bestätigt."
+    end
+  end
+
+  describe "GET /users/magic/:token" do
+    test "reports an invalid magic link in the visitor's language", %{conn: conn} do
+      conn =
+        conn
+        |> put_req_header("accept-language", "de")
+        |> get(~p"/users/magic/#{"oops"}")
+
+      assert redirected_to(conn) == "/"
+
+      assert Phoenix.Flash.get(conn.assigns.flash, :error) ==
+               "Der Anmeldelink ist ungültig oder abgelaufen."
     end
   end
 end

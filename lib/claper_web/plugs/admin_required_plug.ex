@@ -6,6 +6,8 @@ defmodule ClaperWeb.Plugs.AdminRequiredPlug do
   that only admin users can access certain routes.
   """
 
+  use Gettext, backend: ClaperWeb.Gettext
+
   import Plug.Conn
   import Phoenix.Controller
 
@@ -25,7 +27,7 @@ defmodule ClaperWeb.Plugs.AdminRequiredPlug do
       conn
     else
       conn
-      |> put_flash(:error, "You must be an admin to access this page.")
+      |> put_flash(:error, gettext("You must be an admin to access this page."))
       |> redirect(to: ~p"/events")
       |> halt()
     end
