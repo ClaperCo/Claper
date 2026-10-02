@@ -68,19 +68,15 @@ defmodule ClaperWeb.Plugs.Locale do
     known_locales = Gettext.known_locales(ClaperWeb.Gettext)
     user_locale = Map.get(conn.assigns.current_user || %{}, :locale)
 
-    accepted_languages =
-      extract_accept_language(conn)
-      |> Enum.reject(&(String.length(&1) > 2 && not Enum.member?(known_locales, &1)))
+    with [_ | _] = accepted_languages <- extract_accept_language(conn),
+         locale when is_binary(locale) <-
+           user_locale || Enum.find(accepted_languages, &Enum.member?(known_locales, &1)) do
+      Gettext.put_locale(ClaperWeb.Gettext, locale)
 
-    case accepted_languages do
-      [locale | _] ->
-        Gettext.put_locale(ClaperWeb.Gettext, user_locale || locale)
-
-        conn
-        |> put_session(:locale, user_locale || locale)
-
-      _ ->
-        conn
+      conn
+      |> put_session(:locale, locale)
+    else
+      _ -> conn
     end
   end
 
