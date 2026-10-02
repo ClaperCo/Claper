@@ -2,7 +2,7 @@ defmodule ClaperWeb.EventLive.Show do
   alias Claper.Interactions
   use ClaperWeb, :live_view
 
-  alias Claper.{Posts, Polls, Forms, Presentations, Quizzes, Stats, Transcriptions}
+  alias Claper.{Posts, Polls, Forms, Presentations, Quizzes, Scales, Stats, Transcriptions}
   alias ClaperWeb.Presence
 
   on_mount(ClaperWeb.AttendeeLiveAuth)
@@ -362,6 +362,24 @@ defmodule ClaperWeb.EventLive.Show do
   @impl true
   def handle_info({:quiz_deleted, %Claper.Quizzes.Quiz{}}, socket) do
     {:noreply, refresh_current_interaction(socket, true)}
+  end
+
+  @impl true
+  def handle_info({:scale_updated, %Scales.Scale{}}, socket) do
+    {:noreply, refresh_current_interaction(socket, true)}
+  end
+
+  @impl true
+  def handle_info({:scale_deleted, %Scales.Scale{}}, socket) do
+    {:noreply, refresh_current_interaction(socket, true)}
+  end
+
+  @impl true
+  def handle_info(
+        {:scale_response_added, %Scales.Scale{id: id}},
+        %{assigns: %{current_interaction: %Scales.Scale{id: id} = scale}} = socket
+      ) do
+    {:noreply, assign_visible_results(socket, scale)}
   end
 
   @impl true
@@ -731,6 +749,52 @@ defmodule ClaperWeb.EventLive.Show do
 
   @impl true
   def handle_event(
+        "scale-select",
+        %{"value" => value},
+        %{assigns: %{current_interaction: %Scales.Scale{} = scale}} = socket
+      )
+      when is_binary(value) do
+    with {value, ""} <- Integer.parse(value),
+         true <- value in Scales.Scale.points(scale) do
+      {:noreply, assign(socket, :scale_value, value)}
+    else
+      _ -> {:noreply, socket}
+    end
+  end
+
+  @impl true
+  def handle_event("scale-select", _params, socket), do: {:noreply, socket}
+
+  @impl true
+  def handle_event(
+        "submit-scale",
+        %{"value" => value},
+        %{assigns: %{current_interaction: %Scales.Scale{} = scale}} = socket
+      ) do
+    case Scales.submit_response(socket.assigns.event.uuid, scale, identity(socket), value) do
+      {:ok, _response} ->
+        {:noreply, load_current_interaction(socket, scale, true)}
+
+      {:error, :not_an_open_scale} ->
+        {:noreply, refresh_current_interaction(socket)}
+
+      {:error, %Ecto.Changeset{errors: errors}} ->
+        if Keyword.has_key?(errors, :scale_id) do
+          {:noreply,
+           socket
+           |> load_current_interaction(scale, true)
+           |> put_flash(:error, gettext("You have already answered."))}
+        else
+          {:noreply, put_flash(socket, :error, gettext("Please pick a value on the slider."))}
+        end
+    end
+  end
+
+  @impl true
+  def handle_event("submit-scale", _params, socket), do: {:noreply, socket}
+
+  @impl true
+  def handle_event(
         "next-question",
         _params,
         %{assigns: %{current_quiz_question_idx: current_quiz_question_idx}} = socket
@@ -1065,9 +1129,39 @@ defmodule ClaperWeb.EventLive.Show do
     end
   end
 
+  defp load_current_interaction(socket, %Scales.Scale{} = interaction, same_interaction) do
+    socket
+    |> assign(:current_interaction, interaction)
+    |> assign(:scale_response, Scales.get_response_for(interaction, identity(socket)))
+    |> maybe_reset_scale_value(interaction, same_interaction)
+    |> assign_visible_results(interaction)
+  end
+
   defp load_current_interaction(socket, interaction, _same_interaction) do
     socket |> assign(:current_interaction, interaction)
   end
+
+  defp maybe_reset_scale_value(socket, scale, same_interaction) do
+    if same_interaction and socket.assigns[:scale_value] in Scales.Scale.points(scale),
+      do: socket,
+      else: assign(socket, :scale_value, Scales.Scale.middle(scale))
+  end
+
+  # The results stay out of the assigns, and so out of the markup, until the
+  # presenter shares them and this attendee has answered.
+  defp assign_visible_results(
+         %{assigns: %{scale_response: %Scales.ScaleResponse{}}} = socket,
+         %Scales.Scale{show_results: true} = scale
+       ),
+       do: assign(socket, :scale_results, Scales.results(scale))
+
+  defp assign_visible_results(socket, _scale), do: assign(socket, :scale_results, nil)
+
+  defp identity(%{assigns: %{current_user: current_user}}) when is_map(current_user),
+    do: current_user.id
+
+  defp identity(%{assigns: %{attendee_identifier: attendee_identifier}}),
+    do: attendee_identifier
 
   defp maybe_reset_selected_poll_opt(socket, true) do
     socket

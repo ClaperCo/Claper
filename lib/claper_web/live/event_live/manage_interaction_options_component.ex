@@ -39,46 +39,21 @@ defmodule ClaperWeb.EventLive.ManageInteractionOptionsComponent do
       <div class="space-y-2 px-1">
         <%= case @current_interaction do %>
           <% %Claper.Polls.Poll{} -> %>
-            <.toggle_row
-              label={
-                if @state.poll_visible,
-                  do: gettext("Hide results on presentation"),
-                  else: gettext("Show results on presentation")
-              }
-              checked={@state.poll_visible}
-              key={:poll_visible}
-              shortcut={if @create == nil, do: "Z", else: nil}
+            <.results_on_presentation_toggle
+              state={@state}
+              create={@create}
               show_shortcut={@show_shortcut}
-            >
-              <:icon>
-                <svg
-                  :if={@state.poll_visible}
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  class="h-5 w-5"
-                >
-                  <path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M3 4h1m4 0h13" /><path d="M4 4v10a2 2 0 0 0 2 2h10m3.42 -.592c.359 -.362 .58 -.859 .58 -1.408v-10" /><path d="M12 16v4" /><path d="M9 20h6" /><path d="M8 12l2 -2m4 0l2 -2" /><path d="M3 3l18 18" />
-                </svg>
-                <svg
-                  :if={!@state.poll_visible}
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  class="h-5 w-5"
-                >
-                  <path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M3 4l18 0" /><path d="M4 4v10a2 2 0 0 0 2 2h12a2 2 0 0 0 2 -2v-10" /><path d="M12 16l0 4" /><path d="M9 20l6 0" /><path d="M8 12l3 -3l2 2l3 -3" />
-                </svg>
-              </:icon>
-            </.toggle_row>
+            />
+          <% %Claper.Scales.Scale{} -> %>
+            <div class="space-y-2">
+              <.results_on_presentation_toggle
+                state={@state}
+                create={@create}
+                show_shortcut={@show_shortcut}
+              />
+
+              <.scale_results_preview scale={@current_interaction} results={@scale_results} />
+            </div>
           <% %Claper.Quizzes.Quiz{} -> %>
             <div class="space-y-2">
               <.toggle_row
@@ -197,6 +172,102 @@ defmodule ClaperWeb.EventLive.ManageInteractionOptionsComponent do
               {gettext("No settings available for this interaction")}
             </p>
         <% end %>
+      </div>
+    </div>
+    """
+  end
+
+  attr :state, :map, required: true
+  attr :create, :string, default: nil
+  attr :show_shortcut, :boolean, default: true
+
+  defp results_on_presentation_toggle(assigns) do
+    ~H"""
+    <.toggle_row
+      label={
+        if @state.poll_visible,
+          do: gettext("Hide results on presentation"),
+          else: gettext("Show results on presentation")
+      }
+      checked={@state.poll_visible}
+      key={:poll_visible}
+      shortcut={if @create == nil, do: "Z", else: nil}
+      show_shortcut={@show_shortcut}
+    >
+      <:icon>
+        <svg
+          :if={@state.poll_visible}
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          class="h-5 w-5"
+        >
+          <path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M3 4h1m4 0h13" /><path d="M4 4v10a2 2 0 0 0 2 2h10m3.42 -.592c.359 -.362 .58 -.859 .58 -1.408v-10" /><path d="M12 16v4" /><path d="M9 20h6" /><path d="M8 12l2 -2m4 0l2 -2" /><path d="M3 3l18 18" />
+        </svg>
+        <svg
+          :if={!@state.poll_visible}
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          class="h-5 w-5"
+        >
+          <path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M3 4l18 0" /><path d="M4 4v10a2 2 0 0 0 2 2h12a2 2 0 0 0 2 -2v-10" /><path d="M12 16l0 4" /><path d="M9 20l6 0" /><path d="M8 12l3 -3l2 2l3 -3" />
+        </svg>
+      </:icon>
+    </.toggle_row>
+    """
+  end
+
+  attr :scale, Claper.Scales.Scale, required: true
+  attr :results, :map, required: true
+
+  defp scale_results_preview(assigns) do
+    ~H"""
+    <div class="rounded-2xl border border-gray-200 p-3">
+      <p class="mb-2 text-xs font-semibold text-gray-500">{gettext("Results")}</p>
+      <p :if={@results.count == 0} class="text-gray-400 italic text-sm">
+        {gettext("No answers yet")}
+      </p>
+      <div :if={@results.count > 0}>
+        <dl class="grid grid-cols-3 gap-2 text-center">
+          <div>
+            <dt class="text-[10px] text-gray-500">{gettext("Answers")}</dt>
+            <dd class="text-lg font-bold text-primary-600">{@results.count}</dd>
+          </div>
+          <div>
+            <dt class="text-[10px] text-gray-500">{gettext("Average")}</dt>
+            <dd class="text-lg font-bold text-primary-600">
+              {ClaperWeb.Helpers.format_number(@results.average)}
+            </dd>
+          </div>
+          <div>
+            <dt class="text-[10px] text-gray-500">{gettext("Median")}</dt>
+            <dd class="text-lg font-bold text-primary-600">
+              {ClaperWeb.Helpers.format_number(@results.median)}
+            </dd>
+          </div>
+        </dl>
+        <div class="mt-3 flex h-16 items-end gap-px">
+          <div
+            :for={point <- @results.distribution}
+            title={"#{point.value}: #{point.count}"}
+            class="flex-1 rounded-t bg-primary-400"
+            style={"height: #{max(point.weight, 2)}%"}
+          >
+          </div>
+        </div>
+        <div class="mt-1 flex justify-between text-[10px] text-gray-500">
+          <span>{@scale.min_label || @scale.min_value}</span>
+          <span>{@scale.max_label || @scale.max_value}</span>
+        </div>
       </div>
     </div>
     """

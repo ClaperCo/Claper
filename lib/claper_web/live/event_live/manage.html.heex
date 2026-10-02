@@ -27,6 +27,7 @@
           state={@state}
           show_shortcut={false}
           current_interaction={@current_interaction}
+          scale_results={@scale_results}
         />
       </div>
     </div>
@@ -175,6 +176,35 @@
                 </div>
               </a>
             </li>
+            <li id="option-7" role="option" tabindex="-1">
+              <a
+                data-phx-link="patch"
+                data-phx-link-state="push"
+                href={~p"/e/#{@event.code}/manage/add/scale"}
+                class="group flex select-none rounded-xl p-3 w-full hover:bg-gray-200 cursor-pointer"
+              >
+                <div class="flex h-12 w-12 flex-none text-white items-center justify-center rounded-lg bg-primary">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke-width="1.5"
+                    stroke="currentColor"
+                    class="w-7 h-7"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M10.5 6h9.75M10.5 6a1.5 1.5 0 1 1-3 0m3 0a1.5 1.5 0 1 0-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-9.75 0h9.75"
+                    />
+                  </svg>
+                </div>
+                <div class="ml-4 flex-auto text-left">
+                  <p class="font-medium text-gray-700">{gettext("Slider")}</p>
+                  <p class="text-gray-500">{gettext("Let your audience answer on a scale.")}</p>
+                </div>
+              </a>
+            </li>
             <li :if={@transcription_globally_enabled} id="option-5" role="option" tabindex="-1">
               <a
                 :if={!(@transcription_config && @transcription_config.id)}
@@ -313,6 +343,26 @@
               event={@event}
               presentation_file={@event.presentation_file}
               quiz={@quiz}
+              live_action={@create_action}
+              position={@state.position}
+              return_to={~p"/e/#{@event.code}/manage"}
+            />
+          </div>
+        <% end %>
+        <%= if @create == "scale" do %>
+          <div class="scroll-py-3 overflow-y-auto p-6">
+            <p class="text-base font-bold text-secondary mb-5">
+              {case @create_action do
+                :new -> gettext("New slider")
+                :edit -> gettext("Edit slider")
+              end}
+            </p>
+            <.live_component
+              module={ClaperWeb.ScaleLive.FormComponent}
+              id="scale-create"
+              event_uuid={@event.uuid}
+              presentation_file={@event.presentation_file}
+              scale={@scale}
               live_action={@create_action}
               position={@state.position}
               return_to={~p"/e/#{@event.code}/manage"}
@@ -576,6 +626,7 @@
           create={@create}
           state={@state}
           current_interaction={@current_interaction}
+          scale_results={@scale_results}
         />
       </div>
     </aside>

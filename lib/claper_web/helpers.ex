@@ -21,4 +21,18 @@ defmodule ClaperWeb.Helpers do
     url_regex = ~r/(https?:\/\/[^\s]+)/
     String.replace(text, url_regex, "")
   end
+
+  @doc """
+  Formats a slider average or median with at most one decimal, or as a dash
+  while nobody has answered.
+  """
+  def format_number(nil), do: "-"
+
+  def format_number(number) do
+    rounded = Float.round(number / 1, 1)
+
+    if rounded == trunc(rounded),
+      do: Integer.to_string(trunc(rounded)),
+      else: Float.to_string(rounded)
+  end
 end
