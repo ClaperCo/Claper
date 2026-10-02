@@ -4,11 +4,13 @@
       match?(%Claper.Polls.Poll{}, @current_interaction) ||
       match?(%Claper.Forms.Form{}, @current_interaction) ||
       match?(%Claper.Quizzes.Quiz{}, @current_interaction) ||
+      match?(%Claper.WordClouds.WordCloud{}, @current_interaction) ||
       match?(%Claper.Embeds.Embed{attendee_visibility: true}, @current_interaction) %>
   <% interaction_mode? =
     match?(%Claper.Polls.Poll{}, @current_interaction) ||
       match?(%Claper.Forms.Form{}, @current_interaction) ||
       match?(%Claper.Quizzes.Quiz{}, @current_interaction) ||
+      match?(%Claper.WordClouds.WordCloud{}, @current_interaction) ||
       match?(%Claper.Embeds.Embed{attendee_visibility: true}, @current_interaction) %>
   <% captions_visible? =
     @transcription_config && @transcription_config.enabled &&
@@ -196,6 +198,16 @@
                 current_quiz_responses={@current_quiz_responses}
                 quiz_score={@quiz_score}
                 focus_mode
+              />
+            </div>
+          <% %Claper.WordClouds.WordCloud{} -> %>
+            <div class="max-h-[40dvh] overflow-y-auto overscroll-contain p-3">
+              <.live_component
+                module={ClaperWeb.EventLive.WordCloudComponent}
+                id={"#{@current_interaction.id}-word-cloud"}
+                word_cloud={@current_interaction}
+                entries={@word_cloud_entries}
+                words={@word_cloud_words}
               />
             </div>
           <% %Claper.Embeds.Embed{attendee_visibility: true} -> %>

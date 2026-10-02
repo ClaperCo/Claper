@@ -27,6 +27,7 @@
           state={@state}
           show_shortcut={false}
           current_interaction={@current_interaction}
+          word_cloud_words={@word_cloud_words}
         />
       </div>
     </div>
@@ -175,6 +176,37 @@
                 </div>
               </a>
             </li>
+            <li id="option-6" role="option" tabindex="-1">
+              <a
+                data-phx-link="patch"
+                data-phx-link-state="push"
+                href={~p"/e/#{@event.code}/manage/add/word_cloud"}
+                class="group flex select-none rounded-xl p-3 w-full hover:bg-gray-200 cursor-pointer"
+              >
+                <div class="flex h-12 w-12 flex-none text-white items-center justify-center rounded-lg bg-primary">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke-width="1.5"
+                    stroke="currentColor"
+                    class="w-7 h-7"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M2.25 15a4.5 4.5 0 0 0 4.5 4.5H18a3.75 3.75 0 0 0 1.332-7.257 3 3 0 0 0-3.758-3.848 5.25 5.25 0 0 0-10.233 2.33A4.502 4.502 0 0 0 2.25 15Z"
+                    />
+                  </svg>
+                </div>
+                <div class="ml-4 flex-auto text-left">
+                  <p class="font-medium text-gray-700">{gettext("Word Cloud")}</p>
+                  <p class="text-gray-500">
+                    {gettext("Let your audience answer in their own words.")}
+                  </p>
+                </div>
+              </a>
+            </li>
             <li :if={@transcription_globally_enabled} id="option-5" role="option" tabindex="-1">
               <a
                 :if={!(@transcription_config && @transcription_config.id)}
@@ -313,6 +345,26 @@
               event={@event}
               presentation_file={@event.presentation_file}
               quiz={@quiz}
+              live_action={@create_action}
+              position={@state.position}
+              return_to={~p"/e/#{@event.code}/manage"}
+            />
+          </div>
+        <% end %>
+        <%= if @create == "word_cloud" do %>
+          <div class="scroll-py-3 overflow-y-auto p-6">
+            <p class="text-base font-bold text-secondary mb-5">
+              {case @create_action do
+                :new -> gettext("New word cloud")
+                :edit -> gettext("Edit word cloud")
+              end}
+            </p>
+            <.live_component
+              module={ClaperWeb.WordCloudLive.FormComponent}
+              id="word-cloud-create"
+              event_uuid={@event.uuid}
+              presentation_file={@event.presentation_file}
+              word_cloud={@word_cloud}
               live_action={@create_action}
               position={@state.position}
               return_to={~p"/e/#{@event.code}/manage"}
@@ -576,6 +628,7 @@
           create={@create}
           state={@state}
           current_interaction={@current_interaction}
+          word_cloud_words={@word_cloud_words}
         />
       </div>
     </aside>
