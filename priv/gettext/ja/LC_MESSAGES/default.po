@@ -1422,6 +1422,7 @@ msgstr "回答を送信するにはログインしてください"
 msgid "Sign in"
 msgstr "ログイン"
 
+#: lib/claper_web/live/event_live/manageable_quiz_component.ex
 #: lib/claper_web/live/stat_live/index.html.heex
 #, elixir-autogen, elixir-format
 msgid "Total submissions"
@@ -4056,3 +4057,13 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "We sent a confirmation link to the email address of your account. Open it in this browser within 15 minutes."
 msgstr ""
+
+#: lib/claper_web/live/event_live/manage_interaction_options_component.ex
+#, elixir-autogen, elixir-format
+msgid "Hide correct answers"
+msgstr "正解を非表示"
+
+#: lib/claper_web/live/event_live/manage_interaction_options_component.ex
+#, elixir-autogen, elixir-format
+msgid "Reveal correct answers"
+msgstr "正解を表示"
