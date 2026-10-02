@@ -148,21 +148,49 @@ defmodule Claper.Posts do
   @doc """
   Creates a post.
 
+  The author is the third argument, never a field in `attrs`: pass the `%User{}`
+  the caller is authenticated as, or nothing at all for an anonymous attendee.
+  A `"user_id"` travelling in `attrs` is ignored, so an event that requires a
+  login cannot be posted to by naming someone else in the payload.
+
   ## Examples
 
-      iex> create_post(event, %{field: value})
+      iex> create_post(event, %{field: value}, current_user)
       {:ok, %Post{}}
 
       iex> create_post(event, %{field: bad_value})
       {:error, %Ecto.Changeset{}}
 
   """
-  def create_post(event, attrs) do
+  def create_post(event, attrs, author \\ nil) do
     %Post{}
     |> Map.put(:event, event)
     |> Post.changeset(attrs)
+    |> put_author(author)
+    |> validate_author_when_login_required(event)
     |> Repo.insert(returning: [:uuid])
     |> broadcast(:post_created)
+  end
+
+  defp put_author(changeset, %Claper.Accounts.User{id: id}),
+    do: Ecto.Changeset.put_change(changeset, :user_id, id)
+
+  defp put_author(changeset, nil), do: changeset
+
+  # An event whose moderator requires a login to post only accepts messages from
+  # an authenticated author, whichever caller builds them. The check reads the
+  # setting from the database, so a caller working from a state it loaded before
+  # the moderator turned it on cannot slip a message past it either.
+  defp validate_author_when_login_required(changeset, event) do
+    event_id = Map.get(event, :id)
+    author_id = Ecto.Changeset.get_field(changeset, :user_id)
+
+    if is_nil(author_id) && event_id &&
+         Claper.Presentations.authenticated_chat_only?(event_id) do
+      Ecto.Changeset.add_error(changeset, :user_id, "must be logged in to post a message")
+    else
+      changeset
+    end
   end
 
   @doc """

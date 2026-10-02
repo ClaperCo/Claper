@@ -18,6 +18,65 @@ defmodule ClaperWeb.UserSessionControllerTest do
       conn = conn |> log_in_user(user) |> get(~p"/users/log_in")
       assert redirected_to(conn) == "/events"
     end
+
+    test "logs the user back in to the page they came from", %{conn: conn, user: user} do
+      conn = get(conn, ~p"/users/log_in?#{[return_to: "/e/abcd1234"]}")
+
+      conn =
+        post(conn, ~p"/users/log_in", %{
+          "user" => %{"email" => user.email, "password" => valid_user_password()}
+        })
+
+      assert redirected_to(conn) == "/e/abcd1234"
+    end
+
+    test "ignores a return path pointing at another host", %{conn: conn, user: user} do
+      conn = get(conn, ~p"/users/log_in?#{[return_to: "https://evil.example.com/phish"]}")
+
+      conn =
+        post(conn, ~p"/users/log_in", %{
+          "user" => %{"email" => user.email, "password" => valid_user_password()}
+        })
+
+      assert redirected_to(conn) == "/events"
+    end
+
+    test "ignores a protocol relative return path", %{conn: conn, user: user} do
+      conn = get(conn, ~p"/users/log_in?#{[return_to: "//evil.example.com/phish"]}")
+
+      conn =
+        post(conn, ~p"/users/log_in", %{
+          "user" => %{"email" => user.email, "password" => valid_user_password()}
+        })
+
+      assert redirected_to(conn) == "/events"
+    end
+
+    test "ignores a return path holding a tab", %{conn: conn, user: user} do
+      conn = get(conn, ~p"/users/log_in?#{[return_to: "/\t/evil.example.com/phish"]}")
+
+      refute get_session(conn, :user_return_to)
+
+      conn =
+        post(conn, ~p"/users/log_in", %{
+          "user" => %{"email" => user.email, "password" => valid_user_password()}
+        })
+
+      assert redirected_to(conn) == "/events"
+    end
+
+    test "ignores a return path holding an escaped tab", %{conn: conn, user: user} do
+      conn = get(conn, ~p"/users/log_in?#{[return_to: "/%09/evil.example.com/phish"]}")
+
+      refute get_session(conn, :user_return_to)
+
+      conn =
+        post(conn, ~p"/users/log_in", %{
+          "user" => %{"email" => user.email, "password" => valid_user_password()}
+        })
+
+      assert redirected_to(conn) == "/events"
+    end
   end
 
   describe "GET /users/log_in with DISABLE_PASSWORD_LOGIN" do
