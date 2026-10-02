@@ -222,7 +222,8 @@ defmodule ClaperWeb.EventLive.Presenter do
   def handle_info({:quiz_updated, quiz}, socket) do
     {:noreply,
      socket
-     |> update(:current_quiz, fn _current_quiz -> quiz end)}
+     |> maybe_reset_question_idx(quiz)
+     |> assign(:current_quiz, Claper.Quizzes.set_percentages(quiz))}
   end
 
   @impl true
@@ -340,6 +341,7 @@ defmodule ClaperWeb.EventLive.Presenter do
       ) do
     {:noreply,
      socket
+     |> maybe_reset_question_idx(interaction)
      |> assign(:current_quiz, interaction)
      |> assign(:current_poll, nil)
      |> assign(:current_embed, nil)
@@ -380,12 +382,6 @@ defmodule ClaperWeb.EventLive.Presenter do
         {:review_quiz_questions},
         socket
       ) do
-    send_update(
-      ClaperWeb.EventLive.ManageableQuizComponent,
-      id: "#{socket.assigns.current_quiz.id}-quiz",
-      current_question_idx: 0
-    )
-
     {:noreply, socket |> assign(:current_question_idx, 0)}
   end
 
@@ -400,12 +396,6 @@ defmodule ClaperWeb.EventLive.Presenter do
          do: socket.assigns.current_question_idx + 1,
          else: -1
 
-    send_update(
-      ClaperWeb.EventLive.ManageableQuizComponent,
-      id: "#{socket.assigns.current_quiz.id}-quiz",
-      current_question_idx: idx
-    )
-
     {:noreply, socket |> assign(:current_question_idx, idx)}
   end
 
@@ -418,12 +408,6 @@ defmodule ClaperWeb.EventLive.Presenter do
       if socket.assigns.current_question_idx > 0,
         do: socket.assigns.current_question_idx - 1,
         else: 0
-
-    send_update(
-      ClaperWeb.EventLive.ManageableQuizComponent,
-      id: "#{socket.assigns.current_quiz.id}-quiz",
-      current_question_idx: idx
-    )
 
     {:noreply, socket |> assign(:current_question_idx, idx)}
   end
@@ -498,7 +482,17 @@ defmodule ClaperWeb.EventLive.Presenter do
              event.presentation_file.id,
              state.position
            ) do
-      socket |> assign(:current_quiz, quiz) |> assign(:current_question_idx, 0)
+      socket |> assign(:current_quiz, quiz) |> assign(:current_question_idx, -1)
+    end
+  end
+
+  defp maybe_reset_question_idx(socket, %Quiz{id: id} = quiz) do
+    same_quiz? = match?(%Quiz{id: ^id}, socket.assigns.current_quiz)
+
+    if same_quiz? and socket.assigns.current_question_idx < length(quiz.quiz_questions) do
+      socket
+    else
+      assign(socket, :current_question_idx, -1)
     end
   end
 

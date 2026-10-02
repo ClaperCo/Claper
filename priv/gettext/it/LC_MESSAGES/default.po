@@ -1429,6 +1429,7 @@ msgstr "Accedi per inviare le tue risposte"
 msgid "Sign in"
 msgstr "Accedi"
 
+#: lib/claper_web/live/event_live/manageable_quiz_component.ex
 #: lib/claper_web/live/stat_live/index.html.heex
 #, elixir-autogen, elixir-format
 msgid "Total submissions"
@@ -4101,3 +4102,13 @@ msgid "This event ends automatically after %{count} day without activity."
 msgid_plural "This event ends automatically after %{count} days without activity."
 msgstr[0] "Questo evento termina automaticamente dopo %{count} giorno senza attività."
 msgstr[1] "Questo evento termina automaticamente dopo %{count} giorni senza attività."
+
+#: lib/claper_web/live/event_live/manage_interaction_options_component.ex
+#, elixir-autogen, elixir-format
+msgid "Hide correct answers"
+msgstr "Nascondi le risposte corrette"
+
+#: lib/claper_web/live/event_live/manage_interaction_options_component.ex
+#, elixir-autogen, elixir-format
+msgid "Reveal correct answers"
+msgstr "Rivela le risposte corrette"

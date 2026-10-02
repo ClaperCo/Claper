@@ -1427,6 +1427,7 @@ msgstr "回答を送信するにはログインしてください"
 msgid "Sign in"
 msgstr "ログイン"
 
+#: lib/claper_web/live/event_live/manageable_quiz_component.ex
 #: lib/claper_web/live/stat_live/index.html.heex
 #, elixir-autogen, elixir-format
 msgid "Total submissions"
@@ -4093,3 +4094,13 @@ msgstr "イベントが終了しました"
 msgid "This event ends automatically after %{count} day without activity."
 msgid_plural "This event ends automatically after %{count} days without activity."
 msgstr[0] "このイベントは%{count}日間アクティビティがないと自動的に終了します。"
+
+#: lib/claper_web/live/event_live/manage_interaction_options_component.ex
+#, elixir-autogen, elixir-format
+msgid "Hide correct answers"
+msgstr "正解を非表示"
+
+#: lib/claper_web/live/event_live/manage_interaction_options_component.ex
+#, elixir-autogen, elixir-format
+msgid "Reveal correct answers"
+msgstr "正解を表示"
