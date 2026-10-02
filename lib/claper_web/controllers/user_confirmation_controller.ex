@@ -19,8 +19,9 @@ defmodule ClaperWeb.UserConfirmationController do
     conn
     |> put_flash(
       :info,
-      "If your email is in our system and it has not been confirmed yet, " <>
-        "you will receive an email with instructions shortly."
+      gettext(
+        "If your email is in our system and it has not been confirmed yet, you will receive an email with instructions shortly."
+      )
     )
     |> redirect(to: "/")
   end
@@ -31,7 +32,7 @@ defmodule ClaperWeb.UserConfirmationController do
     case Accounts.confirm_user(token) do
       {:ok, _} ->
         conn
-        |> put_flash(:info, "User confirmed successfully.")
+        |> put_flash(:info, gettext("User confirmed successfully."))
         |> redirect(to: ~p"/users/log_in")
 
       :error ->
@@ -45,7 +46,10 @@ defmodule ClaperWeb.UserConfirmationController do
 
           %{} ->
             conn
-            |> put_flash(:error, "User confirmation link is invalid or it has expired.")
+            |> put_flash(
+              :error,
+              gettext("User confirmation link is invalid or it has expired.")
+            )
             |> redirect(to: ~p"/")
         end
     end
@@ -68,7 +72,7 @@ defmodule ClaperWeb.UserConfirmationController do
 
           %{} ->
             conn
-            |> put_flash(:error, "Magic link is invalid or has expired.")
+            |> put_flash(:error, gettext("Magic link is invalid or has expired."))
             |> redirect(to: "/")
         end
     end

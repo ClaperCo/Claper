@@ -137,6 +137,18 @@ defmodule ClaperWeb.UserAuthTest do
                "You must log in to access this page."
     end
 
+    test "tells visitors to log in in their language", %{conn: conn} do
+      conn =
+        conn
+        |> put_req_header("accept-language", "de")
+        |> get(~p"/events")
+
+      assert redirected_to(conn) == ~p"/users/log_in"
+
+      assert Phoenix.Flash.get(conn.assigns.flash, :error) ==
+               "Sie müssen sich anmelden, um auf diese Seite zuzugreifen."
+    end
+
     test "stores the path to redirect to on GET", %{conn: conn} do
       halted_conn =
         %{conn | path_info: ["foo"], query_string: ""}
