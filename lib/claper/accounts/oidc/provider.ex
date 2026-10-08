@@ -13,6 +13,7 @@ defmodule Claper.Accounts.Oidc.Provider do
           scope: String.t(),
           active: boolean(),
           position: integer(),
+          logo_url: String.t() | nil,
           response_type: String.t(),
           response_mode: String.t(),
           inserted_at: NaiveDateTime.t(),
@@ -29,6 +30,7 @@ defmodule Claper.Accounts.Oidc.Provider do
     field :scope, :string, default: "openid email profile"
     field :active, :boolean, default: true
     field :position, :integer, default: 0
+    field :logo_url, :string
     field :response_type, :string, default: "code"
     field :response_mode, :string, default: "query"
 
@@ -50,6 +52,7 @@ defmodule Claper.Accounts.Oidc.Provider do
       :scope,
       :active,
       :position,
+      :logo_url,
       :response_type,
       :response_mode
     ])

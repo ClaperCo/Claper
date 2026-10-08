@@ -5,6 +5,7 @@ defmodule Claper.Repo.Migrations.AddSlugToOidcProviders do
     alter table(:oidc_providers) do
       add :slug, :string
       add :position, :integer, default: 0
+      add :logo_url, :string
     end
 
     # Backfill a URL-safe identifier from the display name. The login routes
@@ -52,6 +53,7 @@ defmodule Claper.Repo.Migrations.AddSlugToOidcProviders do
     drop unique_index(:oidc_users, [:issuer, :sub])
 
     alter table(:oidc_providers) do
+      remove :logo_url
       remove :position
       remove :slug
     end

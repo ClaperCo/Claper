@@ -221,7 +221,8 @@ config :claper, :oidc,
   logo_url: oidc_logo_url,
   property_mappings: oidc_property_mappings,
   auto_redirect_login: oidc_auto_redirect_login,
-  disable_password_login: disable_password_login
+  disable_password_login: disable_password_login,
+  disable_password_login_requested: disable_password_login_requested
 
 config :claper, Claper.Repo,
   url: database_url,
