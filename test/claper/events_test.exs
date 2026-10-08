@@ -302,6 +302,23 @@ defmodule Claper.EventsTest do
       assert attrs.expired_at == event.expired_at
     end
 
+    test "create_event/1 without started_at creates an unscheduled event" do
+      user = user_fixture()
+
+      assert {:ok, %Event{} = event} =
+               Events.create_event(%{name: "some name", code: "unsched", user_id: user.id})
+
+      assert is_nil(event.started_at)
+      assert Event.unscheduled?(event)
+      assert Event.started?(event)
+    end
+
+    test "update_event/2 can clear started_at" do
+      event = event_fixture()
+
+      assert {:ok, %Event{started_at: nil}} = Events.update_event(event, %{started_at: nil})
+    end
+
     test "create_event/1 with invalid data returns error changeset" do
       user = user_fixture()
 
@@ -322,7 +339,6 @@ defmodule Claper.EventsTest do
       assert {:error, %Ecto.Changeset{}} = Events.create_event(Map.delete(attrs, :name))
       assert {:error, %Ecto.Changeset{}} = Events.create_event(Map.delete(attrs, :code))
       assert {:error, %Ecto.Changeset{}} = Events.create_event(Map.delete(attrs, :user_id))
-      assert {:error, %Ecto.Changeset{}} = Events.create_event(Map.delete(attrs, :started_at))
 
       assert {:error, %Ecto.Changeset{}} =
                Events.create_event(Map.merge(attrs, %{code: too_short_code}))
@@ -457,7 +473,6 @@ defmodule Claper.EventsTest do
       assert {:error, %Ecto.Changeset{}} = Events.update_event(event, %{code: nil})
       assert {:error, %Ecto.Changeset{}} = Events.update_event(event, %{code: "tiny"})
       assert {:error, %Ecto.Changeset{}} = Events.update_event(event, %{user_id: nil})
-      assert {:error, %Ecto.Changeset{}} = Events.update_event(event, %{started_at: nil})
 
       assert event == Events.get_event!(event.uuid)
     end

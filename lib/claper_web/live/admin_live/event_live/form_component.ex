@@ -44,7 +44,6 @@ defmodule ClaperWeb.AdminLive.EventLive.FormComponent do
             field={:started_at}
             type="datetime"
             label={gettext("Started At")}
-            required={true}
             width_class="sm:col-span-3"
           />
 

@@ -52,7 +52,7 @@
         <:col :let={event} label={gettext("Started At")} field={:started_at}>
           {if event.started_at,
             do: Calendar.strftime(event.started_at, "%Y-%m-%d %H:%M"),
-            else: gettext("Not started")}
+            else: gettext("Unscheduled")}
         </:col>
         <:col :let={event} label={gettext("Expired At")} field={:expired_at}>
           {if event.expired_at,
@@ -131,7 +131,7 @@
           <.detail_row label={gettext("Started At")}>
             {if @event.started_at,
               do: format_admin_timestamp(@event.started_at),
-              else: gettext("Not started")}
+              else: gettext("Unscheduled")}
           </.detail_row>
           <.detail_row label={gettext("Expired At")}>
             {if @event.expired_at,

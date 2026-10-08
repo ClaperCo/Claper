@@ -76,7 +76,7 @@ defmodule ClaperWeb.EventLive.EventCardComponent do
       
     <!-- Status Badge -->
       <div class="absolute top-4 left-4 z-10">
-        <%= if Event.started?(@event) && !Event.finished?(@event) do %>
+        <%= if !Event.unscheduled?(@event) && Event.started?(@event) && !Event.finished?(@event) do %>
           <div class="px-3 py-1 text-xs font-medium rounded-tr-lg rounded-br-lg rounded-bl-lg bg-red-600 text-white flex items-center gap-1">
             <span class="h-1.5 w-1.5 bg-white rounded-full animate-pulse"></span>
             {gettext("Live")}
@@ -85,6 +85,11 @@ defmodule ClaperWeb.EventLive.EventCardComponent do
         <%= if !Event.started?(@event) && !Event.finished?(@event) do %>
           <div class="px-3 py-1 text-xs font-medium rounded-tr-lg rounded-br-lg rounded-bl-lg bg-primary text-primary-content">
             {gettext("Incoming")}
+          </div>
+        <% end %>
+        <%= if Event.unscheduled?(@event) && !Event.finished?(@event) do %>
+          <div class="px-3 py-1 text-xs font-medium rounded-tr-lg rounded-br-lg rounded-bl-lg bg-gray-100 text-gray-800">
+            {gettext("Unscheduled")}
           </div>
         <% end %>
         <%= if Event.finished?(@event) do %>
@@ -323,7 +328,7 @@ defmodule ClaperWeb.EventLive.EventCardComponent do
                 {@event.name}
               </h3>
               <!-- Status Badge -->
-              <%= if Event.started?(@event) && !Event.finished?(@event) do %>
+              <%= if !Event.unscheduled?(@event) && Event.started?(@event) && !Event.finished?(@event) do %>
                 <div class="px-3 py-1 text-xs font-medium rounded-tr-lg rounded-br-lg rounded-bl-lg bg-red-600 text-white flex items-center gap-1">
                   <span class="h-1.5 w-1.5 bg-white rounded-full animate-pulse"></span>
                   {gettext("Live")}
@@ -332,6 +337,11 @@ defmodule ClaperWeb.EventLive.EventCardComponent do
               <%= if !Event.started?(@event) && !Event.finished?(@event) do %>
                 <div class="px-3 py-1 text-xs font-medium rounded-tr-lg rounded-br-lg rounded-bl-lg bg-primary text-primary-content">
                   {gettext("Incoming")}
+                </div>
+              <% end %>
+              <%= if Event.unscheduled?(@event) && !Event.finished?(@event) do %>
+                <div class="px-3 py-1 text-xs font-medium rounded-tr-lg rounded-br-lg rounded-bl-lg bg-gray-100 text-gray-800">
+                  {gettext("Unscheduled")}
                 </div>
               <% end %>
               <%= if Event.finished?(@event) do %>
@@ -589,7 +599,7 @@ defmodule ClaperWeb.EventLive.EventCardComponent do
               <div class="flex items-center gap-2 mt-1">
                 <span class="text-xs text-gray-500"># {@event.code}</span>
                 <!-- Status Badge -->
-                <%= if Event.started?(@event) && !Event.finished?(@event) do %>
+                <%= if !Event.unscheduled?(@event) && Event.started?(@event) && !Event.finished?(@event) do %>
                   <span class="px-2 py-0.5 text-[10px] font-medium rounded-tr-lg rounded-br-lg rounded-bl-lg bg-red-600 text-white flex items-center gap-1">
                     <span class="h-1.5 w-1.5 bg-white rounded-full animate-pulse"></span>
                     {gettext("Live")}
@@ -598,6 +608,11 @@ defmodule ClaperWeb.EventLive.EventCardComponent do
                 <%= if !Event.started?(@event) && !Event.finished?(@event) do %>
                   <span class="px-2 py-0.5 text-[10px] font-medium rounded-tr-lg rounded-br-lg rounded-bl-lg bg-primary text-primary-content">
                     {gettext("Incoming")}
+                  </span>
+                <% end %>
+                <%= if Event.unscheduled?(@event) && !Event.finished?(@event) do %>
+                  <span class="px-2 py-0.5 text-[10px] font-medium rounded-tr-lg rounded-br-lg rounded-bl-lg bg-gray-100 text-gray-800">
+                    {gettext("Unscheduled")}
                   </span>
                 <% end %>
                 <%= if Event.finished?(@event) do %>
