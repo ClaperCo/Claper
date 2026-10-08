@@ -71,6 +71,7 @@ defmodule ClaperWeb.Router do
 
       live("/events", EventLive.Index, :index)
       live("/events/new", EventLive.Index, :new)
+      live("/events/folders/*path", EventLive.Index, :index)
       live("/events/:id/edit", EventLive.Index, :edit)
       live("/events/:id/stats", StatLive.Index, :index)
 

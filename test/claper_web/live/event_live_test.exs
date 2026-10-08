@@ -34,6 +34,234 @@ defmodule ClaperWeb.EventLiveTest do
       assert html =~ presentation_file.event.name
     end
 
+    test "root lists top-level folders and unfiled events, a folder lists its own", %{
+      conn: conn,
+      user: user,
+      presentation_file: presentation_file
+    } do
+      event = presentation_file.event
+      {:ok, folder} = Claper.Events.create_folder(user.id, %{"name" => "Courses"})
+
+      {:ok, sub} =
+        Claper.Events.create_folder(user.id, %{"name" => "Elixir", "parent_id" => folder.id})
+
+      {:ok, _} = Claper.Events.update_event(event, %{folder_id: sub.id})
+
+      {:ok, _view, html} = live(conn, ~p"/events")
+      assert html =~ "Courses"
+      refute html =~ "Elixir"
+      refute html =~ event.name
+
+      {:ok, _view, html} = live(conn, ~p"/events/folders/Courses")
+      assert html =~ ~s(id="breadcrumbs")
+      assert html =~ "Elixir"
+      refute html =~ event.name
+
+      {:ok, _view, html} = live(conn, ~p"/events/folders/Courses/Elixir")
+      assert html =~ event.name
+    end
+
+    test "creates a subfolder in the current folder", %{conn: conn, user: user} do
+      {:ok, folder} = Claper.Events.create_folder(user.id, %{"name" => "Courses"})
+      {:ok, view, _html} = live(conn, ~p"/events/folders/Courses")
+
+      # the name field only appears after clicking the icon
+      refute has_element?(view, "#create-folder-form")
+      view |> element("#create-folder-toggle") |> render_click()
+      assert has_element?(view, "#create-folder-form")
+
+      html = view |> form("#create-folder-form", name: "HTML Course") |> render_submit()
+      assert html =~ "HTML Course"
+      refute has_element?(view, "#create-folder-form")
+
+      assert [%{name: "HTML Course"}] = Claper.Events.list_child_folders(user.id, folder.id)
+    end
+
+    test "edits a folder from its card: rename and change nesting", %{conn: conn, user: user} do
+      {:ok, a} = Claper.Events.create_folder(user.id, %{"name" => "A folder"})
+      {:ok, b} = Claper.Events.create_folder(user.id, %{"name" => "B folder"})
+      {:ok, view, _html} = live(conn, ~p"/events")
+
+      refute has_element?(view, "#folder-form")
+      view |> element("#folder-grid-#{b.id} button[phx-click=edit-folder]") |> render_click()
+      assert has_element?(view, "#folder-form")
+
+      view |> form("#folder-form", name: "Renamed", parent_id: a.id) |> render_submit()
+      refute has_element?(view, "#folder-form")
+
+      assert %{name: "Renamed", parent_id: parent_id} =
+               Claper.Events.get_user_folder!(user.id, b.id)
+
+      assert parent_id == a.id
+    end
+
+    test "the folder editor does not offer the folder or its descendants as parent", %{
+      conn: conn,
+      user: user
+    } do
+      {:ok, a} = Claper.Events.create_folder(user.id, %{"name" => "Top"})
+      {:ok, _} = Claper.Events.create_folder(user.id, %{"name" => "Below", "parent_id" => a.id})
+      {:ok, _} = Claper.Events.create_folder(user.id, %{"name" => "Other"})
+      {:ok, view, _html} = live(conn, ~p"/events")
+
+      view |> element("#folder-grid-#{a.id} button[phx-click=edit-folder]") |> render_click()
+      html = render(view)
+      assert html =~ "Other"
+      refute html =~ "Top / Below"
+    end
+
+    test "deleting a folder keeps its events by default", %{
+      conn: conn,
+      user: user,
+      presentation_file: presentation_file
+    } do
+      event = presentation_file.event
+      {:ok, folder} = Claper.Events.create_folder(user.id, %{"name" => "Courses"})
+      {:ok, _} = Claper.Events.update_event(event, %{folder_id: folder.id})
+      {:ok, view, _html} = live(conn, ~p"/events")
+
+      view |> element("#folder-grid-#{folder.id} button[phx-click=edit-folder]") |> render_click()
+      html = view |> form("#delete-folder-form") |> render_submit()
+
+      assert_raise Ecto.NoResultsError, fn ->
+        Claper.Events.get_user_folder!(user.id, folder.id)
+      end
+
+      assert Claper.Events.get_user_event!(user.id, event.uuid).folder_id == nil
+      assert html =~ event.name
+    end
+
+    test "deleting a folder can delete the events inside", %{
+      conn: conn,
+      user: user,
+      presentation_file: presentation_file
+    } do
+      event = presentation_file.event
+      {:ok, folder} = Claper.Events.create_folder(user.id, %{"name" => "Courses"})
+      {:ok, _} = Claper.Events.update_event(event, %{folder_id: folder.id})
+      {:ok, view, _html} = live(conn, ~p"/events")
+
+      view |> element("#folder-grid-#{folder.id} button[phx-click=edit-folder]") |> render_click()
+      view |> form("#delete-folder-form", delete_events: "true") |> render_submit()
+
+      assert_raise Ecto.NoResultsError, fn ->
+        Claper.Events.get_user_event!(user.id, event.uuid)
+      end
+    end
+
+    test "redirects for unknown or foreign folders", %{conn: conn, user: user} do
+      other = Claper.AccountsFixtures.user_fixture()
+      {:ok, _} = Claper.Events.create_folder(other.id, %{"name" => "Other"})
+      {:ok, _} = Claper.Events.create_folder(user.id, %{"name" => "Mine"})
+
+      assert {:error, {:live_redirect, %{to: "/events"}}} =
+               live(conn, ~p"/events/folders/Other")
+
+      assert {:error, {:live_redirect, %{to: "/events"}}} =
+               live(conn, ~p"/events/folders/Mine/Missing")
+
+      assert {:error, {:live_redirect, %{to: "/events"}}} =
+               live(conn, ~p"/events/new?folder=Other")
+    end
+
+    test "the same folder name under different parents has its own URL", %{
+      conn: conn,
+      user: user
+    } do
+      {:ok, a} = Claper.Events.create_folder(user.id, %{"name" => "Elixir Course"})
+      {:ok, b} = Claper.Events.create_folder(user.id, %{"name" => "HTML Course"})
+
+      for parent <- [a, b] do
+        {:ok, lecture} =
+          Claper.Events.create_folder(user.id, %{"name" => "Lecture 1", "parent_id" => parent.id})
+
+        %{event: event} =
+          Claper.PresentationsFixtures.presentation_file_fixture(%{user: user}, [:event])
+
+        {:ok, event} =
+          Claper.Events.update_event(event, %{
+            folder_id: lecture.id,
+            name: "Event of #{parent.name}"
+          })
+
+        path = [parent.name, "Lecture 1"]
+        {:ok, _view, html} = live(conn, ~p"/events/folders/#{path}")
+        assert html =~ event.name
+        # only the events of this very folder, not those of the same-named folder elsewhere
+        for other <- [a, b] -- [parent], do: refute(html =~ "Event of #{other.name}")
+      end
+    end
+
+    test "folder URLs are percent-encoded and round-trip for unusual names", %{
+      conn: conn,
+      user: user
+    } do
+      names = ["Elixir Course", "R&D 100%", "a+b?c#d", "Zoë ü", "100% [draft]"]
+
+      {:ok, parent} = Claper.Events.create_folder(user.id, %{"name" => "Parent dir"})
+
+      for name <- names do
+        {:ok, _} =
+          Claper.Events.create_folder(user.id, %{"name" => name, "parent_id" => parent.id})
+      end
+
+      {:ok, _view, html} = live(conn, ~p"/events/folders/Parent dir")
+
+      hrefs =
+        Regex.scan(~r{href="(/events/folders/[^"]*)"}, html, capture: :all_but_first)
+        |> List.flatten()
+        |> Enum.uniq()
+
+      assert length(hrefs) == length(names)
+
+      # the "new event" link carries the folder percent-encoded too, with %20 and not +
+      [new_href] =
+        Regex.run(~r{href="(/events/new\?[^"]*)"}, html, capture: :all_but_first)
+
+      assert new_href == "/events/new?folder=Parent%20dir"
+
+      for href <- hrefs do
+        # the path is a single, encoded string: no raw space or reserved character in a segment
+        refute href =~ ~r/[ ?#\[\]]/
+        assert href =~ "/events/folders/Parent%20dir/"
+      end
+
+      for name <- names do
+        path = ["Parent dir", name]
+
+        {:ok, view, html} = live(conn, ~p"/events/folders/#{path}")
+
+        assert has_element?(view, "#breadcrumbs", name)
+
+        assert html =~ ~s(id="breadcrumbs")
+
+        {:ok, _view, _html} = live(conn, ~p"/events/new?#{[folder: Enum.join(path, "/")]}")
+      end
+    end
+
+    test "search spans all folders", %{
+      conn: conn,
+      user: user,
+      presentation_file: presentation_file
+    } do
+      event = presentation_file.event
+      {:ok, folder} = Claper.Events.create_folder(user.id, %{"name" => "Courses"})
+      {:ok, _} = Claper.Events.update_event(event, %{folder_id: folder.id})
+
+      {:ok, view, html} = live(conn, ~p"/events")
+      refute html =~ event.name
+
+      html = view |> form("form[phx-submit=search]", search: event.name) |> render_change()
+      assert html =~ event.name
+    end
+
+    test "a new event from a folder lands in it", %{conn: conn, user: user} do
+      {:ok, folder} = Claper.Events.create_folder(user.id, %{"name" => "Courses"})
+      {:ok, view, _html} = live(conn, ~p"/events/new?folder=Courses")
+
+      assert render(view) =~ ~r/<option selected="selected" value="#{folder.id}"/
+    end
+
     test "updates event in listing", %{conn: conn, presentation_file: presentation_file} do
       {:ok, index_live, _html} = live(conn, ~p"/events/#{presentation_file.event.uuid}/edit")
 
