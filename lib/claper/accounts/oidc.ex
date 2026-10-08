@@ -21,6 +21,52 @@ defmodule Claper.Accounts.Oidc do
   end
 
   @doc """
+  Returns the enabled providers, in the order they should appear on the login page.
+
+  ## Examples
+
+      iex> list_active_providers()
+      [%Provider{}, ...]
+
+  """
+  def list_active_providers do
+    from(p in Provider,
+      where: p.active == true,
+      order_by: [asc: p.position, asc: p.name]
+    )
+    |> Repo.all()
+  end
+
+  @doc """
+  Gets a single enabled provider by its slug.
+
+  Raises `Ecto.NoResultsError` if no enabled provider carries that slug.
+
+  ## Examples
+
+      iex> get_active_provider_by_slug!("google")
+      %Provider{}
+
+      iex> get_active_provider_by_slug!("nope")
+      ** (Ecto.NoResultsError)
+
+  """
+  def get_active_provider_by_slug!(slug) when is_binary(slug) do
+    Repo.one!(
+      from p in Provider,
+        where: p.slug == ^slug and p.active == true
+    )
+  end
+
+  @doc """
+  Returns true when at least one provider can be used to log in, either from the
+  database or from the legacy environment configuration.
+  """
+  def any_provider_enabled? do
+    list_active_providers() != [] or Application.get_env(:claper, :oidc)[:enabled] == true
+  end
+
+  @doc """
   Gets a single provider.
 
   Raises `Ecto.NoResultsError` if the Provider does not exist.
