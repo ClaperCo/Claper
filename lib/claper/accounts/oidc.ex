@@ -111,7 +111,6 @@ defmodule Claper.Accounts.Oidc do
     %Provider{}
     |> Provider.changeset(attrs)
     |> Repo.insert()
-    |> reload_providers()
   end
 
   @doc """
@@ -130,7 +129,6 @@ defmodule Claper.Accounts.Oidc do
     provider
     |> Provider.changeset(attrs)
     |> Repo.update()
-    |> reload_providers()
   end
 
   @doc """
@@ -146,9 +144,7 @@ defmodule Claper.Accounts.Oidc do
 
   """
   def delete_provider(%Provider{} = provider) do
-    provider
-    |> Repo.delete()
-    |> reload_providers()
+    Repo.delete(provider)
   end
 
   @doc """
@@ -166,16 +162,6 @@ defmodule Claper.Accounts.Oidc do
   defp requested? do
     Application.get_env(:claper, :oidc)[:disable_password_login_requested] == true
   end
-
-  # The configuration workers follow the stored providers, so any write to a
-  # provider restarts them: an edited issuer or client has to be picked up
-  # without a deploy, and a disabled provider has to stop accepting logins.
-  defp reload_providers({:ok, provider} = result) do
-    Claper.Accounts.Oidc.ProviderLoader.reload()
-    result
-  end
-
-  defp reload_providers(other), do: other
 
   @doc """
   Returns an `%Ecto.Changeset{}` for tracking provider changes.

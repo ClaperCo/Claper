@@ -51,6 +51,7 @@ defmodule ClaperWeb.AdminLive.OidcProviderLive do
   def handle_event("delete", %{"id" => id}, socket) do
     provider = Oidc.get_provider!(id)
     {:ok, _} = Oidc.delete_provider(provider)
+    reload_providers()
 
     {:noreply,
      socket
@@ -88,7 +89,27 @@ defmodule ClaperWeb.AdminLive.OidcProviderLive do
         {ClaperWeb.AdminLive.OidcProviderLive.FormComponent, {:saved, _provider}},
         socket
       ) do
+    reload_providers()
     {:noreply, assign(socket, :providers, list_providers())}
+  end
+
+  # The OIDC configuration workers follow the stored providers, so a change here
+  # has to restart them: an edited issuer or client is picked up without a
+  # deploy, and a disabled provider stops accepting logins. It runs off the
+  # LiveView process, because a provider whose issuer is slow or unreachable
+  # must not block the administrator.
+  defp reload_providers do
+    case Process.whereis(Claper.TaskSupervisor) do
+      nil ->
+        :ok
+
+      _pid ->
+        Task.Supervisor.start_child(Claper.TaskSupervisor, fn ->
+          Claper.Accounts.Oidc.ProviderLoader.reload()
+        end)
+    end
+
+    :ok
   end
 
   defp list_providers do
