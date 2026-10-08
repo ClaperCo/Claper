@@ -16,7 +16,12 @@ defmodule ClaperWeb.EventLive.ManageInteractionListComponent do
     {:ok,
      socket
      |> assign(assigns)
-     |> assign(page: page, per_page: per_page)}
+     |> assign(page: page, per_page: per_page)
+     |> assign_new(:reorder, fn -> false end)}
+  end
+
+  def handle_event("toggle-reorder", _, socket) do
+    {:noreply, assign(socket, reorder: !socket.assigns.reorder)}
   end
 
   def handle_event("prev-page", _, socket) do
@@ -68,6 +73,7 @@ defmodule ClaperWeb.EventLive.ManageInteractionListComponent do
       id="interaction-drag-list"
       phx-hook="InteractionDrag"
       phx-target={@myself}
+      data-reorder={to_string(@reorder)}
       class="relative flex flex-col gap-2 border border-gray-200 rounded-2xl p-2 lg:flex-1 lg:min-h-0 lg:overflow-y-auto"
     >
       <div class="flex items-center gap-2">
@@ -90,6 +96,19 @@ defmodule ClaperWeb.EventLive.ManageInteractionListComponent do
           <path d="M7.5 16.5l9 -9" />
         </svg>
         <span class="font-bold text-sm text-[#140553]">{gettext("Interactions")}</span>
+        <label
+          :if={length(@interactions) > 1}
+          class="ml-auto flex items-center gap-2 cursor-pointer text-xs text-gray-500"
+        >
+          {gettext("Reorder")}
+          <input
+            type="checkbox"
+            checked={@reorder}
+            phx-click="toggle-reorder"
+            phx-target={@myself}
+            class="toggle toggle-sm shrink-0 bg-gray-200 border-gray-300 [--tglbg:white] checked:bg-white checked:border-accent checked:[--tglbg:var(--color-accent)]"
+          />
+        </label>
       </div>
 
       <div class="grid grid-cols-4 gap-1">
