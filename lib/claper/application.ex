@@ -8,7 +8,6 @@ defmodule Claper.Application do
   @impl true
   def start(_type, _args) do
     topologies = Application.get_env(:libcluster, :topologies) || []
-    oidc_config = Application.get_env(:claper, :oidc) || []
     Oban.Telemetry.attach_default_logger()
 
     children = [
@@ -30,8 +29,13 @@ defmodule Claper.Application do
       {Task.Supervisor, name: Claper.TaskSupervisor},
       {Registry, keys: :unique, name: Claper.TranscriptionRegistry},
       {DynamicSupervisor, name: Claper.TranscriptionSupervisor, strategy: :one_for_one},
-      {Oidcc.ProviderConfiguration.Worker,
-       %{issuer: oidc_config[:issuer], name: Claper.OidcProviderConfig}},
+      # One OIDC configuration worker per enabled provider, registered by slug.
+      # They are started from the database and from the environment, so an
+      # instance with no provider configured boots normally instead of failing
+      # on a discovery request.
+      {Registry, keys: :unique, name: Claper.OidcRegistry},
+      {Claper.Accounts.Oidc.WorkerSupervisor, []},
+      {Claper.Accounts.Oidc.ProviderLoader, []},
       {Oban, Application.fetch_env!(:claper, Oban)}
     ]
 

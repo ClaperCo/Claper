@@ -149,6 +149,11 @@ defmodule ClaperWeb.Router do
     post("/users/confirm", UserConfirmationController, :create)
     get("/users/confirm/:token", UserConfirmationController, :update)
 
+    get("/users/auth/:provider", UserOidcAuth, :new)
+    get("/users/auth/:provider/callback", UserOidcAuth, :callback)
+
+    # Legacy single-provider routes, kept so that deployments configured only
+    # with OIDC_* environment variables keep working unchanged.
     get("/users/oidc", UserOidcAuth, :new)
     get("/users/oidc/callback", UserOidcAuth, :callback)
   end
