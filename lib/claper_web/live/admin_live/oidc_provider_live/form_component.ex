@@ -30,6 +30,32 @@ defmodule ClaperWeb.AdminLive.OidcProviderLive.FormComponent do
 
           <.live_component
             module={ClaperWeb.AdminLive.FormFieldComponent}
+            id="slug-field"
+            form={@form}
+            field={:slug}
+            type="text"
+            label={gettext("Slug")}
+            placeholder="google"
+            width_class="sm:col-span-3"
+            description={
+              gettext("Addresses this provider in the login route. Derived from the name when left empty")
+            }
+          />
+
+          <.live_component
+            module={ClaperWeb.AdminLive.FormFieldComponent}
+            id="position-field"
+            form={@form}
+            field={:position}
+            type="text"
+            label={gettext("Position")}
+            placeholder="0"
+            width_class="sm:col-span-3"
+            description={gettext("Orders the buttons on the login page, lowest first")}
+          />
+
+          <.live_component
+            module={ClaperWeb.AdminLive.FormFieldComponent}
             id="issuer-field"
             form={@form}
             field={:issuer}
@@ -76,8 +102,20 @@ defmodule ClaperWeb.AdminLive.OidcProviderLive.FormComponent do
             required={true}
             width_class="sm:col-span-6"
             description={
-              gettext("The callback URL for your application (must start with http:// or https://)")
+              gettext("The callback URL to register with the provider, for example https://your-claper/users/auth/google/callback")
             }
+          />
+
+          <.live_component
+            module={ClaperWeb.AdminLive.FormFieldComponent}
+            id="logo_url-field"
+            form={@form}
+            field={:logo_url}
+            type="text"
+            label={gettext("Logo URL")}
+            placeholder="/images/icons/openid.png"
+            width_class="sm:col-span-6"
+            description={gettext("Shown on the login button, falls back to the OpenID icon")}
           />
 
           <.live_component
