@@ -1137,7 +1137,7 @@ msgstr "Opciones"
 msgid "Duplicate"
 msgstr "Duplicar"
 
-#: lib/claper_web/templates/error/csrf_error.html.heex:8
+#: lib/claper_web/templates/error/csrf_error.html.heex:11
 #, elixir-autogen, elixir-format
 msgid "A required security token was not found or was invalid."
 msgstr "No se encontró un token de seguridad requerido o no era válido."
@@ -1147,32 +1147,32 @@ msgstr "No se encontró un token de seguridad requerido o no era válido."
 msgid "CSRF Verification Failed"
 msgstr "Falló la verificación CSRF"
 
-#: lib/claper_web/templates/error/csrf_error.html.heex:17
+#: lib/claper_web/templates/error/csrf_error.html.heex:20
 #, elixir-autogen, elixir-format
 msgid "Clear cookies (at least for Claper domain)"
 msgstr "Borrar cookies (al menos para el dominio de Claper)"
 
-#: lib/claper_web/templates/error/csrf_error.html.heex:20
+#: lib/claper_web/templates/error/csrf_error.html.heex:23
 #, elixir-autogen, elixir-format
 msgid "Ensure the URL does not contain an extra \"/\" anywhere"
 msgstr "Asegúrese de que la URL no contenga una \"/\" extra en ninguna parte"
 
-#: lib/claper_web/templates/error/csrf_error.html.heex:23
+#: lib/claper_web/templates/error/csrf_error.html.heex:26
 #, elixir-autogen, elixir-format
 msgid "If the problem persists, please contact support."
 msgstr "Si el problema persiste, por favor contacte con soporte."
 
-#: lib/claper_web/templates/error/csrf_error.html.heex:14
+#: lib/claper_web/templates/error/csrf_error.html.heex:17
 #, elixir-autogen, elixir-format
 msgid "If you're continually seeing this issue, try the following:"
 msgstr "Si continúa viendo este problema, intente lo siguiente:"
 
-#: lib/claper_web/templates/error/csrf_error.html.heex:18
+#: lib/claper_web/templates/error/csrf_error.html.heex:21
 #, elixir-autogen, elixir-format
 msgid "Reload the page you're trying to access (don't re-submit data)"
 msgstr "Recargue la página a la que está intentando acceder (no vuelva a enviar datos)"
 
-#: lib/claper_web/templates/error/csrf_error.html.heex:19
+#: lib/claper_web/templates/error/csrf_error.html.heex:22
 #, elixir-autogen, elixir-format
 msgid "Try logging in again"
 msgstr "Intente iniciar sesión de nuevo"
@@ -3080,7 +3080,7 @@ msgstr "No se pudieron reordenar las diapositivas"
 msgid "Could not move interaction"
 msgstr "No se pudo mover la interacción"
 
-#: lib/claper_web/templates/error/csrf_error.html.heex:26
+#: lib/claper_web/templates/error/csrf_error.html.heex:29
 #: lib/claper_web/templates/user_reset_password/edit.html.heex:95
 #: lib/claper_web/templates/user_reset_password/new.html.heex:78
 #, elixir-autogen, elixir-format
@@ -3690,4 +3690,9 @@ msgstr ""
 #: lib/claper_web/live/admin_live/oidc_provider_live/form_component.ex:105
 #, elixir-autogen, elixir-format
 msgid "The callback URL to register with the provider, for example https://your-claper/users/auth/google/callback"
+msgstr ""
+
+#: lib/claper_web/templates/error/csrf_error.html.heex:5
+#, elixir-autogen, elixir-format
+msgid "Authentication error"
 msgstr ""
