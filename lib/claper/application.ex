@@ -29,11 +29,10 @@ defmodule Claper.Application do
       {Task.Supervisor, name: Claper.TaskSupervisor},
       {Registry, keys: :unique, name: Claper.TranscriptionRegistry},
       {DynamicSupervisor, name: Claper.TranscriptionSupervisor, strategy: :one_for_one},
-      # One OIDC configuration worker per enabled provider, registered by slug.
+      # One OIDC configuration worker per enabled provider, named from its slug.
       # They are started from the database and from the environment, so an
       # instance with no provider configured boots normally instead of failing
       # on a discovery request.
-      {Registry, keys: :unique, name: Claper.OidcRegistry},
       {Claper.Accounts.Oidc.WorkerSupervisor, []},
       {Claper.Accounts.Oidc.ProviderLoader, []},
       {Oban, Application.fetch_env!(:claper, Oban)}

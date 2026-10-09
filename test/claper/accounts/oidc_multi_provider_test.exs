@@ -116,12 +116,17 @@ defmodule Claper.Accounts.OidcMultiProviderTest do
   end
 
   describe "worker supervision" do
-    test "a worker is named by its slug in the registry" do
+    test "a worker is named by its slug, as an atom" do
+      # oidcc resolves the worker with :erlang.whereis/1 and
+      # Oidcc.ProviderConfiguration.Worker requires an atom name, so the name
+      # has to be an atom and not a Registry key.
+      assert is_atom(WorkerSupervisor.worker_name("google"))
+
       assert WorkerSupervisor.worker_name("google") ==
-               {:via, Registry, {Claper.OidcRegistry, "google"}}
+               :"Claper.OidcProviderConfig.google"
 
       assert WorkerSupervisor.worker_name(%Provider{slug: "corp"}) ==
-               {:via, Registry, {Claper.OidcRegistry, "corp"}}
+               :"Claper.OidcProviderConfig.corp"
     end
 
     test "whereis/1 returns nil when no worker runs" do

@@ -2,16 +2,22 @@ defmodule Claper.Accounts.Oidc.WorkerSupervisor do
   @moduledoc """
   Supervises one `Oidcc.ProviderConfiguration.Worker` per enabled OIDC provider.
 
-  Every worker is registered in `Claper.OidcRegistry` under the provider slug, so
-  the authentication flow can address one provider out of several by URL, and so
-  a provider that is edited or disabled in the admin can be restarted or stopped
+  Every worker is registered under a name derived from the provider slug, so the
+  authentication flow can address one provider out of several by URL, and so a
+  provider that is edited or disabled in the admin can be restarted or stopped
   without touching the others.
+
+  The name is an atom, not a `Registry` key: `oidcc` resolves the configuration
+  worker with `:erlang.whereis/1`, which only accepts an atom, and
+  `Oidcc.ProviderConfiguration.Worker` itself requires an atom name. One atom
+  per provider, and providers are created by an administrator, so the number of
+  atoms stays bounded.
   """
   use DynamicSupervisor
 
   alias Claper.Accounts.Oidc.Provider
 
-  @registry Claper.OidcRegistry
+  @worker_prefix "Claper.OidcProviderConfig"
   @legacy_slug "default"
 
   def start_link(opts \\ []) do
@@ -22,9 +28,9 @@ defmodule Claper.Accounts.Oidc.WorkerSupervisor do
   def init(_opts), do: DynamicSupervisor.init(strategy: :one_for_one)
 
   @doc """
-  Registry key of the configuration worker of a provider slug.
+  Registered name of the configuration worker of a provider slug.
   """
-  def worker_name(slug) when is_binary(slug), do: {:via, Registry, {@registry, slug}}
+  def worker_name(slug) when is_binary(slug), do: :"#{@worker_prefix}.#{slug}"
 
   def worker_name(%Provider{slug: slug}), do: worker_name(slug)
 
@@ -54,10 +60,7 @@ defmodule Claper.Accounts.Oidc.WorkerSupervisor do
   Returns the pid of the configuration worker of a slug, or nil.
   """
   def whereis(slug) when is_binary(slug) do
-    case Registry.lookup(@registry, slug) do
-      [{pid, _value}] -> pid
-      [] -> nil
-    end
+    Process.whereis(worker_name(slug))
   end
 
   def whereis(%Provider{} = provider), do: whereis(provider.slug)
