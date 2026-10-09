@@ -2,7 +2,9 @@
   <div class="max-w-3xl w-full p-10">
     <div class="text-center">
       <h1 class="text-4xl font-bold text-gray-900 mb-2">
-        {if assigns[:error], do: gettext("Authentication error"), else: gettext("CSRF Verification Failed")}
+        {if assigns[:error],
+          do: gettext("Authentication error"),
+          else: gettext("CSRF Verification Failed")}
       </h1>
       <p :if={assigns[:error]} class="text-lg text-gray-700 mb-8">
         {@error}

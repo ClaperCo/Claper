@@ -152,6 +152,7 @@ defmodule ClaperWeb.Helpers.CSVExporterTest do
       {:ok, provider1} =
         Repo.insert(%Provider{
           name: "Provider One",
+          slug: "provider-one",
           issuer: "https://example1.com",
           client_id: "client1",
           client_secret: "secret1",
@@ -164,6 +165,7 @@ defmodule ClaperWeb.Helpers.CSVExporterTest do
       {:ok, provider2} =
         Repo.insert(%Provider{
           name: "Provider Two",
+          slug: "provider-two",
           issuer: "https://example2.com",
           client_id: "client2",
           client_secret: "secret2",
