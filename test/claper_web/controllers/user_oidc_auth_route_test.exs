@@ -84,6 +84,16 @@ defmodule ClaperWeb.UserOidcAuthRouteTest do
 
       assert response(conn, 400) =~ "no OIDC provider is configured"
     end
+
+    test "a provider whose configuration worker is not running is reported, not crashed", %{
+      conn: conn
+    } do
+      {:ok, provider} = Oidc.create_provider(@provider)
+
+      conn = get(conn, "/users/auth/#{provider.slug}")
+
+      assert response(conn, 503) =~ "is not available"
+    end
   end
 
   describe "the callback" do

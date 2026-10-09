@@ -29,28 +29,29 @@ defmodule ClaperWeb.UserOidcAuth do
   def new(conn, params) do
     case fetch_provider(conn, params) do
       {:ok, provider} ->
-        pkce_verifier = generate_pkce_verifier()
-        state = :crypto.strong_rand_bytes(16) |> Base.url_encode64(padding: false)
-        nonce = :crypto.strong_rand_bytes(16) |> Base.url_encode64(padding: false)
+        with {:ok, client_context} <- client_context(provider) do
+          pkce_verifier = generate_pkce_verifier()
+          state = :crypto.strong_rand_bytes(16) |> Base.url_encode64(padding: false)
+          nonce = :crypto.strong_rand_bytes(16) |> Base.url_encode64(padding: false)
 
-        conn =
-          conn
-          |> put_session(:pkce_verifier, pkce_verifier)
-          |> put_session(:oidc_state, state)
-          |> put_session(:oidc_nonce, nonce)
-          |> put_session(@session_slug, provider.slug)
+          conn =
+            conn
+            |> put_session(:pkce_verifier, pkce_verifier)
+            |> put_session(:oidc_state, state)
+            |> put_session(:oidc_nonce, nonce)
+            |> put_session(@session_slug, provider.slug)
 
-        client_context = client_context!(provider)
+          {:ok, redirect_uri} =
+            Oidcc.Authorization.create_redirect_url(
+              client_context,
+              auth_opts(provider, pkce_verifier) |> Map.merge(%{state: state, nonce: nonce})
+            )
 
-        {:ok, redirect_uri} =
-          Oidcc.Authorization.create_redirect_url(
-            client_context,
-            auth_opts(provider, pkce_verifier) |> Map.merge(%{state: state, nonce: nonce})
-          )
-
-        uri = Enum.join(redirect_uri, "")
-
-        redirect(conn, external: uri)
+          redirect(conn, external: Enum.join(redirect_uri, ""))
+        else
+          {:error, reason} ->
+            fail(conn, :service_unavailable, provider_unavailable(provider, reason))
+        end
 
       {:error, reason} ->
         fail(conn, :bad_request, reason)
@@ -165,26 +166,27 @@ defmodule ClaperWeb.UserOidcAuth do
   defp retrieve_token(conn, provider, code) do
     pkce_verifier = get_session(conn, :pkce_verifier)
     nonce = get_session(conn, :oidc_nonce)
-    client_context = client_context!(provider)
 
-    case Oidcc.Token.retrieve(code, client_context, token_opts(provider, pkce_verifier, nonce)) do
-      {:ok,
-       %Oidcc.Token{
-         id: %Oidcc.Token.Id{token: id_token, claims: claims},
-         access: %Oidcc.Token.Access{token: access_token},
-         refresh: refresh
-       } = token} ->
+    with {:ok, client_context} <- client_context(provider) do
+      case Oidcc.Token.retrieve(code, client_context, token_opts(provider, pkce_verifier, nonce)) do
         {:ok,
-         %{
-           token: token,
-           id_token: id_token,
-           access_token: access_token,
-           refresh_token: format_refresh_token(refresh),
-           claims: claims
-         }}
+         %Oidcc.Token{
+           id: %Oidcc.Token.Id{token: id_token, claims: claims},
+           access: %Oidcc.Token.Access{token: access_token},
+           refresh: refresh
+         } = token} ->
+          {:ok,
+           %{
+             token: token,
+             id_token: id_token,
+             access_token: access_token,
+             refresh_token: format_refresh_token(refresh),
+             claims: claims
+           }}
 
-      {:error, reason} ->
-        {:error, reason}
+        {:error, reason} ->
+          {:error, reason}
+      end
     end
   end
 
@@ -195,31 +197,53 @@ defmodule ClaperWeb.UserOidcAuth do
   end
 
   defp maybe_enrich_claims(claims, token, provider) do
-    case Oidcc.Userinfo.retrieve(
-           token.token,
-           client_context!(provider),
-           %{preferred_auth_methods: [:client_secret_basic, :client_secret_post]}
-         ) do
-      {:ok, userinfo} ->
-        {:ok, Map.merge(userinfo, claims)}
+    with {:ok, client_context} <- client_context(provider) do
+      case Oidcc.Userinfo.retrieve(
+             token.token,
+             client_context,
+             %{preferred_auth_methods: [:client_secret_basic, :client_secret_post]}
+           ) do
+        {:ok, userinfo} ->
+          {:ok, Map.merge(userinfo, claims)}
 
-      {:error, reason} ->
-        Logger.error("OIDC userinfo retrieval failed: #{inspect(reason)}")
-        {:ok, claims}
+        {:error, reason} ->
+          Logger.error("OIDC userinfo retrieval failed: #{inspect(reason)}")
+          {:ok, claims}
+      end
     end
   end
 
-  # Build a client context with provider config overrides for broad compatibility:
+  # Builds a client context for a provider. The configuration worker fetches its
+  # discovery document asynchronously, so a request that arrives just after the
+  # provider was enabled, or just after boot, can find it not ready yet; wait
+  # briefly for it instead of failing the login outright.
+  @context_attempts 10
+  @context_delay_ms 200
+
+  defp client_context(provider), do: client_context(provider, @context_attempts)
+
+  defp client_context(provider, attempts) do
+    case Oidcc.ClientContext.from_configuration_worker(
+           WorkerSupervisor.worker_name(provider.slug),
+           provider.client_id,
+           provider.client_secret
+         ) do
+      {:ok, client_context} ->
+        {:ok, patch_provider_configuration(client_context)}
+
+      {:error, :provider_not_ready} when attempts > 1 ->
+        Process.sleep(@context_delay_ms)
+        client_context(provider, attempts - 1)
+
+      {:error, reason} ->
+        {:error, reason}
+    end
+  end
+
+  # Provider config overrides for broad compatibility:
   # - Disable request objects and PAR (Authelia compatibility)
   # - Ensure S256 PKCE is listed as supported (Entra ID compatibility)
-  defp client_context!(provider) do
-    {:ok, client_context} =
-      Oidcc.ClientContext.from_configuration_worker(
-        WorkerSupervisor.worker_name(provider.slug),
-        provider.client_id,
-        provider.client_secret
-      )
-
+  defp patch_provider_configuration(client_context) do
     provider_config = %{
       client_context.provider_configuration
       | request_parameter_supported: false,
@@ -230,6 +254,10 @@ defmodule ClaperWeb.UserOidcAuth do
     }
 
     %{client_context | provider_configuration: provider_config}
+  end
+
+  defp provider_unavailable(provider, reason) do
+    "the provider #{provider.slug} is not available right now (#{inspect(reason)})"
   end
 
   defp clear_oidc_session(conn) do
