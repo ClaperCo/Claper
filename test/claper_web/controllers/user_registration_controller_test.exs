@@ -122,7 +122,8 @@ defmodule ClaperWeb.UserRegistrationControllerTest do
           :oidc,
           Keyword.merge(Application.get_env(:claper, :oidc),
             enabled: true,
-            disable_password_login: unquote(password_login_disabled)
+            disable_password_login: unquote(password_login_disabled),
+            disable_password_login_requested: unquote(password_login_disabled)
           )
         )
 

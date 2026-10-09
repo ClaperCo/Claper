@@ -652,16 +652,17 @@ defmodule Claper.Accounts do
     Repo.all(from u in Accounts.Oidc.User, where: u.email == ^email)
   end
 
-  def get_oidc_user_by_sub(sub) do
-    Repo.get_by(Accounts.Oidc.User, sub: sub)
+  def get_oidc_user(issuer, sub) when is_binary(issuer) and is_binary(sub) do
+    Repo.get_by(Accounts.Oidc.User, issuer: issuer, sub: sub)
   end
 
   def get_or_create_user_with_oidc(
         %{
+          issuer: issuer,
           sub: sub
         } = attrs
       ) do
-    case get_oidc_user_by_sub(sub) do
+    case get_oidc_user(issuer, sub) do
       nil -> create_new_user(attrs)
       %Accounts.Oidc.User{} = user -> update_oidc_user(user, attrs)
     end

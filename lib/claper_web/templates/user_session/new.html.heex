@@ -91,7 +91,20 @@
               <ClaperWeb.Component.Alert.error message={@error_message} stick={true} />
             </div>
 
-            <div :if={@oidc_enabled}>
+            <div :if={@oidc_providers != []} class="space-y-3">
+              <%= for provider <- @oidc_providers do %>
+                <%= link(
+                  to: ~p"/users/auth/#{provider.slug}",
+                  class:
+                    "flex w-full items-center justify-center gap-x-2 rounded-xl border border-secondary-500/70 px-4 py-3 text-sm font-medium text-white transition hover:bg-secondary-500/20"
+                ) do %>
+                  <img width="24" src={provider.logo_url || "/images/icons/openid.png"} />
+                  <span>{gettext("Log in with %{provider}", provider: provider.name)}</span>
+                <% end %>
+              <% end %>
+            </div>
+
+            <div :if={@oidc_providers == [] && @oidc_enabled}>
               <%= link(
                 to: ~p"/users/oidc",
                 class:

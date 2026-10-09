@@ -61,6 +61,6 @@ defmodule Claper.Accounts.Oidc.User do
       :refresh_token
     ])
     |> validate_required([:sub, :email, :issuer, :provider, :id_token, :user_id])
-    |> unique_constraint(:sub)
+    |> unique_constraint(:sub, name: :oidc_users_issuer_sub_index)
   end
 end

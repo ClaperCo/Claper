@@ -58,7 +58,7 @@ defmodule ClaperWeb.UserRegistrationController do
   # regardless of ENABLE_ACCOUNT_CREATION.
   defp account_creation_allowed? do
     Application.get_env(:claper, :enable_account_creation) and
-      !Application.get_env(:claper, :oidc)[:disable_password_login]
+      !Claper.Accounts.Oidc.password_login_disabled?()
   end
 
   def delete(conn, _params) do
