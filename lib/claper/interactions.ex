@@ -113,6 +113,60 @@ defmodule Claper.Interactions do
     Quizzes.update_quiz(event_uuid, quiz, %{position: to, enabled: false})
   end
 
+  @doc """
+Reorders interactions on a slide.
+
+`ordered` is a list of `{type, id}` tuples (type being "poll", "form", "embed"
+or "quiz") in their desired order. They take over the slots those interactions
+currently occupy, so a partial list (e.g. one paginated page) leaves the others
+in place. Order is derived from `inserted_at`, which is rewritten one second
+apart starting from the slide's earliest value.
+
+Returns `:ok` or `{:error, :invalid_interactions}` when an entry is duplicated
+or doesn't belong to the slide.
+"""
+  def reorder_interactions(%Events.Event{} = event, position, ordered) when is_list(ordered) do
+    {:ok, current} = get_interactions_at_position(event, position)
+    current_keys = Enum.map(current, &interaction_key/1)
+
+    if ordered != Enum.uniq(ordered) or not Enum.all?(ordered, &(&1 in current_keys)) do
+      {:error, :invalid_interactions}
+    else
+      {new_order, _} =
+        Enum.map_reduce(current_keys, ordered, fn key, queue ->
+          if key in ordered, do: {hd(queue), tl(queue)}, else: {key, queue}
+        end)
+
+      base = current |> Enum.map(& &1.inserted_at) |> Enum.min(NaiveDateTime)
+
+      new_order
+      |> Enum.with_index()
+      |> Enum.reduce(Ecto.Multi.new(), fn {{type, id} = key, index}, multi ->
+        Ecto.Multi.update_all(
+          multi,
+          key,
+          from(i in interaction_schema(type), where: i.id == ^id),
+          set: [inserted_at: NaiveDateTime.add(base, index)]
+        )
+      end)
+      |> Claper.Repo.transaction()
+      |> case do
+        {:ok, _} -> :ok
+        {:error, _, reason, _} -> {:error, reason}
+      end
+    end
+  end
+
+  defp interaction_key(%Polls.Poll{id: id}), do: {"poll", id}
+  defp interaction_key(%Forms.Form{id: id}), do: {"form", id}
+  defp interaction_key(%Embeds.Embed{id: id}), do: {"embed", id}
+  defp interaction_key(%Quizzes.Quiz{id: id}), do: {"quiz", id}
+
+  defp interaction_schema("poll"), do: Polls.Poll
+  defp interaction_schema("form"), do: Forms.Form
+  defp interaction_schema("embed"), do: Embeds.Embed
+  defp interaction_schema("quiz"), do: Quizzes.Quiz
+
   def enable_interaction(interaction) do
     Ecto.Multi.new()
     |> Ecto.Multi.run(:disable_polls, fn _repo, _ ->
