@@ -472,17 +472,27 @@ defmodule ClaperWeb.EventLive.Show do
   @impl true
   def handle_event(
         "save",
+        _params,
+        %{assigns: %{state: %{authenticated_chat_only: true}, current_user: current_user}} =
+          socket
+      )
+      when not is_map(current_user) do
+    {:noreply, socket |> put_flash(:error, gettext("You must be logged in to post a message"))}
+  end
+
+  @impl true
+  def handle_event(
+        "save",
         %{"post" => post_params},
         %{assigns: %{current_user: current_user} = _assigns} = socket
       )
       when is_map(current_user) do
     post_params =
       post_params
-      |> Map.put("user_id", current_user.id)
       |> Map.put("position", socket.assigns.state.position)
       |> Map.put("name", socket.assigns.nickname)
 
-    case Posts.create_post(socket.assigns.event, post_params) do
+    case Posts.create_post(socket.assigns.event, post_params, current_user) do
       {:ok, _post} ->
         {:noreply,
          socket
@@ -490,7 +500,7 @@ defmodule ClaperWeb.EventLive.Show do
          |> push_event("post-saved", %{})}
 
       {:error, %Ecto.Changeset{} = changeset} ->
-        {:noreply, assign(socket, post_changeset: changeset)}
+        {:noreply, assign_post_error(socket, changeset)}
     end
   end
 
@@ -514,7 +524,7 @@ defmodule ClaperWeb.EventLive.Show do
          |> push_event("post-saved", %{})}
 
       {:error, %Ecto.Changeset{} = changeset} ->
-        {:noreply, assign(socket, post_changeset: changeset)}
+        {:noreply, assign_post_error(socket, changeset)}
     end
   end
 
@@ -1087,5 +1097,17 @@ defmodule ClaperWeb.EventLive.Show do
     Stats.create_stat(event, %{
       attendee_identifier: attendee_identifier
     })
+  end
+
+  # The composer has no field for the author, so the context refusing a message
+  # for want of one has to be said out loud instead of shown inline.
+  defp assign_post_error(socket, changeset) do
+    socket = assign(socket, post_changeset: changeset)
+
+    if Keyword.has_key?(changeset.errors, :user_id) do
+      put_flash(socket, :error, gettext("You must be logged in to post a message"))
+    else
+      socket
+    end
   end
 end
