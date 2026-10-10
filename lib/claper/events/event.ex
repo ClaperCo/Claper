@@ -30,7 +30,7 @@ defmodule Claper.Events.Event do
           name: String.t() | nil,
           code: String.t(),
           audience_peak: integer() | nil,
-          started_at: NaiveDateTime.t(),
+          started_at: NaiveDateTime.t() | nil,
           expired_at: NaiveDateTime.t() | nil,
           posts: [Claper.Posts.Post.t()] | nil,
           leaders: [Claper.Events.ActivityLeader.t()] | nil,
@@ -72,7 +72,7 @@ defmodule Claper.Events.Event do
     ])
     |> cast_assoc(:presentation_file)
     |> cast_assoc(:leaders)
-    |> validate_required([:name, :code, :started_at])
+    |> validate_required([:name, :code])
   end
 
   def create_changeset(event, attrs) do
@@ -81,7 +81,7 @@ defmodule Claper.Events.Event do
     |> cast_assoc(:presentation_file)
     |> cast_assoc(:leaders)
     |> downcase_code
-    |> validate_required([:name, :code, :started_at, :user_id])
+    |> validate_required([:name, :code, :user_id])
     |> validate_length(:code, min: 5, max: 10)
     |> validate_length(:name, min: 5, max: 50)
     |> put_change(:uuid, Ecto.UUID.generate())
@@ -110,7 +110,7 @@ defmodule Claper.Events.Event do
     |> cast_assoc(:presentation_file)
     |> cast_assoc(:leaders)
     |> downcase_code
-    |> validate_required([:name, :code, :started_at, :user_id])
+    |> validate_required([:name, :code, :user_id])
     |> validate_length(:code, min: 5, max: 10)
     |> validate_length(:name, min: 5, max: 50)
   end
@@ -125,6 +125,10 @@ defmodule Claper.Events.Event do
   def subscribe(event_uuid) do
     Phoenix.PubSub.subscribe(Claper.PubSub, "event:#{event_uuid}")
   end
+
+  def unscheduled?(event), do: is_nil(event.started_at)
+
+  def started?(%{started_at: nil}), do: true
 
   def started?(event) do
     NaiveDateTime.compare(NaiveDateTime.utc_now(), event.started_at) == :gt

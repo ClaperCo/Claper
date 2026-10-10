@@ -15,6 +15,7 @@ defmodule ClaperWeb.EventLive.EventFormComponent do
      |> assign(assigns)
      |> assign_new(:container, fn -> :page end)
      |> assign_new(:removed_leader_ids, fn -> MapSet.new() end)
+     |> assign(:unscheduled, is_nil(event.started_at))
      |> assign(:changeset, changeset)
      |> assign(:max_file_size, max_file_size)
      |> allow_upload(:presentation_file,
@@ -28,12 +29,14 @@ defmodule ClaperWeb.EventLive.EventFormComponent do
 
   @impl true
   def handle_event("validate", %{"event" => event_params}, socket) do
+    unscheduled = event_params["unscheduled"] == "true"
+
     changeset =
       socket.assigns.event
-      |> Events.change_event(event_params)
+      |> Events.change_event(apply_unscheduled(event_params))
       |> Map.put(:action, :validate)
 
-    {:noreply, socket |> assign(:changeset, changeset)}
+    {:noreply, socket |> assign(unscheduled: unscheduled, changeset: changeset)}
   end
 
   @impl true
@@ -48,6 +51,8 @@ defmodule ClaperWeb.EventLive.EventFormComponent do
 
   @impl true
   def handle_event("save", %{"event" => event_params}, socket) do
+    event_params = apply_unscheduled(event_params)
+
     case uploaded_entries(socket, :presentation_file) do
       {_, []} -> save_event(socket, socket.assigns.action, event_params)
       _ -> {:noreply, socket}
@@ -125,6 +130,12 @@ defmodule ClaperWeb.EventLive.EventFormComponent do
 
     {:noreply, assign(socket, changeset: updated_changeset)}
   end
+
+  # The "Unscheduled" checkbox is not a schema field; it clears the start date.
+  defp apply_unscheduled(%{"unscheduled" => "true"} = params),
+    do: params |> Map.delete("unscheduled") |> Map.put("started_at", nil)
+
+  defp apply_unscheduled(params), do: Map.delete(params, "unscheduled")
 
   defp get_temp_id, do: :crypto.strong_rand_bytes(5) |> Base.url_encode64() |> binary_part(0, 5)
 

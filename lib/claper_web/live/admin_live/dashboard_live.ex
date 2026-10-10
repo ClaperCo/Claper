@@ -81,7 +81,7 @@ defmodule ClaperWeb.AdminLive.DashboardLive do
     # Get recent events for the dashboard
     recent_events =
       Event
-      |> order_by([e], desc: e.started_at)
+      |> order_by([e], desc: coalesce(e.started_at, e.inserted_at))
       |> limit(5)
       |> preload(:user)
       |> Repo.all()
