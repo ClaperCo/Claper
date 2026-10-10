@@ -260,6 +260,14 @@
             </p>
           </div>
 
+          <.select_field
+            :if={@folder_options != []}
+            form={f}
+            key={:folder_id}
+            label={gettext("Folder")}
+            options={[{gettext("No folder"), ""} | @folder_options]}
+          />
+
           <div class="flex flex-col gap-1" id="date-picker">
             <ClaperWeb.Component.Input.date
               form={f}

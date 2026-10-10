@@ -8,9 +8,176 @@ defmodule Claper.Events do
   import Ecto.Query, warn: false
 
   alias Claper.{Accounts, Presentations, Repo}
-  alias Claper.Events.{Event, ActivityLeader}
+  alias Claper.Events.{Event, ActivityLeader, Folder}
 
   @default_page_size 5
+
+  @doc """
+  Returns the folders of a given user, ordered by name.
+  """
+  def list_folders(user_id) do
+    from(f in Folder, where: f.user_id == ^user_id, order_by: [asc: f.name])
+    |> Repo.all()
+  end
+
+  @doc """
+  Returns the direct subfolders of a folder (`nil` for the top level), ordered by name.
+  """
+  def list_child_folders(user_id, nil) do
+    from(f in Folder, where: f.user_id == ^user_id and is_nil(f.parent_id), order_by: f.name)
+    |> Repo.all()
+  end
+
+  def list_child_folders(user_id, parent_id) do
+    from(f in Folder,
+      where: f.user_id == ^user_id and f.parent_id == ^parent_id,
+      order_by: f.name
+    )
+    |> Repo.all()
+  end
+
+  @doc """
+  Gets a folder of a given user. Raises `Ecto.NoResultsError` if the user does not own it.
+  """
+  def get_user_folder!(user_id, id), do: Repo.get_by!(Folder, id: id, user_id: user_id)
+
+  @doc """
+  Gets a folder of a given user by its public uuid. Raises `Ecto.NoResultsError` if the user
+  does not own it.
+  """
+  def get_user_folder_by_uuid!(user_id, uuid),
+    do: Repo.get_by!(Folder, uuid: uuid, user_id: user_id)
+
+  @doc """
+  Gets a folder of a given user by the names from the top level down, e.g.
+  `["Courses", "Elixir"]`. Names are unique among siblings, so the path is unambiguous.
+  Raises `Ecto.NoResultsError` if there is no such folder.
+  """
+  def get_user_folder_by_path!(_user_id, []), do: raise(Ecto.NoResultsError, queryable: Folder)
+
+  def get_user_folder_by_path!(user_id, names) do
+    Enum.reduce(names, nil, fn name, parent ->
+      query = from(f in Folder, where: f.user_id == ^user_id and f.name == ^name)
+
+      query =
+        if parent,
+          do: where(query, [f], f.parent_id == ^parent.id),
+          else: where(query, [f], is_nil(f.parent_id))
+
+      Repo.one!(query)
+    end)
+  end
+
+  @doc """
+  Returns the folder and its ancestors, root first.
+  """
+  def folder_path(%Folder{} = folder), do: do_folder_path(folder, [folder])
+
+  defp do_folder_path(%Folder{parent_id: nil}, path), do: path
+
+  defp do_folder_path(%Folder{parent_id: parent_id}, path) do
+    parent = Repo.get!(Folder, parent_id)
+    do_folder_path(parent, [parent | path])
+  end
+
+  @doc """
+  Returns `{label, id}` pairs for all folders of a user, labelled with their path
+  (e.g. "Courses / Elixir"). Pass `exclude: folder` to leave out a folder and its
+  descendants, as when choosing a new parent for it.
+  """
+  def folder_options(user_id, opts \\ []) do
+    folders = list_folders(user_id)
+    by_id = Map.new(folders, &{&1.id, &1})
+    excluded = opts[:exclude]
+
+    folders
+    |> Enum.map(&{&1, path_of(&1, by_id)})
+    |> Enum.reject(fn {_, path} -> excluded && Enum.any?(path, &(&1.id == excluded.id)) end)
+    |> Enum.map(fn {folder, path} -> {Enum.map_join(path, " / ", & &1.name), folder.id} end)
+    |> Enum.sort()
+  end
+
+  @doc """
+  Returns the events directly inside a folder of a given user.
+  """
+  def list_folder_events(user_id, folder_id, preload \\ []) do
+    from(e in Event, where: e.user_id == ^user_id and e.folder_id == ^folder_id)
+    |> Repo.all()
+    |> Repo.preload(preload)
+  end
+
+  defp path_of(%Folder{parent_id: nil} = folder, _by_id), do: [folder]
+
+  defp path_of(%Folder{parent_id: parent_id} = folder, by_id),
+    do: path_of(Map.fetch!(by_id, parent_id), by_id) ++ [folder]
+
+  def create_folder(user_id, attrs) do
+    %Folder{}
+    |> Folder.changeset(Map.put(attrs, "user_id", user_id))
+    |> validate_parent(user_id)
+    |> Repo.insert()
+  end
+
+  def update_folder(%Folder{} = folder, attrs) do
+    folder
+    |> Folder.changeset(Map.delete(attrs, "user_id"))
+    |> validate_parent(folder.user_id)
+    |> Repo.update()
+  end
+
+  # The parent must belong to the same user, and a folder can't be moved into itself
+  # or one of its descendants.
+  defp validate_parent(changeset, user_id) do
+    case Ecto.Changeset.get_change(changeset, :parent_id) do
+      nil ->
+        changeset
+
+      parent_id ->
+        parent = Repo.get_by(Folder, id: parent_id, user_id: user_id)
+        folder_id = changeset.data.id
+
+        if parent && !(folder_id && folder_id in Enum.map(folder_path(parent), & &1.id)) do
+          changeset
+        else
+          Ecto.Changeset.add_error(changeset, :parent_id, "is invalid")
+        end
+    end
+  end
+
+  @doc """
+  Deletes a folder. Its subfolders move up to the parent folder.
+
+  The events directly inside it are kept and become unfiled, or are deleted with
+  `delete_events: true`.
+
+  Returns `{:ok, %{folder: folder, deleted_events: events}}`, with the deleted events'
+  presentation file preloaded so the caller can clean up files, or
+  `{:error, :name_conflict}` if a subfolder would clash with a sibling name one level up.
+  """
+  def delete_folder(%Folder{} = folder, opts \\ []) do
+    events =
+      if opts[:delete_events],
+        do: list_folder_events(folder.user_id, folder.id, [:presentation_file]),
+        else: []
+
+    Repo.transaction(fn ->
+      # First, as this is the step that can fail on a name clash
+      from(f in Folder, where: f.parent_id == ^folder.id)
+      |> Repo.update_all(set: [parent_id: folder.parent_id])
+
+      for event <- events, do: {:ok, _} = delete_event(event)
+
+      from(e in Event, where: e.folder_id == ^folder.id)
+      |> Repo.update_all(set: [folder_id: nil])
+
+      %{folder: Repo.delete!(folder), deleted_events: events}
+    end)
+  rescue
+    e in Postgrex.Error ->
+      if e.postgres.code == :unique_violation,
+        do: {:error, :name_conflict},
+        else: reraise(e, __STACKTRACE__)
+  end
 
   @doc """
   Returns the list of events of a given user.
@@ -87,6 +254,7 @@ defmodule Claper.Events do
         order_by: [desc: e.id]
       )
       |> apply_search(search)
+      |> apply_folder(params)
 
     Repo.paginate(query, page: page, page_size: page_size, preload: preload)
   end
@@ -129,6 +297,7 @@ defmodule Claper.Events do
         order_by: [desc: e.expired_at]
       )
       |> apply_search(search)
+      |> apply_folder(params)
 
     Repo.paginate(query, page: page, page_size: page_size, preload: preload)
   end
@@ -213,6 +382,15 @@ defmodule Claper.Events do
     from(e in query,
       where: ilike(e.name, ^search_term) or ilike(e.code, ^search_term)
     )
+  end
+
+  # No "folder_id" key: all events. `nil`: top level only. An id: that folder only.
+  defp apply_folder(query, params) do
+    case Map.fetch(params, "folder_id") do
+      :error -> query
+      {:ok, nil} -> from(e in query, where: is_nil(e.folder_id))
+      {:ok, folder_id} -> from(e in query, where: e.folder_id == ^folder_id)
+    end
   end
 
   defp apply_search_managed(query, nil), do: query
@@ -382,6 +560,7 @@ defmodule Claper.Events do
   def create_event(attrs) do
     %Event{}
     |> Event.create_changeset(attrs)
+    |> validate_folder_owner()
     |> validate_unique_event()
     |> case do
       {:ok, event} ->
@@ -392,6 +571,18 @@ defmodule Claper.Events do
 
       {:error, changeset} ->
         {:error, %{changeset | action: :insert}}
+    end
+  end
+
+  # A folder can only hold events of its own user
+  defp validate_folder_owner(changeset) do
+    with folder_id when not is_nil(folder_id) <- Ecto.Changeset.get_change(changeset, :folder_id),
+         user_id <- Ecto.Changeset.get_field(changeset, :user_id),
+         false <-
+           Repo.exists?(from f in Folder, where: f.id == ^folder_id and f.user_id == ^user_id) do
+      Ecto.Changeset.add_error(changeset, :folder_id, "is invalid")
+    else
+      _ -> changeset
     end
   end
 
@@ -436,6 +627,7 @@ defmodule Claper.Events do
   def update_event(%Event{} = event, attrs) do
     event
     |> Event.update_changeset(attrs)
+    |> validate_folder_owner()
     |> validate_unique_event()
     |> case do
       {:ok, event} ->
