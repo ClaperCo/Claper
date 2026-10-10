@@ -8,6 +8,7 @@ defmodule ClaperWeb.EventLive.ManagerSettingsComponent do
     <div class="flex flex-col gap-4 p-4">
       <ClaperWeb.EventLive.ManageInteractionOptionsComponent.render
         current_interaction={@current_interaction}
+        scale_results={@scale_results}
         state={@state}
         create={@create}
         show_shortcut={@show_shortcut}
