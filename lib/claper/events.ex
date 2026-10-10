@@ -508,12 +508,14 @@ defmodule Claper.Events do
          |> Ecto.Multi.run(:from_event, fn _repo, _changes ->
            {:ok,
             get_user_event!(user_id, from_event_uuid,
-              presentation_file: [polls: [:poll_opts], forms: [], embeds: []]
+              presentation_file: [polls: [:poll_opts], forms: [], embeds: [], word_clouds: []]
             )}
          end)
          |> Ecto.Multi.run(:to_event, fn _repo, _changes ->
            {:ok,
-            get_user_event!(user_id, to_event_uuid, presentation_file: [:polls, :forms, :embeds])}
+            get_user_event!(user_id, to_event_uuid,
+              presentation_file: [:polls, :forms, :embeds, :word_clouds]
+            )}
          end)
          |> Ecto.Multi.run(:polls, fn _repo, %{from_event: from_event, to_event: to_event} ->
            {:ok,
@@ -571,6 +573,23 @@ defmodule Claper.Events do
               end
             end)}
          end)
+         |> Ecto.Multi.run(:word_clouds, fn _repo,
+                                            %{from_event: from_event, to_event: to_event} ->
+           {:ok,
+            from_event.presentation_file.word_clouds
+            |> Enum.each(fn word_cloud ->
+              if word_cloud.position < to_event.presentation_file.length do
+                Claper.WordClouds.create_word_cloud(%{
+                  title: word_cloud.title,
+                  position: word_cloud.position,
+                  enabled: word_cloud.enabled,
+                  show_results: word_cloud.show_results,
+                  max_entries: word_cloud.max_entries,
+                  presentation_file_id: to_event.presentation_file.id
+                })
+              end
+            end)}
+         end)
          |> Repo.transaction() do
       {:ok, %{to_event: to_event}} -> {:ok, to_event}
     end
@@ -602,7 +621,8 @@ defmodule Claper.Events do
           polls: [:poll_opts],
           forms: [],
           embeds: [],
-          quizzes: [quiz_questions: [:quiz_question_opts]]
+          quizzes: [quiz_questions: [:quiz_question_opts]],
+          word_clouds: []
         ]
       )
 
@@ -619,6 +639,9 @@ defmodule Claper.Events do
       |> Ecto.Multi.run(:forms, fn _repo, changes -> duplicate_forms(original, changes) end)
       |> Ecto.Multi.run(:embeds, fn _repo, changes -> duplicate_embeds(original, changes) end)
       |> Ecto.Multi.run(:quizzes, fn _repo, changes -> duplicate_quizzes(original, changes) end)
+      |> Ecto.Multi.run(:word_clouds, fn _repo, changes ->
+        duplicate_word_clouds(original, changes)
+      end)
 
     case Repo.transaction(multi) do
       {:ok, %{event: event}} -> {:ok, event}
@@ -763,6 +786,29 @@ defmodule Claper.Events do
           end
 
         {:ok, quizzes}
+
+      _ ->
+        {:ok, nil}
+    end
+  end
+
+  # Only the settings are copied. The words, and the ones the presenter hid,
+  # belong to the previous audience.
+  defp duplicate_word_clouds(original, changes) do
+    case get_in(original.presentation_file.word_clouds) do
+      word_clouds when is_list(word_clouds) ->
+        word_clouds =
+          for word_cloud <- word_clouds do
+            attrs =
+              Map.from_struct(word_cloud)
+              |> Map.drop([:id, :inserted_at, :updated_at, :hidden_words])
+              |> Map.put(:presentation_file_id, changes.presentation_file.id)
+
+            {:ok, word_cloud} = Claper.WordClouds.create_word_cloud(attrs)
+            word_cloud
+          end
+
+        {:ok, word_clouds}
 
       _ ->
         {:ok, nil}

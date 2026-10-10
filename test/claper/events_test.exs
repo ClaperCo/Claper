@@ -10,7 +10,8 @@ defmodule Claper.EventsTest do
     PresentationsFixtures,
     PollsFixtures,
     FormsFixtures,
-    EmbedsFixtures
+    EmbedsFixtures,
+    WordCloudsFixtures
   }
 
   setup_all do
@@ -434,6 +435,35 @@ defmodule Claper.EventsTest do
       assert duplicate_embed.title == embed.title
     end
 
+    test "duplicate_event/2 copies the settings of a word cloud and starts it empty" do
+      original = event_fixture()
+      presentation_file = presentation_file_fixture(%{event: original})
+
+      word_cloud =
+        word_cloud_fixture(%{
+          presentation_file: presentation_file,
+          title: "One word",
+          position: 2,
+          max_entries: 3,
+          show_results: false
+        })
+
+      {:ok, _} = Claper.WordClouds.submit_entry(original.uuid, word_cloud, "a", "Elixir")
+      {:ok, _} = Claper.WordClouds.hide_word(original.uuid, word_cloud, "elixir")
+
+      {:ok, duplicate} = Events.duplicate_event(original.user_id, original.uuid)
+      duplicate = Repo.preload(duplicate, presentation_file: [word_clouds: [:entries]])
+
+      assert [copy] = duplicate.presentation_file.word_clouds
+      assert copy.id != word_cloud.id
+      assert copy.title == "One word"
+      assert copy.position == 2
+      assert copy.max_entries == 3
+      refute copy.show_results
+      assert copy.entries == []
+      assert copy.hidden_words == []
+    end
+
     test "duplicate_event/2 raises when an invalid user-event is supplied", context do
       original = Enum.at(context.alice_active_events, 0)
 
@@ -572,6 +602,26 @@ defmodule Claper.EventsTest do
                Claper.Presentations.get_presentation_file!(to_presentation_file.id, [:polls]).polls,
                0
              ).title == from_poll.title
+    end
+
+    test "import/3 copies word clouds without their words" do
+      user = user_fixture()
+      from_event = event_fixture(%{user: user, name: "from event"})
+      to_event = event_fixture(%{user: user, name: "to event"})
+      from_presentation_file = presentation_file_fixture(%{event: from_event})
+      to_presentation_file = presentation_file_fixture(%{event: to_event, hash: "444444"})
+
+      word_cloud =
+        word_cloud_fixture(%{presentation_file: from_presentation_file, max_entries: 2})
+
+      {:ok, _} = Claper.WordClouds.submit_entry(from_event.uuid, word_cloud, "a", "Elixir")
+
+      assert {:ok, %Event{}} = Events.import(user.id, from_event.uuid, to_event.uuid)
+
+      assert [imported] = Claper.WordClouds.list_word_clouds(to_presentation_file.id)
+      assert imported.title == word_cloud.title
+      assert imported.max_entries == 2
+      assert Claper.WordClouds.list_entries(imported.id) == []
     end
 
     test "import/3 fail with different user" do

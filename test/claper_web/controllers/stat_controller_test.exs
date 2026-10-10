@@ -1,7 +1,7 @@
 defmodule ClaperWeb.StatControllerTest do
   use ClaperWeb.ConnCase, async: true
 
-  import Claper.{AccountsFixtures, FormsFixtures, PresentationsFixtures}
+  import Claper.{AccountsFixtures, FormsFixtures, PresentationsFixtures, WordCloudsFixtures}
 
   describe "export_transcriptions/2" do
     test "exports timestamp, language, and text as CSV", %{conn: conn} do
@@ -87,6 +87,56 @@ defmodule ClaperWeb.StatControllerTest do
       conn = build_conn() |> log_in_user(stranger)
 
       conn = post(conn, ~p"/export/forms/#{form.id}")
+
+      assert response(conn, 403) == "Forbidden"
+    end
+  end
+
+  describe "POST /export/word_clouds/:word_cloud_id" do
+    setup %{conn: conn} do
+      owner = confirmed_user_fixture()
+      presentation_file = presentation_file_fixture(%{user: owner}, [:event])
+
+      word_cloud =
+        word_cloud_fixture(%{
+          presentation_file: presentation_file,
+          title: "First thoughts",
+          max_entries: 2
+        })
+
+      %{conn: log_in_user(conn, owner), word_cloud: word_cloud, event: presentation_file.event}
+    end
+
+    test "exports one row per submitted word, hidden words marked", %{
+      conn: conn,
+      word_cloud: word_cloud,
+      event: event
+    } do
+      {:ok, _} = Claper.WordClouds.submit_entry(event.uuid, word_cloud, "attendee-1", "Elixir")
+      {:ok, _} = Claper.WordClouds.submit_entry(event.uuid, word_cloud, "attendee-1", "Rude")
+      {:ok, _} = Claper.WordClouds.hide_word(event.uuid, word_cloud, "rude")
+
+      conn = post(conn, ~p"/export/word_clouds/#{word_cloud.id}")
+
+      assert response_content_type(conn, :csv)
+
+      assert get_resp_header(conn, "content-disposition") == [
+               ~s(attachment; filename="word-cloud-First-thoughts.csv")
+             ]
+
+      [header_line, elixir_line, rude_line] =
+        conn |> response(200) |> String.split("\r\n", trim: true)
+
+      assert header_line == "Attendee identifier,User email,Word,Hidden,Sent at (UTC)"
+      assert elixir_line =~ "#{Base.encode16("attendee-1")},N/A,Elixir,false,"
+      assert rude_line =~ "#{Base.encode16("attendee-1")},N/A,Rude,true,"
+    end
+
+    test "returns 403 for users who don't own the event", %{word_cloud: word_cloud} do
+      stranger = confirmed_user_fixture()
+      conn = build_conn() |> log_in_user(stranger)
+
+      conn = post(conn, ~p"/export/word_clouds/#{word_cloud.id}")
 
       assert response(conn, 403) == "Forbidden"
     end
