@@ -193,6 +193,26 @@ defmodule ClaperWeb.UserRegistrationControllerTest do
       assert user.last_name == "Doe"
     end
 
+    test "shows the account created notice in the visitor's language", %{conn: conn} do
+      Application.put_env(:claper, :enable_account_creation, true)
+      Application.put_env(:claper, :email_confirmation, false)
+
+      conn =
+        conn
+        |> put_req_header("accept-language", "de")
+        |> post(~p"/users/register", %{
+          "user" => %{
+            "first_name" => "Jane",
+            "last_name" => "Doe",
+            "email" => unique_user_email(),
+            "password" => valid_user_password(),
+            "password_confirmation" => valid_user_password()
+          }
+        })
+
+      assert Phoenix.Flash.get(conn.assigns.flash, :info) == "Benutzer erfolgreich erstellt"
+    end
+
     test "creates the user and redirects to confirmation when email confirmation is enabled", %{
       conn: conn
     } do
