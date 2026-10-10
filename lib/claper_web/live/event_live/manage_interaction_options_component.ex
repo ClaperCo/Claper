@@ -122,10 +122,51 @@ defmodule ClaperWeb.EventLive.ManageInteractionOptionsComponent do
                 </:icon>
               </.toggle_row>
 
+              <.toggle_row
+                label={
+                  if @current_interaction.reveal_answers,
+                    do: gettext("Hide correct answers"),
+                    else: gettext("Reveal correct answers")
+                }
+                checked={@current_interaction.reveal_answers}
+                key={:quiz_reveal_answers}
+                shortcut={if @create == nil, do: "X", else: nil}
+                show_shortcut={@show_shortcut}
+              >
+                <:icon>
+                  <svg
+                    :if={@current_interaction.reveal_answers}
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    class="h-5 w-5"
+                  >
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M10.585 10.587a2 2 0 0 0 2.829 2.828" /><path d="M16.681 16.673a8.717 8.717 0 0 1 -4.681 1.327c-3.6 0 -6.6 -2 -9 -6c1.272 -2.12 2.712 -3.678 4.32 -4.674m2.86 -1.146a9.055 9.055 0 0 1 1.82 -.18c3.6 0 6.6 2 9 6c-.666 1.11 -1.379 2.067 -2.138 2.87" /><path d="M3 3l18 18" />
+                  </svg>
+                  <svg
+                    :if={!@current_interaction.reveal_answers}
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    class="h-5 w-5"
+                  >
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" /><path d="M21 12c-2.4 4 -5.4 6 -9 6c-3.6 0 -6.6 -2 -9 -6c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6" />
+                  </svg>
+                </:icon>
+              </.toggle_row>
+
               <.action_row
                 label={gettext("Review questions")}
                 key={:review_quiz_questions}
-                disabled={!@current_interaction.show_results}
+                disabled={!Claper.Quizzes.Quiz.on_screen?(@current_interaction)}
               >
                 <:icon>
                   <svg
@@ -147,7 +188,7 @@ defmodule ClaperWeb.EventLive.ManageInteractionOptionsComponent do
                 <.action_row
                   label={gettext("Previous")}
                   key={:prev_quiz_question}
-                  disabled={!@current_interaction.show_results}
+                  disabled={!Claper.Quizzes.Quiz.on_screen?(@current_interaction)}
                   compact
                 >
                   <:icon>
@@ -169,7 +210,7 @@ defmodule ClaperWeb.EventLive.ManageInteractionOptionsComponent do
                 <.action_row
                   label={gettext("Next")}
                   key={:next_quiz_question}
-                  disabled={!@current_interaction.show_results}
+                  disabled={!Claper.Quizzes.Quiz.on_screen?(@current_interaction)}
                   compact
                   reverse
                 >
