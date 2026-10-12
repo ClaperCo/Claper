@@ -31,6 +31,8 @@ defmodule ClaperWeb.AdminLive.FormFieldComponent do
               ] ++ @extra_attrs
             )}
           <% "password" -> %>
+            <%!-- Only the submitted value is echoed back, so a re-render keeps what
+                  was typed without ever sending a stored secret to the browser. --%>
             <div class="relative">
               {password_input(
                 @form,
@@ -39,15 +41,36 @@ defmodule ClaperWeb.AdminLive.FormFieldComponent do
                   class: "input w-full pr-10",
                   placeholder: @placeholder,
                   required: @required,
-                  id: "password-field-#{@field}"
+                  id: "password-field-#{@field}",
+                  value: @form.params[to_string(@field)]
                 ] ++ @extra_attrs
               )}
               <button
                 type="button"
-                class="absolute inset-y-0 right-0 pr-3 flex items-center text-base-content/50 hover:text-base-content"
+                class="absolute inset-y-0 right-0 z-10 pr-3 flex items-center text-base-content/50 hover:text-base-content"
                 phx-click={toggle_password_visibility("password-field-#{@field}")}
+                aria-label={gettext("Show or hide")}
+                title={gettext("Show or hide")}
               >
-                <i class="fas fa-eye"></i>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke-width="1.5"
+                  stroke="currentColor"
+                  class="w-5 h-5"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z"
+                  />
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
+                  />
+                </svg>
               </button>
             </div>
           <% "textarea" -> %>
@@ -140,7 +163,7 @@ defmodule ClaperWeb.AdminLive.FormFieldComponent do
         <label class="label">
           {error_tag(@form, @field)}
           <%= if @description do %>
-            <span class="label-text-alt">{@description}</span>
+            <span class="label-text-alt whitespace-normal">{@description}</span>
           <% end %>
         </label>
       </div>
@@ -178,7 +201,6 @@ defmodule ClaperWeb.AdminLive.FormFieldComponent do
   end
 
   defp toggle_password_visibility(field_id) do
-    %Phoenix.LiveView.JS{}
-    |> Phoenix.LiveView.JS.dispatch("toggle-password", to: "##{field_id}")
+    JS.toggle_attribute({"type", "text", "password"}, to: "##{field_id}")
   end
 end

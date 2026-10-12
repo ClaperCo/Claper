@@ -84,6 +84,32 @@ defmodule ClaperWeb.ConnCase do
   end
 
   @doc """
+  Setup helper that registers and logs in an administrator.
+
+      setup :register_and_log_in_admin
+
+  It stores an updated connection and the administrator in the test context.
+  """
+  def register_and_log_in_admin(%{conn: conn}) do
+    ensure_role("user")
+    ensure_role("admin")
+
+    {:ok, admin} =
+      Claper.AccountsFixtures.confirmed_user_fixture()
+      |> Claper.Accounts.assign_role("admin")
+
+    %{conn: log_in_user(conn, admin), admin: admin}
+  end
+
+  defp ensure_role(name) do
+    Claper.Accounts.get_role_by_name(name) ||
+      case Claper.Accounts.create_role(%{name: name}) do
+        {:ok, role} -> role
+        {:error, _changeset} -> Claper.Accounts.get_role_by_name(name)
+      end
+  end
+
+  @doc """
   Logs the given `user` into the `conn`.
 
   It returns an updated `conn`.

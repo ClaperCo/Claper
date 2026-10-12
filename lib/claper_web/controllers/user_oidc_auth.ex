@@ -29,26 +29,27 @@ defmodule ClaperWeb.UserOidcAuth do
   def new(conn, params) do
     case fetch_provider(conn, params) do
       {:ok, provider} ->
-        with {:ok, client_context} <- client_context(provider) do
-          pkce_verifier = generate_pkce_verifier()
-          state = :crypto.strong_rand_bytes(16) |> Base.url_encode64(padding: false)
-          nonce = :crypto.strong_rand_bytes(16) |> Base.url_encode64(padding: false)
+        case client_context(provider) do
+          {:ok, client_context} ->
+            pkce_verifier = generate_pkce_verifier()
+            state = :crypto.strong_rand_bytes(16) |> Base.url_encode64(padding: false)
+            nonce = :crypto.strong_rand_bytes(16) |> Base.url_encode64(padding: false)
 
-          conn =
-            conn
-            |> put_session(:pkce_verifier, pkce_verifier)
-            |> put_session(:oidc_state, state)
-            |> put_session(:oidc_nonce, nonce)
-            |> put_session(@session_slug, provider.slug)
+            conn =
+              conn
+              |> put_session(:pkce_verifier, pkce_verifier)
+              |> put_session(:oidc_state, state)
+              |> put_session(:oidc_nonce, nonce)
+              |> put_session(@session_slug, provider.slug)
 
-          {:ok, redirect_uri} =
-            Oidcc.Authorization.create_redirect_url(
-              client_context,
-              auth_opts(provider, pkce_verifier) |> Map.merge(%{state: state, nonce: nonce})
-            )
+            {:ok, redirect_uri} =
+              Oidcc.Authorization.create_redirect_url(
+                client_context,
+                auth_opts(provider, pkce_verifier) |> Map.merge(%{state: state, nonce: nonce})
+              )
 
-          redirect(conn, external: Enum.join(redirect_uri, ""))
-        else
+            redirect(conn, external: Enum.join(redirect_uri, ""))
+
           {:error, reason} ->
             fail(conn, :service_unavailable, provider_unavailable(provider, reason))
         end
@@ -139,11 +140,16 @@ defmodule ClaperWeb.UserOidcAuth do
   defp provider_redirect_uri(%Provider{slug: slug, redirect_uri: redirect_uri}) do
     case redirect_uri do
       value when is_binary(value) and value != "" -> value
-      _ -> "#{base_url()}/users/auth/#{slug}/callback"
+      _ -> callback_url(slug)
     end
   end
 
   defp provider_redirect_uri(%{redirect_uri: redirect_uri}), do: redirect_uri
+
+  @doc """
+  The URL Claper serves the authorization response of a stored provider on.
+  """
+  def callback_url(slug), do: "#{base_url()}/users/auth/#{slug}/callback"
 
   defp provider_name(%Provider{name: name}), do: name
   defp provider_name(%{name: name}), do: name
@@ -323,6 +329,7 @@ defmodule ClaperWeb.UserOidcAuth do
            first_name: claims["given_name"],
            last_name: claims["family_name"],
            email: claims["email"],
+           email_verified: claims["email_verified"],
            provider: provider_name(provider),
            expires_at: claims["exp"] |> DateTime.from_unix!() |> DateTime.to_naive(),
            id_token: token.id_token,
@@ -333,6 +340,9 @@ defmodule ClaperWeb.UserOidcAuth do
            organization: claims[mappings["organization"]],
            photo_url: claims[mappings["photo_url"]]
          }) do
+      {:error, :email_not_verified} ->
+        {:error, "the provider has not verified this email address"}
+
       {:error, _} ->
         {:error, :invalid_user}
 

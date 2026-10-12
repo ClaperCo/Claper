@@ -14,24 +14,6 @@ defmodule ClaperWeb.AdminLive.AdminShowTest do
   alias Claper.Accounts
   alias Claper.Repo
 
-  defp role_fixture(name) do
-    Accounts.get_role_by_name(name) ||
-      case Accounts.create_role(%{name: name}) do
-        {:ok, role} -> role
-        {:error, _changeset} -> Accounts.get_role_by_name(name)
-      end
-  end
-
-  defp register_and_log_in_admin(%{conn: conn}) do
-    role_fixture("user")
-    role_fixture("admin")
-
-    user = confirmed_user_fixture()
-    {:ok, user} = Accounts.assign_role(user, "admin")
-
-    %{conn: log_in_user(conn, user), admin: user}
-  end
-
   describe "audit log show" do
     setup [:register_and_log_in_admin]
 

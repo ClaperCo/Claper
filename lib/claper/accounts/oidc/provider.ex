@@ -25,7 +25,7 @@ defmodule Claper.Accounts.Oidc.Provider do
     field :slug, :string
     field :issuer, :string
     field :client_id, :string
-    field :client_secret, :string
+    field :client_secret, :string, redact: true
     field :redirect_uri, :string
     field :scope, :string, default: "openid email profile"
     field :active, :boolean, default: true
