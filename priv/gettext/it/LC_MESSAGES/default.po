@@ -3677,11 +3677,6 @@ msgstr[1] "%{count} risposte"
 msgid "Already confirmed?"
 msgstr "Hai già confermato?"
 
-#: lib/claper_web/live/admin_live/oidc_provider_live/form_component.ex:103
-#, elixir-autogen, elixir-format
-msgid "Authorization Code"
-msgstr "Codice di autorizzazione"
-
 #: lib/claper_web/templates/user_confirmation/new.html.heex:41
 #, elixir-autogen, elixir-format
 msgid "Confirm your account"
@@ -3692,30 +3687,10 @@ msgstr "Conferma il tuo account"
 msgid "Enter your email address and we'll send you a new confirmation link."
 msgstr "Inserisci il tuo indirizzo e-mail e ti invieremo un nuovo link di conferma."
 
-#: lib/claper_web/live/admin_live/oidc_provider_live/form_component.ex:121
-#, elixir-autogen, elixir-format
-msgid "Form Post"
-msgstr "POST del modulo"
-
-#: lib/claper_web/live/admin_live/oidc_provider_live/form_component.ex:120
-#, elixir-autogen, elixir-format
-msgid "Fragment"
-msgstr "Frammento URL"
-
-#: lib/claper_web/live/admin_live/oidc_provider_live/form_component.ex:105
-#, elixir-autogen, elixir-format
-msgid "Hybrid"
-msgstr "Ibrido"
-
 #: lib/claper_web/controllers/user_confirmation_controller.ex:22
 #, elixir-autogen, elixir-format
 msgid "If your email is in our system and it has not been confirmed yet, you will receive an email with instructions shortly."
 msgstr "Se il tuo indirizzo email è nel nostro sistema e non è ancora stato confermato, riceverai a breve un'email con le istruzioni."
-
-#: lib/claper_web/live/admin_live/oidc_provider_live/form_component.ex:104
-#, elixir-autogen, elixir-format
-msgid "Implicit"
-msgstr "Implicito"
 
 #: lib/claper_web/controllers/user_session_controller.ex:73
 #, elixir-autogen, elixir-format
@@ -3726,11 +3701,6 @@ msgstr "Email o password non validi"
 #, elixir-autogen, elixir-format
 msgid "Magic link is invalid or has expired."
 msgstr "Il link di accesso non è valido o è scaduto."
-
-#: lib/claper_web/live/admin_live/oidc_provider_live/form_component.ex:119
-#, elixir-autogen, elixir-format
-msgid "Query"
-msgstr "Parametri della query"
 
 #: lib/claper_web/templates/user_confirmation/new.html.heex:62
 #, elixir-autogen, elixir-format

@@ -27,15 +27,51 @@ defmodule ClaperWeb.AdminLive.OidcProviderLiveTest do
   describe "form" do
     setup [:register_and_log_in_admin]
 
-    test "translates the response type and mode options", %{conn: conn} do
-      {:ok, _view, html} =
+    test "keeps protocol option names untranslated and translates the response mode label", %{
+      conn: conn
+    } do
+      {:ok, view, html} =
         conn
         |> put_req_header("accept-language", "de")
         |> live(~p"/admin/oidc_providers/new")
 
-      assert html =~ "Autorisierungscode"
       assert html =~ "Antwortmodus"
-      assert html =~ "Formular-POST"
+
+      assert has_element?(
+               view,
+               "select[name='provider[response_type]'] option[value='code']",
+               "Authorization Code"
+             )
+
+      assert has_element?(
+               view,
+               "select[name='provider[response_type]'] option[value='token']",
+               "Implicit"
+             )
+
+      assert has_element?(
+               view,
+               "select[name='provider[response_type]'] option[value='code token']",
+               "Hybrid"
+             )
+
+      assert has_element?(
+               view,
+               "select[name='provider[response_mode]'] option[value='query']",
+               "Query"
+             )
+
+      assert has_element?(
+               view,
+               "select[name='provider[response_mode]'] option[value='fragment']",
+               "Fragment"
+             )
+
+      assert has_element?(
+               view,
+               "select[name='provider[response_mode]'] option[value='form_post']",
+               "Form Post"
+             )
     end
   end
 end

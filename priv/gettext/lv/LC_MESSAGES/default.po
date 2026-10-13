@@ -3681,11 +3681,6 @@ msgstr[2] "%{count} atbildes"
 msgid "Already confirmed?"
 msgstr "Jau apstiprinājāt?"
 
-#: lib/claper_web/live/admin_live/oidc_provider_live/form_component.ex:103
-#, elixir-autogen, elixir-format
-msgid "Authorization Code"
-msgstr "Autorizācijas kods"
-
 #: lib/claper_web/templates/user_confirmation/new.html.heex:41
 #, elixir-autogen, elixir-format
 msgid "Confirm your account"
@@ -3696,30 +3691,10 @@ msgstr "Apstipriniet savu kontu"
 msgid "Enter your email address and we'll send you a new confirmation link."
 msgstr "Ievadiet savu e-pasta adresi, un mēs nosūtīsim jaunu apstiprinājuma saiti."
 
-#: lib/claper_web/live/admin_live/oidc_provider_live/form_component.ex:121
-#, elixir-autogen, elixir-format
-msgid "Form Post"
-msgstr "Veidlapas POST"
-
-#: lib/claper_web/live/admin_live/oidc_provider_live/form_component.ex:120
-#, elixir-autogen, elixir-format
-msgid "Fragment"
-msgstr "URL fragments"
-
-#: lib/claper_web/live/admin_live/oidc_provider_live/form_component.ex:105
-#, elixir-autogen, elixir-format
-msgid "Hybrid"
-msgstr "Hibrīdais"
-
 #: lib/claper_web/controllers/user_confirmation_controller.ex:22
 #, elixir-autogen, elixir-format
 msgid "If your email is in our system and it has not been confirmed yet, you will receive an email with instructions shortly."
 msgstr "Ja jūsu e-pasta adrese ir mūsu sistēmā un vēl nav apstiprināta, drīz saņemsiet e-pastu ar norādījumiem."
-
-#: lib/claper_web/live/admin_live/oidc_provider_live/form_component.ex:104
-#, elixir-autogen, elixir-format
-msgid "Implicit"
-msgstr "Implicītais"
 
 #: lib/claper_web/controllers/user_session_controller.ex:73
 #, elixir-autogen, elixir-format
@@ -3730,11 +3705,6 @@ msgstr "Nederīga e-pasta adrese vai parole"
 #, elixir-autogen, elixir-format
 msgid "Magic link is invalid or has expired."
 msgstr "Pieteikšanās saite ir nederīga vai tās derīguma termiņš ir beidzies."
-
-#: lib/claper_web/live/admin_live/oidc_provider_live/form_component.ex:119
-#, elixir-autogen, elixir-format
-msgid "Query"
-msgstr "Vaicājuma parametri"
 
 #: lib/claper_web/templates/user_confirmation/new.html.heex:62
 #, elixir-autogen, elixir-format

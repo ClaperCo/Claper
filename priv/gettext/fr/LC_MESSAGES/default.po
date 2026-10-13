@@ -3681,11 +3681,6 @@ msgstr[2] "%{count} réponses"
 msgid "Already confirmed?"
 msgstr "Déjà confirmé ?"
 
-#: lib/claper_web/live/admin_live/oidc_provider_live/form_component.ex:103
-#, elixir-autogen, elixir-format
-msgid "Authorization Code"
-msgstr "Code d'autorisation"
-
 #: lib/claper_web/templates/user_confirmation/new.html.heex:41
 #, elixir-autogen, elixir-format
 msgid "Confirm your account"
@@ -3696,30 +3691,10 @@ msgstr "Confirmez votre compte"
 msgid "Enter your email address and we'll send you a new confirmation link."
 msgstr "Entrez votre adresse email et nous vous enverrons un nouveau lien de confirmation."
 
-#: lib/claper_web/live/admin_live/oidc_provider_live/form_component.ex:121
-#, elixir-autogen, elixir-format
-msgid "Form Post"
-msgstr "POST de formulaire"
-
-#: lib/claper_web/live/admin_live/oidc_provider_live/form_component.ex:120
-#, elixir-autogen, elixir-format
-msgid "Fragment"
-msgstr "Fragment d'URL"
-
-#: lib/claper_web/live/admin_live/oidc_provider_live/form_component.ex:105
-#, elixir-autogen, elixir-format
-msgid "Hybrid"
-msgstr "Hybride"
-
 #: lib/claper_web/controllers/user_confirmation_controller.ex:22
 #, elixir-autogen, elixir-format
 msgid "If your email is in our system and it has not been confirmed yet, you will receive an email with instructions shortly."
 msgstr "Si votre adresse électronique se trouve dans notre système et n'a pas encore été confirmée, vous recevrez sous peu un email contenant des instructions."
-
-#: lib/claper_web/live/admin_live/oidc_provider_live/form_component.ex:104
-#, elixir-autogen, elixir-format
-msgid "Implicit"
-msgstr "Implicite"
 
 #: lib/claper_web/controllers/user_session_controller.ex:73
 #, elixir-autogen, elixir-format
@@ -3730,11 +3705,6 @@ msgstr "Adresse email ou mot de passe invalide"
 #, elixir-autogen, elixir-format
 msgid "Magic link is invalid or has expired."
 msgstr "Le lien de connexion n'est pas valide ou a expiré."
-
-#: lib/claper_web/live/admin_live/oidc_provider_live/form_component.ex:119
-#, elixir-autogen, elixir-format
-msgid "Query"
-msgstr "Paramètres de requête"
 
 #: lib/claper_web/templates/user_confirmation/new.html.heex:62
 #, elixir-autogen, elixir-format

@@ -3676,11 +3676,6 @@ msgstr[1] "%{count} respuestas"
 msgid "Already confirmed?"
 msgstr "¿Ya confirmaste tu cuenta?"
 
-#: lib/claper_web/live/admin_live/oidc_provider_live/form_component.ex:103
-#, elixir-autogen, elixir-format
-msgid "Authorization Code"
-msgstr "Código de autorización"
-
 #: lib/claper_web/templates/user_confirmation/new.html.heex:41
 #, elixir-autogen, elixir-format
 msgid "Confirm your account"
@@ -3691,30 +3686,10 @@ msgstr "Confirma tu cuenta"
 msgid "Enter your email address and we'll send you a new confirmation link."
 msgstr "Introduce tu correo electrónico y te enviaremos un nuevo enlace de confirmación."
 
-#: lib/claper_web/live/admin_live/oidc_provider_live/form_component.ex:121
-#, elixir-autogen, elixir-format
-msgid "Form Post"
-msgstr "POST de formulario"
-
-#: lib/claper_web/live/admin_live/oidc_provider_live/form_component.ex:120
-#, elixir-autogen, elixir-format
-msgid "Fragment"
-msgstr "Fragmento de URL"
-
-#: lib/claper_web/live/admin_live/oidc_provider_live/form_component.ex:105
-#, elixir-autogen, elixir-format
-msgid "Hybrid"
-msgstr "Híbrido"
-
 #: lib/claper_web/controllers/user_confirmation_controller.ex:22
 #, elixir-autogen, elixir-format
 msgid "If your email is in our system and it has not been confirmed yet, you will receive an email with instructions shortly."
 msgstr "Si tu email está en nuestro sistema y aún no ha sido confirmado, en breve recibirás un email con instrucciones."
-
-#: lib/claper_web/live/admin_live/oidc_provider_live/form_component.ex:104
-#, elixir-autogen, elixir-format
-msgid "Implicit"
-msgstr "Implícito"
 
 #: lib/claper_web/controllers/user_session_controller.ex:73
 #, elixir-autogen, elixir-format
@@ -3725,11 +3700,6 @@ msgstr "Email o contraseña no válidos"
 #, elixir-autogen, elixir-format
 msgid "Magic link is invalid or has expired."
 msgstr "El enlace de acceso es inválido o ha caducado."
-
-#: lib/claper_web/live/admin_live/oidc_provider_live/form_component.ex:119
-#, elixir-autogen, elixir-format
-msgid "Query"
-msgstr "Parámetros de consulta"
 
 #: lib/claper_web/templates/user_confirmation/new.html.heex:62
 #, elixir-autogen, elixir-format

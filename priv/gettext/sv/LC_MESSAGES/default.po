@@ -3712,11 +3712,6 @@ msgstr[1] "%{count} svar"
 msgid "Already confirmed?"
 msgstr "Redan bekräftat?"
 
-#: lib/claper_web/live/admin_live/oidc_provider_live/form_component.ex:103
-#, elixir-autogen, elixir-format
-msgid "Authorization Code"
-msgstr "Auktoriseringskod"
-
 #: lib/claper_web/templates/user_confirmation/new.html.heex:41
 #, elixir-autogen, elixir-format
 msgid "Confirm your account"
@@ -3727,30 +3722,10 @@ msgstr "Bekräfta ditt konto"
 msgid "Enter your email address and we'll send you a new confirmation link."
 msgstr "Ange din e-postadress så skickar vi en ny bekräftelselänk."
 
-#: lib/claper_web/live/admin_live/oidc_provider_live/form_component.ex:121
-#, elixir-autogen, elixir-format
-msgid "Form Post"
-msgstr "Formulär-POST"
-
-#: lib/claper_web/live/admin_live/oidc_provider_live/form_component.ex:120
-#, elixir-autogen, elixir-format
-msgid "Fragment"
-msgstr "URL-fragment"
-
-#: lib/claper_web/live/admin_live/oidc_provider_live/form_component.ex:105
-#, elixir-autogen, elixir-format
-msgid "Hybrid"
-msgstr "Hybrid"
-
 #: lib/claper_web/controllers/user_confirmation_controller.ex:22
 #, elixir-autogen, elixir-format
 msgid "If your email is in our system and it has not been confirmed yet, you will receive an email with instructions shortly."
 msgstr "Om din e-postadress finns i vårt system och inte har bekräftats ännu får du snart ett e-postmeddelande med instruktioner."
-
-#: lib/claper_web/live/admin_live/oidc_provider_live/form_component.ex:104
-#, elixir-autogen, elixir-format
-msgid "Implicit"
-msgstr "Implicit"
 
 #: lib/claper_web/controllers/user_session_controller.ex:73
 #, elixir-autogen, elixir-format
@@ -3761,11 +3736,6 @@ msgstr "Ogiltig e-postadress eller ogiltigt lösenord"
 #, elixir-autogen, elixir-format
 msgid "Magic link is invalid or has expired."
 msgstr "Inloggningslänken är ogiltig eller har gått ut."
-
-#: lib/claper_web/live/admin_live/oidc_provider_live/form_component.ex:119
-#, elixir-autogen, elixir-format
-msgid "Query"
-msgstr "Frågeparametrar"
 
 #: lib/claper_web/templates/user_confirmation/new.html.heex:62
 #, elixir-autogen, elixir-format
