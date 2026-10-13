@@ -19,10 +19,6 @@ defmodule ClaperWeb.EventLive.QuizComponent do
         :response_opt_ids,
         Enum.map(assigns.current_quiz_responses, & &1.quiz_question_opt_id)
       )
-      |> assign(
-        :response_opt_ids,
-        Enum.map(assigns.current_quiz_responses, & &1.quiz_question_opt_id)
-      )
 
     ~H"""
     <div class="font-display">

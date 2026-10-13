@@ -337,6 +337,16 @@ defmodule Claper.EventsTest do
       assert duplicate.code != original.code
     end
 
+    test "duplicate_event/2 truncates the copy name to fit the 50 character limit" do
+      name = String.duplicate("a", 39) <> " “natural”?"
+      original = event_fixture(%{name: name})
+
+      {:ok, duplicate} = Events.duplicate_event(original.user_id, original.uuid)
+
+      assert duplicate.name == String.slice(name, 0, 43) <> " (Copy)"
+      assert String.length(duplicate.name) == 50
+    end
+
     test "duplicate_event/2 duplicates an event with presentation associations" do
       original = event_fixture()
       presentation_file = presentation_file_fixture(%{event: original})

@@ -1,3 +1,15 @@
+## v.3.1.1
+
+### Features
+
+- Add Japenese translation (#258)
+
+### Fixes and improvements
+
+- Fix crash caused by duplication of events with too long names
+- Fix missing locales for emails and admin (#265 #266 #267)
+
+
 ## v.3.1.0
 
 ### Features

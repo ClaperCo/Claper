@@ -12,6 +12,7 @@ import "moment/locale/nl";
 import "moment/locale/it";
 import "moment/locale/hu";
 import "moment/locale/lv";
+import "moment/locale/ja";
 import QRCodeStyling from "qr-code-styling";
 import { Presenter } from "./presenter";
 import { Manager } from "./manager";
@@ -31,6 +32,7 @@ const supportedLocales = window.claperConfig?.supportedLocales || [
   "it",
   "hu",
   "lv",
+  "ja",
 ];
 
 var locale =

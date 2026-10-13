@@ -637,9 +637,23 @@ defmodule Claper.Events do
       |> Map.drop([:id, :inserted_at, :updated_at, :presentation_file, :expired_at])
       |> Map.put(:leaders, [])
       |> Map.put(:code, "#{code}")
-      |> Map.put(:name, "#{original.name} (Copy)")
+      |> Map.put(:name, duplicate_event_name(original.name))
 
     create_event(attrs)
+  end
+
+  @copy_suffix " (Copy)"
+  @event_name_max_length 50
+
+  defp duplicate_event_name(name) do
+    max_base_length = @event_name_max_length - String.length(@copy_suffix)
+
+    base =
+      if String.length(name) > max_base_length,
+        do: name |> String.slice(0, max_base_length) |> String.trim_trailing(),
+        else: name
+
+    base <> @copy_suffix
   end
 
   defp duplicate_presentation_file(original, changes) do

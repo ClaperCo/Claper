@@ -1,0 +1,81 @@
+## "msgid"s in this file come from POT (.pot) files.
+###
+### Do not add, change, or remove "msgid"s manually here as
+### they're tied to the ones in the corresponding POT file
+### (with the same domain).
+###
+### Use "mix gettext.extract --merge" or "mix gettext.merge"
+### to merge POT files into PO files.
+msgid ""
+msgstr ""
+"Language: ja\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+msgid "can't be blank"
+msgstr "入力してください"
+
+msgid "has already been taken"
+msgstr "すでに使用されています"
+
+msgid "is invalid"
+msgstr "値が正しくありません"
+
+msgid "must be accepted"
+msgstr "同意が必要です"
+
+msgid "has invalid format"
+msgstr "形式が正しくありません"
+
+msgid "has an invalid entry"
+msgstr "正しくない値が含まれています"
+
+msgid "is reserved"
+msgstr "予約済みのため使用できません"
+
+msgid "does not match confirmation"
+msgstr "確認用の入力と一致しません"
+
+msgid "is still associated with this entry"
+msgstr "関連するデータが存在するため削除できません"
+
+msgid "are still associated with this entry"
+msgstr "関連するデータが存在するため削除できません"
+
+msgid "should be %{count} character(s)"
+msgid_plural "should be %{count} character(s)"
+msgstr[0] "%{count}文字で入力してください"
+
+msgid "should have %{count} item(s)"
+msgid_plural "should have %{count} item(s)"
+msgstr[0] "%{count}件にしてください"
+
+msgid "should be at least %{count} character(s)"
+msgid_plural "should be at least %{count} character(s)"
+msgstr[0] "%{count}文字以上で入力してください"
+
+msgid "should have at least %{count} item(s)"
+msgid_plural "should have at least %{count} item(s)"
+msgstr[0] "%{count}件以上必要です"
+
+msgid "should be at most %{count} character(s)"
+msgid_plural "should be at most %{count} character(s)"
+msgstr[0] "%{count}文字以内で入力してください"
+
+msgid "should have at most %{count} item(s)"
+msgid_plural "should have at most %{count} item(s)"
+msgstr[0] "%{count}件以内にしてください"
+
+msgid "must be less than %{number}"
+msgstr "%{number}未満の値を入力してください"
+
+msgid "must be greater than %{number}"
+msgstr "%{number}より大きい値を入力してください"
+
+msgid "must be less than or equal to %{number}"
+msgstr "%{number}以下の値を入力してください"
+
+msgid "must be greater than or equal to %{number}"
+msgstr "%{number}以上の値を入力してください"
+
+msgid "must be equal to %{number}"
+msgstr "%{number}を入力してください"
