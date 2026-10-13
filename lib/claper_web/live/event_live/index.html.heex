@@ -56,6 +56,25 @@
         </:tab>
       </.tabs>
     </div>
+
+    <nav
+      :if={@folder}
+      id="breadcrumbs"
+      aria-label={gettext("Folder path")}
+      class="flex flex-wrap items-center gap-1 px-4 lg:px-0 pb-3 text-sm"
+    >
+      <.link patch={~p"/events"} class="link link-hover">{gettext("Events")}</.link>
+      <%= for {crumb, index} <- Enum.with_index(@breadcrumbs) do %>
+        <span aria-hidden="true">/</span>
+        <%= if crumb.id == @folder.id do %>
+          <span class="font-semibold" aria-current="page">{crumb.name}</span>
+        <% else %>
+          <.link patch={folder_href(Enum.take(@path, index + 1))} class="link link-hover">
+            {crumb.name}
+          </.link>
+        <% end %>
+      <% end %>
+    </nav>
     
 <!-- Desktop: Full layout with tabs, view toggle, and action buttons -->
     <div class="hidden lg:flex items-center justify-between gap-4">
@@ -131,9 +150,15 @@
             </svg>
           </button>
         </div>
+
+        <.create_folder_control
+          :if={@active_tab != "invited"}
+          prefix="create-folder"
+          open={@creating_folder}
+        />
         
 <!-- Create Event Button -->
-        <.link patch={~p"/events/new"} class="btn btn-gradient">
+        <.link patch={new_event_href(@path)} class="btn btn-gradient">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             class="h-5 w-5"
@@ -156,6 +181,14 @@
   <div class="relative">
     <!-- Mobile: Always list view -->
     <div role="event-list" id={"events-mobile-#{@active_tab}"} class="lg:hidden space-y-2.5">
+      <%= if show_folders?(assigns) do %>
+        <.folder_card
+          :for={folder <- @subfolders}
+          id={"folder-mobile-#{folder.id}"}
+          folder={folder}
+          href={folder_href(@path ++ [folder.name])}
+        />
+      <% end %>
       <% current_time = NaiveDateTime.utc_now() %>
       <%= for event <- @events do %>
         <.live_component
@@ -177,6 +210,15 @@
         phx-update="replace"
         class="hidden lg:grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4"
       >
+        <%= if show_folders?(assigns) do %>
+          <.folder_card
+            :for={folder <- @subfolders}
+            id={"folder-#{@view_mode}-#{folder.id}"}
+            folder={folder}
+            href={folder_href(@path ++ [folder.name])}
+            layout={@view_mode}
+          />
+        <% end %>
         <% current_time = NaiveDateTime.utc_now() %>
         <%= for event <- @events do %>
           <.live_component
@@ -192,6 +234,15 @@
     <% else %>
       <!-- List View -->
       <div role="event-list" id="events" phx-update="replace" class="hidden lg:block space-y-4">
+        <%= if show_folders?(assigns) do %>
+          <.folder_card
+            :for={folder <- @subfolders}
+            id={"folder-#{@view_mode}-#{folder.id}"}
+            folder={folder}
+            href={folder_href(@path ++ [folder.name])}
+            layout={@view_mode}
+          />
+        <% end %>
         <% current_time = NaiveDateTime.utc_now() %>
         <%= for event <- @events do %>
           <.live_component
@@ -216,7 +267,7 @@
     <% end %>
     
 <!-- Empty State -->
-    <%= if Enum.count(@events) == 0 do %>
+    <%= if Enum.count(@events) == 0 and not (show_folders?(assigns) and @subfolders != []) do %>
       <div class="w-full py-16 text-center">
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -233,7 +284,7 @@
           />
         </svg>
         <p class="text-xl text-gray-400">{gettext("Create your first event")}</p>
-        <.link patch={~p"/events/new"} class="btn btn-gradient mt-4">
+        <.link patch={new_event_href(@path)} class="btn btn-gradient mt-4">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             class="h-5 w-5"
@@ -255,7 +306,12 @@
 <!-- Mobile Fixed Bottom Action Buttons -->
   <div class="lg:hidden fixed bottom-0 left-0 right-0 bg-gradient-to-t from-white from-70% via-white via-85% to-transparent px-4 pt-12 pb-6 z-20">
     <div class="flex flex-col gap-2.5">
-      <.link patch={~p"/events/new"} class="btn btn-gradient w-full">
+      <.create_folder_control
+        :if={@active_tab != "invited"}
+        prefix="create-folder-mobile"
+        open={@creating_folder}
+      />
+      <.link patch={new_event_href(@path)} class="btn btn-gradient w-full">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           class="h-5 w-5"
@@ -278,7 +334,7 @@
 <div
   id="drawer-overlay"
   class={"fixed inset-0 bg-black/50 z-40 transition-opacity duration-300 #{if @live_action in [:new, :edit], do: "opacity-100", else: "opacity-0 pointer-events-none"}"}
-  phx-click={JS.patch(~p"/events")}
+  phx-click={JS.patch(folder_href(@path))}
 />
 
 <!-- Sliding Drawer Panel -->
@@ -289,7 +345,7 @@
   aria-labelledby={if @live_action in [:new, :edit], do: "event-editor-title"}
   aria-hidden={@live_action not in [:new, :edit]}
   class={"fixed top-0 right-0 h-full w-full sm:w-[520px] bg-base-100 shadow-xl z-50 transform transition-transform duration-300 ease-in-out overflow-hidden #{if @live_action in [:new, :edit], do: "translate-x-0", else: "translate-x-full"}"}
-  phx-window-keydown={if @live_action in [:new, :edit], do: JS.patch(~p"/events")}
+  phx-window-keydown={if @live_action in [:new, :edit], do: JS.patch(folder_href(@path))}
   phx-key="Escape"
 >
   <%= if @live_action in [:new, :edit] do %>
@@ -300,10 +356,134 @@
         event={@event}
         page_title={@page_title}
         action={@live_action}
-        return_to={~p"/events"}
+        return_to={folder_href(@path)}
         current_user={@current_user}
         container={:drawer}
       />
     </div>
   <% end %>
+</div>
+
+<!-- Folder editor -->
+<div
+  :if={@editing_folder}
+  id="folder-drawer-overlay"
+  class="fixed inset-0 bg-black/50 z-40"
+  phx-click="close-folder-editor"
+/>
+<div
+  :if={@editing_folder}
+  id="folder-drawer-panel"
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="folder-editor-title"
+  class="fixed top-0 right-0 h-full w-full sm:w-[520px] bg-base-100 shadow-xl z-50 overflow-hidden"
+  phx-window-keydown="close-folder-editor"
+  phx-key="Escape"
+>
+  <div class="flex h-full flex-col">
+    <header class="flex shrink-0 items-center gap-3 border-b border-base-300 bg-base-100 px-4 py-4 sm:px-6">
+      <button
+        type="button"
+        phx-click="close-folder-editor"
+        aria-label={gettext("Close folder editor")}
+        class="btn btn-ghost btn-circle !size-10 shrink-0"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke-width="2"
+          stroke="currentColor"
+          class="h-5 w-5"
+          aria-hidden="true"
+        >
+          <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+        </svg>
+      </button>
+      <h1 id="folder-editor-title" class="truncate text-xl font-bold text-secondary">
+        {gettext("Edit folder")}
+      </h1>
+    </header>
+
+    <div class="flex-1 space-y-7 overflow-y-auto px-4 py-6 sm:px-6">
+      <form id="folder-form" phx-submit="save-folder" class="space-y-4">
+        <div class="flex flex-col gap-1">
+          <label for="folder-name" class="text-sm font-bold text-base-content">
+            {gettext("Folder name")}
+          </label>
+          <input
+            id="folder-name"
+            type="text"
+            name="name"
+            maxlength="50"
+            required
+            value={@editing_folder.name}
+            class="input input-bordered w-full bg-white h-12"
+          />
+        </div>
+
+        <div class="flex flex-col gap-1">
+          <label for="folder-parent" class="text-sm font-bold text-base-content">
+            {gettext("Parent folder")}
+          </label>
+          <select
+            id="folder-parent"
+            name="parent_id"
+            class="select select-bordered w-full bg-white h-12"
+          >
+            <option value="" selected={is_nil(@editing_folder.parent_id)}>
+              {gettext("Top level")}
+            </option>
+            <option
+              :for={{label, id} <- @folder_edit_options}
+              value={id}
+              selected={id == @editing_folder.parent_id}
+            >
+              {label}
+            </option>
+          </select>
+        </div>
+
+        <button type="submit" class="btn btn-primary w-full">{gettext("Save changes")}</button>
+      </form>
+
+      <form
+        id="delete-folder-form"
+        phx-submit="delete-folder"
+        class="space-y-3 border-t border-base-300 pt-7"
+      >
+        <div>
+          <h2 class="text-base font-bold text-error">{gettext("Delete folder")}</h2>
+          <p class="mt-1 text-xs leading-5 text-base-content/60">
+            {gettext(
+              "The events inside the folder are kept and end up without a folder. Subfolders move up one level."
+            )}
+          </p>
+        </div>
+
+        <label class="flex cursor-pointer items-center gap-3">
+          <input
+            type="checkbox"
+            name="delete_events"
+            value="true"
+            class="checkbox checkbox-error"
+          />
+          <span class="text-sm">{gettext("Delete Events inside the Folder")}</span>
+        </label>
+
+        <button
+          type="submit"
+          data-confirm={
+            gettext(
+              "Delete this folder? If \"Delete Events inside the Folder\" is checked, those events are permanently deleted."
+            )
+          }
+          class="btn btn-outline btn-error w-full"
+        >
+          {gettext("Delete folder")}
+        </button>
+      </form>
+    </div>
+  </div>
 </div>

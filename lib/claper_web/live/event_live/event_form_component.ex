@@ -16,6 +16,7 @@ defmodule ClaperWeb.EventLive.EventFormComponent do
      |> assign_new(:container, fn -> :page end)
      |> assign_new(:removed_leader_ids, fn -> MapSet.new() end)
      |> assign(:changeset, changeset)
+     |> assign(:folder_options, Events.folder_options(assigns.current_user.id))
      |> assign(:max_file_size, max_file_size)
      |> allow_upload(:presentation_file,
        accept: ~w(.pdf .ppt .pptx),

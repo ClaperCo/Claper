@@ -36,6 +36,7 @@ defmodule Claper.Events.Event do
           leaders: [Claper.Events.ActivityLeader.t()] | nil,
           presentation_file: Claper.Presentations.PresentationFile.t() | nil,
           user: Claper.Accounts.User.t() | nil,
+          folder: Claper.Events.Folder.t() | nil,
           inserted_at: NaiveDateTime.t(),
           updated_at: NaiveDateTime.t()
         }
@@ -55,6 +56,7 @@ defmodule Claper.Events.Event do
     has_one :lti_resource, Lti13.Resources.Resource
 
     belongs_to :user, Claper.Accounts.User
+    belongs_to :folder, Claper.Events.Folder
 
     timestamps()
   end
@@ -68,7 +70,8 @@ defmodule Claper.Events.Event do
       :started_at,
       :expired_at,
       :audience_peak,
-      :user_id
+      :user_id,
+      :folder_id
     ])
     |> cast_assoc(:presentation_file)
     |> cast_assoc(:leaders)
@@ -77,7 +80,7 @@ defmodule Claper.Events.Event do
 
   def create_changeset(event, attrs) do
     event
-    |> cast(attrs, [:name, :code, :user_id, :started_at, :expired_at])
+    |> cast(attrs, [:name, :code, :user_id, :folder_id, :started_at, :expired_at])
     |> cast_assoc(:presentation_file)
     |> cast_assoc(:leaders)
     |> downcase_code
@@ -106,7 +109,15 @@ defmodule Claper.Events.Event do
 
   def update_changeset(event, attrs) do
     event
-    |> cast(attrs, [:name, :code, :started_at, :expired_at, :audience_peak, :user_id])
+    |> cast(attrs, [
+      :name,
+      :code,
+      :started_at,
+      :expired_at,
+      :audience_peak,
+      :user_id,
+      :folder_id
+    ])
     |> cast_assoc(:presentation_file)
     |> cast_assoc(:leaders)
     |> downcase_code
