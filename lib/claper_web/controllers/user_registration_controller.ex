@@ -44,7 +44,7 @@ defmodule ClaperWeb.UserRegistrationController do
           |> redirect(to: ~p"/users/register/confirm")
         else
           conn
-          |> put_flash(:info, "User created successfully.")
+          |> put_flash(:info, gettext("User created successfully"))
           |> UserAuth.log_in_user(user)
         end
 

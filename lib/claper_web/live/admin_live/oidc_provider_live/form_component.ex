@@ -114,7 +114,7 @@ defmodule ClaperWeb.AdminLive.OidcProviderLive.FormComponent do
             form={@form}
             field={:response_mode}
             type="select"
-            label="Response Mode"
+            label={gettext("Response Mode")}
             select_options={[
               {"Query", "query"},
               {"Fragment", "fragment"},
