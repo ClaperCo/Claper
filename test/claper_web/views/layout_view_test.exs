@@ -52,7 +52,7 @@ defmodule ClaperWeb.LayoutViewTest do
     end
 
     test "skips untranslated languages in favour of a later one", %{conn: conn} do
-      assert get_with_language(conn, ~p"/", "ja,de;q=0.5") =~ ~s(<html lang="de")
+      assert get_with_language(conn, ~p"/", "ja,de;q=0.5") =~ ~s(<html lang="ja")
     end
 
     test "falls back to the default locale without Accept-Language", %{conn: conn} do
