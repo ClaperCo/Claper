@@ -1,5 +1,9 @@
 ## v.3.1.1
 
+### Features
+
+- Add Japenese translation (#258)
+
 ### Fixes and improvements
 
 - Fix crash caused by duplication of events with too long names
