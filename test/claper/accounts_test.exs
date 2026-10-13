@@ -202,6 +202,70 @@ defmodule Claper.AccountsTest do
     end
   end
 
+  describe "OIDC account linking" do
+    test "claims an unconfirmed account with the same email" do
+      user = user_fixture()
+      assert is_nil(user.confirmed_at)
+      session_token = Accounts.generate_user_session_token(user)
+
+      assert {:ok, oidc_user} =
+               Accounts.get_or_create_user_with_oidc(oidc_user_attrs(%{email: user.email}))
+
+      assert oidc_user.user.id == user.id
+      assert oidc_user.user.confirmed_at
+      assert oidc_user.user.is_randomized_password
+      refute Accounts.get_user_by_email_and_password(user.email, valid_user_password())
+      refute Accounts.get_user_by_session_token(session_token)
+    end
+
+    test "keeps the password of a confirmed account" do
+      user = confirmed_user_fixture()
+
+      assert {:ok, oidc_user} =
+               Accounts.get_or_create_user_with_oidc(oidc_user_attrs(%{email: user.email}))
+
+      assert oidc_user.user.id == user.id
+      assert Accounts.get_user_by_email_and_password(user.email, valid_user_password())
+    end
+
+    test "claims an unconfirmed account already linked to the identity" do
+      user = user_fixture()
+
+      {:ok, identity} =
+        Accounts.create_oidc_user(
+          Map.put(oidc_user_attrs(%{email: user.email}), :user_id, user.id)
+        )
+
+      assert {:ok, oidc_user} =
+               Accounts.get_or_create_user_with_oidc(
+                 oidc_user_attrs(%{email: user.email, sub: identity.sub})
+               )
+
+      assert oidc_user.user.confirmed_at
+      refute Accounts.get_user_by_email_and_password(user.email, valid_user_password())
+    end
+
+    for email_verified <- [false, "false"] do
+      test "refuses an existing account when email_verified is #{inspect(email_verified)}" do
+        user = confirmed_user_fixture()
+
+        assert {:error, :email_not_verified} =
+                 Accounts.get_or_create_user_with_oidc(
+                   oidc_user_attrs(%{email: user.email, email_verified: unquote(email_verified)})
+                 )
+
+        assert Accounts.get_all_oidc_users_by_email(user.email) == []
+      end
+    end
+
+    test "creates an account for an unverified email nobody uses yet" do
+      attrs = oidc_user_attrs(%{email_verified: false})
+
+      assert {:ok, oidc_user} = Accounts.get_or_create_user_with_oidc(attrs)
+      assert oidc_user.user.email == attrs.email
+    end
+  end
+
   describe "change_user_email/2" do
     test "returns a user changeset" do
       assert %Ecto.Changeset{} = changeset = Accounts.change_user_email(%User{})

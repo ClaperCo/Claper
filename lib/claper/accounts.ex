@@ -652,36 +652,82 @@ defmodule Claper.Accounts do
     Repo.all(from u in Accounts.Oidc.User, where: u.email == ^email)
   end
 
-  def get_oidc_user_by_sub(sub) do
-    Repo.get_by(Accounts.Oidc.User, sub: sub)
+  def get_oidc_user(issuer, sub) when is_binary(issuer) and is_binary(sub) do
+    Repo.get_by(Accounts.Oidc.User, issuer: issuer, sub: sub)
   end
 
   def get_or_create_user_with_oidc(
         %{
+          issuer: issuer,
           sub: sub
         } = attrs
       ) do
-    case get_oidc_user_by_sub(sub) do
+    case get_oidc_user(issuer, sub) do
       nil -> create_new_user(attrs)
       %Accounts.Oidc.User{} = user -> update_oidc_user(user, attrs)
     end
   end
 
   defp create_new_user(attrs) do
-    with {:ok, claper_user} <- get_user_by_email_or_create(attrs.email, attrs),
-         updated_attrs <-
-           Map.merge(attrs, %{user_id: claper_user.id}),
-         {:ok, user} <- create_oidc_user(updated_attrs) do
-      {:ok, user |> Repo.preload(:user)}
+    with {:ok, claper_user} <- user_for_new_oidc_identity(attrs),
+         {:ok, user} <- create_oidc_user(Map.put(attrs, :user_id, claper_user.id)) do
+      {:ok, Repo.preload(user, :user)}
     else
+      {:error, :email_not_verified} = error -> error
       _ -> {:error, %{reason: :invalid_user, msg: "Invalid Claper user"}}
     end
   end
 
+  # A new identity reaches an existing account through its email only, so the
+  # provider must not report that email as unverified. Providers that omit the
+  # claim are trusted.
+  defp user_for_new_oidc_identity(%{email: email} = attrs) when is_binary(email) do
+    case {get_user_by_email(email), Map.get(attrs, :email_verified)} do
+      {nil, _email_verified} ->
+        get_user_by_email_or_create(email, attrs)
+
+      {%User{}, email_verified} when email_verified in [false, "false"] ->
+        {:error, :email_not_verified}
+
+      {%User{} = user, _email_verified} ->
+        with {:ok, user} <- claim_unconfirmed_user(user) do
+          fill_missing_user_names(user, attrs)
+        end
+    end
+  end
+
+  defp user_for_new_oidc_identity(_attrs), do: {:error, :missing_email}
+
+  # Signing in through a provider proves the ownership of the email, which an
+  # unconfirmed account never did: whoever registered it may not own the
+  # address. The account is confirmed, and the password and tokens issued
+  # before are revoked so that they cannot reach the owner's account.
+  defp claim_unconfirmed_user(%User{confirmed_at: nil} = user) do
+    changeset =
+      user
+      |> User.confirm_changeset()
+      |> User.password_changeset(%{
+        password: :crypto.strong_rand_bytes(32),
+        is_randomized_password: true
+      })
+
+    Ecto.Multi.new()
+    |> Ecto.Multi.update(:user, changeset)
+    |> Ecto.Multi.delete_all(:tokens, UserToken.user_and_contexts_query(user, :all))
+    |> Repo.transaction()
+    |> case do
+      {:ok, %{user: user}} -> {:ok, user}
+      {:error, _operation, reason, _changes} -> {:error, reason}
+    end
+  end
+
+  defp claim_unconfirmed_user(%User{} = user), do: {:ok, user}
+
   defp update_oidc_user(user, attrs) do
     user = Repo.preload(user, :user)
 
-    with {:ok, _claper_user} <- fill_missing_user_names(user.user, attrs),
+    with {:ok, claper_user} <- claim_unconfirmed_user(user.user),
+         {:ok, _claper_user} <- fill_missing_user_names(claper_user, attrs),
          {:ok, user} <-
            user
            |> Accounts.Oidc.User.changeset(attrs)

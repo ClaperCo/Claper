@@ -35,7 +35,8 @@ defmodule ClaperWeb.UserSessionControllerTest do
           enabled: true,
           client_id: "test-client",
           client_secret: "test-secret",
-          disable_password_login: true
+          disable_password_login: true,
+          disable_password_login_requested: true
         )
       )
 
@@ -57,7 +58,8 @@ defmodule ClaperWeb.UserSessionControllerTest do
           enabled: false,
           client_id: nil,
           client_secret: nil,
-          disable_password_login: false
+          disable_password_login: false,
+          disable_password_login_requested: false
         )
       )
 
@@ -82,7 +84,8 @@ defmodule ClaperWeb.UserSessionControllerTest do
           enabled: true,
           client_id: "test-client",
           client_secret: "test-secret",
-          disable_password_login: true
+          disable_password_login: true,
+          disable_password_login_requested: true
         )
       )
 
