@@ -266,8 +266,20 @@
               key={:started_at}
               name={gettext("Start date and time")}
               locale={@current_user.locale}
-              required="true"
+              required={!@unscheduled}
+              disabled={@unscheduled}
             />
+            <label class="flex items-center gap-2 text-sm">
+              <input type="hidden" name="event[unscheduled]" value="false" />
+              <input
+                type="checkbox"
+                name="event[unscheduled]"
+                value="true"
+                checked={@unscheduled}
+                class="checkbox checkbox-sm"
+              />
+              {gettext("Unscheduled")}
+            </label>
             <p class="text-xs text-base-content/60">{gettext("Shown in your local time.")}</p>
           </div>
         </div>

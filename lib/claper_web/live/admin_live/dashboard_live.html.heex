@@ -120,6 +120,9 @@
                     is_nil(event.expired_at) == false ->
                       {gettext("Completed"), "badge-ghost"}
 
+                    is_nil(event.started_at) ->
+                      {gettext("Unscheduled"), "badge-warning"}
+
                     NaiveDateTime.compare(event.started_at, now) == :gt ->
                       {gettext("Scheduled"), "badge-info"}
 
@@ -136,7 +139,11 @@
                     <code class="text-sm uppercase">{event.code}</code>
                   </td>
                   <td>{event.user.email}</td>
-                  <td>{Calendar.strftime(event.started_at, "%b %d, %Y")}</td>
+                  <td>
+                    {if event.started_at,
+                      do: Calendar.strftime(event.started_at, "%b %d, %Y"),
+                      else: "-"}
+                  </td>
                   <td>
                     <div class="badge badge-outline">{event.audience_peak}</div>
                   </td>
