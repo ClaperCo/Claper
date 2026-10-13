@@ -62,6 +62,19 @@ defmodule ClaperWeb.LayoutViewTest do
     end
   end
 
+  describe "user layout" do
+    test "sets the html lang to the locale from Accept-Language when the user has no locale",
+         %{conn: conn} do
+      role_fixture("user")
+      user = confirmed_user_fixture()
+      assert is_nil(user.locale)
+
+      conn = log_in_user(conn, user)
+
+      assert get_with_language(conn, ~p"/users/settings", "de") =~ ~s(<html lang="de")
+    end
+  end
+
   describe "admin layout" do
     setup [:register_and_log_in_admin]
 
