@@ -543,6 +543,7 @@ Hooks.InteractionDrag = {
     this.el.addEventListener("dragstart", (e) => {
       const item = e.target.closest("[data-interaction-id]");
       if (!item) return;
+      this.dragged = item;
       e.dataTransfer.effectAllowed = "move";
       e.dataTransfer.setData(
         INTERACTION_DRAG_TYPE,
@@ -565,11 +566,50 @@ Hooks.InteractionDrag = {
       setTimeout(() => item.classList.add("opacity-40"), 0);
     });
 
+    const clearDropTarget = () =>
+      this.el
+        .querySelectorAll("[data-interaction-id]")
+        .forEach((n) => n.classList.remove("ring-2", "ring-primary-500"));
+
+    this.el.addEventListener("dragover", (e) => {
+      if (!this.reorderEnabled() || !this.dragged || !isInteractionDrag(e)) return;
+      const item = e.target.closest("[data-interaction-id]");
+      if (!item) return;
+      e.preventDefault();
+      e.dataTransfer.dropEffect = "move";
+      clearDropTarget();
+      if (item !== this.dragged) item.classList.add("ring-2", "ring-primary-500");
+    });
+
+    this.el.addEventListener("drop", (e) => {
+      const target = e.target.closest("[data-interaction-id]");
+      if (!this.reorderEnabled() || !this.dragged || !target || !isInteractionDrag(e)) return;
+      e.preventDefault();
+      clearDropTarget();
+      if (target === this.dragged) return;
+
+      const rows = Array.from(this.el.querySelectorAll("[data-interaction-id]"));
+      const from = rows.indexOf(this.dragged);
+      const to = rows.indexOf(target);
+      rows.splice(to, 0, rows.splice(from, 1)[0]);
+      this.pushEvent("reorder-interactions", {
+        order: rows.map((n) => ({
+          id: parseInt(n.dataset.interactionId),
+          type: n.dataset.interactionType,
+        })),
+      });
+    });
+
     this.el.addEventListener("dragend", () => {
+      this.dragged = null;
+      clearDropTarget();
       this.el
         .querySelectorAll("[data-interaction-id]")
         .forEach((n) => n.classList.remove("opacity-40"));
     });
+  },
+  reorderEnabled() {
+    return this.el.dataset.reorder === "true";
   },
   destroyed() {
     this.interactionListResizeObserver.disconnect();

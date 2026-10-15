@@ -504,6 +504,27 @@ defmodule ClaperWeb.EventLive.Manage do
 
   @impl true
   def handle_event(
+        "reorder-interactions",
+        %{"order" => order},
+        %{assigns: %{event: event, state: state}} = socket
+      )
+      when is_list(order) do
+    ordered =
+      for %{"id" => id, "type" => type} <- order,
+          is_integer(id) and type in ["poll", "form", "embed", "quiz"],
+          do: {type, id}
+
+    case Claper.Interactions.reorder_interactions(event, state.position, ordered) do
+      :ok ->
+        {:noreply, socket |> interactions_at_position(state.position)}
+
+      {:error, _reason} ->
+        {:noreply, socket |> put_flash(:error, gettext("Could not reorder interactions"))}
+    end
+  end
+
+  @impl true
+  def handle_event(
         "regenerate-thumbnails",
         _params,
         %{assigns: %{missing_slide_thumbnails: false}} = socket
