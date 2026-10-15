@@ -80,7 +80,7 @@
                           phx-value-field="issuer"
                           class="btn btn-ghost btn-sm"
                         >
-                          {gettext("Issuer")} {sort_indicator(assigns |> Map.put(:field, :issuer))}
+                          Issuer {sort_indicator(assigns |> Map.put(:field, :issuer))}
                         </button>
                       </th>
                       <th class="text-left">
@@ -235,25 +235,25 @@
                 <dd class="col-span-2">{@provider.name}</dd>
               </div>
               <div class="grid grid-cols-3 gap-4">
-                <dt class="font-medium">{gettext("Issuer")}</dt>
+                <dt class="font-medium">Issuer</dt>
                 <dd class="col-span-2">
                   {@provider.issuer}
                 </dd>
               </div>
               <div class="grid grid-cols-3 gap-4">
-                <dt class="font-medium">{gettext("Client ID")}</dt>
+                <dt class="font-medium">Client ID</dt>
                 <dd class="col-span-2">
                   {@provider.client_id}
                 </dd>
               </div>
               <div class="grid grid-cols-3 gap-4">
-                <dt class="font-medium">{gettext("Response Type")}</dt>
+                <dt class="font-medium">Response Type</dt>
                 <dd class="col-span-2">
                   {@provider.response_type}
                 </dd>
               </div>
               <div class="grid grid-cols-3 gap-4">
-                <dt class="font-medium">{gettext("Scope")}</dt>
+                <dt class="font-medium">Scope</dt>
                 <dd class="col-span-2">
                   {@provider.scope}
                 </dd>

@@ -1530,17 +1530,6 @@ msgstr "Avbryt"
 msgid "Choose file"
 msgstr "Välj fil"
 
-#: lib/claper_web/live/admin_live/oidc_provider_live.html.heex
-#: lib/claper_web/live/admin_live/oidc_provider_live/form_component.ex
-#, elixir-autogen, elixir-format
-msgid "Client ID"
-msgstr "Klient-ID"
-
-#: lib/claper_web/live/admin_live/oidc_provider_live/form_component.ex
-#, elixir-autogen, elixir-format
-msgid "Client Secret"
-msgstr "Klienthemlighet"
-
 #: lib/claper_web/live/admin_live/dashboard_live.html.heex
 #, elixir-autogen, elixir-format
 msgid "Completed"
@@ -1730,16 +1719,6 @@ msgstr "Inaktiv"
 msgid "Initial password for the user"
 msgstr "Initialt lösenord för användaren"
 
-#: lib/claper_web/live/admin_live/oidc_provider_live.html.heex
-#, elixir-autogen, elixir-format
-msgid "Issuer"
-msgstr "Utfärdare"
-
-#: lib/claper_web/live/admin_live/oidc_provider_live/form_component.ex
-#, elixir-autogen, elixir-format
-msgid "Issuer URL"
-msgstr "Utfärdarens URL"
-
 #: lib/claper_web/live/admin_live/dashboard_live.html.heex
 #, elixir-autogen, elixir-format
 msgid "Last 30 days"
@@ -1841,17 +1820,6 @@ msgstr "Leverantören uppdaterades"
 msgid "Recent Events"
 msgstr "Senaste evenemang"
 
-#: lib/claper_web/live/admin_live/oidc_provider_live/form_component.ex
-#, elixir-autogen, elixir-format
-msgid "Redirect URI"
-msgstr "Omdirigerings-URI"
-
-#: lib/claper_web/live/admin_live/oidc_provider_live.html.heex
-#: lib/claper_web/live/admin_live/oidc_provider_live/form_component.ex
-#, elixir-autogen, elixir-format
-msgid "Response Type"
-msgstr "Svarstyp"
-
 #: lib/claper_web/live/admin_live/user_live.html.heex
 #: lib/claper_web/live/admin_live/user_live/form_component.ex
 #, elixir-autogen, elixir-format
@@ -1871,12 +1839,6 @@ msgstr "Sparar..."
 #, elixir-autogen, elixir-format
 msgid "Scheduled"
 msgstr "Schemalagt"
-
-#: lib/claper_web/live/admin_live/oidc_provider_live.html.heex
-#: lib/claper_web/live/admin_live/oidc_provider_live/form_component.ex
-#, elixir-autogen, elixir-format
-msgid "Scope"
-msgstr "Omfång"
 
 #: lib/claper_web/live/admin_live/event_live.ex
 #, elixir-autogen, elixir-format
@@ -3596,11 +3558,6 @@ msgstr "Inloggningslänken är ogiltig eller har gått ut."
 #, elixir-autogen, elixir-format
 msgid "Resend confirmation instructions"
 msgstr "Skicka bekräftelseinstruktioner igen"
-
-#: lib/claper_web/live/admin_live/oidc_provider_live/form_component.ex
-#, elixir-autogen, elixir-format
-msgid "Response Mode"
-msgstr "Svarsläge"
 
 #: lib/claper_web/controllers/user_confirmation_controller.ex
 #, elixir-autogen, elixir-format

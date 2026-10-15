@@ -1494,17 +1494,6 @@ msgstr "キャンセル"
 msgid "Choose file"
 msgstr "ファイルを選択"
 
-#: lib/claper_web/live/admin_live/oidc_provider_live.html.heex
-#: lib/claper_web/live/admin_live/oidc_provider_live/form_component.ex
-#, elixir-autogen, elixir-format
-msgid "Client ID"
-msgstr "クライアントID"
-
-#: lib/claper_web/live/admin_live/oidc_provider_live/form_component.ex
-#, elixir-autogen, elixir-format
-msgid "Client Secret"
-msgstr "クライアントシークレット"
-
 #: lib/claper_web/live/admin_live/dashboard_live.html.heex
 #, elixir-autogen, elixir-format
 msgid "Completed"
@@ -1694,16 +1683,6 @@ msgstr "無効"
 msgid "Initial password for the user"
 msgstr "ユーザーの初期パスワード"
 
-#: lib/claper_web/live/admin_live/oidc_provider_live.html.heex
-#, elixir-autogen, elixir-format
-msgid "Issuer"
-msgstr "発行者（Issuer）"
-
-#: lib/claper_web/live/admin_live/oidc_provider_live/form_component.ex
-#, elixir-autogen, elixir-format
-msgid "Issuer URL"
-msgstr "発行者（Issuer）URL"
-
 #: lib/claper_web/live/admin_live/dashboard_live.html.heex
 #, elixir-autogen, elixir-format
 msgid "Last 30 days"
@@ -1805,17 +1784,6 @@ msgstr "プロバイダーを更新しました"
 msgid "Recent Events"
 msgstr "最近のイベント"
 
-#: lib/claper_web/live/admin_live/oidc_provider_live/form_component.ex
-#, elixir-autogen, elixir-format
-msgid "Redirect URI"
-msgstr "リダイレクトURI"
-
-#: lib/claper_web/live/admin_live/oidc_provider_live.html.heex
-#: lib/claper_web/live/admin_live/oidc_provider_live/form_component.ex
-#, elixir-autogen, elixir-format
-msgid "Response Type"
-msgstr "レスポンスタイプ"
-
 #: lib/claper_web/live/admin_live/user_live.html.heex
 #: lib/claper_web/live/admin_live/user_live/form_component.ex
 #, elixir-autogen, elixir-format
@@ -1835,12 +1803,6 @@ msgstr "保存中…"
 #, elixir-autogen, elixir-format
 msgid "Scheduled"
 msgstr "開催予定"
-
-#: lib/claper_web/live/admin_live/oidc_provider_live.html.heex
-#: lib/claper_web/live/admin_live/oidc_provider_live/form_component.ex
-#, elixir-autogen, elixir-format
-msgid "Scope"
-msgstr "スコープ"
 
 #: lib/claper_web/live/admin_live/event_live.ex
 #, elixir-autogen, elixir-format
@@ -3558,11 +3520,6 @@ msgstr "マジックリンクが無効か、有効期限が切れています。
 #, elixir-autogen, elixir-format
 msgid "Resend confirmation instructions"
 msgstr "確認手続きのメールを再送信"
-
-#: lib/claper_web/live/admin_live/oidc_provider_live/form_component.ex
-#, elixir-autogen, elixir-format
-msgid "Response Mode"
-msgstr "レスポンスモード"
 
 #: lib/claper_web/controllers/user_confirmation_controller.ex
 #, elixir-autogen, elixir-format

@@ -1499,17 +1499,6 @@ msgstr "Atcelt"
 msgid "Choose file"
 msgstr "Izvēlēties failu"
 
-#: lib/claper_web/live/admin_live/oidc_provider_live.html.heex
-#: lib/claper_web/live/admin_live/oidc_provider_live/form_component.ex
-#, elixir-autogen, elixir-format
-msgid "Client ID"
-msgstr "Klienta ID"
-
-#: lib/claper_web/live/admin_live/oidc_provider_live/form_component.ex
-#, elixir-autogen, elixir-format
-msgid "Client Secret"
-msgstr "Klienta noslēpums"
-
 #: lib/claper_web/live/admin_live/dashboard_live.html.heex
 #, elixir-autogen, elixir-format
 msgid "Completed"
@@ -1699,16 +1688,6 @@ msgstr "Neaktīvs"
 msgid "Initial password for the user"
 msgstr "Lietotāja sākotnējā parole"
 
-#: lib/claper_web/live/admin_live/oidc_provider_live.html.heex
-#, elixir-autogen, elixir-format
-msgid "Issuer"
-msgstr "Izdevējs"
-
-#: lib/claper_web/live/admin_live/oidc_provider_live/form_component.ex
-#, elixir-autogen, elixir-format
-msgid "Issuer URL"
-msgstr "Izdevēja URL"
-
 #: lib/claper_web/live/admin_live/dashboard_live.html.heex
 #, elixir-autogen, elixir-format
 msgid "Last 30 days"
@@ -1810,17 +1789,6 @@ msgstr "Nodrošinātājs veiksmīgi atjaunināts."
 msgid "Recent Events"
 msgstr "Nesenie pasākumi"
 
-#: lib/claper_web/live/admin_live/oidc_provider_live/form_component.ex
-#, elixir-autogen, elixir-format
-msgid "Redirect URI"
-msgstr "Pāradresēšanas URI"
-
-#: lib/claper_web/live/admin_live/oidc_provider_live.html.heex
-#: lib/claper_web/live/admin_live/oidc_provider_live/form_component.ex
-#, elixir-autogen, elixir-format
-msgid "Response Type"
-msgstr "Atbildes veids"
-
 #: lib/claper_web/live/admin_live/user_live.html.heex
 #: lib/claper_web/live/admin_live/user_live/form_component.ex
 #, elixir-autogen, elixir-format
@@ -1840,12 +1808,6 @@ msgstr "Saglabā..."
 #, elixir-autogen, elixir-format
 msgid "Scheduled"
 msgstr "Ieplānots"
-
-#: lib/claper_web/live/admin_live/oidc_provider_live.html.heex
-#: lib/claper_web/live/admin_live/oidc_provider_live/form_component.ex
-#, elixir-autogen, elixir-format
-msgid "Scope"
-msgstr "Tvērums"
 
 #: lib/claper_web/live/admin_live/event_live.ex
 #, elixir-autogen, elixir-format
@@ -3565,11 +3527,6 @@ msgstr "Pieteikšanās saite ir nederīga vai tās derīguma termiņš ir beidzi
 #, elixir-autogen, elixir-format
 msgid "Resend confirmation instructions"
 msgstr "Atkārtoti nosūtīt apstiprināšanas norādījumus"
-
-#: lib/claper_web/live/admin_live/oidc_provider_live/form_component.ex
-#, elixir-autogen, elixir-format
-msgid "Response Mode"
-msgstr "Atbildes režīms"
 
 #: lib/claper_web/controllers/user_confirmation_controller.ex
 #, elixir-autogen, elixir-format

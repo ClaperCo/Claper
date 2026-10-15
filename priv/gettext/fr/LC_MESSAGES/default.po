@@ -1499,17 +1499,6 @@ msgstr "Annuler"
 msgid "Choose file"
 msgstr "Choisir un fichier"
 
-#: lib/claper_web/live/admin_live/oidc_provider_live.html.heex
-#: lib/claper_web/live/admin_live/oidc_provider_live/form_component.ex
-#, elixir-autogen, elixir-format
-msgid "Client ID"
-msgstr "ID Client"
-
-#: lib/claper_web/live/admin_live/oidc_provider_live/form_component.ex
-#, elixir-autogen, elixir-format
-msgid "Client Secret"
-msgstr "Secret Client"
-
 #: lib/claper_web/live/admin_live/dashboard_live.html.heex
 #, elixir-autogen, elixir-format
 msgid "Completed"
@@ -1699,16 +1688,6 @@ msgstr "Inactif"
 msgid "Initial password for the user"
 msgstr "Mot de passe initial pour l'utilisateur"
 
-#: lib/claper_web/live/admin_live/oidc_provider_live.html.heex
-#, elixir-autogen, elixir-format
-msgid "Issuer"
-msgstr "Émetteur"
-
-#: lib/claper_web/live/admin_live/oidc_provider_live/form_component.ex
-#, elixir-autogen, elixir-format
-msgid "Issuer URL"
-msgstr "URL de l'émetteur"
-
 #: lib/claper_web/live/admin_live/dashboard_live.html.heex
 #, elixir-autogen, elixir-format
 msgid "Last 30 days"
@@ -1810,17 +1789,6 @@ msgstr "Fournisseur mis à jour avec succès"
 msgid "Recent Events"
 msgstr "Événements récents"
 
-#: lib/claper_web/live/admin_live/oidc_provider_live/form_component.ex
-#, elixir-autogen, elixir-format
-msgid "Redirect URI"
-msgstr "URI de redirection"
-
-#: lib/claper_web/live/admin_live/oidc_provider_live.html.heex
-#: lib/claper_web/live/admin_live/oidc_provider_live/form_component.ex
-#, elixir-autogen, elixir-format
-msgid "Response Type"
-msgstr "Type de réponse"
-
 #: lib/claper_web/live/admin_live/user_live.html.heex
 #: lib/claper_web/live/admin_live/user_live/form_component.ex
 #, elixir-autogen, elixir-format
@@ -1840,12 +1808,6 @@ msgstr "Enregistrement..."
 #, elixir-autogen, elixir-format
 msgid "Scheduled"
 msgstr "Planifié"
-
-#: lib/claper_web/live/admin_live/oidc_provider_live.html.heex
-#: lib/claper_web/live/admin_live/oidc_provider_live/form_component.ex
-#, elixir-autogen, elixir-format
-msgid "Scope"
-msgstr "Portée"
 
 #: lib/claper_web/live/admin_live/event_live.ex
 #, elixir-autogen, elixir-format
@@ -3565,11 +3527,6 @@ msgstr "Le lien de connexion n'est pas valide ou a expiré."
 #, elixir-autogen, elixir-format
 msgid "Resend confirmation instructions"
 msgstr "Renvoyer les instructions de confirmation"
-
-#: lib/claper_web/live/admin_live/oidc_provider_live/form_component.ex
-#, elixir-autogen, elixir-format
-msgid "Response Mode"
-msgstr "Mode de réponse"
 
 #: lib/claper_web/controllers/user_confirmation_controller.ex
 #, elixir-autogen, elixir-format

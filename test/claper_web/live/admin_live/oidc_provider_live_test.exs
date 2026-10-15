@@ -27,7 +27,7 @@ defmodule ClaperWeb.AdminLive.OidcProviderLiveTest do
   describe "form" do
     setup [:register_and_log_in_admin]
 
-    test "localizes the response mode label without translating protocol option names", %{
+    test "keeps OIDC technical labels and protocol options unchanged across locales", %{
       conn: conn
     } do
       {:ok, view, html} =
@@ -40,7 +40,20 @@ defmodule ClaperWeb.AdminLive.OidcProviderLiveTest do
         |> put_req_header("accept-language", "en")
         |> live(~p"/admin/oidc_providers/new")
 
-      refute response_mode_label(html) == response_mode_label(english_html)
+      for {field, label} <- [
+            {"issuer", "Issuer URL"},
+            {"client_id", "Client ID"},
+            {"client_secret", "Client Secret"},
+            {"redirect_uri", "Redirect URI"},
+            {"scope", "Scope"},
+            {"response_type", "Response Type"},
+            {"response_mode", "Response Mode"}
+          ] do
+        assert field_label(html, field) == label
+        assert field_label(english_html, field) == label
+      end
+
+      refute field_label(html, "active") == field_label(english_html, "active")
 
       assert has_element?(
                view,
@@ -80,12 +93,12 @@ defmodule ClaperWeb.AdminLive.OidcProviderLiveTest do
     end
   end
 
-  defp response_mode_label(html) do
+  defp field_label(html, field) do
     html
     |> Floki.parse_document!()
     |> Floki.find(".form-control")
-    |> Enum.find(&(Floki.find(&1, "select[name='provider[response_mode]']") != []))
-    |> Floki.find("label")
+    |> Enum.find(&(Floki.find(&1, "[name='provider[#{field}]']") != []))
+    |> Floki.find("label > .label-text")
     |> Floki.text()
   end
 end

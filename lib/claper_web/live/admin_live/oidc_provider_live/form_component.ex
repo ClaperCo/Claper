@@ -34,7 +34,7 @@ defmodule ClaperWeb.AdminLive.OidcProviderLive.FormComponent do
             form={@form}
             field={:issuer}
             type="text"
-            label={gettext("Issuer URL")}
+            label="Issuer URL"
             placeholder={gettext("https://example.com")}
             required={true}
             width_class="sm:col-span-6"
@@ -47,7 +47,7 @@ defmodule ClaperWeb.AdminLive.OidcProviderLive.FormComponent do
             form={@form}
             field={:client_id}
             type="text"
-            label={gettext("Client ID")}
+            label="Client ID"
             placeholder={gettext("Enter client ID")}
             required={true}
             width_class="sm:col-span-3"
@@ -59,7 +59,7 @@ defmodule ClaperWeb.AdminLive.OidcProviderLive.FormComponent do
             form={@form}
             field={:client_secret}
             type="text"
-            label={gettext("Client Secret")}
+            label="Client Secret"
             placeholder={gettext("Enter client secret")}
             required={true}
             width_class="sm:col-span-3"
@@ -71,7 +71,7 @@ defmodule ClaperWeb.AdminLive.OidcProviderLive.FormComponent do
             form={@form}
             field={:redirect_uri}
             type="text"
-            label={gettext("Redirect URI")}
+            label="Redirect URI"
             placeholder="https://yourapp.com/auth/callback"
             required={true}
             width_class="sm:col-span-6"
@@ -86,7 +86,7 @@ defmodule ClaperWeb.AdminLive.OidcProviderLive.FormComponent do
             form={@form}
             field={:scope}
             type="text"
-            label={gettext("Scope")}
+            label="Scope"
             placeholder="openid email profile"
             width_class="sm:col-span-3"
             description={gettext("OIDC scopes to request (defaults to 'openid email profile')")}
@@ -98,7 +98,7 @@ defmodule ClaperWeb.AdminLive.OidcProviderLive.FormComponent do
             form={@form}
             field={:response_type}
             type="select"
-            label={gettext("Response Type")}
+            label="Response Type"
             select_options={[
               {"Authorization Code", "code"},
               {"Implicit", "token"},
@@ -114,7 +114,7 @@ defmodule ClaperWeb.AdminLive.OidcProviderLive.FormComponent do
             form={@form}
             field={:response_mode}
             type="select"
-            label={gettext("Response Mode")}
+            label="Response Mode"
             select_options={[
               {"Query", "query"},
               {"Fragment", "fragment"},
