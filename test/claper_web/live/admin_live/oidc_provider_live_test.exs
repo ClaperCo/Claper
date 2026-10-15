@@ -27,7 +27,7 @@ defmodule ClaperWeb.AdminLive.OidcProviderLiveTest do
   describe "form" do
     setup [:register_and_log_in_admin]
 
-    test "keeps protocol option names untranslated and translates the response mode label", %{
+    test "localizes the response mode label without translating protocol option names", %{
       conn: conn
     } do
       {:ok, view, html} =
@@ -35,7 +35,12 @@ defmodule ClaperWeb.AdminLive.OidcProviderLiveTest do
         |> put_req_header("accept-language", "de")
         |> live(~p"/admin/oidc_providers/new")
 
-      assert html =~ "Antwortmodus"
+      {:ok, _english_view, english_html} =
+        conn
+        |> put_req_header("accept-language", "en")
+        |> live(~p"/admin/oidc_providers/new")
+
+      refute response_mode_label(html) == response_mode_label(english_html)
 
       assert has_element?(
                view,
@@ -73,5 +78,14 @@ defmodule ClaperWeb.AdminLive.OidcProviderLiveTest do
                "Form Post"
              )
     end
+  end
+
+  defp response_mode_label(html) do
+    html
+    |> Floki.parse_document!()
+    |> Floki.find(".form-control")
+    |> Enum.find(&(Floki.find(&1, "select[name='provider[response_mode]']") != []))
+    |> Floki.find("label")
+    |> Floki.text()
   end
 end
