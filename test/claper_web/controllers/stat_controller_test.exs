@@ -1,7 +1,7 @@
 defmodule ClaperWeb.StatControllerTest do
   use ClaperWeb.ConnCase, async: true
 
-  import Claper.{AccountsFixtures, FormsFixtures, PresentationsFixtures}
+  import Claper.{AccountsFixtures, FormsFixtures, PresentationsFixtures, ScalesFixtures}
 
   describe "export_transcriptions/2" do
     test "exports timestamp, language, and text as CSV", %{conn: conn} do
@@ -87,6 +87,70 @@ defmodule ClaperWeb.StatControllerTest do
       conn = build_conn() |> log_in_user(stranger)
 
       conn = post(conn, ~p"/export/forms/#{form.id}")
+
+      assert response(conn, 403) == "Forbidden"
+    end
+  end
+
+  describe "POST /export/scales/:scale_id" do
+    setup %{conn: conn} do
+      owner = confirmed_user_fixture()
+      presentation_file = presentation_file_fixture(%{user: owner}, [:event])
+
+      scale =
+        scale_fixture(%{
+          presentation_file: presentation_file,
+          title: "How sure are you?",
+          min_value: -2,
+          max_value: 2
+        })
+
+      %{
+        conn: log_in_user(conn, owner),
+        owner: owner,
+        scale: scale,
+        event: presentation_file.event
+      }
+    end
+
+    test "exports one row per response with the value as a number", %{
+      conn: conn,
+      owner: owner,
+      scale: scale,
+      event: event
+    } do
+      {:ok, _} = Claper.Scales.submit_response(event.uuid, scale, "attendee-1", "-2")
+      {:ok, _} = Claper.Scales.submit_response(event.uuid, scale, owner.id, "1")
+
+      conn = post(conn, ~p"/export/scales/#{scale.id}")
+
+      assert response_content_type(conn, :csv)
+
+      assert get_resp_header(conn, "content-disposition") == [
+               ~s(attachment; filename="slider-How-sure-are-you.csv")
+             ]
+
+      [header_line, attendee_line, user_line] =
+        conn |> response(200) |> String.split("\r\n", trim: true)
+
+      assert header_line == "Attendee identifier,User email,Value,Answered at (UTC)"
+      assert attendee_line =~ ~r/^#{Base.encode16("attendee-1")},N\/A,-2,\d{4}-\d{2}-\d{2}/
+      assert user_line =~ "N/A,#{owner.email},1,"
+    end
+
+    test "exports only the header when nobody has answered", %{conn: conn, scale: scale} do
+      conn = post(conn, ~p"/export/scales/#{scale.id}")
+
+      assert conn |> response(200) |> String.split("\r\n", trim: true) == [
+               "Attendee identifier,User email,Value,Answered at (UTC)"
+             ]
+    end
+
+    test "returns 403 for users who don't own the event", %{scale: scale} do
+      stranger = confirmed_user_fixture()
+      conn = build_conn() |> log_in_user(stranger)
+
+      conn = post(conn, ~p"/export/scales/#{scale.id}")
 
       assert response(conn, 403) == "Forbidden"
     end

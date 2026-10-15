@@ -183,6 +183,7 @@ msgstr "Redigera"
 #: lib/claper_web/live/form_live/form_component.html.heex
 #: lib/claper_web/live/poll_live/form_component.html.heex
 #: lib/claper_web/live/quiz_live/quiz_component.html.heex
+#: lib/claper_web/live/scale_live/form_component.html.heex
 #: lib/claper_web/live/transcription_live/form_component.html.heex
 #, elixir-autogen, elixir-format
 msgid "Delete"
@@ -192,6 +193,7 @@ msgstr "Ta bort"
 #: lib/claper_web/live/form_live/form_component.html.heex
 #: lib/claper_web/live/poll_live/form_component.html.heex
 #: lib/claper_web/live/quiz_live/quiz_component.html.heex
+#: lib/claper_web/live/scale_live/form_component.html.heex
 #: lib/claper_web/live/transcription_live/form_component.html.heex
 #: lib/claper_web/live/user_settings_live/show.html.heex
 #, elixir-autogen, elixir-format
@@ -1090,6 +1092,7 @@ msgid "Provider"
 msgstr "Leverantör"
 
 #: lib/claper_web/live/poll_live/form_component.html.heex
+#: lib/claper_web/live/scale_live/form_component.html.heex
 #, elixir-autogen, elixir-format
 msgid "Attendees can see the results on their device"
 msgstr "Deltagare kan se resultaten på sin enhet."
@@ -1102,6 +1105,7 @@ msgstr "Deltagare kan visa webbinnehållet på sin enhet."
 #: lib/claper_web/live/embed_live/form_component.html.heex
 #: lib/claper_web/live/poll_live/form_component.html.heex
 #: lib/claper_web/live/quiz_live/quiz_component.html.heex
+#: lib/claper_web/live/scale_live/form_component.html.heex
 #: lib/claper_web/live/transcription_live/form_component.html.heex
 #, elixir-autogen, elixir-format
 msgid "Options"
@@ -3069,6 +3073,7 @@ msgstr "Formulärets titel"
 #: lib/claper_web/live/form_live/form_component.html.heex
 #: lib/claper_web/live/poll_live/form_component.html.heex
 #: lib/claper_web/live/quiz_live/quiz_component.html.heex
+#: lib/claper_web/live/scale_live/form_component.html.heex
 #: lib/claper_web/live/transcription_live/form_component.html.heex
 #, elixir-autogen, elixir-format
 msgid "Loading..."
@@ -3226,6 +3231,7 @@ msgid "Voted"
 msgstr "Röstat"
 
 #: lib/claper_web/live/event_live/form_component.ex
+#: lib/claper_web/live/event_live/scale_component.ex
 #, elixir-autogen, elixir-format
 msgid "Send"
 msgstr "Skicka"
@@ -3593,3 +3599,183 @@ msgstr "Du måste vara administratör för att komma åt den här sidan."
 #, elixir-autogen, elixir-format
 msgid "You must log in to access this page."
 msgstr "Du måste logga in för att komma åt den här sidan."
+
+#: lib/claper_web/live/stat_live/index.html.heex
+#, elixir-autogen, elixir-format
+msgid "%{count} answer"
+msgid_plural "%{count} answers"
+msgstr[0] "%{count} svar"
+msgstr[1] "%{count} svar"
+
+#: lib/claper_web/live/event_live/manage_interaction_options_component.ex
+#: lib/claper_web/live/event_live/presenter.html.heex
+#: lib/claper_web/live/event_live/scale_component.ex
+#, elixir-autogen, elixir-format
+msgid "Answers"
+msgstr "Svar"
+
+#: lib/claper_web/live/scale_live/form_component.html.heex
+#, elixir-autogen, elixir-format
+msgid "Attendees have already answered, so the range can no longer be changed."
+msgstr "Deltagare har redan svarat, så intervallet kan inte längre ändras."
+
+#: lib/claper_web/live/event_live/manage_interaction_options_component.ex
+#: lib/claper_web/live/event_live/presenter.html.heex
+#: lib/claper_web/live/event_live/scale_component.ex
+#: lib/claper_web/live/stat_live/index.html.heex
+#, elixir-autogen, elixir-format
+msgid "Average"
+msgstr "Medelvärde"
+
+#: lib/claper_web/live/scale_live/form_component.html.heex
+#, elixir-autogen, elixir-format
+msgid "Completely"
+msgstr "Helt"
+
+#: lib/claper_web/live/scale_live/form_component.html.heex
+#, elixir-autogen, elixir-format
+msgid "Create slider"
+msgstr "Skapa skjutreglage"
+
+#: lib/claper_web/live/event_live/scale_component.ex
+#, elixir-autogen, elixir-format
+msgid "Current slider"
+msgstr "Nuvarande skjutreglage"
+
+#: lib/claper_web/live/event_live/manage.html.heex
+#, elixir-autogen, elixir-format
+msgid "Edit slider"
+msgstr "Redigera skjutreglage"
+
+#: lib/claper_web/live/scale_live/form_component.html.heex
+#, elixir-autogen, elixir-format
+msgid "Highest value"
+msgstr "Högsta värde"
+
+#: lib/claper_web/live/scale_live/form_component.html.heex
+#, elixir-autogen, elixir-format
+msgid "How confident do you feel about..."
+msgstr "Hur säker känner du dig på..."
+
+#: lib/claper_web/live/scale_live/form_component.html.heex
+#, elixir-autogen, elixir-format
+msgid "Label for the highest value"
+msgstr "Etikett för högsta värdet"
+
+#: lib/claper_web/live/scale_live/form_component.html.heex
+#, elixir-autogen, elixir-format
+msgid "Label for the lowest value"
+msgstr "Etikett för lägsta värdet"
+
+#: lib/claper_web/live/event_live/manage.html.heex
+#: lib/claper_web/live/event_live/manage_floating_action_bar.ex
+#: lib/claper_web/live/event_live/manage_interaction_list_component.ex
+#, elixir-autogen, elixir-format
+msgid "Let your audience answer on a scale."
+msgstr "Låt din publik svara på en skala."
+
+#: lib/claper_web/live/scale_live/form_component.html.heex
+#, elixir-autogen, elixir-format
+msgid "Lowest value"
+msgstr "Lägsta värde"
+
+#: lib/claper_web/live/event_live/manage_interaction_options_component.ex
+#: lib/claper_web/live/event_live/presenter.html.heex
+#: lib/claper_web/live/event_live/scale_component.ex
+#: lib/claper_web/live/stat_live/index.html.heex
+#, elixir-autogen, elixir-format
+msgid "Median"
+msgstr "Median"
+
+#: lib/claper_web/live/event_live/scale_component.ex
+#, elixir-autogen, elixir-format
+msgid "Move the slider and send your answer"
+msgstr "Flytta reglaget och skicka ditt svar"
+
+#: lib/claper_web/live/event_live/manage.html.heex
+#, elixir-autogen, elixir-format
+msgid "New slider"
+msgstr "Nytt skjutreglage"
+
+#: lib/claper_web/live/event_live/manage_interaction_options_component.ex
+#: lib/claper_web/live/stat_live/index.html.heex
+#, elixir-autogen, elixir-format
+msgid "No answers yet"
+msgstr "Inga svar ännu"
+
+#: lib/claper_web/live/scale_live/form_component.html.heex
+#, elixir-autogen, elixir-format
+msgid "Not at all"
+msgstr "Inte alls"
+
+#: lib/claper_web/live/event_live/show.ex
+#, elixir-autogen, elixir-format
+msgid "Please pick a value on the slider."
+msgstr "Välj ett värde på reglaget."
+
+#: lib/claper_web/live/scale_live/form_component.html.heex
+#, elixir-autogen, elixir-format
+msgid "Question"
+msgstr "Fråga"
+
+#: lib/claper_web/live/event_live/manage_interaction_options_component.ex
+#, elixir-autogen, elixir-format
+msgid "Results"
+msgstr "Resultat"
+
+#: lib/claper_web/live/event_live/manage.html.heex
+#: lib/claper_web/live/event_live/manage_floating_action_bar.ex
+#: lib/claper_web/live/event_live/manage_interaction_list_component.ex
+#, elixir-autogen, elixir-format
+msgid "Slider"
+msgstr "Skjutreglage"
+
+#: lib/claper_web/live/stat_live/index.html.heex
+#, elixir-autogen, elixir-format
+msgid "Sliders"
+msgstr "Skjutreglage"
+
+#: lib/claper_web/live/scale_live/form_component.html.heex
+#, elixir-autogen, elixir-format
+msgid "Step"
+msgstr "Steg"
+
+#: lib/claper_web/live/event_live/scale_component.ex
+#, elixir-autogen, elixir-format
+msgid "Thanks! Your answer has been recorded."
+msgstr "Tack! Ditt svar har registrerats."
+
+#: lib/claper_web/live/scale_live/form_component.html.heex
+#, elixir-autogen, elixir-format
+msgid "This will delete all answers and the slider itself, are you sure?"
+msgstr "Detta raderar alla svar och själva skjutreglaget, är du säker?"
+
+#: lib/claper_web/live/event_live/show.ex
+#, elixir-autogen, elixir-format
+msgid "You have already answered."
+msgstr "Du har redan svarat."
+
+#: lib/claper_web/live/event_live/scale_component.ex
+#, elixir-autogen, elixir-format
+msgid "Your answer"
+msgstr "Ditt svar"
+
+#: lib/claper/scales/scale.ex
+#, elixir-autogen, elixir-format
+msgid "cannot be changed once attendees have answered"
+msgstr "kan inte ändras när deltagare har svarat"
+
+#: lib/claper/scales/scale.ex
+#, elixir-autogen, elixir-format
+msgid "is too small, a slider can have at most %{count} values"
+msgstr "är för litet, ett skjutreglage kan ha högst %{count} värden"
+
+#: lib/claper/scales/scale.ex
+#, elixir-autogen, elixir-format
+msgid "must be greater than the lowest value"
+msgstr "måste vara större än det lägsta värdet"
+
+#: lib/claper/scales/scale.ex
+#, elixir-autogen, elixir-format
+msgid "must divide the range evenly"
+msgstr "måste dela intervallet jämnt"
