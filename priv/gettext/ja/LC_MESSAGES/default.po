@@ -24,6 +24,7 @@ msgstr "設定"
 #: lib/claper_web/live/event_live/manage.ex
 #: lib/claper_web/live/form_live/form_component.html.heex
 #: lib/claper_web/live/user_settings_live/show.html.heex
+#: lib/claper_web/templates/user_confirmation/new.html.heex
 #: lib/claper_web/templates/user_registration/new.html.heex
 #: lib/claper_web/templates/user_reset_password/new.html.heex
 #: lib/claper_web/templates/user_session/new.html.heex
@@ -193,6 +194,7 @@ msgstr "削除"
 msgid "Save"
 msgstr "保存"
 
+#: lib/claper_web/controllers/user_settings_controller.ex
 #: lib/claper_web/live/user_settings_live/show.ex
 #, elixir-autogen, elixir-format
 msgid "A link to confirm your email change has been sent to the new address."
@@ -473,6 +475,7 @@ msgstr "Claperについて"
 msgid "Or use the code:"
 msgstr "またはコードを入力："
 
+#: lib/claper_web/templates/user_confirmation/new.html.heex
 #: lib/claper_web/templates/user_registration/new.html.heex
 #: lib/claper_web/templates/user_reset_password/new.html.heex
 #: lib/claper_web/templates/user_session/new.html.heex
@@ -1129,6 +1132,7 @@ msgstr "はい"
 msgid "CONFIRM ACCOUNT"
 msgstr "アカウントを確認"
 
+#: lib/claper_web/templates/user_confirmation/new.html.heex
 #: lib/claper_web/templates/user_notifier/confirm.html.heex
 #, elixir-autogen, elixir-format
 msgid "Confirm account"
@@ -1936,6 +1940,7 @@ msgstr "ユーザーを更新"
 msgid "User Growth"
 msgstr "ユーザー数の推移"
 
+#: lib/claper_web/controllers/user_registration_controller.ex
 #: lib/claper_web/live/admin_live/user_live/form_component.ex
 #, elixir-autogen, elixir-format
 msgid "User created successfully"
@@ -2428,12 +2433,14 @@ msgstr "6文字以上で設定すると、すぐにアカウントを使いは�
 msgid "and"
 msgstr "および"
 
+#: lib/claper_web/templates/user_confirmation/new.html.heex
 #: lib/claper_web/templates/user_registration/new.html.heex
 #: lib/claper_web/templates/user_reset_password/new.html.heex
 #, elixir-autogen, elixir-format
 msgid "you@example.com"
 msgstr "you@example.com"
 
+#: lib/claper_web/templates/user_confirmation/new.html.heex
 #: lib/claper_web/templates/user_session/new.html.heex
 #, elixir-autogen, elixir-format
 msgid "Open your dashboard, launch a session, and let your audience interact in real time."
@@ -2469,6 +2476,7 @@ msgstr "セッションや参加者のデータは、そのまま残っていま
 msgid "Need a new account?"
 msgstr "アカウントをお持ちでない方"
 
+#: lib/claper_web/templates/user_confirmation/new.html.heex
 #: lib/claper_web/templates/user_session/new.html.heex
 #, elixir-autogen, elixir-format
 msgid "Your audience is waiting"
@@ -2494,11 +2502,13 @@ msgstr "新しいパスワードをもう一度入力"
 msgid "Set a new password below, then use it the next time you log in."
 msgstr "新しいパスワードを設定してください。次回ログインからこのパスワードを使用します。"
 
+#: lib/claper_web/templates/user_confirmation/new.html.heex
 #: lib/claper_web/templates/user_session/new.html.heex
 #, elixir-autogen, elixir-format
 msgid "Run live polls, Q&A, and reactions right from your slides."
 msgstr "投票、Q&A、リアクションをスライドから直接実施できます。"
 
+#: lib/claper_web/templates/user_confirmation/new.html.heex
 #: lib/claper_web/templates/user_reset_password/new.html.heex
 #, elixir-autogen, elixir-format
 msgid "Still new here?"
@@ -2950,6 +2960,7 @@ msgid "Could not move interaction"
 msgstr "インタラクションを移動できませんでした"
 
 #: lib/claper_web/templates/error/csrf_error.html.heex
+#: lib/claper_web/templates/user_confirmation/new.html.heex
 #: lib/claper_web/templates/user_reset_password/edit.html.heex
 #: lib/claper_web/templates/user_reset_password/new.html.heex
 #, elixir-autogen, elixir-format
@@ -3512,3 +3523,78 @@ msgstr "このメッセージには返信できません"
 msgid "%{count} reply"
 msgid_plural "%{count} replies"
 msgstr[0] "%{count}件の返信"
+
+#: lib/claper_web/templates/user_confirmation/new.html.heex
+#, elixir-autogen, elixir-format
+msgid "Already confirmed?"
+msgstr "すでに確認済みですか？"
+
+#: lib/claper_web/templates/user_confirmation/new.html.heex
+#, elixir-autogen, elixir-format
+msgid "Confirm your account"
+msgstr "アカウントを確認してください"
+
+#: lib/claper_web/templates/user_confirmation/new.html.heex
+#, elixir-autogen, elixir-format
+msgid "Enter your email address and we'll send you a new confirmation link."
+msgstr "メールアドレスを入力すると、新しい確認用リンクをお送りします。"
+
+#: lib/claper_web/controllers/user_confirmation_controller.ex
+#, elixir-autogen, elixir-format
+msgid "If your email is in our system and it has not been confirmed yet, you will receive an email with instructions shortly."
+msgstr "ご入力のメールアドレスが登録済みで、まだ確認が完了していない場合は、まもなく手順を記載したメールをお送りします。"
+
+#: lib/claper_web/controllers/user_session_controller.ex
+#, elixir-autogen, elixir-format
+msgid "Invalid email or password"
+msgstr "メールアドレスまたはパスワードが正しくありません"
+
+#: lib/claper_web/controllers/user_confirmation_controller.ex
+#, elixir-autogen, elixir-format
+msgid "Magic link is invalid or has expired."
+msgstr "マジックリンクが無効か、有効期限が切れています。"
+
+#: lib/claper_web/templates/user_confirmation/new.html.heex
+#, elixir-autogen, elixir-format
+msgid "Resend confirmation instructions"
+msgstr "確認手続きのメールを再送信"
+
+#: lib/claper_web/live/admin_live/oidc_provider_live/form_component.ex
+#, elixir-autogen, elixir-format
+msgid "Response Mode"
+msgstr "レスポンスモード"
+
+#: lib/claper_web/controllers/user_confirmation_controller.ex
+#, elixir-autogen, elixir-format
+msgid "User confirmation link is invalid or it has expired."
+msgstr "アカウント確認用のリンクが無効か、有効期限が切れています。"
+
+#: lib/claper_web/controllers/user_confirmation_controller.ex
+#, elixir-autogen, elixir-format
+msgid "User confirmed successfully."
+msgstr "アカウントの確認が完了しました。"
+
+#: lib/claper_web/controllers/user_session_controller.ex
+#, elixir-autogen, elixir-format
+msgid "You need to confirm your account before logging in. Please check your email for confirmation instructions."
+msgstr "ログインする前にアカウントの確認が必要です。確認手続きのメールをご確認ください。"
+
+#: lib/claper_web/controllers/user_settings_controller.ex
+#, elixir-autogen, elixir-format
+msgid "Email change link is invalid or it has expired."
+msgstr "メールアドレス変更用のリンクが無効か、有効期限が切れています。"
+
+#: lib/claper_web/controllers/user_settings_controller.ex
+#, elixir-autogen, elixir-format
+msgid "Email changed successfully."
+msgstr "メールアドレスを変更しました。"
+
+#: lib/claper_web/plugs/admin_required_plug.ex
+#, elixir-autogen, elixir-format
+msgid "You must be an admin to access this page."
+msgstr "このページにアクセスするには管理者権限が必要です。"
+
+#: lib/claper_web/controllers/user_auth.ex
+#, elixir-autogen, elixir-format
+msgid "You must log in to access this page."
+msgstr "このページにアクセスするにはログインが必要です。"
