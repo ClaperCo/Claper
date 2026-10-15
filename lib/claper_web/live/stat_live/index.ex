@@ -23,7 +23,8 @@ defmodule ClaperWeb.StatLive.Index do
           polls: [:poll_opts],
           forms: [:form_submits],
           embeds: [],
-          quizzes: [:quiz_questions, quiz_questions: :quiz_question_opts]
+          quizzes: [:quiz_questions, quiz_questions: :quiz_question_opts],
+          word_clouds: []
         ]
       )
 
@@ -56,6 +57,7 @@ defmodule ClaperWeb.StatLive.Index do
        calculate_engagement_rate(event, distinct_attendee_count)
      )
      |> assign(:posts, posts)
+     |> assign(:word_cloud_reports, word_cloud_reports(event))
      |> assign(:current_tab, :messages)}
   end
 
@@ -95,6 +97,7 @@ defmodule ClaperWeb.StatLive.Index do
   defp tab_to_atom("forms"), do: :forms
   defp tab_to_atom("web_content"), do: :web_content
   defp tab_to_atom("quizzes"), do: :quizzes
+  defp tab_to_atom("word_clouds"), do: :word_clouds
   defp tab_to_atom("transcriptions"), do: :transcriptions
   defp tab_to_atom(_), do: :messages
 
@@ -105,6 +108,7 @@ defmodule ClaperWeb.StatLive.Index do
       {:forms, event.presentation_file.forms},
       {:web_content, event.presentation_file.embeds},
       {:quizzes, event.presentation_file.quizzes},
+      {:word_clouds, event.presentation_file.word_clouds},
       {:transcriptions, has_transcriptions?}
     ]
     |> Enum.filter(fn
@@ -207,6 +211,16 @@ defmodule ClaperWeb.StatLive.Index do
       form_ids ->
         distinct_submits = Claper.Stats.get_distinct_form_submits(form_ids)
         distinct_submits / (Enum.count(form_ids) * unique_attendees)
+    end
+  end
+
+  defp word_cloud_reports(event) do
+    for word_cloud <- event.presentation_file.word_clouds do
+      %{
+        word_cloud: word_cloud,
+        words: Claper.WordClouds.list_words(word_cloud),
+        participants: Claper.Stats.get_distinct_word_cloud_entries([word_cloud.id])
+      }
     end
   end
 

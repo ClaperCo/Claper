@@ -92,6 +92,28 @@ defmodule ClaperWeb.EventLive.ManageFloatingActionBar do
             />
           </svg>
         </.action_item>
+
+        <.action_item
+          patch={~p"/e/#{@event_code}/manage/add/word_cloud"}
+          title={gettext("Word Cloud")}
+          label={gettext("Word Cloud")}
+          description={gettext("Let your audience answer in their own words.")}
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="2"
+            stroke="currentColor"
+            class="w-5 h-5"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M2.25 15a4.5 4.5 0 0 0 4.5 4.5H18a3.75 3.75 0 0 0 1.332-7.257 3 3 0 0 0-3.758-3.848 5.25 5.25 0 0 0-10.233 2.33A4.502 4.502 0 0 0 2.25 15Z"
+            />
+          </svg>
+        </.action_item>
       </div>
     </div>
     """

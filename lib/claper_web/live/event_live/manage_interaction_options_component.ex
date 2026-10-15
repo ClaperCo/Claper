@@ -190,6 +190,37 @@ defmodule ClaperWeb.EventLive.ManageInteractionOptionsComponent do
                 </.action_row>
               </div>
             </div>
+          <% %Claper.WordClouds.WordCloud{} -> %>
+            <div class="space-y-2">
+              <.toggle_row
+                label={
+                  if @current_interaction.show_results,
+                    do: gettext("Hide the word cloud from attendees"),
+                    else: gettext("Show the word cloud to attendees")
+                }
+                checked={@current_interaction.show_results}
+                key={:word_cloud_show_results}
+                shortcut={if @create == nil, do: "Z", else: nil}
+                show_shortcut={@show_shortcut}
+              >
+                <:icon>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    class="h-5 w-5"
+                  >
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M6 5a2 2 0 0 1 2 -2h8a2 2 0 0 1 2 2v14a2 2 0 0 1 -2 2h-8a2 2 0 0 1 -2 -2v-14z" /><path d="M11 4h2" /><path d="M12 17v.01" />
+                  </svg>
+                </:icon>
+              </.toggle_row>
+
+              <.word_cloud_preview word_cloud={@current_interaction} words={@word_cloud_words} />
+            </div>
           <% nil -> %>
             <p class="text-gray-400 italic mt-1.5 text-sm">{gettext("No interaction enabled")}</p>
           <% _ -> %>
@@ -249,6 +280,48 @@ defmodule ClaperWeb.EventLive.ManageInteractionOptionsComponent do
           <span class={"pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out #{if @checked, do: "translate-x-5", else: "translate-x-0"}"}>
           </span>
         </button>
+      </div>
+    </div>
+    """
+  end
+
+  attr :word_cloud, Claper.WordClouds.WordCloud, required: true
+  attr :words, :list, required: true
+
+  defp word_cloud_preview(assigns) do
+    ~H"""
+    <div class="rounded-2xl border border-gray-200 p-3">
+      <p class="mb-2 text-xs font-semibold text-gray-500">{gettext("Words")}</p>
+      <p :if={@words == []} class="text-gray-400 italic text-sm">{gettext("No words yet")}</p>
+      <div :if={@words != []} class="flex flex-wrap items-baseline gap-x-3 gap-y-1">
+        <button
+          :for={word <- @words}
+          type="button"
+          phx-click="hide-word"
+          phx-value-id={@word_cloud.id}
+          phx-value-key={word.key}
+          title={gettext("Hide this word")}
+          class="text-sm font-bold text-primary-600 hover:text-gray-400 hover:line-through"
+        >
+          {word.text}<sup class="ml-0.5 text-[10px] font-normal text-gray-400">{word.count}</sup>
+        </button>
+      </div>
+
+      <div :if={@word_cloud.hidden_words != []} class="mt-3">
+        <p class="mb-1 text-xs font-semibold text-gray-500">{gettext("Hidden words")}</p>
+        <div class="flex flex-wrap gap-1">
+          <button
+            :for={key <- @word_cloud.hidden_words}
+            type="button"
+            phx-click="unhide-word"
+            phx-value-id={@word_cloud.id}
+            phx-value-key={key}
+            title={gettext("Show this word again")}
+            class="rounded-full border border-gray-200 px-2 py-0.5 text-xs text-gray-500 line-through hover:no-underline hover:bg-primary-50"
+          >
+            {key}
+          </button>
+        </div>
       </div>
     </div>
     """
