@@ -2,7 +2,7 @@ defmodule ClaperWeb.EventLiveTest do
   use ClaperWeb.ConnCase
 
   import Phoenix.LiveViewTest
-  import Claper.{FormsFixtures, PollsFixtures, PresentationsFixtures}
+  import Claper.{FormsFixtures, PollsFixtures, PresentationsFixtures, QuizzesFixtures}
 
   @update_attrs %{name: "some updated name"}
 
@@ -561,6 +561,36 @@ defmodule ClaperWeb.EventLiveTest do
       assert render(manage_live) =~ "Resource not found"
       assert Claper.Posts.get_post!(other_post.uuid).replies == []
     end
+
+    test "reveals quiz answers with their own toggle", %{
+      conn: conn,
+      presentation_file: presentation_file
+    } do
+      quiz = quiz_fixture(%{presentation_file: presentation_file, position: 0, enabled: true})
+
+      {:ok, manage_live, _html} = live(conn, ~p"/e/#{presentation_file.event.code}/manage")
+
+      reveal = ~s(aside button[role="switch"][phx-value-key="quiz_reveal_answers"])
+      next = ~s(aside button[phx-value-key="next_quiz_question"])
+
+      assert has_element?(manage_live, ~s(#{reveal}[phx-key="X"]))
+      refute has_element?(manage_live, ~s(#{reveal}[aria-checked]))
+      assert has_element?(manage_live, ~s(aside kbd), "X")
+      assert has_element?(manage_live, "#{next}[disabled]")
+
+      manage_live |> element(reveal) |> render_click()
+
+      quiz = Claper.Quizzes.get_quiz!(quiz.id)
+      assert quiz.reveal_answers
+      refute quiz.show_results
+      assert has_element?(manage_live, ~s(#{reveal}[aria-checked]))
+      assert has_element?(manage_live, "aside", "Hide correct answers")
+      refute has_element?(manage_live, "#{next}[disabled]")
+
+      manage_live |> element(reveal) |> render_click()
+
+      refute Claper.Quizzes.get_quiz!(quiz.id).reveal_answers
+    end
   end
 
   describe "Presenter" do
@@ -599,6 +629,194 @@ defmodule ClaperWeb.EventLiveTest do
       refute render(presenter_live) =~ "First answer"
       refute render(presenter_live) =~ "Answered during the break"
       assert render(presenter_live) =~ "2 replies"
+    end
+
+    defp project_quiz(conn, user, attrs) do
+      presentation_file = presentation_file_fixture(%{user: user}, [:event])
+      presentation_state_fixture(%{presentation_file: presentation_file})
+      event = presentation_file.event
+
+      quiz =
+        quiz_fixture(
+          Map.merge(%{presentation_file: presentation_file, position: 0, enabled: true}, attrs)
+        )
+
+      wrong_opt = quiz.quiz_questions |> hd() |> Map.get(:quiz_question_opts) |> List.last()
+      {:ok, _} = Claper.Quizzes.submit_quiz("attendee", event.uuid, [wrong_opt], quiz.id)
+
+      {:ok, presenter_live, _html} = live(conn, ~p"/e/#{event.code}/presenter")
+
+      {presenter_live, event, quiz}
+    end
+
+    defp toggle_quiz(event, quiz, attrs) do
+      [quiz] = Claper.Quizzes.list_quizzes_at_position(quiz.presentation_file_id, quiz.position)
+      {:ok, _} = Claper.Quizzes.update_quiz(event.uuid, quiz, attrs)
+    end
+
+    defp send_quiz_command(event, command) do
+      Phoenix.PubSub.broadcast(Claper.PubSub, "event:#{event.uuid}", {command})
+    end
+
+    defp quiz_overlay_classes(html, quiz) do
+      html
+      |> Floki.parse_document!()
+      |> Floki.attribute(~s([id="#{quiz.id}-quiz"]), "class")
+      |> List.first()
+      |> String.split()
+    end
+
+    test "projects the distribution on neutral bars until the answers are revealed", %{
+      conn: conn,
+      user: user
+    } do
+      {presenter_live, event, quiz} = project_quiz(conn, user, %{show_results: true})
+
+      send_quiz_command(event, :review_quiz_questions)
+      html = render(presenter_live)
+
+      assert "opacity-100" in quiz_overlay_classes(html, quiz)
+      assert html =~ "some question content"
+      assert html =~ "100% (1)"
+      refute html =~ "bg-green-600"
+
+      toggle_quiz(event, quiz, %{reveal_answers: true})
+      html = render(presenter_live)
+
+      assert html =~ "some question content"
+      assert html =~ "100% (1)"
+      assert html =~ "bg-green-600"
+    end
+
+    test "projects revealed answers without the distribution", %{conn: conn, user: user} do
+      {presenter_live, event, quiz} = project_quiz(conn, user, %{reveal_answers: true})
+
+      send_quiz_command(event, :review_quiz_questions)
+      html = render(presenter_live)
+
+      assert "opacity-100" in quiz_overlay_classes(html, quiz)
+      assert html =~ "bg-green-600"
+      refute html =~ "100% (1)"
+
+      toggle_quiz(event, quiz, %{reveal_answers: false})
+
+      assert "opacity-0" in quiz_overlay_classes(render(presenter_live), quiz)
+    end
+
+    test "shows the average score on the quiz summary only once answers are revealed", %{
+      conn: conn,
+      user: user
+    } do
+      {presenter_live, event, quiz} = project_quiz(conn, user, %{show_results: true})
+
+      html = render(presenter_live)
+      assert html =~ "Total submissions"
+      refute html =~ "Average score"
+
+      toggle_quiz(event, quiz, %{reveal_answers: true})
+
+      assert render(presenter_live) =~ "Average score"
+    end
+
+    test "starts at the first question when moving on from the quiz summary", %{
+      conn: conn,
+      user: user
+    } do
+      {presenter_live, event, _quiz} = project_quiz(conn, user, %{show_results: true})
+
+      refute render(presenter_live) =~ "some question content"
+
+      send_quiz_command(event, :next_quiz_question)
+
+      assert render(presenter_live) =~ "some question content"
+    end
+
+    defp quiz_questions(contents) do
+      for content <- contents do
+        %{
+          content: content,
+          type: "qcm",
+          quiz_question_opts: [
+            %{content: "#{content} right", is_correct: true},
+            %{content: "#{content} wrong", is_correct: false}
+          ]
+        }
+      end
+    end
+
+    defp walk_to_second_question(conn, user) do
+      {presenter_live, event, quiz} =
+        project_quiz(conn, user, %{
+          show_results: true,
+          quiz_questions: quiz_questions(["First of A", "Second of A"])
+        })
+
+      send_quiz_command(event, :review_quiz_questions)
+      send_quiz_command(event, :next_quiz_question)
+      assert render(presenter_live) =~ "Second of A"
+
+      {presenter_live, event, quiz}
+    end
+
+    test "opens another quiz on its summary when it becomes the current interaction", %{
+      conn: conn,
+      user: user
+    } do
+      {presenter_live, event, quiz} = walk_to_second_question(conn, user)
+
+      other =
+        quiz_fixture(%{
+          presentation_file_id: quiz.presentation_file_id,
+          position: 1,
+          enabled: true,
+          show_results: true,
+          quiz_questions: quiz_questions(["First of B", "Second of B"])
+        })
+
+      Phoenix.PubSub.broadcast(
+        Claper.PubSub,
+        "event:#{event.uuid}",
+        {:current_interaction, other}
+      )
+
+      html = render(presenter_live)
+
+      assert html =~ "Total submissions"
+      refute html =~ "Second of B"
+    end
+
+    test "falls back to the summary when another quiz is edited during a walkthrough", %{
+      conn: conn,
+      user: user
+    } do
+      {presenter_live, event, quiz} = walk_to_second_question(conn, user)
+
+      other =
+        quiz_fixture(%{
+          presentation_file_id: quiz.presentation_file_id,
+          position: 1,
+          quiz_questions: quiz_questions(["Only of B"])
+        })
+
+      {:ok, _} = Claper.Quizzes.update_quiz(event.uuid, other, %{title: "Edited quiz"})
+
+      assert render(presenter_live) =~ "Total submissions"
+    end
+
+    test "falls back to the summary when the question on screen is removed", %{
+      conn: conn,
+      user: user
+    } do
+      {presenter_live, event, quiz} = walk_to_second_question(conn, user)
+
+      [first | _] = quiz.quiz_questions
+
+      {:ok, _} =
+        Claper.Quizzes.update_quiz(event.uuid, quiz, %{quiz_questions: [%{id: first.id}]})
+
+      html = render(presenter_live)
+      assert html =~ "Total submissions"
+      refute html =~ "Second of A"
     end
   end
 

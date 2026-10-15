@@ -16,6 +16,7 @@ defmodule Claper.QuizzesFixtures do
         position: 42,
         enabled: false,
         show_results: false,
+        reveal_answers: false,
         presentation_file_id: presentation_file.id,
         quiz_questions: [
           %{
