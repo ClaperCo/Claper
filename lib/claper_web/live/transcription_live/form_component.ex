@@ -56,10 +56,21 @@ defmodule ClaperWeb.TranscriptionLive.FormComponent do
 
   @impl true
   def handle_event("delete", %{"id" => id}, socket) do
-    config = Transcriptions.get_transcription_config!(id)
-    {:ok, _} = Transcriptions.delete_transcription_config(socket.assigns.event_uuid, config)
+    case Transcriptions.get_transcription_config_for_event(
+           id,
+           socket.assigns.presentation_file.event_id
+         ) do
+      nil ->
+        {:noreply,
+         socket
+         |> put_flash(:error, gettext("Resource not found"))
+         |> push_navigate(to: socket.assigns.return_to)}
 
-    {:noreply, socket |> push_navigate(to: socket.assigns.return_to)}
+      config ->
+        {:ok, _} = Transcriptions.delete_transcription_config(socket.assigns.event_uuid, config)
+
+        {:noreply, socket |> push_navigate(to: socket.assigns.return_to)}
+    end
   end
 
   defp save_config(socket, :edit, params) do
@@ -67,6 +78,7 @@ defmodule ClaperWeb.TranscriptionLive.FormComponent do
            socket.assigns.event_uuid,
            socket.assigns.transcription_config,
            normalize_language(params)
+           |> Map.put("presentation_file_id", socket.assigns.presentation_file.id)
          ) do
       {:ok, _config} ->
         {:noreply, socket |> push_navigate(to: socket.assigns.return_to)}
