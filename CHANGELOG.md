@@ -1,6 +1,8 @@
 ## v3.1.2 (Unreleased)
 
-TBD
+### Security
+
+- Remove the unused slide-image export endpoint that passed client-supplied images to ImageMagick.
 
 ## v.3.1.1
 
