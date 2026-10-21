@@ -20,7 +20,13 @@ defmodule ClaperWeb.PostController do
     try do
       with event <- Claper.Events.get_event!(event_id) do
         case Claper.Posts.create_post(event, %{body: body}) do
-          {:ok, post} -> render(conn, "post.json", post: post)
+          {:ok, post} ->
+            render(conn, "post.json", post: post)
+
+          {:error, %Ecto.Changeset{} = changeset} ->
+            conn
+            |> put_status(:unprocessable_entity)
+            |> json(%{errors: translate_errors(changeset)})
         end
       end
     rescue
@@ -30,5 +36,9 @@ defmodule ClaperWeb.PostController do
         |> put_view(ClaperWeb.ErrorView)
         |> render(:"404")
     end
+  end
+
+  defp translate_errors(changeset) do
+    Ecto.Changeset.traverse_errors(changeset, &ClaperWeb.ErrorHelpers.translate_error/1)
   end
 end

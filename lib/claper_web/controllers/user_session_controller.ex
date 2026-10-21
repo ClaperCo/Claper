@@ -4,11 +4,36 @@ defmodule ClaperWeb.UserSessionController do
   alias Claper.Accounts
   alias ClaperWeb.UserAuth
 
-  def new(conn, _params) do
+  def new(conn, params) do
     oidc_auto_redirect_login = Application.get_env(:claper, :oidc)[:auto_redirect_login]
 
     conn
+    |> maybe_store_return_to(params)
     |> redirect_to_login(oidc_auto_redirect_login)
+  end
+
+  # A page that sends a visitor here can name where to send them back to, the
+  # same session key `UserAuth.log_in_user/3` already reads for LTI launches.
+  defp maybe_store_return_to(conn, %{"return_to" => return_to}) when is_binary(return_to) do
+    if local_path?(return_to) do
+      put_session(conn, :user_return_to, return_to)
+    else
+      conn
+    end
+  end
+
+  defp maybe_store_return_to(conn, _params), do: conn
+
+  # The characters `Phoenix.Controller.redirect/2` refuses in a local path. A
+  # path holding one of them reaches `redirect(to: ...)` and raises there, so it
+  # must not make it into the session in the first place.
+  @unsafe_local_path_chars ["\\", "/%09", "/\t"]
+
+  # Only same origin paths, so a crafted link cannot turn the login form into
+  # an open redirect or crash the login it is attached to.
+  defp local_path?(path) do
+    String.starts_with?(path, "/") and not String.starts_with?(path, "//") and
+      not String.contains?(path, @unsafe_local_path_chars)
   end
 
   defp redirect_to_login(conn, true) do

@@ -171,6 +171,75 @@ defmodule Claper.PresentationsTest do
       assert {:ok, %PresentationState{}} =
                Presentations.update_presentation_state(presentation_state, update_attrs)
     end
+
+    test "authenticated_chat_only?/1 returns false by default" do
+      presentation_file = presentation_file_fixture()
+      presentation_state_fixture(%{presentation_file: presentation_file})
+
+      refute Presentations.authenticated_chat_only?(presentation_file.event_id)
+    end
+
+    test "authenticated_chat_only?/1 returns true once the moderator enabled it" do
+      presentation_file = presentation_file_fixture()
+      presentation_state = presentation_state_fixture(%{presentation_file: presentation_file})
+
+      {:ok, _presentation_state} =
+        Presentations.update_presentation_state(presentation_state, %{
+          authenticated_chat_only: true
+        })
+
+      assert Presentations.authenticated_chat_only?(presentation_file.event_id)
+    end
+
+    test "authenticated_chat_only?/1 returns false for an unknown event" do
+      refute Presentations.authenticated_chat_only?(-1)
+    end
+
+    test "update_presentation_state/2 refuses to change who may post while messages are off" do
+      presentation_state = presentation_state_fixture(%{chat_enabled: false})
+
+      assert {:error, changeset} =
+               Presentations.update_presentation_state(presentation_state, %{
+                 authenticated_chat_only: true
+               })
+
+      assert "can only be changed while messages are enabled" in errors_on(changeset).authenticated_chat_only
+
+      assert {:error, changeset} =
+               Presentations.update_presentation_state(presentation_state, %{
+                 anonymous_chat_enabled: false
+               })
+
+      assert "can only be changed while messages are enabled" in errors_on(changeset).anonymous_chat_enabled
+
+      reloaded = Claper.Repo.reload!(presentation_state)
+
+      refute reloaded.authenticated_chat_only
+      assert reloaded.anonymous_chat_enabled
+    end
+
+    test "update_presentation_state/2 accepts the change that switches messages on with it" do
+      presentation_state = presentation_state_fixture(%{chat_enabled: false})
+
+      assert {:ok, %PresentationState{} = presentation_state} =
+               Presentations.update_presentation_state(presentation_state, %{
+                 chat_enabled: true,
+                 authenticated_chat_only: true
+               })
+
+      assert presentation_state.authenticated_chat_only
+    end
+
+    test "update_presentation_state/2 reads whether messages are on from the database" do
+      # The fixture hands back a struct whose chat_enabled is still nil while
+      # the stored row carries the column default.
+      presentation_state = presentation_state_fixture()
+
+      assert {:ok, %PresentationState{authenticated_chat_only: true}} =
+               Presentations.update_presentation_state(presentation_state, %{
+                 authenticated_chat_only: true
+               })
+    end
   end
 
   defp put_local_storage_config(storage_dir) do
