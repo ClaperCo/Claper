@@ -990,24 +990,30 @@ defmodule ClaperWeb.EventLive.Manage do
 
   def handle_event("transcription-set-active", %{"id" => id}, socket) do
     if Claper.Settings.transcription_globally_enabled?() do
-      {:ok, config} = Transcriptions.set_transcription_enabled(id)
-      event = socket.assigns.event
+      case Transcriptions.get_transcription_config_for_event(id, event_id(socket)) do
+        nil ->
+          {:noreply, put_flash(socket, :error, gettext("Resource not found"))}
 
-      DynamicSupervisor.start_child(
-        Claper.TranscriptionSupervisor,
-        {Claper.Transcriptions.TranscriptionWorker, {event.uuid, event.presentation_file.id}}
-      )
+        config ->
+          {:ok, config} = Transcriptions.set_transcription_enabled(config)
+          event = socket.assigns.event
 
-      Phoenix.PubSub.broadcast(
-        Claper.PubSub,
-        "event:#{event.uuid}",
-        {:transcription_config_updated, config}
-      )
+          DynamicSupervisor.start_child(
+            Claper.TranscriptionSupervisor,
+            {Claper.Transcriptions.TranscriptionWorker, {event.uuid, event.presentation_file.id}}
+          )
 
-      {:noreply,
-       socket
-       |> assign(:transcription_config, config)
-       |> push_event("transcription-state", %{enabled: true})}
+          Phoenix.PubSub.broadcast(
+            Claper.PubSub,
+            "event:#{event.uuid}",
+            {:transcription_config_updated, config}
+          )
+
+          {:noreply,
+           socket
+           |> assign(:transcription_config, config)
+           |> push_event("transcription-state", %{enabled: true})}
+      end
     else
       {:noreply,
        socket
@@ -1016,21 +1022,27 @@ defmodule ClaperWeb.EventLive.Manage do
   end
 
   def handle_event("transcription-set-inactive", %{"id" => id}, socket) do
-    {:ok, config} = Transcriptions.set_transcription_disabled(id)
-    event = socket.assigns.event
+    case Transcriptions.get_transcription_config_for_event(id, event_id(socket)) do
+      nil ->
+        {:noreply, put_flash(socket, :error, gettext("Resource not found"))}
 
-    Claper.Transcriptions.TranscriptionWorker.stop(event.uuid)
+      config ->
+        {:ok, config} = Transcriptions.set_transcription_disabled(config)
+        event = socket.assigns.event
 
-    Phoenix.PubSub.broadcast(
-      Claper.PubSub,
-      "event:#{event.uuid}",
-      {:transcription_config_updated, config}
-    )
+        Claper.Transcriptions.TranscriptionWorker.stop(event.uuid)
 
-    {:noreply,
-     socket
-     |> assign(:transcription_config, config)
-     |> push_event("transcription-state", %{enabled: false})}
+        Phoenix.PubSub.broadcast(
+          Claper.PubSub,
+          "event:#{event.uuid}",
+          {:transcription_config_updated, config}
+        )
+
+        {:noreply,
+         socket
+         |> assign(:transcription_config, config)
+         |> push_event("transcription-state", %{enabled: false})}
+    end
   end
 
   @impl true
@@ -1454,13 +1466,19 @@ defmodule ClaperWeb.EventLive.Manage do
   end
 
   defp apply_action(socket, :edit_transcription, %{"id" => id}) do
-    config = Transcriptions.get_transcription_config!(id)
+    case Transcriptions.get_transcription_config_for_event(id, event_id(socket)) do
+      nil ->
+        socket
+        |> put_flash(:error, gettext("Resource not found"))
+        |> push_navigate(to: ~p"/e/#{socket.assigns.event.code}/manage")
 
-    socket
-    |> assign(:create, "transcription")
-    |> assign(:interaction_modal, true)
-    |> assign(:create_action, :edit)
-    |> assign(:transcription_config, config)
+      config ->
+        socket
+        |> assign(:create, "transcription")
+        |> assign(:interaction_modal, true)
+        |> assign(:create_action, :edit)
+        |> assign(:transcription_config, config)
+    end
   end
 
   @impl true

@@ -70,8 +70,17 @@ defmodule Claper.Transcriptions do
     Repo.get_by(TranscriptionConfig, presentation_file_id: presentation_file_id)
   end
 
-  def get_transcription_config!(id) do
-    Repo.get!(TranscriptionConfig, id)
+  @doc """
+  Gets a transcription config scoped to the given event.
+
+  Returns `nil` if the config does not exist or does not belong to the event.
+  """
+  def get_transcription_config_for_event(id, event_id) do
+    from(c in TranscriptionConfig,
+      join: pf in assoc(c, :presentation_file),
+      where: c.id == ^id and pf.event_id == ^event_id
+    )
+    |> Repo.one()
   end
 
   def create_transcription_config(attrs) do
@@ -123,14 +132,14 @@ defmodule Claper.Transcriptions do
     TranscriptionConfig.changeset(config, attrs)
   end
 
-  def set_transcription_enabled(id) do
-    get_transcription_config!(id)
+  def set_transcription_enabled(%TranscriptionConfig{} = config) do
+    config
     |> TranscriptionConfig.changeset(%{enabled: true})
     |> Repo.update()
   end
 
-  def set_transcription_disabled(id) do
-    get_transcription_config!(id)
+  def set_transcription_disabled(%TranscriptionConfig{} = config) do
+    config
     |> TranscriptionConfig.changeset(%{enabled: false})
     |> Repo.update()
   end
