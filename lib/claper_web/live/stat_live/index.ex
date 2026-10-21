@@ -40,6 +40,7 @@ defmodule ClaperWeb.StatLive.Index do
     distinct_attendee_count = Claper.Stats.get_unique_attendees_for_event(event.id)
     distinct_poster_count = Claper.Stats.distinct_poster_count(event.id)
     posts = list_posts(socket, event.uuid)
+    word_cloud_reports = word_cloud_reports(event)
 
     {:ok,
      socket
@@ -54,10 +55,10 @@ defmodule ClaperWeb.StatLive.Index do
      )
      |> assign(
        :engagement_rate,
-       calculate_engagement_rate(event, distinct_attendee_count)
+       calculate_engagement_rate(event, distinct_attendee_count, word_cloud_reports)
      )
      |> assign(:posts, posts)
-     |> assign(:word_cloud_reports, word_cloud_reports(event))
+     |> assign(:word_cloud_reports, word_cloud_reports)
      |> assign(:current_tab, :messages)}
   end
 
@@ -151,12 +152,13 @@ defmodule ClaperWeb.StatLive.Index do
     end
   end
 
-  defp calculate_engagement_rate(event, unique_attendees) do
+  defp calculate_engagement_rate(event, unique_attendees, word_cloud_reports) do
     total =
       average_messages(event, unique_attendees) + average_polls(event, unique_attendees) +
-        average_quizzes(event, unique_attendees) + average_forms(event, unique_attendees)
+        average_quizzes(event, unique_attendees) + average_forms(event, unique_attendees) +
+        average_word_clouds(word_cloud_reports, unique_attendees)
 
-    (total / 4 * 100)
+    (total / 5 * 100)
     |> Float.round()
     |> :erlang.float_to_binary(decimals: 0)
     |> :erlang.binary_to_integer()
@@ -212,6 +214,14 @@ defmodule ClaperWeb.StatLive.Index do
         distinct_submits = Claper.Stats.get_distinct_form_submits(form_ids)
         distinct_submits / (Enum.count(form_ids) * unique_attendees)
     end
+  end
+
+  defp average_word_clouds(_reports, 0), do: 0
+  defp average_word_clouds([], _unique_attendees), do: 0
+
+  defp average_word_clouds(reports, unique_attendees) do
+    participants = Enum.reduce(reports, 0, fn report, total -> total + report.participants end)
+    participants / (length(reports) * unique_attendees)
   end
 
   defp word_cloud_reports(event) do

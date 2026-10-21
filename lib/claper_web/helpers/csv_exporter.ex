@@ -3,8 +3,24 @@ defmodule ClaperWeb.Helpers.CSVExporter do
   Helper module for exporting data to CSV format.
 
   This module provides functions to convert collections of data
-  into CSV format for download in the admin panel.
+  into spreadsheet-safe CSV format for download.
   """
+
+  # Spreadsheet applications may ignore leading whitespace and control characters.
+  # Leading tabs and line breaks are unsafe even without a formula operator.
+  @unsafe_cell_prefix ~r/\A[\p{Z}\p{Cc}\p{Cf}]*(?:[=+\-@＝＋－＠]|[\t\r\n])/u
+
+  @doc """
+  Encodes rows as CSV, prefixing untrusted formula-like string cells with an
+  apostrophe without removing their content. Numeric and other non-string
+  values retain their normal CSV representation.
+  """
+  def encode(rows) do
+    rows
+    |> Stream.map(fn row -> Enum.map(row, &escape_formula/1) end)
+    |> CSV.encode()
+    |> Enum.join()
+  end
 
   @doc """
   Converts a list of records to CSV format.
@@ -21,9 +37,7 @@ defmodule ClaperWeb.Helpers.CSVExporter do
     records
     |> build_rows(fields)
     |> add_headers(headers)
-    |> CSV.encode()
-    |> Enum.to_list()
-    |> Enum.join("")
+    |> encode()
   end
 
   @doc """
@@ -54,6 +68,12 @@ defmodule ClaperWeb.Helpers.CSVExporter do
     [headers | rows]
   end
 
+  defp escape_formula(value) when is_binary(value) do
+    if Regex.match?(@unsafe_cell_prefix, value), do: "'" <> value, else: value
+  end
+
+  defp escape_formula(value), do: value
+
   defp format_field_value(value) when is_boolean(value) do
     if value, do: "Yes", else: "No"
   end
@@ -67,6 +87,8 @@ defmodule ClaperWeb.Helpers.CSVExporter do
   end
 
   defp format_field_value(nil), do: ""
+
+  defp format_field_value(value) when is_number(value), do: value
 
   defp format_field_value(value), do: to_string(value)
 

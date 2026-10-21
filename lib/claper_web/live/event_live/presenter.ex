@@ -245,10 +245,10 @@ defmodule ClaperWeb.EventLive.Presenter do
 
   @impl true
   def handle_info(
-        {:word_cloud_entry_added, %WordCloud{id: id} = word_cloud},
+        {:word_cloud_entry_added, %WordCloud{id: id}},
         %{assigns: %{current_word_cloud: %WordCloud{id: id}}} = socket
       ) do
-    {:noreply, assign_word_cloud(socket, word_cloud)}
+    {:noreply, word_cloud_at_position(socket)}
   end
 
   @impl true

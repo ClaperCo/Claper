@@ -6,6 +6,7 @@ defmodule ClaperWeb.StatController do
   use ClaperWeb, :controller
 
   alias Claper.{Forms, Events, Polls, Presentations, Quizzes, Transcriptions, WordClouds}
+  alias ClaperWeb.Helpers.CSVExporter
 
   @doc """
   Exports form submissions as a CSV file.
@@ -165,10 +166,7 @@ defmodule ClaperWeb.StatController do
       # Format data rows - one row per user with their answers and score
       data = Enum.map(responses_by_user, &process_user_responses(&1, questions))
 
-      csv_content =
-        CSV.encode([headers | data])
-        |> Enum.to_list()
-        |> to_string()
+      csv_content = CSVExporter.encode([headers | data])
 
       send_download(conn, {:binary, csv_content},
         filename: "quiz_#{quiz.id}_results.csv",
@@ -296,11 +294,7 @@ defmodule ClaperWeb.StatController do
   defp format_user_email(user), do: user.email
 
   defp export_as_csv(conn, headers, data, filename) do
-    csv_data =
-      ([headers] ++ data)
-      |> CSV.encode()
-      |> Enum.to_list()
-      |> to_string()
+    csv_data = CSVExporter.encode([headers | data])
 
     conn
     |> put_resp_content_type("text/csv")

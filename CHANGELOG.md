@@ -1,6 +1,19 @@
 ## v3.1.2 (Unreleased)
 
-TBD
+### Features
+
+- Include wordcloud participation as a fifth equally weighted engagement category. Each attendee counts once per cloud, including submissions hidden by the presenter.
+- Show attendee-visible wordcloud results immediately, without requiring a submission first.
+
+### Fixes and improvements
+
+- Keep moderated words hidden when delayed submission notifications arrive.
+- Synchronize attendees' submitted words and remaining submissions across tabs.
+- Activate imported wordclouds without leaving multiple interactions enabled on the same slide.
+
+### Security
+
+- Escape formula-like text cells in all CSV exports, including headers and whitespace-prefixed payloads, without changing stored content or numeric values.
 
 ## v.3.1.1
 

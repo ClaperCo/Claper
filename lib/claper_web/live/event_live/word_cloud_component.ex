@@ -66,7 +66,7 @@ defmodule ClaperWeb.EventLive.WordCloudComponent do
         </div>
 
         <ClaperWeb.Component.WordCloud.cloud
-          :if={@word_cloud.show_results and @entries != [] and @words != []}
+          :if={@word_cloud.show_results and @words != []}
           id={"#{@id}-cloud"}
           words={@words}
           text_color="var(--color-primary-300)"

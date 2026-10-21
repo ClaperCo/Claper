@@ -1,7 +1,14 @@
 defmodule ClaperWeb.StatControllerTest do
   use ClaperWeb.ConnCase, async: true
 
-  import Claper.{AccountsFixtures, FormsFixtures, PresentationsFixtures, WordCloudsFixtures}
+  import Claper.{
+    AccountsFixtures,
+    FormsFixtures,
+    PostsFixtures,
+    PresentationsFixtures,
+    QuizzesFixtures,
+    WordCloudsFixtures
+  }
 
   describe "export_transcriptions/2" do
     test "exports timestamp, language, and text as CSV", %{conn: conn} do
@@ -35,6 +42,83 @@ defmodule ClaperWeb.StatControllerTest do
         |> post(~p"/export/#{presentation_file.event.uuid}/transcriptions")
 
       assert response(conn, 403) == "Forbidden"
+    end
+  end
+
+  describe "POST /export/:event_id/messages" do
+    test "protects message text and names while preserving numeric and boolean cells", %{
+      conn: conn
+    } do
+      owner = confirmed_user_fixture()
+      presentation_file = presentation_file_fixture(%{user: owner}, [:event])
+
+      message =
+        post_fixture(%{
+          user: owner,
+          event: presentation_file.event,
+          name: "+Presenter",
+          body: "=HYPERLINK(\"https://example.com\",\"click\")",
+          position: 0
+        })
+
+      conn =
+        conn
+        |> log_in_user(owner)
+        |> post(~p"/export/#{presentation_file.event.uuid}/messages")
+
+      assert [headers, row] = CSV.decode!([response(conn, 200)]) |> Enum.to_list()
+
+      assert headers == [
+               "Attendee identifier",
+               "User email",
+               "Name",
+               "Message",
+               "Pinned",
+               "Slide #",
+               "Sent at (UTC)"
+             ]
+
+      assert row == [
+               "N/A",
+               owner.email,
+               "'+Presenter",
+               "'=HYPERLINK(\"https://example.com\",\"click\")",
+               to_string(message.pinned),
+               "1",
+               to_string(message.inserted_at)
+             ]
+    end
+  end
+
+  describe "POST /export/quizzes/:quiz_id" do
+    test "protects question headers in quiz CSV exports", %{conn: conn} do
+      owner = confirmed_user_fixture()
+      presentation_file = presentation_file_fixture(%{user: owner}, [:event])
+
+      quiz =
+        quiz_fixture(%{
+          presentation_file: presentation_file,
+          quiz_questions: [
+            %{
+              content: "=SUM(1,2)",
+              type: "qcm",
+              quiz_question_opts: [%{content: "answer", is_correct: true}]
+            }
+          ]
+        })
+
+      conn =
+        conn
+        |> log_in_user(owner)
+        |> post(~p"/export/quizzes/#{quiz.id}")
+
+      assert CSV.decode!([response(conn, 200)]) |> Enum.to_list() == [
+               ["Attendee identifier", "User email", "'=SUM(1,2)", "Total"]
+             ]
+
+      assert get_resp_header(conn, "content-disposition") == [
+               ~s(attachment; filename="quiz_#{quiz.id}_results.csv")
+             ]
     end
   end
 
@@ -80,6 +164,39 @@ defmodule ClaperWeb.StatControllerTest do
 
       assert data_line =~ "Ada"
       assert data_line =~ "ada@example.com"
+    end
+
+    test "protects form headers and responses without changing submitted values", %{
+      conn: conn,
+      form: original_form,
+      event: event
+    } do
+      form =
+        form_fixture(%{
+          presentation_file_id: original_form.presentation_file_id,
+          position: 1,
+          fields: [
+            %{name: "=Header", type: "text", required: false},
+            %{name: "Notes", type: "text", required: false}
+          ]
+        })
+
+      {:ok, _submit} =
+        Claper.Forms.create_or_update_form_submit(event.uuid, %{
+          "attendee_identifier" => "attendee-1",
+          "form_id" => form.id,
+          "response" => %{
+            "=Header" => " \t@SUM(1,2)",
+            "Notes" => "\r\nordinary,\"quoted\""
+          }
+        })
+
+      conn = post(conn, ~p"/export/forms/#{form.id}")
+
+      assert CSV.decode!([response(conn, 200)]) |> Enum.to_list() == [
+               ["'=Header", "Notes"],
+               ["' \t@SUM(1,2)", "'\r\nordinary,\"quoted\""]
+             ]
     end
 
     test "returns 403 for users who don't own the event", %{form: form} do
@@ -130,6 +247,51 @@ defmodule ClaperWeb.StatControllerTest do
       assert header_line == "Attendee identifier,User email,Word,Hidden,Sent at (UTC)"
       assert elixir_line =~ "#{Base.encode16("attendee-1")},N/A,Elixir,false,"
       assert rude_line =~ "#{Base.encode16("attendee-1")},N/A,Rude,true,"
+    end
+
+    test "exports formula words as text including CSV-quoted payloads", %{
+      conn: conn,
+      word_cloud: word_cloud,
+      event: event
+    } do
+      words = [
+        "=1+1",
+        "+1",
+        "-1",
+        "@SUM(1,2)",
+        "＝1+1",
+        "=HYPERLINK(\"https://example.com\",\"click\")",
+        "=1\n+2"
+      ]
+
+      words
+      |> Enum.with_index()
+      |> Enum.each(fn {word, index} ->
+        assert {:ok, _} =
+                 Claper.WordClouds.submit_entry(
+                   event.uuid,
+                   word_cloud,
+                   "attendee-#{index}",
+                   word
+                 )
+      end)
+
+      conn = post(conn, ~p"/export/word_clouds/#{word_cloud.id}")
+
+      assert [headers | rows] = CSV.decode!([response(conn, 200)]) |> Enum.to_list()
+      assert headers == ["Attendee identifier", "User email", "Word", "Hidden", "Sent at (UTC)"]
+
+      assert Enum.map(rows, &Enum.at(&1, 2)) == [
+               "'=1+1",
+               "'+1",
+               "'-1",
+               "'@SUM(1,2)",
+               "'＝1+1",
+               "'=HYPERLINK(\"https://example.com\",\"click\")",
+               "'=1\n+2"
+             ]
+
+      assert Enum.all?(rows, fn row -> length(row) == 5 and Enum.at(row, 3) == "false" end)
     end
 
     test "returns 403 for users who don't own the event", %{word_cloud: word_cloud} do

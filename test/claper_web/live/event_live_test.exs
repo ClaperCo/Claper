@@ -694,6 +694,10 @@ defmodule ClaperWeb.EventLiveTest do
       refute has_element?(manage_live, hide_button)
       assert has_element?(manage_live, unhide_button)
 
+      send(manage_live.pid, {:word_cloud_entry_added, word_cloud})
+      refute has_element?(manage_live, hide_button)
+      assert has_element?(manage_live, unhide_button)
+
       {:ok, _} = Claper.WordClouds.submit_entry(event.uuid, word_cloud, "c", "Erlang")
       assert has_element?(manage_live, ~s(#settings-modal-content button[phx-value-key="erlang"]))
 
@@ -820,6 +824,9 @@ defmodule ClaperWeb.EventLiveTest do
 
       {:ok, _} = Claper.WordClouds.hide_word(event.uuid, word_cloud, "grumpfwort")
       refute render(presenter_live) =~ "Grumpfwort"
+
+      send(presenter_live.pid, {:word_cloud_entry_added, word_cloud})
+      assert cloud |> render() |> word_cloud_names() == ["Elixir"]
 
       send(presenter_live.pid, {:current_interaction, nil})
       refute has_element?(presenter_live, "#word-cloud")

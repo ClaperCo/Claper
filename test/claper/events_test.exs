@@ -634,6 +634,53 @@ defmodule Claper.EventsTest do
       assert Claper.WordClouds.list_entries(imported.id) == []
     end
 
+    test "import/3 activates imported clouds without leaving another interaction enabled" do
+      user = user_fixture()
+      source = event_fixture(%{user: user})
+      source_file = presentation_file_fixture(%{event: source})
+      word_cloud_fixture(%{presentation_file: source_file})
+
+      for kind <- [:word_cloud, :poll] do
+        destination = event_fixture(%{user: user})
+        destination_file = presentation_file_fixture(%{event: destination})
+
+        existing =
+          case kind do
+            :word_cloud -> word_cloud_fixture(%{presentation_file: destination_file})
+            :poll -> poll_fixture(%{presentation_file_id: destination_file.id, enabled: true})
+          end
+
+        for _ <- 1..2 do
+          assert {:ok, %Event{}} = Events.import(user.id, source.uuid, destination.uuid)
+
+          current = Claper.WordClouds.get_word_cloud_current_position(destination_file.id, 0)
+          assert current.enabled
+          assert current.id != existing.id or kind == :poll
+
+          event = %{destination | presentation_file: destination_file}
+          assert Claper.Interactions.get_active_interaction(event, 0).id == current.id
+
+          {:ok, interactions} = Claper.Interactions.get_interactions_at_position(event, 0)
+          assert Enum.filter(interactions, & &1.enabled) == [current]
+        end
+      end
+    end
+
+    test "import/3 leaves the destination interaction active when the imported cloud is disabled" do
+      user = user_fixture()
+      source = event_fixture(%{user: user})
+      source_file = presentation_file_fixture(%{event: source})
+      word_cloud_fixture(%{presentation_file: source_file, enabled: false})
+      destination = event_fixture(%{user: user})
+      destination_file = presentation_file_fixture(%{event: destination})
+      existing = word_cloud_fixture(%{presentation_file: destination_file})
+
+      assert {:ok, %Event{}} = Events.import(user.id, source.uuid, destination.uuid)
+
+      assert Claper.WordClouds.get_word_cloud_current_position(destination_file.id, 0).id ==
+               existing.id
+    end
+
     test "import/3 fail with different user" do
       user = user_fixture()
       bad_user = user_fixture()

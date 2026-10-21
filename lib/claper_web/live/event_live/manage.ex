@@ -327,10 +327,16 @@ defmodule ClaperWeb.EventLive.Manage do
   # instead of the whole interaction list.
   @impl true
   def handle_info(
-        {:word_cloud_entry_added, %{id: id} = word_cloud},
+        {:word_cloud_entry_added, %{id: id}},
         %{assigns: %{current_interaction: %WordClouds.WordCloud{id: id}}} = socket
       ) do
-    {:noreply, assign(socket, :word_cloud_words, WordClouds.list_words(word_cloud))}
+    words =
+      case WordClouds.get_word_cloud_for_event(id, event_id(socket)) do
+        nil -> []
+        word_cloud -> WordClouds.list_words(word_cloud)
+      end
+
+    {:noreply, assign(socket, :word_cloud_words, words)}
   end
 
   @impl true

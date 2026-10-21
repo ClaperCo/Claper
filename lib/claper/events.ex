@@ -579,14 +579,19 @@ defmodule Claper.Events do
             from_event.presentation_file.word_clouds
             |> Enum.each(fn word_cloud ->
               if word_cloud.position < to_event.presentation_file.length do
-                Claper.WordClouds.create_word_cloud(%{
-                  title: word_cloud.title,
-                  position: word_cloud.position,
-                  enabled: word_cloud.enabled,
-                  show_results: word_cloud.show_results,
-                  max_entries: word_cloud.max_entries,
-                  presentation_file_id: to_event.presentation_file.id
-                })
+                {:ok, imported} =
+                  Claper.WordClouds.create_word_cloud(%{
+                    title: word_cloud.title,
+                    position: word_cloud.position,
+                    enabled: false,
+                    show_results: word_cloud.show_results,
+                    max_entries: word_cloud.max_entries,
+                    presentation_file_id: to_event.presentation_file.id
+                  })
+
+                if word_cloud.enabled do
+                  :ok = Claper.Interactions.enable_interaction(imported)
+                end
               end
             end)}
          end)

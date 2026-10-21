@@ -379,7 +379,7 @@ defmodule ClaperWeb.EventLive.Show do
         {:word_cloud_entry_added, %WordClouds.WordCloud{id: id}},
         %{assigns: %{current_interaction: %WordClouds.WordCloud{id: id} = word_cloud}} = socket
       ) do
-    {:noreply, assign_visible_words(socket, word_cloud)}
+    {:noreply, load_current_interaction(socket, word_cloud, true)}
   end
 
   @impl true
@@ -762,8 +762,9 @@ defmodule ClaperWeb.EventLive.Show do
 
       {:error, :limit_reached} ->
         {:noreply,
-         put_flash(
-           socket,
+         socket
+         |> refresh_current_interaction(true)
+         |> put_flash(
            :error,
            ngettext(
              "You have already sent your word.",
@@ -1127,11 +1128,9 @@ defmodule ClaperWeb.EventLive.Show do
     socket |> assign(:current_interaction, interaction)
   end
 
-  # The words are left out of the assigns, and so out of the markup, until the
-  # presenter lets attendees see the cloud and this attendee has sent a word.
-  # This also spares the grouping query to everyone who has not sent one yet.
+  # Only the presenter's visibility setting controls whether results reach the attendee.
   defp assign_visible_words(
-         %{assigns: %{word_cloud_entries: [_ | _]}} = socket,
+         socket,
          %WordClouds.WordCloud{show_results: true} = word_cloud
        ),
        do: assign(socket, :word_cloud_words, WordClouds.list_words(word_cloud))

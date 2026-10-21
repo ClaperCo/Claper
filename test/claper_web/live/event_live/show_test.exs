@@ -117,7 +117,7 @@ defmodule ClaperWeb.EventLive.ShowTest do
       %{presentation_file: presentation_file, event: presentation_file.event}
     end
 
-    test "an anonymous attendee sends a word and then sees the cloud", %{
+    test "an anonymous attendee sees results before submitting and can still send a word", %{
       presentation_file: presentation_file,
       event: event
     } do
@@ -128,7 +128,7 @@ defmodule ClaperWeb.EventLive.ShowTest do
 
       assert html =~ "One word"
       assert has_element?(view, ~s(form[phx-submit="submit-word"] input[name="word"]))
-      refute html =~ "Quokka"
+      assert attendee_cloud(view, word_cloud) == ["Quokka"]
 
       view
       |> form(~s(form[phx-submit="submit-word"]), %{word: "  Elixir "})
@@ -164,6 +164,57 @@ defmodule ClaperWeb.EventLive.ShowTest do
       assert user_id == user.id
     end
 
+    test "tabs sharing an attendee update their own words and remaining submissions", %{
+      conn: conn,
+      presentation_file: presentation_file,
+      event: event
+    } do
+      word_cloud = open_word_cloud(presentation_file, %{max_entries: 2})
+      {:ok, first, _html} = live(conn, ~p"/e/#{event.code}")
+      {:ok, second, _html} = live(conn, ~p"/e/#{event.code}")
+
+      first
+      |> form(~s(form[phx-submit="submit-word"]), %{word: "Elixir"})
+      |> render_submit()
+
+      assert attendee_cloud(second, word_cloud) == ["Elixir"]
+      assert has_element?(second, ~s(form[phx-submit="submit-word"]))
+      assert render(second) =~ "You can send one more word."
+
+      second
+      |> form(~s(form[phx-submit="submit-word"]), %{word: "Phoenix"})
+      |> render_submit()
+
+      for view <- [first, second] do
+        assert attendee_cloud(view, word_cloud) == ["Elixir", "Phoenix"]
+        refute has_element?(view, ~s(form[phx-submit="submit-word"]))
+        assert has_element?(view, "[data-submitted]")
+      end
+    end
+
+    test "a rejected submission recovers before its entry notification arrives", %{
+      conn: conn,
+      user: user,
+      presentation_file: presentation_file,
+      event: event
+    } do
+      word_cloud = open_word_cloud(presentation_file)
+      {:ok, view, _html} = live(conn, ~p"/e/#{event.code}")
+
+      word_cloud_entry_fixture(%{
+        word_cloud: word_cloud,
+        user_id: user.id,
+        attendee_identifier: nil,
+        content: "Elixir"
+      })
+
+      render_hook(view, "submit-word", %{"word" => "Phoenix"})
+
+      refute has_element?(view, ~s(form[phx-submit="submit-word"]))
+      assert has_element?(view, "[data-submitted]")
+      assert attendee_cloud(view, word_cloud) == ["Elixir"]
+    end
+
     test "the cloud is left out of the markup while attendees may not see it", %{
       presentation_file: presentation_file,
       event: event
@@ -171,7 +222,20 @@ defmodule ClaperWeb.EventLive.ShowTest do
       word_cloud = open_word_cloud(presentation_file, %{show_results: false})
       word_cloud_entry_fixture(%{word_cloud: word_cloud, content: "Zanzibar"})
 
-      {:ok, view, _html} = live(build_conn(), ~p"/e/#{event.code}")
+      {:ok, view, html} = live(build_conn(), ~p"/e/#{event.code}")
+      refute html =~ "Zanzibar"
+      refute has_element?(view, "##{word_cloud.id}-word-cloud-cloud")
+
+      {:ok, word_cloud} =
+        Claper.WordClouds.update_word_cloud(event.uuid, word_cloud, %{show_results: true})
+
+      assert attendee_cloud(view, word_cloud) == ["Zanzibar"]
+      assert has_element?(view, ~s(form[phx-submit="submit-word"]))
+
+      {:ok, _} =
+        Claper.WordClouds.update_word_cloud(event.uuid, word_cloud, %{show_results: false})
+
+      refute has_element?(view, "##{word_cloud.id}-word-cloud-cloud")
 
       html =
         view
@@ -202,20 +266,20 @@ defmodule ClaperWeb.EventLive.ShowTest do
       refute html =~ "Grumpfwort"
     end
 
-    test "the cloud follows words other attendees send", %{
+    test "an unsubmitted attendee sees the first word another attendee sends", %{
       presentation_file: presentation_file,
       event: event
     } do
       word_cloud = open_word_cloud(presentation_file)
       {:ok, view, _html} = live(build_conn(), ~p"/e/#{event.code}")
 
-      view
-      |> form(~s(form[phx-submit="submit-word"]), %{word: "Elixir"})
-      |> render_submit()
+      refute has_element?(view, "##{word_cloud.id}-word-cloud-cloud")
 
       {:ok, _} = Claper.WordClouds.submit_entry(event.uuid, word_cloud, "someone else", "Erlang")
 
-      assert attendee_cloud(view, word_cloud) == ["Elixir", "Erlang"]
+      assert attendee_cloud(view, word_cloud) == ["Erlang"]
+      assert has_element?(view, ~s(form[phx-submit="submit-word"]))
+      refute has_element?(view, "[data-submitted]")
     end
 
     test "an attendee can send as many words as the cloud allows", %{
