@@ -111,6 +111,63 @@ defmodule ClaperWeb.UserRegistrationControllerTest do
   end
 
   describe "POST /users/register" do
+    for confirmation_required <- [true, false] do
+      test "ignores injected privileges with email confirmation #{confirmation_required}", %{
+        conn: conn
+      } do
+        Application.put_env(:claper, :enable_account_creation, true)
+        Application.put_env(:claper, :email_confirmation, unquote(confirmation_required))
+
+        admin_role =
+          Accounts.get_role_by_name("admin") ||
+            elem(Accounts.create_role(%{name: "admin"}), 1)
+
+        user_role =
+          Accounts.get_role_by_name("user") ||
+            elem(Accounts.create_role(%{name: "user"}), 1)
+
+        email = unique_user_email()
+        password = valid_user_password()
+
+        conn =
+          post(conn, ~p"/users/register", %{
+            "user" => %{
+              "first_name" => "Jane",
+              "last_name" => "Doe",
+              "email" => email,
+              "password" => password,
+              "password_confirmation" => password,
+              "role_id" => to_string(admin_role.id),
+              "confirmed_at" => "2020-01-01T00:00:00"
+            }
+          })
+
+        user = Accounts.get_user_by_email(email)
+        assert user.role_id == user_role.id
+
+        if unquote(confirmation_required) do
+          assert redirected_to(conn) == "/users/register/confirm"
+          refute user.confirmed_at
+          refute get_session(conn, :user_token)
+
+          login_conn =
+            post(recycle(conn), ~p"/users/log_in", %{
+              "user" => %{"email" => email, "password" => password}
+            })
+
+          refute get_session(login_conn, :user_token)
+        else
+          assert redirected_to(conn) == "/events"
+          assert user.confirmed_at
+          refute user.confirmed_at == ~N[2020-01-01 00:00:00]
+          assert get_session(conn, :user_token)
+
+          admin_conn = get(recycle(conn), "/admin/")
+          assert redirected_to(admin_conn) == "/events"
+        end
+      end
+    end
+
     for {account_creation, password_login_disabled} <- [{false, false}, {true, true}] do
       test "rejects registration with account creation #{account_creation} and password login disabled #{password_login_disabled}",
            %{conn: conn} do

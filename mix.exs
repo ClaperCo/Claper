@@ -1,7 +1,7 @@
 defmodule Claper.MixProject do
   use Mix.Project
 
-  @version "3.1.1"
+  @version "3.1.2"
 
   def project do
     [
@@ -12,6 +12,7 @@ defmodule Claper.MixProject do
       start_permanent: Mix.env() == :prod,
       aliases: aliases(),
       deps: deps(),
+      gettext: [write_reference_line_numbers: false],
 
       # Docs
       name: "Claper",

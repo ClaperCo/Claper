@@ -1,14 +1,21 @@
+## v3.1.2
+
+### Security
+
+- Prevent public signup from assigning privileged roles or bypassing email confirmation through client-supplied account fields.
+- Remove the unused slide-image export endpoint that passed client-supplied images to ImageMagick.
+- Prevent cross-event access to transcription controls and keep edited configurations bound to their authorized presentation.
+
 ## v.3.1.1
 
 ### Features
 
-- Add Japenese translation (#258)
+- Add Japanese translation (#258)
 
 ### Fixes and improvements
 
 - Fix crash caused by duplication of events with too long names
 - Fix missing locales for emails and admin (#265 #266 #267)
-
 
 ## v.3.1.0
 
