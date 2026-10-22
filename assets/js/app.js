@@ -988,12 +988,6 @@ Hooks.QRCode = {
   mounted() {
     window.addEventListener("resize", this.draw.bind(this));
     this.draw();
-    if (this.el.dataset.getUrl) {
-      setTimeout(() => {
-        var dataURL = this.qrCode._canvas.toDataURL();
-        document.getElementById("qr-url").value = dataURL;
-      }, 500);
-    }
   },
   updated() {},
   destroyed() {},

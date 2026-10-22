@@ -2,18 +2,12 @@
 
 ### Features
 
-- Include wordcloud participation as a fifth equally weighted engagement category. Each attendee counts once per cloud, including submissions hidden by the presenter.
-- Show attendee-visible wordcloud results immediately, without requiring a submission first.
-
-### Fixes and improvements
-
-- Keep moderated words hidden when delayed submission notifications arrive.
-- Synchronize attendees' submitted words and remaining submissions across tabs.
-- Activate imported wordclouds without leaving multiple interactions enabled on the same slide.
+- Add Word Clouds interaction (#254)
 
 ### Security
 
-- Escape formula-like text cells in all CSV exports, including headers and whitespace-prefixed payloads, without changing stored content or numeric values.
+- Remove the unused slide-image export endpoint that passed client-supplied images to ImageMagick.
+- Prevent cross-event access to transcription controls and keep edited configurations bound to their authorized presentation.
 
 ## v.3.1.1
 
