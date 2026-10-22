@@ -1,6 +1,8 @@
 ## v3.1.3 (Unreleased)
 
-TBD
+### Fixes and improvements
+
+- Fix the transcription API key appearing cleared one day after it was saved.
 
 ## v3.1.2
 
