@@ -44,7 +44,11 @@ defmodule ClaperWeb.WordCloudLive.FormComponent do
     case WordClouds.update_word_cloud(
            socket.assigns.event_uuid,
            socket.assigns.word_cloud,
-           Map.take(word_cloud_params, ["title", "max_entries", "show_results"])
+           Map.take(word_cloud_params, [
+             "title",
+             "max_entries",
+             "show_results"
+           ])
          ) do
       {:ok, _word_cloud} ->
         {:noreply, socket |> push_navigate(to: socket.assigns.return_to)}

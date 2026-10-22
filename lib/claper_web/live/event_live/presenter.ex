@@ -348,12 +348,12 @@ defmodule ClaperWeb.EventLive.Presenter do
 
   @impl true
   def handle_info(
-        {:current_interaction, %WordCloud{} = interaction},
+        {:current_interaction, %WordCloud{}},
         socket
       ) do
     {:noreply,
      socket
-     |> assign_word_cloud(interaction)
+     |> word_cloud_at_position()
      |> assign(:current_poll, nil)
      |> assign(:current_embed, nil)
      |> assign(:current_form, nil)

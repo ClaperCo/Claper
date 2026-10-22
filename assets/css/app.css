@@ -52,6 +52,11 @@
   }
 }
 
+/* Scale each word, not the cloud container, so measured widths still match the row layout. */
+#word-cloud [role="listitem"] {
+  zoom: var(--presenter-word-scale);
+}
+
 /*
  The manager screen uses its own full-height scrolling containers. DaisyUI's
  root scrollbar gutter for open modals adds an unnecessary right-side gutter

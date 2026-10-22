@@ -577,7 +577,11 @@ defmodule ClaperWeb.EventLiveTest do
 
       manage_live
       |> form("#word-cloud-form",
-        word_cloud: %{title: "First thoughts", max_entries: "3", show_results: "false"}
+        word_cloud: %{
+          title: "First thoughts",
+          max_entries: "3",
+          show_results: "false"
+        }
       )
       |> render_submit()
 
@@ -601,10 +605,14 @@ defmodule ClaperWeb.EventLiveTest do
         )
 
       manage_live
-      |> form("#word-cloud-form", word_cloud: %{title: "Renamed"})
+      |> form("#word-cloud-form",
+        word_cloud: %{title: "Renamed", show_results: "true"}
+      )
       |> render_submit()
 
-      assert Claper.WordClouds.get_word_cloud!(word_cloud.id).title == "Renamed"
+      edited = Claper.WordClouds.get_word_cloud!(word_cloud.id)
+      assert edited.title == "Renamed"
+      assert edited.show_results
     end
 
     test "sends to the list when the word cloud belongs to another event", %{
@@ -726,7 +734,6 @@ defmodule ClaperWeb.EventLiveTest do
       presentation_file: presentation_file
     } do
       {:ok, manage_live, _html} = live(conn, ~p"/e/#{presentation_file.event.code}/manage")
-
       render_hook(manage_live, "checked", %{"key" => "word_cloud_show_results", "value" => false})
 
       assert Process.alive?(manage_live.pid)

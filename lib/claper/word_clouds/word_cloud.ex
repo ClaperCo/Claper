@@ -43,7 +43,12 @@ defmodule Claper.WordClouds.WordCloud do
       :max_entries,
       :presentation_file_id
     ])
-    |> validate_required([:title, :presentation_file_id, :position, :max_entries])
+    |> validate_required([
+      :title,
+      :presentation_file_id,
+      :position,
+      :max_entries
+    ])
     |> validate_length(:title, max: 255, count: :codepoints)
     |> validate_number(:max_entries, greater_than_or_equal_to: 1, less_than_or_equal_to: 5)
   end

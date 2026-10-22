@@ -622,15 +622,22 @@ defmodule Claper.EventsTest do
       to_presentation_file = presentation_file_fixture(%{event: to_event, hash: "444444"})
 
       word_cloud =
-        word_cloud_fixture(%{presentation_file: from_presentation_file, max_entries: 2})
+        word_cloud_fixture(%{
+          presentation_file: from_presentation_file,
+          max_entries: 2,
+          show_results: false
+        })
 
       {:ok, _} = Claper.WordClouds.submit_entry(from_event.uuid, word_cloud, "a", "Elixir")
+      {:ok, _} = Claper.WordClouds.hide_word(from_event.uuid, word_cloud, "elixir")
 
       assert {:ok, %Event{}} = Events.import(user.id, from_event.uuid, to_event.uuid)
 
       assert [imported] = Claper.WordClouds.list_word_clouds(to_presentation_file.id)
       assert imported.title == word_cloud.title
       assert imported.max_entries == 2
+      refute imported.show_results
+      assert imported.hidden_words == []
       assert Claper.WordClouds.list_entries(imported.id) == []
     end
 

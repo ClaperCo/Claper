@@ -39,46 +39,7 @@ defmodule ClaperWeb.EventLive.ManageInteractionOptionsComponent do
       <div class="space-y-2 px-1">
         <%= case @current_interaction do %>
           <% %Claper.Polls.Poll{} -> %>
-            <.toggle_row
-              label={
-                if @state.poll_visible,
-                  do: gettext("Hide results on presentation"),
-                  else: gettext("Show results on presentation")
-              }
-              checked={@state.poll_visible}
-              key={:poll_visible}
-              shortcut={if @create == nil, do: "Z", else: nil}
-              show_shortcut={@show_shortcut}
-            >
-              <:icon>
-                <svg
-                  :if={@state.poll_visible}
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  class="h-5 w-5"
-                >
-                  <path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M3 4h1m4 0h13" /><path d="M4 4v10a2 2 0 0 0 2 2h10m3.42 -.592c.359 -.362 .58 -.859 .58 -1.408v-10" /><path d="M12 16v4" /><path d="M9 20h6" /><path d="M8 12l2 -2m4 0l2 -2" /><path d="M3 3l18 18" />
-                </svg>
-                <svg
-                  :if={!@state.poll_visible}
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  class="h-5 w-5"
-                >
-                  <path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M3 4l18 0" /><path d="M4 4v10a2 2 0 0 0 2 2h12a2 2 0 0 0 2 -2v-10" /><path d="M12 16l0 4" /><path d="M9 20l6 0" /><path d="M8 12l3 -3l2 2l3 -3" />
-                </svg>
-              </:icon>
-            </.toggle_row>
+            <.presentation_visibility state={@state} create={@create} show_shortcut={@show_shortcut} />
           <% %Claper.Quizzes.Quiz{} -> %>
             <div class="space-y-2">
               <.toggle_row
@@ -200,8 +161,6 @@ defmodule ClaperWeb.EventLive.ManageInteractionOptionsComponent do
                 }
                 checked={@current_interaction.show_results}
                 key={:word_cloud_show_results}
-                shortcut={if @create == nil, do: "Z", else: nil}
-                show_shortcut={@show_shortcut}
               >
                 <:icon>
                   <svg
@@ -219,6 +178,12 @@ defmodule ClaperWeb.EventLive.ManageInteractionOptionsComponent do
                 </:icon>
               </.toggle_row>
 
+              <.presentation_visibility
+                state={@state}
+                create={@create}
+                show_shortcut={@show_shortcut}
+              />
+
               <.word_cloud_preview word_cloud={@current_interaction} words={@word_cloud_words} />
             </div>
           <% nil -> %>
@@ -230,6 +195,55 @@ defmodule ClaperWeb.EventLive.ManageInteractionOptionsComponent do
         <% end %>
       </div>
     </div>
+    """
+  end
+
+  attr :state, :map, required: true
+  attr :create, :any, default: nil
+  attr :show_shortcut, :boolean, default: true
+
+  defp presentation_visibility(assigns) do
+    ~H"""
+    <.toggle_row
+      label={
+        if @state.poll_visible,
+          do: gettext("Hide results on presentation"),
+          else: gettext("Show results on presentation")
+      }
+      checked={@state.poll_visible}
+      key={:poll_visible}
+      shortcut={if @create == nil, do: "Z", else: nil}
+      show_shortcut={@show_shortcut}
+    >
+      <:icon>
+        <svg
+          :if={@state.poll_visible}
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          class="h-5 w-5"
+        >
+          <path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M3 4h1m4 0h13" /><path d="M4 4v10a2 2 0 0 0 2 2h10m3.42 -.592c.359 -.362 .58 -.859 .58 -1.408v-10" /><path d="M12 16v4" /><path d="M9 20h6" /><path d="M8 12l2 -2m4 0l2 -2" /><path d="M3 3l18 18" />
+        </svg>
+        <svg
+          :if={!@state.poll_visible}
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          class="h-5 w-5"
+        >
+          <path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M3 4l18 0" /><path d="M4 4v10a2 2 0 0 0 2 2h12a2 2 0 0 0 2 -2v-10" /><path d="M12 16l0 4" /><path d="M9 20l6 0" /><path d="M8 12l3 -3l2 2l3 -3" />
+        </svg>
+      </:icon>
+    </.toggle_row>
     """
   end
 
@@ -271,7 +285,8 @@ defmodule ClaperWeb.EventLive.ManageInteractionOptionsComponent do
           type="button"
           class={"relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none disabled:cursor-not-allowed #{if @checked, do: "bg-primary-500", else: "bg-gray-200"}"}
           role="switch"
-          aria-checked={@checked}
+          aria-checked={to_string(@checked)}
+          aria-label={@label}
           phx-key={@shortcut}
           phx-window-keydown={
             if @shortcut && not @disabled, do: ClaperWeb.Component.Input.checked(@checked, @key)
