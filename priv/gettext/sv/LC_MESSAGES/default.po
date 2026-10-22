@@ -184,6 +184,7 @@ msgstr "Redigera"
 #: lib/claper_web/live/poll_live/form_component.html.heex
 #: lib/claper_web/live/quiz_live/quiz_component.html.heex
 #: lib/claper_web/live/transcription_live/form_component.html.heex
+#: lib/claper_web/live/word_cloud_live/form_component.html.heex
 #, elixir-autogen, elixir-format
 msgid "Delete"
 msgstr "Ta bort"
@@ -194,6 +195,7 @@ msgstr "Ta bort"
 #: lib/claper_web/live/quiz_live/quiz_component.html.heex
 #: lib/claper_web/live/transcription_live/form_component.html.heex
 #: lib/claper_web/live/user_settings_live/show.html.heex
+#: lib/claper_web/live/word_cloud_live/form_component.html.heex
 #, elixir-autogen, elixir-format
 msgid "Save"
 msgstr "Spara"
@@ -1103,6 +1105,7 @@ msgstr "Deltagare kan visa webbinnehållet på sin enhet."
 #: lib/claper_web/live/poll_live/form_component.html.heex
 #: lib/claper_web/live/quiz_live/quiz_component.html.heex
 #: lib/claper_web/live/transcription_live/form_component.html.heex
+#: lib/claper_web/live/word_cloud_live/form_component.html.heex
 #, elixir-autogen, elixir-format
 msgid "Options"
 msgstr "Alternativ"
@@ -3070,6 +3073,7 @@ msgstr "Formulärets titel"
 #: lib/claper_web/live/poll_live/form_component.html.heex
 #: lib/claper_web/live/quiz_live/quiz_component.html.heex
 #: lib/claper_web/live/transcription_live/form_component.html.heex
+#: lib/claper_web/live/word_cloud_live/form_component.html.heex
 #, elixir-autogen, elixir-format
 msgid "Loading..."
 msgstr "Laddar..."
@@ -3226,6 +3230,7 @@ msgid "Voted"
 msgstr "Röstat"
 
 #: lib/claper_web/live/event_live/form_component.ex
+#: lib/claper_web/live/event_live/word_cloud_component.ex
 #, elixir-autogen, elixir-format
 msgid "Send"
 msgstr "Skicka"
@@ -3593,3 +3598,158 @@ msgstr "Du måste vara administratör för att komma åt den här sidan."
 #, elixir-autogen, elixir-format
 msgid "You must log in to access this page."
 msgstr "Du måste logga in för att komma åt den här sidan."
+
+#: lib/claper_web/live/stat_live/index.html.heex
+#, elixir-autogen, elixir-format
+msgid "%{count} participant"
+msgid_plural "%{count} participants"
+msgstr[0] "%{count} deltagare"
+msgstr[1] "%{count} deltagare"
+
+#: lib/claper_web/live/word_cloud_live/form_component.html.heex
+#, elixir-autogen, elixir-format
+msgid "Attendees can see the word cloud on their device"
+msgstr "Deltagare kan se ordmolnet på sin enhet"
+
+#: lib/claper_web/live/word_cloud_live/form_component.html.heex
+#, elixir-autogen, elixir-format
+msgid "Create word cloud"
+msgstr "Skapa ordmoln"
+
+#: lib/claper_web/live/event_live/word_cloud_component.ex
+#, elixir-autogen, elixir-format
+msgid "Current word cloud"
+msgstr "Nuvarande ordmoln"
+
+#: lib/claper_web/live/event_live/manage.html.heex
+#, elixir-autogen, elixir-format
+msgid "Edit word cloud"
+msgstr "Redigera ordmoln"
+
+#: lib/claper_web/live/event_live/manage_interaction_options_component.ex
+#, elixir-autogen, elixir-format
+msgid "Hidden words"
+msgstr "Dolda ord"
+
+#: lib/claper_web/live/event_live/manage_interaction_options_component.ex
+#, elixir-autogen, elixir-format
+msgid "Hide the word cloud from attendees"
+msgstr "Dölj ordmolnet för deltagarna"
+
+#: lib/claper_web/live/event_live/manage_interaction_options_component.ex
+#, elixir-autogen, elixir-format
+msgid "Hide this word"
+msgstr "Dölj ordet"
+
+#: lib/claper_web/live/event_live/manage.html.heex
+#: lib/claper_web/live/event_live/manage_floating_action_bar.ex
+#: lib/claper_web/live/event_live/manage_interaction_list_component.ex
+#, elixir-autogen, elixir-format
+msgid "Let your audience answer in their own words."
+msgstr "Låt publiken svara med egna ord."
+
+#: lib/claper_web/live/event_live/manage.html.heex
+#, elixir-autogen, elixir-format
+msgid "New word cloud"
+msgstr "Nytt ordmoln"
+
+#: lib/claper_web/live/stat_live/index.html.heex
+#, elixir-autogen, elixir-format
+msgid "No word cloud has been created"
+msgstr "Inget ordmoln har skapats"
+
+#: lib/claper_web/live/stat_live/index.html.heex
+#, elixir-autogen, elixir-format
+msgid "No words have been sent"
+msgstr "Inga ord har skickats"
+
+#: lib/claper_web/live/event_live/manage_interaction_options_component.ex
+#, elixir-autogen, elixir-format
+msgid "No words yet"
+msgstr "Inga ord än"
+
+#: lib/claper_web/live/word_cloud_live/form_component.html.heex
+#, elixir-autogen, elixir-format
+msgid "Question"
+msgstr "Fråga"
+
+#: lib/claper_web/live/event_live/manage_interaction_options_component.ex
+#, elixir-autogen, elixir-format
+msgid "Show the word cloud to attendees"
+msgstr "Visa ordmolnet för deltagarna"
+
+#: lib/claper_web/live/event_live/manage_interaction_options_component.ex
+#, elixir-autogen, elixir-format
+msgid "Show this word again"
+msgstr "Visa ordet igen"
+
+#: lib/claper_web/live/event_live/word_cloud_component.ex
+#, elixir-autogen, elixir-format
+msgid "Thanks! Your word has been added to the cloud."
+msgstr "Tack! Ditt ord finns nu i molnet."
+
+#: lib/claper_web/live/word_cloud_live/form_component.html.heex
+#, elixir-autogen, elixir-format
+msgid "This will delete all words submitted and the word cloud itself, are you sure?"
+msgstr "Detta raderar alla inskickade ord och själva ordmolnet. Är du säker?"
+
+#: lib/claper_web/live/event_live/word_cloud_component.ex
+#, elixir-autogen, elixir-format
+msgid "Type one word or a short phrase..."
+msgstr "Skriv ett ord eller en kort fras..."
+
+#: lib/claper_web/live/event_live/word_cloud_component.ex
+#, elixir-autogen, elixir-format
+msgid "Type your own word or phrase"
+msgstr "Skriv ditt eget ord eller din egen fras"
+
+#: lib/claper_web/live/word_cloud_live/form_component.html.heex
+#, elixir-autogen, elixir-format
+msgid "What comes to mind when you hear..."
+msgstr "Vad tänker du på när du hör..."
+
+#: lib/claper_web/live/event_live/manage.html.heex
+#: lib/claper_web/live/event_live/manage_floating_action_bar.ex
+#: lib/claper_web/live/event_live/manage_interaction_list_component.ex
+#, elixir-autogen, elixir-format
+msgid "Word Cloud"
+msgstr "Ordmoln"
+
+#: lib/claper_web/live/stat_live/index.html.heex
+#, elixir-autogen, elixir-format
+msgid "Word Clouds"
+msgstr "Ordmoln"
+
+#: lib/claper_web/live/event_live/manage_interaction_options_component.ex
+#, elixir-autogen, elixir-format
+msgid "Words"
+msgstr "Ord"
+
+#: lib/claper_web/live/word_cloud_live/form_component.html.heex
+#, elixir-autogen, elixir-format
+msgid "Words per attendee"
+msgstr "Ord per deltagare"
+
+#: lib/claper_web/live/event_live/word_cloud_component.ex
+#, elixir-autogen, elixir-format
+msgid "You can send one more word."
+msgid_plural "You can send %{count} more words."
+msgstr[0] "Du kan skicka ett ord till."
+msgstr[1] "Du kan skicka %{count} ord till."
+
+#: lib/claper_web/live/event_live/show.ex
+#, elixir-autogen, elixir-format
+msgid "You have already sent this word."
+msgstr "Du har redan skickat det här ordet."
+
+#: lib/claper_web/live/event_live/show.ex
+#, elixir-autogen, elixir-format
+msgid "You have already sent your word."
+msgid_plural "You have already sent your %{count} words."
+msgstr[0] "Du har redan skickat ditt ord."
+msgstr[1] "Du har redan skickat dina %{count} ord."
+
+#: lib/claper_web/live/event_live/show.ex
+#, elixir-autogen, elixir-format
+msgid "Your word could not be added. Please type a word or a short phrase."
+msgstr "Ditt ord kunde inte läggas till. Skriv ett ord eller en kort fras."

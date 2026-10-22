@@ -177,6 +177,7 @@ msgstr "Ändern"
 #: lib/claper_web/live/poll_live/form_component.html.heex
 #: lib/claper_web/live/quiz_live/quiz_component.html.heex
 #: lib/claper_web/live/transcription_live/form_component.html.heex
+#: lib/claper_web/live/word_cloud_live/form_component.html.heex
 #, elixir-autogen, elixir-format
 msgid "Delete"
 msgstr "Löschen"
@@ -187,6 +188,7 @@ msgstr "Löschen"
 #: lib/claper_web/live/quiz_live/quiz_component.html.heex
 #: lib/claper_web/live/transcription_live/form_component.html.heex
 #: lib/claper_web/live/user_settings_live/show.html.heex
+#: lib/claper_web/live/word_cloud_live/form_component.html.heex
 #, elixir-autogen, elixir-format
 msgid "Save"
 msgstr "Speichern"
@@ -1069,6 +1071,7 @@ msgstr "Teilnehmer können die Webinhalte auf ihrem Gerät anzeigen"
 #: lib/claper_web/live/poll_live/form_component.html.heex
 #: lib/claper_web/live/quiz_live/quiz_component.html.heex
 #: lib/claper_web/live/transcription_live/form_component.html.heex
+#: lib/claper_web/live/word_cloud_live/form_component.html.heex
 #, elixir-autogen, elixir-format
 msgid "Options"
 msgstr "Optionen"
@@ -3034,6 +3037,7 @@ msgstr "Titel des Formulars"
 #: lib/claper_web/live/poll_live/form_component.html.heex
 #: lib/claper_web/live/quiz_live/quiz_component.html.heex
 #: lib/claper_web/live/transcription_live/form_component.html.heex
+#: lib/claper_web/live/word_cloud_live/form_component.html.heex
 #, elixir-autogen, elixir-format
 msgid "Loading..."
 msgstr "Wird geladen..."
@@ -3190,6 +3194,7 @@ msgid "Voted"
 msgstr "Abgestimmt"
 
 #: lib/claper_web/live/event_live/form_component.ex
+#: lib/claper_web/live/event_live/word_cloud_component.ex
 #, elixir-autogen, elixir-format
 msgid "Send"
 msgstr "Senden"
@@ -3557,3 +3562,158 @@ msgstr "Sie müssen Administrator sein, um auf diese Seite zuzugreifen."
 #, elixir-autogen, elixir-format
 msgid "You must log in to access this page."
 msgstr "Sie müssen sich anmelden, um auf diese Seite zuzugreifen."
+
+#: lib/claper_web/live/stat_live/index.html.heex
+#, elixir-autogen, elixir-format
+msgid "%{count} participant"
+msgid_plural "%{count} participants"
+msgstr[0] "%{count} Teilnehmer"
+msgstr[1] "%{count} Teilnehmer"
+
+#: lib/claper_web/live/word_cloud_live/form_component.html.heex
+#, elixir-autogen, elixir-format
+msgid "Attendees can see the word cloud on their device"
+msgstr "Teilnehmer können die Wortwolke auf ihrem Gerät sehen"
+
+#: lib/claper_web/live/word_cloud_live/form_component.html.heex
+#, elixir-autogen, elixir-format
+msgid "Create word cloud"
+msgstr "Wortwolke erstellen"
+
+#: lib/claper_web/live/event_live/word_cloud_component.ex
+#, elixir-autogen, elixir-format
+msgid "Current word cloud"
+msgstr "Aktuelle Wortwolke"
+
+#: lib/claper_web/live/event_live/manage.html.heex
+#, elixir-autogen, elixir-format
+msgid "Edit word cloud"
+msgstr "Wortwolke bearbeiten"
+
+#: lib/claper_web/live/event_live/manage_interaction_options_component.ex
+#, elixir-autogen, elixir-format
+msgid "Hidden words"
+msgstr "Ausgeblendete Wörter"
+
+#: lib/claper_web/live/event_live/manage_interaction_options_component.ex
+#, elixir-autogen, elixir-format
+msgid "Hide the word cloud from attendees"
+msgstr "Wortwolke vor den Teilnehmern verbergen"
+
+#: lib/claper_web/live/event_live/manage_interaction_options_component.ex
+#, elixir-autogen, elixir-format
+msgid "Hide this word"
+msgstr "Dieses Wort ausblenden"
+
+#: lib/claper_web/live/event_live/manage.html.heex
+#: lib/claper_web/live/event_live/manage_floating_action_bar.ex
+#: lib/claper_web/live/event_live/manage_interaction_list_component.ex
+#, elixir-autogen, elixir-format
+msgid "Let your audience answer in their own words."
+msgstr "Lassen Sie Ihr Publikum in eigenen Worten antworten."
+
+#: lib/claper_web/live/event_live/manage.html.heex
+#, elixir-autogen, elixir-format
+msgid "New word cloud"
+msgstr "Neue Wortwolke"
+
+#: lib/claper_web/live/stat_live/index.html.heex
+#, elixir-autogen, elixir-format
+msgid "No word cloud has been created"
+msgstr "Es wurde keine Wortwolke erstellt"
+
+#: lib/claper_web/live/stat_live/index.html.heex
+#, elixir-autogen, elixir-format
+msgid "No words have been sent"
+msgstr "Es wurden keine Wörter gesendet"
+
+#: lib/claper_web/live/event_live/manage_interaction_options_component.ex
+#, elixir-autogen, elixir-format
+msgid "No words yet"
+msgstr "Noch keine Wörter"
+
+#: lib/claper_web/live/word_cloud_live/form_component.html.heex
+#, elixir-autogen, elixir-format
+msgid "Question"
+msgstr "Frage"
+
+#: lib/claper_web/live/event_live/manage_interaction_options_component.ex
+#, elixir-autogen, elixir-format
+msgid "Show the word cloud to attendees"
+msgstr "Wortwolke den Teilnehmern zeigen"
+
+#: lib/claper_web/live/event_live/manage_interaction_options_component.ex
+#, elixir-autogen, elixir-format
+msgid "Show this word again"
+msgstr "Dieses Wort wieder anzeigen"
+
+#: lib/claper_web/live/event_live/word_cloud_component.ex
+#, elixir-autogen, elixir-format
+msgid "Thanks! Your word has been added to the cloud."
+msgstr "Danke! Ihr Wort ist jetzt in der Wolke."
+
+#: lib/claper_web/live/word_cloud_live/form_component.html.heex
+#, elixir-autogen, elixir-format
+msgid "This will delete all words submitted and the word cloud itself, are you sure?"
+msgstr "Dadurch werden alle gesendeten Wörter und die Wortwolke selbst gelöscht. Sind Sie sicher?"
+
+#: lib/claper_web/live/event_live/word_cloud_component.ex
+#, elixir-autogen, elixir-format
+msgid "Type one word or a short phrase..."
+msgstr "Ein Wort oder eine kurze Wendung eingeben..."
+
+#: lib/claper_web/live/event_live/word_cloud_component.ex
+#, elixir-autogen, elixir-format
+msgid "Type your own word or phrase"
+msgstr "Eigenes Wort oder eigene Wendung eingeben"
+
+#: lib/claper_web/live/word_cloud_live/form_component.html.heex
+#, elixir-autogen, elixir-format
+msgid "What comes to mind when you hear..."
+msgstr "Was fällt Ihnen ein, wenn Sie ... hören?"
+
+#: lib/claper_web/live/event_live/manage.html.heex
+#: lib/claper_web/live/event_live/manage_floating_action_bar.ex
+#: lib/claper_web/live/event_live/manage_interaction_list_component.ex
+#, elixir-autogen, elixir-format
+msgid "Word Cloud"
+msgstr "Wortwolke"
+
+#: lib/claper_web/live/stat_live/index.html.heex
+#, elixir-autogen, elixir-format
+msgid "Word Clouds"
+msgstr "Wortwolken"
+
+#: lib/claper_web/live/event_live/manage_interaction_options_component.ex
+#, elixir-autogen, elixir-format
+msgid "Words"
+msgstr "Wörter"
+
+#: lib/claper_web/live/word_cloud_live/form_component.html.heex
+#, elixir-autogen, elixir-format
+msgid "Words per attendee"
+msgstr "Wörter pro Teilnehmer"
+
+#: lib/claper_web/live/event_live/word_cloud_component.ex
+#, elixir-autogen, elixir-format
+msgid "You can send one more word."
+msgid_plural "You can send %{count} more words."
+msgstr[0] "Sie können noch ein Wort senden."
+msgstr[1] "Sie können noch %{count} Wörter senden."
+
+#: lib/claper_web/live/event_live/show.ex
+#, elixir-autogen, elixir-format
+msgid "You have already sent this word."
+msgstr "Sie haben dieses Wort bereits gesendet."
+
+#: lib/claper_web/live/event_live/show.ex
+#, elixir-autogen, elixir-format
+msgid "You have already sent your word."
+msgid_plural "You have already sent your %{count} words."
+msgstr[0] "Sie haben Ihr Wort bereits gesendet."
+msgstr[1] "Sie haben Ihre %{count} Wörter bereits gesendet."
+
+#: lib/claper_web/live/event_live/show.ex
+#, elixir-autogen, elixir-format
+msgid "Your word could not be added. Please type a word or a short phrase."
+msgstr "Ihr Wort konnte nicht hinzugefügt werden. Bitte geben Sie ein Wort oder eine kurze Wendung ein."

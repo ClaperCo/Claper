@@ -177,6 +177,7 @@ msgstr "Rediģēt"
 #: lib/claper_web/live/poll_live/form_component.html.heex
 #: lib/claper_web/live/quiz_live/quiz_component.html.heex
 #: lib/claper_web/live/transcription_live/form_component.html.heex
+#: lib/claper_web/live/word_cloud_live/form_component.html.heex
 #, elixir-autogen, elixir-format
 msgid "Delete"
 msgstr "Dzēst"
@@ -187,6 +188,7 @@ msgstr "Dzēst"
 #: lib/claper_web/live/quiz_live/quiz_component.html.heex
 #: lib/claper_web/live/transcription_live/form_component.html.heex
 #: lib/claper_web/live/user_settings_live/show.html.heex
+#: lib/claper_web/live/word_cloud_live/form_component.html.heex
 #, elixir-autogen, elixir-format
 msgid "Save"
 msgstr "Saglabāt"
@@ -1073,6 +1075,7 @@ msgstr "Apmeklētāji var skatīt tīmekļa saturu savā ierīcē"
 #: lib/claper_web/live/poll_live/form_component.html.heex
 #: lib/claper_web/live/quiz_live/quiz_component.html.heex
 #: lib/claper_web/live/transcription_live/form_component.html.heex
+#: lib/claper_web/live/word_cloud_live/form_component.html.heex
 #, elixir-autogen, elixir-format
 msgid "Options"
 msgstr "Iespējas"
@@ -3038,6 +3041,7 @@ msgstr "Veidlapas nosaukums"
 #: lib/claper_web/live/poll_live/form_component.html.heex
 #: lib/claper_web/live/quiz_live/quiz_component.html.heex
 #: lib/claper_web/live/transcription_live/form_component.html.heex
+#: lib/claper_web/live/word_cloud_live/form_component.html.heex
 #, elixir-autogen, elixir-format
 msgid "Loading..."
 msgstr "Ielādē..."
@@ -3194,6 +3198,7 @@ msgid "Voted"
 msgstr "Nobalsots"
 
 #: lib/claper_web/live/event_live/form_component.ex
+#: lib/claper_web/live/event_live/word_cloud_component.ex
 #, elixir-autogen, elixir-format
 msgid "Send"
 msgstr "Sūtīt"
@@ -3562,3 +3567,161 @@ msgstr "Lai piekļūtu šai lapai, jums jābūt administratoram."
 #, elixir-autogen, elixir-format
 msgid "You must log in to access this page."
 msgstr "Lai piekļūtu šai lapai, jums ir jāpiesakās."
+
+#: lib/claper_web/live/stat_live/index.html.heex
+#, elixir-autogen, elixir-format
+msgid "%{count} participant"
+msgid_plural "%{count} participants"
+msgstr[0] "%{count} dalībnieku"
+msgstr[1] "%{count} dalībnieks"
+msgstr[2] "%{count} dalībnieki"
+
+#: lib/claper_web/live/word_cloud_live/form_component.html.heex
+#, elixir-autogen, elixir-format
+msgid "Attendees can see the word cloud on their device"
+msgstr "Dalībnieki var redzēt vārdu mākoni savā ierīcē"
+
+#: lib/claper_web/live/word_cloud_live/form_component.html.heex
+#, elixir-autogen, elixir-format
+msgid "Create word cloud"
+msgstr "Izveidot vārdu mākoni"
+
+#: lib/claper_web/live/event_live/word_cloud_component.ex
+#, elixir-autogen, elixir-format
+msgid "Current word cloud"
+msgstr "Pašreizējais vārdu mākonis"
+
+#: lib/claper_web/live/event_live/manage.html.heex
+#, elixir-autogen, elixir-format
+msgid "Edit word cloud"
+msgstr "Rediģēt vārdu mākoni"
+
+#: lib/claper_web/live/event_live/manage_interaction_options_component.ex
+#, elixir-autogen, elixir-format
+msgid "Hidden words"
+msgstr "Paslēptie vārdi"
+
+#: lib/claper_web/live/event_live/manage_interaction_options_component.ex
+#, elixir-autogen, elixir-format
+msgid "Hide the word cloud from attendees"
+msgstr "Paslēpt vārdu mākoni no dalībniekiem"
+
+#: lib/claper_web/live/event_live/manage_interaction_options_component.ex
+#, elixir-autogen, elixir-format
+msgid "Hide this word"
+msgstr "Paslēpt šo vārdu"
+
+#: lib/claper_web/live/event_live/manage.html.heex
+#: lib/claper_web/live/event_live/manage_floating_action_bar.ex
+#: lib/claper_web/live/event_live/manage_interaction_list_component.ex
+#, elixir-autogen, elixir-format
+msgid "Let your audience answer in their own words."
+msgstr "Ļaujiet auditorijai atbildēt pašu vārdiem."
+
+#: lib/claper_web/live/event_live/manage.html.heex
+#, elixir-autogen, elixir-format
+msgid "New word cloud"
+msgstr "Jauns vārdu mākonis"
+
+#: lib/claper_web/live/stat_live/index.html.heex
+#, elixir-autogen, elixir-format
+msgid "No word cloud has been created"
+msgstr "Nav izveidots neviens vārdu mākonis"
+
+#: lib/claper_web/live/stat_live/index.html.heex
+#, elixir-autogen, elixir-format
+msgid "No words have been sent"
+msgstr "Nav iesūtīts neviens vārds"
+
+#: lib/claper_web/live/event_live/manage_interaction_options_component.ex
+#, elixir-autogen, elixir-format
+msgid "No words yet"
+msgstr "Vēl nav neviena vārda"
+
+#: lib/claper_web/live/word_cloud_live/form_component.html.heex
+#, elixir-autogen, elixir-format
+msgid "Question"
+msgstr "Jautājums"
+
+#: lib/claper_web/live/event_live/manage_interaction_options_component.ex
+#, elixir-autogen, elixir-format
+msgid "Show the word cloud to attendees"
+msgstr "Rādīt vārdu mākoni dalībniekiem"
+
+#: lib/claper_web/live/event_live/manage_interaction_options_component.ex
+#, elixir-autogen, elixir-format
+msgid "Show this word again"
+msgstr "Atkal rādīt šo vārdu"
+
+#: lib/claper_web/live/event_live/word_cloud_component.ex
+#, elixir-autogen, elixir-format
+msgid "Thanks! Your word has been added to the cloud."
+msgstr "Paldies! Tavs vārds ir pievienots mākonim."
+
+#: lib/claper_web/live/word_cloud_live/form_component.html.heex
+#, elixir-autogen, elixir-format
+msgid "This will delete all words submitted and the word cloud itself, are you sure?"
+msgstr "Tas izdzēsīs visus iesūtītos vārdus un pašu vārdu mākoni, vai esat pārliecināti?"
+
+#: lib/claper_web/live/event_live/word_cloud_component.ex
+#, elixir-autogen, elixir-format
+msgid "Type one word or a short phrase..."
+msgstr "Ieraksti vārdu vai īsu frāzi..."
+
+#: lib/claper_web/live/event_live/word_cloud_component.ex
+#, elixir-autogen, elixir-format
+msgid "Type your own word or phrase"
+msgstr "Ieraksti savu vārdu vai frāzi"
+
+#: lib/claper_web/live/word_cloud_live/form_component.html.heex
+#, elixir-autogen, elixir-format
+msgid "What comes to mind when you hear..."
+msgstr "Kas jums nāk prātā, dzirdot..."
+
+#: lib/claper_web/live/event_live/manage.html.heex
+#: lib/claper_web/live/event_live/manage_floating_action_bar.ex
+#: lib/claper_web/live/event_live/manage_interaction_list_component.ex
+#, elixir-autogen, elixir-format
+msgid "Word Cloud"
+msgstr "Vārdu mākonis"
+
+#: lib/claper_web/live/stat_live/index.html.heex
+#, elixir-autogen, elixir-format
+msgid "Word Clouds"
+msgstr "Vārdu mākoņi"
+
+#: lib/claper_web/live/event_live/manage_interaction_options_component.ex
+#, elixir-autogen, elixir-format
+msgid "Words"
+msgstr "Vārdi"
+
+#: lib/claper_web/live/word_cloud_live/form_component.html.heex
+#, elixir-autogen, elixir-format
+msgid "Words per attendee"
+msgstr "Vārdu skaits vienam dalībniekam"
+
+#: lib/claper_web/live/event_live/word_cloud_component.ex
+#, elixir-autogen, elixir-format
+msgid "You can send one more word."
+msgid_plural "You can send %{count} more words."
+msgstr[0] "Vari nosūtīt vēl %{count} vārdus."
+msgstr[1] "Vari nosūtīt vēl vienu vārdu."
+msgstr[2] "Vari nosūtīt vēl %{count} vārdus."
+
+#: lib/claper_web/live/event_live/show.ex
+#, elixir-autogen, elixir-format
+msgid "You have already sent this word."
+msgstr "Šis vārds jau ir nosūtīts."
+
+#: lib/claper_web/live/event_live/show.ex
+#, elixir-autogen, elixir-format
+msgid "You have already sent your word."
+msgid_plural "You have already sent your %{count} words."
+msgstr[0] "Tavi %{count} vārdi jau ir nosūtīti."
+msgstr[1] "Tavs vārds jau ir nosūtīts."
+msgstr[2] "Tavi %{count} vārdi jau ir nosūtīti."
+
+#: lib/claper_web/live/event_live/show.ex
+#, elixir-autogen, elixir-format
+msgid "Your word could not be added. Please type a word or a short phrase."
+msgstr "Tavu vārdu neizdevās pievienot. Ieraksti vārdu vai īsu frāzi."

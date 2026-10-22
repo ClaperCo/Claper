@@ -1,5 +1,9 @@
 ## v3.1.2 (Unreleased)
 
+### Features
+
+- Add Word Clouds interaction (#254)
+
 ### Security
 
 - Remove the unused slide-image export endpoint that passed client-supplied images to ImageMagick.

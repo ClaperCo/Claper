@@ -5,9 +5,10 @@ defmodule Claper.Interactions do
   alias Claper.Events
   alias Claper.Presentations
   alias Claper.Quizzes
+  alias Claper.WordClouds
   import Ecto.Query, warn: false
 
-  @type interaction :: Polls.Poll | Forms.Form | Embeds.Embed
+  @type interaction :: Polls.Poll | Forms.Form | Embeds.Embed | WordClouds.WordCloud
 
   def get_number_total_interactions(presentation_file_id) do
     from(p in Polls.Poll,
@@ -36,6 +37,13 @@ defmodule Claper.Interactions do
       )
       |> Claper.Repo.one()
     )
+    |> Kernel.+(
+      from(w in WordClouds.WordCloud,
+        where: w.presentation_file_id == ^presentation_file_id,
+        select: count(w.id)
+      )
+      |> Claper.Repo.one()
+    )
   end
 
   def get_active_interaction(event, position) do
@@ -54,9 +62,10 @@ defmodule Claper.Interactions do
     with polls <- Polls.list_polls_at_position(presentation_file_id, position),
          forms <- Forms.list_forms_at_position(presentation_file_id, position),
          embeds <- Embeds.list_embeds_at_position(presentation_file_id, position),
-         quizzes <- Quizzes.list_quizzes_at_position(presentation_file_id, position) do
+         quizzes <- Quizzes.list_quizzes_at_position(presentation_file_id, position),
+         word_clouds <- WordClouds.list_word_clouds_at_position(presentation_file_id, position) do
       interactions =
-        (polls ++ forms ++ embeds ++ quizzes)
+        (polls ++ forms ++ embeds ++ quizzes ++ word_clouds)
         |> Enum.sort_by(& &1.inserted_at, {:asc, NaiveDateTime})
 
       if broadcast do
@@ -113,6 +122,9 @@ defmodule Claper.Interactions do
     Quizzes.update_quiz(event_uuid, quiz, %{position: to, enabled: false})
   end
 
+  defp do_move_interaction(event_uuid, %WordClouds.WordCloud{} = word_cloud, to),
+    do: WordClouds.update_word_cloud(event_uuid, word_cloud, %{position: to, enabled: false})
+
   def enable_interaction(interaction) do
     Ecto.Multi.new()
     |> Ecto.Multi.run(:disable_polls, fn _repo, _ ->
@@ -129,6 +141,10 @@ defmodule Claper.Interactions do
     end)
     |> Ecto.Multi.run(:disable_quizzes, fn _repo, _ ->
       {count, _} = Quizzes.disable_all(interaction.presentation_file_id, interaction.position)
+      {:ok, count}
+    end)
+    |> Ecto.Multi.run(:disable_word_clouds, fn _repo, _ ->
+      {count, _} = WordClouds.disable_all(interaction.presentation_file_id, interaction.position)
       {:ok, count}
     end)
     |> Ecto.Multi.run(:enable_interaction, fn _repo, _ ->
@@ -157,6 +173,10 @@ defmodule Claper.Interactions do
     Quizzes.set_enabled(interaction.id)
   end
 
+  defp set_enabled(%WordClouds.WordCloud{} = interaction) do
+    WordClouds.set_enabled(interaction.id)
+  end
+
   def disable_interaction(%Polls.Poll{} = interaction) do
     Polls.set_disabled(interaction.id)
   end
@@ -171,5 +191,9 @@ defmodule Claper.Interactions do
 
   def disable_interaction(%Quizzes.Quiz{} = interaction) do
     Quizzes.set_disabled(interaction.id)
+  end
+
+  def disable_interaction(%WordClouds.WordCloud{} = interaction) do
+    WordClouds.set_disabled(interaction.id)
   end
 end
