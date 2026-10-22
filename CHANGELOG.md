@@ -1,7 +1,8 @@
-## v3.1.2 (Unreleased)
+## v3.1.2
 
 ### Security
 
+- Prevent public signup from assigning privileged roles or bypassing email confirmation through client-supplied account fields.
 - Remove the unused slide-image export endpoint that passed client-supplied images to ImageMagick.
 - Prevent cross-event access to transcription controls and keep edited configurations bound to their authorized presentation.
 
