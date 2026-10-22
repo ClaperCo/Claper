@@ -88,6 +88,16 @@ defmodule Claper.Stats do
     |> Enum.sum()
   end
 
+  # The unique indexes allow one response per attendee and scale, so each row is
+  # a distinct participant.
+  def get_distinct_scale_responses(scale_ids) do
+    from(r in Claper.Scales.ScaleResponse,
+      where: r.scale_id in ^scale_ids,
+      select: count(r.id)
+    )
+    |> Repo.one()
+  end
+
   def distinct_poster_count(event_id) do
     from(posts in Claper.Posts.Post,
       where: posts.event_id == ^event_id,

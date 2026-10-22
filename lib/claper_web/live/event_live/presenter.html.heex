@@ -87,6 +87,77 @@
       iframe={@iframe}
     />
   <% end %>
+  <!-- SCALE -->
+  <div
+    :if={@current_scale}
+    id="scale"
+    class={"#{if @state.poll_visible, do: "opacity-100", else: "opacity-0 pointer-events-none"} h-full w-full flex flex-col justify-center bg-black/90 absolute z-30 left-1/2 top-1/2 transform -translate-y-1/2 -translate-x-1/2 p-10 transition-opacity"}
+  >
+    <div class="w-full md:w-2/3 mx-auto flex flex-col justify-center text-white">
+      <p class={"#{if @iframe, do: "text-xl mb-8", else: "text-5xl mb-16"} font-bold text-center"}>
+        {@current_scale.title}
+      </p>
+
+      <div class={"#{if @iframe, do: "gap-6 mb-6", else: "gap-16 mb-12"} flex justify-center text-center"}>
+        <div>
+          <p
+            id="scale-average"
+            class={"#{if @iframe, do: "text-4xl", else: "text-8xl"} font-bold leading-none"}
+          >
+            {ClaperWeb.Helpers.format_number(@scale_results.average)}
+          </p>
+          <p class={"#{if @iframe, do: "text-xs mt-1", else: "text-2xl mt-3"} font-bold text-gray-400"}>
+            {gettext("Average")}
+          </p>
+        </div>
+        <div>
+          <p
+            id="scale-median"
+            class={"#{if @iframe, do: "text-4xl", else: "text-8xl"} font-bold leading-none"}
+          >
+            {ClaperWeb.Helpers.format_number(@scale_results.median)}
+          </p>
+          <p class={"#{if @iframe, do: "text-xs mt-1", else: "text-2xl mt-3"} font-bold text-gray-400"}>
+            {gettext("Median")}
+          </p>
+        </div>
+        <div>
+          <p
+            id="scale-count"
+            class={"#{if @iframe, do: "text-4xl", else: "text-8xl"} font-bold leading-none"}
+          >
+            {@scale_results.count}
+          </p>
+          <p class={"#{if @iframe, do: "text-xs mt-1", else: "text-2xl mt-3"} font-bold text-gray-400"}>
+            {gettext("Answers")}
+          </p>
+        </div>
+      </div>
+
+      <div class={"#{if @iframe, do: "h-24", else: "h-64"} flex w-full items-end gap-1"}>
+        <div
+          :for={point <- @scale_results.distribution}
+          class="flex h-full flex-1 flex-col items-center justify-end"
+        >
+          <span
+            :if={point.count > 0}
+            class={"#{if @iframe, do: "text-xs", else: "text-lg"} mb-1 font-bold text-gray-300"}
+          >
+            {point.count}
+          </span>
+          <div
+            style={"height: #{point.weight}%;"}
+            class="w-full rounded-t-lg bg-primary transition-all"
+          >
+          </div>
+        </div>
+      </div>
+      <div class={"#{if @iframe, do: "text-xs", else: "text-xl"} mt-2 flex w-full justify-between gap-8 text-gray-400"}>
+        <span>{@current_scale.min_label || @current_scale.min_value}</span>
+        <span class="text-right">{@current_scale.max_label || @current_scale.max_value}</span>
+      </div>
+    </div>
+  </div>
   <!-- MESSAGES -->
   <div
     id="slider-wrapper"
