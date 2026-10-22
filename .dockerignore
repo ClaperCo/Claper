@@ -20,3 +20,8 @@ node_modules
 assets/node_modules/
 deps/
 assets/yarn.lock
+
+# Local uploads and compiled static assets (rebuilt in the image)
+priv/static/uploads
+priv/static/assets
+priv/static/cache_manifest.json
