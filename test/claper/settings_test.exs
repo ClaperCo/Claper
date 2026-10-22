@@ -18,9 +18,11 @@ defmodule Claper.SettingsTest do
           signed_at: two_days_ago
         )
 
-      Repo.get_by!(GlobalConfig, key: "transcription_api_key")
-      |> Ecto.Changeset.change(encrypted_value: encrypted, value: nil)
-      |> Repo.update!()
+      Repo.insert!(
+        %GlobalConfig{key: "transcription_api_key", encrypted_value: encrypted},
+        on_conflict: {:replace, [:encrypted_value, :value]},
+        conflict_target: :key
+      )
 
       assert Settings.get_transcription_api_key() == "sk-old"
     end
