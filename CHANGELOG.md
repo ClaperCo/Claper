@@ -3,6 +3,7 @@
 ### Fixes and improvements
 
 - Fix the transcription API key appearing cleared one day after it was saved.
+- Fix attendee page crashing when a poll option or vote click arrives after the presenter switched to another interaction.
 
 ## v3.1.2
 
