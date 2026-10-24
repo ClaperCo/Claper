@@ -3,7 +3,56 @@ defmodule Claper.InteractionsTest do
 
   alias Claper.Interactions
 
-  import Claper.{EventsFixtures, PollsFixtures, PresentationsFixtures, QuizzesFixtures}
+  import Claper.{EventsFixtures, FormsFixtures, PollsFixtures, PresentationsFixtures, QuizzesFixtures}
+
+  describe "reorder_interactions/3" do
+    setup do
+      event = event_fixture()
+      presentation_file = presentation_file_fixture(%{event: event, length: 5})
+      event = %{event | presentation_file: presentation_file}
+      attrs = %{presentation_file_id: presentation_file.id, position: 0}
+
+      %{
+        event: event,
+        poll: poll_fixture(attrs),
+        form: form_fixture(attrs),
+        other: poll_fixture(%{attrs | position: 1})
+      }
+    end
+
+    defp order(event, position) do
+      {:ok, list} = Interactions.get_interactions_at_position(event, position)
+      Enum.map(list, &{(&1.__struct__ == Claper.Polls.Poll && "poll") || "form", &1.id})
+    end
+
+    test "reorders mixed interactions, even when created in the same second", %{
+      event: event,
+      poll: poll,
+      form: form
+    } do
+      assert :ok =
+               Interactions.reorder_interactions(event, 0, [{"form", form.id}, {"poll", poll.id}])
+
+      assert order(event, 0) == [{"form", form.id}, {"poll", poll.id}]
+
+      assert :ok =
+               Interactions.reorder_interactions(event, 0, [{"poll", poll.id}, {"form", form.id}])
+
+      assert order(event, 0) == [{"poll", poll.id}, {"form", form.id}]
+    end
+
+    test "rejects interactions from another slide or duplicates", %{
+      event: event,
+      poll: poll,
+      other: other
+    } do
+      assert {:error, :invalid_interactions} =
+               Interactions.reorder_interactions(event, 0, [{"poll", other.id}, {"poll", poll.id}])
+
+      assert {:error, :invalid_interactions} =
+               Interactions.reorder_interactions(event, 0, [{"poll", poll.id}, {"poll", poll.id}])
+    end
+  end
 
   describe "move_interaction/3" do
     setup do
