@@ -266,6 +266,82 @@ defmodule ClaperWeb.EventLive.InteractionComponentsTest do
            )
   end
 
+  describe "submitted quiz" do
+    setup do
+      question = %QuizQuestion{
+        id: 1,
+        content: "Which planet is closest to the sun?",
+        quiz_question_opts: [
+          %QuizQuestionOpt{
+            id: 1,
+            content: "Mercury",
+            is_correct: true,
+            percentage: 25,
+            response_count: 1
+          },
+          %QuizQuestionOpt{
+            id: 2,
+            content: "Venus",
+            is_correct: false,
+            percentage: 75,
+            response_count: 3
+          }
+        ]
+      }
+
+      %{quiz: %Quiz{title: "Planets", allow_anonymous: true, quiz_questions: [question]}}
+    end
+
+    defp render_submitted_quiz(quiz, idx) do
+      QuizComponent
+      |> render_component(
+        id: "submitted-quiz",
+        quiz: quiz,
+        current_user: nil,
+        attendee_identifier: "attendee",
+        event: %{},
+        selected_quiz_question_opts: [],
+        current_quiz_question_idx: idx,
+        current_quiz_responses: [%{quiz_question_opt_id: 2}],
+        quiz_score: {0, 1}
+      )
+    end
+
+    test "shows the distribution without marking answers until they are revealed", %{quiz: quiz} do
+      html = render_submitted_quiz(%{quiz | show_results: true, reveal_answers: false}, 0)
+
+      assert html =~ "75% (3)"
+      refute html =~ "supporting-green"
+      refute html =~ "supporting-red"
+      assert html =~ "bg-primary-900/40"
+
+      summary = render_submitted_quiz(%{quiz | show_results: true, reveal_answers: false}, 1)
+
+      refute summary =~ "Your score"
+      assert summary =~ "Show results"
+    end
+
+    test "marks right and wrong answers once they are revealed", %{quiz: quiz} do
+      html = render_submitted_quiz(%{quiz | show_results: false, reveal_answers: true}, 0)
+
+      assert html =~ "border-supporting-green-500"
+      assert html =~ "border-supporting-red-400"
+      refute html =~ "75% (3)"
+      assert html =~ "quiz-review-actions"
+
+      assert render_submitted_quiz(%{quiz | show_results: false, reveal_answers: true}, 1) =~
+               "Your score"
+    end
+
+    test "keeps attendees waiting while results and answers are hidden", %{quiz: quiz} do
+      html = render_submitted_quiz(%{quiz | show_results: false, reveal_answers: false}, 0)
+
+      assert html =~ "Waiting for results..."
+      refute html =~ "Mercury"
+      refute html =~ "quiz-review-actions"
+    end
+  end
+
   test "web content uses the feature preview card and fills a responsive frame" do
     embed = %Embed{
       title: "Watch the demo",
