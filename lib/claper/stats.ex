@@ -88,6 +88,27 @@ defmodule Claper.Stats do
     |> Enum.sum()
   end
 
+  def get_distinct_word_cloud_entries(word_cloud_ids) do
+    from(e in Claper.WordClouds.Entry,
+      where: e.word_cloud_id in ^word_cloud_ids,
+      group_by: e.word_cloud_id,
+      select: %{
+        word_cloud_id: e.word_cloud_id,
+        count:
+          count(
+            fragment(
+              "DISTINCT COALESCE(?, CAST(? AS varchar))",
+              e.attendee_identifier,
+              e.user_id
+            )
+          )
+      }
+    )
+    |> Repo.all()
+    |> Enum.map(fn %{count: count} -> count end)
+    |> Enum.sum()
+  end
+
   def distinct_poster_count(event_id) do
     from(posts in Claper.Posts.Post,
       where: posts.event_id == ^event_id,

@@ -177,6 +177,7 @@ msgstr "Bewerken"
 #: lib/claper_web/live/poll_live/form_component.html.heex
 #: lib/claper_web/live/quiz_live/quiz_component.html.heex
 #: lib/claper_web/live/transcription_live/form_component.html.heex
+#: lib/claper_web/live/word_cloud_live/form_component.html.heex
 #, elixir-autogen, elixir-format
 msgid "Delete"
 msgstr "Verwijderen"
@@ -187,6 +188,7 @@ msgstr "Verwijderen"
 #: lib/claper_web/live/quiz_live/quiz_component.html.heex
 #: lib/claper_web/live/transcription_live/form_component.html.heex
 #: lib/claper_web/live/user_settings_live/show.html.heex
+#: lib/claper_web/live/word_cloud_live/form_component.html.heex
 #, elixir-autogen, elixir-format
 msgid "Save"
 msgstr "Opslaan"
@@ -1069,6 +1071,7 @@ msgstr "Deelnemers kunnen de webinhoud op hun apparaat bekijken"
 #: lib/claper_web/live/poll_live/form_component.html.heex
 #: lib/claper_web/live/quiz_live/quiz_component.html.heex
 #: lib/claper_web/live/transcription_live/form_component.html.heex
+#: lib/claper_web/live/word_cloud_live/form_component.html.heex
 #, elixir-autogen, elixir-format
 msgid "Options"
 msgstr "Opties"
@@ -3036,6 +3039,7 @@ msgstr "Titel van het formulier"
 #: lib/claper_web/live/poll_live/form_component.html.heex
 #: lib/claper_web/live/quiz_live/quiz_component.html.heex
 #: lib/claper_web/live/transcription_live/form_component.html.heex
+#: lib/claper_web/live/word_cloud_live/form_component.html.heex
 #, elixir-autogen, elixir-format
 msgid "Loading..."
 msgstr "Laden..."
@@ -3192,6 +3196,7 @@ msgid "Voted"
 msgstr "Gestemd"
 
 #: lib/claper_web/live/event_live/form_component.ex
+#: lib/claper_web/live/event_live/word_cloud_component.ex
 #, elixir-autogen, elixir-format
 msgid "Send"
 msgstr "Verzenden"
@@ -3559,3 +3564,158 @@ msgstr "Je moet beheerder zijn om deze pagina te bekijken."
 #, elixir-autogen, elixir-format
 msgid "You must log in to access this page."
 msgstr "Je moet inloggen om deze pagina te bekijken."
+
+#: lib/claper_web/live/stat_live/index.html.heex
+#, elixir-autogen, elixir-format
+msgid "%{count} participant"
+msgid_plural "%{count} participants"
+msgstr[0] "%{count} deelnemer"
+msgstr[1] "%{count} deelnemers"
+
+#: lib/claper_web/live/word_cloud_live/form_component.html.heex
+#, elixir-autogen, elixir-format
+msgid "Attendees can see the word cloud on their device"
+msgstr "Deelnemers kunnen de woordwolk op hun apparaat zien"
+
+#: lib/claper_web/live/word_cloud_live/form_component.html.heex
+#, elixir-autogen, elixir-format
+msgid "Create word cloud"
+msgstr "Woordwolk aanmaken"
+
+#: lib/claper_web/live/event_live/word_cloud_component.ex
+#, elixir-autogen, elixir-format
+msgid "Current word cloud"
+msgstr "Huidige woordwolk"
+
+#: lib/claper_web/live/event_live/manage.html.heex
+#, elixir-autogen, elixir-format
+msgid "Edit word cloud"
+msgstr "Woordwolk bewerken"
+
+#: lib/claper_web/live/event_live/manage_interaction_options_component.ex
+#, elixir-autogen, elixir-format
+msgid "Hidden words"
+msgstr "Verborgen woorden"
+
+#: lib/claper_web/live/event_live/manage_interaction_options_component.ex
+#, elixir-autogen, elixir-format
+msgid "Hide the word cloud from attendees"
+msgstr "Woordwolk verbergen voor deelnemers"
+
+#: lib/claper_web/live/event_live/manage_interaction_options_component.ex
+#, elixir-autogen, elixir-format
+msgid "Hide this word"
+msgstr "Dit woord verbergen"
+
+#: lib/claper_web/live/event_live/manage.html.heex
+#: lib/claper_web/live/event_live/manage_floating_action_bar.ex
+#: lib/claper_web/live/event_live/manage_interaction_list_component.ex
+#, elixir-autogen, elixir-format
+msgid "Let your audience answer in their own words."
+msgstr "Laat je publiek in eigen woorden antwoorden."
+
+#: lib/claper_web/live/event_live/manage.html.heex
+#, elixir-autogen, elixir-format
+msgid "New word cloud"
+msgstr "Nieuwe woordwolk"
+
+#: lib/claper_web/live/stat_live/index.html.heex
+#, elixir-autogen, elixir-format
+msgid "No word cloud has been created"
+msgstr "Er is geen woordwolk gemaakt"
+
+#: lib/claper_web/live/stat_live/index.html.heex
+#, elixir-autogen, elixir-format
+msgid "No words have been sent"
+msgstr "Er zijn geen woorden verstuurd"
+
+#: lib/claper_web/live/event_live/manage_interaction_options_component.ex
+#, elixir-autogen, elixir-format
+msgid "No words yet"
+msgstr "Nog geen woorden"
+
+#: lib/claper_web/live/word_cloud_live/form_component.html.heex
+#, elixir-autogen, elixir-format
+msgid "Question"
+msgstr "Vraag"
+
+#: lib/claper_web/live/event_live/manage_interaction_options_component.ex
+#, elixir-autogen, elixir-format
+msgid "Show the word cloud to attendees"
+msgstr "Woordwolk tonen aan deelnemers"
+
+#: lib/claper_web/live/event_live/manage_interaction_options_component.ex
+#, elixir-autogen, elixir-format
+msgid "Show this word again"
+msgstr "Dit woord weer tonen"
+
+#: lib/claper_web/live/event_live/word_cloud_component.ex
+#, elixir-autogen, elixir-format
+msgid "Thanks! Your word has been added to the cloud."
+msgstr "Bedankt! Je woord staat nu in de wolk."
+
+#: lib/claper_web/live/word_cloud_live/form_component.html.heex
+#, elixir-autogen, elixir-format
+msgid "This will delete all words submitted and the word cloud itself, are you sure?"
+msgstr "Hiermee worden alle verstuurde woorden en de woordwolk zelf verwijderd. Weet je het zeker?"
+
+#: lib/claper_web/live/event_live/word_cloud_component.ex
+#, elixir-autogen, elixir-format
+msgid "Type one word or a short phrase..."
+msgstr "Typ een woord of een korte zin..."
+
+#: lib/claper_web/live/event_live/word_cloud_component.ex
+#, elixir-autogen, elixir-format
+msgid "Type your own word or phrase"
+msgstr "Typ je eigen woord of zin"
+
+#: lib/claper_web/live/word_cloud_live/form_component.html.heex
+#, elixir-autogen, elixir-format
+msgid "What comes to mind when you hear..."
+msgstr "Waar denk je aan bij..."
+
+#: lib/claper_web/live/event_live/manage.html.heex
+#: lib/claper_web/live/event_live/manage_floating_action_bar.ex
+#: lib/claper_web/live/event_live/manage_interaction_list_component.ex
+#, elixir-autogen, elixir-format
+msgid "Word Cloud"
+msgstr "Woordwolk"
+
+#: lib/claper_web/live/stat_live/index.html.heex
+#, elixir-autogen, elixir-format
+msgid "Word Clouds"
+msgstr "Woordwolken"
+
+#: lib/claper_web/live/event_live/manage_interaction_options_component.ex
+#, elixir-autogen, elixir-format
+msgid "Words"
+msgstr "Woorden"
+
+#: lib/claper_web/live/word_cloud_live/form_component.html.heex
+#, elixir-autogen, elixir-format
+msgid "Words per attendee"
+msgstr "Woorden per deelnemer"
+
+#: lib/claper_web/live/event_live/word_cloud_component.ex
+#, elixir-autogen, elixir-format
+msgid "You can send one more word."
+msgid_plural "You can send %{count} more words."
+msgstr[0] "Je kunt nog één woord versturen."
+msgstr[1] "Je kunt nog %{count} woorden versturen."
+
+#: lib/claper_web/live/event_live/show.ex
+#, elixir-autogen, elixir-format
+msgid "You have already sent this word."
+msgstr "Je hebt dit woord al verstuurd."
+
+#: lib/claper_web/live/event_live/show.ex
+#, elixir-autogen, elixir-format
+msgid "You have already sent your word."
+msgid_plural "You have already sent your %{count} words."
+msgstr[0] "Je hebt je woord al verstuurd."
+msgstr[1] "Je hebt je %{count} woorden al verstuurd."
+
+#: lib/claper_web/live/event_live/show.ex
+#, elixir-autogen, elixir-format
+msgid "Your word could not be added. Please type a word or a short phrase."
+msgstr "Je woord kon niet worden toegevoegd. Typ een woord of een korte zin."

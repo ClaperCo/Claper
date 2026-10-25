@@ -8,7 +8,8 @@ defmodule ClaperWeb.EventLive.ShowTest do
     FormsFixtures,
     PollsFixtures,
     PostsFixtures,
-    PresentationsFixtures
+    PresentationsFixtures,
+    WordCloudsFixtures
   }
 
   setup [:register_and_log_in_user]
@@ -137,6 +138,280 @@ defmodule ClaperWeb.EventLive.ShowTest do
 
     refute has_element?(view, "#poll-opt-0")
     assert Claper.Polls.get_poll_vote(user.id, poll.id) == []
+  end
+
+  describe "word cloud" do
+    setup %{user: user} do
+      presentation_file = presentation_file_fixture(%{user: user}, [:event])
+      presentation_state_fixture(%{presentation_file: presentation_file})
+
+      %{presentation_file: presentation_file, event: presentation_file.event}
+    end
+
+    test "an anonymous attendee sees results before submitting and can still send a word", %{
+      presentation_file: presentation_file,
+      event: event
+    } do
+      word_cloud = open_word_cloud(presentation_file)
+      word_cloud_entry_fixture(%{word_cloud: word_cloud, content: "Quokka"})
+
+      {:ok, view, html} = live(build_conn(), ~p"/e/#{event.code}")
+
+      assert html =~ "One word"
+      assert has_element?(view, ~s(form[phx-submit="submit-word"] input[name="word"]))
+      assert attendee_cloud(view, word_cloud) == ["Quokka"]
+
+      view
+      |> form(~s(form[phx-submit="submit-word"]), %{word: "  Elixir "})
+      |> render_submit()
+
+      refute has_element?(view, ~s(form[phx-submit="submit-word"]))
+      assert has_element?(view, "[data-submitted]")
+      assert attendee_cloud(view, word_cloud) == ["Elixir", "Quokka"]
+
+      assert [_quokka, %{content: "Elixir", attendee_identifier: identifier, user_id: nil}] =
+               Claper.WordClouds.list_entries(word_cloud.id)
+
+      assert is_binary(identifier)
+    end
+
+    test "a signed-in attendee's word is stored under their account", %{
+      conn: conn,
+      user: user,
+      presentation_file: presentation_file,
+      event: event
+    } do
+      word_cloud = open_word_cloud(presentation_file)
+
+      {:ok, view, _html} = live(conn, ~p"/e/#{event.code}")
+
+      view
+      |> form(~s(form[phx-submit="submit-word"]), %{word: "Elixir"})
+      |> render_submit()
+
+      assert [%{user_id: user_id, attendee_identifier: nil}] =
+               Claper.WordClouds.list_entries(word_cloud.id)
+
+      assert user_id == user.id
+    end
+
+    test "tabs sharing an attendee update their own words and remaining submissions", %{
+      conn: conn,
+      presentation_file: presentation_file,
+      event: event
+    } do
+      word_cloud = open_word_cloud(presentation_file, %{max_entries: 2})
+      {:ok, first, _html} = live(conn, ~p"/e/#{event.code}")
+      {:ok, second, _html} = live(conn, ~p"/e/#{event.code}")
+
+      first
+      |> form(~s(form[phx-submit="submit-word"]), %{word: "Elixir"})
+      |> render_submit()
+
+      assert attendee_cloud(second, word_cloud) == ["Elixir"]
+      assert has_element?(second, ~s(form[phx-submit="submit-word"]))
+      assert render(second) =~ "You can send one more word."
+
+      second
+      |> form(~s(form[phx-submit="submit-word"]), %{word: "Phoenix"})
+      |> render_submit()
+
+      for view <- [first, second] do
+        assert attendee_cloud(view, word_cloud) == ["Elixir", "Phoenix"]
+        refute has_element?(view, ~s(form[phx-submit="submit-word"]))
+        assert has_element?(view, "[data-submitted]")
+      end
+    end
+
+    test "a rejected submission recovers before its entry notification arrives", %{
+      conn: conn,
+      user: user,
+      presentation_file: presentation_file,
+      event: event
+    } do
+      word_cloud = open_word_cloud(presentation_file)
+      {:ok, view, _html} = live(conn, ~p"/e/#{event.code}")
+
+      word_cloud_entry_fixture(%{
+        word_cloud: word_cloud,
+        user_id: user.id,
+        attendee_identifier: nil,
+        content: "Elixir"
+      })
+
+      render_hook(view, "submit-word", %{"word" => "Phoenix"})
+
+      refute has_element?(view, ~s(form[phx-submit="submit-word"]))
+      assert has_element?(view, "[data-submitted]")
+      assert attendee_cloud(view, word_cloud) == ["Elixir"]
+    end
+
+    test "the cloud is left out of the markup while attendees may not see it", %{
+      presentation_file: presentation_file,
+      event: event
+    } do
+      word_cloud = open_word_cloud(presentation_file, %{show_results: false})
+      word_cloud_entry_fixture(%{word_cloud: word_cloud, content: "Zanzibar"})
+
+      {:ok, view, html} = live(build_conn(), ~p"/e/#{event.code}")
+      refute html =~ "Zanzibar"
+      refute has_element?(view, "##{word_cloud.id}-word-cloud-cloud")
+
+      {:ok, word_cloud} =
+        Claper.WordClouds.update_word_cloud(event.uuid, word_cloud, %{show_results: true})
+
+      assert attendee_cloud(view, word_cloud) == ["Zanzibar"]
+      assert has_element?(view, ~s(form[phx-submit="submit-word"]))
+
+      {:ok, _} =
+        Claper.WordClouds.update_word_cloud(event.uuid, word_cloud, %{show_results: false})
+
+      refute has_element?(view, "##{word_cloud.id}-word-cloud-cloud")
+
+      html =
+        view
+        |> form(~s(form[phx-submit="submit-word"]), %{word: "Mine"})
+        |> render_submit()
+
+      assert html =~ "Mine"
+      refute html =~ "Zanzibar"
+      refute has_element?(view, "##{word_cloud.id}-word-cloud-cloud")
+    end
+
+    test "a hidden word is left out of the attendee's cloud", %{
+      presentation_file: presentation_file,
+      event: event
+    } do
+      word_cloud = open_word_cloud(presentation_file)
+      word_cloud_entry_fixture(%{word_cloud: word_cloud, content: "Grumpfwort"})
+      {:ok, _} = Claper.WordClouds.hide_word(event.uuid, word_cloud, "grumpfwort")
+
+      {:ok, view, _html} = live(build_conn(), ~p"/e/#{event.code}")
+
+      html =
+        view
+        |> form(~s(form[phx-submit="submit-word"]), %{word: "Kind"})
+        |> render_submit()
+
+      assert attendee_cloud(view, word_cloud) == ["Kind"]
+      refute html =~ "Grumpfwort"
+    end
+
+    test "an unsubmitted attendee sees the first word another attendee sends", %{
+      presentation_file: presentation_file,
+      event: event
+    } do
+      word_cloud = open_word_cloud(presentation_file)
+      {:ok, view, _html} = live(build_conn(), ~p"/e/#{event.code}")
+
+      refute has_element?(view, "##{word_cloud.id}-word-cloud-cloud")
+
+      {:ok, _} = Claper.WordClouds.submit_entry(event.uuid, word_cloud, "someone else", "Erlang")
+
+      assert attendee_cloud(view, word_cloud) == ["Erlang"]
+      assert has_element?(view, ~s(form[phx-submit="submit-word"]))
+      refute has_element?(view, "[data-submitted]")
+    end
+
+    test "an attendee can send as many words as the cloud allows", %{
+      presentation_file: presentation_file,
+      event: event
+    } do
+      word_cloud = open_word_cloud(presentation_file, %{max_entries: 2})
+      {:ok, view, _html} = live(build_conn(), ~p"/e/#{event.code}")
+
+      html =
+        view
+        |> form(~s(form[phx-submit="submit-word"]), %{word: "Elixir"})
+        |> render_submit()
+
+      assert html =~ "You can send one more word."
+
+      html =
+        view
+        |> form(~s(form[phx-submit="submit-word"]), %{word: "ELIXIR"})
+        |> render_submit()
+
+      assert html =~ "You have already sent this word."
+
+      view
+      |> form(~s(form[phx-submit="submit-word"]), %{word: "Erlang"})
+      |> render_submit()
+
+      refute has_element?(view, ~s(form[phx-submit="submit-word"]))
+
+      assert render_hook(view, "submit-word", %{"word" => "Gleam"}) =~
+               "You have already sent your 2 words."
+
+      assert length(Claper.WordClouds.list_entries(word_cloud.id)) == 2
+    end
+
+    test "a blank word is refused with a message", %{
+      presentation_file: presentation_file,
+      event: event
+    } do
+      word_cloud = open_word_cloud(presentation_file)
+      {:ok, view, _html} = live(build_conn(), ~p"/e/#{event.code}")
+
+      assert render_hook(view, "submit-word", %{"word" => "   "}) =~
+               "Your word could not be added. Please type a word or a short phrase."
+
+      assert Claper.WordClouds.list_entries(word_cloud.id) == []
+    end
+
+    test "a word longer than a column holds is refused with a message", %{
+      presentation_file: presentation_file,
+      event: event
+    } do
+      word_cloud = open_word_cloud(presentation_file)
+      {:ok, view, _html} = live(build_conn(), ~p"/e/#{event.code}")
+      word = "a" <> String.duplicate("\u0301", 300)
+
+      assert render_hook(view, "submit-word", %{"word" => word}) =~
+               "Your word could not be added. Please type a word or a short phrase."
+
+      assert Claper.WordClouds.list_entries(word_cloud.id) == []
+    end
+
+    test "a short word whose key outgrows its column is refused with a message", %{
+      presentation_file: presentation_file,
+      event: event
+    } do
+      word_cloud = open_word_cloud(presentation_file)
+      {:ok, view, _html} = live(build_conn(), ~p"/e/#{event.code}")
+
+      assert render_hook(view, "submit-word", %{"word" => String.duplicate("\uFDFA", 15)}) =~
+               "Your word could not be added. Please type a word or a short phrase."
+
+      assert Claper.WordClouds.list_entries(word_cloud.id) == []
+    end
+
+    test "a word cloud that was closed meanwhile takes no words", %{
+      presentation_file: presentation_file,
+      event: event
+    } do
+      word_cloud = open_word_cloud(presentation_file)
+      {:ok, view, _html} = live(build_conn(), ~p"/e/#{event.code}")
+
+      {:ok, _} = Claper.WordClouds.set_disabled(word_cloud.id)
+      render_hook(view, "submit-word", %{"word" => "Elixir"})
+
+      assert Claper.WordClouds.list_entries(word_cloud.id) == []
+      refute has_element?(view, ~s(form[phx-submit="submit-word"]))
+    end
+  end
+
+  defp open_word_cloud(presentation_file, attrs \\ %{}) do
+    word_cloud_fixture(
+      Map.merge(%{presentation_file: presentation_file, title: "One word"}, attrs)
+    )
+  end
+
+  defp attendee_cloud(view, word_cloud) do
+    view
+    |> element("##{word_cloud.id}-word-cloud-cloud")
+    |> render()
+    |> word_cloud_names()
   end
 
   defp classes(document, selector) do

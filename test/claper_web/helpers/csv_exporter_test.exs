@@ -16,6 +16,100 @@ defmodule ClaperWeb.Helpers.CSVExporterTest do
     "#{prefix}-#{System.unique_integer([:positive])}@example.com"
   end
 
+  describe "to_csv/3" do
+    test "escapes formula cells without changing source content or CSV field boundaries" do
+      values = [
+        "=1+1",
+        "+1",
+        "-1",
+        "@SUM(1,2)",
+        "＝1+1",
+        "＋1",
+        "－1",
+        "＠SUM(1,2)",
+        "  =1+1",
+        "\u0000\u001F-1",
+        "\u00A0\u200B+1",
+        "\tordinary",
+        "\rordinary",
+        "\nordinary",
+        " \tordinary",
+        "=HYPERLINK(\"https://example.com\",\"click\")",
+        "=1\r\n+2"
+      ]
+
+      csv = CSVExporter.to_csv(Enum.map(values, &%{value: &1}), ["=Header"], [:value])
+
+      assert CSV.decode!([csv]) |> Enum.to_list() == [
+               ["'=Header"],
+               ["'=1+1"],
+               ["'+1"],
+               ["'-1"],
+               ["'@SUM(1,2)"],
+               ["'＝1+1"],
+               ["'＋1"],
+               ["'－1"],
+               ["'＠SUM(1,2)"],
+               ["'  =1+1"],
+               ["'\u0000\u001F-1"],
+               ["'\u00A0\u200B+1"],
+               ["'\tordinary"],
+               ["'\rordinary"],
+               ["'\nordinary"],
+               ["' \tordinary"],
+               ["'=HYPERLINK(\"https://example.com\",\"click\")"],
+               ["'=1\r\n+2"]
+             ]
+    end
+
+    test "preserves ordinary strings, numeric values, booleans, and date formatting" do
+      values = [
+        "ordinary",
+        "  ordinary",
+        "name@example.com",
+        "one,two",
+        "\"quoted\"",
+        "one\nline",
+        "'=already text",
+        "",
+        -42,
+        -1.5,
+        0,
+        42,
+        true,
+        false,
+        ~D[2026-10-21],
+        ~N[2026-10-21 12:34:56],
+        ~U[2026-10-21 12:34:56Z],
+        nil
+      ]
+
+      csv = CSVExporter.to_csv(Enum.map(values, &%{value: &1}), ["Value"], [:value])
+
+      assert CSV.decode!([csv]) |> Enum.to_list() == [
+               ["Value"],
+               ["ordinary"],
+               ["  ordinary"],
+               ["name@example.com"],
+               ["one,two"],
+               ["\"quoted\""],
+               ["one\nline"],
+               ["'=already text"],
+               [""],
+               ["-42"],
+               ["-1.5"],
+               ["0"],
+               ["42"],
+               ["Yes"],
+               ["No"],
+               ["2026-10-21"],
+               ["2026-10-21 12:34:56"],
+               ["2026-10-21 12:34:56"],
+               [""]
+             ]
+    end
+  end
+
   describe "export_users_to_csv/1" do
     setup do
       user_role = role_fixture("user")
@@ -129,6 +223,15 @@ defmodule ClaperWeb.Helpers.CSVExporterTest do
       # Check data rows contain event names
       assert Enum.at(lines, 1) =~ "Event One"
       assert Enum.at(lines, 2) =~ "Event Two"
+    end
+
+    test "protects untrusted event names in admin exports", %{events: [event | _]} do
+      csv = CSVExporter.export_events_to_csv([%{event | name: " =SUM(1,2)"}])
+
+      assert CSV.decode!([csv]) |> Enum.to_list() == [
+               ["Name", "Description", "Start Date", "End Date", "Status"],
+               ["' =SUM(1,2)", "", "2023-01-01 10:00:00", "2023-01-01 12:00:00", "completed"]
+             ]
     end
 
     test "handles empty event list" do

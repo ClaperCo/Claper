@@ -1,11 +1,12 @@
 defmodule ClaperWeb.StatController do
   @moduledoc """
   Controller responsible for exporting various statistics and data in CSV format.
-  Handles form submissions, messages, and poll results exports.
+  Handles form submissions, messages, poll results and word cloud exports.
   """
   use ClaperWeb, :controller
 
-  alias Claper.{Forms, Events, Polls, Presentations, Quizzes, Transcriptions}
+  alias Claper.{Forms, Events, Polls, Presentations, Quizzes, Transcriptions, WordClouds}
+  alias ClaperWeb.Helpers.CSVExporter
 
   @doc """
   Exports form submissions as a CSV file.
@@ -25,6 +26,36 @@ defmodule ClaperWeb.StatController do
         end)
 
       export_as_csv(conn, headers, data, "form-#{sanitize(form.title)}")
+    else
+      :unauthorized -> send_resp(conn, 403, "Forbidden")
+    end
+  end
+
+  @doc """
+  Exports the words submitted to a word cloud as a CSV file, one row per
+  submission. Words the presenter hid are included and marked as hidden.
+  """
+  def export_word_cloud(%{assigns: %{current_user: current_user}} = conn, %{
+        "word_cloud_id" => word_cloud_id
+      }) do
+    with word_cloud <- WordClouds.get_word_cloud!(word_cloud_id, presentation_file: :event),
+         :ok <- authorize_event_access(current_user, word_cloud.presentation_file.event) do
+      headers = ["Attendee identifier", "User email", "Word", "Hidden", "Sent at (UTC)"]
+
+      data =
+        word_cloud.id
+        |> WordClouds.list_entries([:user])
+        |> Enum.map(fn entry ->
+          [
+            format_attendee_identifier(entry.attendee_identifier),
+            format_user_email(entry.user),
+            entry.content,
+            entry.normalized_content in word_cloud.hidden_words,
+            entry.inserted_at
+          ]
+        end)
+
+      export_as_csv(conn, headers, data, "word-cloud-#{sanitize(word_cloud.title)}")
     else
       :unauthorized -> send_resp(conn, 403, "Forbidden")
     end
@@ -135,10 +166,7 @@ defmodule ClaperWeb.StatController do
       # Format data rows - one row per user with their answers and score
       data = Enum.map(responses_by_user, &process_user_responses(&1, questions))
 
-      csv_content =
-        CSV.encode([headers | data])
-        |> Enum.to_list()
-        |> to_string()
+      csv_content = CSVExporter.encode([headers | data])
 
       send_download(conn, {:binary, csv_content},
         filename: "quiz_#{quiz.id}_results.csv",
@@ -266,11 +294,7 @@ defmodule ClaperWeb.StatController do
   defp format_user_email(user), do: user.email
 
   defp export_as_csv(conn, headers, data, filename) do
-    csv_data =
-      ([headers] ++ data)
-      |> CSV.encode()
-      |> Enum.to_list()
-      |> to_string()
+    csv_data = CSVExporter.encode([headers | data])
 
     conn
     |> put_resp_content_type("text/csv")

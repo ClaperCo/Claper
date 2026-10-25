@@ -7,6 +7,10 @@
 
 ## v3.1.2
 
+### Features
+
+- Add Word Clouds interaction (#254)
+
 ### Security
 
 - Prevent public signup from assigning privileged roles or bypassing email confirmation through client-supplied account fields.

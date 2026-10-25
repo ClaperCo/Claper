@@ -87,6 +87,40 @@
       iframe={@iframe}
     />
   <% end %>
+  <!-- WORD CLOUD -->
+  <div
+    :if={@current_word_cloud}
+    id="word-cloud"
+    class={"#{if @state.poll_visible, do: "opacity-100", else: "opacity-0 pointer-events-none"} h-full w-full flex flex-col justify-center bg-black/90 absolute z-30 left-1/2 top-1/2 transform -translate-y-1/2 -translate-x-1/2 p-10 transition-opacity"}
+  >
+    <div class="w-full mx-auto h-full flex flex-col justify-center">
+      <header class={[
+        "border-b border-gray-700 text-center",
+        if(@iframe, do: "mb-6 pb-4", else: "mb-10 pb-6")
+      ]}>
+        <h2 class={[
+          "text-gray-300 font-semibold leading-tight",
+          if(@iframe, do: "text-2xl", else: "text-[clamp(2.5rem,4vw,8rem)]")
+        ]}>
+          {@current_word_cloud.title}
+        </h2>
+      </header>
+
+      <ClaperWeb.Component.WordCloud.cloud
+        id={"word-cloud-#{@current_word_cloud.id}-words"}
+        words={@word_cloud_words}
+        text_color="var(--color-primary-200)"
+        class={[
+          "w-full",
+          if(@iframe,
+            do: "[--presenter-word-scale:1.25]",
+            else:
+              "[--presenter-word-scale:2] 2xl:[--presenter-word-scale:3] min-[160rem]:[--presenter-word-scale:4]"
+          )
+        ]}
+      />
+    </div>
+  </div>
   <!-- MESSAGES -->
   <div
     id="slider-wrapper"

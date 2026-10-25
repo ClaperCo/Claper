@@ -2,7 +2,7 @@ defmodule ClaperWeb.EventLive.Show do
   alias Claper.Interactions
   use ClaperWeb, :live_view
 
-  alias Claper.{Posts, Polls, Forms, Presentations, Quizzes, Stats, Transcriptions}
+  alias Claper.{Posts, Polls, Forms, Presentations, Quizzes, Stats, Transcriptions, WordClouds}
   alias ClaperWeb.Presence
 
   on_mount(ClaperWeb.AttendeeLiveAuth)
@@ -365,6 +365,24 @@ defmodule ClaperWeb.EventLive.Show do
   end
 
   @impl true
+  def handle_info({:word_cloud_updated, %WordClouds.WordCloud{}}, socket) do
+    {:noreply, refresh_current_interaction(socket, true)}
+  end
+
+  @impl true
+  def handle_info({:word_cloud_deleted, %WordClouds.WordCloud{}}, socket) do
+    {:noreply, refresh_current_interaction(socket, true)}
+  end
+
+  @impl true
+  def handle_info(
+        {:word_cloud_entry_added, %WordClouds.WordCloud{id: id}},
+        %{assigns: %{current_interaction: %WordClouds.WordCloud{id: id} = word_cloud}} = socket
+      ) do
+    {:noreply, load_current_interaction(socket, word_cloud, true)}
+  end
+
+  @impl true
   def handle_info({:react, type}, socket) do
     {:noreply,
      socket
@@ -723,6 +741,40 @@ defmodule ClaperWeb.EventLive.Show do
 
   @impl true
   def handle_event(
+        "submit-word",
+        %{"word" => word},
+        %{assigns: %{current_interaction: %WordClouds.WordCloud{} = word_cloud}} = socket
+      ) do
+    case WordClouds.submit_entry(socket.assigns.event.uuid, word_cloud, identity(socket), word) do
+      {:ok, _entry} ->
+        {:noreply, load_current_interaction(socket, word_cloud, true)}
+
+      {:error, :not_an_open_word_cloud} ->
+        {:noreply, refresh_current_interaction(socket)}
+
+      {:error, :limit_reached} ->
+        {:noreply,
+         socket
+         |> refresh_current_interaction(true)
+         |> put_flash(
+           :error,
+           ngettext(
+             "You have already sent your word.",
+             "You have already sent your %{count} words.",
+             word_cloud.max_entries
+           )
+         )}
+
+      {:error, %Ecto.Changeset{} = changeset} ->
+        {:noreply, put_flash(socket, :error, word_rejected_message(changeset))}
+    end
+  end
+
+  @impl true
+  def handle_event("submit-word", _params, socket), do: {:noreply, socket}
+
+  @impl true
+  def handle_event(
         "next-question",
         _params,
         %{assigns: %{current_quiz_question_idx: current_quiz_question_idx}} = socket
@@ -1065,8 +1117,37 @@ defmodule ClaperWeb.EventLive.Show do
     end
   end
 
+  defp load_current_interaction(socket, %WordClouds.WordCloud{} = interaction, _same_interaction) do
+    socket
+    |> assign(:current_interaction, interaction)
+    |> assign(:word_cloud_entries, WordClouds.list_entries_for(interaction, identity(socket)))
+    |> assign_visible_words(interaction)
+  end
+
   defp load_current_interaction(socket, interaction, _same_interaction) do
     socket |> assign(:current_interaction, interaction)
+  end
+
+  # Only the presenter's visibility setting controls whether results reach the attendee.
+  defp assign_visible_words(
+         socket,
+         %WordClouds.WordCloud{show_results: true} = word_cloud
+       ),
+       do: assign(socket, :word_cloud_words, WordClouds.list_words(word_cloud))
+
+  defp assign_visible_words(socket, _word_cloud), do: assign(socket, :word_cloud_words, [])
+
+  defp identity(%{assigns: %{current_user: current_user}}) when is_map(current_user),
+    do: current_user.id
+
+  defp identity(%{assigns: %{attendee_identifier: attendee_identifier}}),
+    do: attendee_identifier
+
+  defp word_rejected_message(%Ecto.Changeset{errors: errors}) do
+    case errors[:content] do
+      {_message, [constraint: :unique] ++ _} -> gettext("You have already sent this word.")
+      _ -> gettext("Your word could not be added. Please type a word or a short phrase.")
+    end
   end
 
   defp maybe_reset_selected_poll_opt(socket, true) do
