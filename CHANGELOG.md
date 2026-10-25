@@ -1,4 +1,8 @@
-## v3.1.3 (Unreleased)
+## v3.2.0
+
+### Features
+
+- Add Word Clouds interaction (#254)
 
 ### Fixes and improvements
 
