@@ -679,7 +679,7 @@ defmodule ClaperWeb.EventLive.Show do
   def handle_event(
         "select-poll-opt",
         %{"opt" => opt},
-        %{assigns: %{current_interaction: %{multiple: true}}} = socket
+        %{assigns: %{current_interaction: %Polls.Poll{multiple: true}}} = socket
       ) do
     if Enum.member?(socket.assigns.selected_poll_opt, opt) do
       {:noreply,
@@ -697,7 +697,7 @@ defmodule ClaperWeb.EventLive.Show do
   def handle_event(
         "select-poll-opt",
         %{"opt" => opt},
-        %{assigns: %{current_interaction: %{multiple: false}}} = socket
+        %{assigns: %{current_interaction: %Polls.Poll{}}} = socket
       ) do
     {:noreply, socket |> assign(:selected_poll_opt, [opt])}
   end
@@ -706,45 +706,37 @@ defmodule ClaperWeb.EventLive.Show do
   def handle_event(
         "vote",
         _params,
-        %{assigns: %{current_user: current_user, selected_poll_opt: opts}} = socket
+        %{
+          assigns: %{
+            current_interaction: %Polls.Poll{} = poll,
+            current_user: current_user,
+            selected_poll_opt: opts
+          }
+        } = socket
       )
       when is_map(current_user) do
-    opts = Enum.map(opts, fn opt -> Integer.parse(opt) |> elem(0) end)
-
-    poll_opts =
-      Enum.map(opts, fn opt -> Enum.at(socket.assigns.current_interaction.poll_opts, opt) end)
-
-    case Claper.Polls.vote(
-           current_user.id,
-           socket.assigns.event.uuid,
-           poll_opts,
-           socket.assigns.current_interaction.id
-         ) do
-      {:ok, poll} ->
-        {:noreply, socket |> get_current_vote(poll.id)}
-    end
+    vote(socket, current_user.id, poll, opts)
   end
 
   @impl true
   def handle_event(
         "vote",
         _params,
-        %{assigns: %{attendee_identifier: attendee_identifier, selected_poll_opt: opts}} = socket
+        %{
+          assigns: %{
+            current_interaction: %Polls.Poll{} = poll,
+            attendee_identifier: attendee_identifier,
+            selected_poll_opt: opts
+          }
+        } = socket
       ) do
-    opts = Enum.map(opts, fn opt -> Integer.parse(opt) |> elem(0) end)
+    vote(socket, attendee_identifier, poll, opts)
+  end
 
-    poll_opts =
-      Enum.map(opts, fn opt -> Enum.at(socket.assigns.current_interaction.poll_opts, opt) end)
-
-    case Claper.Polls.vote(
-           attendee_identifier,
-           socket.assigns.event.uuid,
-           poll_opts,
-           socket.assigns.current_interaction.id
-         ) do
-      {:ok, poll} ->
-        {:noreply, socket |> get_current_vote(poll.id)}
-    end
+  # The presenter can switch the active interaction while a poll click is in flight.
+  @impl true
+  def handle_event(event, _params, socket) when event in ["select-poll-opt", "vote"] do
+    {:noreply, socket}
   end
 
   @impl true
@@ -973,6 +965,14 @@ defmodule ClaperWeb.EventLive.Show do
 
   defp list_posts(_socket, event_id) do
     Posts.list_posts(event_id, [:event, :reactions, :user])
+  end
+
+  defp vote(socket, voter, poll, opts) do
+    poll_opts =
+      Enum.map(opts, fn opt -> Enum.at(poll.poll_opts, opt |> Integer.parse() |> elem(0)) end)
+
+    {:ok, poll} = Polls.vote(voter, socket.assigns.event.uuid, poll_opts, poll.id)
+    {:noreply, get_current_vote(socket, poll.id)}
   end
 
   defp get_current_vote(%{assigns: %{current_user: current_user}} = socket, poll_id)

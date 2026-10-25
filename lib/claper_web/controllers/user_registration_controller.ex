@@ -70,6 +70,10 @@ defmodule ClaperWeb.UserRegistrationController do
   end
 
   defp user_params(params) do
+    # Public signup must not accept account state managed by the server or admins.
+    params =
+      Map.take(params, ["email", "first_name", "last_name", "password", "password_confirmation"])
+
     if Application.get_env(:claper, :email_confirmation) do
       params
     else

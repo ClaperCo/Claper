@@ -2,7 +2,15 @@ defmodule ClaperWeb.EventLive.ShowTest do
   use ClaperWeb.ConnCase
 
   import Phoenix.LiveViewTest
-  import Claper.{AccountsFixtures, PostsFixtures, PresentationsFixtures, WordCloudsFixtures}
+
+  import Claper.{
+    AccountsFixtures,
+    FormsFixtures,
+    PollsFixtures,
+    PostsFixtures,
+    PresentationsFixtures,
+    WordCloudsFixtures
+  }
 
   setup [:register_and_log_in_user]
 
@@ -107,6 +115,29 @@ defmodule ClaperWeb.EventLive.ShowTest do
            |> Floki.parse_document!()
            |> Floki.find("[data-caption-text]")
            |> Floki.text() =~ "Live caption text"
+  end
+
+  test "ignores poll clicks that arrive after the presenter switched to another interaction", %{
+    conn: conn,
+    user: user
+  } do
+    presentation_file = presentation_file_fixture(%{user: user}, [:event])
+    presentation_state_fixture(%{presentation_file: presentation_file})
+    poll = poll_fixture(%{presentation_file_id: presentation_file.id})
+
+    {:ok, view, _html} = live(conn, ~p"/e/#{presentation_file.event.code}")
+
+    assert has_element?(view, "#poll-opt-0")
+
+    form = form_fixture(%{presentation_file_id: presentation_file.id, enabled: false})
+    :ok = Claper.Interactions.enable_interaction(form)
+    send(view.pid, {:current_interaction, form})
+
+    render_hook(view, "select-poll-opt", %{"opt" => "0"})
+    render_hook(view, "vote", %{})
+
+    refute has_element?(view, "#poll-opt-0")
+    assert Claper.Polls.get_poll_vote(user.id, poll.id) == []
   end
 
   describe "word cloud" do

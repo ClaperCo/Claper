@@ -110,14 +110,15 @@ defmodule Claper.Settings do
     ClaperWeb.Endpoint.config(:secret_key_base)
   end
 
+  # Plug.Crypto tokens expire after 1 day by default; stored settings must not.
   defp encrypt(value) when is_binary(value) do
-    Plug.Crypto.encrypt(secret_key(), "global_config", value)
+    Plug.Crypto.encrypt(secret_key(), "global_config", value, max_age: :infinity)
   end
 
   defp encrypt(nil), do: nil
 
   defp decrypt(encrypted) when is_binary(encrypted) do
-    case Plug.Crypto.decrypt(secret_key(), "global_config", encrypted) do
+    case Plug.Crypto.decrypt(secret_key(), "global_config", encrypted, max_age: :infinity) do
       {:ok, value} -> value
       {:error, _} -> nil
     end

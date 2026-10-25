@@ -1,4 +1,11 @@
-## v3.1.2 (Unreleased)
+## v3.1.3 (Unreleased)
+
+### Fixes and improvements
+
+- Fix the transcription API key appearing cleared one day after it was saved.
+- Fix attendee page crashing when a poll option or vote click arrives after the presenter switched to another interaction.
+
+## v3.1.2
 
 ### Features
 
@@ -6,6 +13,7 @@
 
 ### Security
 
+- Prevent public signup from assigning privileged roles or bypassing email confirmation through client-supplied account fields.
 - Remove the unused slide-image export endpoint that passed client-supplied images to ImageMagick.
 - Prevent cross-event access to transcription controls and keep edited configurations bound to their authorized presentation.
 
