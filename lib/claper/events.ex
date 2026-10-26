@@ -348,6 +348,33 @@ defmodule Claper.Events do
   end
 
   @doc """
+  Gets a single active (not expired) event by UUID, or `nil`.
+
+  ## Examples
+
+      iex> get_event_with_uuid("123e4567-e89b-12d3-a456-426614174000")
+      %Event{}
+
+      iex> get_event_with_uuid("not-a-uuid")
+      nil
+
+  """
+  def get_event_with_uuid(uuid) do
+    now = DateTime.utc_now()
+
+    case Ecto.UUID.cast(uuid) do
+      {:ok, uuid} ->
+        from(e in Event,
+          where: e.uuid == ^uuid and (is_nil(e.expired_at) or e.expired_at > ^now)
+        )
+        |> Repo.one()
+
+      :error ->
+        nil
+    end
+  end
+
+  @doc """
   Check if a user is a facilitator of a specific event.
 
   ## Examples

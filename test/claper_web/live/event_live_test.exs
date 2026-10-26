@@ -1145,5 +1145,22 @@ defmodule ClaperWeb.EventLiveTest do
       assert has_element?(join_live, "#form")
       assert has_element?(join_live, "#input[placeholder='ABCD1234']")
     end
+
+    test "ignores an integer event id in disconnected_from", %{conn: conn} do
+      event = Claper.EventsFixtures.event_fixture()
+
+      {:ok, _join_live, html} = live(conn, ~p"/?disconnected_from=#{event.id}")
+
+      refute html =~ "Return to your last event"
+      refute html =~ event.code
+    end
+
+    test "offers the event back from its UUID", %{conn: conn} do
+      event = Claper.EventsFixtures.event_fixture()
+
+      {:ok, join_live, _html} = live(conn, ~p"/?disconnected_from=#{event.uuid}")
+
+      assert has_element?(join_live, ~s(a[href="/e/#{event.code}"]), event.name)
+    end
   end
 end
