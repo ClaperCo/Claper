@@ -91,6 +91,85 @@ defmodule ClaperWeb.StatControllerTest do
   end
 
   describe "POST /export/quizzes/:quiz_id" do
+    test "CSV totals match application scores for exact, partial, wrong, extra and missing answers",
+         %{conn: conn} do
+      owner = confirmed_user_fixture()
+      presentation_file = presentation_file_fixture(%{user: owner}, [:event])
+
+      quiz =
+        quiz_fixture(%{
+          presentation_file: presentation_file,
+          enabled: true,
+          quiz_questions: [
+            %{
+              content: "Select both correct options",
+              type: "qcm",
+              quiz_question_opts: [
+                %{content: "A", is_correct: true},
+                %{content: "B", is_correct: true},
+                %{content: "C", is_correct: false}
+              ]
+            },
+            %{
+              content: "Second question",
+              type: "qcm",
+              quiz_question_opts: [%{content: "D", is_correct: true}]
+            }
+          ]
+        })
+
+      [multiple, second] = quiz.quiz_questions
+      [a, b, c] = multiple.quiz_question_opts
+      [d] = second.quiz_question_opts
+
+      cases = [
+        {owner, owner.id, [a, b], "A, B", 2},
+        {"partial", "partial", [a], "A", 1},
+        {"extra", "extra", [a, b, c], "A, B, C", 1},
+        {"wrong", "wrong", [c], "C", 1},
+        {"missing", "missing", [], "", 1}
+      ]
+
+      for {participant, _, selected, _, _} <- cases do
+        assert {:ok, _} =
+                 Claper.Quizzes.submit_quiz(
+                   participant,
+                   presentation_file.event.uuid,
+                   selected ++ [d],
+                   quiz.id
+                 )
+      end
+
+      exported =
+        conn
+        |> log_in_user(owner)
+        |> post(~p"/export/quizzes/#{quiz.id}")
+
+      assert [headers | rows] = CSV.decode!([response(exported, 200)]) |> Enum.to_list()
+
+      assert headers == [
+               "Attendee identifier",
+               "User email",
+               multiple.content,
+               second.content,
+               "Total"
+             ]
+
+      for {_, identity, _, expected_answers, correct} <- cases do
+        assert {^correct, 2} = Claper.Quizzes.calculate_user_score(identity, quiz.id)
+
+        row =
+          Enum.find(rows, fn [identifier, email | _] ->
+            if is_integer(identity),
+              do: email == owner.email,
+              else: identifier == Base.encode16(identity)
+          end)
+
+        assert [_, _, ^expected_answers, "D", total] = row
+        assert total == "#{correct}/2"
+      end
+    end
+
     test "protects question headers in quiz CSV exports", %{conn: conn} do
       owner = confirmed_user_fixture()
       presentation_file = presentation_file_fixture(%{user: owner}, [:event])

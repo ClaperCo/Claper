@@ -216,10 +216,12 @@ defmodule ClaperWeb.StatController do
   defp format_question_response(question_responses, correct_opt_ids) do
     answers = Enum.map(question_responses, & &1.quiz_question_opt.content)
 
-    all_correct =
-      Enum.all?(question_responses, fn r ->
-        MapSet.member?(correct_opt_ids, r.quiz_question_opt_id)
-      end)
+    selected_opt_ids =
+      question_responses
+      |> Enum.map(& &1.quiz_question_opt_id)
+      |> MapSet.new()
+
+    all_correct = MapSet.equal?(selected_opt_ids, correct_opt_ids)
 
     {Enum.join(answers, ", "), all_correct}
   end
