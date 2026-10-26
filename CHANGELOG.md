@@ -24,6 +24,7 @@
 - Enforce one poll ballot per participant and one quiz submission per question, including concurrent requests.
 - Prevent OIDC account takeover through email claims.
 - Fix `disconnected_from` that discloses event names by only filtering with UUID.
+- Restore `SAMEORIGIN` framing protection on `/` and `/join`.
 
 ## v3.1.2
 

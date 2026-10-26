@@ -53,10 +53,15 @@ defmodule ClaperWeb.Router do
 
   live_session :attendee do
     scope "/", ClaperWeb do
-      pipe_through([:browser, :attendee_registration, ClaperWeb.Plugs.Iframe])
+      pipe_through([:browser, :attendee_registration])
 
       live("/", EventLive.Join, :index)
       live("/join", EventLive.Join, :join)
+    end
+
+    scope "/", ClaperWeb do
+      pipe_through([:browser, :attendee_registration, ClaperWeb.Plugs.Iframe])
+
       live("/e/:code", EventLive.Show, :show)
     end
   end
