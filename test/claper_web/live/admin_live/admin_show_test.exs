@@ -174,6 +174,31 @@ defmodule ClaperWeb.AdminLive.AdminShowTest do
       assert page_1_matches == 2
       assert page_2_matches == 1
     end
+
+    test "lists the user's events, paginated independently of audit logs", %{conn: conn} do
+      user = confirmed_user_fixture()
+      for index <- 1..3, do: event_fixture(%{user: user, name: "Owned event #{index}"})
+      event_fixture(%{name: "Someone else's event"})
+
+      logs =
+        for index <- 1..3 do
+          log_fixture(%{user_id: user.id, action: "user.action.#{index}"})
+        end
+
+      params = [page: 2, page_size: 2, events: [page: 2, page_size: 2]]
+      {:ok, view, html} = live(conn, ~p"/admin/users/#{user.id}?#{params}")
+
+      assert view |> element("#user-events") |> render() =~ "Owned event"
+      assert Enum.count(1..3, &(html =~ "Owned event #{&1}")) == 1
+      refute html =~ "Someone else&#39;s event"
+      assert Enum.count(logs, &(html =~ &1.action)) == 1
+
+      # Paginating events keeps the audit log page and vice versa.
+      assert html =~ "/admin/users/#{user.id}?events[page_size]=2&amp;page=2&amp;page_size=2\""
+
+      assert html =~
+               "/admin/users/#{user.id}?page_size=2&amp;events[page]=2&amp;events[page_size]=2\""
+    end
   end
 
   describe "user form" do

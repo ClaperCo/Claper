@@ -45,6 +45,7 @@ msgstr "Cambia"
 #: lib/claper_web/live/admin_live/dashboard_live.html.heex
 #: lib/claper_web/live/admin_live/event_live.html.heex
 #: lib/claper_web/live/admin_live/event_live/form_component.ex
+#: lib/claper_web/live/admin_live/user_live.html.heex
 #, elixir-autogen, elixir-format
 msgid "Code"
 msgstr "Codice"
@@ -554,6 +555,7 @@ msgstr "Modulo"
 #: lib/claper_web/live/admin_live/event_live/form_component.ex
 #: lib/claper_web/live/admin_live/oidc_provider_live.html.heex
 #: lib/claper_web/live/admin_live/oidc_provider_live/form_component.ex
+#: lib/claper_web/live/admin_live/user_live.html.heex
 #: lib/claper_web/live/event_live/manage.ex
 #, elixir-autogen, elixir-format
 msgid "Name"
@@ -1462,20 +1464,10 @@ msgstr "Azioni"
 msgid "Active Events"
 msgstr "Eventi attivi"
 
-#: lib/claper_web/live/admin_live/event_live.html.heex
-#, elixir-autogen, elixir-format
-msgid "Are you sure you want to delete this event?"
-msgstr "Sei sicuro di voler eliminare questo evento?"
-
 #: lib/claper_web/live/admin_live/oidc_provider_live.html.heex
 #, elixir-autogen, elixir-format
 msgid "Are you sure you want to delete this provider?"
 msgstr "Sei sicuro di voler eliminare questo provider?"
-
-#: lib/claper_web/live/admin_live/user_live.html.heex
-#, elixir-autogen, elixir-format
-msgid "Are you sure you want to delete this user?"
-msgstr "Sei sicuro di voler eliminare questo utente?"
 
 #: lib/claper_web/live/admin_live/event_live/form_component.ex
 #, elixir-autogen, elixir-format
@@ -1484,6 +1476,7 @@ msgstr "Utente assegnato"
 
 #: lib/claper_web/live/admin_live/dashboard_live.html.heex
 #: lib/claper_web/live/admin_live/event_live.html.heex
+#: lib/claper_web/live/admin_live/user_live.html.heex
 #, elixir-autogen, elixir-format
 msgid "Audience Peak"
 msgstr "Picco di pubblico"
@@ -1550,7 +1543,6 @@ msgstr "Creato il"
 msgid "Currently running"
 msgstr "Attualmente in corso"
 
-#: lib/claper_web/live/admin_live/event_live.html.heex
 #: lib/claper_web/live/event_live/event_form_component.html.heex
 #, elixir-autogen, elixir-format
 msgid "Delete event"
@@ -1560,11 +1552,6 @@ msgstr "Elimina evento"
 #, elixir-autogen, elixir-format
 msgid "Delete provider"
 msgstr "Elimina provider"
-
-#: lib/claper_web/live/admin_live/user_live.html.heex
-#, elixir-autogen, elixir-format
-msgid "Delete user"
-msgstr "Elimina utente"
 
 #: lib/claper_web/live/admin_live/oidc_provider_live.html.heex
 #, elixir-autogen, elixir-format
@@ -1642,11 +1629,6 @@ msgid "Event created successfully"
 msgstr "Evento creato con successo"
 
 #: lib/claper_web/live/admin_live/event_live.ex
-#, elixir-autogen, elixir-format
-msgid "Event deleted successfully"
-msgstr "Evento eliminato con successo"
-
-#: lib/claper_web/live/admin_live/event_live.ex
 #: lib/claper_web/live/admin_live/event_live.html.heex
 #: lib/claper_web/live/event_live/event_form_component.html.heex
 #, elixir-autogen, elixir-format
@@ -1660,6 +1642,7 @@ msgstr "Evento aggiornato con successo"
 
 #: lib/claper_web/live/admin_live/event_live.ex
 #: lib/claper_web/live/admin_live/event_live.html.heex
+#: lib/claper_web/live/admin_live/user_live.html.heex
 #: lib/claper_web/templates/layout/admin_app.html.heex
 #, elixir-autogen, elixir-format
 msgid "Events"
@@ -1667,6 +1650,7 @@ msgstr "Eventi"
 
 #: lib/claper_web/live/admin_live/event_live.html.heex
 #: lib/claper_web/live/admin_live/event_live/form_component.ex
+#: lib/claper_web/live/admin_live/user_live.html.heex
 #, elixir-autogen, elixir-format
 msgid "Expired At"
 msgstr "Scade il"
@@ -1736,6 +1720,7 @@ msgid "No users found"
 msgstr "Nessun utente trovato"
 
 #: lib/claper_web/live/admin_live/event_live.html.heex
+#: lib/claper_web/live/admin_live/user_live.html.heex
 #, elixir-autogen, elixir-format
 msgid "Not expired"
 msgstr "Non scaduto"
@@ -1849,6 +1834,7 @@ msgstr "Data di inizio"
 
 #: lib/claper_web/live/admin_live/event_live.html.heex
 #: lib/claper_web/live/admin_live/event_live/form_component.ex
+#: lib/claper_web/live/admin_live/user_live.html.heex
 #, elixir-autogen, elixir-format
 msgid "Started At"
 msgstr "Iniziato il"
@@ -1916,11 +1902,6 @@ msgstr "Crescita utenti"
 #, elixir-autogen, elixir-format
 msgid "User created successfully"
 msgstr "Utente creato con successo"
-
-#: lib/claper_web/live/admin_live/user_live.ex
-#, elixir-autogen, elixir-format
-msgid "User deleted successfully"
-msgstr "Utente eliminato con successo"
 
 #: lib/claper_web/live/admin_live/user_live.ex
 #: lib/claper_web/live/admin_live/user_live.html.heex
@@ -2646,6 +2627,7 @@ msgstr "Lingua predefinita per le nuove sessioni di trascrizione. Può essere so
 msgid "Delete transcription"
 msgstr "Elimina trascrizione"
 
+#: lib/claper_web/live/admin_live/user_live.html.heex
 #: lib/claper_web/live/event_live/manage_interaction_list_component.ex
 #, elixir-autogen, elixir-format
 msgid "Disabled"
@@ -3931,3 +3913,79 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "Continue registration in Claper"
 msgstr ""
+
+#: lib/claper_web/live/admin_live/event_live.ex
+#, elixir-autogen, elixir-format
+msgid "Could not delete event"
+msgstr "Impossibile eliminare l'evento"
+
+#: lib/claper_web/live/admin_live/user_live.ex
+#, elixir-autogen, elixir-format
+msgid "Could not delete user"
+msgstr "Impossibile eliminare l'utente"
+
+#: lib/claper_web/live/admin_live/user_live.ex
+#, elixir-autogen, elixir-format
+msgid "Could not disable user"
+msgstr "Impossibile disattivare l'utente"
+
+#: lib/claper_web/live/admin_live/user_live.html.heex
+#, elixir-autogen, elixir-format
+msgid "Disable this user? They will no longer be able to log in, but their data is kept."
+msgstr "Disattivare questo utente? Non potrà più accedere, ma i suoi dati verranno conservati."
+
+#: lib/claper_web/live/admin_live/event_live.ex
+#, elixir-autogen, elixir-format
+msgid "Event and all its data deleted permanently"
+msgstr "Evento e tutti i suoi dati eliminati definitivamente"
+
+#: lib/claper_web/live/admin_live/event_live.html.heex
+#, elixir-autogen, elixir-format
+msgid "Permanently delete this event, its slides and all its interactions? This cannot be undone."
+msgstr "Eliminare definitivamente questo evento, le sue diapositive e tutte le sue interazioni? Questa azione è irreversibile."
+
+#: lib/claper_web/live/admin_live/user_live.ex
+#, elixir-autogen, elixir-format
+msgid "User and all their data deleted permanently"
+msgstr "Utente e tutti i suoi dati eliminati definitivamente"
+
+#: lib/claper_web/live/admin_live/user_live.ex
+#, elixir-autogen, elixir-format
+msgid "User disabled successfully"
+msgstr "Utente disattivato con successo"
+
+#: lib/claper_web/live/admin_live/user_live.html.heex
+#, elixir-autogen, elixir-format
+msgid "No events for this user."
+msgstr "Nessun evento per questo utente."
+
+#: lib/claper_web/live/admin_live/event_live.html.heex
+#: lib/claper_web/live/admin_live/user_live.html.heex
+#, elixir-autogen, elixir-format
+msgid "Delete permanently"
+msgstr "Elimina definitivamente"
+
+#: lib/claper_web/live/admin_live/user_live.html.heex
+#, elixir-autogen, elixir-format
+msgid "Disable"
+msgstr "Disattiva"
+
+#: lib/claper_web/live/admin_live/user_live.ex
+#, elixir-autogen, elixir-format
+msgid "Could not enable user: another active account uses this email"
+msgstr "Impossibile attivare l'utente: un altro account attivo usa questa email"
+
+#: lib/claper_web/live/admin_live/user_live.html.heex
+#, elixir-autogen, elixir-format
+msgid "Enable"
+msgstr "Attiva"
+
+#: lib/claper_web/live/admin_live/user_live.ex
+#, elixir-autogen, elixir-format
+msgid "User enabled successfully"
+msgstr "Utente attivato con successo"
+
+#: lib/claper_web/live/admin_live/user_live.html.heex
+#, elixir-autogen, elixir-format
+msgid "Permanently delete this user and all their events? Their interactions in other events are kept anonymously. This cannot be undone."
+msgstr "Eliminare definitivamente questo utente e tutti i suoi eventi? Le sue interazioni in altri eventi vengono conservate in forma anonima. Questa azione è irreversibile."

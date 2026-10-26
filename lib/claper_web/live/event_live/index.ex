@@ -62,20 +62,8 @@ defmodule ClaperWeb.EventLive.Index do
 
   @impl true
   def handle_event("delete", %{"id" => id}, %{assigns: %{current_user: current_user}} = socket) do
-    event = Events.get_user_event!(current_user.id, id, [:presentation_file])
-
-    hash = event.presentation_file.hash
-
-    files =
-      Claper.Presentations.get_presentation_files_by_hash(hash)
-
+    event = Events.get_user_event!(current_user.id, id)
     {:ok, _} = Events.delete_event(event)
-
-    if files |> Enum.empty?() && !is_nil(hash) do
-      Task.Supervisor.async_nolink(Claper.TaskSupervisor, fn ->
-        Claper.Tasks.Converter.clear(event.presentation_file.hash)
-      end)
-    end
 
     {:noreply, redirect(socket, to: ~p"/events")}
   end

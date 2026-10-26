@@ -850,7 +850,16 @@ defmodule Claper.Events do
   end
 
   @doc """
-  Deletes a event.
+  Permanently deletes an event, every interaction linked to it and its
+  uploaded slides.
+
+  Polls, forms and embeds only have their presentation file reference
+  nilified by the database, so they are deleted explicitly. Everything else
+  (posts, reactions, votes, quizzes, word clouds, stats, transcriptions,
+  facilitators...) cascades from the event or its presentation file.
+
+  Slides are removed from storage once no other presentation file shares
+  the same hash (duplicated events reuse the original slides).
 
   ## Examples
 
@@ -862,6 +871,8 @@ defmodule Claper.Events do
 
   """
   def delete_event(%Event{} = event) do
+    event = Repo.preload(event, :presentation_file)
+
     leaders =
       for %{email: email} <- get_activity_leaders_for_event(event.id),
           leader = Accounts.get_user_by_email(email),
@@ -869,7 +880,8 @@ defmodule Claper.Events do
         leader
       end
 
-    with {:ok, event} <- Repo.delete(event) do
+    with {:ok, event} <- Repo.transaction(fn -> purge_event(event) end) do
+      clear_presentation_storage(event.presentation_file)
       broadcast_user_events(event.user_id, {:deleted, event})
 
       for leader <- leaders do
@@ -879,6 +891,33 @@ defmodule Claper.Events do
       {:ok, event}
     end
   end
+
+  defp purge_event(%Event{presentation_file: presentation_file} = event) do
+    if presentation_file do
+      for schema <- [Claper.Polls.Poll, Claper.Forms.Form, Claper.Embeds.Embed] do
+        from(r in schema, where: r.presentation_file_id == ^presentation_file.id)
+        |> Repo.delete_all()
+      end
+    end
+
+    case Repo.delete(event) do
+      {:ok, event} -> event
+      {:error, changeset} -> Repo.rollback(changeset)
+    end
+  end
+
+  defp clear_presentation_storage(%Presentations.PresentationFile{hash: hash})
+       when is_binary(hash) do
+    if Presentations.get_presentation_files_by_hash(hash) == [] do
+      Task.Supervisor.start_child(Claper.TaskSupervisor, fn ->
+        Claper.Tasks.Converter.clear(hash)
+      end)
+    end
+
+    :ok
+  end
+
+  defp clear_presentation_storage(_presentation_file), do: :ok
 
   @doc """
   Returns an `%Ecto.Changeset{}` for tracking event changes.
@@ -992,6 +1031,8 @@ defmodule Claper.Events do
   def broadcast_user_events(user_id, message) when is_integer(user_id) do
     Phoenix.PubSub.broadcast(Claper.PubSub, "user:#{user_id}:events", message)
   end
+
+  def broadcast_user_events(nil, _message), do: :ok
 
   defp broadcast_all_users({_type, %Event{} = event} = message, _opts \\ []) do
     event = Repo.preload(event, [:leaders])

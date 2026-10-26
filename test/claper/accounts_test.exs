@@ -202,6 +202,85 @@ defmodule Claper.AccountsTest do
     end
   end
 
+  describe "restore_user/1" do
+    test "lets a disabled user log in again" do
+      user = user_fixture()
+      {:ok, user} = Accounts.delete_user(user)
+
+      assert {:ok, user} = Accounts.restore_user(user)
+      refute Accounts.deleted?(user)
+      assert Accounts.get_user_by_email(user.email).id == user.id
+    end
+
+    test "fails when another active account took the email" do
+      user = user_fixture()
+      {:ok, user} = Accounts.delete_user(user)
+      _new_account = user_fixture(%{email: user.email})
+
+      assert {:error, %Ecto.Changeset{} = changeset} = Accounts.restore_user(user)
+      assert %{email: [_]} = errors_on(changeset)
+    end
+  end
+
+  describe "hard_delete_user/1" do
+    import Claper.{EventsFixtures, PollsFixtures, PostsFixtures, PresentationsFixtures}
+    import Claper.QuizzesFixtures
+
+    alias Claper.{Polls, Posts, Quizzes, Repo}
+
+    test "deletes the user and their events but keeps their interactions in other events" do
+      user = user_fixture()
+      owned_file = presentation_file_fixture(%{event: event_fixture(%{user: user})})
+      owned_poll = poll_fixture(%{presentation_file_id: owned_file.id})
+
+      other_file = presentation_file_fixture()
+      other_event = Claper.Events.get_event!(other_file.event_id)
+      own_post = post_fixture(%{user: user, event: other_event})
+
+      poll = poll_fixture(%{presentation_file_id: other_file.id})
+      [opt | _] = poll.poll_opts
+      {:ok, _} = Polls.vote(user.id, other_event.uuid, [opt], poll.id)
+
+      quiz = quiz_fixture(%{presentation_file: other_file, enabled: true})
+      [quiz_opt | _] = hd(quiz.quiz_questions).quiz_question_opts
+      {:ok, _} = Quizzes.submit_quiz(user, other_event.uuid, [quiz_opt], quiz.id)
+
+      post = post_fixture(%{event: other_event})
+      {:ok, reaction} = Posts.create_reaction(%{post: post, icon: "👍", user_id: user.id})
+
+      assert {:ok, _} = Accounts.hard_delete_user(user)
+
+      refute Repo.get(User, user.id)
+      refute Repo.get(Claper.Events.Event, owned_file.event_id)
+      refute Repo.get(Polls.Poll, owned_poll.id)
+
+      kept_post = Repo.get!(Posts.Post, own_post.id)
+      assert is_nil(kept_post.user_id)
+      assert "deleted-user-" <> _ = identifier = kept_post.attendee_identifier
+
+      assert [%{user_id: nil, attendee_identifier: ^identifier}] =
+               Polls.get_poll_vote(identifier, poll.id)
+
+      assert %{user_id: nil, attendee_identifier: ^identifier} =
+               Repo.get!(Posts.Reaction, reaction.id)
+
+      assert Repo.get!(Polls.PollOpt, opt.id).vote_count == 1
+      assert Repo.get!(Quizzes.QuizQuestionOpt, quiz_opt.id).response_count == 1
+    end
+
+    test "deletes the user's audit logs but keeps other users' logs" do
+      user = user_fixture()
+      other_user = user_fixture()
+      {:ok, log} = Claper.Audit.log_action(user, "user.login")
+      {:ok, other_log} = Claper.Audit.log_action(other_user, "user.login")
+
+      assert {:ok, _} = Accounts.hard_delete_user(user)
+
+      refute Repo.get(Claper.Audit.Log, log.id)
+      assert Repo.get(Claper.Audit.Log, other_log.id)
+    end
+  end
+
   describe "change_user_email/2" do
     test "returns a user changeset" do
       assert %Ecto.Changeset{} = changeset = Accounts.change_user_email(%User{})

@@ -66,12 +66,17 @@ defmodule ClaperWeb.AdminLive.EventLive do
   @impl true
   def handle_event("delete", %{"id" => id}, socket) do
     event = Claper.Events.get_event!(id)
-    {:ok, _} = Claper.Events.delete_event(event)
 
-    {:noreply,
-     socket
-     |> put_flash(:info, gettext("Event deleted successfully"))
-     |> push_patch(to: Flop.Phoenix.build_path(~p"/admin/events", socket.assigns.meta.flop))}
+    case Claper.Events.delete_event(event) do
+      {:ok, _event} ->
+        {:noreply,
+         socket
+         |> put_flash(:info, gettext("Event and all its data deleted permanently"))
+         |> push_patch(to: ~p"/admin/events")}
+
+      {:error, _changeset} ->
+        {:noreply, put_flash(socket, :error, gettext("Could not delete event"))}
+    end
   end
 
   @impl true

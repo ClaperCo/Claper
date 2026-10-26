@@ -154,6 +154,84 @@ defmodule Claper.Accounts do
   end
 
   @doc """
+  Restores a soft-deleted user so they can log in again.
+
+  Returns `{:error, changeset}` when another active account now uses the
+  same email.
+  """
+  def restore_user(%User{} = user) do
+    user
+    |> User.restore_changeset()
+    |> Repo.update()
+  end
+
+  @doc """
+  Permanently deletes a user and all of their data.
+
+  Every event owned by the user is purged with `Claper.Events.delete_event/1`
+  (interactions and slides included). The user's audit logs are deleted too
+  (the foreign key would only nilify them).
+
+  Interactions the user made in other people's events (posts, replies,
+  reactions, votes, quiz answers, form submissions, word cloud entries,
+  attendance stats) are kept: they are detached from the account and
+  reassigned to a random anonymous attendee identity, so other presenters'
+  results and counters stay exactly as they were.
+
+  Events are deleted one by one before the user, so a failure part-way leaves
+  the user in place and the call can simply be retried.
+
+  ## Examples
+
+      iex> hard_delete_user(user)
+      {:ok, %User{}}
+
+  """
+  def hard_delete_user(%User{} = user) do
+    with :ok <- delete_owned_events(user) do
+      Repo.transaction(fn -> delete_user_row(user) end)
+    end
+  end
+
+  defp delete_user_row(user) do
+    anonymize_interactions(user)
+    Repo.delete_all(from(l in Claper.Audit.Log, where: l.user_id == ^user.id))
+
+    case Repo.delete(user) do
+      {:ok, user} -> user
+      {:error, changeset} -> Repo.rollback(changeset)
+    end
+  end
+
+  defp delete_owned_events(%User{id: user_id}) do
+    Enum.reduce_while(Claper.Events.list_events(user_id), :ok, fn event, :ok ->
+      case Claper.Events.delete_event(event) do
+        {:ok, _event} -> {:cont, :ok}
+        error -> {:halt, error}
+      end
+    end)
+  end
+
+  # Tables holding interactions authored either by a user or by an anonymous
+  # attendee. Several enforce exactly one author identity, so the user is
+  # swapped for an attendee identifier rather than just nilified.
+  @interaction_tables ~w(posts post_replies reactions poll_ballots poll_votes
+                         quiz_question_submissions quiz_responses form_submits
+                         word_cloud_entries stats)
+
+  defp anonymize_interactions(%User{id: user_id}) do
+    identifier = "deleted-user-" <> Ecto.UUID.generate()
+
+    for table <- @interaction_tables do
+      from(r in table,
+        where: r.user_id == ^user_id,
+        update: [set: [user_id: nil, attendee_identifier: ^identifier]]
+      )
+      |> Repo.update_all([])
+    end
+  end
+
+  @doc """
   Returns true if the user has been soft deleted.
   """
   def deleted?(%User{} = user) do

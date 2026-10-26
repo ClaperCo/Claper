@@ -53,36 +53,18 @@
           {if user.role, do: user.role.name, else: gettext("No role")}
         </:col>
         <:col :let={user} label={gettext("Status")} field={:confirmed_at}>
-          <%= if user.confirmed_at do %>
-            <span class="badge badge-success">{gettext("Confirmed")}</span>
-          <% else %>
-            <span class="badge badge-warning">{gettext("Unconfirmed")}</span>
+          <%= cond do %>
+            <% user.deleted_at -> %>
+              <span class="badge badge-error">{gettext("Disabled")}</span>
+            <% user.confirmed_at -> %>
+              <span class="badge badge-success">{gettext("Confirmed")}</span>
+            <% true -> %>
+              <span class="badge badge-warning">{gettext("Unconfirmed")}</span>
           <% end %>
         </:col>
         <:col :let={user} label={gettext("Created")} field={:inserted_at}>
           {Calendar.strftime(user.inserted_at, "%Y-%m-%d %H:%M")}
         </:col>
-        <:action :let={user} tbody_td_attrs={[class: "text-right"]}>
-          <div class="flex justify-end gap-2">
-            <.link
-              navigate={~p"/admin/users/#{user}/edit"}
-              class="btn btn-link btn-sm text-primary"
-              title={gettext("Edit user")}
-            >
-              <span class="hero-pencil-square w-5 h-5" />
-            </.link>
-            <a
-              href="#"
-              phx-click="delete"
-              phx-value-id={user.id}
-              data-confirm={gettext("Are you sure you want to delete this user?")}
-              class="btn btn-link btn-sm text-error"
-              title={gettext("Delete user")}
-            >
-              <span class="hero-trash w-5 h-5" />
-            </a>
-          </div>
-        </:action>
       </Flop.Phoenix.table>
 
       <div class="flex justify-end mt-4">
@@ -101,6 +83,42 @@
             <.link navigate={~p"/admin/users/#{@user}/edit"} class="btn btn-primary btn-sm">
               {gettext("Edit")}
             </.link>
+            <button
+              :if={is_nil(@user.deleted_at)}
+              type="button"
+              phx-click="disable"
+              phx-value-id={@user.id}
+              data-confirm={
+                gettext(
+                  "Disable this user? They will no longer be able to log in, but their data is kept."
+                )
+              }
+              class="btn btn-outline btn-sm"
+            >
+              {gettext("Disable")}
+            </button>
+            <button
+              :if={@user.deleted_at}
+              type="button"
+              phx-click="enable"
+              phx-value-id={@user.id}
+              class="btn btn-outline btn-sm"
+            >
+              {gettext("Enable")}
+            </button>
+            <button
+              type="button"
+              phx-click="delete"
+              phx-value-id={@user.id}
+              data-confirm={
+                gettext(
+                  "Permanently delete this user and all their events? Their interactions in other events are kept anonymously. This cannot be undone."
+                )
+              }
+              class="btn btn-error btn-outline btn-sm"
+            >
+              {gettext("Delete permanently")}
+            </button>
           </div>
         </div>
       </div>
@@ -120,10 +138,13 @@
             {if @user.role, do: @user.role.name, else: gettext("No role")}
           </.detail_row>
           <.detail_row label={gettext("Status")}>
-            <%= if @user.confirmed_at do %>
-              <span class="badge badge-success">{gettext("Confirmed")}</span>
-            <% else %>
-              <span class="badge badge-warning">{gettext("Unconfirmed")}</span>
+            <%= cond do %>
+              <% @user.deleted_at -> %>
+                <span class="badge badge-error">{gettext("Disabled")}</span>
+              <% @user.confirmed_at -> %>
+                <span class="badge badge-success">{gettext("Confirmed")}</span>
+              <% true -> %>
+                <span class="badge badge-warning">{gettext("Unconfirmed")}</span>
             <% end %>
           </.detail_row>
           <.detail_row label={gettext("Created At")}>
@@ -139,12 +160,61 @@
       </div>
 
       <div class="mt-8">
+        <h2 class="text-2xl font-bold mb-4">{gettext("Events")}</h2>
+
+        <Flop.Phoenix.table
+          id="user-events"
+          items={@events}
+          meta={@events_meta}
+          path={@events_path}
+          opts={[
+            container: true,
+            container_attrs: [class: "card bg-base-100 shadow-md overflow-x-auto"],
+            no_results_content: ~H"""
+            <p class="text-center py-10">{gettext("No events for this user.")}</p>
+            """,
+            table_attrs: [class: "table table-zebra w-full"],
+            symbol_asc: ~H"""
+            <span aria-hidden="true"><ClaperWeb.Icons.arrow_up /></span>
+            """,
+            symbol_desc: ~H"""
+            <span aria-hidden="true"><ClaperWeb.Icons.arrow_down /></span>
+            """
+          ]}
+        >
+          <:col :let={event} label={gettext("Name")} field={:name}>
+            <.link navigate={~p"/admin/events/#{event}"} class="link font-bold">
+              {event.name}
+            </.link>
+          </:col>
+          <:col :let={event} label={gettext("Code")} field={:code}>
+            <span class="uppercase">{event.code}</span>
+          </:col>
+          <:col :let={event} label={gettext("Started At")} field={:started_at}>
+            {format_admin_timestamp(event.started_at)}
+          </:col>
+          <:col :let={event} label={gettext("Expired At")} field={:expired_at}>
+            {if event.expired_at,
+              do: format_admin_timestamp(event.expired_at),
+              else: gettext("Not expired")}
+          </:col>
+          <:col :let={event} label={gettext("Audience Peak")} field={:audience_peak}>
+            <div class="badge badge-outline">{event.audience_peak || 0}</div>
+          </:col>
+        </Flop.Phoenix.table>
+
+        <div class="flex justify-end mt-4">
+          <ClaperWeb.CoreComponents.pagination meta={@events_meta} path={@events_path} />
+        </div>
+      </div>
+
+      <div class="mt-8">
         <h2 class="text-2xl font-bold mb-4">{gettext("Audit Logs")}</h2>
 
         <Flop.Phoenix.table
           items={@audit_logs}
           meta={@audit_meta}
-          path={~p"/admin/users/#{@user}"}
+          path={@audit_path}
           opts={[
             container: true,
             container_attrs: [class: "card bg-base-100 shadow-md overflow-x-auto"],
@@ -181,10 +251,7 @@
         </Flop.Phoenix.table>
 
         <div class="flex justify-end mt-4">
-          <ClaperWeb.CoreComponents.pagination
-            meta={@audit_meta}
-            path={~p"/admin/users/#{@user}"}
-          />
+          <ClaperWeb.CoreComponents.pagination meta={@audit_meta} path={@audit_path} />
         </div>
       </div>
     </div>

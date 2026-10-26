@@ -535,6 +535,24 @@ defmodule Claper.EventsTest do
       assert {:ok, %Event{}} = Events.delete_event(event)
       assert_raise Ecto.NoResultsError, fn -> Events.get_event!(event.uuid) end
     end
+
+    test "delete_event/1 purges interactions that are not cascaded by the database" do
+      presentation_file = presentation_file_fixture(%{}, [:event])
+      attrs = %{presentation_file_id: presentation_file.id}
+      poll = poll_fixture(attrs)
+      form = form_fixture(attrs)
+      embed = embed_fixture(attrs)
+      word_cloud = word_cloud_fixture(%{presentation_file: presentation_file})
+
+      assert {:ok, %Event{}} = Events.delete_event(presentation_file.event)
+
+      refute Claper.Repo.get(Claper.Polls.Poll, poll.id)
+      refute Claper.Repo.get(Claper.Polls.PollOpt, hd(poll.poll_opts).id)
+      refute Claper.Repo.get(Claper.Forms.Form, form.id)
+      refute Claper.Repo.get(Claper.Embeds.Embed, embed.id)
+      refute Claper.Repo.get(Claper.WordClouds.WordCloud, word_cloud.id)
+      refute Claper.Repo.get(Claper.Presentations.PresentationFile, presentation_file.id)
+    end
   end
 
   describe "leading events" do
