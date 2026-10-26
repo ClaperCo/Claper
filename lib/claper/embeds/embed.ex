@@ -170,19 +170,19 @@ defmodule Claper.Embeds.Embed do
   defp safe_iframe_style(style) do
     style
     |> String.split(";", trim: true)
-    |> Enum.flat_map(fn declaration ->
-      case String.split(declaration, ":", parts: 2) do
-        [name, value] ->
-          name = name |> String.trim() |> String.downcase()
-          value = String.trim(value)
-
-          if safe_style_value?(name, value), do: ["#{name}:#{value}"], else: []
-
-        _ ->
-          []
-      end
-    end)
+    |> Enum.flat_map(&safe_style_declaration/1)
     |> Enum.join(";")
+  end
+
+  defp safe_style_declaration(declaration) do
+    with [name, value] <- String.split(declaration, ":", parts: 2),
+         name = name |> String.trim() |> String.downcase(),
+         value = String.trim(value),
+         true <- safe_style_value?(name, value) do
+      ["#{name}:#{value}"]
+    else
+      _ -> []
+    end
   end
 
   defp safe_style_value?(name, value) when name in @size_styles do
