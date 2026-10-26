@@ -12,6 +12,8 @@ defmodule Lti13.Registrations.Registration do
           auth_login_url: String.t() | nil,
           auth_server: String.t() | nil,
           tool_jwk_id: integer() | nil,
+          approved_at: NaiveDateTime.t() | nil,
+          approved_by_id: integer() | nil,
           inserted_at: NaiveDateTime.t(),
           updated_at: NaiveDateTime.t()
         }
@@ -23,10 +25,13 @@ defmodule Lti13.Registrations.Registration do
     field :auth_token_url, :string
     field :auth_login_url, :string
     field :auth_server, :string
+    # nil means the platform is pending administrator approval and cannot launch.
+    field :approved_at, :naive_datetime
 
     has_many :deployments, Lti13.Deployments.Deployment
     belongs_to :tool_jwk, Lti13.Jwks.Jwk, foreign_key: :tool_jwk_id
     belongs_to :user, Claper.Accounts.User
+    belongs_to :approved_by, Claper.Accounts.User
 
     timestamps()
   end

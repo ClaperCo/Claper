@@ -80,7 +80,7 @@ defmodule Lti13.Tool.Services.AccessToken do
     headers = %{"Content-Type" => "application/x-www-form-urlencoded"}
 
     with {:ok, %Req.Response{status: 200, body: body}} <-
-           Req.post(url, body: body, headers: headers),
+           Lti13.HTTP.post(url, body: body, headers: headers),
          {:ok, parsed_body} <- Jason.decode(body) do
       {:ok,
        %__MODULE__{

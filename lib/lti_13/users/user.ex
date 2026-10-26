@@ -10,6 +10,8 @@ defmodule Lti13.Users.User do
           roles: [String.t()],
           user_id: integer(),
           registration_id: integer(),
+          provisioned_at: NaiveDateTime.t() | nil,
+          authorized_at: NaiveDateTime.t() | nil,
           inserted_at: NaiveDateTime.t(),
           updated_at: NaiveDateTime.t()
         }
@@ -19,6 +21,10 @@ defmodule Lti13.Users.User do
     field :name, :string
     field :email, :string
     field :roles, {:array, :string}
+    # Set only when this identity and a brand-new local account are created atomically.
+    # Legacy email-linked rows deliberately have no trusted provenance.
+    field :provisioned_at, :naive_datetime
+    field :authorized_at, :naive_datetime
 
     belongs_to :user, Claper.Accounts.User
     belongs_to :registration, Lti13.Registrations.Registration
@@ -38,6 +44,6 @@ defmodule Lti13.Users.User do
       :registration_id
     ])
     |> validate_required([:sub, :name, :email, :roles, :user_id, :registration_id])
-    |> unique_constraint(:sub)
+    |> unique_constraint([:sub, :registration_id])
   end
 end

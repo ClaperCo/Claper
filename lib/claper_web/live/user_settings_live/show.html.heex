@@ -406,7 +406,71 @@
                 <img src="/images/icons/lms.png" class="w-8" />
                 <div>
                   <p class="text-sm font-medium text-base-content">LMS</p>
-                  <p class="text-xs text-base-content/60">#{account.registration_id}</p>
+                  <p class="text-xs text-base-content/60">{account.registration.issuer}</p>
+                  <p class="text-xs text-base-content/60">
+                    {gettext("Platform user:")} {account.sub}
+                  </p>
+                  <p class="text-xs text-base-content/60">
+                    {gettext("Client ID:")} {account.registration.client_id}
+                  </p>
+                  <p class="text-xs text-base-content/60">
+                    {gettext("Registered by:")} {(account.registration.user &&
+                                                    account.registration.user.email) || "—"}
+                  </p>
+                  <p class="text-xs text-base-content/60">
+                    {gettext("Registered on:")} {Calendar.strftime(
+                      account.registration.inserted_at,
+                      "%Y-%m-%d"
+                    )}
+                  </p>
+                  <p id={"lti-platform-status-#{account.id}"} class="text-xs text-base-content/60">
+                    {gettext("Platform status:")}
+                    <%= if Lti13.Registrations.approved?(account.registration) do %>
+                      {gettext("Approved by an administrator")}
+                    <% else %>
+                      {gettext("Pending administrator approval")}
+                    <% end %>
+                  </p>
+                  <p
+                    :if={
+                      is_nil(account.provisioned_at) and is_nil(account.authorized_at) and
+                        not Lti13.Registrations.approved?(account.registration)
+                    }
+                    id={"lti-pending-#{account.id}"}
+                    class="mt-3 text-sm"
+                  >
+                    {gettext(
+                      "This LMS platform has not been approved by an administrator yet. LMS sign-in from it cannot be restored until an administrator approves the platform."
+                    )}
+                  </p>
+                  <.form
+                    :if={
+                      is_nil(account.provisioned_at) and is_nil(account.authorized_at) and
+                        Lti13.Registrations.approved?(account.registration)
+                    }
+                    for={%{}}
+                    id={"approve-lti-#{account.id}"}
+                    phx-submit="approve_lti_identity"
+                    class="mt-3 space-y-2"
+                  >
+                    <p class="text-sm">
+                      {gettext(
+                        "Only approve this LMS identity if you recognize the platform and platform user above. Enter your local password to restore LMS sign-in. If needed, reset your password first."
+                      )}
+                    </p>
+                    <input type="hidden" name="mapping_id" value={account.id} />
+                    <input
+                      type="password"
+                      name="password"
+                      autocomplete="current-password"
+                      aria-label={gettext("Local password")}
+                      class="input input-bordered input-sm"
+                      required
+                    />
+                    <button type="submit" class="btn btn-primary btn-sm">
+                      {gettext("Approve LMS sign-in")}
+                    </button>
+                  </.form>
                 </div>
               </div>
               <button

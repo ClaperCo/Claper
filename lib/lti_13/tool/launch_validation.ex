@@ -22,11 +22,14 @@ defmodule Lti13.Tool.LaunchValidation do
          {:ok, key_set_url} <- registration_key_set_url(registration),
          {:ok, id_token} <- extract_param(params, "id_token"),
          {:ok, jwt_body} <- validate_jwt_signature(id_token, key_set_url),
+         {:ok} <- validate_issuer(jwt_body, registration.issuer),
+         {:ok} <- validate_audience(jwt_body, registration.client_id),
          {:ok} <- validate_timestamps(jwt_body),
          {:ok} <- validate_deployment(registration, jwt_body),
          {:ok} <- validate_message(jwt_body),
+         # Consume initiation before any local identity or resource side effects.
+         {:ok} <- Lti13.LaunchStates.consume(session_state, jwt_body["nonce"], registration.id),
          {:ok, lti_user} <- validate_user(jwt_body, registration),
-         {:ok} <- validate_nonce(lti_user, jwt_body, "validate_launch"),
          {:ok, is_instructor} <- validate_role(jwt_body),
          {:ok, resource} <- validate_resource(jwt_body, lti_user, registration, is_instructor),
          claims <- jwt_body do
@@ -54,8 +57,10 @@ defmodule Lti13.Tool.LaunchValidation do
   defp compare_oidc_states(nil, _),
     do: {:error, %{reason: :invalid_oidc_state, msg: "State from OIDC request is missing"}}
 
-  defp compare_oidc_states(request_state, session_state) when request_state == session_state,
-    do: {:ok}
+  defp compare_oidc_states(request_state, session_state)
+       when is_binary(request_state) and is_binary(session_state) and
+              request_state == session_state,
+       do: {:ok}
 
   defp compare_oidc_states(_, _),
     do:
@@ -76,9 +81,15 @@ defmodule Lti13.Tool.LaunchValidation do
            }}
 
         registration ->
-          {:ok, registration}
+          ensure_approved(registration)
       end
     end
+  end
+
+  defp ensure_approved(registration) do
+    if Registrations.approved?(registration),
+      do: {:ok, registration},
+      else: Registrations.pending_error(registration)
   end
 
   defp validate_resource(
@@ -127,7 +138,6 @@ defmodule Lti13.Tool.LaunchValidation do
     if lti_user.email not in activity_leaders_emails && resource.event.user_id != lti_user.user_id do
       Claper.Events.create_activity_leader(%{
         email: lti_user.email,
-        user_id: lti_user.id,
         event_id: resource.event_id
       })
     end

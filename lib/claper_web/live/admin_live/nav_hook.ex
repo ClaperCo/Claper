@@ -10,7 +10,9 @@ defmodule ClaperWeb.AdminLive.NavHook do
   import Phoenix.Component, only: [assign: 3]
 
   def on_mount(:default, _params, _session, socket) do
-    {:cont, assign(socket, :active_tab, active_tab(socket.view))}
+    {:cont,
+     socket
+     |> assign(:active_tab, active_tab(socket.view))}
   end
 
   defp active_tab(ClaperWeb.AdminLive.DashboardLive), do: :dashboard
@@ -18,6 +20,7 @@ defmodule ClaperWeb.AdminLive.NavHook do
   defp active_tab(ClaperWeb.AdminLive.UserLive), do: :users
   defp active_tab(ClaperWeb.AdminLive.AuditLogLive), do: :audit_logs
   defp active_tab(ClaperWeb.AdminLive.OidcProviderLive), do: :oidc_providers
+  defp active_tab(ClaperWeb.AdminLive.LtiPlatformLive), do: :lti_platforms
   defp active_tab(ClaperWeb.AdminLive.SettingsLive), do: :settings
   defp active_tab(_), do: nil
 end

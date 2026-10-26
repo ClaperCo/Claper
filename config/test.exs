@@ -25,6 +25,8 @@ config :claper, Claper.Mailer, adapter: Swoosh.Adapters.Test
 
 config :claper, Oban, testing: :inline
 
+config :claper, :lti_http_req, plug: {Req.Test, Lti13.HTTP}
+
 # Print only warnings and errors during test
 config :logger, level: :warning
 

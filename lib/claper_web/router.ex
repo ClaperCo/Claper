@@ -156,12 +156,24 @@ defmodule ClaperWeb.Router do
     get("/users/oidc/callback", UserOidcAuth, :callback)
   end
 
+  # Registration changes the signed-in user's trusted platforms. Unlike LTI
+  # launch callbacks, it is a same-site browser action and requires CSRF.
+  scope "/", ClaperWeb do
+    pipe_through([:browser])
+
+    get("/lti/register", Lti.RegistrationController, :new)
+    get("/lti/register/continue", Lti.RegistrationController, :continue)
+    post("/lti/register", Lti.RegistrationController, :create)
+    # Switching accounts after an LTI launch is an explicit, CSRF-protected choice.
+    get("/lti/launch/confirm", Lti.LaunchController, :show_confirm)
+    post("/lti/launch/confirm", Lti.LaunchController, :confirm)
+    post("/lti/launch/cancel", Lti.LaunchController, :cancel)
+  end
+
   scope "/", ClaperWeb do
     pipe_through([:lti])
 
     get("/.well-known/jwks.json", Lti.RegistrationController, :jwks)
-    get("/lti/register", Lti.RegistrationController, :new)
-    post("/lti/register", Lti.RegistrationController, :create)
     post("/lti/login", Lti.LaunchController, :login)
     get("/lti/login", Lti.LaunchController, :login)
     post("/lti/launch", Lti.LaunchController, :launch)
@@ -204,6 +216,8 @@ defmodule ClaperWeb.Router do
       live "/oidc_providers/new", OidcProviderLive, :new
       live "/oidc_providers/:id/edit", OidcProviderLive, :edit
       live "/oidc_providers/:id", OidcProviderLive, :show
+
+      live "/lti_platforms", LtiPlatformLive, :index
 
       live "/audit_logs", AuditLogLive, :index
       live "/audit_logs/:id", AuditLogLive, :show

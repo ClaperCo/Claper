@@ -8,7 +8,8 @@ defmodule Lti13.RegistrationsFixtures do
   import Claper.AccountsFixtures
 
   @doc """
-  Generate a registration.
+  Generate a registration. Registrations are administrator-approved unless
+  `approved: false` is given.
   """
   def registration_fixture(attrs \\ %{}) do
     jwk = jwk_fixture()
@@ -28,6 +29,14 @@ defmodule Lti13.RegistrationsFixtures do
       })
       |> Lti13.Registrations.create_registration()
 
-    registration
+    if Map.get(Map.new(attrs), :approved, true) do
+      registration
+      |> Ecto.Changeset.change(
+        approved_at: NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
+      )
+      |> Claper.Repo.update!()
+    else
+      registration
+    end
   end
 end
