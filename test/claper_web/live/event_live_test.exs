@@ -47,6 +47,29 @@ defmodule ClaperWeb.EventLiveTest do
       assert html_response(conn, 200) =~ "some updated name"
     end
 
+    test "editing an event cannot transfer ownership through forged form parameters", %{
+      conn: conn,
+      user: owner,
+      presentation_file: presentation_file
+    } do
+      other_user = Claper.AccountsFixtures.confirmed_user_fixture()
+      event = presentation_file.event
+      {:ok, edit_live, _html} = live(conn, ~p"/events/#{event.uuid}/edit")
+
+      {:ok, conn} =
+        edit_live
+        |> form("#event-form", event: @update_attrs)
+        |> render_submit(%{"event" => %{"user_id" => to_string(other_user.id)}})
+        |> follow_redirect(conn, ~p"/events")
+
+      assert html_response(conn, 200) =~ "some updated name"
+      updated = Claper.Events.get_user_event!(owner.id, event.uuid)
+      assert updated.user_id == owner.id
+      assert updated.name == "some updated name"
+
+      assert {:ok, _view, _html} = live(conn, ~p"/events/#{event.uuid}/edit")
+    end
+
     test "renders the redesigned create and edit states", %{
       conn: conn,
       presentation_file: presentation_file
@@ -944,6 +967,59 @@ defmodule ClaperWeb.EventLiveTest do
       refute html =~ ~s(phx-value-tab="quizzes")
       refute html =~ ~s(phx-value-tab="transcriptions")
       refute html =~ ~s(phx-value-tab="word_clouds")
+    end
+
+    test "disabled historical custom embeds are safe in Web Content without being resaved", %{
+      conn: conn,
+      presentation_file: presentation_file
+    } do
+      unsafe_embeds =
+        [
+          ~s|<iframe src="java&#x09;script:parent.document.body.dataset.securityProbe=1"></iframe>|,
+          "<iframe src='java\tscript:alert(1)'></iframe>",
+          ~s|<iframe src="javascript:alert(1)" src="https://example.com"></iframe>|,
+          ~s|<iframe srcdoc="<script>alert(1)</script>" onload="alert(1)"></iframe>|
+        ]
+        |> Enum.with_index()
+        |> Enum.map(fn {content, index} ->
+          # Bypass changesets to model malicious content stored before the fix.
+          Claper.Repo.insert!(%Claper.Embeds.Embed{
+            title: "Historical unsafe content #{index}",
+            content: content,
+            provider: "custom",
+            presentation_file_id: presentation_file.id,
+            enabled: false
+          })
+        end)
+
+      safe_embed =
+        Claper.EmbedsFixtures.embed_fixture(%{
+          title: "Disabled legitimate content",
+          presentation_file_id: presentation_file.id,
+          content: ~s|<iframe src='https://example.com/embed?a=1&amp;b=2' height='450'></iframe>|,
+          enabled: false
+        })
+
+      {:ok, stats_live, _html} = live(conn, ~p"/events/#{presentation_file.event.uuid}/stats")
+
+      html =
+        stats_live
+        |> element(~s{button[phx-value-tab="web_content"]})
+        |> render_click()
+
+      for embed <- unsafe_embeds do
+        assert has_element?(stats_live, "#embed-component-#{embed.id}")
+        assert html =~ embed.title
+        refute has_element?(stats_live, "#embed-component-#{embed.id} iframe")
+        refute has_element?(stats_live, "#embed-component-#{embed.id} script")
+        assert Claper.Embeds.get_embed!(embed.id).content == embed.content
+      end
+
+      assert html =~ safe_embed.title
+      assert has_element?(stats_live, "#embed-component-#{safe_embed.id} iframe")
+
+      assert html |> Floki.parse_fragment!() |> Floki.attribute("iframe", "src") ==
+               ["https://example.com/embed?a=1&b=2"]
     end
 
     test "reports each word cloud with its counts and an export", %{

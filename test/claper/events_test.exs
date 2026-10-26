@@ -490,13 +490,30 @@ defmodule Claper.EventsTest do
       assert event.name == "some updated name"
     end
 
+    test "update_event/2 ignores ownership fields while saving ordinary changes" do
+      event = event_fixture()
+      other_user = user_fixture()
+
+      for attrs <- [
+            %{name: "Owner stays unchanged", user_id: other_user.id},
+            %{"name" => "Owner stays unchanged", "user_id" => to_string(other_user.id)},
+            %{"name" => "Owner stays unchanged", "user_id" => nil},
+            %{"name" => "Owner stays unchanged", "user_id" => "not-an-id"}
+          ] do
+        assert {:ok, updated} = Events.update_event(event, attrs)
+        assert updated.name == "Owner stays unchanged"
+        assert updated.user_id == event.user_id
+        assert Events.get_user_event!(event.user_id, event.uuid).user_id == event.user_id
+        refute Enum.any?(Events.list_events(other_user.id), &(&1.uuid == event.uuid))
+      end
+    end
+
     test "update_event/2 with invalid data returns error changeset" do
       event = event_fixture()
 
       assert {:error, %Ecto.Changeset{}} = Events.update_event(event, %{name: nil})
       assert {:error, %Ecto.Changeset{}} = Events.update_event(event, %{code: nil})
       assert {:error, %Ecto.Changeset{}} = Events.update_event(event, %{code: "tiny"})
-      assert {:error, %Ecto.Changeset{}} = Events.update_event(event, %{user_id: nil})
       assert {:error, %Ecto.Changeset{}} = Events.update_event(event, %{started_at: nil})
 
       assert event == Events.get_event!(event.uuid)

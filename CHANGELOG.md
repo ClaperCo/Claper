@@ -12,9 +12,15 @@
 
 - Fix the transcription API key appearing cleared one day after it was saved.
 - Fix attendee page crashing when a poll option or vote click arrives after the presenter switched to another interaction.
-- Fix security enrollment for LTI platforms and admin option to disable the feature
-- Enforce poll and quiz submissions from avoid being manipulated
 - Fix scoring on CSV export of quizzes
+
+### Security
+
+- Parse custom embeds into HTTP(S)-only iframe attributes and render escaped HTML.
+- Escape quiz titles, questions and options in QTI exports.
+- Ignore client-supplied event ownership fields on updates; ownership can only be assigned when creating an event.
+- Fix security enrollment for LTI platforms and admin option to disable the feature.
+- Enforce one poll ballot per participant and one quiz submission per question, including concurrent requests.
 
 ## v3.1.2
 

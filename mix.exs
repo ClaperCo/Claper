@@ -91,7 +91,7 @@ defmodule Claper.MixProject do
       {:phoenix_live_view, "~> 1.0.19"},
       {:phoenix_swoosh, "~> 1.2.1"},
       {:phoenix_view, "~> 2.0"},
-      {:floki, ">= 0.36.1", only: :test},
+      {:floki, ">= 0.36.1"},
       {:phoenix_live_dashboard, "~> 0.8"},
       {:esbuild, "~> 0.10", runtime: Mix.env() == :dev},
       {:dart_sass, "~> 0.7", runtime: Mix.env() == :dev},

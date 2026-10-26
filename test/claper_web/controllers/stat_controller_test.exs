@@ -201,6 +201,117 @@ defmodule ClaperWeb.StatControllerTest do
     end
   end
 
+  describe "POST /export/quizzes/:quiz_id/qti" do
+    test "exports user content as XML data with plain-text question and option semantics", %{
+      conn: conn
+    } do
+      owner = confirmed_user_fixture()
+      presentation_file = presentation_file_fixture(%{user: owner}, [:event])
+      title = ~s|Quiz " injected="yes"><script>alert('title')</script> & more|
+      question = ~s|Question & "quotes" </mattext><iframe src="javascript:alert(1)"></iframe>|
+      option = ~s|Answer & 'quotes' </mattext><script>alert("option")</script>|
+
+      quiz =
+        quiz_fixture(%{
+          presentation_file: presentation_file,
+          title: title,
+          quiz_questions: [
+            %{
+              content: question,
+              type: "qcm",
+              quiz_question_opts: [%{content: option, is_correct: true}]
+            }
+          ]
+        })
+
+      conn =
+        conn
+        |> log_in_user(owner)
+        |> post(~p"/export/quizzes/#{quiz.id}/qti")
+
+      assert response_content_type(conn, :xml)
+      body = response(conn, 200)
+      {document, []} = :xmerl_scan.string(String.to_charlist(body))
+
+      assert {:xmlObj, :string, exported_title} =
+               :xmerl_xpath.string(~c"string(//assessment/@title)", document)
+
+      assert List.to_string(exported_title) == title
+      assert length(:xmerl_xpath.string(~c"//assessment/@*", document)) == 1
+      assert length(:xmerl_xpath.string(~c"//item", document)) == 1
+      assert :xmerl_xpath.string(~c"//script | //iframe | //mattext/*", document) == []
+
+      assert {:xmlObj, :string, exported_question} =
+               :xmerl_xpath.string(
+                 ~c"string(//presentation/material/mattext)",
+                 document
+               )
+
+      assert List.to_string(exported_question) == question
+
+      assert {:xmlObj, :string, exported_option} =
+               :xmerl_xpath.string(
+                 ~c"string(//response_label/material/mattext)",
+                 document
+               )
+
+      assert List.to_string(exported_option) == option
+      assert length(:xmerl_xpath.string(~c"//mattext", document)) == 2
+      assert length(:xmerl_xpath.string(~c"//mattext[@texttype='text/plain']", document)) == 2
+      refute body =~ "<script"
+      refute body =~ "<iframe"
+    end
+
+    test "exports ordinary quiz text without changing identifiers or scoring", %{conn: conn} do
+      owner = confirmed_user_fixture()
+      presentation_file = presentation_file_fixture(%{user: owner}, [:event])
+      quiz = quiz_fixture(%{presentation_file: presentation_file})
+      [question] = quiz.quiz_questions
+      [correct, incorrect] = question.quiz_question_opts
+
+      conn =
+        conn
+        |> log_in_user(owner)
+        |> post(~p"/export/quizzes/#{quiz.id}/qti")
+
+      {document, []} = :xmerl_scan.string(String.to_charlist(response(conn, 200)))
+
+      assert {:xmlObj, :string, title} =
+               :xmerl_xpath.string(~c"string(//assessment/@title)", document)
+
+      assert List.to_string(title) == quiz.title
+
+      for option <- [correct, incorrect] do
+        path = ~c"//response_label[@ident='#{option.id}']/material/mattext"
+        assert {:xmlObj, :string, text} = :xmerl_xpath.string(~c"string(#{path})", document)
+        assert List.to_string(text) == option.content
+      end
+
+      assert {:xmlObj, :string, scored_id} =
+               :xmerl_xpath.string(~c"string(//respcondition/conditionvar/varequal)", document)
+
+      assert List.to_string(scored_id) == to_string(correct.id)
+      assert length(:xmerl_xpath.string(~c"//respcondition", document)) == 1
+
+      assert {:xmlObj, :string, ~c"1"} =
+               :xmerl_xpath.string(~c"string(//respcondition/setvar[@action='Set'])", document)
+    end
+
+    test "rejects authenticated users without event access", %{conn: conn} do
+      owner = confirmed_user_fixture()
+      unauthorized_user = confirmed_user_fixture()
+      presentation_file = presentation_file_fixture(%{user: owner}, [:event])
+      quiz = quiz_fixture(%{presentation_file: presentation_file})
+
+      conn =
+        conn
+        |> log_in_user(unauthorized_user)
+        |> post(~p"/export/quizzes/#{quiz.id}/qti")
+
+      assert response(conn, 403) == "Forbidden"
+    end
+  end
+
   describe "POST /export/forms/:form_id" do
     setup %{conn: conn} do
       owner = confirmed_user_fixture()

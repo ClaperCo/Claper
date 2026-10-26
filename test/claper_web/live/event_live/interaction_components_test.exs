@@ -11,6 +11,7 @@ defmodule ClaperWeb.EventLive.InteractionComponentsTest do
 
   alias ClaperWeb.EventLive.{
     EmbedComponent,
+    EmbedIframeComponent,
     FormComponent,
     PollComponent,
     QuizComponent,
@@ -332,6 +333,64 @@ defmodule ClaperWeb.EventLive.InteractionComponentsTest do
     assert "overflow-x-auto" in frame_classes
     refute "aspect-video" in frame_classes
     refute "overflow-hidden" in frame_classes
+  end
+
+  test "custom iframes render escaped allowlisted attributes instead of supplied HTML" do
+    document =
+      EmbedIframeComponent
+      |> render_component(
+        id: "safe-custom-iframe",
+        provider: "custom",
+        title: "Interactive exercise",
+        content: """
+        <script id="security-probe">alert(1)</script>
+        <iframe src='https://example.com/embed?a=1&amp;b=2' width='640' height='450'
+          title='&quot; onload=&quot;alert(1)' onload='alert(1)'
+          srcdoc='<script>alert(1)</script>' allowfullscreen sandbox='allow-scripts'>
+          <script>alert(1)</script>
+        </iframe>
+        """
+      )
+      |> Floki.parse_fragment!()
+
+    assert [_] = Floki.find(document, "iframe")
+    assert Floki.attribute(document, "iframe", "src") == ["https://example.com/embed?a=1&b=2"]
+    assert Floki.attribute(document, "iframe", "title") == [~s|" onload="alert(1)|]
+    assert Floki.attribute(document, "iframe", "width") == ["640"]
+    assert Floki.attribute(document, "iframe", "height") == ["450"]
+    assert Floki.attribute(document, "iframe", "sandbox") == ["allow-scripts"]
+    assert Floki.attribute(document, "iframe", "allowfullscreen") != []
+    assert Floki.attribute(document, "iframe", "onload") == []
+    assert Floki.attribute(document, "iframe", "srcdoc") == []
+    assert Floki.find(document, "script") == []
+  end
+
+  test "historical custom iframe payloads cannot bypass URL validation when rendered" do
+    for content <- [
+          nil,
+          "",
+          "<iframe></iframe>",
+          "<iframe src='https://'></iframe>",
+          ~s|<iframe src="java&#x09;script:parent.document.body.dataset.securityProbe=1"></iframe>|,
+          "<iframe src='java\tscript:alert(1)'></iframe>",
+          ~s|<iframe src='javascript:alert(1)'></iframe>|,
+          ~s|<iframe src="data:text/html,<script>alert(1)</script>"></iframe>|,
+          ~s|<iframe src="https://example.com" src="javascript:alert(1)"></iframe>|,
+          ~s|<iframe srcdoc="<script>alert(1)</script>" onload="alert(1)"></iframe>|
+        ] do
+      document =
+        EmbedIframeComponent
+        |> render_component(
+          id: "unsafe-custom-iframe",
+          provider: "custom",
+          title: "Legacy content",
+          content: content
+        )
+        |> Floki.parse_fragment!()
+
+      assert Floki.find(document, "iframe") == []
+      assert Floki.find(document, "script") == []
+    end
   end
 
   test "word cloud offers an input until the attendee has sent all their words" do

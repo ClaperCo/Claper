@@ -309,7 +309,7 @@ defmodule ClaperWeb.StatController do
     """
     <?xml version="1.0" encoding="UTF-8"?>
     <questestinterop xmlns="http://www.imsglobal.org/xsd/ims_qtiasiv1p2">
-      <assessment title="#{quiz.title}">
+      <assessment title="#{escape_qti_text(quiz.title)}">
         <section>
           #{Enum.map_join(quiz.quiz_questions, "\n", &generate_qti_item/1)}
         </section>
@@ -323,7 +323,7 @@ defmodule ClaperWeb.StatController do
       <item>
         <presentation>
           <material>
-            <mattext>#{question.content}</mattext>
+            <mattext texttype="text/plain">#{escape_qti_text(question.content)}</mattext>
           </material>
           <response_lid ident="RESPONSE" rcardinality="Multiple">
             <render_choice>
@@ -345,7 +345,7 @@ defmodule ClaperWeb.StatController do
     """
               <response_label ident="#{option.id}">
                 <material>
-                  <mattext>#{option.content}</mattext>
+                  <mattext texttype="text/plain">#{escape_qti_text(option.content)}</mattext>
                 </material>
               </response_label>
     """
@@ -365,6 +365,9 @@ defmodule ClaperWeb.StatController do
       ""
     end
   end
+
+  defp escape_qti_text(text),
+    do: text |> Phoenix.HTML.html_escape() |> Phoenix.HTML.safe_to_string()
 
   defp sanitize(string),
     do: string |> String.replace(~r/[^\w\s-]/, "") |> String.replace(~r/\s+/, "-")

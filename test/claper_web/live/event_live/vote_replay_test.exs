@@ -62,6 +62,109 @@ defmodule ClaperWeb.EventLive.VoteReplayTest do
     end
   end
 
+  test "poll parameters cannot forge identities or replace a ballot from another tab", %{
+    conn: conn,
+    user: user
+  } do
+    presentation = presentation_file_fixture(%{user: user}, [:event])
+    presentation_state_fixture(%{presentation_file: presentation})
+    poll = poll_fixture(%{presentation_file_id: presentation.id, multiple: true})
+    other_poll = poll_fixture(%{presentation_file_id: presentation.id, enabled: false})
+    [first, second] = poll.poll_opts
+    victim = Claper.AccountsFixtures.user_fixture()
+    anonymous_identifier = "actual-poll-attendee"
+    forged_identifier = "forged-poll-attendee"
+
+    anonymous_conn =
+      build_conn() |> init_test_session(%{attendee_identifier: anonymous_identifier})
+
+    forged_identity = %{
+      "user_id" => victim.id,
+      "attendee_identifier" => forged_identifier
+    }
+
+    path = ~p"/e/#{presentation.event.code}?#{forged_identity}"
+
+    for {attendee_conn, identity} <- [{conn, user.id}, {anonymous_conn, anonymous_identifier}] do
+      {:ok, view, _} = live(attendee_conn, path)
+      {:ok, other_tab, _} = live(attendee_conn, path)
+      render_hook(view, "select-poll-opt", Map.put(forged_identity, "opt", "0"))
+      render_hook(other_tab, "select-poll-opt", Map.put(forged_identity, "opt", "1"))
+
+      forged_vote =
+        Map.merge(forged_identity, %{
+          "poll_id" => other_poll.id,
+          "poll_opt_id" => second.id,
+          "poll_ballot_id" => 1,
+          "selected_poll_opt" => ["1"]
+        })
+
+      render_hook(view, "vote", forged_vote)
+      assert has_element?(view, "[data-submitted]")
+
+      for attempt <- 1..3 do
+        render_hook(
+          other_tab,
+          "vote",
+          Map.put(forged_vote, "attendee_identifier", "#{forged_identifier}-#{attempt}")
+        )
+
+        assert has_element?(other_tab, "[data-submitted]")
+      end
+
+      assert [%{poll_opt_id: option_id, user_id: voter_id, attendee_identifier: attendee}] =
+               Claper.Polls.get_poll_vote(identity, poll.id)
+
+      assert option_id == first.id
+      assert voter_id == if(is_integer(identity), do: identity, else: nil)
+      assert attendee == if(is_binary(identity), do: identity, else: nil)
+      assert Claper.Polls.get_poll_vote(identity, other_poll.id) == []
+    end
+
+    assert Claper.Polls.get_poll_vote(victim.id, poll.id) == []
+    assert Claper.Polls.get_poll_vote(forged_identifier, poll.id) == []
+
+    for attempt <- 1..3 do
+      assert Claper.Polls.get_poll_vote("#{forged_identifier}-#{attempt}", poll.id) == []
+    end
+
+    assert [2, 0] == Enum.map(Claper.Polls.get_poll!(poll.id).poll_opts, & &1.vote_count)
+    assert [0, 0] == Enum.map(Claper.Polls.get_poll!(other_poll.id).poll_opts, & &1.vote_count)
+  end
+
+  test "fresh anonymous cookies are distinct participants but reusing a cookie cannot vote again",
+       %{user: user} do
+    presentation = presentation_file_fixture(%{user: user}, [:event])
+    presentation_state_fixture(%{presentation_file: presentation})
+    poll = poll_fixture(%{presentation_file_id: presentation.id})
+    [first | _] = poll.poll_opts
+    path = ~p"/e/#{presentation.event.code}"
+
+    identifiers =
+      for _participant <- 1..6 do
+        attendee_conn = get(build_conn(), path)
+        identifier = get_session(attendee_conn, :attendee_identifier)
+        assert is_binary(identifier) and identifier != ""
+        {:ok, view, _} = live(attendee_conn)
+        render_hook(view, "select-poll-opt", %{"opt" => "0"})
+        render_hook(view, "vote", %{})
+        assert has_element?(view, "[data-submitted]")
+
+        reused_conn = attendee_conn |> recycle() |> get(path)
+        assert get_session(reused_conn, :attendee_identifier) == identifier
+        {:ok, replay_view, _} = live(reused_conn)
+        render_hook(replay_view, "select-poll-opt", %{"opt" => "1"})
+        render_hook(replay_view, "vote", %{})
+        assert has_element?(replay_view, "[data-submitted]")
+        assert [%{poll_opt_id: option_id}] = Claper.Polls.get_poll_vote(identifier, poll.id)
+        assert option_id == first.id
+        identifier
+      end
+
+    assert length(Enum.uniq(identifiers)) == 6
+    assert [6, 0] == Enum.map(Claper.Polls.get_poll!(poll.id).poll_opts, & &1.vote_count)
+  end
+
   test "malformed poll option indexes do not crash or create ballots", %{conn: conn, user: user} do
     presentation = presentation_file_fixture(%{user: user}, [:event])
     presentation_state_fixture(%{presentation_file: presentation})

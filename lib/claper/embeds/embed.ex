@@ -93,11 +93,7 @@ defmodule Claper.Embeds.Embed do
         )
 
       "custom" ->
-        changeset
-        |> validate_format(:content, ~r/<iframe.*?<\/iframe>/s,
-          message: gettext("Please enter valid HTML content with an iframe tag")
-        )
-        |> sanitize_custom_embed()
+        sanitize_custom_embed(changeset)
 
       _ ->
         changeset
@@ -105,17 +101,46 @@ defmodule Claper.Embeds.Embed do
   end
 
   @allowed_iframe_attrs ~w(src width height frameborder allow allowfullscreen style title loading referrerpolicy sandbox)
+  @size_styles ~w(width height min-width max-width min-height max-height border-radius)
+
+  @doc """
+  Parses custom embed HTML into attributes for a single HTTP(S) iframe.
+
+  Use this at render time as well as on writes: stored embeds may predate validation.
+  No surrounding HTML, iframe contents, event handlers or srcdoc are retained.
+  """
+  def custom_iframe_attributes(content) when is_binary(content) do
+    with {:ok, document} <-
+           Floki.parse_fragment(content, html_parser: Floki.HTMLParser.Mochiweb),
+         [{"iframe", attrs, _children}] <- Floki.find(document, "iframe"),
+         true <- unique_attributes?(attrs),
+         {"src", src} <- List.keyfind(attrs, "src", 0),
+         true <- safe_iframe_url?(src) do
+      attrs =
+        attrs
+        |> Enum.filter(fn {name, _value} -> name in @allowed_iframe_attrs end)
+        |> Enum.map(fn
+          {"src", src} -> {"src", String.trim(src)}
+          {"style", style} -> {"style", safe_iframe_style(style)}
+          attr -> attr
+        end)
+
+      {:ok, attrs}
+    else
+      _ -> :error
+    end
+  end
+
+  def custom_iframe_attributes(_content), do: :error
 
   defp sanitize_custom_embed(%{valid?: false} = changeset), do: changeset
 
   defp sanitize_custom_embed(changeset) do
-    content = get_field(changeset, :content)
+    case custom_iframe_attributes(get_field(changeset, :content)) do
+      {:ok, attrs} ->
+        put_change(changeset, :content, Floki.raw_html({"iframe", attrs, []}, encode: true))
 
-    case Regex.run(~r/<iframe\s[^>]*?(?:\/>|>[\s\S]*?<\/iframe>)/i, content) do
-      [iframe_tag] ->
-        put_change(changeset, :content, sanitize_iframe_tag(iframe_tag))
-
-      _ ->
+      :error ->
         add_error(
           changeset,
           :content,
@@ -124,35 +149,46 @@ defmodule Claper.Embeds.Embed do
     end
   end
 
-  @allowed_boolean_attrs ~w(allowfullscreen sandbox)
-
-  defp sanitize_iframe_tag(iframe_tag) do
-    # Extract key="value" attributes
-    value_attrs =
-      Regex.scan(~r/([\w-]+)\s*=\s*(?:"([^"]*?)"|'([^']*?)')/i, iframe_tag)
-      |> Enum.filter(fn [_, name | _] -> String.downcase(name) in @allowed_iframe_attrs end)
-      |> Enum.reject(fn [_, name, value | _] ->
-        String.downcase(name) == "src" and String.trim(value) =~ ~r/^javascript:/i
-      end)
-      |> Enum.map(fn [_, name, value | _rest] ->
-        ~s(#{String.downcase(name)}="#{String.replace(value, "\"", "&quot;")}")
-      end)
-
-    # Extract standalone boolean attributes (e.g., allowfullscreen)
-    value_attr_names =
-      Regex.scan(~r/([\w-]+)\s*=/i, iframe_tag)
-      |> Enum.map(fn [_, name] -> String.downcase(name) end)
-      |> MapSet.new()
-
-    boolean_attrs =
-      Regex.scan(~r/\s([\w-]+)(?=[\s>\/])/i, iframe_tag)
-      |> Enum.map(fn [_, name] -> String.downcase(name) end)
-      |> Enum.filter(&(&1 in @allowed_boolean_attrs))
-      |> Enum.reject(&MapSet.member?(value_attr_names, &1))
-      |> Enum.uniq()
-
-    all_attrs = Enum.join(value_attrs ++ boolean_attrs, " ")
-
-    if all_attrs == "", do: "<iframe></iframe>", else: "<iframe #{all_attrs}></iframe>"
+  defp unique_attributes?(attrs) do
+    names = Enum.map(attrs, fn {name, _value} -> name end)
+    length(names) == MapSet.size(MapSet.new(names))
   end
+
+  defp safe_iframe_url?(src) do
+    src = String.trim(src)
+
+    # Browsers remove ASCII tabs/newlines when interpreting URL schemes, and
+    # treat backslashes as slashes in HTTP URLs. Reject these ambiguities.
+    with false <- Regex.match?(~r/[\x00-\x20\x7F\\]/u, src),
+         {:ok, %URI{scheme: scheme, host: host}} <- URI.new(src) do
+      scheme in ["http", "https"] and is_binary(host) and host != ""
+    else
+      _ -> false
+    end
+  end
+
+  defp safe_iframe_style(style) do
+    style
+    |> String.split(";", trim: true)
+    |> Enum.flat_map(fn declaration ->
+      case String.split(declaration, ":", parts: 2) do
+        [name, value] ->
+          name = name |> String.trim() |> String.downcase()
+          value = String.trim(value)
+
+          if safe_style_value?(name, value), do: ["#{name}:#{value}"], else: []
+
+        _ ->
+          []
+      end
+    end)
+    |> Enum.join(";")
+  end
+
+  defp safe_style_value?(name, value) when name in @size_styles do
+    Regex.match?(~r/^(?:0|auto|\d+(?:\.\d+)?(?:px|%|em|rem|vh|vw))$/i, value)
+  end
+
+  defp safe_style_value?("border", value), do: value in ["0", "none"]
+  defp safe_style_value?(_name, _value), do: false
 end

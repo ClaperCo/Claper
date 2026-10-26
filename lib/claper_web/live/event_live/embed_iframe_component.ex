@@ -1,7 +1,19 @@
 defmodule ClaperWeb.EventLive.EmbedIframeComponent do
   use ClaperWeb, :live_component
 
+  alias Claper.Embeds.Embed
+
   def render(assigns) do
+    iframe_attrs =
+      if assigns.provider == "custom" do
+        case Embed.custom_iframe_attributes(assigns.content) do
+          {:ok, attrs} -> attrs
+          :error -> nil
+        end
+      end
+
+    assigns = assign(assigns, :iframe_attrs, iframe_attrs)
+
     ~H"""
     <div id={@id} class="h-full w-full">
       <%= case @provider do %>
@@ -47,7 +59,7 @@ defmodule ClaperWeb.EventLive.EmbedIframeComponent do
           >
           </iframe>
         <% "custom" -> %>
-          {raw(@content)}
+          <iframe :if={@iframe_attrs} {@iframe_attrs}></iframe>
       <% end %>
     </div>
     """
