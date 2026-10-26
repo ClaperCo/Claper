@@ -177,11 +177,28 @@ defmodule ClaperWeb.EventLive.FormComponent do
            |> Map.put("form_id", socket.assigns.form.id)
          ) do
       {:ok, form_submit} ->
+        ClaperWeb.SecurityAudit.observe(
+          socket,
+          "form",
+          socket.assigns.form.id,
+          "submission_burst",
+          20
+        )
+
         {:noreply,
          socket
          |> assign(:current_form_submit, form_submit)}
 
-      {:error, _changeset} ->
+      {:error, changeset} ->
+        if match?(%Ecto.Changeset{}, changeset) do
+          ClaperWeb.SecurityAudit.observe(
+            socket,
+            "form",
+            socket.assigns.form.id,
+            "validation_rejected"
+          )
+        end
+
         {:noreply, socket}
     end
   end
@@ -199,11 +216,28 @@ defmodule ClaperWeb.EventLive.FormComponent do
            |> Map.put("form_id", socket.assigns.form.id)
          ) do
       {:ok, form_submit} ->
+        ClaperWeb.SecurityAudit.observe(
+          socket,
+          "form",
+          socket.assigns.form.id,
+          "submission_burst",
+          20
+        )
+
         {:noreply,
          socket
          |> assign(:current_form_submit, form_submit)}
 
-      {:error, _changeset} ->
+      {:error, changeset} ->
+        if match?(%Ecto.Changeset{}, changeset) do
+          ClaperWeb.SecurityAudit.observe(
+            socket,
+            "form",
+            socket.assigns.form.id,
+            "validation_rejected"
+          )
+        end
+
         {:noreply, socket}
     end
   end

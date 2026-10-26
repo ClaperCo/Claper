@@ -323,6 +323,8 @@
               module={ClaperWeb.EmbedLive.FormComponent}
               id="embed-create"
               event_uuid={@event.uuid}
+              current_user={@current_user}
+              security_audit_ip={assigns[:security_audit_ip]}
               presentation_file={@event.presentation_file}
               embed={@embed}
               live_action={@create_action}

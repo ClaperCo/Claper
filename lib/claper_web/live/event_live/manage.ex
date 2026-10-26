@@ -66,6 +66,7 @@ defmodule ClaperWeb.EventLive.Manage do
 
     socket =
       socket
+      |> assign(:security_audit_ip, ClaperWeb.SecurityAudit.peer_ip(socket))
       |> assign(:interaction_modal, false)
       |> assign(:settings_modal, false)
       |> assign(:attendees_nb, 0)

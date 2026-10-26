@@ -19,6 +19,7 @@ defmodule ClaperWeb.Endpoint do
   socket "/live", Phoenix.LiveView.Socket,
     websocket: [
       connect_info: [
+        :peer_data,
         session: {__MODULE__, :runtime_opts, []}
       ]
     ]

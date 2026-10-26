@@ -26,6 +26,8 @@ defmodule ClaperWeb.EmbedLive.FormComponent do
   def handle_event("delete", %{"id" => id}, socket) do
     case Embeds.get_embed_for_event(id, socket.assigns.presentation_file.event_id) do
       nil ->
+        ClaperWeb.SecurityAudit.observe(socket, "embed", nil, "resource_not_found")
+
         {:noreply, socket}
 
       embed ->
@@ -56,11 +58,26 @@ defmodule ClaperWeb.EmbedLive.FormComponent do
            embed_params
          ) do
       {:ok, _embed} ->
+        ClaperWeb.SecurityAudit.observe(
+          socket,
+          "embed",
+          socket.assigns.embed.id,
+          "submission_burst",
+          20
+        )
+
         {:noreply,
          socket
          |> push_navigate(to: socket.assigns.return_to)}
 
       {:error, %Ecto.Changeset{} = changeset} ->
+        ClaperWeb.SecurityAudit.observe(
+          socket,
+          "embed",
+          socket.assigns.embed.id,
+          "validation_rejected"
+        )
+
         {:noreply, assign(socket, :changeset, changeset)}
     end
   end
@@ -73,12 +90,16 @@ defmodule ClaperWeb.EmbedLive.FormComponent do
            |> Map.put("enabled", false)
          ) do
       {:ok, embed} ->
+        ClaperWeb.SecurityAudit.observe(socket, "embed", embed.id, "submission_burst", 20)
+
         {:noreply,
          socket
          |> maybe_change_current_embed(embed)
          |> push_navigate(to: socket.assigns.return_to)}
 
       {:error, %Ecto.Changeset{} = changeset} ->
+        ClaperWeb.SecurityAudit.observe(socket, "embed", nil, "validation_rejected")
+
         {:noreply, assign(socket, changeset: changeset)}
     end
   end
