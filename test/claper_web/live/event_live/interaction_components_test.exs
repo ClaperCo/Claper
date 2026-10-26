@@ -279,7 +279,7 @@ defmodule ClaperWeb.EventLive.InteractionComponentsTest do
     embed = %Embed{
       title: "Watch the demo",
       provider: "youtube",
-      content: "https://youtu.be/video-id"
+      content: "https://youtu.be/dQw4w9WgXcQ"
     }
 
     document =
@@ -391,6 +391,62 @@ defmodule ClaperWeb.EventLive.InteractionComponentsTest do
       assert Floki.find(document, "iframe") == []
       assert Floki.find(document, "script") == []
     end
+  end
+
+  test "provider frames only load the provider's own domain" do
+    render_src = fn provider, content ->
+      EmbedIframeComponent
+      |> render_component(
+        id: "provider-frame",
+        provider: provider,
+        title: "Slides",
+        content: content
+      )
+      |> Floki.parse_fragment!()
+      |> Floki.attribute("iframe", "src")
+    end
+
+    # Stored before validation existed: never framed.
+    for {provider, content} <- [
+          {"canva", "https://evil.example/?canva.com"},
+          {"canva", "https://canva.com.evil.example/design/abc/view"},
+          {"googleslides", "https://evil.example/?google.com"},
+          {"googleslides", "https://sites.google.com/view/phishing"},
+          {"youtube", "https://evil.example/?youtu.be/../../redirect?q=https://evil.example"},
+          {"youtube", "https://youtu.be/../../redirect?q=https://evil.example"},
+          {"vimeo", "https://evil.example/?vimeo.com/../../evil"},
+          {"youtube", nil},
+          {"canva", nil},
+          {"googleslides", ""}
+        ] do
+      assert render_src.(provider, content) == []
+    end
+
+    assert render_src.("canva", "https://www.canva.com/design/DAF1234/view") ==
+             ["https://www.canva.com/design/DAF1234/view?embed"]
+
+    assert render_src.("canva", "http://canva.com/design/DAF1234/view?utm_content=x") ==
+             ["https://canva.com/design/DAF1234/view?utm_content=x&embed"]
+
+    assert render_src.(
+             "googleslides",
+             "https://docs.google.com/presentation/d/e/2PACX-1vQ/pub?start=false&loop=false"
+           ) ==
+             ["https://docs.google.com/presentation/d/e/2PACX-1vQ/embed?start=false&loop=false"]
+
+    for content <- [
+          "https://youtu.be/dQw4w9WgXcQ?si=g1A6ZegIXzcrisSw",
+          "https://www.youtube.com/watch?v=dQw4w9WgXcQ&t=42",
+          "https://m.youtube.com/shorts/dQw4w9WgXcQ"
+        ] do
+      assert render_src.("youtube", content) == ["https://www.youtube.com/embed/dQw4w9WgXcQ"]
+    end
+
+    assert render_src.("vimeo", "https://vimeo.com/123456789") ==
+             ["https://player.vimeo.com/video/123456789"]
+
+    assert render_src.("vimeo", "https://vimeo.com/123456789/abcdef1234") ==
+             ["https://player.vimeo.com/video/123456789?h=abcdef1234"]
   end
 
   test "word cloud offers an input until the attendee has sent all their words" do

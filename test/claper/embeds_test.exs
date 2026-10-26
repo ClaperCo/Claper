@@ -155,6 +155,65 @@ defmodule Claper.EmbedsTest do
       end
     end
 
+    test "provider embeds only accept links on the provider's own domain" do
+      presentation_file = presentation_file_fixture()
+
+      for {provider, content} <- [
+            {"canva", "https://evil.example/?canva.com"},
+            {"canva", "https://canva.com.evil.example/design/abc/view"},
+            {"canva", "https://evilcanva.com/design/abc/view"},
+            {"canva", "https://www.canva.com@evil.example/design/abc/view"},
+            {"canva", "https://evil.example\\.canva.com/design"},
+            {"canva", "javascript:alert('canva.com')"},
+            {"googleslides", "https://evil.example/?google.com"},
+            {"googleslides", "https://google.com.evil.example/presentation/d/e/x/pub"},
+            {"googleslides", "https://sites.google.com/view/phishing"},
+            {"googleslides", "data:text/html,docs.google.com"},
+            {"youtube", "https://evil.example/?youtu.be/../../redirect?q=https://evil.example"},
+            {"youtube", "https://youtube.com.evil.example/watch?v=dQw4w9WgXcQ"},
+            {"youtube", "https://youtu.be/../../redirect?q=https://evil.example"},
+            {"youtube", "https://www.youtube.com/watch?v=not-an-id"},
+            {"youtube", "https://www.youtube.com/redirect?q=https://evil.example"},
+            {"vimeo", "https://evil.example/?vimeo.com/../../evil"},
+            {"vimeo", "https://vimeo.com.evil.example/123456789"},
+            {"vimeo", "https://vimeo.com/channels/staffpicks"}
+          ] do
+        attrs = %{
+          title: "Hostile link",
+          provider: provider,
+          presentation_file_id: presentation_file.id,
+          content: content,
+          position: 0
+        }
+
+        assert {:error, changeset} = Embeds.create_embed(attrs)
+        assert %{content: [_ | _]} = errors_on(changeset)
+      end
+
+      for {provider, content} <- [
+            {"canva", "https://www.canva.com/design/DAF1234/view"},
+            {"canva", "https://canva.com/design/DAF1234/view?utm_content=x"},
+            {"googleslides",
+             "https://docs.google.com/presentation/d/e/2PACX-1vQ/pub?start=false&loop=false"},
+            {"youtube", "https://youtu.be/dQw4w9WgXcQ?si=g1A6ZegIXzcrisSw"},
+            {"youtube", "https://www.youtube.com/watch?v=dQw4w9WgXcQ&t=42"},
+            {"youtube", "https://www.youtube.com/shorts/dQw4w9WgXcQ"},
+            {"vimeo", "https://vimeo.com/123456789"},
+            {"vimeo", "https://vimeo.com/123456789/abcdef1234"}
+          ] do
+        assert {:ok, embed} =
+                 Embeds.create_embed(%{
+                   title: "Slides",
+                   provider: provider,
+                   presentation_file_id: presentation_file.id,
+                   content: content,
+                   position: 0
+                 })
+
+        assert embed.content == content
+      end
+    end
+
     test "custom embeds preserve safe single-quoted URLs and remove executable markup" do
       presentation_file = presentation_file_fixture()
 

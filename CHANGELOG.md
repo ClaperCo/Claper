@@ -17,6 +17,7 @@
 ### Security
 
 - Parse custom embeds into HTTP(S)-only iframe attributes and render escaped HTML.
+- Improve URL filtering of embeds.
 - Escape quiz titles, questions and options in QTI exports.
 - Ignore client-supplied event ownership fields on updates; ownership can only be assigned when creating an event.
 - Fix security enrollment for LTI platforms and admin option to disable the feature.

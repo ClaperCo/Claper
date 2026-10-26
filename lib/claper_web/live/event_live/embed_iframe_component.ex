@@ -12,16 +12,24 @@ defmodule ClaperWeb.EventLive.EmbedIframeComponent do
         end
       end
 
-    assigns = assign(assigns, :iframe_attrs, iframe_attrs)
+    # Stored links are re-validated: rows may predate host validation.
+    provider_url =
+      case Embed.provider_embed_url(assigns.provider, assigns.content) do
+        {:ok, url} -> url
+        :error -> nil
+      end
+
+    assigns = assign(assigns, iframe_attrs: iframe_attrs, provider_url: provider_url)
 
     ~H"""
     <div id={@id} class="h-full w-full">
       <%= case @provider do %>
         <% "youtube" -> %>
           <iframe
+            :if={@provider_url}
             class="h-full w-full"
             title={@title}
-            src={"https://www.youtube.com/embed/#{@content |> String.split("youtu.be/") |> Enum.at(1)}"}
+            src={@provider_url}
             frameborder="0"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
             referrerpolicy="strict-origin-when-cross-origin"
@@ -30,29 +38,21 @@ defmodule ClaperWeb.EventLive.EmbedIframeComponent do
           </iframe>
         <% "vimeo" -> %>
           <iframe
+            :if={@provider_url}
             class="h-full w-full"
             title={@title}
-            src={"https://player.vimeo.com/video/#{@content |> String.split("vimeo.com/") |> Enum.at(1)}"}
+            src={@provider_url}
             frameborder="0"
             allow="autoplay; fullscreen; picture-in-picture"
             allowfullscreen
           >
           </iframe>
-        <% "canva" -> %>
+        <% provider when provider in ["canva", "googleslides"] -> %>
           <iframe
+            :if={@provider_url}
             class="h-full w-full"
             title={@title}
-            src={"#{@content}?embed"}
-            frameborder="0"
-            allowfullscreen="allowfullscreen"
-            allow="fullscreen"
-          >
-          </iframe>
-        <% "googleslides" -> %>
-          <iframe
-            class="h-full w-full"
-            title={@title}
-            src={"#{@content |> String.replace("/pub", "/embed")}"}
+            src={@provider_url}
             frameborder="0"
             allowfullscreen="allowfullscreen"
             allow="fullscreen"
