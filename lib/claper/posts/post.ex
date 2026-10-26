@@ -54,6 +54,18 @@ defmodule Claper.Posts.Post do
       :position,
       :pinned
     ])
+    |> validate_content()
+  end
+
+  @doc false
+  def attendee_changeset(post, attrs) do
+    post
+    |> cast(attrs, [:body])
+    |> validate_content()
+  end
+
+  defp validate_content(changeset) do
+    changeset
     |> validate_required([:body, :position])
     |> validate_length(:body, min: 2, max: 255)
   end
