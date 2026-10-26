@@ -21,6 +21,7 @@
 - Ignore client-supplied event ownership fields on updates; ownership can only be assigned when creating an event.
 - Fix security enrollment for LTI platforms and admin option to disable the feature.
 - Enforce one poll ballot per participant and one quiz submission per question, including concurrent requests.
+- Prevent OIDC account takeover through email claims.
 
 ## v3.1.2
 

@@ -153,26 +153,230 @@ defmodule Claper.AccountsTest do
     end
   end
 
-  describe "OIDC user names" do
+  describe "OIDC account resolution" do
+    # config/runtime.exs replaces the test adapter with the one MAIL_TRANSPORT selects.
+    setup do
+      mailer_config = Application.get_env(:claper, Claper.Mailer)
+      Application.put_env(:claper, Claper.Mailer, adapter: Swoosh.Adapters.Test)
+      on_exit(fn -> Application.put_env(:claper, Claper.Mailer, mailer_config) end)
+    end
+
+    test "an unverified email claim never links an existing account by itself" do
+      victim = user_fixture()
+
+      for verification <- [false, nil, "true", 1, :missing] do
+        attrs =
+          oidc_user_attrs(%{
+            email: victim.email,
+            email_verified: verification,
+            first_name: "Attacker"
+          })
+
+        attrs =
+          if verification == :missing, do: Map.delete(attrs, :email_verified), else: attrs
+
+        assert {:confirmation_sent, _browser_secret} = authenticate(attrs)
+        assert_received {:oidc_confirmation_token, _token}
+        assert Accounts.get_all_oidc_users_by_email(victim.email) == []
+        assert Accounts.get_user!(victim.id).first_name == victim.first_name
+      end
+    end
+
+    test "the emailed link is useless outside the browser that started the sign-in" do
+      victim = user_fixture()
+      victim_email = victim.email
+      attrs = oidc_user_attrs(%{email: victim_email, email_verified: false})
+
+      assert {:confirmation_sent, attacker_secret} = authenticate(attrs)
+      assert_received {:oidc_confirmation_token, token}
+      assert_received {:email, %Swoosh.Email{to: [{_, ^victim_email}]}}
+
+      # The victim opens the link in their own browser; the attacker never sees the token.
+      assert Accounts.confirm_oidc_identity(token, random_token()) == :error
+      assert Accounts.confirm_oidc_identity(token, nil) == :error
+      assert Accounts.confirm_oidc_identity(random_token(), attacker_secret) == :error
+      assert Accounts.confirm_oidc_identity("not base64!", attacker_secret) == :error
+      assert Accounts.get_all_oidc_users_by_email(victim_email) == []
+    end
+
+    test "the mailbox owner confirms a new identity once, then signs in directly" do
+      attrs = oidc_user_attrs(%{email_verified: false})
+
+      assert {:confirmation_sent, secret} = authenticate(attrs)
+      assert_received {:oidc_confirmation_token, token}
+      refute Accounts.get_user_by_email(attrs.email)
+
+      assert {:ok, identity} = Accounts.confirm_oidc_identity(token, secret)
+      assert identity.user.email == attrs.email
+      assert identity.user.confirmed_at
+      assert identity.verified_at
+      assert Accounts.confirm_oidc_identity(token, secret) == :error
+
+      assert {:ok, returning} = authenticate(%{attrs | access_token: "later-token"})
+      assert returning.id == identity.id
+      assert returning.access_token == "later-token"
+      refute_received {:oidc_confirmation_token, _}
+    end
+
+    test "confirming an existing account's email links that account" do
+      user = user_fixture()
+      attrs = oidc_user_attrs(%{email: user.email, email_verified: nil})
+
+      assert {:confirmation_sent, secret} = authenticate(attrs)
+      assert_received {:oidc_confirmation_token, token}
+      assert {:ok, identity} = Accounts.confirm_oidc_identity(token, secret)
+      assert identity.user.id == user.id
+    end
+
+    test "confirmation links expire after 15 minutes" do
+      attrs = oidc_user_attrs(%{email_verified: false})
+      assert {:confirmation_sent, secret} = authenticate(attrs)
+      assert_received {:oidc_confirmation_token, token}
+
+      sixteen_minutes_ago =
+        NaiveDateTime.utc_now() |> NaiveDateTime.add(-16 * 60) |> NaiveDateTime.truncate(:second)
+
+      Repo.update_all(Accounts.Oidc.PendingIdentity, set: [inserted_at: sixteen_minutes_ago])
+
+      assert Accounts.confirm_oidc_identity(token, secret) == :error
+      refute Accounts.get_user_by_email(attrs.email)
+    end
+
+    test "a newer sign-in invalidates the previous confirmation link" do
+      attrs = oidc_user_attrs(%{email_verified: false})
+      assert {:confirmation_sent, old_secret} = authenticate(attrs)
+      assert_received {:oidc_confirmation_token, old_token}
+      assert {:confirmation_sent, secret} = authenticate(attrs)
+      assert_received {:oidc_confirmation_token, token}
+
+      assert Accounts.confirm_oidc_identity(old_token, old_secret) == :error
+      assert {:ok, _identity} = Accounts.confirm_oidc_identity(token, secret)
+    end
+
+    test "bindings created before confirmation existed are confirmed through the bound account" do
+      victim = user_fixture()
+      victim_email = victim.email
+      attrs = oidc_user_attrs(%{email: unique_user_email(), email_verified: false})
+      assert {:ok, _legacy} = Accounts.create_oidc_user(Map.put(attrs, :user_id, victim.id))
+
+      assert {:confirmation_sent, secret} = authenticate(attrs)
+      assert_received {:oidc_confirmation_token, token}
+      assert_received {:email, %Swoosh.Email{to: [{_, ^victim_email}]}}
+
+      assert {:ok, identity} = Accounts.confirm_oidc_identity(token, secret)
+      assert identity.user.id == victim.id
+      assert identity.verified_at
+      assert {:ok, _returning} = authenticate(attrs)
+      refute_received {:oidc_confirmation_token, _}
+    end
+
+    test "a legacy binding is verified when the provider asserts the account's email" do
+      user = user_fixture()
+      attrs = oidc_user_attrs(%{email: user.email})
+      assert {:ok, _legacy} = Accounts.create_oidc_user(Map.put(attrs, :user_id, user.id))
+
+      assert {:ok, identity} = authenticate(attrs)
+      assert identity.user.id == user.id
+      assert identity.verified_at
+    end
+
+    test "verified bindings sign in without verification or email claims" do
+      attrs = oidc_user_attrs()
+      assert {:ok, original} = authenticate(attrs)
+
+      for claims <- [%{attrs | email_verified: false}, Map.drop(attrs, [:email, :email_verified])] do
+        assert {:ok, returning} = authenticate(claims)
+        assert returning.id == original.id
+        assert returning.email == attrs.email
+      end
+
+      refute_received {:oidc_confirmation_token, _}
+    end
+
+    test "disabled accounts cannot sign in through their binding" do
+      attrs = oidc_user_attrs()
+      assert {:ok, identity} = authenticate(attrs)
+      assert {:ok, _} = Accounts.delete_user(identity.user)
+
+      assert {:error, :invalid_user} = authenticate(attrs)
+    end
+
+    test "the same subject at different issuers cannot redirect an account binding" do
+      first_attrs = oidc_user_attrs()
+      assert {:ok, first} = authenticate(first_attrs)
+
+      second_attrs = %{
+        first_attrs
+        | issuer: "https://another-issuer.example.com",
+          email: unique_user_email()
+      }
+
+      assert {:ok, second} = authenticate(second_attrs)
+      refute second.id == first.id
+      refute second.user.id == first.user.id
+      assert second.issuer == second_attrs.issuer
+
+      assert {:ok, returning} = authenticate(first_attrs)
+      assert returning.id == first.id
+      assert returning.user.id == first.user.id
+      assert returning.issuer == first_attrs.issuer
+    end
+
+    test "a returning identity keeps its local account when its verified email changes" do
+      attrs = oidc_user_attrs()
+      assert {:ok, original} = authenticate(attrs)
+      other_user = user_fixture()
+
+      assert {:ok, returning} = authenticate(%{attrs | email: other_user.email})
+
+      assert returning.id == original.id
+      assert returning.user.id == original.user.id
+      assert returning.user.email == attrs.email
+      refute returning.user.id == other_user.id
+    end
+
+    test "one issuer and subject cannot be linked to two local accounts" do
+      attrs = oidc_user_attrs()
+      assert {:ok, original} = authenticate(attrs)
+      other_user = user_fixture()
+
+      assert {:error, %Ecto.Changeset{}} =
+               Accounts.create_oidc_user(Map.put(attrs, :user_id, other_user.id))
+
+      assert {:ok, returning} = authenticate(attrs)
+      assert returning.id == original.id
+      assert returning.user.id == original.user.id
+    end
+
+    test "incomplete identity claims neither link an account nor send email" do
+      victim = user_fixture()
+
+      for verification <- [true, false],
+          field <- [:issuer, :sub, :email],
+          value <- [nil, ""] do
+        attrs = oidc_user_attrs(%{email: victim.email, email_verified: verification})
+
+        assert {:error, _reason} = authenticate(Map.put(attrs, field, value))
+        assert Accounts.get_all_oidc_users_by_email(victim.email) == []
+      end
+
+      refute_received {:oidc_confirmation_token, _}
+    end
+
     test "populates names from standard claims" do
       attrs = oidc_user_attrs()
 
-      assert {:ok, oidc_user} = Accounts.get_or_create_user_with_oidc(attrs)
+      assert {:ok, oidc_user} = authenticate(attrs)
       assert oidc_user.user.first_name == "OIDC"
       assert oidc_user.user.last_name == "User"
     end
 
     test "fills missing names on a later login" do
       attrs = oidc_user_attrs(%{first_name: nil, last_name: nil})
-      assert {:ok, oidc_user} = Accounts.get_or_create_user_with_oidc(attrs)
+      assert {:ok, oidc_user} = authenticate(attrs)
       assert is_nil(oidc_user.user.first_name)
 
-      assert {:ok, oidc_user} =
-               Accounts.get_or_create_user_with_oidc(%{
-                 attrs
-                 | first_name: "Later",
-                   last_name: "Claim"
-               })
+      assert {:ok, oidc_user} = authenticate(%{attrs | first_name: "Later", last_name: "Claim"})
 
       assert oidc_user.user.first_name == "Later"
       assert oidc_user.user.last_name == "Claim"
@@ -182,7 +386,8 @@ defmodule Claper.AccountsTest do
       user = user_fixture(first_name: "Local", last_name: "Name")
       attrs = oidc_user_attrs(%{email: user.email})
 
-      assert {:ok, oidc_user} = Accounts.get_or_create_user_with_oidc(attrs)
+      assert {:ok, oidc_user} = authenticate(attrs)
+      assert oidc_user.user.id == user.id
       assert oidc_user.user.first_name == "Local"
       assert oidc_user.user.last_name == "Name"
     end
@@ -191,10 +396,7 @@ defmodule Claper.AccountsTest do
       deleted_user = user_fixture()
       assert {:ok, deleted_user} = Accounts.delete_user(deleted_user)
 
-      assert {:ok, oidc_user} =
-               Accounts.get_or_create_user_with_oidc(
-                 oidc_user_attrs(%{email: deleted_user.email})
-               )
+      assert {:ok, oidc_user} = authenticate(oidc_user_attrs(%{email: deleted_user.email}))
 
       refute oidc_user.user.id == deleted_user.id
       refute Accounts.deleted?(oidc_user.user)
@@ -297,6 +499,7 @@ defmodule Claper.AccountsTest do
         first_name: "OIDC",
         last_name: "User",
         email: unique_user_email(),
+        email_verified: true,
         provider: "Test Provider",
         expires_at: NaiveDateTime.utc_now(),
         id_token: "id-token",
@@ -310,6 +513,15 @@ defmodule Claper.AccountsTest do
       overrides
     )
   end
+
+  defp authenticate(attrs) do
+    Accounts.authenticate_oidc_identity(attrs, fn token ->
+      send(self(), {:oidc_confirmation_token, token})
+      "https://claper.test/users/oidc/confirm/#{token}"
+    end)
+  end
+
+  defp random_token, do: Base.url_encode64(:crypto.strong_rand_bytes(32), padding: false)
 
   describe "apply_user_email/3" do
     setup do

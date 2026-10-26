@@ -13,6 +13,17 @@ defmodule ClaperWeb.Notifiers.UserNotifier do
     |> render_body("magic.html", %{url: url})
   end
 
+  def oidc_confirmation(email, provider, url) do
+    new()
+    |> to(email)
+    |> from(
+      {Application.get_env(:claper, :mail) |> Keyword.get(:from_name),
+       Application.get_env(:claper, :mail) |> Keyword.get(:from)}
+    )
+    |> subject(gettext("Confirm your sign-in to Claper"))
+    |> render_body("oidc_confirmation.html", %{provider: provider, url: url})
+  end
+
   def welcome(email) do
     new()
     |> to(email)

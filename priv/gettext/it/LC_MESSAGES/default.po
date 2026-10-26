@@ -344,6 +344,7 @@ msgstr "Il sito è in manutenzione, torneremo presto!"
 #: lib/claper_web/templates/user_notifier/change.html.heex
 #: lib/claper_web/templates/user_notifier/confirm.html.heex
 #: lib/claper_web/templates/user_notifier/magic.html.heex
+#: lib/claper_web/templates/user_notifier/oidc_confirmation.html.heex
 #: lib/claper_web/templates/user_notifier/reset.html.heex
 #, elixir-autogen, elixir-format
 msgid "If you’re having trouble with the button above, copy and paste the URL below into your web browser"
@@ -1178,6 +1179,7 @@ msgstr "Puoi confermare il tuo account visitando l'URL sottostante"
 msgid "You can reset your password by visiting the URL below"
 msgstr "Puoi reimpostare la tua password visitando l'URL sottostante"
 
+#: lib/claper_web/templates/user_oidc/check_email.html.heex
 #: lib/claper_web/templates/user_registration/confirm.html.heex
 #, elixir-autogen, elixir-format
 msgid "back to the home page"
@@ -2916,6 +2918,7 @@ msgstr "Impossibile spostare l'interazione"
 
 #: lib/claper_web/templates/error/csrf_error.html.heex
 #: lib/claper_web/templates/user_confirmation/new.html.heex
+#: lib/claper_web/templates/user_oidc/error.html.heex
 #: lib/claper_web/templates/user_reset_password/edit.html.heex
 #: lib/claper_web/templates/user_reset_password/new.html.heex
 #, elixir-autogen, elixir-format
@@ -3989,3 +3992,78 @@ msgstr "Utente attivato con successo"
 #, elixir-autogen, elixir-format
 msgid "Permanently delete this user and all their events? Their interactions in other events are kept anonymously. This cannot be undone."
 msgstr "Eliminare definitivamente questo utente e tutti i suoi eventi? Le sue interazioni in altri eventi vengono conservate in forma anonima. Questa azione è irreversibile."
+
+#: lib/claper_web/controllers/user_oidc_auth.ex
+#, elixir-autogen, elixir-format
+msgid "%{provider} did not share an email address for your account. Ask your administrator to include the email claim for Claper."
+msgstr ""
+
+#: lib/claper_web/templates/user_notifier/oidc_confirmation.html.heex
+#, elixir-autogen, elixir-format
+msgid "CONFIRM SIGN-IN"
+msgstr ""
+
+#: lib/claper_web/templates/user_oidc/check_email.html.heex
+#, elixir-autogen, elixir-format
+msgid "Check your email to finish signing in with %{provider}."
+msgstr ""
+
+#: lib/claper_web/templates/user_oidc/confirm.html.heex
+#, elixir-autogen, elixir-format
+msgid "Confirm and sign in"
+msgstr ""
+
+#: lib/claper_web/templates/user_notifier/oidc_confirmation.html.heex
+#, elixir-autogen, elixir-format
+msgid "Confirm your sign-in"
+msgstr ""
+
+#: lib/claper_web/notifiers/user_notifier.ex
+#, elixir-autogen, elixir-format
+msgid "Confirm your sign-in to Claper"
+msgstr ""
+
+#: lib/claper_web/templates/user_oidc/confirm.html.heex
+#, elixir-autogen, elixir-format
+msgid "Finish signing in with %{provider}"
+msgstr ""
+
+#: lib/claper_web/templates/user_notifier/oidc_confirmation.html.heex
+#, elixir-autogen, elixir-format
+msgid "If this wasn't you, ignore this email. Your account stays unchanged."
+msgstr ""
+
+#: lib/claper_web/templates/user_oidc/error.html.heex
+#, elixir-autogen, elixir-format
+msgid "Sign-in failed"
+msgstr ""
+
+#: lib/claper_web/controllers/user_oidc_auth.ex
+#, elixir-autogen, elixir-format
+msgid "Signing in with %{provider} failed. Please try again."
+msgstr ""
+
+#: lib/claper_web/templates/user_notifier/oidc_confirmation.html.heex
+#, elixir-autogen, elixir-format
+msgid "Someone signed in to Claper with %{provider} using this email address. If this was you, open the link below in the same browser to finish signing in. The link expires in 15 minutes."
+msgstr ""
+
+#: lib/claper_web/controllers/user_oidc_auth.ex
+#, elixir-autogen, elixir-format
+msgid "This account cannot sign in. Contact your administrator."
+msgstr ""
+
+#: lib/claper_web/controllers/user_oidc_auth.ex
+#, elixir-autogen, elixir-format
+msgid "This confirmation link is invalid, has expired, or was opened in a different browser. Sign in with %{provider} again from this browser."
+msgstr ""
+
+#: lib/claper_web/templates/user_oidc/confirm.html.heex
+#, elixir-autogen, elixir-format
+msgid "This links your %{provider} sign-in to your Claper account."
+msgstr ""
+
+#: lib/claper_web/templates/user_oidc/check_email.html.heex
+#, elixir-autogen, elixir-format
+msgid "We sent a confirmation link to the email address of your account. Open it in this browser within 15 minutes."
+msgstr ""

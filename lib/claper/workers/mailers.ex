@@ -31,6 +31,15 @@ defmodule Claper.Workers.Mailers do
     UserNotifier.magic(email, url)
   end
 
+  defp build_email(%{
+         "type" => "oidc_confirmation",
+         "email" => email,
+         "provider" => provider,
+         "url" => url
+       }) do
+    UserNotifier.oidc_confirmation(email, provider, url)
+  end
+
   defp build_email(%{"type" => "welcome", "email" => email}) do
     UserNotifier.welcome(email)
   end
@@ -59,6 +68,10 @@ defmodule Claper.Workers.Mailers do
 
   def new_magic_link(email, url, locale) do
     new(%{type: "magic", email: email, url: url, locale: locale})
+  end
+
+  def new_oidc_confirmation(email, provider, url, locale) do
+    new(%{type: "oidc_confirmation", email: email, provider: provider, url: url, locale: locale})
   end
 
   def new_welcome(email, locale) do

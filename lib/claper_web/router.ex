@@ -158,6 +158,9 @@ defmodule ClaperWeb.Router do
 
     get("/users/oidc", UserOidcAuth, :new)
     get("/users/oidc/callback", UserOidcAuth, :callback)
+    get("/users/oidc/confirm", UserOidcAuth, :check_email)
+    get("/users/oidc/confirm/:token", UserOidcAuth, :show_confirm)
+    post("/users/oidc/confirm/:token", UserOidcAuth, :confirm)
   end
 
   # Registration changes the signed-in user's trusted platforms. Unlike LTI
