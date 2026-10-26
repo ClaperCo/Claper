@@ -73,6 +73,13 @@ defmodule Claper.Settings do
   end
 
   @doc """
+  Returns true only when an administrator has explicitly enabled LTI.
+  """
+  def lti_enabled? do
+    get("lti_enabled") == "true"
+  end
+
+  @doc """
   Clears a setting value (sets both value and encrypted_value to nil).
   """
   def clear(key) when is_binary(key) do
@@ -91,6 +98,7 @@ defmodule Claper.Settings do
   def seed_defaults do
     defaults = [
       %{key: "transcription_enabled", value: "false"},
+      %{key: "lti_enabled", value: "false"},
       %{key: "transcription_api_key"},
       %{key: "transcription_default_language", value: nil}
     ]

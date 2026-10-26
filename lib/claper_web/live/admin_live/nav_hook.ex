@@ -12,7 +12,8 @@ defmodule ClaperWeb.AdminLive.NavHook do
   def on_mount(:default, _params, _session, socket) do
     {:cont,
      socket
-     |> assign(:active_tab, active_tab(socket.view))}
+     |> assign(:active_tab, active_tab(socket.view))
+     |> assign(:lti_enabled, Claper.Settings.lti_enabled?())}
   end
 
   defp active_tab(ClaperWeb.AdminLive.DashboardLive), do: :dashboard

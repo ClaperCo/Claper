@@ -18,6 +18,10 @@ defmodule ClaperWeb.Router do
     plug(ClaperWeb.Plugs.AdminRequiredPlug)
   end
 
+  pipeline :lti_enabled do
+    plug(ClaperWeb.Plugs.LtiEnabled)
+  end
+
   pipeline :lti do
     plug(:accepts, ["html", "json"])
     plug(:put_root_layout, html: {ClaperWeb.LayoutView, :root})
@@ -159,7 +163,7 @@ defmodule ClaperWeb.Router do
   # Registration changes the signed-in user's trusted platforms. Unlike LTI
   # launch callbacks, it is a same-site browser action and requires CSRF.
   scope "/", ClaperWeb do
-    pipe_through([:browser])
+    pipe_through([:lti_enabled, :browser])
 
     get("/lti/register", Lti.RegistrationController, :new)
     get("/lti/register/continue", Lti.RegistrationController, :continue)
@@ -171,7 +175,7 @@ defmodule ClaperWeb.Router do
   end
 
   scope "/", ClaperWeb do
-    pipe_through([:lti])
+    pipe_through([:lti_enabled, :lti])
 
     get("/.well-known/jwks.json", Lti.RegistrationController, :jwks)
     post("/lti/login", Lti.LaunchController, :login)

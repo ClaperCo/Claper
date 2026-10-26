@@ -107,7 +107,7 @@
             {gettext("Audit Logs")}
           </.link>
         </li>
-        <li>
+        <li :if={@lti_enabled}>
           <.link
             navigate={~p"/admin/lti_platforms"}
             class={admin_active(@active_tab, :lti_platforms)}

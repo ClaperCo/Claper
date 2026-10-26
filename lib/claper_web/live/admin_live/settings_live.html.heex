@@ -102,3 +102,39 @@
     </form>
   </div>
 </div>
+
+<div class="card bg-base-100 shadow-xl mt-8">
+  <div class="card-body min-w-0 p-5 sm:p-8">
+    <h2 class="card-title">{gettext("LTI Settings")}</h2>
+    <form id="lti-settings-form" phx-submit="save_lti" class="min-w-0">
+      <div class="form-control mb-6 min-w-0">
+        <label class="label w-full min-w-0 cursor-pointer items-start justify-start gap-3 sm:gap-4">
+          <input type="hidden" name="lti_enabled" value="false" />
+          <input
+            id="lti-enabled"
+            type="checkbox"
+            name="lti_enabled"
+            value="true"
+            class="toggle toggle-primary shrink-0"
+            checked={@lti_enabled}
+          />
+          <div class="min-w-0 flex-1">
+            <span class="label-text block w-full whitespace-normal break-words font-medium">
+              {gettext("Enable LTI globally")}
+            </span>
+            <p class="block w-full whitespace-normal break-words text-xs text-base-content/60">
+              {gettext(
+                "When disabled, LTI registration, login, launches and outbound LMS requests are blocked. Existing registrations and quiz data are preserved."
+              )}
+            </p>
+          </div>
+        </label>
+      </div>
+      <div class="card-actions justify-stretch sm:justify-end">
+        <button type="submit" class="btn btn-primary w-full sm:w-auto">
+          {gettext("Save settings")}
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

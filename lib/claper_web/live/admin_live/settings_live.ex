@@ -3,6 +3,8 @@ defmodule ClaperWeb.AdminLive.SettingsLive do
 
   alias Claper.Settings
 
+  on_mount(ClaperWeb.UserLiveAuth)
+
   @impl true
   def mount(_params, session, socket) do
     with %{"locale" => locale} <- session do
@@ -14,7 +16,9 @@ defmodule ClaperWeb.AdminLive.SettingsLive do
       |> assign(:page_title, gettext("Settings"))
       |> load_settings()
 
-    {:ok, socket}
+    if admin?(socket),
+      do: {:ok, socket},
+      else: {:ok, redirect(socket, to: ~p"/")}
   end
 
   @impl true
@@ -49,6 +53,21 @@ defmodule ClaperWeb.AdminLive.SettingsLive do
   end
 
   @impl true
+  def handle_event("save_lti", params, socket) do
+    value = if params["lti_enabled"] == "true", do: "true", else: "false"
+
+    with true <- admin?(socket),
+         {:ok, _} <- Settings.set("lti_enabled", value) do
+      {:noreply,
+       socket
+       |> put_flash(:info, gettext("Settings saved successfully"))
+       |> load_settings()}
+    else
+      _ -> {:noreply, put_flash(socket, :error, gettext("Unable to save settings."))}
+    end
+  end
+
+  @impl true
   def handle_event("toggle_transcription", params, socket) do
     {:noreply, assign(socket, :transcription_enabled, params["value"] == "true")}
   end
@@ -65,10 +84,24 @@ defmodule ClaperWeb.AdminLive.SettingsLive do
 
   defp load_settings(socket) do
     socket
+    |> assign(:lti_enabled, Settings.lti_enabled?())
     |> assign(:transcription_enabled, Settings.get("transcription_enabled") == "true")
     |> assign(:api_key_configured, Settings.get_transcription_api_key() != nil)
     |> assign(:default_language, Settings.get("transcription_default_language"))
     |> assign(:languages, languages())
+  end
+
+  defp admin?(socket) do
+    case socket.assigns[:current_user] do
+      %Claper.Accounts.User{id: id} ->
+        case Claper.Accounts.get_user(id) do
+          nil -> false
+          user -> Claper.Accounts.user_has_role?(user, "admin")
+        end
+
+      _ ->
+        false
+    end
   end
 
   defp languages do
