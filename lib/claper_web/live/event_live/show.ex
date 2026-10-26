@@ -3,7 +3,7 @@ defmodule ClaperWeb.EventLive.Show do
   use ClaperWeb, :live_view
 
   alias Claper.{Posts, Polls, Forms, Presentations, Quizzes, Stats, Transcriptions, WordClouds}
-  alias ClaperWeb.Presence
+  alias ClaperWeb.{Presence, SecurityAudit}
 
   on_mount(ClaperWeb.AttendeeLiveAuth)
 
@@ -22,11 +22,20 @@ defmodule ClaperWeb.EventLive.Show do
 
   @post_reaction_types %{"👍" => :like, "❤️" => :love, "😂" => :lol}
 
+  @protected_post_fields ~w(user_id attendee_identifier event_id position pinned like_count love_count lol_count)
+
   @impl true
   def mount(%{"code" => code}, session, socket) do
     with %{"locale" => locale} <- session do
       Gettext.put_locale(ClaperWeb.Gettext, locale)
     end
+
+    socket =
+      assign(
+        socket,
+        :security_audit_ip,
+        if(connected?(socket), do: SecurityAudit.peer_ip(socket))
+      )
 
     event =
       Claper.Events.get_event_with_code(code,
@@ -432,12 +441,14 @@ defmodule ClaperWeb.EventLive.Show do
 
   @impl true
   def handle_event("reply", _params, %{assigns: %{state: %{chat_enabled: false}}} = socket) do
+    SecurityAudit.observe(socket, "message", nil, "chat_disabled")
     {:noreply, socket}
   end
 
   def handle_event("reply", %{"id" => id, "reply_body" => body}, socket) do
     case Posts.create_post_reply(socket.assigns.event, id, reply_actor(socket), body) do
       {:ok, _reply} ->
+        SecurityAudit.observe(socket, "message", nil, "submission_burst", 20)
         {:noreply, socket}
 
       {:error, reason} when reason in [:not_found, :forbidden] ->
@@ -463,11 +474,6 @@ defmodule ClaperWeb.EventLive.Show do
   end
 
   @impl true
-  def handle_event("save", _params, %{assigns: %{state: %{chat_enabled: false}}} = socket) do
-    {:noreply, socket}
-  end
-
-  @impl true
   def handle_event(
         event,
         _params,
@@ -478,54 +484,16 @@ defmodule ClaperWeb.EventLive.Show do
   end
 
   @impl true
-  def handle_event(
-        "save",
-        _params,
-        %{assigns: %{state: %{anonymous_chat_enabled: false}, nickname: nickname}} = socket
-      )
-      when nickname in [nil, ""] do
-    {:noreply, socket}
-  end
-
-  @impl true
-  def handle_event(
-        "save",
-        %{"post" => post_params},
-        %{assigns: %{current_user: current_user} = _assigns} = socket
-      )
-      when is_map(current_user) do
-    post_params =
-      post_params
-      |> Map.put("user_id", current_user.id)
-      |> Map.put("position", socket.assigns.state.position)
-      |> Map.put("name", socket.assigns.nickname)
-
-    case Posts.create_post(socket.assigns.event, post_params) do
-      {:ok, _post} ->
-        {:noreply,
-         socket
-         |> assign(:post_changeset, Posts.Post.changeset(%Posts.Post{}, %{}))
-         |> push_event("post-saved", %{})}
-
-      {:error, %Ecto.Changeset{} = changeset} ->
-        {:noreply, assign(socket, post_changeset: changeset)}
+  def handle_event("save", %{"post" => post_params}, socket) do
+    if is_map(post_params) &&
+         Enum.any?(@protected_post_fields, &Map.has_key?(post_params, &1)) do
+      SecurityAudit.observe(socket, "message", nil, "forged_fields")
     end
-  end
 
-  @impl true
-  def handle_event(
-        "save",
-        %{"post" => post_params},
-        %{assigns: %{attendee_identifier: attendee_identifier} = _assigns} = socket
-      ) do
-    post_params =
-      post_params
-      |> Map.put("attendee_identifier", attendee_identifier)
-      |> Map.put("position", socket.assigns.state.position)
-      |> Map.put("name", socket.assigns.nickname)
+    case Posts.create_attendee_post(socket.assigns.event, reply_actor(socket), post_params) do
+      {:ok, post} ->
+        SecurityAudit.observe(socket, "message", post.id, "submission_burst", 20)
 
-    case Posts.create_post(socket.assigns.event, post_params) do
-      {:ok, _post} ->
         {:noreply,
          socket
          |> assign(:post_changeset, Posts.Post.changeset(%Posts.Post{}, %{}))
@@ -533,6 +501,13 @@ defmodule ClaperWeb.EventLive.Show do
 
       {:error, %Ecto.Changeset{} = changeset} ->
         {:noreply, assign(socket, post_changeset: changeset)}
+
+      {:error, :chat_disabled} ->
+        SecurityAudit.observe(socket, "message", nil, "chat_disabled")
+        {:noreply, socket}
+
+      {:error, _reason} ->
+        {:noreply, socket}
     end
   end
 
@@ -753,6 +728,8 @@ defmodule ClaperWeb.EventLive.Show do
         {:noreply, refresh_current_interaction(socket)}
 
       {:error, :limit_reached} ->
+        SecurityAudit.observe(socket, "word_cloud", word_cloud.id, "limit_reached")
+
         {:noreply,
          socket
          |> refresh_current_interaction(true)
@@ -804,36 +781,25 @@ defmodule ClaperWeb.EventLive.Show do
   def handle_event(
         "select-quiz-question-opt",
         %{"opt" => opt},
-        socket
-      ) do
-    opt = Integer.parse(opt) |> elem(0)
-
-    current_quiz_question =
-      Enum.at(
-        socket.assigns.current_interaction.quiz_questions,
-        socket.assigns.current_quiz_question_idx
+        %{assigns: %{current_interaction: %Quizzes.Quiz{} = quiz}} = socket
       )
+      when is_binary(opt) do
+    with true <- socket.assigns.current_quiz_responses == [],
+         {option_id, ""} <- Integer.parse(opt),
+         question when not is_nil(question) <-
+           Enum.at(quiz.quiz_questions, socket.assigns.current_quiz_question_idx),
+         option when not is_nil(option) <-
+           Enum.find(question.quiz_question_opts, &(&1.id == option_id)) do
+      selected = socket.assigns.selected_quiz_question_opts
 
-    quiz_question_opt =
-      Enum.find(current_quiz_question.quiz_question_opts, fn x -> x.id == opt end)
+      selected =
+        if Enum.any?(selected, &(&1.id == option.id)),
+          do: Enum.reject(selected, &(&1.id == option.id)),
+          else: [option | selected]
 
-    if Enum.any?(socket.assigns.selected_quiz_question_opts, fn x ->
-         x.id == quiz_question_opt.id
-       end) do
-      {:noreply,
-       socket
-       |> assign(
-         :selected_quiz_question_opts,
-         Enum.filter(socket.assigns.selected_quiz_question_opts, fn x ->
-           x.id != quiz_question_opt.id
-         end)
-       )}
+      {:noreply, assign(socket, :selected_quiz_question_opts, selected)}
     else
-      {:noreply,
-       socket
-       |> assign(:selected_quiz_question_opts, [
-         quiz_question_opt | socket.assigns.selected_quiz_question_opts
-       ])}
+      _ -> {:noreply, socket}
     end
   end
 
@@ -841,44 +807,46 @@ defmodule ClaperWeb.EventLive.Show do
   def handle_event(
         "submit-quiz",
         _params,
-        %{assigns: %{current_user: current_user, selected_quiz_question_opts: opts}} = socket
-      )
-      when is_map(current_user) do
-    case Claper.Quizzes.submit_quiz(
-           current_user,
-           socket.assigns.event.uuid,
-           opts,
-           socket.assigns.current_interaction.id
-         ) do
-      {:ok, quiz} ->
-        {:noreply,
-         socket
-         |> load_current_interaction(quiz, true)
-         |> assign(:selected_quiz_question_opts, [])
-         |> assign(:current_quiz_question_idx, socket.assigns.current_quiz_question_idx + 1)}
-    end
-  end
-
-  @impl true
-  def handle_event(
-        "submit-quiz",
-        _params,
-        %{assigns: %{attendee_identifier: attendee_identifier, selected_quiz_question_opts: opts}} =
-          socket
+        %{assigns: %{current_interaction: %Quizzes.Quiz{} = quiz}} = socket
       ) do
-    case Claper.Quizzes.submit_quiz(
-           attendee_identifier,
+    participant = socket.assigns.current_user || socket.assigns.attendee_identifier
+
+    case Quizzes.submit_quiz(
+           participant,
            socket.assigns.event.uuid,
-           opts,
-           socket.assigns.current_interaction.id
+           socket.assigns.selected_quiz_question_opts,
+           quiz.id
          ) do
-      {:ok, quiz} ->
+      {:ok, updated_quiz} ->
+        SecurityAudit.observe(socket, "quiz", quiz.id, "submission_burst", 20)
+
         {:noreply,
          socket
-         |> load_current_interaction(quiz, true)
+         |> load_current_interaction(updated_quiz, true)
          |> assign(:selected_quiz_question_opts, [])
-         |> assign(:current_quiz_question_idx, socket.assigns.current_quiz_question_idx + 1)}
+         |> assign(:current_quiz_question_idx, length(updated_quiz.quiz_questions))}
+
+      {:error, :already_submitted} ->
+        SecurityAudit.observe(socket, "quiz", quiz.id, "already_submitted")
+
+        {:noreply,
+         socket
+         |> refresh_current_interaction()
+         |> assign(:selected_quiz_question_opts, [])}
+
+      {:error, :invalid_options} ->
+        SecurityAudit.observe(socket, "quiz", quiz.id, "invalid_options")
+        {:noreply, refresh_current_interaction(socket, true)}
+
+      {:error, _reason} ->
+        {:noreply, refresh_current_interaction(socket, true)}
     end
+  end
+
+  @impl true
+  def handle_event(event, _params, socket)
+      when event in ["select-quiz-question-opt", "submit-quiz"] do
+    {:noreply, socket}
   end
 
   def toggle_side_menu(js \\ %JS{}) do
@@ -969,11 +937,38 @@ defmodule ClaperWeb.EventLive.Show do
 
   defp vote(socket, voter, poll, opts) do
     poll_opts =
-      Enum.map(opts, fn opt -> Enum.at(poll.poll_opts, opt |> Integer.parse() |> elem(0)) end)
+      Enum.map(opts, &selected_poll_option(&1, poll.poll_opts))
 
-    {:ok, poll} = Polls.vote(voter, socket.assigns.event.uuid, poll_opts, poll.id)
-    {:noreply, get_current_vote(socket, poll.id)}
+    case Polls.vote(voter, socket.assigns.event.uuid, poll_opts, poll.id) do
+      {:ok, _poll} ->
+        SecurityAudit.observe(socket, "poll", poll.id, "submission_burst", 20)
+        {:noreply, get_current_vote(socket, poll.id)}
+
+      {:error, :already_voted} ->
+        SecurityAudit.observe(socket, "poll", poll.id, "already_voted")
+        {:noreply, get_current_vote(socket, poll.id)}
+
+      {:error, :invalid_options} ->
+        SecurityAudit.observe(socket, "poll", poll.id, "invalid_options")
+        {:noreply, refresh_current_interaction(socket, true)}
+
+      {:error, :invalid_identity} ->
+        SecurityAudit.observe(socket, "poll", poll.id, "invalid_identity")
+        {:noreply, refresh_current_interaction(socket, true)}
+
+      {:error, _reason} ->
+        {:noreply, refresh_current_interaction(socket, true)}
+    end
   end
+
+  defp selected_poll_option(option, options) when is_binary(option) do
+    case Integer.parse(option) do
+      {index, ""} when index >= 0 -> Enum.at(options, index)
+      _ -> nil
+    end
+  end
+
+  defp selected_poll_option(_option, _options), do: nil
 
   defp get_current_vote(%{assigns: %{current_user: current_user}} = socket, poll_id)
        when is_map(current_user) do
