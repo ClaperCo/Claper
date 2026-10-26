@@ -944,6 +944,7 @@ msgid "Activate the tool in your LMS"
 msgstr ""
 
 #: lib/claper_web/templates/lti/registration/new.html.heex
+#: lib/claper_web/templates/lti/registration/start.html.heex
 #, elixir-autogen, elixir-format
 msgid "Bring Claper to your LMS"
 msgstr ""
@@ -964,6 +965,7 @@ msgid "Oops"
 msgstr ""
 
 #: lib/claper_web/templates/lti/registration/new.html.heex
+#: lib/claper_web/templates/lti/registration/start.html.heex
 #, elixir-autogen, elixir-format
 msgid "Register your platform"
 msgstr ""
@@ -1530,6 +1532,7 @@ msgstr ""
 msgid "Create User"
 msgstr ""
 
+#: lib/claper_web/live/admin_live/lti_platform_live.html.heex
 #: lib/claper_web/live/admin_live/oidc_provider_live.html.heex
 #: lib/claper_web/live/admin_live/user_live.html.heex
 #, elixir-autogen, elixir-format
@@ -1852,6 +1855,7 @@ msgid "Started At"
 msgstr ""
 
 #: lib/claper_web/live/admin_live/dashboard_live.html.heex
+#: lib/claper_web/live/admin_live/lti_platform_live.html.heex
 #: lib/claper_web/live/admin_live/oidc_provider_live.html.heex
 #: lib/claper_web/live/admin_live/user_live.html.heex
 #, elixir-autogen, elixir-format
@@ -2267,6 +2271,7 @@ msgid "Metadata"
 msgstr ""
 
 #: lib/claper_web/live/admin_live/audit_log_live.html.heex
+#: lib/claper_web/live/admin_live/lti_platform_live.html.heex
 #, elixir-autogen, elixir-format
 msgid "No results."
 msgstr ""
@@ -2282,6 +2287,7 @@ msgid "Resource Type"
 msgstr ""
 
 #: lib/claper_web/live/event_live/manage.ex
+#: lib/claper_web/live/transcription_live/form_component.ex
 #, elixir-autogen, elixir-format
 msgid "Resource not found"
 msgstr ""
@@ -2955,6 +2961,7 @@ msgstr ""
 msgid "We already sent you an email to log in, please retry in 5 minutes."
 msgstr ""
 
+#: lib/claper_web/controllers/lti/registration_controller.ex
 #: lib/claper_web/templates/lti/registration/new.html.heex
 #, elixir-autogen, elixir-format
 msgid "You must log in to continue"
@@ -3718,4 +3725,210 @@ msgstr[1] ""
 #: lib/claper_web/live/event_live/show.ex
 #, elixir-autogen, elixir-format
 msgid "Your word could not be added. Please type a word or a short phrase."
+msgstr ""
+
+#: lib/claper_web/controllers/lti/registration_controller.ex
+#, elixir-autogen, elixir-format
+msgid "Registration with your platform failed. Please check your platform configuration and try again."
+msgstr ""
+
+#: lib/claper_web/live/user_settings_live/show.html.heex
+#, elixir-autogen, elixir-format
+msgid "Approve LMS sign-in"
+msgstr ""
+
+#: lib/claper_web/live/user_settings_live/show.ex
+#, elixir-autogen, elixir-format
+msgid "LMS sign-in has been approved."
+msgstr ""
+
+#: lib/claper_web/live/user_settings_live/show.html.heex
+#, elixir-autogen, elixir-format
+msgid "Local password"
+msgstr ""
+
+#: lib/claper_web/live/user_settings_live/show.html.heex
+#, elixir-autogen, elixir-format
+msgid "Only approve this LMS identity if you recognize the platform and platform user above. Enter your local password to restore LMS sign-in. If needed, reset your password first."
+msgstr ""
+
+#: lib/claper_web/live/user_settings_live/show.html.heex
+#, elixir-autogen, elixir-format
+msgid "Platform user:"
+msgstr ""
+
+#: lib/claper_web/live/user_settings_live/show.ex
+#, elixir-autogen, elixir-format
+msgid "Unable to approve LMS sign-in. Check your local password."
+msgstr ""
+
+#: lib/claper_web/templates/lti/registration/success.html.heex
+#, elixir-autogen, elixir-format
+msgid "An administrator of this Claper instance must approve this platform before it can be used. Until then, launches from this platform will be refused."
+msgstr ""
+
+#: lib/claper_web/live/admin_live/lti_platform_live.html.heex
+#, elixir-autogen, elixir-format
+msgid "Approve"
+msgstr ""
+
+#: lib/claper_web/live/admin_live/lti_platform_live.html.heex
+#, elixir-autogen, elixir-format
+msgid "Approved"
+msgstr ""
+
+#: lib/claper_web/live/user_settings_live/show.html.heex
+#, elixir-autogen, elixir-format
+msgid "Approved by an administrator"
+msgstr ""
+
+#: lib/claper_web/templates/lti/registration/success.html.heex
+#, elixir-autogen, elixir-format
+msgid "Ask a Claper administrator to approve this platform"
+msgstr ""
+
+#: lib/claper_web/live/admin_live/lti_platform_live.html.heex
+#, elixir-autogen, elixir-format
+msgid "Client ID"
+msgstr ""
+
+#: lib/claper_web/live/user_settings_live/show.html.heex
+#, elixir-autogen, elixir-format
+msgid "Client ID:"
+msgstr ""
+
+#: lib/claper_web/templates/lti/launch/confirm.html.heex
+#, elixir-autogen, elixir-format
+msgid "Continue as %{email}"
+msgstr ""
+
+#: lib/claper_web/live/admin_live/lti_platform_live.html.heex
+#, elixir-autogen, elixir-format
+msgid "Issuer"
+msgstr ""
+
+#: lib/claper_web/live/admin_live/lti_platform_live.html.heex
+#, elixir-autogen, elixir-format
+msgid "LMS platforms registered by non-administrators stay pending until approved. Pending platforms cannot sign users in or launch Claper."
+msgstr ""
+
+#: lib/claper_web/live/admin_live/lti_platform_live.ex
+#: lib/claper_web/templates/layout/admin_app.html.heex
+#, elixir-autogen, elixir-format
+msgid "LTI Platforms"
+msgstr ""
+
+#: lib/claper_web/live/admin_live/lti_platform_live.ex
+#, elixir-autogen, elixir-format
+msgid "LTI platform updated."
+msgstr ""
+
+#: lib/claper_web/live/admin_live/lti_platform_live.html.heex
+#, elixir-autogen, elixir-format
+msgid "Pending"
+msgstr ""
+
+#: lib/claper_web/live/user_settings_live/show.html.heex
+#, elixir-autogen, elixir-format
+msgid "Pending administrator approval"
+msgstr ""
+
+#: lib/claper_web/live/user_settings_live/show.html.heex
+#, elixir-autogen, elixir-format
+msgid "Platform status:"
+msgstr ""
+
+#: lib/claper_web/live/admin_live/lti_platform_live.html.heex
+#, elixir-autogen, elixir-format
+msgid "Registered by"
+msgstr ""
+
+#: lib/claper_web/live/user_settings_live/show.html.heex
+#, elixir-autogen, elixir-format
+msgid "Registered by:"
+msgstr ""
+
+#: lib/claper_web/live/user_settings_live/show.html.heex
+#, elixir-autogen, elixir-format
+msgid "Registered on:"
+msgstr ""
+
+#: lib/claper_web/live/admin_live/lti_platform_live.html.heex
+#, elixir-autogen, elixir-format
+msgid "Revoke"
+msgstr ""
+
+#: lib/claper_web/live/admin_live/lti_platform_live.html.heex
+#, elixir-autogen, elixir-format
+msgid "Revoke this platform? Its users will no longer be able to launch Claper."
+msgstr ""
+
+#: lib/claper_web/templates/lti/launch/confirm.html.heex
+#, elixir-autogen, elixir-format
+msgid "Stay signed in as %{email}"
+msgstr ""
+
+#: lib/claper_web/templates/lti/launch/confirm.html.heex
+#, elixir-autogen, elixir-format
+msgid "Switch account?"
+msgstr ""
+
+#: lib/claper_web/live/user_settings_live/show.html.heex
+#, elixir-autogen, elixir-format
+msgid "This LMS platform has not been approved by an administrator yet. LMS sign-in from it cannot be restored until an administrator approves the platform."
+msgstr ""
+
+#: lib/claper_web/controllers/lti/launch_controller.ex
+#, elixir-autogen, elixir-format
+msgid "This account switch request is invalid or expired."
+msgstr ""
+
+#: lib/claper_web/live/user_settings_live/show.ex
+#, elixir-autogen, elixir-format
+msgid "Too many approval attempts. Please wait a minute and try again."
+msgstr ""
+
+#: lib/claper_web/live/admin_live/lti_platform_live.ex
+#, elixir-autogen, elixir-format
+msgid "Unable to update LTI platform."
+msgstr ""
+
+#: lib/claper_web/templates/lti/launch/confirm.html.heex
+#, elixir-autogen, elixir-format
+msgid "You are currently signed in as %{email}."
+msgstr ""
+
+#: lib/claper_web/templates/lti/launch/confirm.html.heex
+#, elixir-autogen, elixir-format
+msgid "Your learning platform wants to sign you in as %{email}."
+msgstr ""
+
+#: lib/claper_web/live/admin_live/settings_live.html.heex
+#, elixir-autogen, elixir-format
+msgid "Enable LTI globally"
+msgstr ""
+
+#: lib/claper_web/live/admin_live/settings_live.html.heex
+#, elixir-autogen, elixir-format
+msgid "LTI Settings"
+msgstr ""
+
+#: lib/claper_web/live/admin_live/settings_live.ex
+#, elixir-autogen, elixir-format
+msgid "Unable to save settings."
+msgstr ""
+
+#: lib/claper_web/live/admin_live/settings_live.html.heex
+#, elixir-autogen, elixir-format
+msgid "When disabled, LTI registration, login, launches and outbound LMS requests are blocked. Existing registrations and quiz data are preserved."
+msgstr ""
+
+#: lib/claper_web/templates/lti/registration/start.html.heex
+#, elixir-autogen, elixir-format
+msgid "Continue in a new tab to sign in and securely confirm platform registration. Return to your LMS when registration is complete."
+msgstr ""
+
+#: lib/claper_web/templates/lti/registration/start.html.heex
+#, elixir-autogen, elixir-format
+msgid "Continue registration in Claper"
 msgstr ""
