@@ -34,7 +34,7 @@ defmodule Claper.Stats do
         count:
           count(
             fragment(
-              "DISTINCT COALESCE(?, CAST(? AS varchar))",
+              "DISTINCT ROW(?, ?)",
               pv.attendee_identifier,
               pv.user_id
             )
@@ -55,7 +55,7 @@ defmodule Claper.Stats do
         count:
           count(
             fragment(
-              "DISTINCT COALESCE(?, CAST(? AS varchar))",
+              "DISTINCT ROW(?, ?)",
               pv.attendee_identifier,
               pv.user_id
             )
@@ -123,10 +123,7 @@ defmodule Claper.Stats do
       on: pv.poll_id == p.id,
       where: p.presentation_file_id == ^presentation_file_id,
       group_by: p.presentation_file_id,
-      select:
-        count(
-          fragment("DISTINCT COALESCE(?, CAST(? AS varchar))", pv.attendee_identifier, pv.user_id)
-        )
+      select: count(fragment("DISTINCT ROW(?, ?)", pv.attendee_identifier, pv.user_id))
     )
     |> Repo.all()
   end

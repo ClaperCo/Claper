@@ -257,50 +257,77 @@ defmodule Claper.Polls do
     )
   end
 
-  def vote(user_id, event_uuid, poll_opts, poll_id)
-      when is_number(user_id) and is_list(poll_opts) do
-    case Enum.reduce(poll_opts, Ecto.Multi.new(), fn opt, multi ->
-           Ecto.Multi.update(
-             multi,
-             {:update_poll_opt, opt.id},
-             PollOpt.changeset(opt, %{"vote_count" => opt.vote_count + 1})
-           )
-           |> Ecto.Multi.insert(
-             {:insert_poll_vote, opt.id},
-             PollVote.changeset(%PollVote{}, %{
-               user_id: user_id,
-               poll_opt_id: opt.id,
-               poll_id: poll_id
-             })
-           )
-         end)
-         |> Repo.transaction() do
-      {:ok, _} ->
-        poll = get_poll!(poll_id)
-        broadcast({:ok, poll, event_uuid}, :poll_updated)
+  @doc """
+  Records one immutable ballot per poll and participant.
+
+  Multiple-choice options must be submitted together. Replays return
+  `{:error, :already_voted}` without changing counts or broadcasting.
+  """
+  def vote(voter, event_uuid, poll_opts, poll_id) when is_list(poll_opts) do
+    with {:ok, identity} <- voter_identity(voter),
+         {:ok, option_ids} <- vote_option_ids(poll_opts) do
+      Repo.transaction(fn -> record_ballot(identity, option_ids, poll_id) end)
+      |> case do
+        {:ok, _} -> broadcast({:ok, get_poll!(poll_id), event_uuid}, :poll_updated)
+        {:error, reason} -> {:error, reason}
+      end
     end
   end
 
-  def vote(attendee_identifier, event_uuid, poll_opts, poll_id) when is_list(poll_opts) do
-    case Enum.reduce(poll_opts, Ecto.Multi.new(), fn opt, multi ->
-           Ecto.Multi.update(
-             multi,
-             {:update_poll_opt, opt.id},
-             PollOpt.changeset(opt, %{"vote_count" => opt.vote_count + 1})
-           )
-           |> Ecto.Multi.insert(
-             {:insert_poll_vote, opt.id},
-             PollVote.changeset(%PollVote{}, %{
-               attendee_identifier: attendee_identifier,
-               poll_opt_id: opt.id,
-               poll_id: poll_id
-             })
-           )
-         end)
-         |> Repo.transaction() do
-      {:ok, _} ->
-        poll = get_poll!(poll_id)
-        broadcast({:ok, poll, event_uuid}, :poll_updated)
+  def vote(_voter, _event_uuid, _poll_opts, _poll_id), do: {:error, :invalid_options}
+
+  defp record_ballot(identity, option_ids, poll_id) do
+    poll = Repo.one(from p in Poll, where: p.id == ^poll_id, lock: "FOR SHARE")
+    if is_nil(poll) or not poll.enabled, do: Repo.rollback(:not_open)
+
+    options =
+      Repo.all(from o in PollOpt, where: o.poll_id == ^poll_id and o.id in ^option_ids)
+
+    if length(options) != length(option_ids) or
+         (not poll.multiple and length(option_ids) != 1),
+       do: Repo.rollback(:invalid_options)
+
+    now = NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
+    ballot = Map.merge(identity, %{poll_id: poll_id, inserted_at: now, updated_at: now})
+
+    ballot_id =
+      case Repo.insert_all("poll_ballots", [ballot], on_conflict: :nothing, returning: [:id]) do
+        {1, [%{id: id}]} -> id
+        {0, []} -> Repo.rollback(:already_voted)
+      end
+
+    votes =
+      Enum.map(option_ids, fn option_id ->
+        Map.merge(identity, %{
+          poll_ballot_id: ballot_id,
+          poll_id: poll_id,
+          poll_opt_id: option_id,
+          inserted_at: now,
+          updated_at: now
+        })
+      end)
+
+    Repo.insert_all(PollVote, votes)
+    Repo.update_all(from(o in PollOpt, where: o.id in ^option_ids), inc: [vote_count: 1])
+  end
+
+  defp voter_identity(user_id) when is_integer(user_id) and user_id > 0,
+    do: {:ok, %{user_id: user_id, attendee_identifier: nil}}
+
+  defp voter_identity(identifier) when is_binary(identifier) and byte_size(identifier) > 0,
+    do: {:ok, %{user_id: nil, attendee_identifier: identifier}}
+
+  defp voter_identity(_), do: {:error, :invalid_identity}
+
+  defp vote_option_ids(options) do
+    if options != [] and
+         Enum.all?(options, fn
+           %{id: id} when is_integer(id) and id > 0 -> true
+           _ -> false
+         end) do
+      {:ok, options |> Enum.map(& &1.id) |> Enum.uniq()}
+    else
+      {:error, :invalid_options}
     end
   end
 
@@ -357,23 +384,5 @@ defmodule Claper.Polls do
       order_by: [asc: p.id]
     )
     |> Repo.all()
-  end
-
-  @doc """
-  Creates a poll_vote.
-
-  ## Examples
-
-      iex> create_poll_vote(%{field: value})
-      {:ok, %PollVote{}}
-
-      iex> create_poll_vote(%{field: bad_value})
-      {:error, %Ecto.Changeset{}}
-
-  """
-  def create_poll_vote(attrs \\ %{}) do
-    %PollVote{}
-    |> PollVote.changeset(attrs)
-    |> Repo.insert()
   end
 end

@@ -14,6 +14,7 @@ defmodule Claper.Polls.PollVote do
 
   schema "poll_votes" do
     field :attendee_identifier, :string
+    field :poll_ballot_id, :integer
 
     belongs_to :poll, Claper.Polls.Poll
     belongs_to :poll_opt, Claper.Polls.PollOpt
@@ -25,7 +26,9 @@ defmodule Claper.Polls.PollVote do
   @doc false
   def changeset(poll_vote, attrs) do
     poll_vote
-    |> cast(attrs, [:attendee_identifier, :user_id, :poll_opt_id, :poll_id])
-    |> validate_required([:poll_opt_id, :poll_id])
+    |> cast(attrs, [:attendee_identifier, :user_id, :poll_opt_id, :poll_id, :poll_ballot_id])
+    |> validate_required([:poll_opt_id, :poll_id, :poll_ballot_id])
+    |> foreign_key_constraint(:poll_ballot_id)
+    |> unique_constraint([:poll_ballot_id, :poll_opt_id])
   end
 end

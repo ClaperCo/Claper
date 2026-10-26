@@ -36,16 +36,13 @@ defmodule Claper.PollsFixtures do
     presentation_file = presentation_file_fixture()
     poll = poll_fixture(%{presentation_file_id: presentation_file.id})
     [poll_opt | _] = poll.poll_opts
-    assoc = %{poll: poll}
 
-    {:ok, poll_vote} =
-      attrs
-      |> Enum.into(%{
-        poll_id: assoc.poll.id,
-        poll_opt_id: poll_opt.id,
-        user_id: user_fixture().id
-      })
-      |> Claper.Polls.create_poll_vote()
+    identity = attrs[:user_id] || attrs[:attendee_identifier] || user_fixture().id
+    poll_id = attrs[:poll_id] || poll.id
+    option_id = attrs[:poll_opt_id] || poll_opt.id
+    option = Claper.Repo.get!(Claper.Polls.PollOpt, option_id)
+    {:ok, _} = Claper.Polls.vote(identity, "fixture", [option], poll_id)
+    [poll_vote] = Claper.Polls.get_poll_vote(identity, poll_id)
 
     poll_vote
   end

@@ -114,7 +114,7 @@ defmodule Claper.QuizzesTest do
     end
 
     test "submit_quiz/4 with user records responses and updates counts" do
-      quiz = quiz_fixture()
+      quiz = quiz_fixture(%{enabled: true})
       user = user_fixture()
       event_uuid = Ecto.UUID.generate()
       question = List.first(quiz.quiz_questions)
@@ -133,7 +133,7 @@ defmodule Claper.QuizzesTest do
     end
 
     test "submit_quiz/4 with attendee_identifier records responses" do
-      quiz = quiz_fixture()
+      quiz = quiz_fixture(%{enabled: true})
       event_uuid = Ecto.UUID.generate()
       question = List.first(quiz.quiz_questions)
       option = List.first(question.quiz_question_opts)
@@ -147,7 +147,7 @@ defmodule Claper.QuizzesTest do
     end
 
     test "calculate_user_score/2 correctly calculates score" do
-      quiz = quiz_fixture()
+      quiz = quiz_fixture(%{enabled: true})
       user = user_fixture()
       question = List.first(quiz.quiz_questions)
       correct_option = Enum.find(question.quiz_question_opts, & &1.is_correct)
@@ -179,7 +179,7 @@ defmodule Claper.QuizzesTest do
     end
 
     test "submit_quiz/4 with duplicate opts deduplicates by id" do
-      quiz = quiz_fixture()
+      quiz = quiz_fixture(%{enabled: true})
       event_uuid = Ecto.UUID.generate()
       question = List.first(quiz.quiz_questions)
       option = List.first(question.quiz_question_opts)
@@ -218,7 +218,7 @@ defmodule Claper.QuizzesTest do
     end
 
     test "submit_quiz/4 with user and duplicate opts deduplicates by id" do
-      quiz = quiz_fixture()
+      quiz = quiz_fixture(%{enabled: true})
       user = user_fixture()
       event_uuid = Ecto.UUID.generate()
       question = List.first(quiz.quiz_questions)
@@ -229,6 +229,109 @@ defmodule Claper.QuizzesTest do
 
       assert {:ok, _updated_quiz} =
                Quizzes.submit_quiz(user, event_uuid, duplicate_opts, quiz.id)
+    end
+
+    test "repeat submissions cannot change answers or inflate distributions" do
+      quiz = quiz_fixture(%{enabled: true})
+      user = user_fixture()
+      [question] = quiz.quiz_questions
+      [first, second] = question.quiz_question_opts
+      uuid = Ecto.UUID.generate()
+      Phoenix.PubSub.subscribe(Claper.PubSub, "event:#{uuid}")
+
+      for participant <- [Integer.to_string(user.id), user] do
+        identity = if is_binary(participant), do: participant, else: participant.id
+        assert {:ok, _} = Quizzes.submit_quiz(participant, uuid, [first], quiz.id)
+        assert_receive {:quiz_updated, _}
+
+        assert {:error, :already_submitted} =
+                 Quizzes.submit_quiz(participant, uuid, [first], quiz.id)
+
+        assert {:error, :already_submitted} =
+                 Quizzes.submit_quiz(participant, uuid, [second], quiz.id)
+
+        assert [%{quiz_question_opt_id: id}] = Quizzes.get_quiz_responses(identity, quiz.id)
+        assert id == first.id
+        refute_receive {:quiz_updated, _}
+      end
+
+      assert {:ok, updated} = Quizzes.submit_quiz("another", uuid, [second], quiz.id)
+      [updated_question] = updated.quiz_questions
+      assert [2, 1] == Enum.map(updated_question.quiz_question_opts, & &1.response_count)
+      assert ["67", "33"] == Enum.map(updated_question.quiz_question_opts, & &1.percentage)
+      assert Quizzes.get_submission_count(quiz.id) == 3
+      assert Claper.Stats.get_distinct_quiz_responses([quiz.id]) == 3
+    end
+
+    test "one question response may include multiple options but cannot be extended later" do
+      quiz =
+        quiz_fixture(%{
+          enabled: true,
+          quiz_questions: [
+            %{
+              content: "Select both",
+              type: "qcm",
+              quiz_question_opts: [
+                %{content: "First", is_correct: true},
+                %{content: "Second", is_correct: true},
+                %{content: "Third", is_correct: false}
+              ]
+            },
+            %{
+              content: "Next question",
+              type: "qcm",
+              quiz_question_opts: [%{content: "Next", is_correct: true}]
+            }
+          ]
+        })
+
+      [question, next_question] = quiz.quiz_questions
+      [first, second, third] = question.quiz_question_opts
+      uuid = Ecto.UUID.generate()
+
+      assert {:ok, _} = Quizzes.submit_quiz("multi", uuid, [first, second, first], quiz.id)
+
+      assert {:error, :already_submitted} =
+               Quizzes.submit_quiz(
+                 "multi",
+                 uuid,
+                 [third | next_question.quiz_question_opts],
+                 quiz.id
+               )
+
+      assert length(Quizzes.get_quiz_responses("multi", quiz.id)) == 2
+
+      assert {:ok, _} =
+               Quizzes.submit_quiz("multi", uuid, next_question.quiz_question_opts, quiz.id)
+
+      assert {2, 2} = Quizzes.calculate_user_score("multi", quiz.id)
+
+      assert {:error, :already_submitted} =
+               Quizzes.submit_quiz("multi", uuid, [third], quiz.id)
+
+      assert length(Quizzes.get_quiz_responses("multi", quiz.id)) == 3
+
+      assert {:ok, updated} = Quizzes.submit_quiz("other", uuid, [first], quiz.id)
+
+      assert [2, 1, 0] ==
+               Enum.map(hd(updated.quiz_questions).quiz_question_opts, & &1.response_count)
+    end
+
+    test "foreign options and closed quizzes do not persist responses" do
+      quiz = quiz_fixture(%{enabled: true})
+      other = quiz_fixture()
+      [question] = other.quiz_questions
+      uuid = Ecto.UUID.generate()
+
+      assert {:error, :invalid_options} = Quizzes.submit_quiz("a", uuid, [], quiz.id)
+
+      assert {:error, :invalid_options} =
+               Quizzes.submit_quiz("a", uuid, question.quiz_question_opts, quiz.id)
+
+      assert {:error, :not_open} =
+               Quizzes.submit_quiz("a", uuid, question.quiz_question_opts, other.id)
+
+      assert Quizzes.get_quiz_responses("a", quiz.id) == []
     end
   end
 end

@@ -264,112 +264,144 @@ defmodule Claper.Quizzes do
   end
 
   @doc """
-  Submits quiz responses for a user.
+  Submits immutable quiz question responses for a user or anonymous attendee.
 
-  Records the user's selected options and increments response counts.
+  Each question may have multiple selected options, submitted together. A second
+  submission for any already-answered question returns
+  `{:error, :already_submitted}` and rolls back the whole request without
+  changing counts, reporting grades, or broadcasting.
 
   ## Parameters
 
-    - user_id: The ID of the user submitting responses
+    - participant: User struct or anonymous attendee identifier
+    - event_uuid: Event broadcast topic UUID
     - quiz_opts: List of selected quiz options
     - quiz_id: The ID of the quiz being submitted
 
   ## Returns
 
-  Broadcasts the updated quiz on successful submission.
-
-  ## Examples
-
-      iex> submit_quiz(123, quiz_opts, 456)
-      {:ok, quiz}
+  `{:ok, quiz}` on success, or `{:error, reason}` for rejected submissions.
 
   """
 
-  # Pattern match on user, from user we create QuizResponse struct
-  # def submit_quiz(user_id, quiz_opts, quiz_id)
-  #     when is_number(user_id) and is_list(quiz_opts) do
-  #   quiz_opts = Enum.with_index(quiz_opts)
-
-  #   case Enum.reduce(quiz_opts, Ecto.Multi.new(), fn {opt, index}, multi ->
-  #          unique_key = "#{opt.id}_#{user_id + index}"
-
-  #          multi
-  #          |> Ecto.Multi.update(
-  #            "update_quiz_opt_#{unique_key}",
-  #            QuizQuestionOpt.changeset(opt, %{"response_count" => opt.response_count + 1})
-  #          )
-  #          |> Ecto.Multi.insert(
-  #            "insert_quiz_response_#{unique_key}",
-  #            QuizResponse.changeset(%QuizResponse{}, %{
-  #              user_id: user_id,
-  #              quiz_question_opt_id: opt.id,
-  #              quiz_question_id: opt.quiz_question_id,
-  #              quiz_id: quiz_id
-  #            })
-  #          )
-  #        end)
-  #        |> Repo.transact() do
-  #     {:ok, _} ->
-  #       quiz = get_quiz!(quiz_id, [:quiz_questions, quiz_questions: :quiz_question_opts])
-  #       Lti13.QuizScoreReporter.report_quiz_score(quiz, user_id)
-  #       {:ok, quiz}
-  #   end
-  # end
-
-  def submit_quiz(%User{} = user, event_uuid, quiz_opts, quiz_id) do
-    quiz_opts = quiz_opts |> Enum.uniq_by(& &1.id) |> Enum.with_index()
-
-    case Enum.reduce(quiz_opts, Ecto.Multi.new(), fn {opt, index}, multi ->
-           unique_key = "#{opt.id}_#{user.id + index}"
-
-           multi
-           |> Ecto.Multi.update(
-             "update_quiz_opt_#{unique_key}",
-             QuizQuestionOpt.changeset(opt, %{"response_count" => opt.response_count + 1})
-           )
-           |> Ecto.Multi.insert(
-             "insert_quiz_response_#{unique_key}",
-             Ecto.build_assoc(user, :quiz_responses, %{
-               quiz_question_opt_id: opt.id,
-               quiz_question_id: opt.quiz_question_id,
-               quiz_id: quiz_id
-             })
-           )
-         end)
-         |> Repo.transact() do
-      {:ok, _} ->
-        quiz = get_quiz!(quiz_id, [:quiz_questions, quiz_questions: :quiz_question_opts])
-        Lti13.QuizScoreReporter.report_quiz_score(quiz, user.id)
-        broadcast({:ok, quiz, event_uuid}, :quiz_updated)
+  def submit_quiz(%User{id: user_id}, event_uuid, quiz_opts, quiz_id)
+      when is_list(quiz_opts) do
+    submit_responses(
+      %{user_id: user_id, attendee_identifier: nil},
+      event_uuid,
+      quiz_opts,
+      quiz_id
+    )
+    |> case do
+      {:ok, quiz} ->
+        Lti13.QuizScoreReporter.report_quiz_score(quiz, user_id)
         {:ok, quiz}
+
+      error ->
+        error
     end
   end
 
   def submit_quiz(attendee_identifier, event_uuid, quiz_opts, quiz_id)
-      when is_binary(attendee_identifier) and is_list(quiz_opts) do
-    quiz_opts = Enum.uniq_by(quiz_opts, & &1.id)
+      when is_binary(attendee_identifier) and byte_size(attendee_identifier) > 0 and
+             is_list(quiz_opts) do
+    submit_responses(
+      %{user_id: nil, attendee_identifier: attendee_identifier},
+      event_uuid,
+      quiz_opts,
+      quiz_id
+    )
+  end
 
-    case Enum.reduce(quiz_opts, Ecto.Multi.new(), fn opt, multi ->
-           multi
-           |> Ecto.Multi.update(
-             {:update_quiz_opt, opt.id},
-             QuizQuestionOpt.changeset(opt, %{"response_count" => opt.response_count + 1})
-           )
-           |> Ecto.Multi.insert(
-             {:insert_quiz_response, opt.id},
-             QuizResponse.changeset(%QuizResponse{}, %{
-               attendee_identifier: attendee_identifier,
-               quiz_question_opt_id: opt.id,
-               quiz_question_id: opt.quiz_question_id,
-               quiz_id: quiz_id
-             })
-           )
-         end)
-         |> Repo.transact() do
-      {:ok, _} ->
-        quiz = get_quiz!(quiz_id, [:quiz_questions, quiz_questions: :quiz_question_opts])
-        broadcast({:ok, quiz, event_uuid}, :quiz_updated)
-        {:ok, quiz}
+  def submit_quiz(_participant, _event_uuid, _quiz_opts, _quiz_id),
+    do: {:error, :invalid_options}
+
+  defp submit_responses(identity, event_uuid, quiz_opts, quiz_id) do
+    with {:ok, option_ids} <- response_option_ids(quiz_opts) do
+      Repo.transaction(fn ->
+        options = lock_quiz_options(quiz_id, option_ids)
+
+        now = NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
+
+        options
+        |> Enum.group_by(& &1.quiz_question_id)
+        |> Enum.sort_by(&elem(&1, 0))
+        |> Enum.each(&record_question_responses(identity, quiz_id, &1, now))
+
+        Repo.update_all(from(o in QuizQuestionOpt, where: o.id in ^option_ids),
+          inc: [response_count: 1]
+        )
+      end)
+      |> case do
+        {:ok, _} ->
+          quiz = get_quiz!(quiz_id, [:quiz_questions, quiz_questions: :quiz_question_opts])
+          broadcast({:ok, quiz, event_uuid}, :quiz_updated)
+
+        {:error, reason} ->
+          {:error, reason}
+      end
+    end
+  end
+
+  defp lock_quiz_options(quiz_id, option_ids) do
+    quiz = Repo.one(from q in Quiz, where: q.id == ^quiz_id, lock: "FOR SHARE")
+    if is_nil(quiz) or not quiz.enabled, do: Repo.rollback(:not_open)
+
+    options =
+      Repo.all(
+        from o in QuizQuestionOpt,
+          join: q in QuizQuestion,
+          on: q.id == o.quiz_question_id,
+          where: q.quiz_id == ^quiz_id and o.id in ^option_ids,
+          order_by: [asc: o.quiz_question_id, asc: o.id]
+      )
+
+    if length(options) != length(option_ids), do: Repo.rollback(:invalid_options)
+    options
+  end
+
+  defp record_question_responses(identity, quiz_id, {question_id, question_options}, now) do
+    submission =
+      Map.merge(identity, %{
+        quiz_id: quiz_id,
+        quiz_question_id: question_id,
+        inserted_at: now,
+        updated_at: now
+      })
+
+    submission_id =
+      case Repo.insert_all("quiz_question_submissions", [submission],
+             on_conflict: :nothing,
+             returning: [:id]
+           ) do
+        {1, [%{id: id}]} -> id
+        {0, []} -> Repo.rollback(:already_submitted)
+      end
+
+    responses =
+      Enum.map(question_options, fn option ->
+        Map.merge(identity, %{
+          quiz_question_submission_id: submission_id,
+          quiz_id: quiz_id,
+          quiz_question_id: question_id,
+          quiz_question_opt_id: option.id,
+          inserted_at: now,
+          updated_at: now
+        })
+      end)
+
+    Repo.insert_all(QuizResponse, responses)
+  end
+
+  defp response_option_ids(options) do
+    if options != [] and
+         Enum.all?(options, fn
+           %{id: id} when is_integer(id) and id > 0 -> true
+           _ -> false
+         end) do
+      {:ok, options |> Enum.map(& &1.id) |> Enum.uniq()}
+    else
+      {:error, :invalid_options}
     end
   end
 
@@ -512,10 +544,7 @@ defmodule Claper.Quizzes do
   def get_submission_count(quiz_id) do
     from(r in QuizResponse,
       where: r.quiz_id == ^quiz_id,
-      select:
-        count(
-          fragment("DISTINCT COALESCE(?, CAST(? AS varchar))", r.attendee_identifier, r.user_id)
-        )
+      select: count(fragment("DISTINCT ROW(?, ?)", r.user_id, r.attendee_identifier))
     )
     |> Repo.one()
   end
