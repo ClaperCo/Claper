@@ -100,6 +100,42 @@ defmodule Claper.VoteMigrationTest do
     assert rows("SELECT count(*) FROM quiz_question_submissions") == [[0]]
   end
 
+  test "reserves each question identity once when historical responses disagree on the quiz" do
+    Repo.query!("INSERT INTO quizzes VALUES (2)")
+    Repo.query!("UPDATE quiz_questions SET quiz_id = 2 WHERE id = 1")
+
+    for {attendee, user_id} <- [{"'attendee'", "NULL"}, {"NULL", "1"}] do
+      quiz_response(attendee, user_id, 100, "00")
+
+      Repo.query!("""
+      INSERT INTO quiz_responses
+        (attendee_identifier, user_id, quiz_id, quiz_question_id, quiz_question_opt_id, inserted_at, updated_at)
+      VALUES (#{attendee}, #{user_id}, 2, 1, 101, '2026-01-01 00:00:01', '2026-01-01 00:00:01')
+      """)
+    end
+
+    before = history()
+    migrate(:up)
+
+    assert history() == before
+
+    assert rows("""
+           SELECT quiz_id, quiz_question_id, user_id, attendee_identifier, inserted_at
+           FROM quiz_question_submissions ORDER BY user_id NULLS FIRST
+           """) == [
+             [2, 1, nil, "attendee", ~N[2026-01-01 00:00:00]],
+             [2, 1, 1, nil, ~N[2026-01-01 00:00:00]]
+           ]
+
+    for identity <- ["NULL, 'attendee'", "1, NULL"] do
+      assert rows("""
+             INSERT INTO quiz_question_submissions
+               (quiz_id, quiz_question_id, user_id, attendee_identifier, inserted_at, updated_at)
+             VALUES (2, 1, #{identity}, now(), now()) ON CONFLICT DO NOTHING RETURNING id
+             """) == []
+    end
+  end
+
   defp history do
     %{
       votes:
