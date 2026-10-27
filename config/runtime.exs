@@ -143,6 +143,14 @@ oidc_auto_redirect_login =
   get_var_from_path_or_env(config_dir, "OIDC_AUTO_REDIRECT_LOGIN", "false")
   |> String.to_existing_atom()
 
+# Linking a first OIDC sign-in to an existing account by email requires the user
+# to confirm an emailed link unless the provider's email_verified claim is trusted.
+# Only enable for providers that really verify every address (e.g. Google).
+oidc_trust_email_verified =
+  get_var_from_path_or_env(config_dir, "OIDC_TRUST_EMAIL_VERIFIED", "false")
+  |> String.trim()
+  |> String.downcase() == "true"
+
 oidc_property_mappings =
   get_var_from_path_or_env(config_dir, "OIDC_PROPERTY_MAPPINGS", nil)
   |> case do
@@ -221,7 +229,8 @@ config :claper, :oidc,
   logo_url: oidc_logo_url,
   property_mappings: oidc_property_mappings,
   auto_redirect_login: oidc_auto_redirect_login,
-  disable_password_login: disable_password_login
+  disable_password_login: disable_password_login,
+  trust_email_verified: oidc_trust_email_verified
 
 config :claper, Claper.Repo,
   url: database_url,

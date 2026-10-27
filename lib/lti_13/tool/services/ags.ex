@@ -20,7 +20,7 @@ defmodule Lti13.Tool.Services.AGS do
   def post_score(%Score{} = score, %LineItem{} = line_item, %AccessToken{} = access_token) do
     body = score |> Jason.encode!()
 
-    case Req.post(
+    case Lti13.HTTP.post(
            build_url_with_path(line_item.id, "scores"),
            body: body,
            headers: score_headers(access_token)
@@ -46,7 +46,7 @@ defmodule Lti13.Tool.Services.AGS do
         %AccessToken{} = access_token
       ) do
     with {:ok, %Req.Response{status: code, body: body}} when code in [200, 201] <-
-           Req.get(line_items_service_url, headers: headers(access_token)),
+           Lti13.HTTP.get(line_items_service_url, headers: headers(access_token)),
          result <- if(is_binary(body), do: Jason.decode!(body), else: body) do
       process_line_items(
         result,
@@ -111,7 +111,7 @@ defmodule Lti13.Tool.Services.AGS do
     # a thousand grade book entries.
     url = build_url_with_params(line_items_service_url, "limit=1000")
 
-    case Req.get(url, headers: headers(access_token)) do
+    case Lti13.HTTP.get(url, headers: headers(access_token)) do
       {:ok, %Req.Response{status: 200, body: body}} ->
         results = if is_binary(body), do: Jason.decode!(body), else: body
         {:ok, Enum.map(results, fn r -> to_line_item(r) end)}
@@ -140,7 +140,7 @@ defmodule Lti13.Tool.Services.AGS do
 
     body = line_item |> Jason.encode!()
 
-    case Req.post(line_items_service_url, body: body, headers: headers(access_token)) do
+    case Lti13.HTTP.post(line_items_service_url, body: body, headers: headers(access_token)) do
       {:ok, %Req.Response{status: code, body: body}} when code in [200, 201] ->
         result = if is_binary(body), do: Jason.decode!(body), else: body
         {:ok, to_line_item(result)}
@@ -168,7 +168,7 @@ defmodule Lti13.Tool.Services.AGS do
     # url to use is the id of the line item
     url = line_item.id
 
-    case Req.put(url, body: body, headers: headers(access_token)) do
+    case Lti13.HTTP.put(url, body: body, headers: headers(access_token)) do
       {:ok, %Req.Response{status: 200, body: body}} ->
         result = if is_binary(body), do: Jason.decode!(body), else: body
         {:ok, to_line_item(result)}

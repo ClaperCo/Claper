@@ -18,6 +18,10 @@ defmodule ClaperWeb.Router do
     plug(ClaperWeb.Plugs.AdminRequiredPlug)
   end
 
+  pipeline :lti_enabled do
+    plug(ClaperWeb.Plugs.LtiEnabled)
+  end
+
   pipeline :lti do
     plug(:accepts, ["html", "json"])
     plug(:put_root_layout, html: {ClaperWeb.LayoutView, :root})
@@ -49,10 +53,15 @@ defmodule ClaperWeb.Router do
 
   live_session :attendee do
     scope "/", ClaperWeb do
-      pipe_through([:browser, :attendee_registration, ClaperWeb.Plugs.Iframe])
+      pipe_through([:browser, :attendee_registration])
 
       live("/", EventLive.Join, :index)
       live("/join", EventLive.Join, :join)
+    end
+
+    scope "/", ClaperWeb do
+      pipe_through([:browser, :attendee_registration, ClaperWeb.Plugs.Iframe])
+
       live("/e/:code", EventLive.Show, :show)
     end
   end
@@ -66,6 +75,7 @@ defmodule ClaperWeb.Router do
       post "/export/polls/:poll_id", StatController, :export_poll
       post "/export/quizzes/:quiz_id", StatController, :export_quiz
       post "/export/quizzes/:quiz_id/qti", StatController, :export_quiz_qti
+      post "/export/word_clouds/:word_cloud_id", StatController, :export_word_cloud
       post "/export/:event_id/messages", StatController, :export_all_messages
       post "/export/:event_id/transcriptions", StatController, :export_transcriptions
 
@@ -97,6 +107,8 @@ defmodule ClaperWeb.Router do
       live("/e/:code/manage/edit/embed/:id", EventLive.Manage, :edit_embed)
       live("/e/:code/manage/add/quiz", EventLive.Manage, :add_quiz)
       live("/e/:code/manage/edit/quiz/:id", EventLive.Manage, :edit_quiz)
+      live("/e/:code/manage/add/word_cloud", EventLive.Manage, :add_word_cloud)
+      live("/e/:code/manage/edit/word_cloud/:id", EventLive.Manage, :edit_word_cloud)
       live("/e/:code/manage/add/transcription", EventLive.Manage, :add_transcription)
       live("/e/:code/manage/edit/transcription/:id", EventLive.Manage, :edit_transcription)
     end
@@ -151,14 +163,29 @@ defmodule ClaperWeb.Router do
 
     get("/users/oidc", UserOidcAuth, :new)
     get("/users/oidc/callback", UserOidcAuth, :callback)
+    get("/users/oidc/confirm", UserOidcAuth, :check_email)
+    get("/users/oidc/confirm/:token", UserOidcAuth, :show_confirm)
+    post("/users/oidc/confirm/:token", UserOidcAuth, :confirm)
+  end
+
+  # Registration changes the signed-in user's trusted platforms. Unlike LTI
+  # launch callbacks, it is a same-site browser action and requires CSRF.
+  scope "/", ClaperWeb do
+    pipe_through([:lti_enabled, :browser])
+
+    get("/lti/register", Lti.RegistrationController, :new)
+    get("/lti/register/continue", Lti.RegistrationController, :continue)
+    post("/lti/register", Lti.RegistrationController, :create)
+    # Switching accounts after an LTI launch is an explicit, CSRF-protected choice.
+    get("/lti/launch/confirm", Lti.LaunchController, :show_confirm)
+    post("/lti/launch/confirm", Lti.LaunchController, :confirm)
+    post("/lti/launch/cancel", Lti.LaunchController, :cancel)
   end
 
   scope "/", ClaperWeb do
-    pipe_through([:lti])
+    pipe_through([:lti_enabled, :lti])
 
     get("/.well-known/jwks.json", Lti.RegistrationController, :jwks)
-    get("/lti/register", Lti.RegistrationController, :new)
-    post("/lti/register", Lti.RegistrationController, :create)
     post("/lti/login", Lti.LaunchController, :login)
     get("/lti/login", Lti.LaunchController, :login)
     post("/lti/launch", Lti.LaunchController, :launch)
@@ -201,6 +228,8 @@ defmodule ClaperWeb.Router do
       live "/oidc_providers/new", OidcProviderLive, :new
       live "/oidc_providers/:id/edit", OidcProviderLive, :edit
       live "/oidc_providers/:id", OidcProviderLive, :show
+
+      live "/lti_platforms", LtiPlatformLive, :index
 
       live "/audit_logs", AuditLogLive, :index
       live "/audit_logs/:id", AuditLogLive, :show

@@ -17,6 +17,7 @@ defmodule Claper.Accounts.Oidc.User do
           roles: :string,
           organization: String.t(),
           user_id: integer(),
+          verified_at: NaiveDateTime.t() | nil,
           inserted_at: NaiveDateTime.t(),
           updated_at: NaiveDateTime.t()
         }
@@ -35,6 +36,7 @@ defmodule Claper.Accounts.Oidc.User do
     field :groups, {:array, :string}
     field :roles, :string
     field :organization, :string
+    field :verified_at, :naive_datetime
 
     belongs_to :user, Claper.Accounts.User
 
@@ -61,6 +63,6 @@ defmodule Claper.Accounts.Oidc.User do
       :refresh_token
     ])
     |> validate_required([:sub, :email, :issuer, :provider, :id_token, :user_id])
-    |> unique_constraint(:sub)
+    |> unique_constraint([:issuer, :sub])
   end
 end

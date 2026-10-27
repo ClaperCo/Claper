@@ -154,6 +154,84 @@ defmodule Claper.Accounts do
   end
 
   @doc """
+  Restores a soft-deleted user so they can log in again.
+
+  Returns `{:error, changeset}` when another active account now uses the
+  same email.
+  """
+  def restore_user(%User{} = user) do
+    user
+    |> User.restore_changeset()
+    |> Repo.update()
+  end
+
+  @doc """
+  Permanently deletes a user and all of their data.
+
+  Every event owned by the user is purged with `Claper.Events.delete_event/1`
+  (interactions and slides included). The user's audit logs are deleted too
+  (the foreign key would only nilify them).
+
+  Interactions the user made in other people's events (posts, replies,
+  reactions, votes, quiz answers, form submissions, word cloud entries,
+  attendance stats) are kept: they are detached from the account and
+  reassigned to a random anonymous attendee identity, so other presenters'
+  results and counters stay exactly as they were.
+
+  Events are deleted one by one before the user, so a failure part-way leaves
+  the user in place and the call can simply be retried.
+
+  ## Examples
+
+      iex> hard_delete_user(user)
+      {:ok, %User{}}
+
+  """
+  def hard_delete_user(%User{} = user) do
+    with :ok <- delete_owned_events(user) do
+      Repo.transaction(fn -> delete_user_row(user) end)
+    end
+  end
+
+  defp delete_user_row(user) do
+    anonymize_interactions(user)
+    Repo.delete_all(from(l in Claper.Audit.Log, where: l.user_id == ^user.id))
+
+    case Repo.delete(user) do
+      {:ok, user} -> user
+      {:error, changeset} -> Repo.rollback(changeset)
+    end
+  end
+
+  defp delete_owned_events(%User{id: user_id}) do
+    Enum.reduce_while(Claper.Events.list_events(user_id), :ok, fn event, :ok ->
+      case Claper.Events.delete_event(event) do
+        {:ok, _event} -> {:cont, :ok}
+        error -> {:halt, error}
+      end
+    end)
+  end
+
+  # Tables holding interactions authored either by a user or by an anonymous
+  # attendee. Several enforce exactly one author identity, so the user is
+  # swapped for an attendee identifier rather than just nilified.
+  @interaction_tables ~w(posts post_replies reactions poll_ballots poll_votes
+                         quiz_question_submissions quiz_responses form_submits
+                         word_cloud_entries stats)
+
+  defp anonymize_interactions(%User{id: user_id}) do
+    identifier = "deleted-user-" <> Ecto.UUID.generate()
+
+    for table <- @interaction_tables do
+      from(r in table,
+        where: r.user_id == ^user_id,
+        update: [set: [user_id: nil, attendee_identifier: ^identifier]]
+      )
+      |> Repo.update_all([])
+    end
+  end
+
+  @doc """
   Returns true if the user has been soft deleted.
   """
   def deleted?(%User{} = user) do
@@ -652,43 +730,216 @@ defmodule Claper.Accounts do
     Repo.all(from u in Accounts.Oidc.User, where: u.email == ^email)
   end
 
-  def get_oidc_user_by_sub(sub) do
-    Repo.get_by(Accounts.Oidc.User, sub: sub)
+  def get_oidc_user_by_issuer_and_sub(issuer, sub) do
+    Repo.get_by(Accounts.Oidc.User, issuer: issuer, sub: sub)
   end
 
-  def get_or_create_user_with_oidc(
-        %{
-          sub: sub
-        } = attrs
-      ) do
-    case get_oidc_user_by_sub(sub) do
-      nil -> create_new_user(attrs)
-      %Accounts.Oidc.User{} = user -> update_oidc_user(user, attrs)
+  @oidc_confirmation_ttl_seconds 15 * 60
+  @oidc_stored_fields ~w(name first_name last_name email provider id_token access_token
+                        refresh_token expires_at groups roles organization photo_url)a
+
+  @doc """
+  Signs in an OIDC identity, which is bound to a local account by issuer and subject.
+
+  Returns `{:ok, oidc_user}` for a verified binding, or for a new identity when
+  `email_verified: true`, meaning the provider asserted a verified email and the
+  administrator chose to trust that assertion. Otherwise nothing is linked:
+  a single-use link valid for 15 minutes is emailed and
+  `{:confirmation_sent, browser_secret}` is returned. The initiating browser must
+  keep the secret and present it with the emailed token to
+  `confirm_oidc_identity/2`. Unverified bindings are confirmed once through the
+  bound account's email.
+  """
+  def authenticate_oidc_identity(attrs, confirmation_url_fun)
+      when is_function(confirmation_url_fun, 1) do
+    with {:ok, issuer, sub} <- oidc_subject(attrs) do
+      case get_oidc_user_by_issuer_and_sub(issuer, sub) do
+        nil ->
+          authenticate_new_oidc_identity(attrs, confirmation_url_fun)
+
+        identity ->
+          identity
+          |> Repo.preload(:user)
+          |> authenticate_bound_oidc_identity(attrs, confirmation_url_fun)
+      end
     end
   end
 
-  defp create_new_user(attrs) do
-    with {:ok, claper_user} <- get_user_by_email_or_create(attrs.email, attrs),
-         updated_attrs <-
-           Map.merge(attrs, %{user_id: claper_user.id}),
-         {:ok, user} <- create_oidc_user(updated_attrs) do
-      {:ok, user |> Repo.preload(:user)}
+  @doc """
+  Completes an emailed OIDC confirmation.
+
+  Requires the emailed token and the secret held by the browser that started the
+  sign-in. Links are single-use and expire after 15 minutes.
+  """
+  def confirm_oidc_identity(token, browser_secret)
+      when is_binary(token) and is_binary(browser_secret) do
+    with {:ok, token} <- Base.url_decode64(token, padding: false),
+         {:ok, browser_secret} <- Base.url_decode64(browser_secret, padding: false),
+         {:ok, identity} <-
+           Repo.transaction(fn -> consume_oidc_confirmation(token, browser_secret) end) do
+      {:ok, identity}
     else
-      _ -> {:error, %{reason: :invalid_user, msg: "Invalid Claper user"}}
+      _ -> :error
     end
   end
 
-  defp update_oidc_user(user, attrs) do
-    user = Repo.preload(user, :user)
+  def confirm_oidc_identity(_token, _browser_secret), do: :error
 
-    with {:ok, _claper_user} <- fill_missing_user_names(user.user, attrs),
-         {:ok, user} <-
-           user
-           |> Accounts.Oidc.User.changeset(attrs)
-           |> Repo.update() do
-      {:ok, Repo.preload(user, :user, force: true)}
+  defp oidc_subject(%{issuer: issuer, sub: sub})
+       when is_binary(issuer) and issuer != "" and is_binary(sub) and sub != "",
+       do: {:ok, issuer, sub}
+
+  defp oidc_subject(_attrs), do: {:error, :invalid_identity}
+
+  defp authenticate_new_oidc_identity(attrs, confirmation_url_fun) do
+    email = attrs[:email]
+
+    cond do
+      not valid_oidc_email?(email) -> {:error, :missing_email}
+      attrs[:email_verified] == true -> create_verified_oidc_identity(attrs, email)
+      true -> request_oidc_confirmation(attrs, email, confirmation_url_fun)
     end
   end
+
+  defp authenticate_bound_oidc_identity(identity, attrs, confirmation_url_fun) do
+    cond do
+      deleted?(identity.user) ->
+        {:error, :invalid_user}
+
+      identity.verified_at ->
+        update_oidc_identity(identity, attrs)
+
+      attrs[:email_verified] == true and attrs[:email] == identity.user.email ->
+        update_oidc_identity(identity, attrs, verify: true)
+
+      true ->
+        request_oidc_confirmation(attrs, identity.user.email, confirmation_url_fun)
+    end
+  end
+
+  defp valid_oidc_email?(email),
+    do: is_binary(email) and Regex.match?(~r/^[^\s]+@[^\s]+$/, email)
+
+  defp create_verified_oidc_identity(attrs, email) do
+    with {:ok, claper_user} <- get_user_by_email_or_create(email, attrs),
+         {:ok, identity} <-
+           %Accounts.Oidc.User{}
+           |> Accounts.Oidc.User.changeset(Map.put(attrs, :user_id, claper_user.id))
+           |> Ecto.Changeset.put_change(:verified_at, oidc_now())
+           |> Repo.insert() do
+      {:ok, Repo.preload(identity, :user)}
+    else
+      _ -> {:error, :invalid_user}
+    end
+  end
+
+  defp update_oidc_identity(identity, attrs, opts \\ []) do
+    # Providers may omit the email claim on later sign-ins; keep the stored one.
+    attrs =
+      if valid_oidc_email?(attrs[:email]), do: attrs, else: Map.put(attrs, :email, identity.email)
+
+    changeset = Accounts.Oidc.User.changeset(identity, attrs)
+
+    changeset =
+      if opts[:verify],
+        do: Ecto.Changeset.put_change(changeset, :verified_at, oidc_now()),
+        else: changeset
+
+    with {:ok, _claper_user} <- fill_missing_user_names(identity.user, attrs),
+         {:ok, identity} <- Repo.update(changeset) do
+      {:ok, Repo.preload(identity, :user, force: true)}
+    else
+      _ -> {:error, :invalid_user}
+    end
+  end
+
+  defp request_oidc_confirmation(attrs, email, confirmation_url_fun) do
+    token = :crypto.strong_rand_bytes(32)
+    browser_secret = :crypto.strong_rand_bytes(32)
+
+    # A newer sign-in for the same identity replaces any older pending link.
+    Repo.delete_all(
+      from p in Accounts.Oidc.PendingIdentity,
+        where:
+          p.inserted_at <= ^oidc_confirmation_expiry() or
+            (p.issuer == ^attrs.issuer and p.sub == ^attrs.sub)
+    )
+
+    Repo.insert!(%Accounts.Oidc.PendingIdentity{
+      token_hash: :crypto.hash(:sha256, token),
+      browser_hash: :crypto.hash(:sha256, browser_secret),
+      email: email,
+      issuer: attrs.issuer,
+      sub: attrs.sub,
+      attrs: pending_oidc_attrs(attrs)
+    })
+
+    UserNotifier.deliver_oidc_confirmation(
+      email,
+      attrs[:provider],
+      confirmation_url_fun.(Base.url_encode64(token, padding: false))
+    )
+
+    {:confirmation_sent, Base.url_encode64(browser_secret, padding: false)}
+  end
+
+  defp consume_oidc_confirmation(token, browser_secret) do
+    token_hash = :crypto.hash(:sha256, token)
+    browser_hash = :crypto.hash(:sha256, browser_secret)
+
+    query =
+      from p in Accounts.Oidc.PendingIdentity,
+        where:
+          p.token_hash == ^token_hash and p.browser_hash == ^browser_hash and
+            p.inserted_at > ^oidc_confirmation_expiry(),
+        select: p
+
+    with {1, [pending]} <- Repo.delete_all(query),
+         {:ok, identity} <- link_confirmed_oidc_identity(pending) do
+      identity
+    else
+      _ -> Repo.rollback(:invalid_confirmation)
+    end
+  end
+
+  defp link_confirmed_oidc_identity(pending) do
+    attrs = restore_pending_oidc_attrs(pending)
+
+    case get_oidc_user_by_issuer_and_sub(pending.issuer, pending.sub) do
+      nil ->
+        create_verified_oidc_identity(attrs, pending.email)
+
+      identity ->
+        identity = Repo.preload(identity, :user)
+
+        if identity.user.email == pending.email and not deleted?(identity.user),
+          do: update_oidc_identity(identity, attrs, verify: true),
+          else: {:error, :invalid_confirmation}
+    end
+  end
+
+  defp pending_oidc_attrs(attrs) do
+    Map.new(@oidc_stored_fields, fn
+      :expires_at ->
+        {"expires_at", attrs[:expires_at] && NaiveDateTime.to_iso8601(attrs[:expires_at])}
+
+      field ->
+        {Atom.to_string(field), attrs[field]}
+    end)
+  end
+
+  defp restore_pending_oidc_attrs(pending) do
+    @oidc_stored_fields
+    |> Map.new(fn field -> {field, pending.attrs[Atom.to_string(field)]} end)
+    |> Map.update!(:expires_at, &(&1 && NaiveDateTime.from_iso8601!(&1)))
+    |> Map.update!(:email, &(&1 || pending.email))
+    |> Map.merge(%{issuer: pending.issuer, sub: pending.sub})
+  end
+
+  defp oidc_confirmation_expiry,
+    do: NaiveDateTime.add(oidc_now(), -@oidc_confirmation_ttl_seconds, :second)
+
+  defp oidc_now, do: NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
 
   ## Role Management
 

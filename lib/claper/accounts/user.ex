@@ -125,6 +125,16 @@ defmodule Claper.Accounts.User do
     change(user, deleted_at: now)
   end
 
+  @doc """
+  A changeset for restoring a soft-deleted user. Fails when another active
+  account has taken the email in the meantime.
+  """
+  def restore_changeset(user) do
+    user
+    |> change(deleted_at: nil)
+    |> unique_constraint(:email)
+  end
+
   defp validate_email(changeset) do
     changeset
     |> validate_required([:email])

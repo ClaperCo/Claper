@@ -61,6 +61,7 @@ defmodule ClaperWeb.AdminLive.EventLive.FormComponent do
           />
 
           <.live_component
+            :if={@action == :new}
             module={ClaperWeb.AdminLive.SearchableSelectComponent}
             id="event-user-id"
             form={@form}
@@ -94,8 +95,12 @@ defmodule ClaperWeb.AdminLive.EventLive.FormComponent do
     changeset = Events.change_event(event)
 
     user_options =
-      Accounts.list_users()
-      |> Enum.map(&{"#{&1.email}", &1.id})
+      if assigns.action == :new do
+        Accounts.list_users()
+        |> Enum.map(&{"#{&1.email}", &1.id})
+      else
+        []
+      end
 
     {:ok,
      socket

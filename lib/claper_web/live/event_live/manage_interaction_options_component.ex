@@ -39,46 +39,7 @@ defmodule ClaperWeb.EventLive.ManageInteractionOptionsComponent do
       <div class="space-y-2 px-1">
         <%= case @current_interaction do %>
           <% %Claper.Polls.Poll{} -> %>
-            <.toggle_row
-              label={
-                if @state.poll_visible,
-                  do: gettext("Hide results on presentation"),
-                  else: gettext("Show results on presentation")
-              }
-              checked={@state.poll_visible}
-              key={:poll_visible}
-              shortcut={if @create == nil, do: "Z", else: nil}
-              show_shortcut={@show_shortcut}
-            >
-              <:icon>
-                <svg
-                  :if={@state.poll_visible}
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  class="h-5 w-5"
-                >
-                  <path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M3 4h1m4 0h13" /><path d="M4 4v10a2 2 0 0 0 2 2h10m3.42 -.592c.359 -.362 .58 -.859 .58 -1.408v-10" /><path d="M12 16v4" /><path d="M9 20h6" /><path d="M8 12l2 -2m4 0l2 -2" /><path d="M3 3l18 18" />
-                </svg>
-                <svg
-                  :if={!@state.poll_visible}
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  class="h-5 w-5"
-                >
-                  <path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M3 4l18 0" /><path d="M4 4v10a2 2 0 0 0 2 2h12a2 2 0 0 0 2 -2v-10" /><path d="M12 16l0 4" /><path d="M9 20l6 0" /><path d="M8 12l3 -3l2 2l3 -3" />
-                </svg>
-              </:icon>
-            </.toggle_row>
+            <.presentation_visibility state={@state} create={@create} show_shortcut={@show_shortcut} />
           <% %Claper.Quizzes.Quiz{} -> %>
             <div class="space-y-2">
               <.toggle_row
@@ -190,6 +151,41 @@ defmodule ClaperWeb.EventLive.ManageInteractionOptionsComponent do
                 </.action_row>
               </div>
             </div>
+          <% %Claper.WordClouds.WordCloud{} -> %>
+            <div class="space-y-2">
+              <.toggle_row
+                label={
+                  if @current_interaction.show_results,
+                    do: gettext("Hide the word cloud from attendees"),
+                    else: gettext("Show the word cloud to attendees")
+                }
+                checked={@current_interaction.show_results}
+                key={:word_cloud_show_results}
+              >
+                <:icon>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    class="h-5 w-5"
+                  >
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M6 5a2 2 0 0 1 2 -2h8a2 2 0 0 1 2 2v14a2 2 0 0 1 -2 2h-8a2 2 0 0 1 -2 -2v-14z" /><path d="M11 4h2" /><path d="M12 17v.01" />
+                  </svg>
+                </:icon>
+              </.toggle_row>
+
+              <.presentation_visibility
+                state={@state}
+                create={@create}
+                show_shortcut={@show_shortcut}
+              />
+
+              <.word_cloud_preview word_cloud={@current_interaction} words={@word_cloud_words} />
+            </div>
           <% nil -> %>
             <p class="text-gray-400 italic mt-1.5 text-sm">{gettext("No interaction enabled")}</p>
           <% _ -> %>
@@ -199,6 +195,55 @@ defmodule ClaperWeb.EventLive.ManageInteractionOptionsComponent do
         <% end %>
       </div>
     </div>
+    """
+  end
+
+  attr :state, :map, required: true
+  attr :create, :any, default: nil
+  attr :show_shortcut, :boolean, default: true
+
+  defp presentation_visibility(assigns) do
+    ~H"""
+    <.toggle_row
+      label={
+        if @state.poll_visible,
+          do: gettext("Hide results on presentation"),
+          else: gettext("Show results on presentation")
+      }
+      checked={@state.poll_visible}
+      key={:poll_visible}
+      shortcut={if @create == nil, do: "Z", else: nil}
+      show_shortcut={@show_shortcut}
+    >
+      <:icon>
+        <svg
+          :if={@state.poll_visible}
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          class="h-5 w-5"
+        >
+          <path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M3 4h1m4 0h13" /><path d="M4 4v10a2 2 0 0 0 2 2h10m3.42 -.592c.359 -.362 .58 -.859 .58 -1.408v-10" /><path d="M12 16v4" /><path d="M9 20h6" /><path d="M8 12l2 -2m4 0l2 -2" /><path d="M3 3l18 18" />
+        </svg>
+        <svg
+          :if={!@state.poll_visible}
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          class="h-5 w-5"
+        >
+          <path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M3 4l18 0" /><path d="M4 4v10a2 2 0 0 0 2 2h12a2 2 0 0 0 2 -2v-10" /><path d="M12 16l0 4" /><path d="M9 20l6 0" /><path d="M8 12l3 -3l2 2l3 -3" />
+        </svg>
+      </:icon>
+    </.toggle_row>
     """
   end
 
@@ -240,7 +285,8 @@ defmodule ClaperWeb.EventLive.ManageInteractionOptionsComponent do
           type="button"
           class={"relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none disabled:cursor-not-allowed #{if @checked, do: "bg-primary-500", else: "bg-gray-200"}"}
           role="switch"
-          aria-checked={@checked}
+          aria-checked={to_string(@checked)}
+          aria-label={@label}
           phx-key={@shortcut}
           phx-window-keydown={
             if @shortcut && not @disabled, do: ClaperWeb.Component.Input.checked(@checked, @key)
@@ -249,6 +295,48 @@ defmodule ClaperWeb.EventLive.ManageInteractionOptionsComponent do
           <span class={"pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out #{if @checked, do: "translate-x-5", else: "translate-x-0"}"}>
           </span>
         </button>
+      </div>
+    </div>
+    """
+  end
+
+  attr :word_cloud, Claper.WordClouds.WordCloud, required: true
+  attr :words, :list, required: true
+
+  defp word_cloud_preview(assigns) do
+    ~H"""
+    <div class="rounded-2xl border border-gray-200 p-3">
+      <p class="mb-2 text-xs font-semibold text-gray-500">{gettext("Words")}</p>
+      <p :if={@words == []} class="text-gray-400 italic text-sm">{gettext("No words yet")}</p>
+      <div :if={@words != []} class="flex flex-wrap items-baseline gap-x-3 gap-y-1">
+        <button
+          :for={word <- @words}
+          type="button"
+          phx-click="hide-word"
+          phx-value-id={@word_cloud.id}
+          phx-value-key={word.key}
+          title={gettext("Hide this word")}
+          class="text-sm font-bold text-primary-600 hover:text-gray-400 hover:line-through"
+        >
+          {word.text}<sup class="ml-0.5 text-[10px] font-normal text-gray-400">{word.count}</sup>
+        </button>
+      </div>
+
+      <div :if={@word_cloud.hidden_words != []} class="mt-3">
+        <p class="mb-1 text-xs font-semibold text-gray-500">{gettext("Hidden words")}</p>
+        <div class="flex flex-wrap gap-1">
+          <button
+            :for={key <- @word_cloud.hidden_words}
+            type="button"
+            phx-click="unhide-word"
+            phx-value-id={@word_cloud.id}
+            phx-value-key={key}
+            title={gettext("Show this word again")}
+            class="rounded-full border border-gray-200 px-2 py-0.5 text-xs text-gray-500 line-through hover:no-underline hover:bg-primary-50"
+          >
+            {key}
+          </button>
+        </div>
       </div>
     </div>
     """

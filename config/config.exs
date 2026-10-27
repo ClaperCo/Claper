@@ -74,6 +74,9 @@ config :logger, :console,
 # Use Jason for JSON parsing in Phoenix
 config :phoenix, :json_library, Jason
 
+# LTI registration and launch credentials must not appear in parameter logs.
+config :phoenix, :filter_parameters, ["password", "secret", "token"]
+
 config :porcelain, driver: Porcelain.Driver.Basic
 
 config :claper, :storage_dir, System.get_env("PRESENTATION_STORAGE_DIR", "priv/static")

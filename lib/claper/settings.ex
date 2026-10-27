@@ -73,6 +73,13 @@ defmodule Claper.Settings do
   end
 
   @doc """
+  Returns true only when an administrator has explicitly enabled LTI.
+  """
+  def lti_enabled? do
+    get("lti_enabled") == "true"
+  end
+
+  @doc """
   Clears a setting value (sets both value and encrypted_value to nil).
   """
   def clear(key) when is_binary(key) do
@@ -91,6 +98,7 @@ defmodule Claper.Settings do
   def seed_defaults do
     defaults = [
       %{key: "transcription_enabled", value: "false"},
+      %{key: "lti_enabled", value: "false"},
       %{key: "transcription_api_key"},
       %{key: "transcription_default_language", value: nil}
     ]
@@ -110,14 +118,15 @@ defmodule Claper.Settings do
     ClaperWeb.Endpoint.config(:secret_key_base)
   end
 
+  # Plug.Crypto tokens expire after 1 day by default; stored settings must not.
   defp encrypt(value) when is_binary(value) do
-    Plug.Crypto.encrypt(secret_key(), "global_config", value)
+    Plug.Crypto.encrypt(secret_key(), "global_config", value, max_age: :infinity)
   end
 
   defp encrypt(nil), do: nil
 
   defp decrypt(encrypted) when is_binary(encrypted) do
-    case Plug.Crypto.decrypt(secret_key(), "global_config", encrypted) do
+    case Plug.Crypto.decrypt(secret_key(), "global_config", encrypted, max_age: :infinity) do
       {:ok, value} -> value
       {:error, _} -> nil
     end

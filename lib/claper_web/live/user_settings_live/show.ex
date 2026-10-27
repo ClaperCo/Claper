@@ -19,7 +19,7 @@ defmodule ClaperWeb.UserSettingsLive.Show do
       Accounts.get_all_oidc_users_by_email(socket.assigns.current_user.email) |> List.wrap()
 
     lti_accounts =
-      Lti13.Users.get_all_users_by_email(socket.assigns.current_user.email) |> List.wrap()
+      Lti13.Users.get_all_users_by_user_id(socket.assigns.current_user.id)
 
     preferences_changeset =
       Accounts.User.preferences_changeset(
@@ -86,6 +86,51 @@ defmodule ClaperWeb.UserSettingsLive.Show do
   defp apply_action(socket, :show, _params) do
     socket
     |> assign(:page_title, gettext("Settings"))
+  end
+
+  @impl true
+  def handle_event(
+        "approve_lti_identity",
+        %{"mapping_id" => mapping_id, "password" => password},
+        socket
+      ) do
+    result =
+      with {id, ""} <- Integer.parse(mapping_id) do
+        Lti13.Users.authorize_legacy_user(socket.assigns.current_user, id, password)
+      end
+
+    case result do
+      {:ok} ->
+        {:noreply,
+         socket
+         |> put_flash(:info, gettext("LMS sign-in has been approved."))
+         |> push_navigate(to: ~p"/users/settings")}
+
+      {:error, %{reason: :rate_limited}} ->
+        {:noreply,
+         put_flash(
+           socket,
+           :error,
+           gettext("Too many approval attempts. Please wait a minute and try again.")
+         )}
+
+      _ ->
+        {:noreply,
+         put_flash(
+           socket,
+           :error,
+           gettext("Unable to approve LMS sign-in. Check your local password.")
+         )}
+    end
+  end
+
+  def handle_event("approve_lti_identity", _params, socket) do
+    {:noreply,
+     put_flash(
+       socket,
+       :error,
+       gettext("Unable to approve LMS sign-in. Check your local password.")
+     )}
   end
 
   @impl true

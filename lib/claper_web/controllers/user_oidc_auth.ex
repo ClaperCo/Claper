@@ -2,12 +2,15 @@ defmodule ClaperWeb.UserOidcAuth do
   @moduledoc """
     Plug for OpenID Connect authentication.
   """
+  alias Claper.Accounts
   alias ClaperWeb.UserAuth
   use ClaperWeb, :controller
 
   import Phoenix.Controller
 
   require Logger
+
+  @pending_key "oidc_pending_confirmation"
 
   defp generate_pkce_verifier do
     :crypto.strong_rand_bytes(32)
@@ -68,20 +71,12 @@ defmodule ClaperWeb.UserOidcAuth do
                client_context,
                token_opts(pkce_verifier, nonce)
              ),
-           {:ok, claims} <- maybe_enrich_claims(claims, token, client_context),
-           {:ok, oidc_user} <- validate_user(id_token, access_token, refresh_token, claims) do
+           {:ok, claims} <- maybe_enrich_claims(claims, token, client_context) do
         conn
         |> clear_oidc_session()
-        |> UserAuth.log_in_user(oidc_user.user)
+        |> authenticate_identity(identity_attrs(id_token, access_token, refresh_token, claims))
       else
-        {:error, reason} ->
-          Logger.error("OIDC token retrieval/validation failed: #{inspect(reason)}")
-
-          conn
-          |> clear_oidc_session()
-          |> put_status(:unauthorized)
-          |> put_view(ClaperWeb.ErrorView)
-          |> render("csrf_error.html", %{error: "Authentication failed: #{inspect(reason)}"})
+        {:error, reason} -> authentication_failed(conn, reason)
       end
     end
   end
@@ -95,11 +90,97 @@ defmodule ClaperWeb.UserOidcAuth do
   end
 
   def callback(conn, %{"error" => error} = _params) do
+    authentication_failed(conn, {:provider_error, error})
+  end
+
+  @doc """
+  Asks the user to open the emailed link that confirms a new OIDC sign-in.
+  """
+  def check_email(conn, _params) do
+    if get_session(conn, @pending_key) do
+      conn
+      |> put_view(ClaperWeb.UserOidcView)
+      |> render("check_email.html", provider_name: provider_name())
+    else
+      redirect(conn, to: ~p"/users/log_in")
+    end
+  end
+
+  @doc """
+  Shows the confirmation form for an emailed link. Opening the link never signs
+  in by itself, so mail scanners that prefetch links cannot consume it.
+  """
+  def show_confirm(conn, %{"token" => token}) do
+    if get_session(conn, @pending_key) do
+      conn
+      |> put_view(ClaperWeb.UserOidcView)
+      |> render("confirm.html", token: token, provider_name: provider_name())
+    else
+      confirmation_failed(conn)
+    end
+  end
+
+  @doc """
+  Completes the sign-in when the emailed token and this browser's pending
+  confirmation belong together.
+  """
+  def confirm(conn, %{"token" => token}) do
+    case Accounts.confirm_oidc_identity(token, get_session(conn, @pending_key)) do
+      {:ok, oidc_user} -> UserAuth.log_in_user(conn, oidc_user.user)
+      :error -> confirmation_failed(conn)
+    end
+  end
+
+  defp authenticate_identity(conn, attrs) do
+    case Accounts.authenticate_oidc_identity(attrs, &url(~p"/users/oidc/confirm/#{&1}")) do
+      {:ok, oidc_user} ->
+        UserAuth.log_in_user(conn, oidc_user.user)
+
+      {:confirmation_sent, browser_secret} ->
+        conn
+        |> put_session(@pending_key, browser_secret)
+        |> redirect(to: ~p"/users/oidc/confirm")
+
+      {:error, reason} ->
+        authentication_failed(conn, reason)
+    end
+  end
+
+  defp authentication_failed(conn, reason) do
+    Logger.error("OIDC authentication failed: #{inspect(reason)}")
+
     conn
     |> clear_oidc_session()
     |> put_status(:unauthorized)
-    |> put_view(ClaperWeb.ErrorView)
-    |> render("csrf_error.html", %{error: "Authentication failed: #{error}"})
+    |> put_view(ClaperWeb.UserOidcView)
+    |> render("error.html", message: failure_message(reason))
+  end
+
+  defp failure_message(:missing_email) do
+    gettext(
+      "%{provider} did not share an email address for your account. Ask your administrator to include the email claim for Claper.",
+      provider: provider_name()
+    )
+  end
+
+  defp failure_message(:invalid_user),
+    do: gettext("This account cannot sign in. Contact your administrator.")
+
+  defp failure_message(_reason),
+    do:
+      gettext("Signing in with %{provider} failed. Please try again.", provider: provider_name())
+
+  defp confirmation_failed(conn) do
+    conn
+    |> put_status(:bad_request)
+    |> put_view(ClaperWeb.UserOidcView)
+    |> render("error.html",
+      message:
+        gettext(
+          "This confirmation link is invalid, has expired, or was opened in a different browser. Sign in with %{provider} again from this browser.",
+          provider: provider_name()
+        )
+    )
   end
 
   # Fetch userinfo to fill in claims missing from the ID token (e.g. email on Authelia)
@@ -108,6 +189,13 @@ defmodule ClaperWeb.UserOidcAuth do
     {:ok, claims}
   end
 
+  defp maybe_enrich_claims(
+         claims,
+         _token,
+         %{provider_configuration: %{userinfo_endpoint: :undefined}}
+       ),
+       do: {:ok, claims}
+
   defp maybe_enrich_claims(claims, token, client_context) do
     case Oidcc.Userinfo.retrieve(
            token,
@@ -115,7 +203,8 @@ defmodule ClaperWeb.UserOidcAuth do
            %{preferred_auth_methods: [:client_secret_basic, :client_secret_post]}
          ) do
       {:ok, userinfo} ->
-        {:ok, Map.merge(userinfo, claims)}
+        # Verification must describe the email supplied by this same response.
+        {:ok, Map.merge(userinfo, Map.drop(claims, ["email", "email_verified"]))}
 
       {:error, reason} ->
         Logger.error("OIDC userinfo retrieval failed: #{inspect(reason)}")
@@ -211,31 +300,28 @@ defmodule ClaperWeb.UserOidcAuth do
     ""
   end
 
-  defp validate_user(id_token, access_token, refresh_token, claims) do
+  defp identity_attrs(id_token, access_token, refresh_token, claims) do
     mappings = config()[:property_mappings]
 
-    case Claper.Accounts.get_or_create_user_with_oidc(%{
-           sub: claims["sub"],
-           issuer: claims["iss"],
-           name: claims["name"],
-           first_name: claims["given_name"],
-           last_name: claims["family_name"],
-           email: claims["email"],
-           provider: provider_name(),
-           expires_at: claims["exp"] |> DateTime.from_unix!() |> DateTime.to_naive(),
-           id_token: id_token,
-           access_token: access_token,
-           refresh_token: format_refresh_token(refresh_token),
-           groups: claims["groups"],
-           roles: claims[mappings["roles"]],
-           organization: claims[mappings["organization"]],
-           photo_url: claims[mappings["photo_url"]]
-         }) do
-      {:error, _} ->
-        {:error, %{reason: :invalid_user, msg: "Invalid user"}}
-
-      {:ok, user} ->
-        {:ok, user}
-    end
+    %{
+      sub: claims["sub"],
+      issuer: claims["iss"],
+      name: claims["name"],
+      first_name: claims["given_name"],
+      last_name: claims["family_name"],
+      email: claims["email"],
+      # The provider's claim only counts when an administrator trusts it.
+      email_verified:
+        config()[:trust_email_verified] == true and claims["email_verified"] == true,
+      provider: provider_name(),
+      expires_at: claims["exp"] |> DateTime.from_unix!() |> DateTime.to_naive(),
+      id_token: id_token,
+      access_token: access_token,
+      refresh_token: format_refresh_token(refresh_token),
+      groups: claims["groups"],
+      roles: claims[mappings["roles"]],
+      organization: claims[mappings["organization"]],
+      photo_url: claims[mappings["photo_url"]]
+    }
   end
 end

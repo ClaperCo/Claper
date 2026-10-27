@@ -2,15 +2,9 @@ defmodule Lti13.Tool.OidcLogin do
   alias Lti13.Registrations
 
   def oidc_login_redirect_url(params) do
-    with {:ok, _issuer, login_hint, registration} <- validate_oidc_login(params) do
-      # craft OIDC auth response
-
-      # create unique state. Be sure to add this state to conn
-      #
-      # ## Example:
-      # conn = conn
-      #   |> put_session("state", state)
-      state = UUID.uuid4()
+    with {:ok, _issuer, login_hint, registration} <- validate_oidc_login(params),
+         {:ok, challenge} <- Lti13.LaunchStates.create(registration.id) do
+      state = challenge.state
 
       query_params = %{
         "scope" => "openid",
@@ -20,7 +14,7 @@ defmodule Lti13.Tool.OidcLogin do
         "client_id" => params["client_id"],
         "redirect_uri" => params["target_link_uri"],
         "state" => state,
-        "nonce" => UUID.uuid4(),
+        "nonce" => challenge.nonce,
         "login_hint" => login_hint
       }
 
@@ -34,6 +28,12 @@ defmodule Lti13.Tool.OidcLogin do
       redirect_url = registration.auth_login_url <> "?" <> URI.encode_query(query_params)
 
       {:ok, state, redirect_url}
+    else
+      {:error, %Ecto.Changeset{}} ->
+        {:error, %{reason: :invalid_oidc_state, msg: "Unable to start LTI login"}}
+
+      error ->
+        error
     end
   end
 
@@ -80,7 +80,9 @@ defmodule Lti13.Tool.OidcLogin do
          }}
 
       registration ->
-        {:ok, registration}
+        if Registrations.approved?(registration),
+          do: {:ok, registration},
+          else: Registrations.pending_error(registration)
     end
   end
 end

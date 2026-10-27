@@ -78,21 +78,6 @@ defmodule Lti13.Jwks.Validator do
     end
   end
 
-  @spec validate_nonce(
-          Claper.Accounts.User.t(),
-          map(),
-          String.t()
-        ) :: {:ok} | {:error, %{msg: any(), reason: :invalid_nonce}}
-  def validate_nonce(user, jwt, domain) do
-    case Lti13.Nonces.create_nonce(%{value: jwt["nonce"], domain: domain, lti_user_id: user.id}) do
-      {:ok, _nonce} ->
-        {:ok}
-
-      {:error, changeset} ->
-        {:error, %{reason: :invalid_nonce, msg: changeset}}
-    end
-  end
-
   def validate_user(
         %{
           "sub" => sub,
@@ -101,7 +86,8 @@ defmodule Lti13.Jwks.Validator do
           "https://purl.imsglobal.org/spec/lti/claim/roles" => roles
         } = claims,
         registration
-      ) do
+      )
+      when is_binary(sub) and is_binary(email) and is_binary(name) and is_list(roles) do
     case Lti13.Users.get_or_create_user(%{
            sub: sub,
            name: name,
@@ -111,13 +97,16 @@ defmodule Lti13.Jwks.Validator do
            roles: roles,
            registration_id: registration.id
          }) do
-      {:error, _} ->
-        {:error, %{reason: :invalid_user, msg: "Invalid user"}}
+      {:error, error} ->
+        {:error, error}
 
       {:ok, user} ->
         {:ok, user}
     end
   end
+
+  def validate_user(_, _),
+    do: {:error, %{reason: :invalid_user, msg: "Invalid user claims"}}
 
   def validate_issuer(jwt, issuer) do
     if jwt["iss"] == issuer do
@@ -132,14 +121,17 @@ defmodule Lti13.Jwks.Validator do
   end
 
   def validate_audience(jwt, audience) do
-    audience_claims = String.split(jwt["aud"], ",", trim: true)
+    audiences = List.wrap(jwt["aud"])
+    authorized_party = jwt["azp"]
 
-    if audience_claims in audience do
+    if audience in audiences and
+         (length(audiences) == 1 or authorized_party == audience) and
+         (is_nil(authorized_party) or authorized_party == audience) do
       {:ok}
     else
       {:error,
        %{
-         reason: :invalid_issuer,
+         reason: :invalid_audience,
          msg: "Audience ('aud' claim) in JWT doesn't contain the expected audience"
        }}
     end
@@ -147,7 +139,7 @@ defmodule Lti13.Jwks.Validator do
 
   def fetch_public_key(key_set_url, kid) do
     public_key_set =
-      case Req.get(key_set_url) do
+      case Lti13.HTTP.get(key_set_url) do
         {:ok, %Req.Response{status: 200, body: body}} -> body
         error -> error
       end

@@ -6,7 +6,8 @@ defmodule Claper.RuntimeConfigTest do
   @moduletag :tmp_dir
 
   setup %{tmp_dir: tmp_dir} do
-    keys = ~w(CONFIG_DIR OIDC_CLIENT_ID OIDC_CLIENT_SECRET DISABLE_PASSWORD_LOGIN)
+    keys = ~w(CONFIG_DIR OIDC_CLIENT_ID OIDC_CLIENT_SECRET DISABLE_PASSWORD_LOGIN
+              OIDC_TRUST_EMAIL_VERIFIED)
     original_env = Map.new(keys, &{&1, System.get_env(&1)})
 
     on_exit(fn ->
@@ -24,6 +25,7 @@ defmodule Claper.RuntimeConfigTest do
     })
 
     System.delete_env("DISABLE_PASSWORD_LOGIN")
+    System.delete_env("OIDC_TRUST_EMAIL_VERIFIED")
     :ok
   end
 
@@ -31,6 +33,22 @@ defmodule Claper.RuntimeConfigTest do
     oidc = read_oidc_config()
     assert oidc[:enabled]
     refute oidc[:disable_password_login]
+  end
+
+  test "provider email verification is only trusted when explicitly enabled" do
+    refute read_oidc_config()[:trust_email_verified]
+
+    for {value, trusted} <- [
+          {"false", false},
+          {"", false},
+          {"yes", false},
+          {"1", false},
+          {"true", true},
+          {" TRUE ", true}
+        ] do
+      System.put_env("OIDC_TRUST_EMAIL_VERIFIED", value)
+      assert read_oidc_config()[:trust_email_verified] == trusted
+    end
   end
 
   test "password login can be disabled with configured OIDC credentials" do

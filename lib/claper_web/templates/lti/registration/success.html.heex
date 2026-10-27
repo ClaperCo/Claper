@@ -5,12 +5,20 @@
         <span>{gettext("Registration completed")}</span>
         <img src="/images/icons/thumb.svg" class="h-12 -mt-3" />
       </p>
+      <p :if={!@approved} id="registration-pending" class="mt-6 text-yellow-300">
+        {gettext(
+          "An administrator of this Claper instance must approve this platform before it can be used. Until then, launches from this platform will be refused."
+        )}
+      </p>
       <div class="my-8">
         <p class="text-gray-200">
           {gettext("Your next steps")}:
         </p>
         <div class="mt-4 bg-gray-800 p-6 rounded-lg shadow-lg border border-white">
           <ol class="list-decimal list-inside text-gray-200">
+            <li :if={!@approved} class="mb-2">
+              {gettext("Ask a Claper administrator to approve this platform")}
+            </li>
             <li class="mb-2">{gettext("Activate the tool in your LMS")}</li>
             <li class="mb-2">{gettext("Configure it to be opened in a new window")}</li>
             <li class="mb-2">
@@ -21,7 +29,7 @@
       </div>
       <button
         class="btn btn-primary mx-auto mt-8"
-        onclick="(window.opener || window.parent).postMessage({subject:'org.imsglobal.lti.close'}, '*');"
+        onclick="(window.opener || window.parent).postMessage({subject:'org.imsglobal.lti.close'}, '*'); if (window.parent === window) window.close();"
       >
         {gettext("Finish")}
       </button>

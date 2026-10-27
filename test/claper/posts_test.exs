@@ -47,6 +47,61 @@ defmodule Claper.PostsTest do
       assert post == Posts.get_post!(post.uuid, [:event])
     end
 
+    test "attendee creation accepts only body content and keeps the trusted actor" do
+      event = event_fixture()
+      presentation = Claper.PresentationsFixtures.presentation_file_fixture(%{event: event})
+
+      Claper.PresentationsFixtures.presentation_state_fixture(%{
+        presentation_file: presentation,
+        position: 3,
+        chat_enabled: true,
+        anonymous_chat_enabled: true
+      })
+
+      user = user_fixture()
+      victim = user_fixture()
+
+      attrs = %{
+        body: "An attendee question?",
+        user_id: victim.id,
+        attendee_identifier: "forged-attendee",
+        name: "Forged name",
+        position: 100,
+        pinned: true,
+        like_count: 100,
+        love_count: 100,
+        lol_count: 100
+      }
+
+      assert {:ok, %Post{} = post} =
+               Posts.create_attendee_post(event, {:user, user, "Actual name"}, attrs)
+
+      assert post.user_id == user.id
+      assert post.attendee_identifier == nil
+      assert post.name == "Actual name"
+      assert post.position == 3
+      refute post.pinned
+      assert {post.like_count, post.love_count, post.lol_count} == {0, 0, 0}
+    end
+
+    test "trusted post creation and presenter pinning retain moderation fields" do
+      event = event_fixture()
+
+      assert {:ok, post} =
+               Posts.create_post(event, %{
+                 body: "A moderated question?",
+                 pinned: true,
+                 like_count: 12
+               })
+
+      assert post.pinned
+      assert post.like_count == 12
+      assert {:ok, unpinned} = Posts.toggle_pin_post(post)
+      refute unpinned.pinned
+      assert {:ok, pinned} = Posts.toggle_pin_post(unpinned)
+      assert Posts.get_post!(pinned.uuid).pinned
+    end
+
     test "create_post_reply/4 appends multiple host replies in order" do
       host = user_fixture()
       event = event_fixture(%{user: host})

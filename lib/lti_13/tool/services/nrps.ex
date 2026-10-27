@@ -34,7 +34,7 @@ defmodule Lti13.Tool.Services.NRPS do
     url = context_memberships_url <> "?limit=1000"
 
     with {:ok, %Req.Response{status: 200, body: body}} <-
-           Req.get(url, headers: headers(access_token)),
+           Lti13.HTTP.get(url, headers: headers(access_token)),
          {:ok, results} <- Jason.decode(body),
          members <- Map.get(results, "members") do
       {:ok, Enum.map(members, fn r -> to_membership(r) end)}

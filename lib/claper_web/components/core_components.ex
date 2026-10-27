@@ -502,10 +502,11 @@ defmodule ClaperWeb.CoreComponents do
   ## Attributes
 
   * `meta` - A `Flop.Meta` struct with pagination info.
-  * `path` - The base path for pagination links.
+  * `path` - The base path for pagination links, or a path builder accepted by
+    `Flop.Phoenix.build_path/2` (e.g. a function receiving the Flop params).
   """
   attr :meta, :map, required: true
-  attr :path, :string, required: true
+  attr :path, :any, required: true
 
   def pagination(assigns) do
     meta = assigns.meta

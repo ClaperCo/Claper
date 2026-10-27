@@ -2,7 +2,7 @@ defmodule ClaperWeb.EventLiveTest do
   use ClaperWeb.ConnCase
 
   import Phoenix.LiveViewTest
-  import Claper.{FormsFixtures, PollsFixtures, PresentationsFixtures}
+  import Claper.{FormsFixtures, PollsFixtures, PresentationsFixtures, WordCloudsFixtures}
 
   @update_attrs %{name: "some updated name"}
 
@@ -45,6 +45,29 @@ defmodule ClaperWeb.EventLiveTest do
 
       assert html_response(conn, 200) =~ "Updated successfully"
       assert html_response(conn, 200) =~ "some updated name"
+    end
+
+    test "editing an event cannot transfer ownership through forged form parameters", %{
+      conn: conn,
+      user: owner,
+      presentation_file: presentation_file
+    } do
+      other_user = Claper.AccountsFixtures.confirmed_user_fixture()
+      event = presentation_file.event
+      {:ok, edit_live, _html} = live(conn, ~p"/events/#{event.uuid}/edit")
+
+      {:ok, conn} =
+        edit_live
+        |> form("#event-form", event: @update_attrs)
+        |> render_submit(%{"event" => %{"user_id" => to_string(other_user.id)}})
+        |> follow_redirect(conn, ~p"/events")
+
+      assert html_response(conn, 200) =~ "some updated name"
+      updated = Claper.Events.get_user_event!(owner.id, event.uuid)
+      assert updated.user_id == owner.id
+      assert updated.name == "some updated name"
+
+      assert {:ok, _view, _html} = live(conn, ~p"/events/#{event.uuid}/edit")
     end
 
     test "renders the redesigned create and edit states", %{
@@ -563,8 +586,334 @@ defmodule ClaperWeb.EventLiveTest do
     end
   end
 
+  describe "Manage word clouds" do
+    setup [:register_and_log_in_user, :create_event]
+
+    test "creates a word cloud on the current slide, closed", %{
+      conn: conn,
+      presentation_file: presentation_file
+    } do
+      {:ok, manage_live, _html} =
+        live(conn, ~p"/e/#{presentation_file.event.code}/manage/add/word_cloud")
+
+      assert has_element?(manage_live, "#word-cloud-form")
+
+      manage_live
+      |> form("#word-cloud-form",
+        word_cloud: %{
+          title: "First thoughts",
+          max_entries: "3",
+          show_results: "false"
+        }
+      )
+      |> render_submit()
+
+      assert_redirect(manage_live, ~p"/e/#{presentation_file.event.code}/manage")
+
+      assert [word_cloud] = Claper.WordClouds.list_word_clouds(presentation_file.id)
+      assert word_cloud.title == "First thoughts"
+      assert word_cloud.max_entries == 3
+      refute word_cloud.show_results
+      refute word_cloud.enabled
+      assert word_cloud.position == 0
+    end
+
+    test "edits a word cloud", %{conn: conn, presentation_file: presentation_file} do
+      word_cloud = word_cloud_fixture(%{presentation_file: presentation_file})
+
+      {:ok, manage_live, _html} =
+        live(
+          conn,
+          ~p"/e/#{presentation_file.event.code}/manage/edit/word_cloud/#{word_cloud.id}"
+        )
+
+      manage_live
+      |> form("#word-cloud-form",
+        word_cloud: %{title: "Renamed", show_results: "true"}
+      )
+      |> render_submit()
+
+      edited = Claper.WordClouds.get_word_cloud!(word_cloud.id)
+      assert edited.title == "Renamed"
+      assert edited.show_results
+    end
+
+    test "sends to the list when the word cloud belongs to another event", %{
+      conn: conn,
+      presentation_file: presentation_file
+    } do
+      foreign = word_cloud_fixture()
+
+      assert {:error, {:live_redirect, %{to: to}}} =
+               live(
+                 conn,
+                 ~p"/e/#{presentation_file.event.code}/manage/edit/word_cloud/#{foreign.id}"
+               )
+
+      assert to == ~p"/e/#{presentation_file.event.code}/manage"
+    end
+
+    test "lists a word cloud and switches it on and off", %{
+      conn: conn,
+      presentation_file: presentation_file
+    } do
+      word_cloud =
+        word_cloud_fixture(%{presentation_file: presentation_file, enabled: false, title: "Mood"})
+
+      {:ok, manage_live, _html} = live(conn, ~p"/e/#{presentation_file.event.code}/manage")
+
+      assert has_element?(
+               manage_live,
+               ~s([data-interaction-type="word_cloud"][data-interaction-id="#{word_cloud.id}"]),
+               "Mood"
+             )
+
+      manage_live
+      |> element(~s(input[phx-click="word-cloud-set-active"][phx-value-id="#{word_cloud.id}"]))
+      |> render_click()
+
+      assert Claper.WordClouds.get_word_cloud!(word_cloud.id).enabled
+
+      manage_live
+      |> element(~s(input[phx-click="word-cloud-set-inactive"][phx-value-id="#{word_cloud.id}"]))
+      |> render_click()
+
+      refute Claper.WordClouds.get_word_cloud!(word_cloud.id).enabled
+    end
+
+    test "moves a word cloud to another slide", %{
+      conn: conn,
+      presentation_file: presentation_file
+    } do
+      word_cloud = word_cloud_fixture(%{presentation_file: presentation_file})
+
+      {:ok, manage_live, _html} = live(conn, ~p"/e/#{presentation_file.event.code}/manage")
+
+      render_hook(manage_live, "move-interaction", %{
+        "id" => word_cloud.id,
+        "type" => "word_cloud",
+        "to" => 4
+      })
+
+      moved = Claper.WordClouds.get_word_cloud!(word_cloud.id)
+      assert moved.position == 4
+      refute moved.enabled
+    end
+
+    test "previews the words and hides and unhides one", %{
+      conn: conn,
+      presentation_file: presentation_file
+    } do
+      event = presentation_file.event
+      word_cloud = word_cloud_fixture(%{presentation_file: presentation_file})
+      {:ok, _} = Claper.WordClouds.submit_entry(event.uuid, word_cloud, "a", "Elixir")
+      {:ok, _} = Claper.WordClouds.submit_entry(event.uuid, word_cloud, "b", "Grumpfwort")
+
+      {:ok, manage_live, _html} = live(conn, ~p"/e/#{event.code}/manage")
+
+      hide_button =
+        ~s(#settings-modal-content button[phx-click="hide-word"][phx-value-key="grumpfwort"])
+
+      unhide_button =
+        ~s(#settings-modal-content button[phx-click="unhide-word"][phx-value-key="grumpfwort"])
+
+      assert has_element?(manage_live, hide_button, "Grumpfwort")
+
+      manage_live |> element(hide_button) |> render_click()
+
+      assert Claper.WordClouds.get_word_cloud!(word_cloud.id).hidden_words == ["grumpfwort"]
+      refute has_element?(manage_live, hide_button)
+      assert has_element?(manage_live, unhide_button)
+
+      send(manage_live.pid, {:word_cloud_entry_added, word_cloud})
+      refute has_element?(manage_live, hide_button)
+      assert has_element?(manage_live, unhide_button)
+
+      {:ok, _} = Claper.WordClouds.submit_entry(event.uuid, word_cloud, "c", "Erlang")
+      assert has_element?(manage_live, ~s(#settings-modal-content button[phx-value-key="erlang"]))
+
+      manage_live |> element(unhide_button) |> render_click()
+
+      assert Claper.WordClouds.get_word_cloud!(word_cloud.id).hidden_words == []
+      assert has_element?(manage_live, hide_button)
+    end
+
+    test "lets attendees see the cloud or not", %{
+      conn: conn,
+      presentation_file: presentation_file
+    } do
+      word_cloud = word_cloud_fixture(%{presentation_file: presentation_file})
+
+      {:ok, manage_live, _html} = live(conn, ~p"/e/#{presentation_file.event.code}/manage")
+
+      render_hook(manage_live, "checked", %{"key" => "word_cloud_show_results", "value" => false})
+
+      refute Claper.WordClouds.get_word_cloud!(word_cloud.id).show_results
+      assert render(manage_live) =~ "Show the word cloud to attendees"
+    end
+
+    test "ignores a show-results toggle once no word cloud is current", %{
+      conn: conn,
+      presentation_file: presentation_file
+    } do
+      {:ok, manage_live, _html} = live(conn, ~p"/e/#{presentation_file.event.code}/manage")
+      render_hook(manage_live, "checked", %{"key" => "word_cloud_show_results", "value" => false})
+
+      assert Process.alive?(manage_live.pid)
+    end
+
+    test "keeps the slide, file and state of a word cloud when it is edited", %{
+      conn: conn,
+      presentation_file: presentation_file
+    } do
+      word_cloud =
+        word_cloud_fixture(%{presentation_file: presentation_file, enabled: false, position: 0})
+
+      other_presentation_file = presentation_file_fixture()
+
+      {:ok, manage_live, _html} =
+        live(
+          conn,
+          ~p"/e/#{presentation_file.event.code}/manage/edit/word_cloud/#{word_cloud.id}"
+        )
+
+      manage_live
+      |> element("#word-cloud-form")
+      |> render_submit(%{
+        "word_cloud" => %{
+          "title" => "Renamed",
+          "position" => "7",
+          "enabled" => "true",
+          "presentation_file_id" => other_presentation_file.id
+        }
+      })
+
+      edited = Claper.WordClouds.get_word_cloud!(word_cloud.id)
+      assert edited.title == "Renamed"
+      assert edited.position == 0
+      refute edited.enabled
+      assert edited.presentation_file_id == presentation_file.id
+    end
+
+    test "hides and unhides no word in a word cloud of another event", %{
+      conn: conn,
+      presentation_file: presentation_file
+    } do
+      foreign_presentation_file = presentation_file_fixture(%{}, [:event])
+      foreign = word_cloud_fixture(%{presentation_file: foreign_presentation_file})
+      word_cloud_entry_fixture(%{word_cloud: foreign, content: "kept"})
+      word_cloud_entry_fixture(%{word_cloud: foreign, content: "added", attendee_identifier: "b"})
+
+      {:ok, _} =
+        Claper.WordClouds.hide_word(foreign_presentation_file.event.uuid, foreign, "kept")
+
+      {:ok, manage_live, _html} = live(conn, ~p"/e/#{presentation_file.event.code}/manage")
+
+      render_hook(manage_live, "hide-word", %{"id" => foreign.id, "key" => "added"})
+      render_hook(manage_live, "unhide-word", %{"id" => foreign.id, "key" => "kept"})
+
+      assert Claper.WordClouds.get_word_cloud!(foreign.id).hidden_words == ["kept"]
+    end
+  end
+
   describe "Presenter" do
     setup [:register_and_log_in_user]
+
+    test "projects the enabled word cloud and follows new and hidden words", %{
+      conn: conn,
+      user: user
+    } do
+      presentation_file = presentation_file_fixture(%{user: user}, [:event])
+      presentation_state_fixture(%{presentation_file: presentation_file})
+      event = presentation_file.event
+
+      word_cloud =
+        word_cloud_fixture(%{
+          presentation_file: presentation_file,
+          title: "Mood",
+          show_results: false
+        })
+
+      {:ok, _} = Claper.WordClouds.submit_entry(event.uuid, word_cloud, "a", "Elixir")
+
+      {:ok, presenter_live, _html} = live(conn, ~p"/e/#{event.code}/presenter")
+      cloud = element(presenter_live, "#word-cloud-#{word_cloud.id}-words")
+
+      assert has_element?(presenter_live, "#word-cloud", "Mood")
+
+      assert [%{"id" => "elixir", "name" => "Elixir", "count" => 1}] =
+               cloud |> render() |> word_cloud_words()
+
+      {:ok, _} = Claper.WordClouds.submit_entry(event.uuid, word_cloud, "b", "Grumpfwort")
+      {:ok, _} = Claper.WordClouds.submit_entry(event.uuid, word_cloud, "c", "ELIXIR")
+
+      assert [
+               %{"id" => "elixir", "name" => "Elixir", "count" => 2},
+               %{"id" => "grumpfwort", "name" => "Grumpfwort", "count" => 1}
+             ] = cloud |> render() |> word_cloud_words()
+
+      {:ok, _} = Claper.WordClouds.hide_word(event.uuid, word_cloud, "grumpfwort")
+      refute render(presenter_live) =~ "Grumpfwort"
+
+      send(presenter_live.pid, {:word_cloud_entry_added, word_cloud})
+      assert cloud |> render() |> word_cloud_names() == ["Elixir"]
+
+      send(presenter_live.pid, {:current_interaction, nil})
+      refute has_element?(presenter_live, "#word-cloud")
+    end
+
+    test "keeps the projected word cloud when another cloud on the slide changes or goes", %{
+      conn: conn,
+      user: user
+    } do
+      presentation_file = presentation_file_fixture(%{user: user}, [:event])
+      presentation_state_fixture(%{presentation_file: presentation_file})
+      event = presentation_file.event
+
+      word_cloud_fixture(%{presentation_file: presentation_file, title: "Mood"})
+
+      other =
+        word_cloud_fixture(%{
+          presentation_file: presentation_file,
+          title: "Other",
+          enabled: false
+        })
+
+      {:ok, presenter_live, _html} = live(conn, ~p"/e/#{event.code}/presenter")
+
+      {:ok, other} = Claper.WordClouds.update_word_cloud(event.uuid, other, %{title: "Renamed"})
+      assert has_element?(presenter_live, "#word-cloud", "Mood")
+
+      {:ok, _} = Claper.WordClouds.delete_word_cloud(event.uuid, other)
+      assert has_element?(presenter_live, "#word-cloud", "Mood")
+    end
+
+    test "keeps a word hidden that was hidden while the cloud was being edited", %{
+      conn: conn,
+      user: user
+    } do
+      presentation_file = presentation_file_fixture(%{user: user}, [:event])
+      presentation_state_fixture(%{presentation_file: presentation_file})
+      event = presentation_file.event
+
+      word_cloud = word_cloud_fixture(%{presentation_file: presentation_file, title: "Mood"})
+      {:ok, _} = Claper.WordClouds.submit_entry(event.uuid, word_cloud, "a", "Elixir")
+      {:ok, _} = Claper.WordClouds.submit_entry(event.uuid, word_cloud, "b", "Grumpfwort")
+
+      {:ok, presenter_live, _html} = live(conn, ~p"/e/#{event.code}/presenter")
+
+      {:ok, _} = Claper.WordClouds.hide_word(event.uuid, word_cloud, "grumpfwort")
+      {:ok, _} = Claper.WordClouds.update_word_cloud(event.uuid, word_cloud, %{title: "Renamed"})
+
+      assert has_element?(presenter_live, "#word-cloud", "Renamed")
+
+      assert presenter_live
+             |> element("#word-cloud-#{word_cloud.id}-words")
+             |> render()
+             |> word_cloud_names() == ["Elixir"]
+
+      refute render(presenter_live) =~ "Grumpfwort"
+    end
 
     test "renders only the reply count on the projected display", %{conn: conn, user: user} do
       presentation_file = presentation_file_fixture(%{user: user}, [:event])
@@ -617,6 +966,90 @@ defmodule ClaperWeb.EventLiveTest do
       refute html =~ ~s(phx-value-tab="web_content")
       refute html =~ ~s(phx-value-tab="quizzes")
       refute html =~ ~s(phx-value-tab="transcriptions")
+      refute html =~ ~s(phx-value-tab="word_clouds")
+    end
+
+    test "disabled historical custom embeds are safe in Web Content without being resaved", %{
+      conn: conn,
+      presentation_file: presentation_file
+    } do
+      unsafe_embeds =
+        [
+          ~s|<iframe src="java&#x09;script:parent.document.body.dataset.securityProbe=1"></iframe>|,
+          "<iframe src='java\tscript:alert(1)'></iframe>",
+          ~s|<iframe src="javascript:alert(1)" src="https://example.com"></iframe>|,
+          ~s|<iframe srcdoc="<script>alert(1)</script>" onload="alert(1)"></iframe>|
+        ]
+        |> Enum.with_index()
+        |> Enum.map(fn {content, index} ->
+          # Bypass changesets to model malicious content stored before the fix.
+          Claper.Repo.insert!(%Claper.Embeds.Embed{
+            title: "Historical unsafe content #{index}",
+            content: content,
+            provider: "custom",
+            presentation_file_id: presentation_file.id,
+            enabled: false
+          })
+        end)
+
+      safe_embed =
+        Claper.EmbedsFixtures.embed_fixture(%{
+          title: "Disabled legitimate content",
+          presentation_file_id: presentation_file.id,
+          content: ~s|<iframe src='https://example.com/embed?a=1&amp;b=2' height='450'></iframe>|,
+          enabled: false
+        })
+
+      {:ok, stats_live, _html} = live(conn, ~p"/events/#{presentation_file.event.uuid}/stats")
+
+      html =
+        stats_live
+        |> element(~s{button[phx-value-tab="web_content"]})
+        |> render_click()
+
+      for embed <- unsafe_embeds do
+        assert has_element?(stats_live, "#embed-component-#{embed.id}")
+        assert html =~ embed.title
+        refute has_element?(stats_live, "#embed-component-#{embed.id} iframe")
+        refute has_element?(stats_live, "#embed-component-#{embed.id} script")
+        assert Claper.Embeds.get_embed!(embed.id).content == embed.content
+      end
+
+      assert html =~ safe_embed.title
+      assert has_element?(stats_live, "#embed-component-#{safe_embed.id} iframe")
+
+      assert html |> Floki.parse_fragment!() |> Floki.attribute("iframe", "src") ==
+               ["https://example.com/embed?a=1&b=2"]
+    end
+
+    test "reports each word cloud with its counts and an export", %{
+      conn: conn,
+      presentation_file: presentation_file
+    } do
+      event = presentation_file.event
+      word_cloud = word_cloud_fixture(%{presentation_file: presentation_file, title: "Mood"})
+      {:ok, _} = Claper.WordClouds.submit_entry(event.uuid, word_cloud, "a", "Elixir")
+      {:ok, _} = Claper.WordClouds.submit_entry(event.uuid, word_cloud, "b", "elixir")
+      {:ok, _} = Claper.WordClouds.submit_entry(event.uuid, word_cloud, "c", "Grumpfwort")
+      {:ok, _} = Claper.WordClouds.hide_word(event.uuid, word_cloud, "grumpfwort")
+
+      {:ok, stats_live, _html} = live(conn, ~p"/events/#{event.uuid}/stats")
+
+      html =
+        stats_live
+        |> element(~s{button[phx-value-tab="word_clouds"]})
+        |> render_click()
+
+      report = "#word-cloud-report-#{word_cloud.id}"
+
+      assert has_element?(stats_live, report, "Mood")
+      assert has_element?(stats_live, report, "3 participants")
+
+      assert [%{"id" => "elixir", "name" => "Elixir", "count" => 2}] =
+               stats_live |> element(report) |> render() |> word_cloud_words()
+
+      assert html =~ ~p"/export/word_clouds/#{word_cloud.id}"
+      refute html =~ "Grumpfwort"
     end
 
     test "displays transcriptions in report", %{conn: conn, presentation_file: presentation_file} do
@@ -711,6 +1144,23 @@ defmodule ClaperWeb.EventLiveTest do
 
       assert has_element?(join_live, "#form")
       assert has_element?(join_live, "#input[placeholder='ABCD1234']")
+    end
+
+    test "ignores an integer event id in disconnected_from", %{conn: conn} do
+      event = Claper.EventsFixtures.event_fixture()
+
+      {:ok, _join_live, html} = live(conn, ~p"/?disconnected_from=#{event.id}")
+
+      refute html =~ "Return to your last event"
+      refute html =~ event.code
+    end
+
+    test "offers the event back from its UUID", %{conn: conn} do
+      event = Claper.EventsFixtures.event_fixture()
+
+      {:ok, join_live, _html} = live(conn, ~p"/?disconnected_from=#{event.uuid}")
+
+      assert has_element?(join_live, ~s(a[href="/e/#{event.code}"]), event.name)
     end
   end
 end

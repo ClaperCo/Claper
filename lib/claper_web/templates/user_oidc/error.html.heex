@@ -1,0 +1,11 @@
+<div class="min-h-screen flex items-center justify-center bg-gray-100">
+  <div class="max-w-3xl w-full p-10 text-center">
+    <h1 class="text-4xl font-bold text-gray-900 mb-4">
+      {gettext("Sign-in failed")}
+    </h1>
+    <p id="oidc-error" class="text-lg text-gray-700 mb-8">{@message}</p>
+    <.link href={~p"/users/log_in"} class="text-blue underline font-semibold">
+      {gettext("Back to log in")}
+    </.link>
+  </div>
+</div>

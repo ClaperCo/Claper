@@ -146,7 +146,9 @@ defmodule Claper.Posts do
   end
 
   @doc """
-  Creates a post.
+  Creates a post from trusted attributes, including moderation fields.
+
+  Attendee-submitted attributes must use `create_attendee_post/3` instead.
 
   ## Examples
 
@@ -163,6 +165,38 @@ defmodule Claper.Posts do
     |> Post.changeset(attrs)
     |> Repo.insert(returning: [:uuid])
     |> broadcast(:post_created)
+  end
+
+  @doc """
+  Creates an attendee message from body content and a server-authenticated actor.
+
+  The actor carries the session user or attendee identifier and the server-held
+  nickname. Attribution, slide position, and chat permissions are never taken
+  from submitted attributes. Moderation fields remain available only through
+  the trusted post creation and update paths.
+  """
+  def create_attendee_post(event, actor, attrs) do
+    state =
+      from(e in Claper.Events.Event,
+        join: presentation in assoc(e, :presentation_file),
+        join: state in assoc(presentation, :presentation_state),
+        where: e.id == ^event.id,
+        select: state
+      )
+      |> Repo.one()
+
+    with %Claper.Presentations.PresentationState{} <- state,
+         {:ok, author_attrs} <- post_author_attrs(actor),
+         :ok <- attendee_chat_allowed(state, author_attrs.name) do
+      Post
+      |> struct(Map.merge(author_attrs, %{event: event, position: state.position}))
+      |> Post.attendee_changeset(attrs)
+      |> Repo.insert(returning: [:uuid])
+      |> broadcast(:post_created)
+    else
+      nil -> {:error, :not_found}
+      error -> error
+    end
   end
 
   @doc """
@@ -373,6 +407,31 @@ defmodule Claper.Posts do
            ) do
       Repo.delete(reaction)
       broadcast({:ok, post}, :reaction_removed)
+    end
+  end
+
+  defp post_author_attrs({:user, %Claper.Accounts.User{id: user_id}, name})
+       when is_integer(user_id) do
+    {:ok, %{user_id: user_id, name: normalize_author_name(name)}}
+  end
+
+  defp post_author_attrs({:attendee, identifier, name})
+       when is_binary(identifier) and identifier != "" do
+    {:ok, %{attendee_identifier: identifier, name: normalize_author_name(name)}}
+  end
+
+  defp post_author_attrs(_actor), do: {:error, :forbidden}
+
+  defp attendee_chat_allowed(state, name) do
+    cond do
+      state.chat_enabled == false ->
+        {:error, :chat_disabled}
+
+      state.anonymous_chat_enabled == false and name in [nil, ""] ->
+        {:error, :nickname_required}
+
+      true ->
+        :ok
     end
   end
 

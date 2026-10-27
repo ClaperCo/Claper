@@ -52,9 +52,6 @@ defmodule Claper.EmbedsTest do
 
       assert {:ok, %Embed{} = embed} = Embeds.create_embed(valid_attrs)
       assert embed.title == "some title"
-
-      assert embed.content ==
-               "<iframe src=\"https://www.youtube.com/embed/9bZkp7q19f0\" frameborder=\"0\" allowfullscreen></iframe>"
     end
 
     test "create_embed/1 with valid data creates a youtube embed" do
@@ -110,9 +107,6 @@ defmodule Claper.EmbedsTest do
                Embeds.update_embed(presentation_file.event_id, embed, update_attrs)
 
       assert embed.title == "some updated title"
-
-      assert embed.content ==
-               "<iframe src=\"https://www.youtube.com/embed/9bZkp7q19f0\" frameborder=\"0\"></iframe>"
     end
 
     test "update_embed/3 with invalid data returns error changeset" do
@@ -123,6 +117,129 @@ defmodule Claper.EmbedsTest do
                Embeds.update_embed(presentation_file.event_id, embed, @invalid_attrs)
 
       assert embed == Embeds.get_embed!(embed.id, presentation_file: [:event])
+    end
+
+    test "custom embeds reject unsafe and ambiguous sources on create and update" do
+      presentation_file = presentation_file_fixture()
+      embed = embed_fixture(%{presentation_file_id: presentation_file.id})
+
+      for content <- [
+            ~s|<iframe src="java&#x09;script:parent.document.body.dataset.securityProbe=1"></iframe>|,
+            "<iframe src=\"java\tscript:alert(1)\"></iframe>",
+            ~s|<iframe src='javascript:alert(1)'></iframe>|,
+            ~s|<iframe src="data:text/html,<script>alert(1)</script>"></iframe>|,
+            ~s|<iframe src="https:///missing-host"></iframe>|,
+            ~s|<iframe src="//example.com/embed"></iframe>|,
+            ~s|<iframe srcdoc="<script>alert(1)</script>" onload="alert(1)"></iframe>|,
+            ~s|<iframe src="https://example.com" s&#x72;c="javascript:alert(1)"></iframe>|,
+            ~s|<iframe src="https://example.com" SRC="javascript:alert(1)"></iframe>|,
+            ~s|<iframe src="javascript:alert(1)" src="https://example.com"></iframe>|,
+            ~s|<iframe src="https://example.com"></iframe><iframe src="https://other.example"></iframe>|
+          ] do
+        attrs = %{
+          title: "Unsafe content",
+          provider: "custom",
+          presentation_file_id: presentation_file.id,
+          content: content,
+          enabled: false
+        }
+
+        assert {:error, changeset} = Embeds.create_embed(attrs)
+        assert %{content: [_ | _]} = errors_on(changeset)
+
+        assert {:error, changeset} =
+                 Embeds.update_embed(presentation_file.event_id, embed, attrs)
+
+        assert %{content: [_ | _]} = errors_on(changeset)
+        assert Embeds.get_embed!(embed.id).content == embed.content
+      end
+    end
+
+    test "provider embeds only accept links on the provider's own domain" do
+      presentation_file = presentation_file_fixture()
+
+      for {provider, content} <- [
+            {"canva", "https://evil.example/?canva.com"},
+            {"canva", "https://canva.com.evil.example/design/abc/view"},
+            {"canva", "https://evilcanva.com/design/abc/view"},
+            {"canva", "https://www.canva.com@evil.example/design/abc/view"},
+            {"canva", "https://evil.example\\.canva.com/design"},
+            {"canva", "javascript:alert('canva.com')"},
+            {"googleslides", "https://evil.example/?google.com"},
+            {"googleslides", "https://google.com.evil.example/presentation/d/e/x/pub"},
+            {"googleslides", "https://sites.google.com/view/phishing"},
+            {"googleslides", "data:text/html,docs.google.com"},
+            {"youtube", "https://evil.example/?youtu.be/../../redirect?q=https://evil.example"},
+            {"youtube", "https://youtube.com.evil.example/watch?v=dQw4w9WgXcQ"},
+            {"youtube", "https://youtu.be/../../redirect?q=https://evil.example"},
+            {"youtube", "https://www.youtube.com/watch?v=not-an-id"},
+            {"youtube", "https://www.youtube.com/redirect?q=https://evil.example"},
+            {"vimeo", "https://evil.example/?vimeo.com/../../evil"},
+            {"vimeo", "https://vimeo.com.evil.example/123456789"},
+            {"vimeo", "https://vimeo.com/channels/staffpicks"}
+          ] do
+        attrs = %{
+          title: "Hostile link",
+          provider: provider,
+          presentation_file_id: presentation_file.id,
+          content: content,
+          position: 0
+        }
+
+        assert {:error, changeset} = Embeds.create_embed(attrs)
+        assert %{content: [_ | _]} = errors_on(changeset)
+      end
+
+      for {provider, content} <- [
+            {"canva", "https://www.canva.com/design/DAF1234/view"},
+            {"canva", "https://canva.com/design/DAF1234/view?utm_content=x"},
+            {"googleslides",
+             "https://docs.google.com/presentation/d/e/2PACX-1vQ/pub?start=false&loop=false"},
+            {"youtube", "https://youtu.be/dQw4w9WgXcQ?si=g1A6ZegIXzcrisSw"},
+            {"youtube", "https://www.youtube.com/watch?v=dQw4w9WgXcQ&t=42"},
+            {"youtube", "https://www.youtube.com/shorts/dQw4w9WgXcQ"},
+            {"vimeo", "https://vimeo.com/123456789"},
+            {"vimeo", "https://vimeo.com/123456789/abcdef1234"}
+          ] do
+        assert {:ok, embed} =
+                 Embeds.create_embed(%{
+                   title: "Slides",
+                   provider: provider,
+                   presentation_file_id: presentation_file.id,
+                   content: content,
+                   position: 0
+                 })
+
+        assert embed.content == content
+      end
+    end
+
+    test "custom embeds preserve safe single-quoted URLs and remove executable markup" do
+      presentation_file = presentation_file_fixture()
+
+      attrs = %{
+        title: "Interactive content",
+        provider: "custom",
+        presentation_file_id: presentation_file.id,
+        content: """
+        <script>alert(1)</script>
+        <iframe src='https://example.com/embed?a=1&amp;b=2' width='640' height='480'
+          title='&quot; onload=&quot;alert(1)'
+          srcdoc='<script>alert(1)</script>' onload='alert(1)' allowfullscreen
+          sandbox='allow-scripts' loading='lazy' referrerpolicy='no-referrer'
+          style='width:100%;height:480px;position:fixed;background:url(javascript:alert(1))'>
+          <script>alert(1)</script>
+        </iframe>
+        """
+      }
+
+      assert {:ok, embed} = Embeds.create_embed(attrs)
+      assert_safe_custom_content(embed.content)
+
+      assert {:ok, updated} =
+               Embeds.update_embed(presentation_file.event_id, embed, %{content: attrs.content})
+
+      assert_safe_custom_content(Embeds.get_embed!(updated.id).content)
     end
 
     test "delete_embed/2 deletes the embed" do
@@ -159,5 +276,26 @@ defmodule Claper.EmbedsTest do
       presentation_file = presentation_file_fixture()
       assert is_nil(Embeds.get_embed_for_event(-1, presentation_file.event_id))
     end
+  end
+
+  defp assert_safe_custom_content(content) do
+    document = Floki.parse_fragment!(content)
+    assert [_] = Floki.find(document, "iframe")
+    assert Floki.attribute(document, "iframe", "src") == ["https://example.com/embed?a=1&b=2"]
+    assert Floki.attribute(document, "iframe", "width") == ["640"]
+    assert Floki.attribute(document, "iframe", "height") == ["480"]
+    assert Floki.attribute(document, "iframe", "title") == [~s|" onload="alert(1)|]
+    assert Floki.attribute(document, "iframe", "sandbox") == ["allow-scripts"]
+    assert Floki.attribute(document, "iframe", "loading") == ["lazy"]
+    assert Floki.attribute(document, "iframe", "referrerpolicy") == ["no-referrer"]
+    assert Floki.attribute(document, "iframe", "allowfullscreen") != []
+    assert Floki.attribute(document, "iframe", "srcdoc") == []
+    assert Floki.attribute(document, "iframe", "onload") == []
+    assert Floki.find(document, "script") == []
+    [style] = Floki.attribute(document, "iframe", "style")
+    assert style =~ "width:100%"
+    assert style =~ "height:480px"
+    refute style =~ "position"
+    refute style =~ "javascript"
   end
 end

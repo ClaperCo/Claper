@@ -7,7 +7,16 @@ defmodule ClaperWeb.EventLive.InteractionComponentsTest do
   alias Claper.Forms.Form
   alias Claper.Polls.{Poll, PollOpt}
   alias Claper.Quizzes.{Quiz, QuizQuestion, QuizQuestionOpt}
-  alias ClaperWeb.EventLive.{EmbedComponent, FormComponent, PollComponent, QuizComponent}
+  alias Claper.WordClouds.{Entry, WordCloud}
+
+  alias ClaperWeb.EventLive.{
+    EmbedComponent,
+    EmbedIframeComponent,
+    FormComponent,
+    PollComponent,
+    QuizComponent,
+    WordCloudComponent
+  }
 
   test "poll uses the feature preview card and selected option styling" do
     poll = %Poll{
@@ -270,7 +279,7 @@ defmodule ClaperWeb.EventLive.InteractionComponentsTest do
     embed = %Embed{
       title: "Watch the demo",
       provider: "youtube",
-      content: "https://youtu.be/video-id"
+      content: "https://youtu.be/dQw4w9WgXcQ"
     }
 
     document =
@@ -324,6 +333,202 @@ defmodule ClaperWeb.EventLive.InteractionComponentsTest do
     assert "overflow-x-auto" in frame_classes
     refute "aspect-video" in frame_classes
     refute "overflow-hidden" in frame_classes
+  end
+
+  test "custom iframes render escaped allowlisted attributes instead of supplied HTML" do
+    document =
+      EmbedIframeComponent
+      |> render_component(
+        id: "safe-custom-iframe",
+        provider: "custom",
+        title: "Interactive exercise",
+        content: """
+        <script id="security-probe">alert(1)</script>
+        <iframe src='https://example.com/embed?a=1&amp;b=2' width='640' height='450'
+          title='&quot; onload=&quot;alert(1)' onload='alert(1)'
+          srcdoc='<script>alert(1)</script>' allowfullscreen sandbox='allow-scripts'>
+          <script>alert(1)</script>
+        </iframe>
+        """
+      )
+      |> Floki.parse_fragment!()
+
+    assert [_] = Floki.find(document, "iframe")
+    assert Floki.attribute(document, "iframe", "src") == ["https://example.com/embed?a=1&b=2"]
+    assert Floki.attribute(document, "iframe", "title") == [~s|" onload="alert(1)|]
+    assert Floki.attribute(document, "iframe", "width") == ["640"]
+    assert Floki.attribute(document, "iframe", "height") == ["450"]
+    assert Floki.attribute(document, "iframe", "sandbox") == ["allow-scripts"]
+    assert Floki.attribute(document, "iframe", "allowfullscreen") != []
+    assert Floki.attribute(document, "iframe", "onload") == []
+    assert Floki.attribute(document, "iframe", "srcdoc") == []
+    assert Floki.find(document, "script") == []
+  end
+
+  test "historical custom iframe payloads cannot bypass URL validation when rendered" do
+    for content <- [
+          nil,
+          "",
+          "<iframe></iframe>",
+          "<iframe src='https://'></iframe>",
+          ~s|<iframe src="java&#x09;script:parent.document.body.dataset.securityProbe=1"></iframe>|,
+          "<iframe src='java\tscript:alert(1)'></iframe>",
+          ~s|<iframe src='javascript:alert(1)'></iframe>|,
+          ~s|<iframe src="data:text/html,<script>alert(1)</script>"></iframe>|,
+          ~s|<iframe src="https://example.com" src="javascript:alert(1)"></iframe>|,
+          ~s|<iframe srcdoc="<script>alert(1)</script>" onload="alert(1)"></iframe>|
+        ] do
+      document =
+        EmbedIframeComponent
+        |> render_component(
+          id: "unsafe-custom-iframe",
+          provider: "custom",
+          title: "Legacy content",
+          content: content
+        )
+        |> Floki.parse_fragment!()
+
+      assert Floki.find(document, "iframe") == []
+      assert Floki.find(document, "script") == []
+    end
+  end
+
+  test "provider frames only load the provider's own domain" do
+    render_src = fn provider, content ->
+      EmbedIframeComponent
+      |> render_component(
+        id: "provider-frame",
+        provider: provider,
+        title: "Slides",
+        content: content
+      )
+      |> Floki.parse_fragment!()
+      |> Floki.attribute("iframe", "src")
+    end
+
+    # Stored before validation existed: never framed.
+    for {provider, content} <- [
+          {"canva", "https://evil.example/?canva.com"},
+          {"canva", "https://canva.com.evil.example/design/abc/view"},
+          {"googleslides", "https://evil.example/?google.com"},
+          {"googleslides", "https://sites.google.com/view/phishing"},
+          {"youtube", "https://evil.example/?youtu.be/../../redirect?q=https://evil.example"},
+          {"youtube", "https://youtu.be/../../redirect?q=https://evil.example"},
+          {"vimeo", "https://evil.example/?vimeo.com/../../evil"},
+          {"youtube", nil},
+          {"canva", nil},
+          {"googleslides", ""}
+        ] do
+      assert render_src.(provider, content) == []
+    end
+
+    assert render_src.("canva", "https://www.canva.com/design/DAF1234/view") ==
+             ["https://www.canva.com/design/DAF1234/view?embed"]
+
+    assert render_src.("canva", "http://canva.com/design/DAF1234/view?utm_content=x") ==
+             ["https://canva.com/design/DAF1234/view?utm_content=x&embed"]
+
+    assert render_src.(
+             "googleslides",
+             "https://docs.google.com/presentation/d/e/2PACX-1vQ/pub?start=false&loop=false"
+           ) ==
+             ["https://docs.google.com/presentation/d/e/2PACX-1vQ/embed?start=false&loop=false"]
+
+    for content <- [
+          "https://youtu.be/dQw4w9WgXcQ?si=g1A6ZegIXzcrisSw",
+          "https://www.youtube.com/watch?v=dQw4w9WgXcQ&t=42",
+          "https://m.youtube.com/shorts/dQw4w9WgXcQ"
+        ] do
+      assert render_src.("youtube", content) == ["https://www.youtube.com/embed/dQw4w9WgXcQ"]
+    end
+
+    assert render_src.("vimeo", "https://vimeo.com/123456789") ==
+             ["https://player.vimeo.com/video/123456789"]
+
+    assert render_src.("vimeo", "https://vimeo.com/123456789/abcdef1234") ==
+             ["https://player.vimeo.com/video/123456789?h=abcdef1234"]
+  end
+
+  test "word cloud offers an input until the attendee has sent all their words" do
+    word_cloud = %WordCloud{id: 7, title: "One word", max_entries: 2, show_results: true}
+    entry = %Entry{content: "Elixir", normalized_content: "elixir"}
+    words = [%{key: "elixir", text: "Elixir", count: 1}]
+
+    document =
+      WordCloudComponent
+      |> render_component(
+        id: "word-cloud-component",
+        word_cloud: word_cloud,
+        entries: [],
+        words: []
+      )
+      |> Floki.parse_document!()
+
+    assert "bg-gray-900" in classes(document, "#extended-word-cloud")
+    assert Floki.attribute(document, ~s(input[name="word"]), "maxlength") == ["60"]
+    assert "btn-gradient" in classes(document, ~s(button[type="submit"]))
+    assert Floki.find(document, "[data-submitted]") == []
+
+    one_sent_document =
+      WordCloudComponent
+      |> render_component(
+        id: "one-sent-word-cloud-component",
+        word_cloud: word_cloud,
+        entries: [entry],
+        words: words
+      )
+      |> Floki.parse_document!()
+
+    assert Floki.find(one_sent_document, ~s(input[name="word"])) != []
+
+    assert one_sent_document |> Floki.raw_html() |> word_cloud_words() == [
+             %{"id" => "elixir", "name" => "Elixir", "count" => 1}
+           ]
+
+    assert Floki.attribute(
+             one_sent_document,
+             "#one-sent-word-cloud-component-cloud",
+             "phx-update"
+           ) ==
+             ["ignore"]
+
+    done_document =
+      WordCloudComponent
+      |> render_component(
+        id: "done-word-cloud-component",
+        word_cloud: %{word_cloud | max_entries: 1},
+        entries: [entry],
+        words: words
+      )
+      |> Floki.parse_document!()
+
+    assert Floki.find(done_document, ~s(input[name="word"])) == []
+    assert Floki.find(done_document, "[data-submitted]") != []
+  end
+
+  test "word cloud renders no cloud and no hidden own word when they must stay out of view" do
+    word_cloud = %WordCloud{
+      id: 7,
+      title: "One word",
+      max_entries: 2,
+      show_results: false,
+      hidden_words: ["rude"]
+    }
+
+    html =
+      render_component(WordCloudComponent,
+        id: "hidden-word-cloud-component",
+        word_cloud: word_cloud,
+        entries: [
+          %Entry{content: "Rude", normalized_content: "rude"},
+          %Entry{content: "Kind", normalized_content: "kind"}
+        ],
+        words: [%{key: "kind", text: "Kind", count: 1}]
+      )
+
+    assert html =~ "Kind"
+    refute html =~ "Rude"
+    refute html =~ "hidden-word-cloud-component-cloud"
   end
 
   defp assert_card_shell(document, card_selector, close_selector) do

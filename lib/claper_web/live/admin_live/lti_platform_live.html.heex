@@ -1,0 +1,62 @@
+<h1 class="text-3xl font-bold mb-2">{@page_title}</h1>
+<p class="text-base-content/70 mb-6">
+  {gettext(
+    "LMS platforms registered by non-administrators stay pending until approved. Pending platforms cannot sign users in or launch Claper."
+  )}
+</p>
+
+<div class="card bg-base-100 shadow-md overflow-x-auto my-5">
+  <table class="table table-zebra w-full">
+    <thead>
+      <tr>
+        <th>{gettext("Issuer")}</th>
+        <th>{gettext("Client ID")}</th>
+        <th>{gettext("Registered by")}</th>
+        <th>{gettext("Created")}</th>
+        <th>{gettext("Status")}</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr :if={@registrations == []}>
+        <td colspan="6" class="text-center py-10">{gettext("No results.")}</td>
+      </tr>
+      <tr :for={registration <- @registrations} id={"lti-registration-#{registration.id}"}>
+        <td class="break-all">{registration.issuer}</td>
+        <td class="break-all">{registration.client_id}</td>
+        <td>{(registration.user && registration.user.email) || empty_value()}</td>
+        <td>{format_admin_timestamp(registration.inserted_at)}</td>
+        <td>
+          <%= if Lti13.Registrations.approved?(registration) do %>
+            <span class="badge badge-success">{gettext("Approved")}</span>
+          <% else %>
+            <span class="badge badge-warning">{gettext("Pending")}</span>
+          <% end %>
+        </td>
+        <td class="text-right">
+          <button
+            :if={!Lti13.Registrations.approved?(registration)}
+            id={"approve-lti-registration-#{registration.id}"}
+            phx-click="approve"
+            phx-value-id={registration.id}
+            class="btn btn-primary btn-sm"
+          >
+            {gettext("Approve")}
+          </button>
+          <button
+            :if={Lti13.Registrations.approved?(registration)}
+            id={"revoke-lti-registration-#{registration.id}"}
+            phx-click="revoke"
+            phx-value-id={registration.id}
+            data-confirm={
+              gettext("Revoke this platform? Its users will no longer be able to launch Claper.")
+            }
+            class="btn btn-error btn-outline btn-sm"
+          >
+            {gettext("Revoke")}
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

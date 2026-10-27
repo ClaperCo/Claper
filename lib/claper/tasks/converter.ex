@@ -59,7 +59,7 @@ defmodule Claper.Tasks.Converter do
       )
     else
       stream =
-        ExAws.S3.list_objects(get_s3_bucket(), prefix: "presentations/#{hash}")
+        ExAws.S3.list_objects(get_s3_bucket(), prefix: "presentations/#{hash}/")
         |> ExAws.stream!()
         |> Stream.map(& &1.key)
 

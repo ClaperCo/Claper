@@ -175,5 +175,59 @@ defmodule Claper.PollsTest do
                  poll.id
                )
     end
+
+    test "a ballot cannot be replayed with the same or different options" do
+      presentation_file = presentation_file_fixture(%{}, [:event])
+      poll = poll_fixture(%{presentation_file_id: presentation_file.id, multiple: true})
+      [first, second] = poll.poll_opts
+      uuid = presentation_file.event.uuid
+      Phoenix.PubSub.subscribe(Claper.PubSub, "event:#{uuid}")
+
+      for voter <- [
+            Integer.to_string(presentation_file.event.user_id),
+            presentation_file.event.user_id
+          ] do
+        assert {:ok, _} = Polls.vote(voter, uuid, [first], poll.id)
+        assert_receive {:poll_updated, _}
+        assert {:error, :already_voted} = Polls.vote(voter, uuid, [first], poll.id)
+        assert {:error, :already_voted} = Polls.vote(voter, uuid, [second], poll.id)
+        assert [%{poll_opt_id: id}] = Polls.get_poll_vote(voter, poll.id)
+        assert id == first.id
+        refute_receive {:poll_updated, _}
+      end
+
+      assert [2, 0] == Enum.map(Polls.get_poll!(poll.id).poll_opts, & &1.vote_count)
+      assert Claper.Stats.get_distinct_poll_votes([poll.id]) == 2
+      assert Claper.Stats.total_vote_count(presentation_file.id) == [2]
+    end
+
+    test "multiple-choice selections are one ballot and stale counters do not lose votes" do
+      presentation_file = presentation_file_fixture(%{}, [:event])
+      poll = poll_fixture(%{presentation_file_id: presentation_file.id, multiple: true})
+      [first, second] = poll.poll_opts
+      uuid = presentation_file.event.uuid
+
+      assert {:ok, _} = Polls.vote("first", uuid, [first, second, first], poll.id)
+      assert {:ok, _} = Polls.vote("second", uuid, [first], poll.id)
+      assert {:ok, _} = Polls.vote(presentation_file.event.user_id, uuid, [second], poll.id)
+      assert length(Polls.get_poll_vote("first", poll.id)) == 2
+      assert [2, 2] == Enum.map(Polls.get_poll!(poll.id).poll_opts, & &1.vote_count)
+      assert {:error, :already_voted} = Polls.vote("first", uuid, [second], poll.id)
+    end
+
+    test "invalid choices and closed polls never persist a ballot" do
+      presentation_file = presentation_file_fixture(%{}, [:event])
+      poll = poll_fixture(%{presentation_file_id: presentation_file.id})
+      other = poll_fixture(%{presentation_file_id: presentation_file.id, enabled: false})
+      uuid = presentation_file.event.uuid
+
+      assert {:error, :invalid_options} = Polls.vote("attendee", uuid, [], poll.id)
+      assert {:error, :invalid_options} = Polls.vote("attendee", uuid, poll.poll_opts, poll.id)
+      assert {:error, :invalid_options} = Polls.vote("attendee", uuid, other.poll_opts, poll.id)
+      assert {:error, :invalid_options} = Polls.vote("attendee", uuid, [nil], poll.id)
+      assert {:error, :not_open} = Polls.vote("attendee", uuid, other.poll_opts, other.id)
+      assert Polls.get_poll_vote("attendee", poll.id) == []
+      assert [0, 0] == Enum.map(Polls.get_poll!(poll.id).poll_opts, & &1.vote_count)
+    end
   end
 end

@@ -15,6 +15,7 @@ defmodule Claper.Quizzes.QuizResponse do
 
   schema "quiz_responses" do
     field :attendee_identifier, :string
+    field :quiz_question_submission_id, :integer
 
     belongs_to :quiz, Claper.Quizzes.Quiz
     belongs_to :quiz_question, Claper.Quizzes.QuizQuestion
@@ -29,10 +30,21 @@ defmodule Claper.Quizzes.QuizResponse do
     quiz_response
     |> cast(attrs, [
       :attendee_identifier,
+      :user_id,
+      :quiz_question_submission_id,
       :quiz_id,
       :quiz_question_id,
       :quiz_question_opt_id
     ])
-    |> validate_required([:quiz_id, :quiz_question_id, :quiz_question_opt_id])
+    |> validate_required([
+      :quiz_id,
+      :quiz_question_id,
+      :quiz_question_opt_id,
+      :quiz_question_submission_id
+    ])
+    |> foreign_key_constraint(:quiz_question_submission_id)
+    |> unique_constraint([:quiz_question_submission_id, :quiz_question_opt_id],
+      name: :quiz_responses_submission_option_index
+    )
   end
 end

@@ -315,7 +315,8 @@ defmodule Claper.Admin do
   end
 
   @doc """
-  Returns a paginated list of users using Flop.
+  Returns a paginated list of users using Flop, including disabled
+  (soft-deleted) users so admins can still manage them.
 
   Accepts Flop params for filtering, sorting, and pagination.
   See `Claper.Accounts.User` Flop.Schema config for available fields.
@@ -329,7 +330,6 @@ defmodule Claper.Admin do
   def list_users_paginated(params \\ %{}) do
     query =
       User
-      |> where([u], is_nil(u.deleted_at))
       |> preload(:role)
       |> join(:left, [u], r in assoc(u, :role), as: :role)
 
@@ -355,6 +355,21 @@ defmodule Claper.Admin do
       |> preload(:user)
 
     Flop.validate_and_run!(query, params, for: Event, replace_invalid_params: true)
+  end
+
+  @doc """
+  Returns a paginated list of the events owned by the given user, using Flop.
+
+  ## Examples
+
+      iex> list_user_events_paginated(user_id, %{"page" => 1})
+      {[%Event{}, ...], %Flop.Meta{}}
+
+  """
+  def list_user_events_paginated(user_id, params \\ %{}) do
+    Event
+    |> where([e], e.user_id == ^user_id)
+    |> Flop.validate_and_run!(params, for: Event, replace_invalid_params: true)
   end
 
   @doc """

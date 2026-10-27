@@ -96,4 +96,16 @@ defmodule ClaperWeb.ConnCase do
     |> Plug.Conn.put_session(:current_user, user)
     |> Plug.Conn.put_session(:user_token, token)
   end
+
+  @doc """
+  The words the word clouds in `html` hand to the browser, as decoded maps.
+  """
+  def word_cloud_words(html) do
+    html
+    |> Floki.parse_fragment!()
+    |> Floki.attribute("[phx-hook=WordCloud]", "data-words")
+    |> Enum.flat_map(&Jason.decode!/1)
+  end
+
+  def word_cloud_names(html), do: html |> word_cloud_words() |> Enum.map(& &1["name"])
 end

@@ -10,7 +10,8 @@ defmodule Claper.EventsTest do
     PresentationsFixtures,
     PollsFixtures,
     FormsFixtures,
-    EmbedsFixtures
+    EmbedsFixtures,
+    WordCloudsFixtures
   }
 
   setup_all do
@@ -444,6 +445,35 @@ defmodule Claper.EventsTest do
       assert duplicate_embed.title == embed.title
     end
 
+    test "duplicate_event/2 copies the settings of a word cloud and starts it empty" do
+      original = event_fixture()
+      presentation_file = presentation_file_fixture(%{event: original})
+
+      word_cloud =
+        word_cloud_fixture(%{
+          presentation_file: presentation_file,
+          title: "One word",
+          position: 2,
+          max_entries: 3,
+          show_results: false
+        })
+
+      {:ok, _} = Claper.WordClouds.submit_entry(original.uuid, word_cloud, "a", "Elixir")
+      {:ok, _} = Claper.WordClouds.hide_word(original.uuid, word_cloud, "elixir")
+
+      {:ok, duplicate} = Events.duplicate_event(original.user_id, original.uuid)
+      duplicate = Repo.preload(duplicate, presentation_file: [word_clouds: [:entries]])
+
+      assert [copy] = duplicate.presentation_file.word_clouds
+      assert copy.id != word_cloud.id
+      assert copy.title == "One word"
+      assert copy.position == 2
+      assert copy.max_entries == 3
+      refute copy.show_results
+      assert copy.entries == []
+      assert copy.hidden_words == []
+    end
+
     test "duplicate_event/2 raises when an invalid user-event is supplied", context do
       original = Enum.at(context.alice_active_events, 0)
 
@@ -460,13 +490,30 @@ defmodule Claper.EventsTest do
       assert event.name == "some updated name"
     end
 
+    test "update_event/2 ignores ownership fields while saving ordinary changes" do
+      event = event_fixture()
+      other_user = user_fixture()
+
+      for attrs <- [
+            %{name: "Owner stays unchanged", user_id: other_user.id},
+            %{"name" => "Owner stays unchanged", "user_id" => to_string(other_user.id)},
+            %{"name" => "Owner stays unchanged", "user_id" => nil},
+            %{"name" => "Owner stays unchanged", "user_id" => "not-an-id"}
+          ] do
+        assert {:ok, updated} = Events.update_event(event, attrs)
+        assert updated.name == "Owner stays unchanged"
+        assert updated.user_id == event.user_id
+        assert Events.get_user_event!(event.user_id, event.uuid).user_id == event.user_id
+        refute Enum.any?(Events.list_events(other_user.id), &(&1.uuid == event.uuid))
+      end
+    end
+
     test "update_event/2 with invalid data returns error changeset" do
       event = event_fixture()
 
       assert {:error, %Ecto.Changeset{}} = Events.update_event(event, %{name: nil})
       assert {:error, %Ecto.Changeset{}} = Events.update_event(event, %{code: nil})
       assert {:error, %Ecto.Changeset{}} = Events.update_event(event, %{code: "tiny"})
-      assert {:error, %Ecto.Changeset{}} = Events.update_event(event, %{user_id: nil})
       assert {:error, %Ecto.Changeset{}} = Events.update_event(event, %{started_at: nil})
 
       assert event == Events.get_event!(event.uuid)
@@ -504,6 +551,24 @@ defmodule Claper.EventsTest do
 
       assert {:ok, %Event{}} = Events.delete_event(event)
       assert_raise Ecto.NoResultsError, fn -> Events.get_event!(event.uuid) end
+    end
+
+    test "delete_event/1 purges interactions that are not cascaded by the database" do
+      presentation_file = presentation_file_fixture(%{}, [:event])
+      attrs = %{presentation_file_id: presentation_file.id}
+      poll = poll_fixture(attrs)
+      form = form_fixture(attrs)
+      embed = embed_fixture(attrs)
+      word_cloud = word_cloud_fixture(%{presentation_file: presentation_file})
+
+      assert {:ok, %Event{}} = Events.delete_event(presentation_file.event)
+
+      refute Claper.Repo.get(Claper.Polls.Poll, poll.id)
+      refute Claper.Repo.get(Claper.Polls.PollOpt, hd(poll.poll_opts).id)
+      refute Claper.Repo.get(Claper.Forms.Form, form.id)
+      refute Claper.Repo.get(Claper.Embeds.Embed, embed.id)
+      refute Claper.Repo.get(Claper.WordClouds.WordCloud, word_cloud.id)
+      refute Claper.Repo.get(Claper.Presentations.PresentationFile, presentation_file.id)
     end
   end
 
@@ -582,6 +647,80 @@ defmodule Claper.EventsTest do
                Claper.Presentations.get_presentation_file!(to_presentation_file.id, [:polls]).polls,
                0
              ).title == from_poll.title
+    end
+
+    test "import/3 copies word clouds without their words" do
+      user = user_fixture()
+      from_event = event_fixture(%{user: user, name: "from event"})
+      to_event = event_fixture(%{user: user, name: "to event"})
+      from_presentation_file = presentation_file_fixture(%{event: from_event})
+      to_presentation_file = presentation_file_fixture(%{event: to_event, hash: "444444"})
+
+      word_cloud =
+        word_cloud_fixture(%{
+          presentation_file: from_presentation_file,
+          max_entries: 2,
+          show_results: false
+        })
+
+      {:ok, _} = Claper.WordClouds.submit_entry(from_event.uuid, word_cloud, "a", "Elixir")
+      {:ok, _} = Claper.WordClouds.hide_word(from_event.uuid, word_cloud, "elixir")
+
+      assert {:ok, %Event{}} = Events.import(user.id, from_event.uuid, to_event.uuid)
+
+      assert [imported] = Claper.WordClouds.list_word_clouds(to_presentation_file.id)
+      assert imported.title == word_cloud.title
+      assert imported.max_entries == 2
+      refute imported.show_results
+      assert imported.hidden_words == []
+      assert Claper.WordClouds.list_entries(imported.id) == []
+    end
+
+    test "import/3 activates imported clouds without leaving another interaction enabled" do
+      user = user_fixture()
+      source = event_fixture(%{user: user})
+      source_file = presentation_file_fixture(%{event: source})
+      word_cloud_fixture(%{presentation_file: source_file})
+
+      for kind <- [:word_cloud, :poll] do
+        destination = event_fixture(%{user: user})
+        destination_file = presentation_file_fixture(%{event: destination})
+
+        existing =
+          case kind do
+            :word_cloud -> word_cloud_fixture(%{presentation_file: destination_file})
+            :poll -> poll_fixture(%{presentation_file_id: destination_file.id, enabled: true})
+          end
+
+        for _ <- 1..2 do
+          assert {:ok, %Event{}} = Events.import(user.id, source.uuid, destination.uuid)
+
+          current = Claper.WordClouds.get_word_cloud_current_position(destination_file.id, 0)
+          assert current.enabled
+          assert current.id != existing.id or kind == :poll
+
+          event = %{destination | presentation_file: destination_file}
+          assert Claper.Interactions.get_active_interaction(event, 0).id == current.id
+
+          {:ok, interactions} = Claper.Interactions.get_interactions_at_position(event, 0)
+          assert Enum.filter(interactions, & &1.enabled) == [current]
+        end
+      end
+    end
+
+    test "import/3 leaves the destination interaction active when the imported cloud is disabled" do
+      user = user_fixture()
+      source = event_fixture(%{user: user})
+      source_file = presentation_file_fixture(%{event: source})
+      word_cloud_fixture(%{presentation_file: source_file, enabled: false})
+      destination = event_fixture(%{user: user})
+      destination_file = presentation_file_fixture(%{event: destination})
+      existing = word_cloud_fixture(%{presentation_file: destination_file})
+
+      assert {:ok, %Event{}} = Events.import(user.id, source.uuid, destination.uuid)
+
+      assert Claper.WordClouds.get_word_cloud_current_position(destination_file.id, 0).id ==
+               existing.id
     end
 
     test "import/3 fail with different user" do

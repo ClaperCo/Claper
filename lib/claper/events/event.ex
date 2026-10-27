@@ -106,7 +106,7 @@ defmodule Claper.Events.Event do
 
   def update_changeset(event, attrs) do
     event
-    |> cast(attrs, [:name, :code, :started_at, :expired_at, :audience_peak, :user_id])
+    |> cast(attrs, [:name, :code, :started_at, :expired_at, :audience_peak])
     |> cast_assoc(:presentation_file)
     |> cast_assoc(:leaders)
     |> downcase_code

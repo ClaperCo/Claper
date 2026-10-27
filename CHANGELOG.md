@@ -1,4 +1,36 @@
+## v3.2.0
+
+### Features
+
+- Add Word Clouds interaction (#254)
+- Audit logs for rate limits and suspicious submissions
+- Admin can disable a user (soft delete), re-enable them, or permanently delete a user with their events and audit logs (their interactions in other events are kept anonymously)
+- Admin user details page lists the events owned by the user
+- Disable and delete actions are on the admin user and event details pages
+
+### Fixes and improvements
+
+- Fix the transcription API key appearing cleared one day after it was saved.
+- Fix attendee page crashing when a poll option or vote click arrives after the presenter switched to another interaction.
+- Fix scoring on CSV export of quizzes
+
+### Security
+
+- Parse custom embeds into HTTP(S)-only iframe attributes and render escaped HTML.
+- Improve URL filtering of embeds.
+- Escape quiz titles, questions and options in QTI exports.
+- Ignore client-supplied event ownership fields on updates; ownership can only be assigned when creating an event.
+- Fix security enrollment for LTI platforms and admin option to disable the feature.
+- Enforce one poll ballot per participant and one quiz submission per question, including concurrent requests.
+- Prevent OIDC account takeover through email claims.
+- Fix `disconnected_from` that discloses event names by only filtering with UUID.
+- Restore `SAMEORIGIN` framing protection on `/` and `/join`.
+
 ## v3.1.2
+
+### Features
+
+- Add Word Clouds interaction (#254)
 
 ### Security
 

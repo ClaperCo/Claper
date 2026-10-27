@@ -9,16 +9,10 @@ defmodule ClaperWeb.EventLive.Join do
       Gettext.put_locale(ClaperWeb.Gettext, locale)
     end
 
-    if params["disconnected_from"] do
-      try do
-        event = Claper.Events.get_event!(params["disconnected_from"])
-        {:ok, socket |> assign(:last_event, event)}
-      rescue
-        _ -> {:ok, socket |> assign(:last_event, nil)}
-      end
-    else
-      {:ok, socket |> assign(:last_event, nil)}
-    end
+    # UUID only: integer ids are sequential and would allow enumerating events.
+    last_event = Claper.Events.get_event_with_uuid(params["disconnected_from"])
+
+    {:ok, socket |> assign(:last_event, last_event)}
   end
 
   @impl true

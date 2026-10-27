@@ -24,11 +24,34 @@ defmodule ClaperWeb.Plugs.RateLimitPlug do
       {:allow, _count} ->
         conn
 
-      {:deny, _retry_after} ->
+      {:deny, retry_after} ->
+        Claper.Audit.Security.record(
+          conn.assigns[:current_user],
+          "security.rate_limit_exceeded",
+          %{
+            reason: prefix,
+            ip_address: ip,
+            request_id: Logger.metadata()[:request_id],
+            route: route_template(conn),
+            method: conn.method,
+            limit: max_requests,
+            interval_ms: interval_ms,
+            retry_after_ms: retry_after
+          },
+          1
+        )
+
         conn
         |> put_resp_content_type("text/plain")
         |> send_resp(429, "Too Many Requests")
         |> halt()
+    end
+  end
+
+  defp route_template(conn) do
+    case Phoenix.Router.route_info(ClaperWeb.Router, conn.method, conn.path_info, conn.host) do
+      %{route: route} -> route
+      _ -> nil
     end
   end
 end

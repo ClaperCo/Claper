@@ -1,0 +1,32 @@
+<div>
+  <div class="relative h-screen bg-black flex justify-center items-center">
+    <div class="max-w-xl text-center">
+      <p class="text-3xl font-bold text-gray-100">
+        {gettext("Switch account?")}
+      </p>
+      <div class="my-8 text-gray-200 space-y-2">
+        <p>
+          {gettext("You are currently signed in as %{email}.", email: @current_email)}
+        </p>
+        <p>
+          {gettext("Your learning platform wants to sign you in as %{email}.", email: @lti_email)}
+        </p>
+      </div>
+      <div class="flex flex-col gap-4 items-center">
+        <form action={~p"/lti/launch/confirm"} method="post">
+          <input type="hidden" name="_csrf_token" value={Plug.CSRFProtection.get_csrf_token()} />
+          <input type="hidden" name="token" value={@token} />
+          <button type="submit" class="btn btn-primary">
+            {gettext("Continue as %{email}", email: @lti_email)}
+          </button>
+        </form>
+        <form action={~p"/lti/launch/cancel"} method="post">
+          <input type="hidden" name="_csrf_token" value={Plug.CSRFProtection.get_csrf_token()} />
+          <button type="submit" class="btn">
+            {gettext("Stay signed in as %{email}", email: @current_email)}
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

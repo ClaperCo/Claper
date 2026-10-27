@@ -348,6 +348,33 @@ defmodule Claper.Events do
   end
 
   @doc """
+  Gets a single active (not expired) event by UUID, or `nil`.
+
+  ## Examples
+
+      iex> get_event_with_uuid("123e4567-e89b-12d3-a456-426614174000")
+      %Event{}
+
+      iex> get_event_with_uuid("not-a-uuid")
+      nil
+
+  """
+  def get_event_with_uuid(uuid) do
+    now = DateTime.utc_now()
+
+    case Ecto.UUID.cast(uuid) do
+      {:ok, uuid} ->
+        from(e in Event,
+          where: e.uuid == ^uuid and (is_nil(e.expired_at) or e.expired_at > ^now)
+        )
+        |> Repo.one()
+
+      :error ->
+        nil
+    end
+  end
+
+  @doc """
   Check if a user is a facilitator of a specific event.
 
   ## Examples
@@ -508,12 +535,14 @@ defmodule Claper.Events do
          |> Ecto.Multi.run(:from_event, fn _repo, _changes ->
            {:ok,
             get_user_event!(user_id, from_event_uuid,
-              presentation_file: [polls: [:poll_opts], forms: [], embeds: []]
+              presentation_file: [polls: [:poll_opts], forms: [], embeds: [], word_clouds: []]
             )}
          end)
          |> Ecto.Multi.run(:to_event, fn _repo, _changes ->
            {:ok,
-            get_user_event!(user_id, to_event_uuid, presentation_file: [:polls, :forms, :embeds])}
+            get_user_event!(user_id, to_event_uuid,
+              presentation_file: [:polls, :forms, :embeds, :word_clouds]
+            )}
          end)
          |> Ecto.Multi.run(:polls, fn _repo, %{from_event: from_event, to_event: to_event} ->
            {:ok,
@@ -571,6 +600,28 @@ defmodule Claper.Events do
               end
             end)}
          end)
+         |> Ecto.Multi.run(:word_clouds, fn _repo,
+                                            %{from_event: from_event, to_event: to_event} ->
+           {:ok,
+            from_event.presentation_file.word_clouds
+            |> Enum.each(fn word_cloud ->
+              if word_cloud.position < to_event.presentation_file.length do
+                {:ok, imported} =
+                  Claper.WordClouds.create_word_cloud(%{
+                    title: word_cloud.title,
+                    position: word_cloud.position,
+                    enabled: false,
+                    show_results: word_cloud.show_results,
+                    max_entries: word_cloud.max_entries,
+                    presentation_file_id: to_event.presentation_file.id
+                  })
+
+                if word_cloud.enabled do
+                  :ok = Claper.Interactions.enable_interaction(imported)
+                end
+              end
+            end)}
+         end)
          |> Repo.transaction() do
       {:ok, %{to_event: to_event}} -> {:ok, to_event}
     end
@@ -602,7 +653,8 @@ defmodule Claper.Events do
           polls: [:poll_opts],
           forms: [],
           embeds: [],
-          quizzes: [quiz_questions: [:quiz_question_opts]]
+          quizzes: [quiz_questions: [:quiz_question_opts]],
+          word_clouds: []
         ]
       )
 
@@ -619,6 +671,9 @@ defmodule Claper.Events do
       |> Ecto.Multi.run(:forms, fn _repo, changes -> duplicate_forms(original, changes) end)
       |> Ecto.Multi.run(:embeds, fn _repo, changes -> duplicate_embeds(original, changes) end)
       |> Ecto.Multi.run(:quizzes, fn _repo, changes -> duplicate_quizzes(original, changes) end)
+      |> Ecto.Multi.run(:word_clouds, fn _repo, changes ->
+        duplicate_word_clouds(original, changes)
+      end)
 
     case Repo.transaction(multi) do
       {:ok, %{event: event}} -> {:ok, event}
@@ -783,6 +838,29 @@ defmodule Claper.Events do
     end
   end
 
+  # Only the settings are copied. The words, and the ones the presenter hid,
+  # belong to the previous audience.
+  defp duplicate_word_clouds(original, changes) do
+    case get_in(original.presentation_file.word_clouds) do
+      word_clouds when is_list(word_clouds) ->
+        word_clouds =
+          for word_cloud <- word_clouds do
+            attrs =
+              Map.from_struct(word_cloud)
+              |> Map.drop([:id, :inserted_at, :updated_at, :hidden_words])
+              |> Map.put(:presentation_file_id, changes.presentation_file.id)
+
+            {:ok, word_cloud} = Claper.WordClouds.create_word_cloud(attrs)
+            word_cloud
+          end
+
+        {:ok, word_clouds}
+
+      _ ->
+        {:ok, nil}
+    end
+  end
+
   defp map_quiz_question(question) do
     Map.from_struct(question)
     |> Map.drop([:id, :inserted_at, :updated_at])
@@ -799,7 +877,16 @@ defmodule Claper.Events do
   end
 
   @doc """
-  Deletes a event.
+  Permanently deletes an event, every interaction linked to it and its
+  uploaded slides.
+
+  Polls, forms and embeds only have their presentation file reference
+  nilified by the database, so they are deleted explicitly. Everything else
+  (posts, reactions, votes, quizzes, word clouds, stats, transcriptions,
+  facilitators...) cascades from the event or its presentation file.
+
+  Slides are removed from storage once no other presentation file shares
+  the same hash (duplicated events reuse the original slides).
 
   ## Examples
 
@@ -811,6 +898,8 @@ defmodule Claper.Events do
 
   """
   def delete_event(%Event{} = event) do
+    event = Repo.preload(event, :presentation_file)
+
     leaders =
       for %{email: email} <- get_activity_leaders_for_event(event.id),
           leader = Accounts.get_user_by_email(email),
@@ -818,7 +907,8 @@ defmodule Claper.Events do
         leader
       end
 
-    with {:ok, event} <- Repo.delete(event) do
+    with {:ok, event} <- Repo.transaction(fn -> purge_event(event) end) do
+      clear_presentation_storage(event.presentation_file)
       broadcast_user_events(event.user_id, {:deleted, event})
 
       for leader <- leaders do
@@ -828,6 +918,33 @@ defmodule Claper.Events do
       {:ok, event}
     end
   end
+
+  defp purge_event(%Event{presentation_file: presentation_file} = event) do
+    if presentation_file do
+      for schema <- [Claper.Polls.Poll, Claper.Forms.Form, Claper.Embeds.Embed] do
+        from(r in schema, where: r.presentation_file_id == ^presentation_file.id)
+        |> Repo.delete_all()
+      end
+    end
+
+    case Repo.delete(event) do
+      {:ok, event} -> event
+      {:error, changeset} -> Repo.rollback(changeset)
+    end
+  end
+
+  defp clear_presentation_storage(%Presentations.PresentationFile{hash: hash})
+       when is_binary(hash) do
+    if Presentations.get_presentation_files_by_hash(hash) == [] do
+      Task.Supervisor.start_child(Claper.TaskSupervisor, fn ->
+        Claper.Tasks.Converter.clear(hash)
+      end)
+    end
+
+    :ok
+  end
+
+  defp clear_presentation_storage(_presentation_file), do: :ok
 
   @doc """
   Returns an `%Ecto.Changeset{}` for tracking event changes.
@@ -941,6 +1058,8 @@ defmodule Claper.Events do
   def broadcast_user_events(user_id, message) when is_integer(user_id) do
     Phoenix.PubSub.broadcast(Claper.PubSub, "user:#{user_id}:events", message)
   end
+
+  def broadcast_user_events(nil, _message), do: :ok
 
   defp broadcast_all_users({_type, %Event{} = event} = message, _opts \\ []) do
     event = Repo.preload(event, [:leaders])

@@ -31,6 +31,16 @@ defmodule Claper.Accounts.UserNotifier do
   end
 
   @doc """
+  Deliver the link confirming an OIDC sign-in for this email address.
+  """
+  def deliver_oidc_confirmation(email, provider, url) do
+    Claper.Workers.Mailers.new_oidc_confirmation(email, provider, url, email_locale(email))
+    |> Oban.insert()
+
+    {:ok, :enqueued}
+  end
+
+  @doc """
   Deliver instructions to confirm account.
   """
   def deliver_confirmation_instructions(user, url) do

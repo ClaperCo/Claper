@@ -30,6 +30,7 @@
           <div class="flex flex-row justify-center items-center space-x-3"></div>
 
           <form action={~p"/lti/register"} method="post">
+            <input type="hidden" name="_csrf_token" value={Plug.CSRFProtection.get_csrf_token()} />
             <input type="hidden" name="openid_configuration" value={@conf} />
             <input type="hidden" name="registration_token" value={@token} />
             <button :if={@current_user} type="submit" class="btn btn-primary">
