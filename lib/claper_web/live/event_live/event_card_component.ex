@@ -114,7 +114,7 @@ defmodule ClaperWeb.EventLive.EventCardComponent do
       </div>
       
     <!-- Sliding Bottom Panel -->
-      <div class="absolute bottom-0 left-0 right-0 bg-white transition-transform duration-300 ease-out z-20 translate-y-14 group-hover:translate-y-0 group-focus-within:translate-y-0">
+      <div class="absolute bottom-0 left-0 right-0 bg-white z-20">
         <!-- Card Body (Title, Code, Menu) -->
         <div class="p-2 border-t border-gray-200">
           <div class="flex items-start justify-between gap-4">
@@ -157,136 +157,143 @@ defmodule ClaperWeb.EventLive.EventCardComponent do
           </div>
         </div>
         
-    <!-- Action Buttons (revealed on hover) -->
-        <div
-          :if={@event.presentation_file.status == "done" && !Event.finished?(@event)}
-          class="px-2 pb-2 flex gap-2"
-        >
-          <!-- Join Button with Dropdown -->
-          <div class="relative flex-1">
-            <button
-              id={dom_id(@id, "join-button")}
-              type="button"
-              aria-expanded="false"
-              aria-controls={dom_id(@id, "join-menu")}
-              phx-click={toggle_join_menu(@id)}
-              class="btn btn-primary w-full"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                class="h-5 w-5"
-                viewBox="0 0 20 20"
-                fill="currentColor"
-              >
-                <path
-                  fill-rule="evenodd"
-                  d="M5.22 14.78a.75.75 0 001.06 0l7.22-7.22v5.69a.75.75 0 001.5 0v-7.5a.75.75 0 00-.75-.75h-7.5a.75.75 0 000 1.5h5.69l-7.22 7.22a.75.75 0 000 1.06z"
-                  clip-rule="evenodd"
-                />
-              </svg>
-              {gettext("Join")}
-              <svg
-                id={dom_id(@id, "join-arrow")}
-                xmlns="http://www.w3.org/2000/svg"
-                class="h-4 w-4 transition-transform"
-                viewBox="0 0 20 20"
-                fill="currentColor"
-              >
-                <path
-                  fill-rule="evenodd"
-                  d="M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z"
-                  clip-rule="evenodd"
-                />
-              </svg>
-            </button>
-            <!-- Dropdown Menu -->
+    <!-- Hover-revealed actions: collapsed to 0 height until hover/focus -->
+        <div class="grid grid-rows-[0fr] transition-[grid-template-rows] duration-300 ease-out group-hover:grid-rows-[1fr] group-focus-within:grid-rows-[1fr]">
+          <div class="min-h-0 overflow-hidden group-hover:overflow-visible group-focus-within:overflow-visible">
+            <!-- Action Buttons -->
             <div
-              id={dom_id(@id, "join-menu")}
-              phx-click-away={close_join_menu(@id)}
-              class="hidden absolute bottom-full left-0 right-0 mb-2 bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden"
+              :if={@event.presentation_file.status == "done" && !Event.finished?(@event)}
+              class="px-2 pb-2 flex gap-2"
             >
-              <a
-                href={~p"/e/#{@event.code}/manage"}
-                class="flex items-center gap-3 px-4 py-3 text-gray-700 hover:bg-gray-50 transition"
+              <!-- Join Button with Dropdown -->
+              <div class="relative flex-1">
+                <button
+                  id={dom_id(@id, "join-button")}
+                  type="button"
+                  aria-expanded="false"
+                  aria-controls={dom_id(@id, "join-menu")}
+                  phx-click={toggle_join_menu(@id)}
+                  class="btn btn-primary w-full"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="h-5 w-5"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                  >
+                    <path
+                      fill-rule="evenodd"
+                      d="M5.22 14.78a.75.75 0 001.06 0l7.22-7.22v5.69a.75.75 0 001.5 0v-7.5a.75.75 0 00-.75-.75h-7.5a.75.75 0 000 1.5h5.69l-7.22 7.22a.75.75 0 000 1.06z"
+                      clip-rule="evenodd"
+                    />
+                  </svg>
+                  {gettext("Join")}
+                  <svg
+                    id={dom_id(@id, "join-arrow")}
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="h-4 w-4 transition-transform"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                  >
+                    <path
+                      fill-rule="evenodd"
+                      d="M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z"
+                      clip-rule="evenodd"
+                    />
+                  </svg>
+                </button>
+                <!-- Dropdown Menu -->
+                <div
+                  id={dom_id(@id, "join-menu")}
+                  phx-click-away={close_join_menu(@id)}
+                  class="hidden absolute bottom-full left-0 right-0 mb-2 bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden"
+                >
+                  <a
+                    href={~p"/e/#{@event.code}/manage"}
+                    class="flex items-center gap-3 px-4 py-3 text-gray-700 hover:bg-gray-50 transition"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 24 24"
+                      fill="currentColor"
+                      class="w-5 h-5"
+                    >
+                      <path
+                        fill-rule="evenodd"
+                        d="M2.25 2.25a.75.75 0 0 0 0 1.5H3v10.5a3 3 0 0 0 3 3h1.21l-1.172 3.513a.75.75 0 0 0 1.424.474l.329-.987h8.418l.33.987a.75.75 0 0 0 1.422-.474l-1.17-3.513H18a3 3 0 0 0 3-3V3.75h.75a.75.75 0 0 0 0-1.5H2.25Zm6.04 16.5.5-1.5h6.42l.5 1.5H8.29Zm7.46-12a.75.75 0 0 0-1.5 0v6a.75.75 0 0 0 1.5 0v-6Zm-3 2.25a.75.75 0 0 0-1.5 0v3.75a.75.75 0 0 0 1.5 0V9Zm-3 2.25a.75.75 0 0 0-1.5 0v1.5a.75.75 0 0 0 1.5 0v-1.5Z"
+                        clip-rule="evenodd"
+                      />
+                    </svg>
+                    <span class="font-medium">{gettext("Event Manager")}</span>
+                  </a>
+                  <a
+                    href={~p"/e/#{@event.code}"}
+                    class="flex items-center gap-3 px-4 py-3 text-gray-700 hover:bg-gray-50 transition border-t border-gray-100"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 24 24"
+                      fill="currentColor"
+                      class="w-5 h-5"
+                    >
+                      <path
+                        fill-rule="evenodd"
+                        d="M8.25 6.75a3.75 3.75 0 1 1 7.5 0 3.75 3.75 0 0 1-7.5 0ZM15.75 9.75a3 3 0 1 1 6 0 3 3 0 0 1-6 0ZM2.25 9.75a3 3 0 1 1 6 0 3 3 0 0 1-6 0ZM6.31 15.117A6.745 6.745 0 0 1 12 12a6.745 6.745 0 0 1 6.709 7.498.75.75 0 0 1-.372.568A12.696 12.696 0 0 1 12 21.75c-2.305 0-4.47-.612-6.337-1.684a.75.75 0 0 1-.372-.568 6.787 6.787 0 0 1 1.019-4.38Z"
+                        clip-rule="evenodd"
+                      />
+                      <path d="M5.082 14.254a8.287 8.287 0 0 0-1.308 5.135 9.687 9.687 0 0 1-1.764-.44l-.115-.04a.563.563 0 0 1-.373-.487l-.01-.121a3.75 3.75 0 0 1 3.57-4.047ZM20.226 19.389a8.287 8.287 0 0 0-1.308-5.135 3.75 3.75 0 0 1 3.57 4.047l-.01.121a.563.563 0 0 1-.373.486l-.115.04c-.567.2-1.156.349-1.764.441Z" />
+                    </svg>
+                    <span class="font-medium">{gettext("Attendees Room")}</span>
+                  </a>
+                </div>
+              </div>
+              <!-- End Event Button -->
+              <.link
+                :if={Event.started?(@event) && not @is_leader}
+                data-confirm={
+                  gettext(
+                    "Are you sure you want to terminate this event? This action cannot be undone."
+                  )
+                }
+                phx-value-id={@event.uuid}
+                phx-click="terminate"
+                class="btn btn-outline flex-1"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
+                  class="h-5 w-5"
+                  viewBox="0 0 20 20"
                   fill="currentColor"
-                  class="w-5 h-5"
                 >
-                  <path
-                    fill-rule="evenodd"
-                    d="M2.25 2.25a.75.75 0 0 0 0 1.5H3v10.5a3 3 0 0 0 3 3h1.21l-1.172 3.513a.75.75 0 0 0 1.424.474l.329-.987h8.418l.33.987a.75.75 0 0 0 1.422-.474l-1.17-3.513H18a3 3 0 0 0 3-3V3.75h.75a.75.75 0 0 0 0-1.5H2.25Zm6.04 16.5.5-1.5h6.42l.5 1.5H8.29Zm7.46-12a.75.75 0 0 0-1.5 0v6a.75.75 0 0 0 1.5 0v-6Zm-3 2.25a.75.75 0 0 0-1.5 0v3.75a.75.75 0 0 0 1.5 0V9Zm-3 2.25a.75.75 0 0 0-1.5 0v1.5a.75.75 0 0 0 1.5 0v-1.5Z"
-                    clip-rule="evenodd"
-                  />
+                  <path d="M6.28 5.22a.75.75 0 0 0-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 1 0 1.06 1.06L10 11.06l3.72 3.72a.75.75 0 1 0 1.06-1.06L11.06 10l3.72-3.72a.75.75 0 0 0-1.06-1.06L10 8.94 6.28 5.22Z" />
                 </svg>
-                <span class="font-medium">{gettext("Event Manager")}</span>
-              </a>
-              <a
-                href={~p"/e/#{@event.code}"}
-                class="flex items-center gap-3 px-4 py-3 text-gray-700 hover:bg-gray-50 transition border-t border-gray-100"
-              >
+                {gettext("End Event")}
+              </.link>
+            </div>
+            
+    <!-- Error Status -->
+            <div :if={@event.presentation_file.status == "fail"} class="px-2 pb-2">
+              <span class="text-sm text-supporting-red-500">
+                {gettext("Error when processing the file")}
+              </span>
+            </div>
+            
+    <!-- Finished Event Actions -->
+            <div :if={Event.finished?(@event)} class="px-2 pb-2">
+              <a href={~p"/events/#{@event.uuid}/stats"} class="btn btn-primary w-full">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
+                  class="h-5 w-5"
+                  viewBox="0 0 20 20"
                   fill="currentColor"
-                  class="w-5 h-5"
                 >
-                  <path
-                    fill-rule="evenodd"
-                    d="M8.25 6.75a3.75 3.75 0 1 1 7.5 0 3.75 3.75 0 0 1-7.5 0ZM15.75 9.75a3 3 0 1 1 6 0 3 3 0 0 1-6 0ZM2.25 9.75a3 3 0 1 1 6 0 3 3 0 0 1-6 0ZM6.31 15.117A6.745 6.745 0 0 1 12 12a6.745 6.745 0 0 1 6.709 7.498.75.75 0 0 1-.372.568A12.696 12.696 0 0 1 12 21.75c-2.305 0-4.47-.612-6.337-1.684a.75.75 0 0 1-.372-.568 6.787 6.787 0 0 1 1.019-4.38Z"
-                    clip-rule="evenodd"
-                  />
-                  <path d="M5.082 14.254a8.287 8.287 0 0 0-1.308 5.135 9.687 9.687 0 0 1-1.764-.44l-.115-.04a.563.563 0 0 1-.373-.487l-.01-.121a3.75 3.75 0 0 1 3.57-4.047ZM20.226 19.389a8.287 8.287 0 0 0-1.308-5.135 3.75 3.75 0 0 1 3.57 4.047l-.01.121a.563.563 0 0 1-.373.486l-.115.04c-.567.2-1.156.349-1.764.441Z" />
+                  <path d="M2 10a8 8 0 018-8v8h8a8 8 0 11-16 0z" />
+                  <path d="M12 2.252A8.014 8.014 0 0117.748 8H12V2.252z" />
                 </svg>
-                <span class="font-medium">{gettext("Attendees Room")}</span>
+                {gettext("View report")}
               </a>
             </div>
           </div>
-          <!-- End Event Button -->
-          <.link
-            :if={Event.started?(@event) && not @is_leader}
-            data-confirm={
-              gettext("Are you sure you want to terminate this event? This action cannot be undone.")
-            }
-            phx-value-id={@event.uuid}
-            phx-click="terminate"
-            class="btn btn-outline flex-1"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              class="h-5 w-5"
-              viewBox="0 0 20 20"
-              fill="currentColor"
-            >
-              <path d="M6.28 5.22a.75.75 0 0 0-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 1 0 1.06 1.06L10 11.06l3.72 3.72a.75.75 0 1 0 1.06-1.06L11.06 10l3.72-3.72a.75.75 0 0 0-1.06-1.06L10 8.94 6.28 5.22Z" />
-            </svg>
-            {gettext("End Event")}
-          </.link>
-        </div>
-        
-    <!-- Error Status -->
-        <div :if={@event.presentation_file.status == "fail"} class="px-2 pb-2">
-          <span class="text-sm text-supporting-red-500">
-            {gettext("Error when processing the file")}
-          </span>
-        </div>
-        
-    <!-- Finished Event Actions -->
-        <div :if={Event.finished?(@event)} class="px-2 pb-2">
-          <a href={~p"/events/#{@event.uuid}/stats"} class="btn btn-primary w-full">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              class="h-5 w-5"
-              viewBox="0 0 20 20"
-              fill="currentColor"
-            >
-              <path d="M2 10a8 8 0 018-8v8h8a8 8 0 11-16 0z" />
-              <path d="M12 2.252A8.014 8.014 0 0117.748 8H12V2.252z" />
-            </svg>
-            {gettext("View report")}
-          </a>
         </div>
       </div>
     </div>
