@@ -1,4 +1,4 @@
-## v3.2.0 (unreleased)
+## v3.2.0
 
 ### Features
 
