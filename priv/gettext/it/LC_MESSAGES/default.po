@@ -3709,208 +3709,209 @@ msgstr "Non è stato possibile aggiungere la tua parola. Scrivi una parola o una
 #: lib/claper_web/controllers/lti/registration_controller.ex
 #, elixir-autogen, elixir-format
 msgid "Registration with your platform failed. Please check your platform configuration and try again."
-msgstr ""
+msgstr "La registrazione con la tua piattaforma non è riuscita. Verifica la configurazione della piattaforma e riprova."
 
 #: lib/claper_web/live/user_settings_live/show.html.heex
 #, elixir-autogen, elixir-format
 msgid "Approve LMS sign-in"
-msgstr ""
+msgstr "Approva l'accesso LMS"
 
 #: lib/claper_web/live/user_settings_live/show.ex
 #, elixir-autogen, elixir-format
 msgid "LMS sign-in has been approved."
-msgstr ""
+msgstr "L'accesso LMS è stato approvato."
+
 
 #: lib/claper_web/live/user_settings_live/show.html.heex
 #, elixir-autogen, elixir-format
 msgid "Local password"
-msgstr ""
+msgstr "Password locale"
 
 #: lib/claper_web/live/user_settings_live/show.html.heex
 #, elixir-autogen, elixir-format
 msgid "Only approve this LMS identity if you recognize the platform and platform user above. Enter your local password to restore LMS sign-in. If needed, reset your password first."
-msgstr ""
+msgstr "Approva questa identità LMS solo se riconosci la piattaforma e l'utente della piattaforma indicati sopra. Inserisci la tua password locale per ripristinare l'accesso LMS. Se necessario, reimposta prima la password."
 
 #: lib/claper_web/live/user_settings_live/show.html.heex
 #, elixir-autogen, elixir-format
 msgid "Platform user:"
-msgstr ""
+msgstr "Utente della piattaforma:"
 
 #: lib/claper_web/live/user_settings_live/show.ex
 #, elixir-autogen, elixir-format
 msgid "Unable to approve LMS sign-in. Check your local password."
-msgstr ""
+msgstr "Impossibile approvare l'accesso LMS. Controlla la tua password locale."
 
 #: lib/claper_web/templates/lti/registration/success.html.heex
 #, elixir-autogen, elixir-format
 msgid "An administrator of this Claper instance must approve this platform before it can be used. Until then, launches from this platform will be refused."
-msgstr ""
+msgstr "Un amministratore di questa istanza di Claper deve approvare questa piattaforma prima che possa essere utilizzata. Fino ad allora, gli avvii da questa piattaforma saranno rifiutati."
 
 #: lib/claper_web/live/admin_live/lti_platform_live.html.heex
 #, elixir-autogen, elixir-format
 msgid "Approve"
-msgstr ""
+msgstr "Approva"
 
 #: lib/claper_web/live/admin_live/lti_platform_live.html.heex
 #, elixir-autogen, elixir-format
 msgid "Approved"
-msgstr ""
+msgstr "Approvata"
 
 #: lib/claper_web/live/user_settings_live/show.html.heex
 #, elixir-autogen, elixir-format
 msgid "Approved by an administrator"
-msgstr ""
+msgstr "Approvata da un amministratore"
 
 #: lib/claper_web/templates/lti/registration/success.html.heex
 #, elixir-autogen, elixir-format
 msgid "Ask a Claper administrator to approve this platform"
-msgstr ""
+msgstr "Chiedi a un amministratore di Claper di approvare questa piattaforma"
 
 #: lib/claper_web/live/admin_live/lti_platform_live.html.heex
 #, elixir-autogen, elixir-format
 msgid "Client ID"
-msgstr ""
+msgstr "Client ID"
 
 #: lib/claper_web/live/user_settings_live/show.html.heex
 #, elixir-autogen, elixir-format
 msgid "Client ID:"
-msgstr ""
+msgstr "Client ID:"
 
 #: lib/claper_web/templates/lti/launch/confirm.html.heex
 #, elixir-autogen, elixir-format
 msgid "Continue as %{email}"
-msgstr ""
+msgstr "Continua come %{email}"
 
 #: lib/claper_web/live/admin_live/lti_platform_live.html.heex
 #, elixir-autogen, elixir-format
 msgid "Issuer"
-msgstr ""
+msgstr "Issuer (Emittente)"
 
 #: lib/claper_web/live/admin_live/lti_platform_live.html.heex
 #, elixir-autogen, elixir-format
 msgid "LMS platforms registered by non-administrators stay pending until approved. Pending platforms cannot sign users in or launch Claper."
-msgstr ""
+msgstr "Le piattaforme LMS registrate da non amministratori rimangono in attesa fino all'approvazione. Le piattaforme in attesa non possono autenticare gli utenti o avviare Claper."
 
 #: lib/claper_web/live/admin_live/lti_platform_live.ex
 #: lib/claper_web/templates/layout/admin_app.html.heex
 #, elixir-autogen, elixir-format
 msgid "LTI Platforms"
-msgstr ""
+msgstr "Piattaforme LTI"
 
 #: lib/claper_web/live/admin_live/lti_platform_live.ex
 #, elixir-autogen, elixir-format
 msgid "LTI platform updated."
-msgstr ""
+msgstr "Piattaforma LTI aggiornata."
 
 #: lib/claper_web/live/admin_live/lti_platform_live.html.heex
 #, elixir-autogen, elixir-format
 msgid "Pending"
-msgstr ""
+msgstr "In attesa"
 
 #: lib/claper_web/live/user_settings_live/show.html.heex
 #, elixir-autogen, elixir-format
 msgid "Pending administrator approval"
-msgstr ""
+msgstr "In attesa di approvazione dell'amministratore"
 
 #: lib/claper_web/live/user_settings_live/show.html.heex
 #, elixir-autogen, elixir-format, fuzzy
 msgid "Platform status:"
-msgstr ""
+msgstr "Stato della piattaforma:"
 
 #: lib/claper_web/live/admin_live/lti_platform_live.html.heex
 #, elixir-autogen, elixir-format
 msgid "Registered by"
-msgstr ""
+msgstr "Registrata da"
 
 #: lib/claper_web/live/user_settings_live/show.html.heex
 #, elixir-autogen, elixir-format
 msgid "Registered by:"
-msgstr ""
+msgstr "Registrata da:"
 
 #: lib/claper_web/live/user_settings_live/show.html.heex
 #, elixir-autogen, elixir-format
 msgid "Registered on:"
-msgstr ""
+msgstr "Registrata il:"
 
 #: lib/claper_web/live/admin_live/lti_platform_live.html.heex
 #, elixir-autogen, elixir-format
 msgid "Revoke"
-msgstr ""
+msgstr "Revoca"
 
 #: lib/claper_web/live/admin_live/lti_platform_live.html.heex
 #, elixir-autogen, elixir-format
 msgid "Revoke this platform? Its users will no longer be able to launch Claper."
-msgstr ""
+msgstr "Revocare questa piattaforma? I suoi utenti non potranno più avviare Claper."
 
 #: lib/claper_web/templates/lti/launch/confirm.html.heex
 #, elixir-autogen, elixir-format
 msgid "Stay signed in as %{email}"
-msgstr ""
+msgstr "Resta connesso come %{email}"
 
 #: lib/claper_web/templates/lti/launch/confirm.html.heex
 #, elixir-autogen, elixir-format
 msgid "Switch account?"
-msgstr ""
+msgstr "Cambiare account?"
 
 #: lib/claper_web/live/user_settings_live/show.html.heex
 #, elixir-autogen, elixir-format
 msgid "This LMS platform has not been approved by an administrator yet. LMS sign-in from it cannot be restored until an administrator approves the platform."
-msgstr ""
+msgstr "Questa piattaforma LMS non è ancora stata approvata da un amministratore. L'accesso LMS da essa non potrà essere ripristinato finché un amministratore non avrà approvato la piattaforma."
 
 #: lib/claper_web/controllers/lti/launch_controller.ex
 #, elixir-autogen, elixir-format
 msgid "This account switch request is invalid or expired."
-msgstr ""
+msgstr "Questa richiesta di cambio account non è valida o è scaduta."
 
 #: lib/claper_web/live/user_settings_live/show.ex
 #, elixir-autogen, elixir-format
 msgid "Too many approval attempts. Please wait a minute and try again."
-msgstr ""
+msgstr "Troppi tentativi di approvazione. Attendi un minuto e riprova."
 
 #: lib/claper_web/live/admin_live/lti_platform_live.ex
 #, elixir-autogen, elixir-format
 msgid "Unable to update LTI platform."
-msgstr ""
+msgstr "Impossibile aggiornare la piattaforma LTI."
 
 #: lib/claper_web/templates/lti/launch/confirm.html.heex
 #, elixir-autogen, elixir-format
 msgid "You are currently signed in as %{email}."
-msgstr ""
+msgstr "Attualmente hai effettuato l'accesso come %{email}."
 
 #: lib/claper_web/templates/lti/launch/confirm.html.heex
 #, elixir-autogen, elixir-format
 msgid "Your learning platform wants to sign you in as %{email}."
-msgstr ""
+msgstr "La tua piattaforma di apprendimento desidera farti accedere come %{email}."
 
 #: lib/claper_web/live/admin_live/settings_live.html.heex
 #, elixir-autogen, elixir-format
 msgid "Enable LTI globally"
-msgstr ""
+msgstr "Abilita LTI a livello globale"
 
 #: lib/claper_web/live/admin_live/settings_live.html.heex
-#, elixir-autogen, elixir-format, fuzzy
+#, elixir-autogen, elixir-format
 msgid "LTI Settings"
-msgstr "Impostazioni"
+msgstr "Impostazioni LTI"
 
 #: lib/claper_web/live/admin_live/settings_live.ex
 #, elixir-autogen, elixir-format
 msgid "Unable to save settings."
-msgstr ""
+msgstr "Impossibile salvare le impostazioni."
 
 #: lib/claper_web/live/admin_live/settings_live.html.heex
 #, elixir-autogen, elixir-format
 msgid "When disabled, LTI registration, login, launches and outbound LMS requests are blocked. Existing registrations and quiz data are preserved."
-msgstr ""
+msgstr "Se disabilitato, la registrazione LTI, l'accesso, gli avvii e le richieste LMS in uscita vengono bloccati. Le registrazioni esistenti e i dati dei quiz vengono preservati."
 
 #: lib/claper_web/templates/lti/registration/start.html.heex
 #, elixir-autogen, elixir-format
 msgid "Continue in a new tab to sign in and securely confirm platform registration. Return to your LMS when registration is complete."
-msgstr ""
+msgstr "Continua in una nuova scheda per accedere e confermare in modo sicuro la registrazione della piattaforma. Torna al tuo LMS al completamento della registrazione."
 
 #: lib/claper_web/templates/lti/registration/start.html.heex
 #, elixir-autogen, elixir-format
 msgid "Continue registration in Claper"
-msgstr ""
+msgstr "Continua la registrazione in Claper"
 
 #: lib/claper_web/live/admin_live/event_live.ex
 #, elixir-autogen, elixir-format
@@ -3991,74 +3992,75 @@ msgstr "Eliminare definitivamente questo utente e tutti i suoi eventi? Le sue in
 #: lib/claper_web/controllers/user_oidc_auth.ex
 #, elixir-autogen, elixir-format
 msgid "%{provider} did not share an email address for your account. Ask your administrator to include the email claim for Claper."
-msgstr ""
+msgstr "%{provider} non ha condiviso un indirizzo email per il tuo account. Chiedi al tuo amministratore di includere il claim email per Claper."
 
 #: lib/claper_web/templates/user_notifier/oidc_confirmation.html.heex
 #, elixir-autogen, elixir-format
 msgid "CONFIRM SIGN-IN"
-msgstr ""
+msgstr "CONFERMA ACCESSO"
 
 #: lib/claper_web/templates/user_oidc/check_email.html.heex
 #, elixir-autogen, elixir-format
 msgid "Check your email to finish signing in with %{provider}."
-msgstr ""
+msgstr "Controlla la tua email per completare l'accesso con %{provider}."
 
 #: lib/claper_web/templates/user_oidc/confirm.html.heex
 #, elixir-autogen, elixir-format
 msgid "Confirm and sign in"
-msgstr ""
+msgstr "Conferma e accedi"
 
 #: lib/claper_web/templates/user_notifier/oidc_confirmation.html.heex
 #, elixir-autogen, elixir-format
 msgid "Confirm your sign-in"
-msgstr ""
+msgstr "Conferma il tuo accesso"
 
 #: lib/claper_web/notifiers/user_notifier.ex
 #, elixir-autogen, elixir-format
 msgid "Confirm your sign-in to Claper"
-msgstr ""
+msgstr "Conferma il tuo accesso a Claper"
 
 #: lib/claper_web/templates/user_oidc/confirm.html.heex
 #, elixir-autogen, elixir-format
 msgid "Finish signing in with %{provider}"
-msgstr ""
+msgstr "Completa l'accesso con %{provider}"
 
 #: lib/claper_web/templates/user_notifier/oidc_confirmation.html.heex
 #, elixir-autogen, elixir-format
 msgid "If this wasn't you, ignore this email. Your account stays unchanged."
-msgstr ""
+msgstr "Se non sei stato tu, ignora questa email. Il tuo account rimarrà invariato."
 
 #: lib/claper_web/templates/user_oidc/error.html.heex
 #, elixir-autogen, elixir-format
 msgid "Sign-in failed"
-msgstr ""
+msgstr "Accesso non riuscito"
 
 #: lib/claper_web/controllers/user_oidc_auth.ex
 #, elixir-autogen, elixir-format
 msgid "Signing in with %{provider} failed. Please try again."
-msgstr ""
+msgstr "L'accesso con %{provider} non è riuscito. Riprova."
 
 #: lib/claper_web/templates/user_notifier/oidc_confirmation.html.heex
 #, elixir-autogen, elixir-format
 msgid "Someone signed in to Claper with %{provider} using this email address. If this was you, open the link below in the same browser to finish signing in. The link expires in 15 minutes."
-msgstr ""
+msgstr "Qualcuno ha effettuato l'accesso a Claper con %{provider} utilizzando questo indirizzo email. Se sei stato tu, apri il link sottostante nello stesso browser per completare l'accesso. Il link scadrà tra 15 minutes."
 
 #: lib/claper_web/controllers/user_oidc_auth.ex
 #, elixir-autogen, elixir-format
 msgid "This account cannot sign in. Contact your administrator."
-msgstr ""
+msgstr "Questo account non può accedere. Contatta il tuo amministratore."
 
 #: lib/claper_web/controllers/user_oidc_auth.ex
 #, elixir-autogen, elixir-format
 msgid "This confirmation link is invalid, has expired, or was opened in a different browser. Sign in with %{provider} again from this browser."
-msgstr ""
+msgstr "Questo link di conferma non è valido, è scaduto o è stato aperto in un browser diverso. Effettua nuovamente l'accesso con %{provider} da questo browser."
 
 #: lib/claper_web/templates/user_oidc/confirm.html.heex
 #, elixir-autogen, elixir-format
 msgid "This links your %{provider} sign-in to your Claper account."
-msgstr ""
+msgstr "Questo collegherà il tuo accesso tramite %{provider} al tuo account Claper."
 
 #: lib/claper_web/templates/user_oidc/check_email.html.heex
 #, elixir-autogen, elixir-format
 msgid "We sent a confirmation link to the email address of your account. Open it in this browser within 15 minutes."
-msgstr ""
+msgstr "Abbiamo inviato un link di conferma all'indirizzo email del tuo account. Aprilo in questo browser entro 15 minuti."
+
