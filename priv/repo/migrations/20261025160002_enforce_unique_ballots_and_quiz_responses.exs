@@ -70,15 +70,19 @@ defmodule Claper.Repo.Migrations.EnforceUniqueBallotsAndQuizResponses do
     GROUP BY poll_id, user_id, attendee_identifier
     """)
 
+    # Historical responses may disagree on quiz_id for the same question.
+    # Reserve by question and identity, using the question's owning quiz.
     execute("""
     INSERT INTO quiz_question_submissions
       (quiz_id, quiz_question_id, user_id, attendee_identifier, inserted_at, updated_at)
-    SELECT quiz_id, quiz_question_id, user_id, attendee_identifier, min(inserted_at), min(inserted_at)
-    FROM quiz_responses
-    WHERE quiz_id IS NOT NULL AND quiz_question_id IS NOT NULL
-      AND num_nonnulls(user_id, attendee_identifier) = 1
-      AND (attendee_identifier IS NULL OR attendee_identifier <> '')
-    GROUP BY quiz_id, quiz_question_id, user_id, attendee_identifier
+    SELECT q.quiz_id, r.quiz_question_id, r.user_id, r.attendee_identifier,
+      min(r.inserted_at), min(r.inserted_at)
+    FROM quiz_responses r
+    JOIN quiz_questions q ON q.id = r.quiz_question_id
+    WHERE r.quiz_id IS NOT NULL AND q.quiz_id IS NOT NULL
+      AND num_nonnulls(r.user_id, r.attendee_identifier) = 1
+      AND (r.attendee_identifier IS NULL OR r.attendee_identifier <> '')
+    GROUP BY q.quiz_id, r.quiz_question_id, r.user_id, r.attendee_identifier
     """)
   end
 
