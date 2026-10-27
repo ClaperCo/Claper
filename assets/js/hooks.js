@@ -174,16 +174,11 @@ const Hooks = {
     }
   },
   
-  // Hook for persisting view mode preference to localStorage
+  // Persists the event list view mode in a cookie so the server renders it on first paint
   ViewModePreference: {
     mounted() {
-      const savedMode = localStorage.getItem("claper_event_list_view_mode");
-      if (savedMode && (savedMode === "grid" || savedMode === "list")) {
-        this.pushEvent("restore-view-mode", { view: savedMode });
-      }
-
       this.handleEvent("save-view-mode", ({ view }) => {
-        localStorage.setItem("claper_event_list_view_mode", view);
+        document.cookie = `claper_event_view_mode=${view}; path=/; max-age=31536000; SameSite=Lax`;
       });
     }
   },

@@ -67,7 +67,8 @@ defmodule ClaperWeb.Router do
   end
 
   live_session :user,
-    root_layout: {ClaperWeb.LayoutView, :user} do
+    root_layout: {ClaperWeb.LayoutView, :user},
+    session: {ClaperWeb.EventLive.Index, :view_mode_session, []} do
     scope "/", ClaperWeb do
       pipe_through([:browser, :require_authenticated_user])
 

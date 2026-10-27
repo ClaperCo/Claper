@@ -245,6 +245,23 @@ defmodule ClaperWeb.EventLiveTest do
 
       refute has_element?(index_live, "#event-#{presentation_file.event.id}")
     end
+
+    test "renders the saved list view mode on first render", %{conn: conn} do
+      conn = conn |> put_req_cookie("claper_event_view_mode", "list") |> get(~p"/events")
+
+      assert html_response(conn, 200) =~ ~s(role="event-list" id="events")
+
+      {:ok, index_live, _html} = live(conn)
+
+      assert has_element?(index_live, ~s(#events[role="event-list"]))
+    end
+
+    test "falls back to grid view for an unknown saved view mode", %{conn: conn} do
+      {:ok, index_live, _html} =
+        conn |> put_req_cookie("claper_event_view_mode", "bogus") |> live(~p"/events")
+
+      refute has_element?(index_live, ~s(#events[role="event-list"]))
+    end
   end
 
   describe "Show" do

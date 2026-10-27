@@ -29,7 +29,7 @@ defmodule ClaperWeb.EventLive.Index do
       |> assign(:total_entries, 0)
       |> assign(:events, [])
       |> assign(:search_query, "")
-      |> assign(:view_mode, "grid")
+      |> assign(:view_mode, valid_view_mode(session["event_view_mode"]))
       |> assign(:temporary_assigns, events: [])
       |> load_events()
 
@@ -126,16 +126,26 @@ defmodule ClaperWeb.EventLive.Index do
 
   @impl true
   def handle_event("change-view", %{"view" => view_mode}, socket) do
+    view_mode = valid_view_mode(view_mode)
+
     {:noreply,
      socket
      |> assign(:view_mode, view_mode)
      |> push_event("save-view-mode", %{view: view_mode})}
   end
 
-  @impl true
-  def handle_event("restore-view-mode", %{"view" => view_mode}, socket) do
-    {:noreply, assign(socket, :view_mode, view_mode)}
+  @view_mode_cookie "claper_event_view_mode"
+
+  @doc """
+  Extra LiveView session for the `:user` live_session: exposes the event list
+  view mode cookie so the first (static) render already uses the saved layout.
+  """
+  def view_mode_session(conn) do
+    %{"event_view_mode" => conn.cookies[@view_mode_cookie]}
   end
+
+  defp valid_view_mode(mode) when mode in ["grid", "list"], do: mode
+  defp valid_view_mode(_), do: "grid"
 
   defp apply_action(socket, :edit, %{"id" => id}) do
     event =

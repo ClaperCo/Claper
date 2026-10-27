@@ -1,6 +1,8 @@
 ## v3.2.1
 
-TBD
+### Fixes and improvements
+
+- Fix event view preference flash on reload
 
 ## v3.2.0
 
