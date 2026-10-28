@@ -99,6 +99,42 @@ defmodule Claper.AccountsTest do
       refute changeset.valid?
       assert "does not match confirmation" in errors_on(changeset).password_confirmation
     end
+
+    test "limits passwords to bcrypt's 72-byte input" do
+      at_limit = String.duplicate("é", 36)
+      over_limit = String.duplicate("é", 37)
+
+      assert Accounts.change_user_registration(
+               %User{},
+               valid_user_attributes(password: at_limit, password_confirmation: at_limit)
+             ).valid?
+
+      changeset =
+        Accounts.change_user_registration(
+          %User{},
+          valid_user_attributes(password: over_limit, password_confirmation: over_limit)
+        )
+
+      assert "is too long" in errors_on(changeset).password
+    end
+
+    test "admin changes apply the same 72-byte password limit" do
+      changeset = Accounts.change_user(%User{}, %{password: String.duplicate("é", 37)})
+
+      assert "is too long" in errors_on(changeset).password
+    end
+
+    test "existing users with passwords over 72 bytes can still log in" do
+      user = user_fixture()
+      password = String.duplicate("é", 37)
+
+      user
+      |> Ecto.Changeset.change(hashed_password: Bcrypt.hash_pwd_salt(password))
+      |> Claper.Repo.update!()
+
+      assert %User{id: id} = Accounts.get_user_by_email_and_password(user.email, password)
+      assert id == user.id
+    end
   end
 
   describe "user profile" do

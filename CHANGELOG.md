@@ -4,6 +4,10 @@
 
 - Fix event view preference flash on reload
 
+### Security
+
+- Enforce bcrypt 72 bytes password limit
+
 ## v3.2.0
 
 ### Features
