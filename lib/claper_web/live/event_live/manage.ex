@@ -1067,6 +1067,24 @@ defmodule ClaperWeb.EventLive.Manage do
   @impl true
   def handle_event(
         "checked",
+        %{"key" => "quiz_reveal_answers", "value" => value},
+        %{assigns: %{current_interaction: interaction}} = socket
+      ) do
+    {:ok, new_interaction} =
+      Claper.Quizzes.update_quiz(
+        socket.assigns.event.uuid,
+        interaction,
+        %{
+          :reveal_answers => value
+        }
+      )
+
+    {:noreply, socket |> assign(:current_interaction, new_interaction)}
+  end
+
+  @impl true
+  def handle_event(
+        "checked",
         %{"key" => "word_cloud_show_results", "value" => value},
         %{assigns: %{current_interaction: %WordClouds.WordCloud{} = word_cloud}} = socket
       ) do
