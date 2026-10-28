@@ -14,6 +14,12 @@ defmodule ClaperWeb.EventLive.Show do
     "raisehand" => :raisehand
   }
 
+  # 20 reactions per 10s per user
+  @react_sender_limit {10_000, 20}
+
+  # 10 reactions per second globally
+  @react_event_limit {1_000, 10}
+
   @reaction_fields %{
     like: {:like_count, :like_posts},
     love: {:love_count, :love_posts},
@@ -542,11 +548,13 @@ defmodule ClaperWeb.EventLive.Show do
         {:noreply, socket}
 
       {true, type_atom} ->
-        Phoenix.PubSub.broadcast(
-          Claper.PubSub,
-          "event:#{socket.assigns.event.uuid}",
-          {:react, type_atom}
-        )
+        if allow_reaction?(socket) do
+          Phoenix.PubSub.broadcast(
+            Claper.PubSub,
+            "event:#{socket.assigns.event.uuid}",
+            {:react, type_atom}
+          )
+        end
 
         {:noreply, socket}
     end
@@ -912,6 +920,31 @@ defmodule ClaperWeb.EventLive.Show do
        do: true
 
   defp can_delete_post?(_socket, _post), do: false
+
+  defp allow_reaction?(%{assigns: %{event: %{id: event_id}}} = socket) do
+    {sender_ms, sender_max} = @react_sender_limit
+    {event_ms, event_max} = @react_event_limit
+
+    with {:allow, _} <-
+           Claper.RateLimit.hit(
+             "react:sender:#{event_id}:#{reaction_sender(socket)}",
+             sender_ms,
+             sender_max
+           ),
+         {:allow, _} <- Claper.RateLimit.hit("react:event:#{event_id}", event_ms, event_max) do
+      true
+    else
+      _ -> false
+    end
+  end
+
+  defp reaction_sender(%{assigns: %{current_user: %{id: user_id}}}), do: "user:#{user_id}"
+
+  defp reaction_sender(%{assigns: %{attendee_identifier: identifier}})
+       when is_binary(identifier),
+       do: "attendee:#{identifier}"
+
+  defp reaction_sender(_socket), do: "pid:#{inspect(self())}"
 
   defp reply_actor(%{assigns: %{current_user: current_user, nickname: nickname}})
        when is_map(current_user),

@@ -7,6 +7,10 @@
 ### Security
 
 - Enforce bcrypt 72 bytes password limit
+- Ignore client-supplied presentation and LTI fields when editing quizzes, polls and forms.
+- Only accept poll votes for polls that belong to the event.
+- Rate limit audience reactions per participant and per event to bound their broadcast to every connected client.
+- Store only the session token in the session cookie instead of the full user record.
 
 ## v3.2.0
 

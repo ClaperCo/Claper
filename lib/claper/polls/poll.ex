@@ -37,20 +37,21 @@ defmodule Claper.Polls.Poll do
     timestamps()
   end
 
-  @doc false
+  @doc """
+  Fields a presenter may edit through the poll form. `presentation_file_id`
+  decides which event owns the poll and is only set on creation by the server.
+  """
   def changeset(poll, attrs) do
     poll
-    |> cast(attrs, [
-      :title,
-      :presentation_file_id,
-      :position,
-      :enabled,
-      :total,
-      :multiple,
-      :show_results
-    ])
+    |> cast(attrs, [:title, :position, :enabled, :total, :multiple, :show_results])
     |> cast_assoc(:poll_opts, required: true)
     |> validate_required([:title, :presentation_file_id, :position])
     |> validate_length(:title, max: 255)
+  end
+
+  def create_changeset(poll, attrs) do
+    poll
+    |> cast(attrs, [:presentation_file_id])
+    |> changeset(attrs)
   end
 end

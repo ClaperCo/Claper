@@ -168,7 +168,7 @@ defmodule Claper.Polls do
   """
   def create_poll(attrs \\ %{}) do
     %Poll{}
-    |> Poll.changeset(attrs)
+    |> Poll.create_changeset(attrs)
     |> Repo.insert()
     |> case do
       {:ok, poll} ->
@@ -266,7 +266,7 @@ defmodule Claper.Polls do
   def vote(voter, event_uuid, poll_opts, poll_id) when is_list(poll_opts) do
     with {:ok, identity} <- voter_identity(voter),
          {:ok, option_ids} <- vote_option_ids(poll_opts) do
-      Repo.transaction(fn -> record_ballot(identity, option_ids, poll_id) end)
+      Repo.transaction(fn -> record_ballot(identity, option_ids, poll_id, event_uuid) end)
       |> case do
         {:ok, _} -> broadcast({:ok, get_poll!(poll_id), event_uuid}, :poll_updated)
         {:error, reason} -> {:error, reason}
@@ -276,8 +276,23 @@ defmodule Claper.Polls do
 
   def vote(_voter, _event_uuid, _poll_opts, _poll_id), do: {:error, :invalid_options}
 
-  defp record_ballot(identity, option_ids, poll_id) do
-    poll = Repo.one(from p in Poll, where: p.id == ^poll_id, lock: "FOR SHARE")
+  defp record_ballot(identity, option_ids, poll_id, event_uuid) do
+    # A poll id from another event must look exactly like a closed poll.
+    event_presentation_files =
+      from pf in Claper.Presentations.PresentationFile,
+        join: e in assoc(pf, :event),
+        where: e.uuid == ^event_uuid,
+        select: pf.id
+
+    poll =
+      Repo.one(
+        from p in Poll,
+          where:
+            p.id == ^poll_id and
+              p.presentation_file_id in subquery(event_presentation_files),
+          lock: "FOR SHARE"
+      )
+
     if is_nil(poll) or not poll.enabled, do: Repo.rollback(:not_open)
 
     options =
