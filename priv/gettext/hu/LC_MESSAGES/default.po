@@ -177,6 +177,7 @@ msgstr "Szerkesztés"
 #: lib/claper_web/live/form_live/form_component.html.heex
 #: lib/claper_web/live/poll_live/form_component.html.heex
 #: lib/claper_web/live/quiz_live/quiz_component.html.heex
+#: lib/claper_web/live/scale_live/form_component.html.heex
 #: lib/claper_web/live/transcription_live/form_component.html.heex
 #: lib/claper_web/live/word_cloud_live/form_component.html.heex
 #, elixir-autogen, elixir-format
@@ -187,6 +188,7 @@ msgstr "Törlés"
 #: lib/claper_web/live/form_live/form_component.html.heex
 #: lib/claper_web/live/poll_live/form_component.html.heex
 #: lib/claper_web/live/quiz_live/quiz_component.html.heex
+#: lib/claper_web/live/scale_live/form_component.html.heex
 #: lib/claper_web/live/transcription_live/form_component.html.heex
 #: lib/claper_web/live/user_settings_live/show.html.heex
 #: lib/claper_web/live/word_cloud_live/form_component.html.heex
@@ -1058,6 +1060,7 @@ msgid "Provider"
 msgstr "Szolgáltató"
 
 #: lib/claper_web/live/poll_live/form_component.html.heex
+#: lib/claper_web/live/scale_live/form_component.html.heex
 #, elixir-autogen, elixir-format
 msgid "Attendees can see the results on their device"
 msgstr "A résztvevők az eszközükön megtekinthetik az eredményeket"
@@ -1070,6 +1073,7 @@ msgstr "A résztvevők az eszközükön megtekinthetik a webes tartalmat"
 #: lib/claper_web/live/embed_live/form_component.html.heex
 #: lib/claper_web/live/poll_live/form_component.html.heex
 #: lib/claper_web/live/quiz_live/quiz_component.html.heex
+#: lib/claper_web/live/scale_live/form_component.html.heex
 #: lib/claper_web/live/transcription_live/form_component.html.heex
 #: lib/claper_web/live/word_cloud_live/form_component.html.heex
 #, elixir-autogen, elixir-format
@@ -3023,6 +3027,7 @@ msgstr "Az űrlap címe"
 #: lib/claper_web/live/form_live/form_component.html.heex
 #: lib/claper_web/live/poll_live/form_component.html.heex
 #: lib/claper_web/live/quiz_live/quiz_component.html.heex
+#: lib/claper_web/live/scale_live/form_component.html.heex
 #: lib/claper_web/live/transcription_live/form_component.html.heex
 #: lib/claper_web/live/word_cloud_live/form_component.html.heex
 #, elixir-autogen, elixir-format
@@ -3181,6 +3186,7 @@ msgid "Voted"
 msgstr "Szavazva"
 
 #: lib/claper_web/live/event_live/form_component.ex
+#: lib/claper_web/live/event_live/scale_component.ex
 #: lib/claper_web/live/event_live/word_cloud_component.ex
 #, elixir-autogen, elixir-format
 msgid "Send"
@@ -3619,6 +3625,7 @@ msgstr "Nem érkezett egy szó sem"
 msgid "No words yet"
 msgstr "Még nincsenek szavak"
 
+#: lib/claper_web/live/scale_live/form_component.html.heex
 #: lib/claper_web/live/word_cloud_live/form_component.html.heex
 #, elixir-autogen, elixir-format
 msgid "Question"
@@ -4061,3 +4068,178 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "We sent a confirmation link to the email address of your account. Open it in this browser within 15 minutes."
 msgstr ""
+
+#: lib/claper_web/live/stat_live/index.html.heex
+#, elixir-autogen, elixir-format
+msgid "%{count} answer"
+msgid_plural "%{count} answers"
+msgstr[0] "%{count} válasz"
+msgstr[1] "%{count} válasz"
+
+#: lib/claper_web/live/event_live/manage_interaction_options_component.ex
+#: lib/claper_web/live/event_live/presenter.html.heex
+#: lib/claper_web/live/event_live/scale_component.ex
+#, elixir-autogen, elixir-format
+msgid "Answers"
+msgstr "Válaszok"
+
+#: lib/claper_web/live/scale_live/form_component.html.heex
+#, elixir-autogen, elixir-format
+msgid "Attendees have already answered, so the range can no longer be changed."
+msgstr "A résztvevők már válaszoltak, ezért a tartomány már nem módosítható."
+
+#: lib/claper_web/live/event_live/manage_interaction_options_component.ex
+#: lib/claper_web/live/event_live/presenter.html.heex
+#: lib/claper_web/live/event_live/scale_component.ex
+#: lib/claper_web/live/stat_live/index.html.heex
+#, elixir-autogen, elixir-format
+msgid "Average"
+msgstr "Átlag"
+
+#: lib/claper_web/live/scale_live/form_component.html.heex
+#, elixir-autogen, elixir-format
+msgid "Completely"
+msgstr "Teljesen"
+
+#: lib/claper_web/live/scale_live/form_component.html.heex
+#, elixir-autogen, elixir-format
+msgid "Create slider"
+msgstr "Csúszka létrehozása"
+
+#: lib/claper_web/live/event_live/scale_component.ex
+#, elixir-autogen, elixir-format
+msgid "Current slider"
+msgstr "Jelenlegi csúszka"
+
+#: lib/claper_web/live/event_live/manage.html.heex
+#, elixir-autogen, elixir-format
+msgid "Edit slider"
+msgstr "Csúszka szerkesztése"
+
+#: lib/claper_web/live/scale_live/form_component.html.heex
+#, elixir-autogen, elixir-format
+msgid "Highest value"
+msgstr "Legmagasabb érték"
+
+#: lib/claper_web/live/scale_live/form_component.html.heex
+#, elixir-autogen, elixir-format
+msgid "How confident do you feel about..."
+msgstr "Mennyire érzi magát magabiztosnak..."
+
+#: lib/claper_web/live/scale_live/form_component.html.heex
+#, elixir-autogen, elixir-format
+msgid "Label for the highest value"
+msgstr "A legmagasabb érték címkéje"
+
+#: lib/claper_web/live/scale_live/form_component.html.heex
+#, elixir-autogen, elixir-format
+msgid "Label for the lowest value"
+msgstr "A legalacsonyabb érték címkéje"
+
+#: lib/claper_web/live/event_live/manage.html.heex
+#: lib/claper_web/live/event_live/manage_floating_action_bar.ex
+#: lib/claper_web/live/event_live/manage_interaction_list_component.ex
+#, elixir-autogen, elixir-format
+msgid "Let your audience answer on a scale."
+msgstr "Hagyja, hogy a közönsége egy skálán válaszoljon."
+
+#: lib/claper_web/live/scale_live/form_component.html.heex
+#, elixir-autogen, elixir-format
+msgid "Lowest value"
+msgstr "Legalacsonyabb érték"
+
+#: lib/claper_web/live/event_live/manage_interaction_options_component.ex
+#: lib/claper_web/live/event_live/presenter.html.heex
+#: lib/claper_web/live/event_live/scale_component.ex
+#: lib/claper_web/live/stat_live/index.html.heex
+#, elixir-autogen, elixir-format
+msgid "Median"
+msgstr "Medián"
+
+#: lib/claper_web/live/event_live/scale_component.ex
+#, elixir-autogen, elixir-format
+msgid "Move the slider and send your answer"
+msgstr "Mozgassa a csúszkát, és küldje el a válaszát"
+
+#: lib/claper_web/live/event_live/manage.html.heex
+#, elixir-autogen, elixir-format
+msgid "New slider"
+msgstr "Új csúszka"
+
+#: lib/claper_web/live/event_live/manage_interaction_options_component.ex
+#: lib/claper_web/live/stat_live/index.html.heex
+#, elixir-autogen, elixir-format
+msgid "No answers yet"
+msgstr "Még nincs válasz"
+
+#: lib/claper_web/live/scale_live/form_component.html.heex
+#, elixir-autogen, elixir-format
+msgid "Not at all"
+msgstr "Egyáltalán nem"
+
+#: lib/claper_web/live/event_live/show.ex
+#, elixir-autogen, elixir-format
+msgid "Please pick a value on the slider."
+msgstr "Válasszon egy értéket a csúszkán."
+
+#: lib/claper_web/live/event_live/manage_interaction_options_component.ex
+#, elixir-autogen, elixir-format
+msgid "Results"
+msgstr "Eredmények"
+
+#: lib/claper_web/live/event_live/manage.html.heex
+#: lib/claper_web/live/event_live/manage_floating_action_bar.ex
+#: lib/claper_web/live/event_live/manage_interaction_list_component.ex
+#, elixir-autogen, elixir-format
+msgid "Slider"
+msgstr "Csúszka"
+
+#: lib/claper_web/live/stat_live/index.html.heex
+#, elixir-autogen, elixir-format
+msgid "Sliders"
+msgstr "Csúszkák"
+
+#: lib/claper_web/live/scale_live/form_component.html.heex
+#, elixir-autogen, elixir-format
+msgid "Step"
+msgstr "Lépésköz"
+
+#: lib/claper_web/live/event_live/scale_component.ex
+#, elixir-autogen, elixir-format
+msgid "Thanks! Your answer has been recorded."
+msgstr "Köszönjük! A válaszát rögzítettük."
+
+#: lib/claper_web/live/scale_live/form_component.html.heex
+#, elixir-autogen, elixir-format
+msgid "This will delete all answers and the slider itself, are you sure?"
+msgstr "Ezzel törli az összes választ és magát a csúszkát is. Biztos benne?"
+
+#: lib/claper_web/live/event_live/show.ex
+#, elixir-autogen, elixir-format
+msgid "You have already answered."
+msgstr "Ön már válaszolt."
+
+#: lib/claper_web/live/event_live/scale_component.ex
+#, elixir-autogen, elixir-format
+msgid "Your answer"
+msgstr "Az Ön válasza"
+
+#: lib/claper/scales/scale.ex
+#, elixir-autogen, elixir-format
+msgid "cannot be changed once attendees have answered"
+msgstr "nem módosítható, miután a résztvevők válaszoltak"
+
+#: lib/claper/scales/scale.ex
+#, elixir-autogen, elixir-format
+msgid "is too small, a slider can have at most %{count} values"
+msgstr "túl kicsi, egy csúszkának legfeljebb %{count} értéke lehet"
+
+#: lib/claper/scales/scale.ex
+#, elixir-autogen, elixir-format
+msgid "must be greater than the lowest value"
+msgstr "nagyobbnak kell lennie a legalacsonyabb értéknél"
+
+#: lib/claper/scales/scale.ex
+#, elixir-autogen, elixir-format
+msgid "must divide the range evenly"
+msgstr "egyenletesen kell felosztania a tartományt"

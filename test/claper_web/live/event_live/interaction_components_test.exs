@@ -7,6 +7,7 @@ defmodule ClaperWeb.EventLive.InteractionComponentsTest do
   alias Claper.Forms.Form
   alias Claper.Polls.{Poll, PollOpt}
   alias Claper.Quizzes.{Quiz, QuizQuestion, QuizQuestionOpt}
+  alias Claper.Scales.{Scale, ScaleResponse}
   alias Claper.WordClouds.{Entry, WordCloud}
 
   alias ClaperWeb.EventLive.{
@@ -15,6 +16,7 @@ defmodule ClaperWeb.EventLive.InteractionComponentsTest do
     FormComponent,
     PollComponent,
     QuizComponent,
+    ScaleComponent,
     WordCloudComponent
   }
 
@@ -529,6 +531,71 @@ defmodule ClaperWeb.EventLive.InteractionComponentsTest do
     assert html =~ "Kind"
     refute html =~ "Rude"
     refute html =~ "hidden-word-cloud-component-cloud"
+  end
+
+  test "slider offers the range until the attendee has answered" do
+    scale = %Scale{id: 7, title: "Confidence", min_value: 0, max_value: 20, step: 5}
+
+    document =
+      ScaleComponent
+      |> render_component(
+        id: "scale-component",
+        scale: scale,
+        selected: 10,
+        response: nil,
+        results: nil
+      )
+      |> Floki.parse_document!()
+
+    assert "bg-gray-900" in classes(document, "#extended-scale")
+
+    for {attribute, value} <- [
+          {"min", "0"},
+          {"max", "20"},
+          {"step", "5"},
+          {"value", "10"},
+          {"name", "value"}
+        ] do
+      assert Floki.attribute(document, ~s(input[type="range"]), attribute) == [value]
+    end
+
+    assert Floki.find(document, "[data-answered]") == []
+
+    results = %{
+      count: 2,
+      average: 12.5,
+      median: 12.5,
+      distribution: for(value <- [0, 5, 10, 15, 20], do: %{value: value, count: 0, weight: 0.0})
+    }
+
+    answered =
+      ScaleComponent
+      |> render_component(
+        id: "answered-scale-component",
+        scale: scale,
+        selected: 10,
+        response: %ScaleResponse{value: 15},
+        results: results
+      )
+      |> Floki.parse_document!()
+
+    assert Floki.find(answered, ~s(input[type="range"])) == []
+    assert answered |> Floki.find("[data-answered]") |> Floki.text() =~ "15"
+    assert answered |> Floki.find("#answered-scale-component-results") |> Floki.text() =~ "12.5"
+  end
+
+  test "slider renders no results when they must stay out of view" do
+    html =
+      render_component(ScaleComponent,
+        id: "hidden-scale-component",
+        scale: %Scale{id: 7, title: "Confidence", min_value: 1, max_value: 5, step: 1},
+        selected: 3,
+        response: %ScaleResponse{value: 4},
+        results: nil
+      )
+
+    assert html =~ "Your answer"
+    refute html =~ "hidden-scale-component-results"
   end
 
   defp assert_card_shell(document, card_selector, close_selector) do

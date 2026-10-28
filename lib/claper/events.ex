@@ -535,13 +535,19 @@ defmodule Claper.Events do
          |> Ecto.Multi.run(:from_event, fn _repo, _changes ->
            {:ok,
             get_user_event!(user_id, from_event_uuid,
-              presentation_file: [polls: [:poll_opts], forms: [], embeds: [], word_clouds: []]
+              presentation_file: [
+                polls: [:poll_opts],
+                forms: [],
+                embeds: [],
+                word_clouds: [],
+                scales: []
+              ]
             )}
          end)
          |> Ecto.Multi.run(:to_event, fn _repo, _changes ->
            {:ok,
             get_user_event!(user_id, to_event_uuid,
-              presentation_file: [:polls, :forms, :embeds, :word_clouds]
+              presentation_file: [:polls, :forms, :embeds, :word_clouds, :scales]
             )}
          end)
          |> Ecto.Multi.run(:polls, fn _repo, %{from_event: from_event, to_event: to_event} ->
@@ -622,6 +628,31 @@ defmodule Claper.Events do
               end
             end)}
          end)
+         |> Ecto.Multi.run(:scales, fn _repo, %{from_event: from_event, to_event: to_event} ->
+           {:ok,
+            from_event.presentation_file.scales
+            |> Enum.each(fn scale ->
+              if scale.position < to_event.presentation_file.length do
+                {:ok, imported} =
+                  Claper.Scales.create_scale(%{
+                    title: scale.title,
+                    min_value: scale.min_value,
+                    max_value: scale.max_value,
+                    step: scale.step,
+                    min_label: scale.min_label,
+                    max_label: scale.max_label,
+                    position: scale.position,
+                    enabled: false,
+                    show_results: scale.show_results,
+                    presentation_file_id: to_event.presentation_file.id
+                  })
+
+                if scale.enabled do
+                  :ok = Claper.Interactions.enable_interaction(imported)
+                end
+              end
+            end)}
+         end)
          |> Repo.transaction() do
       {:ok, %{to_event: to_event}} -> {:ok, to_event}
     end
@@ -654,7 +685,8 @@ defmodule Claper.Events do
           forms: [],
           embeds: [],
           quizzes: [quiz_questions: [:quiz_question_opts]],
-          word_clouds: []
+          word_clouds: [],
+          scales: []
         ]
       )
 
@@ -674,6 +706,7 @@ defmodule Claper.Events do
       |> Ecto.Multi.run(:word_clouds, fn _repo, changes ->
         duplicate_word_clouds(original, changes)
       end)
+      |> Ecto.Multi.run(:scales, fn _repo, changes -> duplicate_scales(original, changes) end)
 
     case Repo.transaction(multi) do
       {:ok, %{event: event}} -> {:ok, event}
@@ -861,6 +894,27 @@ defmodule Claper.Events do
     end
   end
 
+  defp duplicate_scales(original, changes) do
+    case get_in(original.presentation_file.scales) do
+      scales when is_list(scales) ->
+        scales =
+          for scale <- scales do
+            attrs =
+              Map.from_struct(scale)
+              |> Map.drop([:id, :inserted_at, :updated_at, :responses])
+              |> Map.put(:presentation_file_id, changes.presentation_file.id)
+
+            {:ok, scale} = Claper.Scales.create_scale(attrs)
+            scale
+          end
+
+        {:ok, scales}
+
+      _ ->
+        {:ok, nil}
+    end
+  end
+
   defp map_quiz_question(question) do
     Map.from_struct(question)
     |> Map.drop([:id, :inserted_at, :updated_at])
@@ -882,7 +936,7 @@ defmodule Claper.Events do
 
   Polls, forms and embeds only have their presentation file reference
   nilified by the database, so they are deleted explicitly. Everything else
-  (posts, reactions, votes, quizzes, word clouds, stats, transcriptions,
+  (posts, reactions, votes, quizzes, word clouds, sliders, stats, transcriptions,
   facilitators...) cascades from the event or its presentation file.
 
   Slides are removed from storage once no other presentation file shares

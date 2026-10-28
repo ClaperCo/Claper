@@ -5,12 +5,14 @@
       match?(%Claper.Forms.Form{}, @current_interaction) ||
       match?(%Claper.Quizzes.Quiz{}, @current_interaction) ||
       match?(%Claper.WordClouds.WordCloud{}, @current_interaction) ||
+      match?(%Claper.Scales.Scale{}, @current_interaction) ||
       match?(%Claper.Embeds.Embed{attendee_visibility: true}, @current_interaction) %>
   <% interaction_mode? =
     match?(%Claper.Polls.Poll{}, @current_interaction) ||
       match?(%Claper.Forms.Form{}, @current_interaction) ||
       match?(%Claper.Quizzes.Quiz{}, @current_interaction) ||
       match?(%Claper.WordClouds.WordCloud{}, @current_interaction) ||
+      match?(%Claper.Scales.Scale{}, @current_interaction) ||
       match?(%Claper.Embeds.Embed{attendee_visibility: true}, @current_interaction) %>
   <% captions_visible? =
     @transcription_config && @transcription_config.enabled &&
@@ -209,6 +211,17 @@
                 word_cloud={@current_interaction}
                 entries={@word_cloud_entries}
                 words={@word_cloud_words}
+              />
+            </div>
+          <% %Claper.Scales.Scale{} -> %>
+            <div class="max-h-[40dvh] overflow-y-auto overscroll-contain p-3">
+              <.live_component
+                module={ClaperWeb.EventLive.ScaleComponent}
+                id={"#{@current_interaction.id}-scale"}
+                scale={@current_interaction}
+                selected={@scale_value}
+                response={@scale_response}
+                results={@scale_results}
               />
             </div>
           <% %Claper.Embeds.Embed{attendee_visibility: true} -> %>
