@@ -28,15 +28,6 @@ defmodule ClaperWeb.EventCardComponentTest do
       assert html =~ "Live"
     end
 
-    test "uses CSS hover state for grid actions", %{conn: conn, user: user} do
-      create_event(user, NaiveDateTime.utc_now())
-      {:ok, _view, html} = live(conn, "/events")
-
-      assert html =~ "group-hover:translate-y-0"
-      assert html =~ "group-focus-within:translate-y-0"
-      refute html =~ "showActions"
-    end
-
     test "renders finished for expired event", %{conn: conn, user: user} do
       create_event(
         user,

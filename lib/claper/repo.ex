@@ -8,7 +8,11 @@ defmodule Claper.Repo do
   @default_page_size 12
 
   def init(_type, config) do
-    if url = System.get_env("DATABASE_URL") do
+    url =
+      if config[:pool] != Ecto.Adapters.SQL.Sandbox,
+        do: System.get_env("DATABASE_URL")
+
+    if url do
       {:ok, Keyword.put(config, :url, url)}
     else
       {:ok, config}

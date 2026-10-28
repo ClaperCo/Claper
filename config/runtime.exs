@@ -232,15 +232,17 @@ config :claper, :oidc,
   disable_password_login: disable_password_login,
   trust_email_verified: oidc_trust_email_verified
 
-config :claper, Claper.Repo,
-  url: database_url,
-  ssl: db_ssl,
-  ssl_opts: [
-    verify: :verify_none
-  ],
-  prepare: :unnamed,
-  pool_size: pool_size,
-  queue_target: queue_target
+if config_env() != :test do
+  config :claper, Claper.Repo,
+    url: database_url,
+    ssl: db_ssl,
+    ssl_opts: [
+      verify: :verify_none
+    ],
+    prepare: :unnamed,
+    pool_size: pool_size,
+    queue_target: queue_target
+end
 
 config :claper, ClaperWeb.Endpoint,
   url: [scheme: base_url.scheme, host: base_url.host, path: base_url.path, port: base_url.port],
