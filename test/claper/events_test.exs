@@ -529,6 +529,21 @@ defmodule Claper.EventsTest do
       assert event == Events.get_event!(event.uuid)
     end
 
+    test "update_event/2 refuses to reactivate an event whose code another active event uses" do
+      ended = event_fixture(%{expired_at: ~N[2020-01-01 00:00:00]})
+      event_fixture(%{code: ended.code})
+
+      assert {:error, changeset} = Events.update_event(ended, %{expired_at: nil})
+      assert %{code: ["Already exists"]} = errors_on(changeset)
+    end
+
+    test "update_event/2 saves an ended event whose code a newer event uses" do
+      ended = event_fixture(%{expired_at: ~N[2020-01-01 00:00:00]})
+      event_fixture(%{code: ended.code})
+
+      assert {:ok, %Event{name: "Renamed"}} = Events.update_event(ended, %{name: "Renamed"})
+    end
+
     test "change_event/1 returns a event changeset" do
       event = event_fixture()
       assert %Ecto.Changeset{} = Events.change_event(event)
@@ -544,6 +559,45 @@ defmodule Claper.EventsTest do
       assert NaiveDateTime.diff(NaiveDateTime.utc_now(), event.expired_at) |> abs() < 1
       assert_received {:event_terminated, uuid}
       assert uuid == event.uuid
+    end
+
+    test "terminate_event/1 emails the owner a recap once attendees joined" do
+      Oban.Testing.with_testing_mode(:manual, fn ->
+        attended = event_fixture()
+        Claper.Stats.create_stat(attended, %{attendee_identifier: "attendee"})
+        unattended = event_fixture()
+
+        {:ok, _} = Events.terminate_event(attended)
+        {:ok, _} = Events.terminate_event(unattended)
+
+        assert_enqueued(
+          worker: Claper.Workers.Mailers,
+          args: %{type: "event_recap", event_id: attended.id, ended_by: "manual"}
+        )
+
+        refute_enqueued(
+          worker: Claper.Workers.Mailers,
+          args: %{type: "event_recap", event_id: unattended.id}
+        )
+      end)
+    end
+
+    test "terminate_event/1 emails no recap to a deleted owner" do
+      Oban.Testing.with_testing_mode(:manual, fn ->
+        owner = user_fixture()
+        event = event_fixture(%{user: owner})
+        Claper.Stats.create_stat(event, %{attendee_identifier: "attendee"})
+
+        from(u in Claper.Accounts.User, where: u.id == ^owner.id)
+        |> Repo.update_all(set: [deleted_at: NaiveDateTime.utc_now(:second)])
+
+        {:ok, _} = Events.terminate_event(event)
+
+        refute_enqueued(
+          worker: Claper.Workers.Mailers,
+          args: %{type: "event_recap", event_id: event.id}
+        )
+      end)
     end
 
     test "delete_event/1 deletes the event" do

@@ -22,6 +22,16 @@ services:
       - 5432:5432
     networks:
       - claper-dev
+  mailpit:
+    image: axllent/mailpit:latest
+    ports:
+      - 1025:1025 # SMTP
+      - 8025:8025 # Web UI
+    environment:
+      MP_SMTP_AUTH_ACCEPT_ANY: 1
+      MP_SMTP_AUTH_ALLOW_INSECURE: 1
+    networks:
+      - claper-dev
   app:
     build:
       context: .

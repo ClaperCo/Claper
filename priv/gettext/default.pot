@@ -327,6 +327,7 @@ msgstr ""
 
 #: lib/claper_web/live/event_live/manage_audience_responses_component.ex
 #: lib/claper_web/live/stat_live/index.html.heex
+#: lib/claper_web/templates/event_notifier/recap.html.heex
 #, elixir-autogen, elixir-format
 msgid "Messages"
 msgstr ""
@@ -341,6 +342,7 @@ msgstr ""
 msgid "The site is under maintenance, we'll be back very soon!"
 msgstr ""
 
+#: lib/claper_web/templates/event_notifier/recap.html.heex
 #: lib/claper_web/templates/leader_notifier/invitation.html.heex
 #: lib/claper_web/templates/user_notifier/change.html.heex
 #: lib/claper_web/templates/user_notifier/confirm.html.heex
@@ -457,11 +459,13 @@ msgstr[0] ""
 msgstr[1] ""
 
 #: lib/claper_web/live/stat_live/index.html.heex
+#: lib/claper_web/templates/event_notifier/recap.html.heex
 #, elixir-autogen, elixir-format
 msgid "Audience peak"
 msgstr ""
 
 #: lib/claper_web/live/stat_live/index.html.heex
+#: lib/claper_web/templates/event_notifier/recap.html.heex
 #, elixir-autogen, elixir-format
 msgid "Engagement rate"
 msgstr ""
@@ -1375,6 +1379,7 @@ msgid "Report"
 msgstr ""
 
 #: lib/claper_web/live/stat_live/index.html.heex
+#: lib/claper_web/templates/event_notifier/recap.html.heex
 #, elixir-autogen, elixir-format
 msgid "Unique attendees"
 msgstr ""
@@ -4062,4 +4067,31 @@ msgstr ""
 #: lib/claper_web/templates/user_oidc/check_email.html.heex
 #, elixir-autogen, elixir-format
 msgid "We sent a confirmation link to the email address of your account. Open it in this browser within 15 minutes."
+msgstr ""
+
+#: lib/claper_web/templates/event_notifier/recap.html.heex
+#, elixir-autogen, elixir-format
+msgid "%{name} ended automatically after %{count} day without activity, so other events can now use its code %{code}."
+msgid_plural "%{name} ended automatically after %{count} days without activity, so other events can now use its code %{code}."
+msgstr[0] ""
+msgstr[1] ""
+
+#: lib/claper_web/templates/event_notifier/recap.html.heex
+#, elixir-autogen, elixir-format
+msgid "Here is the recap of %{name}."
+msgstr ""
+
+#: lib/claper_web/notifiers/event_notifier.ex
+#, elixir-autogen, elixir-format
+msgid "Recap of your event %{name}"
+msgstr ""
+
+#: lib/claper_web/templates/event_notifier/recap.html.heex
+#, elixir-autogen, elixir-format
+msgid "View the full report"
+msgstr ""
+
+#: lib/claper_web/templates/event_notifier/recap.html.heex
+#, elixir-autogen, elixir-format
+msgid "Your event has ended"
 msgstr ""

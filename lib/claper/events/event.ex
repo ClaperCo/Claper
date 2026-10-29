@@ -32,6 +32,7 @@ defmodule Claper.Events.Event do
           audience_peak: integer() | nil,
           started_at: NaiveDateTime.t(),
           expired_at: NaiveDateTime.t() | nil,
+          last_active_at: NaiveDateTime.t() | nil,
           posts: [Claper.Posts.Post.t()] | nil,
           leaders: [Claper.Events.ActivityLeader.t()] | nil,
           presentation_file: Claper.Presentations.PresentationFile.t() | nil,
@@ -47,6 +48,7 @@ defmodule Claper.Events.Event do
     field :audience_peak, :integer, default: 0
     field :started_at, :naive_datetime
     field :expired_at, :naive_datetime
+    field :last_active_at, :naive_datetime
 
     has_many :posts, Claper.Posts.Post
     has_many :leaders, Claper.Events.ActivityLeader, on_replace: :delete

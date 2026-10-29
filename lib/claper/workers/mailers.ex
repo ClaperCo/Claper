@@ -2,7 +2,7 @@ defmodule Claper.Workers.Mailers do
   use Oban.Worker, queue: :mailers
 
   alias Claper.Mailer
-  alias ClaperWeb.Notifiers.{UserNotifier, LeaderNotifier}
+  alias ClaperWeb.Notifiers.{EventNotifier, LeaderNotifier, UserNotifier}
 
   @impl Oban.Worker
   def perform(%Oban.Job{args: args}) do
@@ -53,6 +53,16 @@ defmodule Claper.Workers.Mailers do
     LeaderNotifier.event_invitation(event_name, email, url)
   end
 
+  defp build_email(%{"type" => "event_recap", "event_id" => event_id, "ended_by" => ended_by}) do
+    event = Claper.Events.get_event!(event_id, [:user])
+
+    inactivity_days =
+      if ended_by == "inactivity",
+        do: Application.fetch_env!(:claper, :events)[:inactivity_days]
+
+    EventNotifier.recap(event, Claper.Stats.report_summary(event), inactivity_days)
+  end
+
   # Helper functions to create jobs
   def new_confirmation(user_id, url, locale) do
     new(%{type: "confirm", user_id: user_id, url: url, locale: locale})
@@ -86,5 +96,9 @@ defmodule Claper.Workers.Mailers do
       url: url,
       locale: locale
     })
+  end
+
+  def new_event_recap(event_id, ended_by, locale) when ended_by in [:manual, :inactivity] do
+    new(%{type: "event_recap", event_id: event_id, ended_by: ended_by, locale: locale})
   end
 end

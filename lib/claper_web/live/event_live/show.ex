@@ -97,6 +97,7 @@ defmodule ClaperWeb.EventLive.Show do
       online = Presence.list("event:#{event.uuid}") |> Enum.count()
       update_stats(socket, event)
       maybe_update_audience_peak(event, online)
+      Claper.Events.record_event_activity(event)
     end
 
     post_changeset = Posts.Post.changeset(%Posts.Post{}, %{})

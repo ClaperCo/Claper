@@ -275,6 +275,9 @@ config :claper, :presentations,
   resolution: get_var_from_path_or_env(config_dir, "GS_JPG_RESOLUTION", "300x300"),
   s3_public_url: s3_public_url
 
+config :claper, :events,
+  inactivity_days: get_int_from_path_or_env(config_dir, "EVENT_INACTIVITY_DAYS", 0)
+
 config :claper, :mail,
   from: get_var_from_path_or_env(config_dir, "MAIL_FROM", "noreply@claper.co"),
   from_name: get_var_from_path_or_env(config_dir, "MAIL_FROM_NAME", "Claper")

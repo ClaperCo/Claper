@@ -7,7 +7,7 @@ defmodule Claper.RuntimeConfigTest do
 
   setup %{tmp_dir: tmp_dir} do
     keys = ~w(CONFIG_DIR OIDC_CLIENT_ID OIDC_CLIENT_SECRET DISABLE_PASSWORD_LOGIN
-              OIDC_TRUST_EMAIL_VERIFIED)
+              OIDC_TRUST_EMAIL_VERIFIED EVENT_INACTIVITY_DAYS)
     original_env = Map.new(keys, &{&1, System.get_env(&1)})
 
     on_exit(fn ->
@@ -26,7 +26,15 @@ defmodule Claper.RuntimeConfigTest do
 
     System.delete_env("DISABLE_PASSWORD_LOGIN")
     System.delete_env("OIDC_TRUST_EMAIL_VERIFIED")
+    System.delete_env("EVENT_INACTIVITY_DAYS")
     :ok
+  end
+
+  test "events are only terminated for inactivity once EVENT_INACTIVITY_DAYS is set" do
+    assert read_claper_config()[:events][:inactivity_days] == 0
+
+    System.put_env("EVENT_INACTIVITY_DAYS", "14")
+    assert read_claper_config()[:events][:inactivity_days] == 14
   end
 
   test "password login stays enabled by default" do
@@ -99,9 +107,9 @@ defmodule Claper.RuntimeConfigTest do
     assert warning =~ "Password login stays enabled."
   end
 
-  defp read_oidc_config do
-    Config.Reader.read!(Path.expand("../../config/runtime.exs", __DIR__), env: :test)[:claper][
-      :oidc
-    ]
+  defp read_oidc_config, do: read_claper_config()[:oidc]
+
+  defp read_claper_config do
+    Config.Reader.read!(Path.expand("../../config/runtime.exs", __DIR__), env: :test)[:claper]
   end
 end

@@ -326,6 +326,7 @@ msgstr "Jautājiet, komentējiet..."
 
 #: lib/claper_web/live/event_live/manage_audience_responses_component.ex
 #: lib/claper_web/live/stat_live/index.html.heex
+#: lib/claper_web/templates/event_notifier/recap.html.heex
 #, elixir-autogen, elixir-format
 msgid "Messages"
 msgstr "Ziņojumi"
@@ -340,6 +341,7 @@ msgstr "Ups, lapa neeksistē."
 msgid "The site is under maintenance, we'll be back very soon!"
 msgstr "Vietne tiek uzturēta, mēs atgriezīsimies ļoti drīz!"
 
+#: lib/claper_web/templates/event_notifier/recap.html.heex
 #: lib/claper_web/templates/leader_notifier/invitation.html.heex
 #: lib/claper_web/templates/user_notifier/change.html.heex
 #: lib/claper_web/templates/user_notifier/confirm.html.heex
@@ -458,11 +460,13 @@ msgstr[1] "dalībnieks"
 msgstr[2] "dalībnieki"
 
 #: lib/claper_web/live/stat_live/index.html.heex
+#: lib/claper_web/templates/event_notifier/recap.html.heex
 #, elixir-autogen, elixir-format
 msgid "Audience peak"
 msgstr "Auditorijas maksimums"
 
 #: lib/claper_web/live/stat_live/index.html.heex
+#: lib/claper_web/templates/event_notifier/recap.html.heex
 #, elixir-autogen, elixir-format
 msgid "Engagement rate"
 msgstr "Iesaistīšanās līmenis"
@@ -1377,6 +1381,7 @@ msgid "Report"
 msgstr "Ziņojums"
 
 #: lib/claper_web/live/stat_live/index.html.heex
+#: lib/claper_web/templates/event_notifier/recap.html.heex
 #, elixir-autogen, elixir-format
 msgid "Unique attendees"
 msgstr "Unikālie apmeklētāji"
@@ -4069,3 +4074,31 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "We sent a confirmation link to the email address of your account. Open it in this browser within 15 minutes."
 msgstr ""
+
+#: lib/claper_web/templates/event_notifier/recap.html.heex
+#, elixir-autogen, elixir-format
+msgid "%{name} ended automatically after %{count} day without activity, so other events can now use its code %{code}."
+msgid_plural "%{name} ended automatically after %{count} days without activity, so other events can now use its code %{code}."
+msgstr[0] "Jūsu pasākums %{name} tika automātiski beigts pēc %{count} dienām bez aktivitātes, tāpēc tā kodu %{code} tagad var izmantot citi pasākumi."
+msgstr[1] "Jūsu pasākums %{name} tika automātiski beigts pēc %{count} dienas bez aktivitātes, tāpēc tā kodu %{code} tagad var izmantot citi pasākumi."
+msgstr[2] "Jūsu pasākums %{name} tika automātiski beigts pēc %{count} dienām bez aktivitātes, tāpēc tā kodu %{code} tagad var izmantot citi pasākumi."
+
+#: lib/claper_web/templates/event_notifier/recap.html.heex
+#, elixir-autogen, elixir-format
+msgid "Here is the recap of %{name}."
+msgstr "Lūk, pasākuma %{name} kopsavilkums."
+
+#: lib/claper_web/notifiers/event_notifier.ex
+#, elixir-autogen, elixir-format
+msgid "Recap of your event %{name}"
+msgstr "Jūsu pasākuma %{name} kopsavilkums"
+
+#: lib/claper_web/templates/event_notifier/recap.html.heex
+#, elixir-autogen, elixir-format
+msgid "View the full report"
+msgstr "Skatīt pilnu ziņojumu"
+
+#: lib/claper_web/templates/event_notifier/recap.html.heex
+#, elixir-autogen, elixir-format
+msgid "Your event has ended"
+msgstr "Jūsu pasākums ir beidzies"

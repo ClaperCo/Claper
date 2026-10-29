@@ -42,4 +42,30 @@ defmodule Claper.Workers.MailersTest do
 
     assert_email_sent(subject: "Reset password instructions")
   end
+
+  test "builds the recap of an event ended for inactivity for its owner" do
+    owner = user_fixture()
+    event = Claper.EventsFixtures.event_fixture(%{user: owner, name: "Town hall"})
+    {:ok, event} = Claper.Events.update_event(event, %{audience_peak: 123})
+
+    events_config = Application.get_env(:claper, :events)
+    Application.put_env(:claper, :events, inactivity_days: 21)
+    on_exit(fn -> Application.put_env(:claper, :events, events_config) end)
+
+    perform_job(Mailers, %{
+      type: "event_recap",
+      event_id: event.id,
+      ended_by: "inactivity",
+      locale: "en"
+    })
+
+    assert_email_sent(fn email ->
+      assert email.to == [{"", owner.email}]
+      assert email.subject =~ "Town hall"
+      assert email.html_body =~ "21 days"
+      assert email.html_body =~ event.code
+      assert email.html_body =~ "123"
+      assert email.html_body =~ "/events/#{event.uuid}/stats"
+    end)
+  end
 end

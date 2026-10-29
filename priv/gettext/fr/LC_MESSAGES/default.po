@@ -326,6 +326,7 @@ msgstr "Questionnez, commentez..."
 
 #: lib/claper_web/live/event_live/manage_audience_responses_component.ex
 #: lib/claper_web/live/stat_live/index.html.heex
+#: lib/claper_web/templates/event_notifier/recap.html.heex
 #, elixir-autogen, elixir-format
 msgid "Messages"
 msgstr "Messages"
@@ -340,6 +341,7 @@ msgstr "Oups, la page n'existe pas."
 msgid "The site is under maintenance, we'll be back very soon!"
 msgstr "Le site est en cours de maintenance, nous serons de retour très bientôt !"
 
+#: lib/claper_web/templates/event_notifier/recap.html.heex
 #: lib/claper_web/templates/leader_notifier/invitation.html.heex
 #: lib/claper_web/templates/user_notifier/change.html.heex
 #: lib/claper_web/templates/user_notifier/confirm.html.heex
@@ -458,11 +460,13 @@ msgstr[1] "participants"
 msgstr[2] "participants"
 
 #: lib/claper_web/live/stat_live/index.html.heex
+#: lib/claper_web/templates/event_notifier/recap.html.heex
 #, elixir-autogen, elixir-format
 msgid "Audience peak"
 msgstr "Pic d'audience"
 
 #: lib/claper_web/live/stat_live/index.html.heex
+#: lib/claper_web/templates/event_notifier/recap.html.heex
 #, elixir-autogen, elixir-format
 msgid "Engagement rate"
 msgstr "Taux d'engagement"
@@ -1377,6 +1381,7 @@ msgid "Report"
 msgstr "Rapport"
 
 #: lib/claper_web/live/stat_live/index.html.heex
+#: lib/claper_web/templates/event_notifier/recap.html.heex
 #, elixir-autogen, elixir-format
 msgid "Unique attendees"
 msgstr "Participants uniques"
@@ -4069,3 +4074,31 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "We sent a confirmation link to the email address of your account. Open it in this browser within 15 minutes."
 msgstr ""
+
+#: lib/claper_web/templates/event_notifier/recap.html.heex
+#, elixir-autogen, elixir-format
+msgid "%{name} ended automatically after %{count} day without activity, so other events can now use its code %{code}."
+msgid_plural "%{name} ended automatically after %{count} days without activity, so other events can now use its code %{code}."
+msgstr[0] "Votre événement %{name} s'est terminé automatiquement après %{count} jour sans activité : d'autres événements peuvent désormais utiliser son code %{code}."
+msgstr[1] "Votre événement %{name} s'est terminé automatiquement après %{count} jours sans activité : d'autres événements peuvent désormais utiliser son code %{code}."
+msgstr[2] "Votre événement %{name} s'est terminé automatiquement après %{count} jours sans activité : d'autres événements peuvent désormais utiliser son code %{code}."
+
+#: lib/claper_web/templates/event_notifier/recap.html.heex
+#, elixir-autogen, elixir-format
+msgid "Here is the recap of %{name}."
+msgstr "Voici le récapitulatif de %{name}."
+
+#: lib/claper_web/notifiers/event_notifier.ex
+#, elixir-autogen, elixir-format
+msgid "Recap of your event %{name}"
+msgstr "Récapitulatif de votre événement %{name}"
+
+#: lib/claper_web/templates/event_notifier/recap.html.heex
+#, elixir-autogen, elixir-format
+msgid "View the full report"
+msgstr "Voir le rapport complet"
+
+#: lib/claper_web/templates/event_notifier/recap.html.heex
+#, elixir-autogen, elixir-format
+msgid "Your event has ended"
+msgstr "Votre événement est terminé"

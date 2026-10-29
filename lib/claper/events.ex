@@ -8,7 +8,7 @@ defmodule Claper.Events do
   import Ecto.Query, warn: false
 
   alias Claper.{Accounts, Presentations, Repo}
-  alias Claper.Events.{Event, ActivityLeader}
+  alias Claper.Events.{Event, ActivityLeader, EventNotifier}
 
   @default_page_size 5
 
@@ -433,19 +433,31 @@ defmodule Claper.Events do
   end
 
   defp validate_unique_event(%Ecto.Changeset{data: event} = changeset) do
-    case get_different_event_with_code(event.code, event.id) do
-      %Event{} -> {:error, Ecto.Changeset.add_error(changeset, :code, "Already exists")}
-      nil -> {:ok, changeset}
+    if active_after_save?(changeset) and code_used_by_other_active_event?(event.code, event.id) do
+      {:error, Ecto.Changeset.add_error(changeset, :code, "Already exists")}
+    else
+      {:ok, changeset}
     end
   end
 
-  defp get_different_event_with_code(nil, _event_id), do: nil
+  # An ended event no longer holds its code, so it can keep a code reused by a newer event.
+  defp active_after_save?(changeset) do
+    case Ecto.Changeset.get_field(changeset, :expired_at) do
+      nil -> true
+      expired_at -> NaiveDateTime.after?(expired_at, NaiveDateTime.utc_now())
+    end
+  end
 
-  defp get_different_event_with_code(code, event_id) do
-    now = DateTime.utc_now()
+  defp code_used_by_other_active_event?(nil, _event_id), do: false
 
-    from(e in Event, where: e.code == ^code and e.id != ^event_id and e.expired_at > ^now)
-    |> Repo.one()
+  defp code_used_by_other_active_event?(code, event_id) do
+    now = NaiveDateTime.utc_now()
+
+    from(e in Event,
+      where: e.code == ^code and e.id != ^event_id,
+      where: is_nil(e.expired_at) or e.expired_at > ^now
+    )
+    |> Repo.exists?()
   end
 
   @doc """
@@ -495,7 +507,8 @@ defmodule Claper.Events do
   end
 
   @doc """
-  Terminates an event.
+  Terminates an event and emails its owner a recap (see
+  `Claper.Events.EventNotifier.deliver_recap/2`).
 
   ## Examples
 
@@ -509,13 +522,136 @@ defmodule Claper.Events do
     |> Repo.update()
     |> case do
       {:ok, event} ->
-        broadcast_all_users({:updated, event})
-        broadcast_event(event.uuid, {:event_terminated, event.uuid})
+        broadcast_terminated(event)
+        EventNotifier.deliver_recap(event, :manual)
         {:ok, event}
 
       {:error, changeset} ->
         {:error, %{changeset | action: :update}}
     end
+  end
+
+  @activity_write_interval_seconds 10 * 60
+
+  @doc """
+  Records that an attendee or facilitator is using an event, which keeps
+  `terminate_inactive_events/1` from ending it.
+
+  So that a whole audience joining at once doesn't write the event row for every
+  attendee, a visit is only written when the last recorded one is older than
+  10 minutes.
+
+  ## Examples
+
+      iex> record_event_activity(event)
+      :ok
+
+  """
+  def record_event_activity(%Event{id: id, last_active_at: last_active_at}) do
+    now = NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
+    stale_before = NaiveDateTime.add(now, -@activity_write_interval_seconds)
+
+    if is_nil(last_active_at) or NaiveDateTime.before?(last_active_at, stale_before) do
+      from(e in Event,
+        where: e.id == ^id,
+        where: is_nil(e.last_active_at) or e.last_active_at < ^stale_before
+      )
+      |> Repo.update_all(set: [last_active_at: now])
+    end
+
+    :ok
+  end
+
+  @doc """
+  Terminates the events without an end date that have had no activity since
+  `inactive_since`, so that new events can use their codes.
+
+  An event's last activity is the latest of its last recorded visit (see
+  `record_event_activity/1`), its last update and its start date. Events linked
+  to an LTI resource are never terminated here: the LMS link to them would stop
+  working.
+
+  The owners of events that just became inactive get a recap email (see
+  `Claper.Events.EventNotifier.deliver_recap/2`). Events inactive for over a day
+  longer, which the first run after enabling it or after downtime ends all at once,
+  end without one.
+
+  Returns the number of terminated events. `preview_inactive_events/1` tells what
+  it would do without changing anything.
+
+  ## Examples
+
+      iex> terminate_inactive_events(~N[2026-10-01 00:00:00])
+      3
+
+  """
+  def terminate_inactive_events(%NaiveDateTime{} = inactive_since) do
+    now = NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
+
+    # updated_at is kept so that the returned events still tell their last activity.
+    {count, events} =
+      inactive_since
+      |> inactive_events_query()
+      |> select([e], e)
+      |> Repo.update_all(set: [expired_at: now])
+
+    for event <- events do
+      broadcast_terminated(event)
+
+      if just_became_inactive?(event, inactive_since),
+        do: EventNotifier.deliver_recap(event, :inactivity)
+    end
+
+    count
+  end
+
+  @doc """
+  Returns what `terminate_inactive_events/1` would do for `inactive_since`, without
+  changing anything: how many events it would terminate, and how many recap emails
+  it would send.
+
+  ## Examples
+
+      iex> preview_inactive_events(~N[2026-10-01 00:00:00])
+      %{terminated: 3, recaps: 1}
+
+  """
+  def preview_inactive_events(%NaiveDateTime{} = inactive_since) do
+    events = inactive_since |> inactive_events_query() |> Repo.all()
+
+    %{
+      terminated: length(events),
+      recaps:
+        Enum.count(events, fn event ->
+          just_became_inactive?(event, inactive_since) and EventNotifier.recap?(event)
+        end)
+    }
+  end
+
+  defp inactive_events_query(inactive_since) do
+    from(e in Event,
+      as: :event,
+      where: is_nil(e.expired_at),
+      where:
+        fragment("GREATEST(?, ?, ?)", e.last_active_at, e.updated_at, e.started_at) <
+          type(^inactive_since, :naive_datetime),
+      where:
+        not exists(from(r in Lti13.Resources.Resource, where: r.event_id == parent_as(:event).id))
+    )
+  end
+
+  defp just_became_inactive?(%Event{} = event, inactive_since) do
+    last_activity =
+      [event.last_active_at, event.updated_at, event.started_at]
+      |> Enum.reject(&is_nil/1)
+      |> Enum.max(NaiveDateTime)
+
+    NaiveDateTime.after?(last_activity, NaiveDateTime.add(inactive_since, -1, :day))
+  end
+
+  defp broadcast_terminated(%Event{} = event) do
+    broadcast_all_users({:updated, event})
+    broadcast_event(event.uuid, {:event_terminated, event.uuid})
   end
 
   @doc """
