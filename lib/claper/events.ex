@@ -531,6 +531,12 @@ defmodule Claper.Events do
     end
   end
 
+  @doc """
+  Returns `EVENT_INACTIVITY_DAYS`: after how many days without activity events with
+  no end date are terminated, or `0` when they never are.
+  """
+  def inactivity_days, do: Application.fetch_env!(:claper, :events)[:inactivity_days]
+
   @activity_write_interval_seconds 10 * 60
 
   @doc """

@@ -4102,3 +4102,11 @@ msgstr "Skatīt pilnu ziņojumu"
 #, elixir-autogen, elixir-format
 msgid "Your event has ended"
 msgstr "Jūsu pasākums ir beidzies"
+
+#: lib/claper_web/live/event_live/event_form_component.html.heex
+#, elixir-autogen, elixir-format
+msgid "This event ends automatically after %{count} day without activity."
+msgid_plural "This event ends automatically after %{count} days without activity."
+msgstr[0] "Šis pasākums automātiski beigsies pēc %{count} dienām bez aktivitātes."
+msgstr[1] "Šis pasākums automātiski beigsies pēc %{count} dienas bez aktivitātes."
+msgstr[2] "Šis pasākums automātiski beigsies pēc %{count} dienām bez aktivitātes."

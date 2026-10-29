@@ -11,7 +11,7 @@ defmodule Claper.Workers.TerminateInactiveEvents do
 
   @impl Oban.Worker
   def perform(%Oban.Job{}) do
-    case Application.fetch_env!(:claper, :events)[:inactivity_days] do
+    case Events.inactivity_days() do
       days when days > 0 ->
         days |> inactive_since() |> Events.terminate_inactive_events()
         :ok

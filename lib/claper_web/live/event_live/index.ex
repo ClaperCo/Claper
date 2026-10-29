@@ -149,7 +149,11 @@ defmodule ClaperWeb.EventLive.Index do
 
   defp apply_action(socket, :edit, %{"id" => id}) do
     event =
-      Events.get_user_event!(socket.assigns.current_user.id, id, [:presentation_file, :leaders])
+      Events.get_user_event!(socket.assigns.current_user.id, id, [
+        :presentation_file,
+        :leaders,
+        :lti_resource
+      ])
 
     if event.expired_at && NaiveDateTime.compare(NaiveDateTime.utc_now(), event.expired_at) == :gt do
       redirect(socket, to: ~p"/events")

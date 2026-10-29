@@ -4087,3 +4087,9 @@ msgstr "レポート全体を見る"
 #, elixir-autogen, elixir-format
 msgid "Your event has ended"
 msgstr "イベントが終了しました"
+
+#: lib/claper_web/live/event_live/event_form_component.html.heex
+#, elixir-autogen, elixir-format
+msgid "This event ends automatically after %{count} day without activity."
+msgid_plural "This event ends automatically after %{count} days without activity."
+msgstr[0] "このイベントは%{count}日間アクティビティがないと自動的に終了します。"

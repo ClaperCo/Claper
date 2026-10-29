@@ -56,9 +56,7 @@ defmodule Claper.Workers.Mailers do
   defp build_email(%{"type" => "event_recap", "event_id" => event_id, "ended_by" => ended_by}) do
     event = Claper.Events.get_event!(event_id, [:user])
 
-    inactivity_days =
-      if ended_by == "inactivity",
-        do: Application.fetch_env!(:claper, :events)[:inactivity_days]
+    inactivity_days = if ended_by == "inactivity", do: Claper.Events.inactivity_days()
 
     EventNotifier.recap(event, Claper.Stats.report_summary(event), inactivity_days)
   end

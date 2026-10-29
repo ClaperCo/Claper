@@ -110,6 +110,33 @@ defmodule ClaperWeb.EventLiveTest do
       assert has_element?(new_live, ~s(#date-picker input[type="datetime-local"][lang="fr"]))
     end
 
+    test "tells after how many days without activity the event ends, when enabled", %{
+      conn: conn,
+      presentation_file: presentation_file
+    } do
+      events_config = Application.get_env(:claper, :events)
+      on_exit(fn -> Application.put_env(:claper, :events, events_config) end)
+
+      Application.put_env(:claper, :events, inactivity_days: 0)
+      {:ok, new_live, _html} = live(conn, ~p"/events/new")
+      refute has_element?(new_live, "#event-inactivity-notice")
+
+      Application.put_env(:claper, :events, inactivity_days: 21)
+      {:ok, new_live, _html} = live(conn, ~p"/events/new")
+      assert has_element?(new_live, "#event-inactivity-notice", "21 days")
+
+      {:ok, _} =
+        Lti13.Resources.create_resource(%{
+          title: "Course",
+          resource_id: 1,
+          registration_id: Lti13.RegistrationsFixtures.registration_fixture().id,
+          event_id: presentation_file.event.id
+        })
+
+      {:ok, edit_live, _html} = live(conn, ~p"/events/#{presentation_file.event.uuid}/edit")
+      refute has_element?(edit_live, "#event-inactivity-notice")
+    end
+
     test "adds and removes an unsaved facilitator", %{
       conn: conn,
       presentation_file: presentation_file
