@@ -1,3 +1,26 @@
+## v3.3.0
+
+### Upgrade notes
+
+- Terminating inactive events is disabled by default. Visits are only recorded from this version on, so before that many days have passed since the upgrade, an event in use without a recent slide change or message could be terminated. Enable it with `EVENT_INACTIVITY_DAYS=14` once 14 days have passed, after checking what the first run would do with `bin/claper rpc "IO.inspect(Claper.Workers.TerminateInactiveEvents.preview(14))"`.
+- Events inactive for more than a day beyond the delay are terminated without a recap email, so the first run doesn't email owners about all their old events.
+
+### Features
+
+- Terminate events without an end date after `EVENT_INACTIVITY_DAYS` days without attendee or facilitator activity (disabled by default).
+
+### Fixes and improvements
+
+- Fix event view preference flash on reload
+
+### Security
+
+- Enforce bcrypt 72 bytes password limit
+- Ignore client-supplied presentation and LTI fields when editing quizzes, polls and forms.
+- Only accept poll votes for polls that belong to the event.
+- Rate limit audience reactions per participant and per event to bound their broadcast to every connected client.
+- Store only the session token in the session cookie instead of the full user record.
+
 ## v3.2.0
 
 ### Features

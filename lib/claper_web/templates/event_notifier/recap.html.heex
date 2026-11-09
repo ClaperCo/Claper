@@ -1,0 +1,92 @@
+<tr>
+  <td>
+    <table
+      width="95%"
+      border="0"
+      align="center"
+      cellpadding="0"
+      cellspacing="0"
+      style="max-width:670px;background:#fff; border-radius:3px; text-align:center;-webkit-box-shadow:0 6px 18px 0 rgba(0,0,0,.06);-moz-box-shadow:0 6px 18px 0 rgba(0,0,0,.06);box-shadow:0 6px 18px 0 rgba(0,0,0,.06);"
+    >
+      <tr>
+        <td style="height:40px;">&nbsp;</td>
+      </tr>
+      <tr>
+        <td style="padding:0 35px;">
+          <h1 style="color:#1e1e2d; font-weight:500; margin:0;font-size:32px;font-family:'Rubik',sans-serif;">
+            {gettext("Your event has ended")}
+          </h1>
+          <span style="display:inline-block; vertical-align:middle; margin:29px 0 26px; border-bottom:1px solid #cecece; width:100px;">
+          </span>
+          <p
+            :if={@inactivity_days}
+            style="color:#455056; font-size:15px;line-height:24px; margin:0;"
+          >
+            {ngettext(
+              "%{name} ended automatically after %{count} day without activity, so other events can now use its code %{code}.",
+              "%{name} ended automatically after %{count} days without activity, so other events can now use its code %{code}.",
+              @inactivity_days,
+              name: @event.name,
+              code: @event.code
+            )}
+          </p>
+          <p
+            :if={is_nil(@inactivity_days)}
+            style="color:#455056; font-size:15px;line-height:24px; margin:0;"
+          >
+            {gettext("Here is the recap of %{name}.", name: @event.name)}
+          </p>
+          <table width="100%" border="0" cellpadding="0" cellspacing="0" style="margin-top:30px;">
+            <tr>
+              <td
+                :for={
+                  {label, value} <- [
+                    {gettext("Audience peak"), @summary.audience_peak},
+                    {gettext("Unique attendees"), @summary.unique_attendees},
+                    {gettext("Messages"), @summary.messages},
+                    {gettext("Engagement rate"), "#{@summary.engagement_rate}%"}
+                  ]
+                }
+                width="25%"
+                style="padding:0 5px; vertical-align:top;"
+              >
+                <p style="color:#1e1e2d; font-weight:500; margin:0;font-size:28px;font-family:'Rubik',sans-serif;">
+                  {value}
+                </p>
+                <p style="color:#6C6C6C; font-size:13px;line-height:18px; margin:4px 0 0;">
+                  {label}
+                </p>
+              </td>
+            </tr>
+          </table>
+          <a
+            href={@url}
+            target="_blank"
+            style="background:#8611ed;text-decoration:none !important; font-weight:500; margin-top:35px; color:#fff;text-transform:uppercase; font-size:14px;padding:10px 24px;display:inline-block;border-radius:50px;"
+          >
+            {gettext("View the full report")}
+          </a>
+        </td>
+      </tr>
+      <tr>
+        <td style="height:20px;">&nbsp;</td>
+      </tr>
+      <tr>
+        <td style="font-size: 0.8em; color: #6C6C6C">
+          <p class="sub">
+            {gettext(
+              "If you’re having trouble with the button above, copy and paste the URL below into your web browser"
+            )}.
+          </p>
+          <p class="sub">{@url}</p>
+        </td>
+      </tr>
+      <tr>
+        <td style="height:40px;">&nbsp;</td>
+      </tr>
+    </table>
+  </td>
+</tr>
+<tr>
+  <td style="height:20px;">&nbsp;</td>
+</tr>

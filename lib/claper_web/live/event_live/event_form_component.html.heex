@@ -270,6 +270,18 @@
             />
             <p class="text-xs text-base-content/60">{gettext("Shown in your local time.")}</p>
           </div>
+
+          <p
+            :if={@inactivity_days > 0}
+            id="event-inactivity-notice"
+            class="text-xs text-base-content/60"
+          >
+            {ngettext(
+              "This event ends automatically after %{count} day without activity.",
+              "This event ends automatically after %{count} days without activity.",
+              @inactivity_days
+            )}
+          </p>
         </div>
       </section>
 

@@ -77,6 +77,21 @@ defmodule Claper.FormsTest do
       assert form.title == "some updated title"
     end
 
+    test "update_form/3 cannot move the form to another presentation" do
+      presentation_file = presentation_file_fixture()
+      other_presentation_file = presentation_file_fixture()
+      form = form_fixture(%{presentation_file_id: presentation_file.id})
+
+      assert {:ok, %Form{} = form} =
+               Forms.update_form(presentation_file.event_id, form, %{
+                 "title" => "Renamed",
+                 "presentation_file_id" => other_presentation_file.id
+               })
+
+      assert form.title == "Renamed"
+      assert form.presentation_file_id == presentation_file.id
+    end
+
     test "update_form/3 with invalid data returns error changeset" do
       presentation_file = presentation_file_fixture()
       form = form_fixture(%{presentation_file_id: presentation_file.id})

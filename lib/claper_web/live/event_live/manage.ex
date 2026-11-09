@@ -35,6 +35,7 @@ defmodule ClaperWeb.EventLive.Manage do
       Claper.Events.Event.subscribe(event.uuid)
       Presentations.subscribe(event.presentation_file.id)
       Events.subscribe_user_events(socket.assigns.current_user.id)
+      Events.record_event_activity(event)
     end
 
     posts = list_all_posts(socket, event.uuid)

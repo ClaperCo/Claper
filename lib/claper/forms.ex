@@ -110,7 +110,7 @@ defmodule Claper.Forms do
   """
   def create_form(attrs \\ %{}) do
     %Form{}
-    |> Form.changeset(attrs)
+    |> Form.create_changeset(attrs)
     |> Repo.insert()
     |> case do
       {:ok, form} ->

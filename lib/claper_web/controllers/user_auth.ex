@@ -114,7 +114,26 @@ defmodule ClaperWeb.UserAuth do
   def fetch_current_user(conn, _opts) do
     {user_token, conn} = ensure_user_token(conn)
     user = user_token && Accounts.get_user_by_session_token(user_token)
-    conn |> put_session(:current_user, user) |> assign(:current_user, user)
+
+    # Sessions issued before the token-only cookie still carry the user struct.
+    conn
+    |> delete_session(:current_user)
+    |> assign(:current_user, user)
+  end
+
+  @doc """
+  Assigns the user owning the session token to a LiveView socket.
+
+  Only the token lives in the session cookie; the user is loaded from the
+  database so revoked tokens and account changes apply on the next mount.
+  The dead render reuses the user already loaded by `fetch_current_user/2`.
+  """
+  def mount_current_user(socket, session) do
+    Phoenix.Component.assign_new(socket, :current_user, fn ->
+      if user_token = session["user_token"] do
+        Accounts.get_user_by_session_token(user_token)
+      end
+    end)
   end
 
   defp ensure_user_token(conn) do

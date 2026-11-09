@@ -115,6 +115,7 @@ defmodule ClaperWeb.QuizLive.QuizComponent do
            quiz_params
            |> Map.put("presentation_file_id", socket.assigns.presentation_file.id)
            |> Map.put("lti_resource_id", lti_resource_id)
+           |> Map.put("lti_line_item_url", nil)
            |> Map.put("position", socket.assigns.position)
            |> Map.put("enabled", false)
          ) do

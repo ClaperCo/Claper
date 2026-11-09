@@ -78,6 +78,21 @@ defmodule Claper.PollsTest do
       assert poll.title == "some updated title"
     end
 
+    test "update_poll/3 cannot move the poll to another presentation" do
+      presentation_file = presentation_file_fixture()
+      other_presentation_file = presentation_file_fixture()
+      poll = poll_fixture(%{presentation_file_id: presentation_file.id})
+
+      assert {:ok, %Poll{} = poll} =
+               Polls.update_poll(presentation_file.event_id, poll, %{
+                 "title" => "Renamed",
+                 "presentation_file_id" => other_presentation_file.id
+               })
+
+      assert poll.title == "Renamed"
+      assert poll.presentation_file_id == presentation_file.id
+    end
+
     test "update_poll/3 with invalid data returns error changeset" do
       presentation_file = presentation_file_fixture()
       poll = poll_fixture(%{presentation_file_id: presentation_file.id})
@@ -170,7 +185,7 @@ defmodule Claper.PollsTest do
       assert {:ok, %Polls.Poll{}} =
                Polls.vote(
                  presentation_file.event.user_id,
-                 presentation_file.event_id,
+                 presentation_file.event.uuid,
                  [poll_opt],
                  poll.id
                )
@@ -228,6 +243,21 @@ defmodule Claper.PollsTest do
       assert {:error, :not_open} = Polls.vote("attendee", uuid, other.poll_opts, other.id)
       assert Polls.get_poll_vote("attendee", poll.id) == []
       assert [0, 0] == Enum.map(Polls.get_poll!(poll.id).poll_opts, & &1.vote_count)
+    end
+
+    test "a poll from another event is treated as closed" do
+      presentation_file = presentation_file_fixture(%{}, [:event])
+      other_presentation_file = presentation_file_fixture(%{}, [:event])
+      poll = poll_fixture(%{presentation_file_id: other_presentation_file.id})
+      [first | _] = poll.poll_opts
+      Phoenix.PubSub.subscribe(Claper.PubSub, "event:#{presentation_file.event.uuid}")
+
+      assert {:error, :not_open} =
+               Polls.vote("attendee", presentation_file.event.uuid, [first], poll.id)
+
+      assert Polls.get_poll_vote("attendee", poll.id) == []
+      assert [0, 0] == Enum.map(Polls.get_poll!(poll.id).poll_opts, & &1.vote_count)
+      refute_receive {:poll_updated, _}
     end
   end
 end

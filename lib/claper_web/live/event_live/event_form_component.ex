@@ -17,6 +17,7 @@ defmodule ClaperWeb.EventLive.EventFormComponent do
      |> assign_new(:removed_leader_ids, fn -> MapSet.new() end)
      |> assign(:changeset, changeset)
      |> assign(:max_file_size, max_file_size)
+     |> assign(:inactivity_days, inactivity_days(event))
      |> allow_upload(:presentation_file,
        accept: ~w(.pdf .ppt .pptx),
        auto_upload: true,
@@ -313,6 +314,13 @@ defmodule ClaperWeb.EventLive.EventFormComponent do
   defp get_max_file_size() do
     Application.get_env(:claper, :presentations) |> Keyword.get(:max_file_size)
   end
+
+  # Events with an end date or linked to an LTI resource are never terminated for inactivity.
+  defp inactivity_days(%Events.Event{expired_at: nil, lti_resource: %Lti13.Resources.Resource{}}),
+    do: 0
+
+  defp inactivity_days(%Events.Event{expired_at: nil}), do: Events.inactivity_days()
+  defp inactivity_days(_event), do: 0
 
   defp get_presentation_storage_dir do
     Application.get_env(:claper, :storage_dir)

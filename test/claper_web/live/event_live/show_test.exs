@@ -70,6 +70,26 @@ defmodule ClaperWeb.EventLive.ShowTest do
     assert render(view) =~ "data-message-reaction-trigger"
   end
 
+  test "caps the global reaction fan-out of a flooding sender", %{conn: conn, user: user} do
+    presentation_file = presentation_file_fixture(%{user: user}, [:event])
+
+    presentation_state_fixture(%{
+      presentation_file: presentation_file,
+      message_reaction_enabled: true
+    })
+
+    {:ok, view, _html} = live(conn, ~p"/e/#{presentation_file.event.code}")
+    Phoenix.PubSub.subscribe(Claper.PubSub, "event:#{presentation_file.event.uuid}")
+
+    for _ <- 1..50, do: render_hook(view, "global-react", %{"type" => "heart"})
+
+    broadcasts = count_reactions(0)
+
+    # The per-event cap is 10 per one-second window; a burst can straddle two
+    # windows but never more.
+    assert broadcasts in 10..20
+  end
+
   test "does not render the focus panel without attendee content", %{conn: conn, user: user} do
     presentation_file = presentation_file_fixture(%{user: user, length: 0}, [:event])
     presentation_state_fixture(%{presentation_file: presentation_file})
@@ -664,6 +684,14 @@ defmodule ClaperWeb.EventLive.ShowTest do
       assert Claper.WordClouds.list_entries(word_cloud.id) == []
       refute has_element?(view, ~s(form[phx-submit="submit-word"]))
       assert submission_audits_for_event("word_cloud", event.id) == []
+    end
+  end
+
+  defp count_reactions(count) do
+    receive do
+      {:react, :heart} -> count_reactions(count + 1)
+    after
+      100 -> count
     end
   end
 

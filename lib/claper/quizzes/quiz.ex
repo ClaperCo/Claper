@@ -38,19 +38,15 @@ defmodule Claper.Quizzes.Quiz do
     timestamps()
   end
 
-  @doc false
+  @doc """
+  Fields a presenter may edit through the quiz form. Ownership
+  (`presentation_file_id`) and LTI wiring (`lti_resource_id`,
+  `lti_line_item_url`) are never cast here: they decide which LMS the score
+  reporter authenticates against and where it sends the bearer token.
+  """
   def changeset(quiz, attrs) do
     quiz
-    |> cast(attrs, [
-      :title,
-      :position,
-      :presentation_file_id,
-      :enabled,
-      :show_results,
-      :allow_anonymous,
-      :lti_resource_id,
-      :lti_line_item_url
-    ])
+    |> cast(attrs, [:title, :position, :enabled, :show_results, :allow_anonymous])
     |> validate_required([:title, :position, :presentation_file_id])
     |> cast_assoc(:quiz_questions,
       required: true,
@@ -58,6 +54,16 @@ defmodule Claper.Quizzes.Quiz do
       sort_param: :quiz_questions_order,
       drop_param: :quiz_questions_delete
     )
+  end
+
+  @doc """
+  Creation changeset. Callers must set the server-owned fields themselves
+  instead of forwarding them from client params.
+  """
+  def create_changeset(quiz, attrs) do
+    quiz
+    |> cast(attrs, [:presentation_file_id, :lti_resource_id, :lti_line_item_url])
+    |> changeset(attrs)
   end
 
   def update_line_item_changeset(quiz, attrs) do

@@ -168,10 +168,11 @@ defmodule Claper.Accounts.User do
     end
   end
 
+  # Bcrypt only hashes the first 72 bytes, so longer UTF-8 passwords would be truncated.
   defp validate_password(changeset, opts) do
     changeset
     |> validate_required([:password])
-    |> validate_length(:password, min: 6, max: 72)
+    |> validate_password_length()
     |> maybe_hash_password(opts)
   end
 
@@ -181,11 +182,17 @@ defmodule Claper.Accounts.User do
     # Only validate password if it's provided
     if password && password != "" do
       changeset
-      |> validate_length(:password, min: 6, max: 72)
+      |> validate_password_length()
       |> maybe_hash_password(opts)
     else
       changeset
     end
+  end
+
+  defp validate_password_length(changeset) do
+    changeset
+    |> validate_length(:password, min: 6)
+    |> validate_length(:password, max: 72, count: :bytes, message: "is too long")
   end
 
   defp maybe_hash_password(changeset, opts) do

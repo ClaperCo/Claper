@@ -125,7 +125,7 @@ defmodule Claper.Quizzes do
   """
   def create_quiz(attrs \\ %{}) do
     %Quiz{}
-    |> Quiz.changeset(attrs)
+    |> Quiz.create_changeset(attrs)
     |> Repo.insert()
     |> case do
       {:ok, quiz} ->

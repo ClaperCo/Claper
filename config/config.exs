@@ -29,7 +29,8 @@ config :claper, Oban,
   repo: Claper.Repo,
   plugins: [
     {Oban.Plugins.Pruner, max_age: 60 * 60 * 24 * 7},
-    {Oban.Plugins.Lifeline, rescue_after: :timer.minutes(30)}
+    {Oban.Plugins.Lifeline, rescue_after: :timer.minutes(30)},
+    {Oban.Plugins.Cron, crontab: [{"@daily", Claper.Workers.TerminateInactiveEvents}]}
   ]
 
 config :dart_sass,

@@ -232,15 +232,17 @@ config :claper, :oidc,
   disable_password_login: disable_password_login,
   trust_email_verified: oidc_trust_email_verified
 
-config :claper, Claper.Repo,
-  url: database_url,
-  ssl: db_ssl,
-  ssl_opts: [
-    verify: :verify_none
-  ],
-  prepare: :unnamed,
-  pool_size: pool_size,
-  queue_target: queue_target
+if config_env() != :test do
+  config :claper, Claper.Repo,
+    url: database_url,
+    ssl: db_ssl,
+    ssl_opts: [
+      verify: :verify_none
+    ],
+    prepare: :unnamed,
+    pool_size: pool_size,
+    queue_target: queue_target
+end
 
 config :claper, ClaperWeb.Endpoint,
   url: [scheme: base_url.scheme, host: base_url.host, path: base_url.path, port: base_url.port],
@@ -272,6 +274,9 @@ config :claper, :presentations,
   s3_bucket: s3_bucket,
   resolution: get_var_from_path_or_env(config_dir, "GS_JPG_RESOLUTION", "300x300"),
   s3_public_url: s3_public_url
+
+config :claper, :events,
+  inactivity_days: get_int_from_path_or_env(config_dir, "EVENT_INACTIVITY_DAYS", 0)
 
 config :claper, :mail,
   from: get_var_from_path_or_env(config_dir, "MAIL_FROM", "noreply@claper.co"),

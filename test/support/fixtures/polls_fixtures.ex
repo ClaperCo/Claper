@@ -41,7 +41,13 @@ defmodule Claper.PollsFixtures do
     poll_id = attrs[:poll_id] || poll.id
     option_id = attrs[:poll_opt_id] || poll_opt.id
     option = Claper.Repo.get!(Claper.Polls.PollOpt, option_id)
-    {:ok, _} = Claper.Polls.vote(identity, "fixture", [option], poll_id)
+
+    %{presentation_file: %{event: %{uuid: event_uuid}}} =
+      Claper.Polls.Poll
+      |> Claper.Repo.get!(poll_id)
+      |> Claper.Repo.preload(presentation_file: :event)
+
+    {:ok, _} = Claper.Polls.vote(identity, event_uuid, [option], poll_id)
     [poll_vote] = Claper.Polls.get_poll_vote(identity, poll_id)
 
     poll_vote

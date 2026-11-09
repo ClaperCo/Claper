@@ -5,7 +5,7 @@ defmodule ClaperWeb.AttendeeLiveAuth do
     socket =
       socket
       |> assign(:attendee_identifier, session["attendee_identifier"])
-      |> assign(:current_user, session["current_user"])
+      |> ClaperWeb.UserAuth.mount_current_user(session)
 
     {:cont, socket}
   end

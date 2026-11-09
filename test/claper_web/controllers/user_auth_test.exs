@@ -89,6 +89,44 @@ defmodule ClaperWeb.UserAuthTest do
       assert conn.assigns.current_user.id == user.id
     end
 
+    test "keeps only the token in the session cookie", %{conn: conn, user: user} do
+      user_token = Accounts.generate_user_session_token(user)
+
+      conn =
+        conn
+        |> put_session(:user_token, user_token)
+        |> put_session(:current_user, user)
+        |> UserAuth.fetch_current_user([])
+
+      assert get_session(conn, :user_token) == user_token
+      assert get_session(conn, :current_user) == nil
+    end
+
+    test "LiveView mounts load the user from the token, so revoked tokens lose access", %{
+      user: user
+    } do
+      user_token = Accounts.generate_user_session_token(user)
+      socket = %Phoenix.LiveView.Socket{assigns: %{__changed__: %{}}}
+
+      {_, mounted} =
+        ClaperWeb.UserLiveAuth.on_mount(:default, %{}, %{"user_token" => user_token}, socket)
+
+      assert mounted.assigns.current_user.id == user.id
+
+      Accounts.delete_session_token(user_token)
+
+      assert {:halt, revoked} =
+               ClaperWeb.UserLiveAuth.on_mount(
+                 :default,
+                 %{},
+                 %{"user_token" => user_token},
+                 socket
+               )
+
+      assert revoked.assigns.current_user == nil
+      assert revoked.redirected == {:redirect, %{status: 302, to: "/users/log_in"}}
+    end
+
     test "authenticates user from cookies", %{conn: conn, user: user} do
       logged_in_conn =
         conn |> fetch_cookies() |> UserAuth.log_in_user(user, %{"remember_me" => "true"})

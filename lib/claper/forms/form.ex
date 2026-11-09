@@ -27,11 +27,20 @@ defmodule Claper.Forms.Form do
     timestamps()
   end
 
-  @doc false
+  @doc """
+  Fields a presenter may edit through the form editor. `presentation_file_id`
+  decides which event owns the form and is only set on creation by the server.
+  """
   def changeset(form, attrs \\ %{}) do
     form
-    |> cast(attrs, [:enabled, :title, :presentation_file_id, :position])
+    |> cast(attrs, [:enabled, :title, :position])
     |> cast_embed(:fields)
     |> validate_required([:title, :presentation_file_id, :position])
+  end
+
+  def create_changeset(form, attrs) do
+    form
+    |> cast(attrs, [:presentation_file_id])
+    |> changeset(attrs)
   end
 end

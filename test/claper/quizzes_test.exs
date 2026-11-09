@@ -87,6 +87,24 @@ defmodule Claper.QuizzesTest do
       assert updated_quiz.title == "Updated Title"
     end
 
+    test "update_quiz/3 ignores ownership and LTI fields from form params" do
+      quiz = quiz_fixture()
+      other_presentation_file = presentation_file_fixture()
+
+      assert {:ok, %Quiz{} = updated_quiz} =
+               Quizzes.update_quiz(Ecto.UUID.generate(), quiz, %{
+                 "title" => "Renamed",
+                 "presentation_file_id" => other_presentation_file.id,
+                 "lti_resource_id" => -1,
+                 "lti_line_item_url" => "https://attacker.example/lineitem"
+               })
+
+      assert updated_quiz.title == "Renamed"
+      assert updated_quiz.presentation_file_id == quiz.presentation_file_id
+      assert updated_quiz.lti_resource_id == nil
+      assert updated_quiz.lti_line_item_url == nil
+    end
+
     test "delete_quiz/2 deletes the quiz" do
       quiz = quiz_fixture()
       event_uuid = Ecto.UUID.generate()
