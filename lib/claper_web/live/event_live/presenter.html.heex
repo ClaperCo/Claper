@@ -56,7 +56,7 @@
 
         <div class={"#{if @iframe, do: "space-y-5", else: "space-y-8"} flex flex-col"}>
           <%= if (length @current_poll.poll_opts) > 0 do %>
-            <%= for opt <- @current_poll.poll_opts do %>
+            <%= for opt <- Enum.sort_by(@current_poll.poll_opts, & &1.vote_count, :desc) do %>
               <div class={"#{if @iframe, do: "py-1", else: "py-4"} bg-gray-500 px-6 rounded-3xl flex justify-between items-center relative text-white"}>
                 <div
                   style={"width: #{opt.percentage}%;"}
