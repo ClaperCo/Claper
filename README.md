@@ -19,7 +19,7 @@ Your audience joins from their phone: no app, no account.
   <a href="https://docs.claper.co/self-hosting/quick-start.html"><strong>Self-host</strong></a> ·
   <a href="https://docs.claper.co"><strong>Documentation</strong></a> ·
   <a href="https://claper.co"><strong>Website</strong></a> ·
-  <a href="https://discord.gg/M7ejVaC9gA"><strong>Discord</strong></a>
+  <a href="https://community.claper.co"><strong>Community</strong></a>
 </p>
 
 <p>
@@ -28,7 +28,7 @@ Your audience joins from their phone: no app, no account.
   <a href="https://github.com/ClaperCo/Claper/pkgs/container/claper"><img alt="Docker image" src="https://img.shields.io/badge/docker-ghcr.io-2496ED?style=flat-square&logo=docker&logoColor=white" /></a>
   <a href="LICENSE.txt"><img alt="License: AGPL-3.0" src="https://img.shields.io/github/license/ClaperCo/Claper?style=flat-square&color=6b7280" /></a>
   <a href="https://github.com/ClaperCo/Claper/stargazers"><img alt="GitHub stars" src="https://img.shields.io/github/stars/ClaperCo/Claper?style=flat-square&color=f59e0b" /></a>
-  <a href="https://discord.gg/M7ejVaC9gA"><img alt="Discord" src="https://img.shields.io/badge/Discord-join-5865F2?style=flat-square&logo=discord&logoColor=white" /></a>
+  <a href="https://community.claper.co"><img alt="Community" src="https://img.shields.io/badge/Community-join-8b5cf6?style=flat-square" /></a>
 </p>
 
 </div>
@@ -168,7 +168,7 @@ Contributions of all sizes are welcome: bug reports, features, docs and translat
 2. Set up your environment with the [development guide](https://docs.claper.co/self-hosting/development.html)
 3. Open a pull request against `dev`
 
-Read [CONTRIBUTING.md](CONTRIBUTING.md) for details, including how to add a new language. Not sure where to start? Browse [open issues](https://github.com/ClaperCo/Claper/issues) or ask on [Discord](https://discord.gg/M7ejVaC9gA).
+Read [CONTRIBUTING.md](CONTRIBUTING.md) for details, including how to add a new language. Not sure where to start? Browse [open issues](https://github.com/ClaperCo/Claper/issues) or ask on the [community forum](https://community.claper.co).
 
 <a href="https://github.com/ClaperCo/Claper/graphs/contributors">
   <img src="https://contrib.rocks/image?repo=ClaperCo/Claper" alt="Claper contributors" />
@@ -176,10 +176,10 @@ Read [CONTRIBUTING.md](CONTRIBUTING.md) for details, including how to add a new 
 
 ## 💬 Community and support
 
-- 💬 [Discord](https://discord.gg/M7ejVaC9gA): questions, ideas and help from the community
+- 💬 [Community](https://community.claper.co): questions, ideas and help from the community
 - 🐛 [GitHub Issues](https://github.com/ClaperCo/Claper/issues): bug reports and feature requests
 - 📖 [Documentation](https://docs.claper.co): usage and self-hosting guides
-- 🟠 [r/claper](https://reddit.com/r/claper) · 𝕏 [@alxlion_](https://x.com/alxlion_) (founder)
+- 𝕏 [@alxlion_](https://x.com/alxlion_) (founder)
 - 🔒 Security issue? Do not open a public issue, follow the [security policy](https://claper.co/security)
 
 If Claper helps you, a ⭐ helps others find it. You can also [sponsor the project](https://github.com/sponsors/ClaperCo).
