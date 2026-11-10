@@ -15,15 +15,28 @@
   <% captions_visible? =
     @transcription_config && @transcription_config.enabled &&
       @transcription_config.visibility in ["both", "attendee"] %>
+  <%!-- Without chat, the interaction takes the space of the message feed --%>
+  <% expand? = interaction_mode? && !@state.chat_enabled %>
+  <% reactions? = @state.message_reaction_enabled %>
+  <% interaction_box_class = [
+    "overflow-y-auto overscroll-contain p-3",
+    !expand? && "max-h-[40dvh]",
+    expand? && "h-full",
+    expand? && !reactions? && "pb-18"
+  ] %>
   <div class="h-[100dvh] overflow-hidden bg-black lg:bg-primary-700">
     <main
       id="attendee-room"
       class={[
         "relative mx-auto grid h-[100dvh] w-full max-w-lg overflow-hidden bg-black font-display shadow-2xl",
-        focus_content? && captions_visible? &&
+        !expand? && focus_content? && captions_visible? &&
           "grid-rows-[auto_auto_auto_minmax(0,1fr)]",
-        focus_content? != captions_visible? && "grid-rows-[auto_auto_minmax(0,1fr)]",
-        !focus_content? && !captions_visible? && "grid-rows-[auto_minmax(0,1fr)]"
+        !expand? && focus_content? != captions_visible? && "grid-rows-[auto_auto_minmax(0,1fr)]",
+        !focus_content? && !captions_visible? && "grid-rows-[auto_minmax(0,1fr)]",
+        expand? && captions_visible? && reactions? && "grid-rows-[auto_minmax(0,1fr)_auto_9rem]",
+        expand? && captions_visible? && !reactions? && "grid-rows-[auto_minmax(0,1fr)_auto]",
+        expand? && !captions_visible? && reactions? && "grid-rows-[auto_minmax(0,1fr)_9rem]",
+        expand? && !captions_visible? && !reactions? && "grid-rows-[auto_minmax(0,1fr)]"
       ]}
     >
       <div
@@ -143,8 +156,9 @@
         data-collapse-key={"focus-slot:#{@event.uuid}"}
         data-interaction-mode={to_string(interaction_mode?)}
         class={[
-          "relative z-10 min-h-0 overflow-hidden border-y border-white/10 bg-gray-950 transition-[height] duration-300",
-          interaction_mode? && "h-auto max-h-[40dvh]",
+          "relative z-10 min-h-0 overflow-hidden border-t border-white/10 bg-gray-950 transition-[height] duration-300",
+          !expand? && "border-b",
+          interaction_mode? && !expand? && "h-auto max-h-[40dvh]",
           !interaction_mode? && "h-[40dvh] min-h-40 max-h-[26rem]"
         ]}
       >
@@ -157,7 +171,7 @@
 
         <%= case @current_interaction do %>
           <% %Claper.Polls.Poll{} -> %>
-            <div class="max-h-[40dvh] overflow-y-auto overscroll-contain p-3">
+            <div class={interaction_box_class}>
               <.live_component
                 module={ClaperWeb.EventLive.PollComponent}
                 id={"#{@current_interaction.id}-poll"}
@@ -172,7 +186,7 @@
               />
             </div>
           <% %Claper.Forms.Form{} -> %>
-            <div class="max-h-[40dvh] overflow-y-auto overscroll-contain p-3">
+            <div class={interaction_box_class}>
               <.live_component
                 module={ClaperWeb.EventLive.FormComponent}
                 id={"#{@current_interaction.id}-form"}
@@ -186,7 +200,7 @@
               />
             </div>
           <% %Claper.Quizzes.Quiz{} -> %>
-            <div class="max-h-[40dvh] overflow-y-auto overscroll-contain p-3">
+            <div class={interaction_box_class}>
               <.live_component
                 module={ClaperWeb.EventLive.QuizComponent}
                 id={"#{@current_interaction.id}-quiz"}
@@ -202,7 +216,7 @@
               />
             </div>
           <% %Claper.WordClouds.WordCloud{} -> %>
-            <div class="max-h-[40dvh] overflow-y-auto overscroll-contain p-3">
+            <div class={interaction_box_class}>
               <.live_component
                 module={ClaperWeb.EventLive.WordCloudComponent}
                 id={"#{@current_interaction.id}-word-cloud"}
@@ -212,7 +226,7 @@
               />
             </div>
           <% %Claper.Embeds.Embed{attendee_visibility: true} -> %>
-            <div class="max-h-[40dvh] overflow-y-auto overscroll-contain p-3">
+            <div class={interaction_box_class}>
               <.live_component
                 id={"#{@current_interaction.id}-embed"}
                 module={ClaperWeb.EventLive.EmbedComponent}
@@ -356,11 +370,18 @@
         </div>
       </section>
 
-      <section id="chat-panel" class="relative min-h-0 overflow-visible bg-black">
+      <section
+        id="chat-panel"
+        class={[
+          "relative min-h-0 overflow-visible bg-black",
+          expand? && !reactions? && "hidden"
+        ]}
+      >
         <div
           id="chat-feed"
           class={[
             "h-full space-y-3 overflow-y-auto overscroll-contain px-4 pt-4",
+            expand? && "hidden",
             @state.message_reaction_enabled && "pb-40",
             !@state.message_reaction_enabled && "pb-24"
           ]}
@@ -406,7 +427,11 @@
           id="reacts"
           phx-hook="GlobalReacts"
           data-class-name="h-12 w-12"
-          class="pointer-events-none absolute inset-0 z-10 overflow-hidden"
+          class={[
+            "pointer-events-none absolute inset-x-0 bottom-0 z-10 overflow-hidden",
+            !expand? && "top-0",
+            expand? && "h-[100dvh]"
+          ]}
           phx-update="ignore"
         >
         </div>
