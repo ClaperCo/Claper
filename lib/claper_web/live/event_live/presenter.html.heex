@@ -47,16 +47,16 @@
   <%= if @current_poll do %>
     <div
       id="poll"
-      class={"#{if @state.poll_visible, do: "opacity-100", else: "opacity-0 pointer-events-none"} h-full w-full flex flex-col justify-center bg-black/90 absolute z-30 left-1/2 top-1/2 transform -translate-y-1/2 -translate-x-1/2 p-10 transition-opacity"}
+      class={"#{if @state.poll_visible, do: "opacity-100", else: "opacity-0 pointer-events-none"} h-full w-full flex flex-col justify-center-safe overflow-y-auto bg-black/90 absolute z-30 left-1/2 top-1/2 transform -translate-y-1/2 -translate-x-1/2 p-10 transition-opacity"}
     >
-      <div class="w-full md:w-1/2 mx-auto h-full">
+      <div class="w-full md:w-1/2 mx-auto min-h-full pb-10">
         <p class={"#{if @iframe, do: "text-xl mb-12", else: "text-5xl mb-24"} text-white font-bold  text-center"}>
           {@current_poll.title}
         </p>
 
         <div class={"#{if @iframe, do: "space-y-5", else: "space-y-8"} flex flex-col"}>
           <%= if (length @current_poll.poll_opts) > 0 do %>
-            <%= for opt <- @current_poll.poll_opts do %>
+            <%= for opt <- Enum.sort_by(@current_poll.poll_opts, & &1.vote_count, :desc) do %>
               <div class={"#{if @iframe, do: "py-1", else: "py-4"} bg-gray-500 px-6 rounded-3xl flex justify-between items-center relative text-white"}>
                 <div
                   style={"width: #{opt.percentage}%;"}
