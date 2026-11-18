@@ -1428,6 +1428,7 @@ msgstr "Jelentkezzen be a válaszok beküldéséhez"
 msgid "Sign in"
 msgstr "Bejelentkezés"
 
+#: lib/claper_web/live/event_live/manageable_quiz_component.ex
 #: lib/claper_web/live/stat_live/index.html.heex
 #, elixir-autogen, elixir-format
 msgid "Total submissions"
@@ -4100,3 +4101,13 @@ msgid "This event ends automatically after %{count} day without activity."
 msgid_plural "This event ends automatically after %{count} days without activity."
 msgstr[0] "Az esemény automatikusan lezárul, ha %{count} napig nincs aktivitás."
 msgstr[1] "Az esemény automatikusan lezárul, ha %{count} napig nincs aktivitás."
+
+#: lib/claper_web/live/event_live/manage_interaction_options_component.ex
+#, elixir-autogen, elixir-format
+msgid "Hide correct answers"
+msgstr "Helyes válaszok elrejtése"
+
+#: lib/claper_web/live/event_live/manage_interaction_options_component.ex
+#, elixir-autogen, elixir-format
+msgid "Reveal correct answers"
+msgstr "Helyes válaszok felfedése"

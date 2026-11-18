@@ -1432,6 +1432,7 @@ msgstr "Lūdzu, pierakstieties, lai iesniegtu savas atbildes"
 msgid "Sign in"
 msgstr "Pierakstīties"
 
+#: lib/claper_web/live/event_live/manageable_quiz_component.ex
 #: lib/claper_web/live/stat_live/index.html.heex
 #, elixir-autogen, elixir-format
 msgid "Total submissions"
@@ -4110,3 +4111,13 @@ msgid_plural "This event ends automatically after %{count} days without activity
 msgstr[0] "Šis pasākums automātiski beigsies pēc %{count} dienām bez aktivitātes."
 msgstr[1] "Šis pasākums automātiski beigsies pēc %{count} dienas bez aktivitātes."
 msgstr[2] "Šis pasākums automātiski beigsies pēc %{count} dienām bez aktivitātes."
+
+#: lib/claper_web/live/event_live/manage_interaction_options_component.ex
+#, elixir-autogen, elixir-format
+msgid "Hide correct answers"
+msgstr "Paslēpt pareizās atbildes"
+
+#: lib/claper_web/live/event_live/manage_interaction_options_component.ex
+#, elixir-autogen, elixir-format
+msgid "Reveal correct answers"
+msgstr "Atklāt pareizās atbildes"
