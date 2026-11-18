@@ -2351,6 +2351,7 @@ msgid "Join 6,000+ speakers"
 msgstr "Pievienojieties 6000+ runātājiem"
 
 #: lib/claper_web/live/event_live/join.html.heex
+#: lib/claper_web/live/event_live/show.html.heex
 #: lib/claper_web/templates/user_registration/new.html.heex
 #: lib/claper_web/templates/user_session/new.html.heex
 #, elixir-autogen, elixir-format
@@ -4110,3 +4111,28 @@ msgid_plural "This event ends automatically after %{count} days without activity
 msgstr[0] "Šis pasākums automātiski beigsies pēc %{count} dienām bez aktivitātes."
 msgstr[1] "Šis pasākums automātiski beigsies pēc %{count} dienas bez aktivitātes."
 msgstr[2] "Šis pasākums automātiski beigsies pēc %{count} dienām bez aktivitātes."
+
+#: lib/claper_web/live/event_live/manage_attendees_options_component.ex
+#, elixir-autogen, elixir-format
+msgid "Allow messages without login"
+msgstr ""
+
+#: lib/claper_web/live/event_live/show.html.heex
+#, elixir-autogen, elixir-format
+msgid "Log in to post a message"
+msgstr ""
+
+#: lib/claper_web/live/event_live/manage_attendees_options_component.ex
+#, elixir-autogen, elixir-format
+msgid "Require login to post"
+msgstr ""
+
+#: lib/claper_web/live/event_live/manage.ex
+#, elixir-autogen, elixir-format
+msgid "Turn messages on before changing who can post"
+msgstr ""
+
+#: lib/claper_web/live/event_live/show.ex
+#, elixir-autogen, elixir-format
+msgid "You must be logged in to post a message"
+msgstr ""
