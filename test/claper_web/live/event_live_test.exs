@@ -665,6 +665,22 @@ defmodule ClaperWeb.EventLiveTest do
 
       refute Claper.Quizzes.get_quiz!(quiz.id).reveal_answers
     end
+
+    test "ignores a reveal toggle once no quiz is current", %{
+      conn: conn,
+      presentation_file: presentation_file
+    } do
+      quiz = quiz_fixture(%{presentation_file: presentation_file, position: 1, enabled: true})
+      word_cloud = word_cloud_fixture(%{presentation_file: presentation_file})
+
+      {:ok, manage_live, _html} = live(conn, ~p"/e/#{presentation_file.event.code}/manage")
+      render_hook(manage_live, "checked", %{"key" => "quiz_reveal_answers", "value" => true})
+
+      assert Process.alive?(manage_live.pid)
+      refute Claper.Quizzes.get_quiz!(quiz.id).reveal_answers
+      assert Claper.WordClouds.get_word_cloud!(word_cloud.id).show_results
+      assert render(manage_live) =~ "Hide the word cloud from attendees"
+    end
   end
 
   describe "Manage word clouds" do

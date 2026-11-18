@@ -1069,19 +1069,17 @@ defmodule ClaperWeb.EventLive.Manage do
   def handle_event(
         "checked",
         %{"key" => "quiz_reveal_answers", "value" => value},
-        %{assigns: %{current_interaction: interaction}} = socket
+        %{assigns: %{current_interaction: %Quizzes.Quiz{} = quiz}} = socket
       ) do
-    {:ok, new_interaction} =
-      Claper.Quizzes.update_quiz(
-        socket.assigns.event.uuid,
-        interaction,
-        %{
-          :reveal_answers => value
-        }
-      )
+    {:ok, quiz} = Quizzes.update_quiz(socket.assigns.event.uuid, quiz, %{reveal_answers: value})
 
-    {:noreply, socket |> assign(:current_interaction, new_interaction)}
+    {:noreply, socket |> assign(:current_interaction, quiz)}
   end
+
+  # A reveal toggle rendered before another interaction became current.
+  @impl true
+  def handle_event("checked", %{"key" => "quiz_reveal_answers"}, socket),
+    do: {:noreply, socket}
 
   @impl true
   def handle_event(
