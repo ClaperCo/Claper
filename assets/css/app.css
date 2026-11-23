@@ -144,6 +144,52 @@
   height: 100%;
 }
 
+/*
+ Fullscreen with an interaction (poll, quiz, form, ...): the slide stays on
+ the left and the interaction appears beside it. On a portrait screen there is
+ no room for two columns, so the interaction goes below the slide instead.
+ */
+#focus-slot[data-interaction-mode="true"]:fullscreen,
+#focus-slot[data-interaction-mode="true"].focus-fallback-fullscreen {
+  flex-direction: row;
+}
+
+#focus-slot[data-interaction-mode="true"]:fullscreen #focus-media,
+#focus-slot[data-interaction-mode="true"].focus-fallback-fullscreen #focus-media {
+  flex: 1 1 0%;
+  min-width: 0;
+  height: 100%;
+}
+
+#focus-slot[data-interaction-mode="true"]:fullscreen #focus-interaction,
+#focus-slot[data-interaction-mode="true"].focus-fallback-fullscreen #focus-interaction {
+  flex: 0 0 min(38%, 28rem);
+  height: 100%;
+  border-left: 1px solid rgb(255 255 255 / 0.1);
+}
+
+@media (orientation: portrait) {
+  #focus-slot[data-interaction-mode="true"]:fullscreen,
+  #focus-slot[data-interaction-mode="true"].focus-fallback-fullscreen {
+    flex-direction: column;
+  }
+
+  #focus-slot[data-interaction-mode="true"]:fullscreen #focus-media,
+  #focus-slot[data-interaction-mode="true"].focus-fallback-fullscreen #focus-media {
+    flex: 0 0 38%;
+    width: 100%;
+    height: auto;
+  }
+
+  #focus-slot[data-interaction-mode="true"]:fullscreen #focus-interaction,
+  #focus-slot[data-interaction-mode="true"].focus-fallback-fullscreen #focus-interaction {
+    flex: 1 1 0%;
+    height: auto;
+    border-left: 0;
+    border-top: 1px solid rgb(255 255 255 / 0.1);
+  }
+}
+
 #chat-feed {
   scrollbar-width: thin;
   scrollbar-color: rgb(75 85 99) transparent;
@@ -549,4 +595,10 @@
 
 .animate__slow_slow {
   --animate-duration: 5s;
+}
+
+/* Virtual pointer: the presenter sees the green dot instead of the mouse cursor. */
+.pointer-cursor-hidden,
+.pointer-cursor-hidden * {
+  cursor: none !important;
 }

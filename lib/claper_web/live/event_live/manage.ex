@@ -491,6 +491,25 @@ defmodule ClaperWeb.EventLive.Manage do
      |> interactions_at_position(page)}
   end
 
+  # Virtual pointer: only leaders can mount this LiveView, so these events are
+  # trusted to come from the presenter. The values are still validated by the
+  # context before being broadcast.
+  @impl true
+  def handle_event(
+        "pointer-move",
+        %{"x" => x, "y" => y},
+        %{assigns: %{event: event, state: state}} = socket
+      ) do
+    Presentations.broadcast_pointer(event.presentation_file.id, state.position, x, y, self())
+    {:noreply, socket}
+  end
+
+  @impl true
+  def handle_event("pointer-hide", _params, %{assigns: %{event: event}} = socket) do
+    Presentations.broadcast_pointer_hidden(event.presentation_file.id, self())
+    {:noreply, socket}
+  end
+
   @impl true
   def handle_event(
         "reorder-slides",

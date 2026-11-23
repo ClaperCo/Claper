@@ -219,6 +219,54 @@ defmodule Claper.Presentations do
     Phoenix.PubSub.subscribe(Claper.PubSub, "presentation:#{presentation_file_id}")
   end
 
+  @doc """
+  Broadcasts the position of the presenter's virtual pointer to everyone
+  following the presentation.
+
+  `x` and `y` are relative to the slide picture, from `0` (left/top edge) to
+  `1` (right/bottom edge), so they do not depend on the size each screen shows
+  the slide at. `position` is the slide the pointer is on; receivers ignore a
+  pointer meant for another slide. Nothing is persisted.
+
+  `source` identifies the sender (the pid of its LiveView). A receiver that is
+  the sender itself skips the message, because it already shows its own mouse.
+
+  ## Examples
+
+      iex> broadcast_pointer(presentation_file_id, 0, 0.5, 0.25)
+      :ok
+
+      iex> broadcast_pointer(presentation_file_id, 0, 1.5, 0.25)
+      {:error, :invalid_pointer}
+
+  """
+  def broadcast_pointer(presentation_file_id, position, x, y, source \\ nil)
+
+  def broadcast_pointer(presentation_file_id, position, x, y, source)
+      when is_integer(position) and is_number(x) and is_number(y) and x >= 0 and x <= 1 and
+             y >= 0 and y <= 1 do
+    Phoenix.PubSub.broadcast(
+      Claper.PubSub,
+      "presentation:#{presentation_file_id}",
+      {:pointer_moved, %{x: x, y: y, position: position, source: source}}
+    )
+  end
+
+  def broadcast_pointer(_presentation_file_id, _position, _x, _y, _source),
+    do: {:error, :invalid_pointer}
+
+  @doc """
+  Tells everyone following the presentation to hide the virtual pointer.
+  See `broadcast_pointer/5` for `source`.
+  """
+  def broadcast_pointer_hidden(presentation_file_id, source \\ nil) do
+    Phoenix.PubSub.broadcast(
+      Claper.PubSub,
+      "presentation:#{presentation_file_id}",
+      {:pointer_hidden, source}
+    )
+  end
+
   alias Claper.Presentations.PresentationState
 
   @doc """

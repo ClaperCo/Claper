@@ -98,6 +98,22 @@ defmodule ClaperWeb.EventLive.Presenter do
   defp leader?(_socket, _event), do: false
 
   @impl true
+  def handle_event(
+        "pointer-move",
+        %{"x" => x, "y" => y},
+        %{assigns: %{event: event, state: state}} = socket
+      ) do
+    Presentations.broadcast_pointer(event.presentation_file.id, state.position, x, y, self())
+    {:noreply, socket}
+  end
+
+  @impl true
+  def handle_event("pointer-hide", _params, %{assigns: %{event: event}} = socket) do
+    Presentations.broadcast_pointer_hidden(event.presentation_file.id, self())
+    {:noreply, socket}
+  end
+
+  @impl true
   def handle_info(%{event: "presence_diff"}, %{assigns: %{event: event}} = socket) do
     attendees = Presence.list("event:#{event.uuid}")
     {:noreply, push_event(socket, "update-attendees", %{count: Enum.count(attendees)})}
@@ -128,6 +144,14 @@ defmodule ClaperWeb.EventLive.Presenter do
 
   @impl true
   def handle_info({:state_updated, state}, socket) do
+    position_changed = socket.assigns.state.position != state.position
+
+    # `slide_changed` also lets this window stop a pointer it is steering itself.
+    socket =
+      if position_changed,
+        do: push_event(socket, "pointer", %{visible: false, slide_changed: true}),
+        else: socket
+
     {:noreply,
      socket
      |> assign(:state, state)
@@ -136,6 +160,34 @@ defmodule ClaperWeb.EventLive.Presenter do
      |> poll_at_position
      |> embed_at_position
      |> word_cloud_at_position}
+  end
+
+  # The presenter can steer the virtual pointer with the mouse in this window
+  # (toggled with the L key). Only leaders can mount this LiveView, and the
+  # context validates the values before broadcasting them.
+  @impl true
+  def handle_info({:pointer_moved, %{source: source}}, socket) when source == self() do
+    {:noreply, socket}
+  end
+
+  # A pointer meant for another slide is dropped; it would land on the wrong
+  # content. Anything else falls through to the catch-all clause.
+  @impl true
+  def handle_info(
+        {:pointer_moved, %{x: x, y: y, position: position}},
+        %{assigns: %{state: %{position: position}}} = socket
+      ) do
+    {:noreply, push_event(socket, "pointer", %{visible: true, x: x, y: y})}
+  end
+
+  @impl true
+  def handle_info({:pointer_hidden, source}, socket) when source == self() do
+    {:noreply, socket}
+  end
+
+  @impl true
+  def handle_info({:pointer_hidden, _source}, socket) do
+    {:noreply, push_event(socket, "pointer", %{visible: false})}
   end
 
   @impl true

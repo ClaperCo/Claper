@@ -285,7 +285,23 @@
     phx-update="ignore"
   >
   </div>
-  
+  <!-- VIRTUAL POINTER -->
+  <div
+    id="presenter-pointer"
+    phx-hook="PointerOverlay"
+    phx-update="ignore"
+    data-image-selector="#slider img.tns-slide-active"
+    data-pointer-control
+    class="pointer-events-none fixed inset-0 z-50 overflow-hidden"
+    aria-hidden="true"
+  >
+    <span
+      data-pointer-dot
+      class="hidden absolute h-3 w-3 -translate-x-1/2 -translate-y-1/2 rounded-full bg-green-500 shadow-[0_0_7px_3px_rgba(34,197,94,0.7)] transition-[left,top] duration-75 ease-linear"
+    >
+    </span>
+  </div>
+
 <!-- ONLINE BADGE -->
   <div
     :if={!@iframe && @state.show_attendee_count}
