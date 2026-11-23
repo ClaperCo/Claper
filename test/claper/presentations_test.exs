@@ -189,6 +189,58 @@ defmodule Claper.PresentationsTest do
     end
   end
 
+  describe "virtual pointer" do
+    test "broadcast_pointer/4 sends the normalized position to subscribers" do
+      Presentations.subscribe(42)
+
+      assert :ok = Presentations.broadcast_pointer(42, 3, 0.25, 0.75)
+      assert_receive {:pointer_moved, %{x: 0.25, y: 0.75, position: 3}}
+    end
+
+    test "broadcast_pointer/4 accepts the slide edges" do
+      Presentations.subscribe(42)
+
+      assert :ok = Presentations.broadcast_pointer(42, 0, 0, 1)
+      assert_receive {:pointer_moved, %{x: 0, y: 1, position: 0}}
+    end
+
+    test "broadcast_pointer/4 rejects positions outside the slide" do
+      Presentations.subscribe(42)
+
+      assert {:error, :invalid_pointer} = Presentations.broadcast_pointer(42, 0, 1.5, 0.5)
+      assert {:error, :invalid_pointer} = Presentations.broadcast_pointer(42, 0, 0.5, -0.1)
+      assert {:error, :invalid_pointer} = Presentations.broadcast_pointer(42, 0, "0.5", 0.5)
+      assert {:error, :invalid_pointer} = Presentations.broadcast_pointer(42, 0, nil, 0.5)
+      refute_receive {:pointer_moved, _}
+    end
+
+    test "broadcast_pointer/4 only reaches the subscribers of that presentation" do
+      Presentations.subscribe(42)
+
+      assert :ok = Presentations.broadcast_pointer(43, 0, 0.5, 0.5)
+      refute_receive {:pointer_moved, _}
+    end
+
+    test "broadcast_pointer_hidden/1 notifies subscribers" do
+      Presentations.subscribe(42)
+
+      assert :ok = Presentations.broadcast_pointer_hidden(42)
+      assert_receive {:pointer_hidden, nil}
+    end
+
+    test "the sender is passed along so it can skip its own messages" do
+      Presentations.subscribe(42)
+
+      assert :ok = Presentations.broadcast_pointer(42, 0, 0.5, 0.5, self())
+      assert_receive {:pointer_moved, %{source: source}}
+      assert source == self()
+
+      assert :ok = Presentations.broadcast_pointer_hidden(42, self())
+      assert_receive {:pointer_hidden, source}
+      assert source == self()
+    end
+  end
+
   defp put_local_storage_config(storage_dir) do
     previous_storage_dir = Application.get_env(:claper, :storage_dir)
     previous_presentations = Application.get_env(:claper, :presentations)

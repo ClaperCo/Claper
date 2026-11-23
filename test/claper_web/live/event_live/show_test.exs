@@ -137,6 +137,38 @@ defmodule ClaperWeb.EventLive.ShowTest do
            |> Floki.text() =~ "Live caption text"
   end
 
+  test "keeps the slide visible and shows an interaction next to it", %{conn: conn, user: user} do
+    presentation_file = presentation_file_fixture(%{user: user}, [:event])
+    presentation_state_fixture(%{presentation_file: presentation_file})
+    poll_fixture(%{presentation_file_id: presentation_file.id})
+
+    {:ok, view, html} = live(conn, ~p"/e/#{presentation_file.event.code}")
+
+    document = Floki.parse_document!(html)
+
+    # The poll is rendered in its own panel under the slide instead of replacing it.
+    assert Floki.attribute(document, "#focus-slot", "data-interaction-mode") == ["true"]
+    assert Floki.find(document, "#focus-media img") != []
+    assert Floki.find(document, "#focus-interaction") != []
+    assert has_element?(view, "#focus-interaction #poll-opt-0")
+    assert has_element?(view, "#focus-media [data-focus-fullscreen]")
+    assert Floki.find(document, "#focus-media [data-focus-collapse]") == []
+  end
+
+  test "shows only the slide when there is no interaction", %{conn: conn, user: user} do
+    presentation_file = presentation_file_fixture(%{user: user}, [:event])
+    presentation_state_fixture(%{presentation_file: presentation_file})
+
+    {:ok, view, html} = live(conn, ~p"/e/#{presentation_file.event.code}")
+
+    document = Floki.parse_document!(html)
+
+    assert Floki.attribute(document, "#focus-slot", "data-interaction-mode") == ["false"]
+    assert Floki.find(document, "#focus-media img") != []
+    assert Floki.find(document, "#focus-interaction") == []
+    assert has_element?(view, "#focus-media [data-focus-collapse]")
+  end
+
   test "ignores poll clicks that arrive after the presenter switched to another interaction", %{
     conn: conn,
     user: user

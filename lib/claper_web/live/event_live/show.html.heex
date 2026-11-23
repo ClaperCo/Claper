@@ -143,8 +143,9 @@
         data-collapse-key={"focus-slot:#{@event.uuid}"}
         data-interaction-mode={to_string(interaction_mode?)}
         class={[
-          "relative z-10 min-h-0 overflow-hidden border-y border-white/10 bg-gray-950 transition-[height] duration-300",
-          interaction_mode? && "h-auto max-h-[40dvh]",
+          "relative z-10 flex min-h-0 flex-col overflow-hidden border-y border-white/10 bg-gray-950 transition-[height] duration-300",
+          interaction_mode? && !is_nil(@current_slide_url) && "h-auto max-h-[60dvh]",
+          interaction_mode? && is_nil(@current_slide_url) && "h-auto max-h-[40dvh]",
           !interaction_mode? && "h-[40dvh] min-h-40 max-h-[26rem]"
         ]}
       >
@@ -155,120 +156,148 @@
           {gettext("New interaction")}
         </div>
 
-        <%= case @current_interaction do %>
-          <% %Claper.Polls.Poll{} -> %>
-            <div class="max-h-[40dvh] overflow-y-auto overscroll-contain p-3">
-              <.live_component
-                module={ClaperWeb.EventLive.PollComponent}
-                id={"#{@current_interaction.id}-poll"}
-                poll={@current_interaction}
-                current_user={@current_user}
-                attendee_identifier={@attendee_identifier}
-                event={@event}
-                selected_poll_opt={@selected_poll_opt}
-                current_poll_vote={@current_poll_vote}
-                show_results={@current_interaction.show_results}
-                focus_mode
-              />
-            </div>
-          <% %Claper.Forms.Form{} -> %>
-            <div class="max-h-[40dvh] overflow-y-auto overscroll-contain p-3">
-              <.live_component
-                module={ClaperWeb.EventLive.FormComponent}
-                id={"#{@current_interaction.id}-form"}
-                form={@current_interaction}
-                current_user={@current_user}
-                attendee_identifier={@attendee_identifier}
-                security_audit_ip={assigns[:security_audit_ip]}
-                event={@event}
-                current_form_submit={@current_form_submit}
-                focus_mode
-              />
-            </div>
-          <% %Claper.Quizzes.Quiz{} -> %>
-            <div class="max-h-[40dvh] overflow-y-auto overscroll-contain p-3">
-              <.live_component
-                module={ClaperWeb.EventLive.QuizComponent}
-                id={"#{@current_interaction.id}-quiz"}
-                quiz={@current_interaction}
-                current_user={@current_user}
-                attendee_identifier={@attendee_identifier}
-                event={@event}
-                selected_quiz_question_opts={@selected_quiz_question_opts}
-                current_quiz_question_idx={@current_quiz_question_idx}
-                current_quiz_responses={@current_quiz_responses}
-                quiz_score={@quiz_score}
-                focus_mode
-              />
-            </div>
-          <% %Claper.WordClouds.WordCloud{} -> %>
-            <div class="max-h-[40dvh] overflow-y-auto overscroll-contain p-3">
-              <.live_component
-                module={ClaperWeb.EventLive.WordCloudComponent}
-                id={"#{@current_interaction.id}-word-cloud"}
-                word_cloud={@current_interaction}
-                entries={@word_cloud_entries}
-                words={@word_cloud_words}
-              />
-            </div>
-          <% %Claper.Embeds.Embed{attendee_visibility: true} -> %>
-            <div class="max-h-[40dvh] overflow-y-auto overscroll-contain p-3">
-              <.live_component
-                id={"#{@current_interaction.id}-embed"}
-                module={ClaperWeb.EventLive.EmbedComponent}
-                embed={@current_interaction}
-                focus_mode
-              />
-            </div>
-          <% _ -> %>
-            <div id="focus-media" class="relative h-full w-full bg-black">
-              <img
-                src={@current_slide_url}
-                alt={gettext("Current presentation slide")}
-                class="h-full w-full object-contain"
-              />
-            </div>
-        <% end %>
-
-        <button
-          :if={focus_content? && !interaction_mode?}
-          type="button"
-          data-focus-fullscreen
-          aria-label={gettext("Open fullscreen")}
-          class="absolute right-3 top-3 z-20 grid h-11 w-11 place-items-center rounded-full bg-black/65 text-white backdrop-blur"
+        <div
+          :if={@current_slide_url}
+          id="focus-media"
+          class={[
+            "relative bg-black",
+            interaction_mode? && "h-[24dvh] min-h-28 shrink-0",
+            !interaction_mode? && "h-full w-full"
+          ]}
         >
-          <svg
-            class="h-5 w-5"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
+          <img
+            src={@current_slide_url}
+            alt={gettext("Current presentation slide")}
+            class="h-full w-full object-contain"
+          />
+          <div
+            id="focus-pointer"
+            phx-hook="PointerOverlay"
+            phx-update="ignore"
+            data-image-selector="#focus-media img"
+            class="pointer-events-none absolute inset-0 z-10 overflow-hidden"
+            aria-hidden="true"
           >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              d="M8 3H3v5M16 3h5v5M8 21H3v-5m13 5h5v-5"
-            />
-          </svg>
-        </button>
+            <span
+              data-pointer-dot
+              class="hidden absolute h-3 w-3 -translate-x-1/2 -translate-y-1/2 rounded-full bg-green-500 shadow-[0_0_7px_3px_rgba(34,197,94,0.7)] transition-[left,top] duration-75 ease-linear"
+            >
+            </span>
+          </div>
 
-        <button
-          :if={focus_content? && !interaction_mode?}
-          type="button"
-          data-focus-collapse
-          aria-label={gettext("Hide presentation")}
-          class="absolute right-16 top-3 z-20 grid h-11 w-11 place-items-center rounded-full bg-black/65 text-white backdrop-blur"
-        >
-          <svg
-            class="h-5 w-5"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
+          <button
+            type="button"
+            data-focus-fullscreen
+            aria-label={gettext("Open fullscreen")}
+            class="absolute right-3 top-3 z-20 grid h-11 w-11 place-items-center rounded-full bg-black/65 text-white backdrop-blur"
           >
-            <path stroke-linecap="round" stroke-linejoin="round" d="m6 15 6-6 6 6" />
-          </svg>
-        </button>
+            <svg
+              class="h-5 w-5"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M8 3H3v5M16 3h5v5M8 21H3v-5m13 5h5v-5"
+              />
+            </svg>
+          </button>
+
+          <button
+            :if={!interaction_mode?}
+            type="button"
+            data-focus-collapse
+            aria-label={gettext("Hide presentation")}
+            class="absolute right-16 top-3 z-20 grid h-11 w-11 place-items-center rounded-full bg-black/65 text-white backdrop-blur"
+          >
+            <svg
+              class="h-5 w-5"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path stroke-linecap="round" stroke-linejoin="round" d="m6 15 6-6 6 6" />
+            </svg>
+          </button>
+        </div>
+
+        <div
+          :if={interaction_mode?}
+          id="focus-interaction"
+          class="min-h-0 flex-1 overflow-y-auto overscroll-contain"
+        >
+          <%= case @current_interaction do %>
+            <% %Claper.Polls.Poll{} -> %>
+              <div class="p-3">
+                <.live_component
+                  module={ClaperWeb.EventLive.PollComponent}
+                  id={"#{@current_interaction.id}-poll"}
+                  poll={@current_interaction}
+                  current_user={@current_user}
+                  attendee_identifier={@attendee_identifier}
+                  event={@event}
+                  selected_poll_opt={@selected_poll_opt}
+                  current_poll_vote={@current_poll_vote}
+                  show_results={@current_interaction.show_results}
+                  focus_mode
+                />
+              </div>
+            <% %Claper.Forms.Form{} -> %>
+              <div class="p-3">
+                <.live_component
+                  module={ClaperWeb.EventLive.FormComponent}
+                  id={"#{@current_interaction.id}-form"}
+                  form={@current_interaction}
+                  current_user={@current_user}
+                  attendee_identifier={@attendee_identifier}
+                  security_audit_ip={assigns[:security_audit_ip]}
+                  event={@event}
+                  current_form_submit={@current_form_submit}
+                  focus_mode
+                />
+              </div>
+            <% %Claper.Quizzes.Quiz{} -> %>
+              <div class="p-3">
+                <.live_component
+                  module={ClaperWeb.EventLive.QuizComponent}
+                  id={"#{@current_interaction.id}-quiz"}
+                  quiz={@current_interaction}
+                  current_user={@current_user}
+                  attendee_identifier={@attendee_identifier}
+                  event={@event}
+                  selected_quiz_question_opts={@selected_quiz_question_opts}
+                  current_quiz_question_idx={@current_quiz_question_idx}
+                  current_quiz_responses={@current_quiz_responses}
+                  quiz_score={@quiz_score}
+                  focus_mode
+                />
+              </div>
+            <% %Claper.WordClouds.WordCloud{} -> %>
+              <div class="p-3">
+                <.live_component
+                  module={ClaperWeb.EventLive.WordCloudComponent}
+                  id={"#{@current_interaction.id}-word-cloud"}
+                  word_cloud={@current_interaction}
+                  entries={@word_cloud_entries}
+                  words={@word_cloud_words}
+                />
+              </div>
+            <% %Claper.Embeds.Embed{attendee_visibility: true} -> %>
+              <div class="p-3">
+                <.live_component
+                  id={"#{@current_interaction.id}-embed"}
+                  module={ClaperWeb.EventLive.EmbedComponent}
+                  embed={@current_interaction}
+                  focus_mode
+                />
+              </div>
+            <% _ -> %>
+          <% end %>
+        </div>
 
         <div
           :if={focus_content? && !interaction_mode?}

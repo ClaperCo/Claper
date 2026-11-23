@@ -246,7 +246,25 @@ defmodule ClaperWeb.EventLive.Show do
         socket
       end
 
+    socket =
+      if position_changed, do: push_event(socket, "pointer", %{visible: false}), else: socket
+
     {:noreply, if(position_changed, do: refresh_current_interaction(socket), else: socket)}
+  end
+
+  # A pointer meant for another slide is dropped; it would land on the wrong
+  # content. Anything else falls through to the catch-all clause.
+  @impl true
+  def handle_info(
+        {:pointer_moved, %{x: x, y: y, position: position}},
+        %{assigns: %{state: %{position: position}}} = socket
+      ) do
+    {:noreply, push_event(socket, "pointer", %{visible: true, x: x, y: y})}
+  end
+
+  @impl true
+  def handle_info({:pointer_hidden, _source}, socket) do
+    {:noreply, push_event(socket, "pointer", %{visible: false})}
   end
 
   @impl true
