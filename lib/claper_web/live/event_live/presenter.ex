@@ -177,7 +177,8 @@ defmodule ClaperWeb.EventLive.Presenter do
      |> push_event("reset-global-react", %{})
      |> poll_at_position
      |> embed_at_position
-     |> word_cloud_at_position}
+     |> word_cloud_at_position
+     |> quiz_and_form_at_position(position_changed)}
   end
 
   # The presenter can steer the virtual pointer with the mouse in this window
@@ -602,8 +603,25 @@ defmodule ClaperWeb.EventLive.Presenter do
              event.presentation_file.id,
              state.position
            ) do
-      socket |> assign(:current_quiz, quiz) |> assign(:current_question_idx, 0)
+      # -1: the quiz shows its summary until a review is started.
+      socket |> assign(:current_quiz, quiz) |> assign(:current_question_idx, -1)
     end
+  end
+
+  # A quiz (or form) belongs to one slide: look it up again when the slide
+  # changes, so it disappears from the screen with the slide. Other state
+  # updates must not touch it, or a running review would lose its position.
+  defp quiz_and_form_at_position(socket, false), do: socket
+
+  defp quiz_and_form_at_position(socket, true) do
+    # The manage view's review switch follows the quiz on screen.
+    Phoenix.PubSub.broadcast(
+      Claper.PubSub,
+      "event:#{socket.assigns.event.uuid}",
+      {:quiz_review_idx, nil, -1}
+    )
+
+    socket |> form_at_position() |> quiz_at_position()
   end
 
   defp word_cloud_at_position(%{assigns: %{event: event, state: state}} = socket) do

@@ -114,12 +114,17 @@ defmodule ClaperWeb.EventLive.ManageInteractionOptionsComponent do
                 </:icon>
               </.toggle_row>
 
-              <div class="grid grid-cols-2 gap-2">
+              <%!-- Only useful while reviewing a quiz with more than one question. --%>
+              <div
+                :if={
+                  quiz_reviewing?(@quiz_review, @current_interaction) &&
+                    several_questions?(@current_interaction)
+                }
+                class="grid grid-cols-2 gap-2"
+              >
                 <.action_row
                   label={gettext("Previous")}
                   key={:prev_quiz_question}
-                  disabled={!@current_interaction.show_results ||
-                    !quiz_reviewing?(@quiz_review, @current_interaction)}
                   compact
                 >
                   <:icon>
@@ -141,8 +146,6 @@ defmodule ClaperWeb.EventLive.ManageInteractionOptionsComponent do
                 <.action_row
                   label={gettext("Next")}
                   key={:next_quiz_question}
-                  disabled={!@current_interaction.show_results ||
-                    !quiz_reviewing?(@quiz_review, @current_interaction)}
                   compact
                   reverse
                 >
@@ -264,6 +267,13 @@ defmodule ClaperWeb.EventLive.ManageInteractionOptionsComponent do
     do: quiz_id == id and idx >= 0
 
   defp quiz_reviewing?(_quiz_review, _interaction), do: false
+
+  # A single question has nothing to step through. When the questions are not
+  # loaded the count is unknown, so the buttons stay available.
+  defp several_questions?(%{quiz_questions: questions}) when is_list(questions),
+    do: length(questions) > 1
+
+  defp several_questions?(_quiz), do: true
 
   attr :label, :string, required: true
   attr :checked, :boolean, required: true

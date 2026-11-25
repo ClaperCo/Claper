@@ -2,7 +2,7 @@ defmodule ClaperWeb.EventLive.PresenterVisibilityTest do
   use ClaperWeb.ConnCase
 
   import Phoenix.LiveViewTest
-  import Claper.{PollsFixtures, PresentationsFixtures, WordCloudsFixtures}
+  import Claper.{PollsFixtures, PresentationsFixtures, QuizzesFixtures, WordCloudsFixtures}
 
   alias Claper.{Presentations, WordClouds}
 
@@ -153,6 +153,43 @@ defmodule ClaperWeb.EventLive.PresenterVisibilityTest do
     manager |> element(toggle) |> render_keydown()
     assert has_element?(presenter, "#presenter > #poll.opacity-100")
     assert has_element?(presenter, "#left-column.pointer-events-none")
+  end
+
+  test "polls and quizzes disappear from the presenter screen when the slide changes", %{
+    conn: conn,
+    presentation_file: presentation_file,
+    event: event
+  } do
+    poll = poll_fixture(%{presentation_file_id: presentation_file.id, title: "Poll question"})
+
+    quiz =
+      quiz_fixture(%{
+        presentation_file: presentation_file,
+        position: 1,
+        enabled: true,
+        show_results: true
+      })
+
+    {:ok, presenter, _html} = live(conn, ~p"/e/#{event.code}/presenter")
+    assert has_element?(presenter, "#poll")
+    refute has_element?(presenter, "##{quiz.id}-quiz")
+
+    {:ok, _} =
+      Presentations.update_presentation_state(presentation_state(presentation_file), %{
+        position: 1
+      })
+
+    refute has_element?(presenter, "#poll")
+    assert has_element?(presenter, "##{quiz.id}-quiz")
+
+    {:ok, _} =
+      Presentations.update_presentation_state(presentation_state(presentation_file), %{
+        position: 0
+      })
+
+    assert has_element?(presenter, "#poll")
+    refute has_element?(presenter, "##{quiz.id}-quiz")
+    assert poll.position == 0
   end
 
   defp presentation_state(presentation_file) do
