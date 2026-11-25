@@ -474,6 +474,25 @@ defmodule Claper.Quizzes do
 
   """
   def calculate_average_score(quiz_id) do
+    case average_correct_answers(quiz_id) do
+      0 -> 0
+      avg -> if avg == trunc(avg), do: trunc(avg), else: Float.round(avg, 1)
+    end
+  end
+
+  @doc """
+  The average score of a quiz as a whole percentage of its questions
+  (0 when nobody answered or the quiz has no questions).
+  """
+  def calculate_average_score_percent(quiz_id) do
+    case length(get_quiz!(quiz_id, [:quiz_questions]).quiz_questions) do
+      0 -> 0
+      count -> round(average_correct_answers(quiz_id) / count * 100)
+    end
+  end
+
+  # Average number of correctly answered questions per participant, unrounded.
+  defp average_correct_answers(quiz_id) do
     # Get quiz with questions and correct answers
     quiz = get_quiz!(quiz_id, [:quiz_questions, quiz_questions: :quiz_question_opts])
 
@@ -527,8 +546,7 @@ defmodule Claper.Quizzes do
         0
 
       n ->
-        avg = Enum.sum(scores) / n
-        if avg == trunc(avg), do: trunc(avg), else: Float.round(avg, 1)
+        Enum.sum(scores) / n
     end
   end
 

@@ -263,8 +263,12 @@ defmodule ClaperWeb.EventLive.ManageInteractionOptionsComponent do
   end
 
   # Whether the presenter is currently showing the quiz's questions one by one.
-  defp quiz_reviewing?(%{quiz_id: quiz_id, idx: idx}, %{id: id}),
-    do: quiz_id == id and idx >= 0
+  # The review is on by default, so as long as the presenter has not reported
+  # anything about this quiz, it is on whenever the results are shown.
+  defp quiz_reviewing?(%{quiz_id: quiz_id, idx: idx}, %{id: id}) when quiz_id == id,
+    do: idx >= 0
+
+  defp quiz_reviewing?(_quiz_review, %{show_results: true, quiz_questions: [_ | _]}), do: true
 
   defp quiz_reviewing?(_quiz_review, _interaction), do: false
 

@@ -87,6 +87,7 @@
         quiz={@current_quiz}
         iframe={@iframe}
         chat_visible={@state.chat_visible}
+        current_question_idx={@current_question_idx}
         beside={false}
       />
     <% end %>
@@ -186,6 +187,7 @@
             quiz={@current_quiz}
             iframe={@iframe}
             chat_visible={@state.chat_visible}
+            current_question_idx={@current_question_idx}
             beside={true}
           />
         <% end %>

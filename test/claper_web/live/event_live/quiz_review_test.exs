@@ -32,22 +32,17 @@ defmodule ClaperWeb.EventLive.QuizReviewTest do
     render(manager)
   end
 
-  test "review questions is a switch that can be turned off again", %{
+  test "the review of the questions is on by default and can be turned off again", %{
     conn: conn,
     event: event,
     quiz: quiz
   } do
     {:ok, manager, _html} = live(conn, ~p"/e/#{event.code}/manage")
     {:ok, presenter, _html} = live(conn, ~p"/e/#{event.code}/presenter")
-
-    assert has_element?(manager, @review <> ~s([aria-checked="false"]))
-    assert has_element?(manager, @review <> ~s([phx-key="C"]))
-    assert has_element?(presenter, "##{quiz.id}-quiz", quiz.title)
-
-    render_hook(manager, "checked", %{"key" => "quiz_review", "value" => true})
     settle(manager, presenter)
 
     assert has_element?(manager, @review <> ~s([aria-checked="true"]))
+    assert has_element?(manager, @review <> ~s([phx-key="C"]))
     assert has_element?(presenter, "##{quiz.id}-quiz", "some question content")
 
     render_hook(manager, "checked", %{"key" => "quiz_review", "value" => false})
@@ -55,6 +50,52 @@ defmodule ClaperWeb.EventLive.QuizReviewTest do
 
     assert has_element?(manager, @review <> ~s([aria-checked="false"]))
     assert has_element?(presenter, "##{quiz.id}-quiz", quiz.title)
+
+    render_hook(manager, "checked", %{"key" => "quiz_review", "value" => true})
+    settle(manager, presenter)
+
+    assert has_element?(manager, @review <> ~s([aria-checked="true"]))
+    assert has_element?(presenter, "##{quiz.id}-quiz", "some question content")
+  end
+
+  test "the C key in the presenter window switches the review", %{
+    conn: conn,
+    event: event,
+    quiz: quiz
+  } do
+    {:ok, manager, _html} = live(conn, ~p"/e/#{event.code}/manage")
+    {:ok, presenter, _html} = live(conn, ~p"/e/#{event.code}/presenter")
+    settle(manager, presenter)
+    assert has_element?(presenter, "##{quiz.id}-quiz", "some question content")
+
+    render_hook(presenter, "toggle-quiz-review", %{})
+    settle(manager, presenter)
+    assert has_element?(manager, @review <> ~s([aria-checked="false"]))
+    assert has_element?(presenter, "##{quiz.id}-quiz", quiz.title)
+
+    render_hook(presenter, "toggle-quiz-review", %{})
+    settle(manager, presenter)
+    assert has_element?(manager, @review <> ~s([aria-checked="true"]))
+    assert has_element?(presenter, "##{quiz.id}-quiz", "some question content")
+  end
+
+  test "the review starts when the results of the quiz are shown", %{
+    conn: conn,
+    event: event,
+    quiz: quiz
+  } do
+    {:ok, manager, _html} = live(conn, ~p"/e/#{event.code}/manage")
+    {:ok, presenter, _html} = live(conn, ~p"/e/#{event.code}/presenter")
+
+    {:ok, hidden} = Claper.Quizzes.update_quiz(event.uuid, quiz, %{show_results: false})
+    settle(manager, presenter)
+    assert has_element?(manager, @review <> "[disabled]")
+
+    {:ok, _shown} = Claper.Quizzes.update_quiz(event.uuid, hidden, %{show_results: true})
+    settle(manager, presenter)
+
+    assert has_element?(manager, @review <> ~s([aria-checked="true"]))
+    assert has_element?(presenter, "##{quiz.id}-quiz", "some question content")
   end
 
   test "previous and next only show while reviewing a quiz with several questions", %{
@@ -65,8 +106,8 @@ defmodule ClaperWeb.EventLive.QuizReviewTest do
     # One question: nothing to step through, with or without a review.
     {:ok, manager, _html} = live(conn, ~p"/e/#{event.code}/manage")
     {:ok, presenter, _html} = live(conn, ~p"/e/#{event.code}/presenter")
-    render_hook(manager, "checked", %{"key" => "quiz_review", "value" => true})
     settle(manager, presenter)
+    assert has_element?(manager, @review <> ~s([aria-checked="true"]))
     refute has_element?(manager, @next)
     refute has_element?(manager, @prev)
 
@@ -101,9 +142,6 @@ defmodule ClaperWeb.EventLive.QuizReviewTest do
 
     {:ok, manager, _html} = live(conn, ~p"/e/#{event.code}/manage")
     {:ok, presenter, _html} = live(conn, ~p"/e/#{event.code}/presenter")
-    refute has_element?(manager, @next)
-
-    render_hook(manager, "checked", %{"key" => "quiz_review", "value" => true})
     settle(manager, presenter)
     assert has_element?(manager, @next)
     assert has_element?(manager, @prev)
@@ -111,13 +149,15 @@ defmodule ClaperWeb.EventLive.QuizReviewTest do
     render_hook(manager, "checked", %{"key" => "quiz_review", "value" => false})
     settle(manager, presenter)
     refute has_element?(manager, @next)
+
+    render_hook(manager, "checked", %{"key" => "quiz_review", "value" => true})
+    settle(manager, presenter)
+    assert has_element?(manager, @next)
   end
 
   test "going past the last question ends the review", %{conn: conn, event: event} do
     {:ok, manager, _html} = live(conn, ~p"/e/#{event.code}/manage")
     {:ok, presenter, _html} = live(conn, ~p"/e/#{event.code}/presenter")
-
-    render_hook(manager, "checked", %{"key" => "quiz_review", "value" => true})
     settle(manager, presenter)
     assert has_element?(manager, @review <> ~s([aria-checked="true"]))
 

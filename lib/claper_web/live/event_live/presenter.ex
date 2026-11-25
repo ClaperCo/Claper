@@ -131,6 +131,20 @@ defmodule ClaperWeb.EventLive.Presenter do
     {:noreply, socket}
   end
 
+  # The C key in this window switches the review on and off, like L does for
+  # the pointer. Nothing happens unless a quiz shows its results.
+  @impl true
+  def handle_event(
+        "toggle-quiz-review",
+        _params,
+        %{assigns: %{current_quiz: %{show_results: true, quiz_questions: [_ | _]}}} = socket
+      ) do
+    command = if (socket.assigns[:current_question_idx] || -1) >= 0, do: :off, else: :on
+    {:noreply, apply_quiz_review(socket, command)}
+  end
+
+  def handle_event("toggle-quiz-review", _params, socket), do: {:noreply, socket}
+
   @impl true
   def handle_info(%{event: "presence_diff"}, %{assigns: %{event: event}} = socket) do
     attendees = Presence.list("event:#{event.uuid}")
@@ -291,9 +305,17 @@ defmodule ClaperWeb.EventLive.Presenter do
 
   @impl true
   def handle_info({:quiz_updated, quiz}, socket) do
-    {:noreply,
-     socket
-     |> update(:current_quiz, fn _current_quiz -> quiz end)}
+    previous = socket.assigns[:current_quiz]
+
+    # The review starts as soon as the results become visible; other changes
+    # must not move a review that is already running.
+    results_just_shown? =
+      quiz.show_results == true and
+        not (previous != nil and previous.id == quiz.id and previous.show_results == true)
+
+    socket = assign(socket, :current_quiz, quiz)
+
+    {:noreply, if(results_just_shown?, do: start_quiz_review(socket, quiz), else: socket)}
   end
 
   @impl true
@@ -412,6 +434,7 @@ defmodule ClaperWeb.EventLive.Presenter do
     {:noreply,
      socket
      |> assign(:current_quiz, interaction)
+     |> start_quiz_review(interaction)
      |> assign(:current_poll, nil)
      |> assign(:current_embed, nil)
      |> assign(:current_form, nil)
@@ -452,32 +475,10 @@ defmodule ClaperWeb.EventLive.Presenter do
   @impl true
   def handle_info(
         {:quiz_review, command},
-        %{assigns: %{current_quiz: %{quiz_questions: questions} = quiz}} = socket
+        %{assigns: %{current_quiz: %{quiz_questions: _}}} = socket
       )
       when command in [:on, :off, :next, :prev] do
-    current = socket.assigns[:current_question_idx] || -1
-
-    idx =
-      case command do
-        :on -> 0
-        :off -> -1
-        :next -> if current < length(questions) - 1, do: current + 1, else: -1
-        :prev -> if current > 0, do: current - 1, else: 0
-      end
-
-    send_update(
-      ClaperWeb.EventLive.ManageableQuizComponent,
-      id: "#{quiz.id}-quiz",
-      current_question_idx: idx
-    )
-
-    Phoenix.PubSub.broadcast(
-      Claper.PubSub,
-      "event:#{socket.assigns.event.uuid}",
-      {:quiz_review_idx, quiz.id, idx}
-    )
-
-    {:noreply, socket |> assign(:current_question_idx, idx)}
+    {:noreply, apply_quiz_review(socket, command)}
   end
 
   @impl true
@@ -597,16 +598,64 @@ defmodule ClaperWeb.EventLive.Presenter do
     end
   end
 
+  defp apply_quiz_review(
+         %{assigns: %{current_quiz: %{quiz_questions: questions} = quiz}} = socket,
+         command
+       ) do
+    current = socket.assigns[:current_question_idx] || -1
+
+    idx =
+      case command do
+        :on -> 0
+        :off -> -1
+        :next -> if current < length(questions) - 1, do: current + 1, else: -1
+        :prev -> if current > 0, do: current - 1, else: 0
+      end
+
+    send_update(
+      ClaperWeb.EventLive.ManageableQuizComponent,
+      id: "#{quiz.id}-quiz",
+      current_question_idx: idx
+    )
+
+    Phoenix.PubSub.broadcast(
+      Claper.PubSub,
+      "event:#{socket.assigns.event.uuid}",
+      {:quiz_review_idx, quiz.id, idx}
+    )
+
+    assign(socket, :current_question_idx, idx)
+  end
+
   defp quiz_at_position(%{assigns: %{event: event, state: state}} = socket) do
     with quiz <-
            Claper.Quizzes.get_quiz_current_position(
              event.presentation_file.id,
              state.position
            ) do
-      # -1: the quiz shows its summary until a review is started.
-      socket |> assign(:current_quiz, quiz) |> assign(:current_question_idx, -1)
+      socket |> assign(:current_quiz, quiz) |> start_quiz_review(quiz)
     end
   end
+
+  # The review of the questions is on by default: it starts with the first
+  # question as soon as a quiz shows its results. -1 is the summary view.
+  # The manage view is told, so its switch matches what is on screen.
+  defp start_quiz_review(socket, quiz) do
+    idx = if review_by_default?(quiz), do: 0, else: -1
+
+    if quiz != nil and connected?(socket) do
+      Phoenix.PubSub.broadcast(
+        Claper.PubSub,
+        "event:#{socket.assigns.event.uuid}",
+        {:quiz_review_idx, quiz.id, idx}
+      )
+    end
+
+    assign(socket, :current_question_idx, idx)
+  end
+
+  defp review_by_default?(%{show_results: true, quiz_questions: [_ | _]}), do: true
+  defp review_by_default?(_quiz), do: false
 
   # A quiz (or form) belongs to one slide: look it up again when the slide
   # changes, so it disappears from the screen with the slide. Other state

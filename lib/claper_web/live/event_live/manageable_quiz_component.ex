@@ -9,7 +9,7 @@ defmodule ClaperWeb.EventLive.ManageableQuizComponent do
      |> assign_new(:chat_visible, fn -> true end)
      |> assign_new(:beside, fn -> true end)
      |> assign_new(:current_question, fn -> nil end)
-     |> assign_new(:average_score, fn -> 0 end)}
+     |> assign_new(:average_percent, fn -> 0 end)}
   end
 
   @impl true
@@ -18,7 +18,11 @@ defmodule ClaperWeb.EventLive.ManageableQuizComponent do
 
     socket =
       if Map.has_key?(assigns, :quiz) do
-        assign(socket, :average_score, Claper.Quizzes.calculate_average_score(assigns.quiz.id))
+        assign(
+          socket,
+          :average_percent,
+          Claper.Quizzes.calculate_average_score_percent(assigns.quiz.id)
+        )
       else
         socket
       end
@@ -47,7 +51,7 @@ defmodule ClaperWeb.EventLive.ManageableQuizComponent do
         >
           <p class="font-semibold text-2xl">{gettext("Average score")}:</p>
           <p class={"font-semibold #{if @beside, do: "text-6xl", else: "text-7xl"}"}>
-            {@average_score}/{length(@quiz.quiz_questions)}
+            {@average_percent}%
           </p>
         </div>
 

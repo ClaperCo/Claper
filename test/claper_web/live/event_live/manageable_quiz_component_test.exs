@@ -59,10 +59,13 @@ defmodule ClaperWeb.EventLive.ManageableQuizComponentTest do
     refute "bg-green-500" in (wrong |> Floki.find("div[style]") |> class_list())
   end
 
-  test "the summary still shows the average score", %{quiz: quiz} do
+  test "the summary shows the average score as a percentage", %{quiz: quiz} do
     html = render_quiz(quiz, -1)
 
     assert html =~ "Average score"
+    # Nobody answered yet: 0%, not "0/1".
+    assert html =~ "0%"
+    refute html =~ "0/1"
     refute option_row(html, "option 1")
   end
 
