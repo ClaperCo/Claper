@@ -91,11 +91,59 @@ defmodule ClaperWeb.EventLive.Presenter do
     """
   end
 
+  # Whether interaction results are shown in the left column (above the
+  # comments) instead of as an overlay covering the slide. On unless switched
+  # off in the presentation settings.
+  defp beside_comments?(state), do: state.interactions_beside_comments != false
+
+  # The left column shows the comments and, above them, the results of the
+  # current interaction. It is only needed while one of the two is visible.
+  defp left_column_visible?(state, poll, word_cloud, quiz) do
+    state.chat_visible == true or interaction_results_visible?(state, poll, word_cloud, quiz)
+  end
+
+  # Polls and word clouds share one visibility switch; a quiz has its own.
+  defp interaction_results_visible?(state, poll, word_cloud, quiz) do
+    beside_comments?(state) and
+      ((state.poll_visible == true and (poll != nil or word_cloud != nil)) or
+         (quiz != nil and quiz.show_results == true))
+  end
+
   defp leader?(%{assigns: %{current_user: current_user}} = _socket, event) do
     Claper.Events.led_by?(current_user.email, event) || event.user.id == current_user.id
   end
 
   defp leader?(_socket, _event), do: false
+
+  @impl true
+  def handle_event(
+        "pointer-move",
+        %{"x" => x, "y" => y},
+        %{assigns: %{event: event, state: state}} = socket
+      ) do
+    Presentations.broadcast_pointer(event.presentation_file.id, state.position, x, y, self())
+    {:noreply, socket}
+  end
+
+  @impl true
+  def handle_event("pointer-hide", _params, %{assigns: %{event: event}} = socket) do
+    Presentations.broadcast_pointer_hidden(event.presentation_file.id, self())
+    {:noreply, socket}
+  end
+
+  # The C key in this window switches the review on and off, like L does for
+  # the pointer. Nothing happens unless a quiz shows its results.
+  @impl true
+  def handle_event(
+        "toggle-quiz-review",
+        _params,
+        %{assigns: %{current_quiz: %{show_results: true, quiz_questions: [_ | _]}}} = socket
+      ) do
+    command = if (socket.assigns[:current_question_idx] || -1) >= 0, do: :off, else: :on
+    {:noreply, apply_quiz_review(socket, command)}
+  end
+
+  def handle_event("toggle-quiz-review", _params, socket), do: {:noreply, socket}
 
   @impl true
   def handle_info(%{event: "presence_diff"}, %{assigns: %{event: event}} = socket) do
@@ -128,6 +176,14 @@ defmodule ClaperWeb.EventLive.Presenter do
 
   @impl true
   def handle_info({:state_updated, state}, socket) do
+    position_changed = socket.assigns.state.position != state.position
+
+    # `slide_changed` also lets this window stop a pointer it is steering itself.
+    socket =
+      if position_changed,
+        do: push_event(socket, "pointer", %{visible: false, slide_changed: true}),
+        else: socket
+
     {:noreply,
      socket
      |> assign(:state, state)
@@ -135,7 +191,36 @@ defmodule ClaperWeb.EventLive.Presenter do
      |> push_event("reset-global-react", %{})
      |> poll_at_position
      |> embed_at_position
-     |> word_cloud_at_position}
+     |> word_cloud_at_position
+     |> quiz_and_form_at_position(position_changed)}
+  end
+
+  # The presenter can steer the virtual pointer with the mouse in this window
+  # (toggled with the L key). Only leaders can mount this LiveView, and the
+  # context validates the values before broadcasting them.
+  @impl true
+  def handle_info({:pointer_moved, %{source: source}}, socket) when source == self() do
+    {:noreply, socket}
+  end
+
+  # A pointer meant for another slide is dropped; it would land on the wrong
+  # content. Anything else falls through to the catch-all clause.
+  @impl true
+  def handle_info(
+        {:pointer_moved, %{x: x, y: y, position: position}},
+        %{assigns: %{state: %{position: position}}} = socket
+      ) do
+    {:noreply, push_event(socket, "pointer", %{visible: true, x: x, y: y})}
+  end
+
+  @impl true
+  def handle_info({:pointer_hidden, source}, socket) when source == self() do
+    {:noreply, socket}
+  end
+
+  @impl true
+  def handle_info({:pointer_hidden, _source}, socket) do
+    {:noreply, push_event(socket, "pointer", %{visible: false})}
   end
 
   @impl true
@@ -220,9 +305,17 @@ defmodule ClaperWeb.EventLive.Presenter do
 
   @impl true
   def handle_info({:quiz_updated, quiz}, socket) do
-    {:noreply,
-     socket
-     |> update(:current_quiz, fn _current_quiz -> quiz end)}
+    previous = socket.assigns[:current_quiz]
+
+    # The review starts as soon as the results become visible; other changes
+    # must not move a review that is already running.
+    results_just_shown? =
+      quiz.show_results == true and
+        not (previous != nil and previous.id == quiz.id and previous.show_results == true)
+
+    socket = assign(socket, :current_quiz, quiz)
+
+    {:noreply, if(results_just_shown?, do: start_quiz_review(socket, quiz), else: socket)}
   end
 
   @impl true
@@ -341,6 +434,7 @@ defmodule ClaperWeb.EventLive.Presenter do
     {:noreply,
      socket
      |> assign(:current_quiz, interaction)
+     |> start_quiz_review(interaction)
      |> assign(:current_poll, nil)
      |> assign(:current_embed, nil)
      |> assign(:current_form, nil)
@@ -373,6 +467,18 @@ defmodule ClaperWeb.EventLive.Presenter do
      |> assign(:current_form, nil)
      |> assign(:current_quiz, nil)
      |> assign(:current_word_cloud, nil)}
+  end
+
+  # The manager's quiz review controls. The presenter owns the position (it
+  # knows how many questions there are), applies the command and reports the
+  # result back so the manager's switch always shows what is on screen.
+  @impl true
+  def handle_info(
+        {:quiz_review, command},
+        %{assigns: %{current_quiz: %{quiz_questions: _}}} = socket
+      )
+      when command in [:on, :off, :next, :prev] do
+    {:noreply, apply_quiz_review(socket, command)}
   end
 
   @impl true
@@ -492,14 +598,79 @@ defmodule ClaperWeb.EventLive.Presenter do
     end
   end
 
+  defp apply_quiz_review(
+         %{assigns: %{current_quiz: %{quiz_questions: questions} = quiz}} = socket,
+         command
+       ) do
+    current = socket.assigns[:current_question_idx] || -1
+
+    idx =
+      case command do
+        :on -> 0
+        :off -> -1
+        :next -> if current < length(questions) - 1, do: current + 1, else: -1
+        :prev -> if current > 0, do: current - 1, else: 0
+      end
+
+    send_update(
+      ClaperWeb.EventLive.ManageableQuizComponent,
+      id: "#{quiz.id}-quiz",
+      current_question_idx: idx
+    )
+
+    Phoenix.PubSub.broadcast(
+      Claper.PubSub,
+      "event:#{socket.assigns.event.uuid}",
+      {:quiz_review_idx, quiz.id, idx}
+    )
+
+    assign(socket, :current_question_idx, idx)
+  end
+
   defp quiz_at_position(%{assigns: %{event: event, state: state}} = socket) do
     with quiz <-
            Claper.Quizzes.get_quiz_current_position(
              event.presentation_file.id,
              state.position
            ) do
-      socket |> assign(:current_quiz, quiz) |> assign(:current_question_idx, 0)
+      socket |> assign(:current_quiz, quiz) |> start_quiz_review(quiz)
     end
+  end
+
+  # The review of the questions is on by default: it starts with the first
+  # question as soon as a quiz shows its results. -1 is the summary view.
+  # The manage view is told, so its switch matches what is on screen.
+  defp start_quiz_review(socket, quiz) do
+    idx = if review_by_default?(quiz), do: 0, else: -1
+
+    if quiz != nil and connected?(socket) do
+      Phoenix.PubSub.broadcast(
+        Claper.PubSub,
+        "event:#{socket.assigns.event.uuid}",
+        {:quiz_review_idx, quiz.id, idx}
+      )
+    end
+
+    assign(socket, :current_question_idx, idx)
+  end
+
+  defp review_by_default?(%{show_results: true, quiz_questions: [_ | _]}), do: true
+  defp review_by_default?(_quiz), do: false
+
+  # A quiz (or form) belongs to one slide: look it up again when the slide
+  # changes, so it disappears from the screen with the slide. Other state
+  # updates must not touch it, or a running review would lose its position.
+  defp quiz_and_form_at_position(socket, false), do: socket
+
+  defp quiz_and_form_at_position(socket, true) do
+    # The manage view's review switch follows the quiz on screen.
+    Phoenix.PubSub.broadcast(
+      Claper.PubSub,
+      "event:#{socket.assigns.event.uuid}",
+      {:quiz_review_idx, nil, -1}
+    )
+
+    socket |> form_at_position() |> quiz_at_position()
   end
 
   defp word_cloud_at_position(%{assigns: %{event: event, state: state}} = socket) do

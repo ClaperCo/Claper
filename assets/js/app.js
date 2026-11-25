@@ -16,6 +16,7 @@ import "moment/locale/ja";
 import QRCodeStyling from "qr-code-styling";
 import { Presenter } from "./presenter";
 import { Manager } from "./manager";
+import { PointerSender, PointerOverlay } from "./pointer";
 import { AudioCapture } from "./audio_capture";
 import DateTimeLocal from "./date_time_local.mjs";
 import Split from "split-grid";
@@ -463,6 +464,27 @@ Hooks.Manager = {
   },
   updated() {
     this.manager.update();
+  },
+};
+Hooks.PointerSender = {
+  mounted() {
+    this.pointer = new PointerSender(this);
+    this.pointer.init();
+  },
+  updated() {
+    this.pointer.update();
+  },
+  destroyed() {
+    this.pointer.destroy();
+  },
+};
+Hooks.PointerOverlay = {
+  mounted() {
+    this.pointer = new PointerOverlay(this);
+    this.pointer.init();
+  },
+  destroyed() {
+    this.pointer.destroy();
   },
 };
 const INTERACTION_DRAG_TYPE = "application/x-claper-interaction";

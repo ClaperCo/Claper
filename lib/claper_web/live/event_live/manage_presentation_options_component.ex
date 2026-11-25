@@ -134,6 +134,32 @@ defmodule ClaperWeb.EventLive.ManagePresentationOptionsComponent do
             </svg>
           </:icon>
         </.toggle_row>
+        <.toggle_row
+          label={
+            if @state.interactions_beside_comments != false,
+              do: gettext("Show results over the slide"),
+              else: gettext("Show results beside the slide")
+          }
+          checked={@state.interactions_beside_comments != false}
+          key={:interactions_beside_comments}
+          shortcut={if @create == nil, do: "X", else: nil}
+          show_shortcut={@show_shortcut}
+        >
+          <:icon>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+              class="w-5 h-5"
+            >
+              <path
+                fill-rule="evenodd"
+                d="M2 4.75A.75.75 0 0 1 2.75 4h3.5a.75.75 0 0 1 .75.75v10.5a.75.75 0 0 1-.75.75h-3.5a.75.75 0 0 1-.75-.75V4.75ZM8 4.75A.75.75 0 0 1 8.75 4h8.5a.75.75 0 0 1 .75.75v10.5a.75.75 0 0 1-.75.75h-8.5a.75.75 0 0 1-.75-.75V4.75Z"
+                clip-rule="evenodd"
+              />
+            </svg>
+          </:icon>
+        </.toggle_row>
       </div>
     </div>
     """

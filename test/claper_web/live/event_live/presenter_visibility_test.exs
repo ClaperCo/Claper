@@ -2,7 +2,7 @@ defmodule ClaperWeb.EventLive.PresenterVisibilityTest do
   use ClaperWeb.ConnCase
 
   import Phoenix.LiveViewTest
-  import Claper.{PollsFixtures, PresentationsFixtures, WordCloudsFixtures}
+  import Claper.{PollsFixtures, PresentationsFixtures, QuizzesFixtures, WordCloudsFixtures}
 
   alias Claper.{Presentations, WordClouds}
 
@@ -97,6 +97,99 @@ defmodule ClaperWeb.EventLive.PresenterVisibilityTest do
     refute has_element?(attendee, "[phx-hook=WordCloud]")
     assert presentation_state(presentation_file).poll_visible
     assert presenter_words(presenter, cloud) == ["Elixir", "Phoenix"]
+  end
+
+  test "the results of an interaction are shown in the left column, above the comments", %{
+    conn: conn,
+    presentation_file: presentation_file,
+    event: event
+  } do
+    poll_fixture(%{presentation_file_id: presentation_file.id, title: "Poll question"})
+
+    {:ok, manager, _html} = live(conn, ~p"/e/#{event.code}/manage")
+    {:ok, presenter, _html} = live(conn, ~p"/e/#{event.code}/presenter")
+    toggle = ~s(#settings-modal-content button[phx-value-key="poll_visible"][phx-key="Z"])
+
+    # Results hidden: the column is out of the layout, the slide has the whole screen.
+    assert has_element?(presenter, "#left-column.pointer-events-none")
+    assert has_element?(presenter, "#left-column #poll.pointer-events-none")
+
+    # Results shown: the column appears next to the slide and holds the results.
+    manager |> element(toggle) |> render_keydown()
+    refute has_element?(presenter, "#left-column.pointer-events-none")
+    refute has_element?(presenter, "#left-column #poll.pointer-events-none")
+    assert has_element?(presenter, "#left-column #poll", "Poll question")
+    assert has_element?(presenter, "#slider img")
+
+    manager |> element(toggle) |> render_keydown()
+    assert has_element?(presenter, "#left-column.pointer-events-none")
+  end
+
+  test "results cover the slide as an overlay when the presentation setting is off", %{
+    conn: conn,
+    presentation_file: presentation_file,
+    event: event
+  } do
+    poll_fixture(%{presentation_file_id: presentation_file.id, title: "Poll question"})
+
+    {:ok, manager, _html} = live(conn, ~p"/e/#{event.code}/manage")
+    {:ok, presenter, _html} = live(conn, ~p"/e/#{event.code}/presenter")
+    setting = ~s(#settings-modal-content button[phx-value-key="interactions_beside_comments"])
+    toggle = ~s(#settings-modal-content button[phx-value-key="poll_visible"][phx-key="Z"])
+
+    # On by default.
+    assert has_element?(manager, setting <> ~s([aria-checked="true"]))
+    assert has_element?(manager, setting <> ~s([phx-key="X"]))
+    assert has_element?(presenter, "#left-column #poll")
+
+    render_hook(manager, "checked", %{"key" => "interactions_beside_comments", "value" => false})
+    assert has_element?(manager, setting <> ~s([aria-checked="false"]))
+    refute Presentations.get_presentation_file!(presentation_file.id, [:presentation_state]).presentation_state.interactions_beside_comments
+
+    # The poll is no longer inside the column, it covers the screen again.
+    refute has_element?(presenter, "#left-column #poll")
+    assert has_element?(presenter, "#presenter > #poll.absolute")
+
+    manager |> element(toggle) |> render_keydown()
+    assert has_element?(presenter, "#presenter > #poll.opacity-100")
+    assert has_element?(presenter, "#left-column.pointer-events-none")
+  end
+
+  test "polls and quizzes disappear from the presenter screen when the slide changes", %{
+    conn: conn,
+    presentation_file: presentation_file,
+    event: event
+  } do
+    poll = poll_fixture(%{presentation_file_id: presentation_file.id, title: "Poll question"})
+
+    quiz =
+      quiz_fixture(%{
+        presentation_file: presentation_file,
+        position: 1,
+        enabled: true,
+        show_results: true
+      })
+
+    {:ok, presenter, _html} = live(conn, ~p"/e/#{event.code}/presenter")
+    assert has_element?(presenter, "#poll")
+    refute has_element?(presenter, "##{quiz.id}-quiz")
+
+    {:ok, _} =
+      Presentations.update_presentation_state(presentation_state(presentation_file), %{
+        position: 1
+      })
+
+    refute has_element?(presenter, "#poll")
+    assert has_element?(presenter, "##{quiz.id}-quiz")
+
+    {:ok, _} =
+      Presentations.update_presentation_state(presentation_state(presentation_file), %{
+        position: 0
+      })
+
+    assert has_element?(presenter, "#poll")
+    refute has_element?(presenter, "##{quiz.id}-quiz")
+    assert poll.position == 0
   end
 
   defp presentation_state(presentation_file) do

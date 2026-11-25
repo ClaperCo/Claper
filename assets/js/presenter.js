@@ -115,6 +115,12 @@ export class Presenter {
             e.preventDefault();
             this.fullscreen();
             break;
+          case "c": // C: review the quiz questions on/off
+          case "C":
+            if (e.ctrlKey || e.metaKey || e.altKey) break;
+            e.preventDefault();
+            this.context.pushEvent("toggle-quiz-review", {});
+            break;
           case "ArrowLeft":
           case "PageUp":
             e.preventDefault();
