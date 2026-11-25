@@ -4,7 +4,10 @@ defmodule ClaperWeb.EventLive.ManageInteractionOptionsComponent do
   use Gettext, backend: ClaperWeb.Gettext
 
   def render(assigns) do
-    assigns = assigns |> assign_new(:show_shortcut, fn -> true end)
+    assigns =
+      assigns
+      |> assign_new(:show_shortcut, fn -> true end)
+      |> assign_new(:quiz_review, fn -> %{quiz_id: nil, idx: -1} end)
 
     ~H"""
     <div class="flex flex-col gap-2 border border-gray-200 rounded-2xl p-2 bg-white shadow-lg">
@@ -83,10 +86,17 @@ defmodule ClaperWeb.EventLive.ManageInteractionOptionsComponent do
                 </:icon>
               </.toggle_row>
 
-              <.action_row
-                label={gettext("Review questions")}
-                key={:review_quiz_questions}
+              <.toggle_row
+                label={
+                  if quiz_reviewing?(@quiz_review, @current_interaction),
+                    do: gettext("Stop reviewing questions"),
+                    else: gettext("Review questions")
+                }
+                checked={quiz_reviewing?(@quiz_review, @current_interaction)}
+                key={:quiz_review}
+                shortcut={if @create == nil, do: "C", else: nil}
                 disabled={!@current_interaction.show_results}
+                show_shortcut={@show_shortcut}
               >
                 <:icon>
                   <svg
@@ -102,13 +112,14 @@ defmodule ClaperWeb.EventLive.ManageInteractionOptionsComponent do
                     <path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M3 13a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v6a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1z" /><path d="M15 9a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v10a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1z" /><path d="M9 5a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v14a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1z" /><path d="M4 20h14" />
                   </svg>
                 </:icon>
-              </.action_row>
+              </.toggle_row>
 
               <div class="grid grid-cols-2 gap-2">
                 <.action_row
                   label={gettext("Previous")}
                   key={:prev_quiz_question}
-                  disabled={!@current_interaction.show_results}
+                  disabled={!@current_interaction.show_results ||
+                    !quiz_reviewing?(@quiz_review, @current_interaction)}
                   compact
                 >
                   <:icon>
@@ -130,7 +141,8 @@ defmodule ClaperWeb.EventLive.ManageInteractionOptionsComponent do
                 <.action_row
                   label={gettext("Next")}
                   key={:next_quiz_question}
-                  disabled={!@current_interaction.show_results}
+                  disabled={!@current_interaction.show_results ||
+                    !quiz_reviewing?(@quiz_review, @current_interaction)}
                   compact
                   reverse
                 >
@@ -246,6 +258,12 @@ defmodule ClaperWeb.EventLive.ManageInteractionOptionsComponent do
     </.toggle_row>
     """
   end
+
+  # Whether the presenter is currently showing the quiz's questions one by one.
+  defp quiz_reviewing?(%{quiz_id: quiz_id, idx: idx}, %{id: id}),
+    do: quiz_id == id and idx >= 0
+
+  defp quiz_reviewing?(_quiz_review, _interaction), do: false
 
   attr :label, :string, required: true
   attr :checked, :boolean, required: true

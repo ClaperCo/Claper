@@ -30,6 +30,16 @@ defmodule ClaperWeb.EventLive.Manage do
     end
   end
 
+  defp quiz_review_command(socket, command) do
+    Phoenix.PubSub.broadcast(
+      Claper.PubSub,
+      "event:#{socket.assigns.event.uuid}",
+      {:quiz_review, command}
+    )
+
+    {:noreply, socket}
+  end
+
   defp mount_event(socket, event) do
     if connected?(socket) do
       Claper.Events.Event.subscribe(event.uuid)
@@ -70,6 +80,7 @@ defmodule ClaperWeb.EventLive.Manage do
       |> assign(:security_audit_ip, ClaperWeb.SecurityAudit.peer_ip(socket))
       |> assign(:interaction_modal, false)
       |> assign(:settings_modal, false)
+      |> assign(:quiz_review, %{quiz_id: nil, idx: -1})
       |> assign(:attendees_nb, 0)
       |> assign(:event, event)
       |> assign(:sort_questions_by, "date")
@@ -456,6 +467,13 @@ defmodule ClaperWeb.EventLive.Manage do
   @impl true
   def handle_info({:transcription_created, _transcription}, socket) do
     {:noreply, socket}
+  end
+
+  # The presenter reports which quiz question it shows while the review runs
+  # (-1: not reviewing), so the review switch matches what is on screen.
+  @impl true
+  def handle_info({:quiz_review_idx, quiz_id, idx}, socket) do
+    {:noreply, assign(socket, :quiz_review, %{quiz_id: quiz_id, idx: idx})}
   end
 
   @impl true
@@ -995,6 +1013,23 @@ defmodule ClaperWeb.EventLive.Manage do
   @impl true
   def handle_event(
         "checked",
+        %{"key" => "interactions_beside_comments", "value" => value},
+        %{assigns: %{event: _event, state: state}} = socket
+      ) do
+    {:ok, new_state} =
+      Claper.Presentations.update_presentation_state(
+        state,
+        %{
+          :interactions_beside_comments => value
+        }
+      )
+
+    {:noreply, socket |> assign(:state, new_state)}
+  end
+
+  @impl true
+  def handle_event(
+        "checked",
         %{"key" => "join_screen_visible", "value" => value},
         %{assigns: %{state: state}} = socket
       ) do
@@ -1127,36 +1162,23 @@ defmodule ClaperWeb.EventLive.Manage do
   end
 
   @impl true
-  def handle_event("checked", %{"key" => "review_quiz_questions"}, socket) do
-    Phoenix.PubSub.broadcast(
-      Claper.PubSub,
-      "event:#{socket.assigns.event.uuid}",
-      {:review_quiz_questions}
-    )
+  def handle_event("checked", %{"key" => "quiz_review", "value" => value}, socket) do
+    quiz_review_command(socket, if(value, do: :on, else: :off))
+  end
 
-    {:noreply, socket}
+  @impl true
+  def handle_event("checked", %{"key" => "review_quiz_questions"}, socket) do
+    quiz_review_command(socket, :on)
   end
 
   @impl true
   def handle_event("checked", %{"key" => "next_quiz_question"}, socket) do
-    Phoenix.PubSub.broadcast(
-      Claper.PubSub,
-      "event:#{socket.assigns.event.uuid}",
-      {:next_quiz_question}
-    )
-
-    {:noreply, socket}
+    quiz_review_command(socket, :next)
   end
 
   @impl true
   def handle_event("checked", %{"key" => "prev_quiz_question"}, socket) do
-    Phoenix.PubSub.broadcast(
-      Claper.PubSub,
-      "event:#{socket.assigns.event.uuid}",
-      {:prev_quiz_question}
-    )
-
-    {:noreply, socket}
+    quiz_review_command(socket, :prev)
   end
 
   @impl true

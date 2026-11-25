@@ -91,6 +91,24 @@ defmodule ClaperWeb.EventLive.Presenter do
     """
   end
 
+  # Whether interaction results are shown in the left column (above the
+  # comments) instead of as an overlay covering the slide. On unless switched
+  # off in the presentation settings.
+  defp beside_comments?(state), do: state.interactions_beside_comments != false
+
+  # The left column shows the comments and, above them, the results of the
+  # current interaction. It is only needed while one of the two is visible.
+  defp left_column_visible?(state, poll, word_cloud, quiz) do
+    state.chat_visible == true or interaction_results_visible?(state, poll, word_cloud, quiz)
+  end
+
+  # Polls and word clouds share one visibility switch; a quiz has its own.
+  defp interaction_results_visible?(state, poll, word_cloud, quiz) do
+    beside_comments?(state) and
+      ((state.poll_visible == true and (poll != nil or word_cloud != nil)) or
+         (quiz != nil and quiz.show_results == true))
+  end
+
   defp leader?(%{assigns: %{current_user: current_user}} = _socket, event) do
     Claper.Events.led_by?(current_user.email, event) || event.user.id == current_user.id
   end
@@ -425,6 +443,40 @@ defmodule ClaperWeb.EventLive.Presenter do
      |> assign(:current_form, nil)
      |> assign(:current_quiz, nil)
      |> assign(:current_word_cloud, nil)}
+  end
+
+  # The manager's quiz review controls. The presenter owns the position (it
+  # knows how many questions there are), applies the command and reports the
+  # result back so the manager's switch always shows what is on screen.
+  @impl true
+  def handle_info(
+        {:quiz_review, command},
+        %{assigns: %{current_quiz: %{quiz_questions: questions} = quiz}} = socket
+      )
+      when command in [:on, :off, :next, :prev] do
+    current = socket.assigns[:current_question_idx] || -1
+
+    idx =
+      case command do
+        :on -> 0
+        :off -> -1
+        :next -> if current < length(questions) - 1, do: current + 1, else: -1
+        :prev -> if current > 0, do: current - 1, else: 0
+      end
+
+    send_update(
+      ClaperWeb.EventLive.ManageableQuizComponent,
+      id: "#{quiz.id}-quiz",
+      current_question_idx: idx
+    )
+
+    Phoenix.PubSub.broadcast(
+      Claper.PubSub,
+      "event:#{socket.assigns.event.uuid}",
+      {:quiz_review_idx, quiz.id, idx}
+    )
+
+    {:noreply, socket |> assign(:current_question_idx, idx)}
   end
 
   @impl true

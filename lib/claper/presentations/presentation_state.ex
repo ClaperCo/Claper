@@ -14,6 +14,7 @@ defmodule Claper.Presentations.PresentationState do
           banned: [String.t()] | nil,
           show_only_pinned: boolean() | nil,
           show_attendee_count: boolean() | nil,
+          interactions_beside_comments: boolean() | nil,
           presentation_file_id: integer() | nil,
           inserted_at: NaiveDateTime.t(),
           updated_at: NaiveDateTime.t()
@@ -30,6 +31,7 @@ defmodule Claper.Presentations.PresentationState do
     field :banned, {:array, :string}, default: []
     field :show_only_pinned, :boolean, default: false
     field :show_attendee_count, :boolean, default: true
+    field :interactions_beside_comments, :boolean, default: true
 
     belongs_to :presentation_file, Claper.Presentations.PresentationFile
 
@@ -50,6 +52,7 @@ defmodule Claper.Presentations.PresentationState do
       :anonymous_chat_enabled,
       :show_only_pinned,
       :show_attendee_count,
+      :interactions_beside_comments,
       :message_reaction_enabled
     ])
     |> validate_required([])
